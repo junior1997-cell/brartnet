@@ -308,12 +308,12 @@ switch ($_GET["op"]) {
       }
       //Declaramos las variables de sesión
       $_SESSION['idusuario']      = $rspta['data']['usuario']['idusuario'];
-      $_SESSION['user_nombre']    = $rspta['data']['usuario']['nombre_usuario'];
-      $_SESSION['user_apellido']  = $rspta['data']['usuario']['nombre_usuario'];
+      $_SESSION['user_nombre']    = $rspta['data']['usuario']['nombres'];
+      $_SESSION['user_apellido']  = $rspta['data']['usuario']['nombres'];
       $_SESSION['user_tipo_doc']  = $rspta['data']['usuario']['tipo_documento'];
-      $_SESSION['user_num_doc']   = $rspta['data']['usuario']['num_documento'];
+      $_SESSION['user_num_doc']   = $rspta['data']['usuario']['numero_documento'];
       $_SESSION['user_cargo']     = $cargo;
-      $_SESSION['user_imagen']    = $rspta['data']['usuario']['imagen'];
+      $_SESSION['user_imagen']    = $rspta['data']['usuario']['foto_perfil'];
       $_SESSION['user_login']     = $rspta['data']['usuario']['login'];
 
       // $_SESSION['idusuario_empresa']  = $rspta['data']['sucursal']['idusuario_empresa'];
@@ -324,7 +324,7 @@ switch ($_GET["op"]) {
       // $_SESSION['empresa_domicilio']  = $rspta['data']['sucursal']['domicilio_fiscal'];        
       // $_SESSION['empresa_iva']        = $rspta['data']['sucursal']['igv'];
 
-      $_SESSION['estadotempo']        = $rspta3['data']['estado'];      
+      // $_SESSION['estadotempo']        = $rspta3['data']['estado'];      
       
       $marcados = $usuario->listarmarcados($rspta['data']['usuario']['idusuario']);         # Obtenemos los permisos del usuario
       $grupo    = $usuario->listar_grupo_marcados($rspta['data']['usuario']['idusuario']);  # Obtenemos los permisos del usuario
