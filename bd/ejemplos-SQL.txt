@@ -1,0 +1,8 @@
+
+:::::::::::::::::::::::: ACTUALIZAR FECHAS CON SUS NOMBRES DE: DIA Y MES ::::::::::::::
+
+SET lc_time_names = 'es_ES';
+UPDATE landing_correo as v, landing_correo  as vp
+SET v.day_name= CONCAT(UPPER(LEFT(DAYNAME(vp.fecha_envio),1)),SUBSTR(DAYNAME(vp.fecha_envio),2)), 
+v.month_name=CONCAT(UPPER(LEFT(MONTHNAME(vp.fecha_envio),1)),SUBSTR(MONTHNAME(vp.fecha_envio),2)), 
+v.year_name=YEAR(vp.fecha_envio) WHERE  v.idlanding_correo = vp.idlanding_correo;
