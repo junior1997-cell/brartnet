@@ -6,7 +6,10 @@ function init() {
 	listar();
 
 	// ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
-  $("#guardar_registro_usuario").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-usuario").submit(); }  });
+  $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-usuario").submit(); }  });
+
+	// ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+  lista_select2("../ajax/ajax_general.php?op=select2_usuario_persona", '#idusuario', null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════
   $("#tipo_documento").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -15,7 +18,7 @@ function init() {
 	$("#imagenmuestra").hide();
 
 	$.post("../ajax/usuario.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	});
-	$.post("../ajax/usuario.php?op=seriesnuevo&id=", function (r) {	$("#series").html(r);	});
+	$.post("../ajax/usuario.php?op=series&id=", function (r) {	$("#series").html(r);	});
 	// $.post("../ajax/usuario.php?op=permisosEmpresaTodos", function (r) {	$("#empresas").html(r);	});
 }
 
@@ -31,14 +34,7 @@ function limpiar_form() {
 	$("#login").val("");
 	$("#clave").val("");	
 	$("#idusuario").val("");
-
-  $("#imagenactual").val("");
-  $("#imagenmuestra").attr("src", "../assets/modulo/usuario/perfil/no-perfil.jpg");
-  $("#imagenmuestra").attr("src", "../assets/modulo/usuario/perfil/no-perfil.jpg").show();
-  var imagenMuestra = document.getElementById('imagenmuestra');
-  if (!imagenMuestra.src || imagenMuestra.src == "") {
-    imagenMuestra.src = '../assets/modulo/usuario/perfil/no-perfil.jpg';
-  }
+ 
 
   $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
   $.post("../ajax/usuario.php?op=series&id=", function (r) { $("#series").html(r); });
@@ -53,10 +49,18 @@ function show_hide_form(flag) {
 	if (flag == 1) {
 		$("#div-tabla").show();
 		$("#div-form").hide();
+
+		$(".btn-agregar").show();
+		$(".btn-guardar").hide();
+		$(".btn-cancelar").hide();
 		
 	} else if (flag == 2) {
 		$("#div-tabla").hide();
 		$("#div-form").show();
+
+		$(".btn-agregar").hide();
+		$(".btn-guardar").show();
+		$(".btn-cancelar").show();
 	}
 }
 

@@ -84,6 +84,8 @@ Class Ubigeo
 		WHERE di.estado = '1' AND di.iddistrito = '$id';";
 		return ejecutarConsultaSimpleFila($sql);		
 	}
+
+	
 }
 
 ?>

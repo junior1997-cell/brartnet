@@ -93,6 +93,16 @@ Class Ajax_general
     return json_decode($response);
   }
 
+  // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
+	public function select2_usuario_persona()	{
+		$sql="SELECT p.idpersona, p.nombres, p.numero_documento,p.foto_perfil, ct.nombre as cargo 
+		FROM persona p 
+		LEFT JOIN usuario u ON p.idpersona = u.idpersona 
+		INNER JOIN cargo_trabajador ct ON p.idcargo_trabajador = ct.idcargo_trabajador
+		WHERE p.estado = '1' AND p.estado_delete = '1' AND u.idpersona IS NULL;";
+		return ejecutarConsultaSimpleFila($sql);		
+	}
+
 
 
 }

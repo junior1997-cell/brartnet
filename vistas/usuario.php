@@ -34,7 +34,8 @@
                 <div>
                   <div class="d-md-flex d-block align-items-center ">
                     <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);limpiar_form();"  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
-                    <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" onclick="show_hide_form(2);limpiar_form();"  > <i class="ri-save-2-line bx-tada label-btn-icon me-2" ></i> Agregar </button>
+                    <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
+                    <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                     <div>
                       <p class="fw-semibold fs-18 mb-0">Lista de usuarios del sistema!</p>
                       <span class="fs-semibold text-muted">Adminstra de manera eficiente tus usuarios.</span>
@@ -101,92 +102,13 @@
                             <div class="tab-pane fade show active text-muted" id="dato-usuario-pane" role="tabpanel" tabindex="0">
                               <div class="row gy-2" id="cargando-1-fomulario">
                                 <!-- id usuario -->
-                                <input type="hidden" name="idusuario" id="idusuario" />
-
-                                <!-- Imgen -->
-                                <div class="col-md-4">
-                                  <div class="mb-4 d-sm-flex align-items-center">
-                                    <div class="mb-0 me-5">
-                                      <span class="avatar avatar-xxl avatar-rounded">
-                                        <img src="../assets/images/faces/9.jpg" alt="" id="imagenmuestra" onerror="this.src='../assets/modulo/usuario/perfil/no-perfil.jpg';">
-                                        <a href="javascript:void(0);" class="badge rounded-pill bg-primary avatar-badge">
-                                          <input type="file" class="position-absolute w-100 h-100 op-0" name="imagen" id="imagen">
-                                          <input type="hidden" name="imagenactual" id="imagenactual">
-                                          <i class="fe fe-camera"></i>
-                                        </a>
-                                      </span>
-                                    </div>
-                                    <div class="btn-group">
-                                      <a class="btn btn-primary" onclick="cambiarImagen()"><i class='bx bx-cloud-upload bx-tada fs-5'></i> Subir</a>
-                                      <a class="btn btn-light" onclick="removerImagen()"><i class="bi bi-trash fs-6"></i> Remover</a>
-                                    </div>
-                                  </div>
-                                </div>                      
-
-                                <!-- Tipo doc -->
-                                <div class="col-md-3">
-                                  <div class="form-group">
-                                    <label for="tipo_documento" class="form-label">Tipo documento(*):</label>
-                                    <select class="form-control"  name="tipo_documento" id="tipo_documento">
-                                      <option value="DNI">DNI</option>
-                                      <option value="RUC">RUC</option>
-                                      <option value="CEDULA">CEDULA</option>
-                                    </select>
-                                  </div>                        
-                                </div>
-                                <!--  Nro Doc -->
-                                <div class="col-md-3">
-                                  <div class="form-group">
-                                    <label for="num_documento" class="form-label">Número(*):</label>
-                                    
-                                    <div class="input-group mb-3">                            
-                                      <input type="text" class="form-control" name="num_documento" id="num_documento" required>
-                                      <button class="btn btn-primary" type="button" onclick="consultaDniSunat();" id="icon-search-sr"><i class='bx bx-search-alt fs-5'></i></button>
-                                    </div>
-                                  </div>                                         
-                                </div>
-                                <!-- Nombre -->
-                                <div class="col-md-6">
-                                  <div class="form-group">
-                                    <label for="nombre" class="form-label">Nombres(*):</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" required>
-                                  </div>                                         
-                                </div>
-                                <!-- Apellidos -->
-                                <div class="col-md-6">
-                                  <div class="form-group">
-                                    <label for="apellidos" class="form-label">Apellidos(*):</label>
-                                    <input type="text" class="form-control" name="apellidos" id="apellidos" required>       
-                                  </div>                                  
-                                </div>
-                              
-                                <!-- Direccion -->
-                                <div class="col-md-4">
-                                  <div class="form-group">
-                                    <label for="direccion" class="form-label">Dirección :</label>
-                                    <input type="text" class="form-control" name="direccion" id="direccion" required>
-                                  </div>                                            
-                                </div>
-                                <!-- Correo -->
-                                <div class="col-md-4">
-                                  <div class="form-group">
-                                    <label for="email" class="form-label">Correo :</label>
-                                    <input type="email" class="form-control" name="email" id="email" required>  
-                                  </div>                                       
-                                </div>
-                                <!-- Celular -->
-                                <div class="col-md-4">
-                                  <div class="form-group">
-                                    <label for="telefono" class="form-label">Celular:</label>
-                                    <input type="text" class="form-control" name="telefono" id="telefono"  required> 
-                                  </div>                        
-                                </div>
+                                <input type="hidden" name="idusuario" id="idusuario" />                                 
                               
                                 <!-- Cargo -->
                                 <div class="col-md-4">
                                   <div class="form-group">
-                                    <label for="cargo" class="form-label">Cargo:</label>
-                                    <select class="form-control" name="cargo" id="cargo">                                
+                                    <label for="idusuario" class="form-label">Cargo:</label>
+                                    <select class="form-control" name="idusuario" id="idusuario">                                
                                       <option value="0">Administrador</option>
                                       <option value="1">Ventas</option>
                                       <option value="2">Logistica</option>
@@ -270,8 +192,8 @@
                       </div>                    
                     </div>  
                     <div class="card-footer border-top-0">
-                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>
-                      <button type="button" class="btn btn-success" id="guardar_registro_usuario" ><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                      <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1);" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
+                      <button type="button" class="btn btn-success btn-guardar" id="guardar_registro_usuario" style="display: none;"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
                     </div>                
                   </div> <!-- /.card -->              
                 </div> <!-- /.col -->           

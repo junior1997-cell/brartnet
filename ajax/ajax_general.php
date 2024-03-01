@@ -3,7 +3,7 @@
 
   if (strlen(session_id()) < 1) {  session_start();  }//Validamos si existe o no la sesión
 
-  if (!isset($_SESSION["nombre"])) {
+  if (!isset($_SESSION["user_nombre"])) {
 
     $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
     echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
@@ -16,7 +16,7 @@
     $ajax_general = new Ajax_general($_SESSION['idusuario']);
     $_ubigeo 			= new Ubigeo();
 
-    $scheme_host  =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/sunat_ventas_jdl/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
+    $scheme_host  =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/brartnet/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
     $toltip       = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
@@ -109,6 +109,30 @@
       case 'select2_distrito_id':			
         $rspta = $_ubigeo->select2_distrito_id($_GET['id']);
         echo json_encode($rspta, true);
+      break;
+      
+      // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
+      case 'select2_usuario_persona':			
+        $rspta = $ajax_general->select2_usuario_persona();
+
+        $data = "";
+
+        if ($rspta['status']) {
+
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value=' . $value['idpersona'] . ' title="' . $value['foto_perfil'] . '" cargo="' . $value['cargo'] . '">' . $value['nombres'] . ' - ' . $value['numero_documento'] . '</option>';
+          }
+
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
       break;
 
       // ══════════════════════════════════════ DEFAULT ══════════════════════════════════════
