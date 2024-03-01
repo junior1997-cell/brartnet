@@ -400,6 +400,23 @@
         <?php } ?>
         <!-- End::slide -->
 
+        <!-- Start::slide -->
+        <?php  if ($_SESSION['empresa'] == '1') { ?>
+        <li class="slide has-sub">
+          <a href="javascript:void(0);" class="side-menu__item">
+            <i class="bx bx-party side-menu__icon"></i>
+            <span class="side-menu__label">Configuración</span>
+            <i class="fe fe-chevron-right side-menu__angle"></i>
+          </a>
+          <ul class="slide-menu child1">
+            <li class="slide side-menu__label1"><a href="javascript:void(0)">Configuración</a></li>
+           
+            <li class="slide"><a href="accordions_collpase.php" class="side-menu__item">General</a></li>                  
+          </ul>
+        </li>
+        <?php } ?>
+        <!-- End::slide -->
+
         <!-- Start::slide__category -->
         <li class="slide__category"><span class="category-name">S O P O R T E</span></li>
         <!-- End::slide__category --> 

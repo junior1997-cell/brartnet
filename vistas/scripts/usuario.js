@@ -16,7 +16,7 @@ function init() {
 
 	$.post("../ajax/usuario.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	});
 	$.post("../ajax/usuario.php?op=seriesnuevo&id=", function (r) {	$("#series").html(r);	});
-	$.post("../ajax/usuario.php?op=permisosEmpresaTodos", function (r) {	$("#empresas").html(r);	});
+	// $.post("../ajax/usuario.php?op=permisosEmpresaTodos", function (r) {	$("#empresas").html(r);	});
 }
 
 //Función limpiar

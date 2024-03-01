@@ -124,7 +124,13 @@ class Usuario
 
 	//Implementar un método para listar los registros
 	public function listar()	{
-		$sql = "SELECT * from usuario";
+		$sql = "SELECT u.idusuario, p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, p.numero_documento, p.celular, p.correo,
+		p.foto_perfil, u.login, u.last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
+		FROM persona as p
+		inner join usuario as u on u.idusuario = p.idpersona
+		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
+		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
+		WHERE u.estado = '1' AND u.estado_delete = '1'";
 		return ejecutarConsulta($sql);
 	}
 	//Implementar un método para listar los registros y mostrar en el select
@@ -159,7 +165,7 @@ class Usuario
 	}
 
 	public function listarmarcadosNumeracion($idusuario)	{
-		$sql = "SELECT * from detalle_usuario_numeracion where idusuario='$idusuario'";
+		$sql = "SELECT * from sunat_usuario_comprobante where idusuario='$idusuario'";
 		return ejecutarConsulta($sql);
 	}
 

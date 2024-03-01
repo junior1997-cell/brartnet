@@ -204,31 +204,23 @@ class Numeracion
 
 
   //Función para incrementar numero de nota de debito.
-  public function llenarNumeroNdedito($serie)
-  {
+  public function llenarNumeroNdedito($serie)  {
     $sql = "SELECT (n.numero+1) as Nnumero from numeracion n inner join detalle_usuario_numeracion dn on n.idnumeracion=dn.idnumeracion inner join usuario u on dn.idusuario=u.idusuario where n.tipo_documento='08' and n.idnumeracion='$serie' limit 1";
     return ejecutarConsulta($sql);
   }
 
-
-
-
-  public function updateNumeracion($numero, $idnumeracion)
-  {
+  public function updateNumeracion($numero, $idnumeracion)  {
     $sql = "update numeracion set numero='$numero' where idnumeracion='$idnumeracion'";
     return ejecutarConsulta($sql);
   }
 
   public function listarSeries()  {
-    $sql = "SELECT n.*, c.descripcion as nombre_documento from numeracion as n
-    INNER JOIN catalogo1 AS c ON c.codigo = n.tipo_documento
-    where estado='1'";
+    $sql = "SELECT * from sunat_correlacion_comprobante where estado='1' and estado_delete ='1'";
     return ejecutarConsultaArray($sql);
   }
 
-  public function listarSeriesNuevo()
-  {
-    $sql = "SELECT * from numeracion";
+  public function listarSeriesNuevo()  {
+    $sql = "SELECT * from sunat_correlacion_comprobante where estado='1' and estado_delete ='1'";
     return ejecutarConsulta($sql);
   }
 }

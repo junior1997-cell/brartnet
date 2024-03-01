@@ -88,20 +88,14 @@ switch ($_GET["op"]) {
 
     while ($reg = $rspta['data']->fetch_object()) {
       // Mapear el valor numérico a su respectiva descripción
-      $cargo = '';
-      switch ($reg->cargo) {
-        case 0: $cargo = "Administrador"; break;
-        case 1: $cargo = "Ventas"; break;
-        case 2: $cargo = "Logistica"; break;
-        case 3: $cargo = "Contabilidad"; break;
-      }
+      
 
       $img = empty($reg->imagen) ? 'no-perfil.jpg' : $reg->imagen ;
 
       $data[] = array(
         "0" => '<div class="hstack gap-2 fs-15">' .
           '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar(' . $reg->idusuario . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-          ($reg->condicion ? '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="desactivar(' . $reg->idusuario . ')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>':
+          ($reg->estado ? '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="desactivar(' . $reg->idusuario . ')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>':
           '<button class="btn btn-icon btn-sm btn-success-light product-btn" onclick="activar(' . $reg->idusuario . ')" data-bs-toggle="tooltip" title="Activar"><i class="fa fa-check"></i></button>'
           ).
         '</div>'
@@ -109,15 +103,15 @@ switch ($_GET["op"]) {
         "1" =>'<div class="d-flex flex-fill align-items-center">
           <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/usuario/perfil/' . $img . '" alt=""> </span></div>
           <div>
-            <span class="d-block fw-semibold text-primary">'.$reg->nombre .' '. $reg->apellidos.'</span>
-            <span class="text-muted">'.$reg->tipo_documento .' '. $reg->num_documento.'</span>
+            <span class="d-block fw-semibold text-primary">'.$reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial.'</span>
+            <span class="text-muted">'.$reg->tipo_documento .' '. $reg->numero_documento.'</span>
           </div>
         </div>',
         "2" => $reg->login,
-        "3" => $cargo,
-        "4" => $reg->telefono,
-        "5" => $reg->email,
-        "6" => ($reg->condicion) ? '<span class="badge bg-success-transparent">Activado</span>' : '<span class="badge bg-danger-transparent">Inhabilitado</span>'
+        "3" => $reg->cargo_trabajador,
+        "4" => $reg->celular,
+        "5" => $reg->correo,
+        "6" => ($reg->estado) ? '<span class="badge bg-success-transparent">Activado</span>' : '<span class="badge bg-danger-transparent">Inhabilitado</span>'
       );
     }
     $results = array(
@@ -146,7 +140,7 @@ switch ($_GET["op"]) {
     //Mostramos la lista de permisos en la vista y si están o no marcados
     echo '<div class="row gy-2" >';
     foreach ($rspta['data']['agrupado'] as $key => $val1) {   
-      echo '<div class="col-lg-2" >';
+      echo '<div class="col-lg-4 col-xl-3 col-xxl-3 mt-3 mb-2" >';
       echo '<span>'.$val1['modulo'].'</span>';
       foreach ($val1['submodulo'] as $key => $val2) {
         $sw = in_array($val2['idpermiso'], $valores) ? 'checked' : '';
@@ -232,19 +226,19 @@ switch ($_GET["op"]) {
 
     //Almacenar los permisos asignados al usuario en el array
     while ($per = $marcados['data']->fetch_object()) {
-      array_push($valores, $per->idnumeracion);
+      array_push($valores, $per->idsunat_usuario_comprobante);
     }
 
     //Mostramos la lista de permisos en la vista y si están o no marcados
     echo '<div class="row gy-2" >';
     foreach ($rspta['data'] as $key => $val) {
 
-      if ($key % 3 === 0) {   echo '<div class="col-lg-4" >';   } # abrimos el: col-lg-2      
+      if ($key % 3 === 0) {   echo '<div class="col-lg-4 col-xl-3 col-xxl-3" >';   } # abrimos el: col-lg-2      
       
-      $sw = in_array($val['idnumeracion'], $valores) ? 'checked' : '';
+      $sw = in_array($val['idtipo_comprobante'], $valores) ? 'checked' : '';
       echo '<div class="custom-toggle-switch d-flex align-items-center mb-1">
-        <input id="serie_' . $val['idnumeracion'] . '" name="serie[]" value="' . $val['idnumeracion'] . '" type="checkbox" ' . $sw . '>
-        <label for="serie_' . $val['idnumeracion'] . '" class="label-primary"></label><span class="ms-3">' . $val['serie'] . '-' . $val['nombre_documento'] . '</span>
+        <input id="serie_' . $val['idtipo_comprobante'] . '" name="serie[]" value="' . $val['idtipo_comprobante'] . '" type="checkbox" ' . $sw . '>
+        <label for="serie_' . $val['idtipo_comprobante'] . '" class="label-primary"></label><span class="ms-3">' . $val['abreviatura'] .': <b>'.  $val['serie'] . '-' . $val['numero'] . '</b></span>
       </div>';
       if (($key + 1) % 3 === 0 || $key === count($rspta['data']) - 1) { echo "</div>"; } # cerramos el: col-lg-2
     }
@@ -256,29 +250,9 @@ switch ($_GET["op"]) {
     require_once "../modelos/Numeracion.php";
     $numeracion = new Numeracion();
     $rspta = $numeracion->listarSeriesNuevo();
-    //Mostramos la lista de permisos en la vista y si están o no marcados
-    while ($reg = $rspta->fetch_object()) {
-      $nombres = "";
-      switch ($reg->tipo_documento) {
-        case '01': $nombres = "FACTURA"; break;
-        case '03': $nombres = "BOLETA"; break;
-        case '07': $nombres = "NOTA DE CRÉDITO"; break;
-        case '08': $nombres = "NOTA DE DEBITO"; break;
-        case '09': $nombres = "GUIA REMISION REMITENTE"; break;
-        case '12': $nombres = "TICKET DE MAQUINA REGISTRADORA"; break;
-        case '13': $nombres = "DOCUM. EMIT. POR BANC. & SEG."; break;
-        case '18': $nombres = "SBS"; break;
-        case '31': $nombres = "DOC. EMIT. POR AFP"; break;
-        case '50': $nombres = "NOTA DE PEDIDO"; break;
-        case '56': $nombres = "GUIA REMISION TRANSPOR."; break;
-        case '99': $nombres = "ORDEN DE SERVICIO";
-        case '20': $nombres = "COTIZACION"; break;
-        case '30': $nombres = "DOCUMENTO COBRANZA"; break;
-        case '90': $nombres = "BOLETAS DE PAGO"; break;
-        default: break;
-      }
-
-      echo '<li> <input type="checkbox" name="serie[]" value="' . $reg->idnumeracion . '">' . $reg->serie . '-' . $nombres . ' </li>';
+    
+    while ($reg = $rspta['data']->fetch_object()) { 
+      echo '<li> <input type="checkbox" name="serie[]" value="' . $reg->idtipo_comprobante . '">' . $reg->serie . '-' . $reg->numero . ' </li>';
     }
   break;
 

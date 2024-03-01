@@ -16,7 +16,7 @@
 
       </head> 
 
-      <body id="body-usuario">
+      <body id="body-usuario"> 
 
         <?php include("template/switcher.php"); ?>
         <?php include("template/loader.php"); ?>
