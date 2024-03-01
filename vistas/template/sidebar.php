@@ -308,7 +308,11 @@
             <li class="slide side-menu__label1"><a href="javascript:void(0)">Administracion</a></li>
             <?php  if ($_SESSION['usuario'] == '1') { ?>
             <li class="slide"><a href="usuario.php" class="side-menu__item">Usuarios</a></li>     
-            <?php } ?>       
+            <?php } ?>  
+            
+            <?php  if ($_SESSION['usuario'] == '1') { ?>
+            <li class="slide"><a href="gasto_de_trabajador.php" class="side-menu__item">Sueldo Trabajador</a></li>     
+            <?php } ?> 
           </ul>
         </li>
         <?php } ?>
