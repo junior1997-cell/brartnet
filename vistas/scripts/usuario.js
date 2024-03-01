@@ -9,8 +9,8 @@ function init() {
   $("#guardar_registro_usuario").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-usuario").submit(); }  });
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════
-  $("#tipo_documento").select2({dropdownParent: $('#modal-agregar-usuario'), theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#cargo").select2({dropdownParent: $('#modal-agregar-usuario'),  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#tipo_documento").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#cargo").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
 	$("#imagenmuestra").hide();
 
@@ -47,6 +47,17 @@ function limpiar_form() {
   $(".form-control").removeClass('is-valid');
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
+}
+
+function show_hide_form(flag) {
+	if (flag == 1) {
+		$("#div-tabla").show();
+		$("#div-form").hide();
+		
+	} else if (flag == 2) {
+		$("#div-tabla").hide();
+		$("#div-form").show();
+	}
 }
 
 $("#imagenmuestra").css("display", "block");
@@ -96,23 +107,7 @@ function listar() {
 
 function guardar_y_editar_usuario(e) {
 	//e.preventDefault(); //No se activará la acción predeterminada del evento
-	if (modoDemo) {
-		sw_warning('Modo demo', 'No puedes editar o guardar en modo demo');		
-		return;
-	}
-
-	// Validar el campo de contraseña
-	var clave = $('#clave').val();
-	if (clave == '') {
-		Swal.fire({
-			icon: 'warning',
-			title: 'Contraseña requerida',
-			text: 'Para validar tus cambios, ingresa tu contraseña actual',
-		});
-		return;
-	}
-
-	$("#btnGuardar").prop("disabled", true);
+	
 	var formData = new FormData($("#form-agregar-usuario")[0]);
 
 	$.ajax({
@@ -137,11 +132,7 @@ function guardar_y_editar_usuario(e) {
 			ver_errores(jqXhr);
 		}
 	});
-
 }
-
-
-
 
 function mostrar(idusuario) {
 	$('#modal-agregar-usuario').modal('show');
@@ -186,70 +177,42 @@ function mostrar(idusuario) {
 
 //Función para desactivar registros
 function desactivar(idusuario) {
-	if (modoDemo) {
-		Swal.fire({
-			icon: 'warning',
-			title: 'Modo demo',
-			text: 'No puedes editar o guardar en modo demo',
-		});
-		return;
-	}
-	$("#btnGuardar").prop("disabled", true);
-	swal.fire({
-		title: "¿Está seguro de desactivar el usuario?",
-		icon: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#3085d6",
-		cancelButtonColor: "#d33",
-		confirmButtonText: "Sí, desactivar",
-		cancelButtonText: "Cancelar"
-	}).then((result) => {
-		if (result.isConfirmed) {
-			$.post("../ajax/usuario.php?op=desactivar", { idusuario: idusuario }, function (e) {
-				swal.fire({
-					title: "Usuario desactivado",
-					text: e,
-					icon: "success",
-					showConfirmButton: false,
-					timer: 1500
-				});
-				tabla_usuario.ajax.reload();
-			});
-		}
-	});
+	crud_eliminar_papelera(
+    "../ajax/bancos.php?op=desactivar_bancos",
+    "../ajax/bancos.php?op=eliminar_bancos", 
+    idbancos, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tabla_bancos.ajax.reload(null, false); },
+    false, 
+    false, 
+    false,
+    false
+  );
 }
 
 
 //Función para activar registros
 function activar(idusuario) {
-	swal.fire({
-		title: "¿Está seguro de activar el usuario?",
-		icon: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#3085d6",
-		cancelButtonColor: "#d33",
-		confirmButtonText: "Sí, activar",
-		cancelButtonText: "Cancelar",
-	}).then((result) => {
-		if (result.isConfirmed) {
-			$.post("../ajax/usuario.php?op=activar", { idusuario: idusuario }, function (e) {
-				swal.fire({
-					title: "Usuario activado",
-					text: e,
-					icon: "success",
-					showConfirmButton: false,
-					timer: 1500
-				});
-				tabla_usuario.ajax.reload();
-			});
-		}
-	});
+	crud_simple_alerta(
+		"../ajax/bancos.php?op=desactivar_bancos",
+    idbancos, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+		`Aceptar`,
+    function(){ sw_success('Recuperado', "Tu registro ha sido restaurado." ) }, 
+    function(){ tabla_bancos.ajax.reload(null, false); },
+    false, 
+    false, 
+    false,
+    false
+  );
 }
 
 
-function mayus(e) {
-	e.value = e.value.toUpperCase();
-}
+
 
 function cambiarImagen() {
 	var imagenInput = document.getElementById('imagen');

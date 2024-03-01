@@ -140,11 +140,11 @@ switch ($_GET["op"]) {
     //Mostramos la lista de permisos en la vista y si están o no marcados
     echo '<div class="row gy-2" >';
     foreach ($rspta['data']['agrupado'] as $key => $val1) {   
-      echo '<div class="col-lg-4 col-xl-3 col-xxl-3 mt-3 mb-2" >';
-      echo '<span>'.$val1['modulo'].'</span>';
+      echo '<div class="col-lg-4 col-xl-3 col-xxl-3 mt-3" >';
+      echo '<span >'.$val1['modulo'].'</span>';
       foreach ($val1['submodulo'] as $key => $val2) {
         $sw = in_array($val2['idpermiso'], $valores) ? 'checked' : '';
-        echo '<div class="custom-toggle-switch d-flex align-items-center mb-1">
+        echo '<div class="custom-toggle-switch d-flex align-items-center mt-2 mb-2">
           <input id="permiso_' . $val2['idpermiso'] . '" name="permiso[]" type="checkbox" ' . $sw . ' value="' . $val2['idpermiso'] . '">
           <label for="permiso_' . $val2['idpermiso'] . '" class="label-primary"></label><span class="ms-3">' . $val2['submodulo'] . '</span>
         </div>';
@@ -236,7 +236,7 @@ switch ($_GET["op"]) {
       if ($key % 3 === 0) {   echo '<div class="col-lg-4 col-xl-3 col-xxl-3" >';   } # abrimos el: col-lg-2      
       
       $sw = in_array($val['idtipo_comprobante'], $valores) ? 'checked' : '';
-      echo '<div class="custom-toggle-switch d-flex align-items-center mb-1">
+      echo '<div class="custom-toggle-switch d-flex align-items-center mb-2 mt-2">
         <input id="serie_' . $val['idtipo_comprobante'] . '" name="serie[]" value="' . $val['idtipo_comprobante'] . '" type="checkbox" ' . $sw . '>
         <label for="serie_' . $val['idtipo_comprobante'] . '" class="label-primary"></label><span class="ms-3">' . $val['abreviatura'] .': <b>'.  $val['serie'] . '-' . $val['numero'] . '</b></span>
       </div>';
@@ -282,8 +282,8 @@ switch ($_GET["op"]) {
       }
       //Declaramos las variables de sesión
       $_SESSION['idusuario']      = $rspta['data']['usuario']['idusuario'];
-      $_SESSION['user_nombre']    = $rspta['data']['usuario']['nombres'];
-      $_SESSION['user_apellido']  = $rspta['data']['usuario']['nombres'];
+      $_SESSION['user_nombre']    = $rspta['data']['usuario']['nombre_razonsocial'];
+      $_SESSION['user_apellido']  = $rspta['data']['usuario']['apellidos_nombrecomercial'];
       $_SESSION['user_tipo_doc']  = $rspta['data']['usuario']['tipo_documento'];
       $_SESSION['user_num_doc']   = $rspta['data']['usuario']['numero_documento'];
       $_SESSION['user_cargo']     = $cargo;
