@@ -12,7 +12,7 @@
   <meta name="Author" content="Spruko Technologies Private Limited">
 
   <!-- Favicon -->
-  <link rel="icon" href="../assets/images/brand-logos/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../assets/images/brand-logos/ico-brartnet.svg" type="image/x-icon">
 
   <!-- Bootstrap Css -->
   <link id="style" href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">

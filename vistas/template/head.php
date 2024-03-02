@@ -8,7 +8,7 @@
 <meta name="keywords" content="admin,admin dashboard,admin panel,admin template,bootstrap,clean,dashboard,flat,jquery,modern,responsive,premium admin templates,responsive admin,ui,ui kit.">
 
 <!-- Favicon -->
-<link rel="icon" href="../assets/images/brand-logos/favicon.ico" type="image/x-icon">
+<link rel="icon" href="../assets/images/brand-logos/ico-brartnet.svg" type="image/x-icon">
 
 <!-- Font Awesome 6.2 -->
 <link rel="stylesheet" href="../assets/libs/fontawesome-free-6.2.0/css/all.min.css" />

@@ -31,8 +31,24 @@ function crud_listar_tabla(url, nombre_modulo) {
   return tabla;
 }
 
-function lista_select2(url, nombre_input, id_tabla, span_charge = null, callback_charge = "") {
-  if (span_charge == null || span_charge == '' || span_charge == false ) { } else {$(span_charge).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');}
+/**
+ * Funcion para mostarar datos en un SELECT por ejemplo:
+ *
+ * @param {text} url              ajax/ajax_general.php?op=select2.
+ * @param {text} nombre_input     #idpersona.
+ * @param {number} id_tabla       idpersona.
+ * @param {text} span_charge      .charge_idpersona
+ * @param {text} callback_charge  &lt;i class="fas fa-spinner fa-pulse fa-lg text-danger"&gt;&lt;/i&gt;.
+ * @param {text} callback_true    'Cargado'.
+ * @returns {html} html lista de: &lt;option value="5" &gt;Juan Paz&lt;/option&gt;
+*/
+
+function lista_select2(url, nombre_input, id_tabla, span_charge = null, callback_charge = "", callback_true = '') {
+  if (span_charge == null || span_charge == '' || span_charge == false ) { /*No hacemos nada*/ } else {
+    if (callback_charge == null || callback_charge == '' || callback_charge == false ) { 
+      $(span_charge).html('<div class="spinner-border spinner-border-sm" role="status"></div>'); } else {  $(span_charge).html(callback_charge);
+    }    
+  }
   $.get(url, function (e, status) {
     try {
       e = JSON.parse(e);   //console.log(e);
@@ -40,11 +56,9 @@ function lista_select2(url, nombre_input, id_tabla, span_charge = null, callback
       if (e.status==true) {
         $(nombre_input).html(e.data); 
         if ( !id_tabla || id_tabla == "NaN" || id_tabla == "" || id_tabla == null || id_tabla == "Infinity" || id_tabla === undefined) {
-          $(nombre_input).val(null).trigger("change");
-        } else {
-          $(nombre_input).val(id_tabla).trigger("change");  
+          $(nombre_input).val(null).trigger("change");   } else {  $(nombre_input).val(id_tabla).trigger("change");  
         }
-        if (span_charge == null || span_charge == '' || span_charge == false ) { } else {  $(span_charge).html(callback_charge); }
+        if (span_charge == null || span_charge == '' || span_charge == false ) { } else {  $(span_charge).html(callback_true); }
       } else {
         ver_errores(e);
       }

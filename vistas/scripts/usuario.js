@@ -1,4 +1,5 @@
 var tabla_usuario;
+var tabla_historial;
 var modoDemo = false;
 //Función que se ejecuta al inicio
 function init() {
@@ -9,13 +10,10 @@ function init() {
   $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-usuario").submit(); }  });
 
 	// ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/ajax_general.php?op=select2_usuario_persona", '#idusuario', null);
+  lista_select2("../ajax/ajax_general.php?op=select2_usuario_trabajador&id=", '#idpersona', null);
 
-  // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════
-  $("#tipo_documento").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#cargo").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-
-	$("#imagenmuestra").hide();
+  // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
+  $("#idpersona").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
 	$.post("../ajax/usuario.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	});
 	$.post("../ajax/usuario.php?op=series&id=", function (r) {	$("#series").html(r);	});
@@ -33,16 +31,19 @@ function limpiar_form() {
 	$("#cargo").val("");
 	$("#login").val("");
 	$("#clave").val("");	
-	$("#idusuario").val("");
- 
+	$("#idusuario").val(""); 
 
-  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
-  $.post("../ajax/usuario.php?op=series&id=", function (r) { $("#series").html(r); });
+  $( "#clave" ).rules( "add", { required: true,  messages: {  required: "Campo requerido", } });
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
+}
+
+function reload_ps() {
+  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
+  $.post("../ajax/usuario.php?op=series&id=", function (r) { $("#series").html(r); });
 }
 
 function show_hide_form(flag) {
@@ -63,9 +64,6 @@ function show_hide_form(flag) {
 		$(".btn-cancelar").show();
 	}
 }
-
-$("#imagenmuestra").css("display", "block");
-
 
 //Función Listar
 function listar() {
@@ -124,8 +122,8 @@ function guardar_y_editar_usuario(e) {
 			try {
 				e = JSON.parse(e);  //console.log(e); 
         if (e.status == true) {	
-					tabla_usuario.ajax.reload();
-					$('#modal-agregar-usuario').modal('hide');
+					tabla_usuario.ajax.reload(null, false);          
+					show_hide_form(1)
 					sw_success('Exito', 'Usuario guardado correctamente.');
 				} else {
 					ver_errores(jqXhr);
@@ -139,52 +137,59 @@ function guardar_y_editar_usuario(e) {
 }
 
 function mostrar(idusuario) {
-	$('#modal-agregar-usuario').modal('show');
+  limpiar_form();
+	show_hide_form(2);
 	$('#cargando-1-fomulario').hide();	$('#cargando-2-fomulario').show();
-	$('#cargando-3-fomulario').hide();	$('#cargando-4-fomulario').show();
+	$('#cargando-3-fomulario').hide();	$('#cargando-4-fomulario').show();  
+	
 	$.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (e, status) {
 		e = JSON.parse(e);
 
-		$("#nombre").val(e.data.nombre);
-		$("#apellidos").val(e.data.apellidos);
-		$("#tipo_documento").append('<option value="' + e.data.tipo_documento + '">' + e.data.tipo_documento + '</option>');
-		$("#tipo_documento").val(e.data.tipo_documento);
-		//$("#tipo_documento").selectpicker('refresh');
-		$("#num_documento").val(e.data.num_documento);
-		$("#direccion").val(e.data.direccion);
-		$("#telefono").val(e.data.telefono);
-		$("#email").val(e.data.email);
-		$("#cargo").val(e.data.cargo);
-		$("#login").val(e.data.login);
-		//$("#clave").val(e.data.clave);
+		$.post(`../ajax/ajax_general.php?op=select2_usuario_trabajador&id=${idusuario}`, function (e2, textStatus, jqXHR) {
+      e2 = JSON.parse(e2);
+			$("#idpersona").html(e2.data);
 
-		$("#imagenmuestra").show();
-		$("#imagenmuestra").attr("src", "../asset/modulo/usuario/perfil/" + e.data.imagen);
-		$("#imagenactual").val(e.data.imagen);
-		$("#idusuario").val(e.data.idusuario);
+			$("#idusuario").val(e.data.idusuario);
+			$("#idpersona").val(e.data.idpersona).trigger("change");
+			$("#cargo").val(e.data.cargo_trabajador);
 
-		$.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
-			$("#permisos").html(r);
-			$.post("../ajax/usuario.php?op=series&id=" + idusuario, function (r) {
-				$("#series").html(r);
-				$.post("../ajax/usuario.php?op=permisosEmpresa&id=" + idusuario, function (r) {
-					$("#empresas").html(r);
-					
+			$("#email").val(e.data.email);		
+			$("#login").val(e.data.login);		
+      
+      $("#clave").rules( "remove", "required" );
+
+			$.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (e3) {
+				$("#permisos").html(e3);
+				$.post("../ajax/usuario.php?op=series&id=" + idusuario, function (e4) {
+					$("#series").html(e4);
 					$('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
 					$('#cargando-3-fomulario').show();	$('#cargando-4-fomulario').hide();
+          $('#form-agregar-usuario').valid();
 				});
 			});
 		});
+	});	
+}
 
+function ver_cargo() {
+	
+	$('.charge_cargo').html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);	
+	
+  var id = $('#idpersona').val() == '' || $('#idpersona').val() == null ? '0' : $('#idpersona').val();
+	$.post("../ajax/usuario.php?op=cargo_persona", { idpersona: id }, function (e, status) {
+    e = JSON.parse(e);	
+    $('#cargo').val(e.data.cargo_trabajador);
+    $('.charge_cargo').html('');
 	});	
 }
 
 //Función para desactivar registros
-function desactivar(idusuario) {
+function desactivar(idusuario, nombre) {
+	$('.tooltip').remove();
 	crud_eliminar_papelera(
     "../ajax/bancos.php?op=desactivar_bancos",
     "../ajax/bancos.php?op=eliminar_bancos", 
-    idbancos, 
+    idusuario, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
@@ -199,10 +204,10 @@ function desactivar(idusuario) {
 
 
 //Función para activar registros
-function activar(idusuario) {
+function activar(idusuario, nombre) {
 	crud_simple_alerta(
 		"../ajax/bancos.php?op=desactivar_bancos",
-    idbancos, 
+    idusuario, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
 		`Aceptar`,
@@ -213,90 +218,6 @@ function activar(idusuario) {
     false,
     false
   );
-}
-
-
-
-
-function cambiarImagen() {
-	var imagenInput = document.getElementById('imagen');
-	imagenInput.click();
-}
-
-function removerImagen() {
-	var imagenMuestra = document.getElementById('imagenmuestra');
-	var imagenActualInput = document.getElementById('imagenactual');
-	imagenMuestra.src = '../assets/images/faces/9.jpg';
-	imagenActualInput.value = '';
-}
-
-// Esto se encarga de mostrar la imagen cuando se selecciona una nueva
-document.addEventListener('DOMContentLoaded', function () {
-	var imagenMuestra = document.getElementById('imagenmuestra');
-	var imagenInput = document.getElementById('imagen');
-
-	imagenInput.addEventListener('change', function () {
-		if (imagenInput.files && imagenInput.files[0]) {
-			var reader = new FileReader();
-
-			reader.onload = function (e) {
-				imagenMuestra.src = e.target.result;
-			}
-
-			reader.readAsDataURL(imagenInput.files[0]);
-		}
-	});
-});
-
-
-$(document).ready(function () {
-	$('#tipo_documento').change(function () {
-		if ($(this).val() == 'DNI') {
-			$('#num_documento').focus(); // Asumiendo que tu input para ingresar el número tiene el id 'num_documento'.
-		}
-	});
-});
-
-$('#num_documento').keypress(function (e) {
-	if (e.which == 13) { // 13 es el código de tecla para Enter
-		var numero = $(this).val();
-		if (numero) { // verifica si el número no está vacío
-			consultaDniSunat(numero);
-		} else {
-			toastr_warning('Vacio!!', 'El numero de documento esta vacio, porfavor ingresa un numero.');
-		}
-	}
-});
-
-
-function consultaDniSunat(numero) {
-	var dni_ruc = numero == '' || numero == null ? $('#num_documento').val() : numero;
-	$('#icon-search-sr').html(`<i class='bx bx-loader bx-spin fs-5' ></i>`);
-	$.ajax({
-		type: 'POST',
-		url: "../ajax/ajax_general.php?op=reniec_otro&dni=" + dni_ruc,
-		dataType: 'json',
-		beforeSend: function () {
-			// Aquí puedes mostrar un loader o similar
-		},
-		complete: function (data) {			
-			// Acciones después de completar la solicitud, por ejemplo, ocultar el loader
-		},
-		success: function (e) {
-			console.log(e);
-			if (e.status == true) {
-				$("#num_documento").val(e.numeroDocumento);
-				$('#nombre').val(e.nombres);
-				$('#apellidos').val(e.apellidoPaterno + ' ' + e.apellidoMaterno);
-			} else {
-				ver_errores(e);
-			}
-			$('#icon-search-sr').html(`<i class='bx bx-search-alt fs-5'></i>`);
-		},
-		error: function (e) {
-      console.log(e); toastr_error('Error!!', `Tenemos este error: ${e.statusText}`);
-		}
-	});
 }
 
 function ver_password(click) {
@@ -317,6 +238,47 @@ function ver_password(click) {
   $('[data-toggle="tooltip"]').tooltip();
 }
 
+function historial_sesion(id) {
+  $('#modal-ver-historial-sesion').modal('show');
+  tabla_historial = $('#tabla-historial-sesion').dataTable({
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom:"<'row'<'col-md-2'B><'col-md-3 float-left'l><'col-md-7'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
+    buttons: [
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_historial) { tabla_historial.ajax.reload(null, false); } } },      
+    ],
+		"ajax":	{
+			url: `../ajax/usuario.php?op=historial_sesion&id=${id}`,
+			type: "get",
+			dataType: "json",
+			error: function (e) {
+				console.log(e.responseText);
+			},
+      complete: function () {
+        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');        
+        $('[data-bs-toggle="tooltip"]').tooltip();
+      },
+		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
+      // columna: sub total
+      if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap"); } 
+    },
+		language: {
+      lengthMenu: "_MENU_",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      emptyTable: "No hay datos"
+    },
+    "bDestroy": true,
+    "iDisplayLength": 10,//Paginación
+    "order": [[2, "desc"]]//Ordenar (columna,orden)
+	}).DataTable();
+
+}
+
 $(document).ready(function () {
   init();
 });
@@ -324,20 +286,12 @@ $(document).ready(function () {
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {
-  $('#cargo').on('change', function() { $(this).trigger('blur'); });
+  $('#idpersona').on('change', function() { $(this).trigger('blur'); });
   $("#form-agregar-usuario").validate({
     ignore: "",
-    rules: { 
-      tipo_documento: { required: true, },
-      num_documento:  { required: true, },
-      nombre:  				{ required: true, },
-      apellidos:      { required: true, },
-      direccion:      { required: true, minlength:2, maxlength:100 },
-      email:    			{  minlength:2, maxlength:200 },
-      telefono:       { required: true, minlength:5, maxlength:12 },
-      cargo:          { required: true,   },       
-      clave:    			{ required: true,   },       
-      imagen:         { extension: "png|jpg|jpeg|webp|svg",  }, 
+    rules: {           
+      idpersona:      { required: true,   },       
+      clave:    			{ required: true, minlength: 4, maxlength: 20, },       
 			login:          { required: true, minlength: 4, maxlength: 20,
         remote: {
           url: "../ajax/usuario.php?op=validar_usuario",
@@ -350,18 +304,9 @@ $(function () {
         }
       },
     },
-    messages: {
-      tipo_documento:	{ required: "Campo requerido", },
-      num_documento:  { required: "Campo requerido", },
-      nombre:  				{ required: "Campo requerido", },
-      apellidos:      { required: "Campo requerido", },
-      direccion:      { required: "Campo requerido", minlength:"Minimo {0} caracteres", maxlength:"Maximo {0} caracteres" },
-      email:    			{ minlength:"Minimo {0} caracteres", maxlength:"Maximo {0} caracteres" },
-      telefono:       { required: "Campo requerido", minlength:"Minimo {0} caracteres", maxlength:"Maximo {0} caracteres" },
-      cargo:          { required: "Campo requerido",  },
+    messages: {     
       login:    			{ required: "Campo requerido", remote:"Usuario en uso."},
-      clave:    			{ required: "Campo requerido", },      
-      imagen:         { extension: "Ingrese imagenes validas ( {0} )", },
+      clave:    			{ required: "Campo requerido", }, 
     },
         
     errorElement: "span",
@@ -383,7 +328,17 @@ $(function () {
       guardar_y_editar_usuario(e);      
     },
   });
-  $('#cargo').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#idpersona').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function ver_img(img, nombre) {
+	$(".title-modal-img").html(`-${nombre}`);
+  $('#modal-ver-img').modal("show");
+  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/usuario/perfil', '100%', '550'));
+}
+
+
+
+function reload_usr_trab(){ $('.tipo_persona_venta').html(`(trabajador)`); lista_select2("../ajax/ajax_general.php?op=select2_usuario_trabajador&id=", '#idpersona', null, '.charge_idpersona'); }

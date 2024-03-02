@@ -1,5 +1,5 @@
 <!-- Loader -->
 <div id="loader">
-  <img src="../assets/images/media/loader.svg" alt="">
+  <img class="bx-flashing" src="../assets/images/media/logo-brartnet.svg" alt="" width="200px">
 </div>
 <!-- Loader -->

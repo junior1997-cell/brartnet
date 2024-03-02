@@ -11,10 +11,10 @@
   } else {     
     
     require_once "../modelos/Ajax_general.php";
-    require_once "../modelos/Ubigeo.php";
+    // require_once "../modelos/Ubigeo.php";
     
     $ajax_general = new Ajax_general($_SESSION['idusuario']);
-    $_ubigeo 			= new Ubigeo();
+    // $_ubigeo 			= new Ubigeo();
 
     $scheme_host  =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/brartnet/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
@@ -112,15 +112,15 @@
       break;
       
       // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
-      case 'select2_usuario_persona':			
-        $rspta = $ajax_general->select2_usuario_persona();
-
+      case 'select2_usuario_trabajador':			
+        $rspta = $ajax_general->select2_usuario_trabajador($_GET['id']);
+        // echo json_encode($rspta, true); die;
         $data = "";
 
         if ($rspta['status']) {
 
           foreach ($rspta['data'] as $key => $value) {
-            $data  .= '<option value=' . $value['idpersona'] . ' title="' . $value['foto_perfil'] . '" cargo="' . $value['cargo'] . '">' . $value['nombres'] . ' - ' . $value['numero_documento'] . '</option>';
+            $data  .= '<option value=' . $value['idpersona'] . ' title="' . $value['foto_perfil'] . '" cargo="' . $value['cargo'] . '">' . $value['nombre_razonsocial'] . ' - ' . $value['numero_documento'] . '</option>';
           }
 
           $retorno = array(

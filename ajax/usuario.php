@@ -10,47 +10,28 @@ date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
 $imagen_error = "this.src='../dist/svg/404-v2.svg'";
 $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
+# ══════════════════════════════════════ D A T O S   U S U A R I O ══════════════════════════════════════ 
 $idusuario = isset($_POST["idusuario"]) ? limpiarCadena($_POST["idusuario"]) : "";
-
-$nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
-$apellidos = isset($_POST["apellidos"]) ? limpiarCadena($_POST["apellidos"]) : "";
-$tipo_documento = isset($_POST["tipo_documento"]) ? limpiarCadena($_POST["tipo_documento"]) : "";
-$num_documento = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
-$direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
-$telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
-$email = isset($_POST["email"]) ? limpiarCadena($_POST["email"]) : "";
-$cargo = isset($_POST["cargo"]) ? limpiarCadena($_POST["cargo"]) : "";
+$idpersona = isset($_POST["idpersona"]) ? limpiarCadena($_POST["idpersona"]) : "";
 $login = isset($_POST["login"]) ? limpiarCadena($_POST["login"]) : "";
 $clave = isset($_POST["clave"]) ? limpiarCadena($_POST["clave"]) : "";
-$imagen = isset($_POST["imagen"]) ? limpiarCadena($_POST["imagen"]) : "";
 
 
 switch ($_GET["op"]) {
   case 'guardaryeditar':
-
-    if (!file_exists($_FILES['imagen']['tmp_name']) || !is_uploaded_file($_FILES['imagen']['tmp_name'])) {
-      $imagen = $_POST["imagenactual"];
-    } else {
-      $ext = explode(".", $_FILES["imagen"]["name"]);
-      if ($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png") {
-        $imagen = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);
-        move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/usuarios/" . $imagen);
-      }
-    }
-    if (empty($clave)) {
-      // Si la variable $clave está vacía, se obtiene la clave actual del usuario y se usa para actualizar el registro
-      $usuario_actual = $usuario->mostrar($idusuario);
-      $clavehash = $usuario_actual['clave'];
-    } else {
-      // Si la variable $clave tiene un valor, se usa ese valor para actualizar el registro
+    
+    if (empty($clave)) { #Extraemos la clave antigua     
+      $usuario_actual = $usuario->mostrar_clave($idusuario);
+      $clavehash = $usuario_actual['data']['password'];
+    } else {  # Encriptamos la clave      
       $clavehash = hash("SHA256", $clave);
     }
 
     if (empty($idusuario)) {
-      $rspta = $usuario->insertar($nombre, $apellidos, $tipo_documento, $num_documento, $direccion, $telefono, $email, $cargo, $login, $clavehash, $imagen, $_POST['permiso'], $_POST['serie'], $_POST['empresa']);
+      $rspta = $usuario->insertar($idpersona, $login, $clavehash, $_POST['permiso'], $_POST['serie']);
       echo json_encode($rspta, true);
     } else {
-      $rspta = $usuario->editar($idusuario, $nombre, $apellidos, $tipo_documento, $num_documento, $direccion, $telefono, $email, $cargo, $login, $clavehash, $imagen, $_POST['permiso'], $_POST['serie'], $_POST['empresa']);
+      $rspta = $usuario->editar($idusuario, $idpersona, $login, $clavehash, $_POST['permiso'], $_POST['serie']);
       echo json_encode($rspta, true);
     }
   break;
@@ -66,6 +47,11 @@ switch ($_GET["op"]) {
     echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
   break;
 
+  case 'cargo_persona':
+    $rspta = $usuario->cargo_persona($_POST["idpersona"]);
+    //Codificar el resultado utilizando json
+    echo json_encode($rspta, true);
+  break;
 
   case 'mostrar':
     $rspta = $usuario->mostrar($idusuario);
@@ -79,6 +65,25 @@ switch ($_GET["op"]) {
     echo json_encode($rspta, true);
   break;
 
+  case 'historial_sesion':
+    $rspta = $usuario->historial_sesion($_GET["id"]);
+    $data = array();
+    foreach ($rspta['data'] as $key => $val) {
+      $data[] = array(
+        "0" => $key +1  ,        
+        "1" => $val['last_sesion'],
+        "2" => $val['nombre_dia'],
+        "3" => $val['nombre_mes'],
+      );
+    }
+    $results = array(
+      "sEcho" => 1, //Información para el datatables
+      "iTotalRecords" => count($data),  //enviamos el total registros al datatable
+      "iTotalDisplayRecords" => count($data),  //enviamos el total registros a visualizar
+      "aaData" => $data
+    );
+    echo json_encode($results, true);
+  break;
 
   case 'listar':
     $rspta = $usuario->listar();
@@ -95,13 +100,13 @@ switch ($_GET["op"]) {
       $data[] = array(
         "0" => '<div class="hstack gap-2 fs-15">' .
           '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar(' . $reg->idusuario . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-          ($reg->estado ? '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="desactivar(' . $reg->idusuario . ')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>':
+          ($reg->estado ? '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="desactivar(' . $reg->idusuario . ', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>':
           '<button class="btn btn-icon btn-sm btn-success-light product-btn" onclick="activar(' . $reg->idusuario . ')" data-bs-toggle="tooltip" title="Activar"><i class="fa fa-check"></i></button>'
           ).
         '</div>'
         ,        
         "1" =>'<div class="d-flex flex-fill align-items-center">
-          <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/usuario/perfil/' . $img . '" alt=""> </span></div>
+          <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/usuario/perfil/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')"> </span></div>
           <div>
             <span class="d-block fw-semibold text-primary">'.$reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial.'</span>
             <span class="text-muted">'.$reg->tipo_documento .' '. $reg->numero_documento.'</span>
@@ -109,8 +114,8 @@ switch ($_GET["op"]) {
         </div>',
         "2" => $reg->login,
         "3" => $reg->cargo_trabajador,
-        "4" => $reg->celular,
-        "5" => $reg->correo,
+        "4" => '<a href="tel:+51'.$reg->celular.'">'.$reg->celular.'</a>',
+        "5" => '<span class="cursor-pointer" data-bs-toggle="tooltip" title="Ver historial" onclick="historial_sesion(' . $reg->idusuario . ')" >'.$reg->last_sesion.'</span>',
         "6" => ($reg->estado) ? '<span class="badge bg-success-transparent">Activado</span>' : '<span class="badge bg-danger-transparent">Inhabilitado</span>'
       );
     }
@@ -266,27 +271,22 @@ switch ($_GET["op"]) {
     //$clavehash=$clavea;
     $clavehash = hash("SHA256", $clavea);
 
-    $rspta  = $usuario->verificar($logina, $clavehash);
+    $rspta  = $usuario->verificar($logina, $clavehash);    
     // $rspta2 = $usuario->onoffTempo($st);
     // $rspta3 = $usuario->consultatemporizador();    
 
     if (!empty($rspta['data']['usuario'])) {
 
-      // Mapear el valor numérico a su respectiva descripción
-      $cargo = '';
-      switch ($rspta['data']['usuario']['cargo']) {
-        case 0: $cargo = "Administrador"; break;
-        case 1: $cargo = "Ventas"; break;
-        case 2: $cargo = "Logistica"; break;
-        case 3: $cargo = "Contabilidad"; break;
-      }
+      
+      $rspta2 = $usuario->last_sesion($rspta['data']['usuario']['idusuario']); # Ultima sesion
+      
       //Declaramos las variables de sesión
       $_SESSION['idusuario']      = $rspta['data']['usuario']['idusuario'];
       $_SESSION['user_nombre']    = $rspta['data']['usuario']['nombre_razonsocial'];
       $_SESSION['user_apellido']  = $rspta['data']['usuario']['apellidos_nombrecomercial'];
       $_SESSION['user_tipo_doc']  = $rspta['data']['usuario']['tipo_documento'];
       $_SESSION['user_num_doc']   = $rspta['data']['usuario']['numero_documento'];
-      $_SESSION['user_cargo']     = $cargo;
+      $_SESSION['user_cargo']     = $rspta['data']['usuario']['cargo'];
       $_SESSION['user_imagen']    = $rspta['data']['usuario']['foto_perfil'];
       $_SESSION['user_login']     = $rspta['data']['usuario']['login'];
 
@@ -302,7 +302,7 @@ switch ($_GET["op"]) {
       
       $marcados = $usuario->listarmarcados($rspta['data']['usuario']['idusuario']);         # Obtenemos los permisos del usuario
       $grupo    = $usuario->listar_grupo_marcados($rspta['data']['usuario']['idusuario']);  # Obtenemos los permisos del usuario
-      // $usuario->savedetalsesion($rspta['data']['usuario']['idusuario']);                    # Guardamos los datos del usuario al iniciar sesion.
+      // $usuario->savedetalsesion($rspta['data']['usuario']['idusuario']);                 # Guardamos los datos del usuario al iniciar sesion.
 
       $valores = array();           # Declaramos el array para almacenar todos los permisos marcados
       $valores_agrupado = array();  # Declaramos el array para almacenar todos los permisos marcados
@@ -402,7 +402,8 @@ switch ($_GET["op"]) {
   case 'salir':     
     session_unset();  //Limpiamos las variables de sesión  
     session_destroy(); //Destruìmos la sesión
-    header("Location: ../index.php"); //Redireccionamos al login
+    // header("Location: ../index.php"); 
+    header("Location: index.php?file=".(isset($_GET["file"]) ? $_GET["file"] : "")); //Redireccionamos al login
   break;    
 }
 
