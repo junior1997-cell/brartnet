@@ -411,7 +411,7 @@
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"><a href="javascript:void(0)">Configuración</a></li>
            
-            <li class="slide"><a href="accordions_collpase.php" class="side-menu__item">General</a></li>                  
+            <li class="slide"><a href="general.php" class="side-menu__item">General</a></li>                  
           </ul>
         </li>
         <?php } ?>
