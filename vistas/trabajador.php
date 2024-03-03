@@ -158,35 +158,6 @@
                                 <input type="text" class="form-control" name="direccion" id="direccion">
                               </div>                                         
                             </div>
-                            <!-- Distrito -->
-                            <div class="col-md-3 col-lg-3 col-xl-3">
-                              <div class="form-group">
-                                <label for="distrito" class="form-label">Distrito:  </label></label>
-                                <select name="distrito" id="distrito" class="form-control" placeholder="Seleccionar" onchange="llenar_dep_prov_ubig(this);">                                  
-                                </select>
-                              </div>                                         
-                            </div>
-                            <!-- Usuario -->
-                            <div class="col-md-3 col-lg-3 col-xl-3">
-                              <div class="form-group">
-                                <label for="departamento" class="form-label">Departamento: <span class="chargue-pro"></span></label>
-                                <input type="text" class="form-control" name="departamento" id="departamento">
-                              </div>                                         
-                            </div>
-                            <!-- Usuario -->
-                            <div class="col-md-3 col-lg-3 col-xl-3">
-                              <div class="form-group">
-                                <label for="provincia" class="form-label">Provincia: <span class="chargue-dep"></span></label>
-                                <input type="text" class="form-control" name="provincia" id="provincia">
-                              </div>                                         
-                            </div>
-                            <!-- Usuario -->
-                            <div class="col-md-3 col-lg-3 col-xl-3">
-                              <div class="form-group">
-                                <label for="ubigeo" class="form-label">Ubigeo: <span class="chargue-ubi"></span></label>
-                                <input type="text" class="form-control" name="ubigeo" id="ubigeo">
-                              </div>                                         
-                            </div>
                             <!-- CArgo -->
                             <div class="col-md-6 col-lg-3 col-xl-3">
                               <div class="form-group">
@@ -240,22 +211,6 @@
                                 <label for="idbanco" class="form-label">Banco:  </label></label>
                                 <select name="idbanco" id="idbanco" class="form-control" placeholder="Seleccionar">                                  
                                 </select>
-                              </div>                                         
-                            </div>
-
-                            <!-- Usuario -->
-                            <div class="col-md-6 col-lg-3 col-xl-3">
-                              <div class="form-group">
-                                <label for="cuenta_bancaria" class="form-label">Cuenta Bancaria:</label>
-                                <input type="text" class="form-control" name="cuenta_bancaria" id="cuenta_bancaria" required>
-                              </div>                                         
-                            </div>
-
-                            <!-- Usuario -->
-                            <div class="col-md-6 col-lg-3 col-xl-3">
-                              <div class="form-group">
-                                <label for="cci" class="form-label">CCI:</label>
-                                <input type="text" class="form-control" name="cci" id="cci" required>
                               </div>                                         
                             </div>
                             
