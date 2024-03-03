@@ -12,7 +12,7 @@
 
       <head>
         
-        <?php $title_page = "Inicio"; include("template/head.php"); ?>    
+        <?php $title_page = "Usuarios"; include("template/head.php"); ?>    
 
       </head> 
 
@@ -24,6 +24,7 @@
         <div class="page">
           <?php include("template/header.php") ?>
           <?php include("template/sidebar.php") ?>
+          <?php if($_SESSION['usuario']==1) { ?>
 
           <!-- Start::app-content -->
           <div class="main-content app-content">
@@ -33,9 +34,9 @@
               <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                 <div>
                   <div class="d-md-flex d-block align-items-center ">
-                    <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2); reload_usr_trab(); limpiar_form(); reload_ps();"  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                    <button type="button" class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2); reload_usr_trab(); limpiar_form(); reload_ps();"  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                     <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
-                    <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
+                    <button type="button" class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                     <div>
                       <p class="fw-semibold fs-18 mb-0">Lista de usuarios del sistema!</p>
                       <span class="fs-semibold text-muted">Adminstra de manera eficiente tus usuarios.</span>
@@ -46,8 +47,8 @@
                 <div class="btn-list mt-md-0 mt-2">              
                   <nav>
                     <ol class="breadcrumb mb-0">
-                      <li class="breadcrumb-item"><a href="javascript:void(0);">Usuario</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">Administracion</li>
+                      <li class="breadcrumb-item"><a href="javascript:void(0);"> Administracion</a></li>
+                      <li class="breadcrumb-item active" aria-current="page">Usuario</li>
                     </ol>
                   </nav>
                 </div>
@@ -64,6 +65,7 @@
                         <table id="tabla-usuario" class="table table-bordered w-100" style="width: 100%;">
                           <thead>
                             <tr>
+                              <th>#</th>   
                               <th>Opciones</th>                          
                               <th>Nombre</th>
                               <th>Usuario</th>
@@ -77,6 +79,7 @@
                           </tbody>
                           <tfoot>
                             <tr>
+                              <th>#</th>
                               <th>Opciones</th>                          
                               <th>Nombre</th>
                               <th>Usuario</th>
@@ -197,7 +200,8 @@
                     </div>  
                     <div class="card-footer border-top-0">
                       <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1);" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
-                      <button type="button" class="btn btn-success btn-guardar" id="guardar_registro_usuario" style="display: none;"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                      <button type="button" class="btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
+
                     </div>                
                   </div> <!-- /.card -->              
                 </div> <!-- /.col -->           
@@ -207,6 +211,7 @@
             </div>
           </div>
           <!-- End::app-content -->
+          <?php } else { $title_submodulo ='Usuario'; $descripcion ='Lista de Usuarios del sistema!'; $title_modulo = 'Administracion'; include("403_error.php"); }?>   
 
           <div class="modal fade modal-effect" id="modal-ver-img" tabindex="-1" aria-labelledby="modal-agregar-usuarioLabel" aria-hidden="true">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
@@ -270,7 +275,7 @@
         <?php include("template/custom_switcherjs.php"); ?>    
 
         <!-- Select2 Cdn -->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
 
         <script src="scripts/usuario.js"></script>
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>

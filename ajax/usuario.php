@@ -11,11 +11,13 @@ $imagen_error = "this.src='../dist/svg/404-v2.svg'";
 $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
 # ══════════════════════════════════════ D A T O S   U S U A R I O ══════════════════════════════════════ 
-$idusuario = isset($_POST["idusuario"]) ? limpiarCadena($_POST["idusuario"]) : "";
-$idpersona = isset($_POST["idpersona"]) ? limpiarCadena($_POST["idpersona"]) : "";
-$login = isset($_POST["login"]) ? limpiarCadena($_POST["login"]) : "";
-$clave = isset($_POST["clave"]) ? limpiarCadena($_POST["clave"]) : "";
+$idusuario  = isset($_POST["idusuario"]) ? limpiarCadena($_POST["idusuario"]) : "";
+$idpersona  = isset($_POST["idpersona"]) ? limpiarCadena($_POST["idpersona"]) : "";
+$login      = isset($_POST["login"]) ? limpiarCadena($_POST["login"]) : "";
+$clave      = isset($_POST["clave"]) ? limpiarCadena($_POST["clave"]) : "";
 
+$permiso    = isset($_POST["permiso"]) ? $_POST['permiso'] : "";
+$serie      = isset($_POST["serie"]) ? $_POST['serie'] : "";
 
 switch ($_GET["op"]) {
   case 'guardaryeditar':
@@ -28,23 +30,28 @@ switch ($_GET["op"]) {
     }
 
     if (empty($idusuario)) {
-      $rspta = $usuario->insertar($idpersona, $login, $clavehash, $_POST['permiso'], $_POST['serie']);
+      $rspta = $usuario->insertar($idpersona, $login, $clavehash, $permiso , $serie );
       echo json_encode($rspta, true);
     } else {
-      $rspta = $usuario->editar($idusuario, $idpersona, $login, $clavehash, $_POST['permiso'], $_POST['serie']);
+      $rspta = $usuario->editar($idusuario, $idpersona, $login, $clavehash, $permiso , $serie );
       echo json_encode($rspta, true);
     }
   break;
 
-  case 'desactivar':
-    $rspta = $usuario->desactivar($idusuario);
-    echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";
+  case 'papelera':
+    $rspta = $usuario->papelera($_GET["id_tabla"]);
+    echo json_encode($rspta, true);
+  break;
+
+  case 'eliminar':
+    $rspta = $usuario->eliminar($_GET["id_tabla"]);
+    echo json_encode($rspta, true);
   break;
 
 
   case 'activar':
-    $rspta = $usuario->activar($idusuario);
-    echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
+    $rspta = $usuario->activar($_GET["id_tabla"]);
+    echo json_encode($rspta, true);
   break;
 
   case 'cargo_persona':
@@ -89,34 +96,33 @@ switch ($_GET["op"]) {
     $rspta = $usuario->listar();
     //Vamos a declarar un array
 
-    $data = array();
+    $data = array(); $count =1;
 
     while ($reg = $rspta['data']->fetch_object()) {
-      // Mapear el valor numérico a su respectiva descripción
-      
+      // Mapear el valor numérico a su respectiva descripción      
 
       $img = empty($reg->imagen) ? 'no-perfil.jpg' : $reg->imagen ;
 
       $data[] = array(
-        "0" => '<div class="hstack gap-2 fs-15">' .
+        "0" => $count++,
+        "1" => '<div class="hstack gap-2 fs-15">' .
           '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar(' . $reg->idusuario . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
           ($reg->estado ? '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="desactivar(' . $reg->idusuario . ', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>':
           '<button class="btn btn-icon btn-sm btn-success-light product-btn" onclick="activar(' . $reg->idusuario . ')" data-bs-toggle="tooltip" title="Activar"><i class="fa fa-check"></i></button>'
           ).
-        '</div>'
-        ,        
-        "1" =>'<div class="d-flex flex-fill align-items-center">
+        '</div>',        
+        "2" =>'<div class="d-flex flex-fill align-items-center">
           <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/usuario/perfil/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')"> </span></div>
           <div>
             <span class="d-block fw-semibold text-primary">'.$reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial.'</span>
             <span class="text-muted">'.$reg->tipo_documento .' '. $reg->numero_documento.'</span>
           </div>
         </div>',
-        "2" => $reg->login,
-        "3" => $reg->cargo_trabajador,
-        "4" => '<a href="tel:+51'.$reg->celular.'">'.$reg->celular.'</a>',
-        "5" => '<span class="cursor-pointer" data-bs-toggle="tooltip" title="Ver historial" onclick="historial_sesion(' . $reg->idusuario . ')" >'.$reg->last_sesion.'</span>',
-        "6" => ($reg->estado) ? '<span class="badge bg-success-transparent">Activado</span>' : '<span class="badge bg-danger-transparent">Inhabilitado</span>'
+        "3" => $reg->login,
+        "4" => $reg->cargo_trabajador,
+        "5" => '<a href="tel:+51'.$reg->celular.'">'.$reg->celular.'</a>',
+        "6" => '<span class="cursor-pointer" data-bs-toggle="tooltip" title="Ver historial" onclick="historial_sesion(' . $reg->idusuario . ')" >'.$reg->last_sesion.'</span>',
+        "7" => ($reg->estado) ? '<span class="badge bg-success-transparent">Activado</span>' : '<span class="badge bg-danger-transparent">Inhabilitado</span>'
       );
     }
     $results = array(

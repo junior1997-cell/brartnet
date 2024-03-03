@@ -120,7 +120,31 @@
         if ($rspta['status']) {
 
           foreach ($rspta['data'] as $key => $value) {
-            $data  .= '<option value=' . $value['idpersona'] . ' title="' . $value['foto_perfil'] . '" cargo="' . $value['cargo'] . '">' . $value['nombre_razonsocial'] . ' - ' . $value['numero_documento'] . '</option>';
+            $data  .= '<option value=' . $value['idpersona'] . ' title="' . $value['foto_perfil'] . '" cargo="' . $value['cargo'] . '">' . $value['nombre_razonsocial'] . ' '. $value['apellidos_nombrecomercial'] . ' - ' . $value['numero_documento'] . '</option>';
+          }
+
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+      break;
+
+      // ══════════════════════════════════════ C A R G O - S E L E C T 2  ══════════════════════════════════════
+      case 'select2_cargo':			
+        $rspta = $ajax_general->select2_cargo();
+        // echo json_encode($rspta, true); die;
+        $data = "";
+
+        if ($rspta['status']) {
+
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value="' . $value['idcargo_trabajador'] . '"  >' . $value['nombre']  . '</option>';
           }
 
           $retorno = array(

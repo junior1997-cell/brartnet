@@ -129,4 +129,11 @@ Class Ajax_general
     }
 	}
 
+  // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
+	public function select2_cargo()	{
+    // $data = [];
+		$sql="SELECT * FROM cargo_trabajador WHERE estado='1' AND estado_delete='1'";
+		return ejecutarConsultaArray($sql);   
+	}
+
 }

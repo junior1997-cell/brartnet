@@ -15,6 +15,11 @@ class Usuario
 
 	//Implementamos un método para insertar registros
 	public function insertar($idpersona, $login, $clavehash, $permisos, $series)	{
+
+		if (empty($permisos)) {	return [ 'status'=>'error_usuario', 'user'=> $_SESSION['user_nombre'], 'message'=>'No se ha selecionado los permisos de <b>MÓDULOS</b>','data'=>  []  ]; 	}
+		if (empty($series)) {	return [ 'status'=>'error_usuario', 'user'=> $_SESSION['user_nombre'], 'message'=>'No se ha selecionado los permisos de <b>SERIES</b>','data'=>  []  ]; 	}
+		
+     
 		$sql = "INSERT INTO usuario( idpersona, login, password) VALUES ('$idpersona','$login','$clavehash')";
 		$id_new = ejecutarConsulta_retornarID($sql, 'C');	if ($id_new['status'] == false) {  return $id_new; } 		
 
@@ -69,15 +74,39 @@ class Usuario
 	}
 
 	//Implementamos un método para desactivar usuario
-	public function desactivar($idusuario) {
-		$sql = "UPDATE usuario set condicion='0' where idusuario='$idusuario'";
-		return ejecutarConsulta($sql);
+	public function papelera($idusuario) {
+		$sql = "UPDATE usuario set estado='0' where idusuario='$idusuario'";
+		$papelera = ejecutarConsulta($sql, 'U');
+		//add registro en nuestra bitacora
+		$sql_d = $idusuario;
+		$sql = "INSERT INTO bitacora_bd(idcodigo,nombre_tabla, id_tabla, sql_d, id_user) VALUES (2,'usuario','$idusuario','$sql_d','$this->id_usr_sesion')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+		return $papelera;
+	}
+
+	//Implementamos un método para desactivar usuario
+	public function eliminar($idusuario) {
+		$sql = "UPDATE usuario set estado_delete='0' where idusuario='$idusuario'";
+		$eliminar = ejecutarConsulta($sql, 'U');
+		//add registro en nuestra bitacora
+		$sql_d = $idusuario;
+		$sql = "INSERT INTO bitacora_bd(idcodigo,nombre_tabla, id_tabla, sql_d, id_user) VALUES (4,'usuario','$idusuario','$sql_d','$this->id_usr_sesion')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+		return $eliminar;
 	}
 
 	//Implementamos un método para activar usuario
 	public function activar($idusuario)	{
-		$sql = "UPDATE usuario set condicion='1' where idusuario='$idusuario'";
-		return ejecutarConsulta($sql);
+		$sql = "UPDATE usuario set estado='1' where idusuario='$idusuario'";
+		$activar = ejecutarConsulta($sql, 'U');
+		//add registro en nuestra bitacora
+		$sql_d = $idusuario;
+		$sql = "INSERT INTO bitacora_bd(idcodigo,nombre_tabla, id_tabla, sql_d, id_user) VALUES (1,'usuario','$idusuario','$sql_d','$this->id_usr_sesion')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }
+
+		return $activar;
 	}
 
 	//Implementamos un método para activar usuario
@@ -130,7 +159,7 @@ class Usuario
 		inner join persona as p on u.idpersona = p.idpersona
 		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
-		WHERE u.estado = '1' AND u.estado_delete = '1'";
+		WHERE u.estado_delete = '1' ORDER BY  u.estado DESC, p.nombre_razonsocial ASC ";
 		return ejecutarConsulta($sql);
 	}
 	//Implementar un método para listar los registros y mostrar en el select

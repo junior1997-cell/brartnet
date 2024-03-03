@@ -10,10 +10,11 @@ function init() {
   $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-usuario").submit(); }  });
 
 	// ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/ajax_general.php?op=select2_usuario_trabajador&id=", '#idpersona', null);
+  lista_select2("../ajax/ajax_general.php?op=select2_cargo", '#idcargo_trabajador', null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
-  $("#idpersona").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#tipo_documento").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#idcargo_trabajador").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
 	$.post("../ajax/usuario.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	});
 	$.post("../ajax/usuario.php?op=series&id=", function (r) {	$("#series").html(r);	});
@@ -102,7 +103,7 @@ function listar() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[0, "asc"]]//Ordenar (columna,orden)
+    "order": [[2, "desc"]]//Ordenar (columna,orden)
 	}).DataTable();
 }
 //Función para guardar o editar
@@ -126,33 +127,9 @@ function guardar_y_editar_usuario(e) {
 					show_hide_form(1)
 					sw_success('Exito', 'Usuario guardado correctamente.');
 				} else {
-					ver_errores(e);
+					ver_errores(jqXhr);
 				}				
 			} catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
-      $(".btn-guardar").html('<i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar').removeClass('disabled send-data');
-		},
-		xhr: function () {
-			var xhr = new window.XMLHttpRequest();
-			xhr.upload.addEventListener("progress", function (evt) {
-				if (evt.lengthComputable) {
-					var percentComplete = (evt.loaded / evt.total) * 100;
-					/*console.log(percentComplete + '%');*/
-					$("#barra_progress_usuario").css({ "width": percentComplete + '%' });
-					$("#barra_progress_usuario div").text(percentComplete.toFixed(2) + " %");
-				}
-			}, false);
-			return xhr;
-		},
-		beforeSend: function () {
-			$(".btn-guardar").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled send-data');
-			$("#barra_progress_usuario").css({ width: "0%", });
-			$("#barra_progress_usuario div").text("0%");
-      $("#barra_progress_usuario_div").show();
-		},
-		complete: function () {
-			$("#barra_progress_usuario").css({ width: "0%", });
-			$("#barra_progress_usuario div").text("0%");
-      $("#barra_progress_usuario_div").hide();
 		},
 		error: function (jqXhr, ajaxOptions, thrownError) {
 			ver_errores(jqXhr);
@@ -218,13 +195,14 @@ function desactivar(idusuario, nombre) {
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla_usuario.ajax.reload(null, false); },
+    function(){ tabla_bancos.ajax.reload(null, false); },
     false, 
     false, 
     false,
     false
   );
 }
+
 
 //Función para activar registros
 function activar(idusuario, nombre) {
@@ -235,7 +213,7 @@ function activar(idusuario, nombre) {
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
 		`Aceptar`,
     function(){ sw_success('Recuperado', "Tu registro ha sido restaurado." ) }, 
-    function(){ tabla_usuario.ajax.reload(null, false); },
+    function(){ tabla_bancos.ajax.reload(null, false); },
     false, 
     false, 
     false,
@@ -347,8 +325,7 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");   
     },
     submitHandler: function (e) {
-      // $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      // window.scroll({ top: document.body.scrollHeight, left: document.body.scrollHeight, behavior: "smooth", });
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
       guardar_y_editar_usuario(e);      
     },
   });
