@@ -13,28 +13,29 @@ Class Plan
 	//Implementamos un método para insertar registros
 	public function insertar($nombre_plan, $costo_plan) {
 		//var_dump($nombre);die();
-		$sql="INSERT INTO plan(nombre, costo, user_created)VALUES('$nombre_plan', '$costo_plan','" . $_SESSION['idusuario'] . "' )";
+		$sql="INSERT INTO plan(nombre, costo)VALUES('$nombre_plan', '$costo_plan')";
 
 		$insertar =  ejecutarConsulta_retornarID($sql); 
 		if ($insertar['status'] == false) {  return $insertar; } 
 		
 		//add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('plan','".$insertar['data']."','Nueva plan registrado','" . $_SESSION['idusuario'] . "')";
-		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		// $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('plan','".$insertar['data']."','Nueva plan registrado','" . $_SESSION['idusuario'] . "')";
+		// $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
 		
 		return $insertar;
 	}
 
 	//Implementamos un método para editar registros
 	public function editar($idplan, $nombre_plan, $costo_plan) {
-		$sql="UPDATE plan SET nombre='$nombre_plan', costo ='$costo_plan', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idplan='$idplan'";
+		// var_dump($idplan .'-'. $nombre_plan.'-'. $costo_plan); die();
+		$sql="UPDATE plan SET nombre='$nombre_plan', costo ='$costo_plan' WHERE idplan='$idplan'";
 		$editar =  ejecutarConsulta($sql);
 		if ( $editar['status'] == false) {return $editar; } 
 	
 		//add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) 
-		VALUES ('plan','$idplan','plan editada','" . $_SESSION['idusuario'] . "')";
-		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+		// $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) 
+		// VALUES ('plan','$idplan','plan editada','" . $_SESSION['idusuario'] . "')";
+		// $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
 	
 		return $editar;
 	}
@@ -44,11 +45,11 @@ Class Plan
 		$sql="UPDATE plan SET estado='0', user_trash= '" . $_SESSION['idusuario'] . "' WHERE idplan='$idplan'";
 		$desactivar= ejecutarConsulta($sql);
 
-		if ($desactivar['status'] == false) {  return $desactivar; }
+		// if ($desactivar['status'] == false) {  return $desactivar; }
 		
-		//add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('plan','".$idplan."','plan desactivada','" . $_SESSION['idusuario'] . "')";
-		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		// //add registro en nuestra bitacora
+		// $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('plan','".$idplan."','plan desactivada','" . $_SESSION['idusuario'] . "')";
+		// $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
 		
 		return $desactivar;
 	}
@@ -61,13 +62,14 @@ Class Plan
 
 	//Implementamos un método para eliminar plan
 	public function eliminar($idplan) {
-		$sql="UPDATE plan SET estado_delete='0', user_delete= '" . $_SESSION['idusuario'] . "' WHERE idplan='$idplan'";
+		
+		$sql="UPDATE plan SET estado_delete='0' WHERE idplan='$idplan'";
 		$eliminar =  ejecutarConsulta($sql);
 		if ( $eliminar['status'] == false) {return $eliminar; }  
 		
 		//add registro en nuestra bitacora
-		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('plan', '$idplan', 'plan Eliminada','" . $_SESSION['idusuario'] . "')";
-		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		// $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('plan', '$idplan', 'plan Eliminada','" . $_SESSION['idusuario'] . "')";
+		// $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
 		
 		return $eliminar;
 	}
