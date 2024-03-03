@@ -195,6 +195,30 @@ if (!isset($_SESSION["user_nombre"])) {
       }
       break;
 
+      // ══════════════════════════════════════ B A N C O - S E L E C T 2  ══════════════════════════════════════
+    case 'select2_banco':
+      $rspta = $ajax_general->select2_banco();
+      // echo json_encode($rspta, true); die;
+      $data = "";
+
+      if ($rspta['status']) {
+
+        foreach ($rspta['data'] as $key => $value) {
+          $data  .= '<option value="' . $value['idbancos'] . '"  >' . $value['nombre']  . '</option>';
+        }
+
+        $retorno = array(
+          'status' => true,
+          'message' => 'Salió todo ok',
+          'data' => $data,
+        );
+
+        echo json_encode($retorno, true);
+      } else {
+        echo json_encode($rspta, true);
+      }
+      break;
+
       // ══════════════════════════════════════ DEFAULT ══════════════════════════════════════
     default:
       $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];

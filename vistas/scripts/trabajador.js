@@ -13,15 +13,43 @@ function init() {
   lista_select2("../ajax/ajax_general.php?op=select2_cargo", '#idcargo_trabajador', null);
   lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
   lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);
+  lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#tipo_documento").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#idcargo_trabajador").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#idbanco").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#distrito").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
 	$.post("../ajax/usuario.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	});
 	$.post("../ajax/usuario.php?op=series&id=", function (r) {	$("#series").html(r);	});
 	// $.post("../ajax/usuario.php?op=permisosEmpresaTodos", function (r) {	$("#empresas").html(r);	});
+}
+
+function llenar_dep_prov_ubig(input) {
+
+  $(".chargue-pro").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-dep").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+
+  if ($(input).select2("val") == null || $(input).select2("val") == '') { 
+    $("#departamento").val(""); 
+    $("#provincia").val(""); 
+    $("#ubigeo").val(""); 
+
+    $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+  } else {
+    var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
+    $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
+      e = JSON.parse(e); console.log(e);
+      $("#departamento").val(e.data.departamento); 
+      $("#provincia").val(e.data.provincia); 
+      $("#ubigeo").val(e.data.ubigeo_inei); 
+
+      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+      $("#form-cliente").valid();
+    });
+  }  
 }
 
 //Función limpiar

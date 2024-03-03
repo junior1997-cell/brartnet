@@ -145,4 +145,11 @@ Class Ajax_general
 		return ejecutarConsultaArray($sql);   
 	}
 
+  // ══════════════════════════════════════ B A N C O - S E L E C T 2  ══════════════════════════════════════
+	public function select2_banco()	{
+    // $data = [];
+		$sql="SELECT * FROM bancos WHERE estado='1' AND estado_delete = '1'";
+		return ejecutarConsultaArray($sql);   
+	}
+
 }

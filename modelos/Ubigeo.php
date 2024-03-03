@@ -77,10 +77,10 @@ Class Ubigeo
 
 	public function select2_distrito_id($id)	{
 		$sql="SELECT di.*, de.nombre as departamento, p.nombre as provincia
-		FROM distrito as di 
-		INNER JOIN departamento as de ON de.iddepartamento = di.iddepartamento
-		INNER JOIN provincia as p ON p.idprovincia = di.idprovincia
-		WHERE di.estado = '1' AND di.iddistrito = '$id';";
+		FROM ubigeo_distrito as di 
+		INNER JOIN ubigeo_departamento as de ON de.idubigeo_departamento = di.idubigeo_departamento
+		INNER JOIN ubigeo_provincia as p ON p.idubigeo_provincia = di.idubigeo_provincia
+		WHERE di.estado = '1' AND di.idubigeo_distrito = '$id';";
 		return ejecutarConsultaSimpleFila($sql);		
 	}
 }
