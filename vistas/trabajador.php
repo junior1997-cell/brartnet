@@ -98,7 +98,7 @@
                             <!-- idpersona -->
                             <input type="hidden" name="idpersona" id="idpersona" />   
 
-                            <!-- CArgo -->
+                            <!-- Tipo documento -->
                             <div class="col-md-3 col-lg-3 col-xl-3">
                               <div class="form-group">
                                 <label for="nombre_razonsocial" class="form-label">Tipo documento:  </label></label>
@@ -114,7 +114,7 @@
                                 <label for="numero_documento" class="form-label">Numero Documento:</label>
                                 <div class="input-group mb-3">                            
                                   <input type="text" class="form-control" name="numero_documento" id="numero_documento" placeholder="Contraseña" aria-describedby="icon-view-password">
-                                  <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#distrito' );" >
+                                  <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito' );" >
                                     <i class='bx bx-search-alt' id="search_t"></i>
                                     <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
                                   </button>
@@ -202,6 +202,15 @@
                               <div class="form-group">
                                 <label for="login" class="form-label">Sueldo dia:</label>
                                 <input type="text" class="form-control" name="login" id="login" required>
+                              </div>                                         
+                            </div>
+
+                            <!-- Banco -->
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                              <div class="form-group">
+                                <label for="idbanco" class="form-label">Banco:  </label></label>
+                                <select name="idbanco" id="idbanco" class="form-control" placeholder="Seleccionar">                                  
+                                </select>
                               </div>                                         
                             </div>
                             
