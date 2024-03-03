@@ -7,7 +7,7 @@ function init() {
 	listar();
 
 	// ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
-  $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-usuario").submit(); }  });
+  $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-trabajador").submit(); }  });
 
 	// ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2_cargo", '#idcargo_trabajador', null);
@@ -26,31 +26,7 @@ function init() {
 	// $.post("../ajax/usuario.php?op=permisosEmpresaTodos", function (r) {	$("#empresas").html(r);	});
 }
 
-function llenar_dep_prov_ubig(input) {
 
-  $(".chargue-pro").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
-  $(".chargue-dep").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
-  $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
-
-  if ($(input).select2("val") == null || $(input).select2("val") == '') { 
-    $("#departamento").val(""); 
-    $("#provincia").val(""); 
-    $("#ubigeo").val(""); 
-
-    $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
-  } else {
-    var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
-    $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
-      e = JSON.parse(e); console.log(e);
-      $("#departamento").val(e.data.departamento); 
-      $("#provincia").val(e.data.provincia); 
-      $("#ubigeo").val(e.data.ubigeo_inei); 
-
-      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
-      $("#form-cliente").valid();
-    });
-  }  
-}
 
 //Función limpiar
 function limpiar_form() {
@@ -318,27 +294,66 @@ $(document).ready(function () {
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {
-  $('#idpersona').on('change', function() { $(this).trigger('blur'); });
-  $("#form-agregar-usuario").validate({
+  $('#tipo_documento').on('change', function() { $(this).trigger('blur'); });
+  $('#idcargo_trabajador').on('change', function() { $(this).trigger('blur'); });
+  $('#distrito').on('change', function() { $(this).trigger('blur'); });
+  $('#idbanco').on('change', function() { $(this).trigger('blur'); });
+  $("#form-agregar-trabajador").validate({
     ignore: "",
     rules: {           
-      idpersona:      { required: true,   },       
-      clave:    			{ required: true, minlength: 4, maxlength: 20, },       
-			login:          { required: true, minlength: 4, maxlength: 20,
-        remote: {
-          url: "../ajax/usuario.php?op=validar_usuario",
-          type: "get",
-          data: {
-            action: function () { return "checkusername";  },
-            username: function() { var username = $("#login").val(); return username; },
-            idusuario: function() { var idusuario = $("#idusuario").val(); return idusuario; }
-          }
-        }
-      },
+      tipo_documento:           { required: true, minlength: 1, maxlength: 2, },       
+      numero_documento:    			{ required: true, minlength: 8, maxlength: 20, },       
+      idcargo_trabajador:    		{ required: true, },       
+      nombre_razonsocial:    		{ required: true, minlength: 4, maxlength: 200, },       
+      apellidos_nombrecomercial:{ required: true, minlength: 4, maxlength: 200, },       
+      correo:    			          { minlength: 4, maxlength: 100, },       
+      celular:    			        { minlength: 8, maxlength: 9, },       
+      fecha_nacimiento:    			{  },  
+
+      ruc:    			            { minlength: 4, maxlength: 11, },       
+      usuario_sol:    			    { minlength: 4, maxlength: 20, },       
+      clave_sol:    			      { minlength: 4, maxlength: 20, },       
+      direccion:    			      { minlength: 4, maxlength: 20, },       
+      distrito:    			        { required: true, },       
+      departamento:    			    { required: true, },       
+      provincia:    			      { required: true, },  
+      ubigeo:    			          { required: true, },
+
+      sueldo_mensual:    			  { minlength: 4, maxlength: 20, },
+      sueldo_diario:    			  { minlength: 4, maxlength: 20, },
+      idbanco:    			        { required: true, minlength: 4, maxlength: 20, },
+      cuenta_bancaria:    			{ minlength: 4, maxlength: 45, },
+      cci:    			            { minlength: 4, maxlength: 45, },
+      titular_cuenta:    			  { minlength: 4, maxlength: 45, },
+
+			
     },
     messages: {     
-      login:    			{ required: "Campo requerido", remote:"Usuario en uso."},
-      clave:    			{ required: "Campo requerido", }, 
+      tipo_documento:    			  { required: "Campo requerido", },
+      numero_documento:    			{ required: "Campo requerido", }, 
+      idcargo_trabajador:    		{ required: "Campo requerido", }, 
+      nombre_razonsocial:    		{ required: "Campo requerido", }, 
+      apellidos_nombrecomercial:{ required: "Campo requerido", }, 
+      correo:    			          { minlength: "Mínimo {0} caracteres.", }, 
+      celular:    			        { minlength: "Mínimo {0} caracteres.", }, 
+      fecha_nacimiento:    			{  }, 
+
+      ruc:    			            { minlength: "Mínimo {0} caracteres.", }, 
+      usuario_sol:    			    { minlength: "Mínimo {0} caracteres.", }, 
+      clave_sol:    			      { minlength: "Mínimo {0} caracteres.", }, 
+      direccion:    			      { minlength: "Mínimo {0} caracteres.", },
+      distrito:    			        { required: "Campo requerido", }, 
+      departamento:    			    { required: "Campo requerido", }, 
+      provincia:    			      { required: "Campo requerido", }, 
+      ubigeo:    			          { required: "Campo requerido", },
+
+      sueldo_mensual:    			  { minlength: "Mínimo {0} caracteres.", }, 
+      sueldo_diario:    			  { minlength: "Mínimo {0} caracteres.", }, 
+      idbanco:    			        { required: "Campo requerido", }, 
+      cuenta_bancaria:    			{ minlength: "Mínimo {0} caracteres.", }, 
+      cci:    			            { minlength: "Mínimo {0} caracteres.", }, 
+      titular_cuenta:    			  { minlength: "Mínimo {0} caracteres.", }, 
+
     },
         
     errorElement: "span",
@@ -360,7 +375,10 @@ $(function () {
       guardar_y_editar_usuario(e);      
     },
   });
-  $('#idpersona').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#tipo_documento').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#idcargo_trabajador').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#distrito').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#idbanco').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
@@ -371,6 +389,46 @@ function ver_img(img, nombre) {
   $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/usuario/perfil', '100%', '550'));
 }
 
+function llenar_dep_prov_ubig(input) {
+
+  $(".chargue-pro").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-dep").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+
+  if ($(input).select2("val") == null || $(input).select2("val") == '') { 
+    $("#departamento").val(""); 
+    $("#provincia").val(""); 
+    $("#ubigeo").val(""); 
+
+    $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+  } else {
+    var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
+    $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
+      e = JSON.parse(e); console.log(e);
+      $("#departamento").val(e.data.departamento); 
+      $("#provincia").val(e.data.provincia); 
+      $("#ubigeo").val(e.data.ubigeo_inei); 
+
+      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+      $("#form-cliente").valid();
+    });
+  }  
+}
+
+// Modificar nombre segun  el tipo de documento
+$('#tipo_documento').change(function() {
+  var tipo = $(this).val();
+
+  if (tipo !== null && tipo !== '' && tipo == '6') {
+    $('.label-nom-raz').html('Razón Social <sup class="text-danger">*</sup>');
+    $('.label-ape-come').html('Nombre comercial <sup class="text-danger">*</sup>');
+  }else{
+    $('.label-nom-raz').html('Nombres <sup class="text-danger">*</sup>');
+    $('.label-ape-come').html('Apellidos <sup class="text-danger">*</sup>');
+  }
+
+});
+  
 
 
 function reload_usr_trab(){ $('.tipo_persona_venta').html(`(trabajador)`); lista_select2("../ajax/ajax_general.php?op=select2_usuario_trabajador&id=", '#idpersona', null, '.charge_idpersona'); }

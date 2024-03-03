@@ -45,6 +45,10 @@ class Usuario
 	//Implementamos un método para editar registros
 	public function editar($idusuario, $idpersona, $login, $clavehash, $permisos, $series) {
 
+		if (empty($permisos)) {	return [ 'status'=>'error_usuario', 'user'=> $_SESSION['user_nombre'], 'message'=>'No se ha selecionado los permisos de <b>MÓDULOS</b>','data'=>  []  ]; 	}
+		if (empty($series)) {	return [ 'status'=>'error_usuario', 'user'=> $_SESSION['user_nombre'], 'message'=>'No se ha selecionado los permisos de <b>SERIES</b>','data'=>  []  ]; 	}
+		
+
 		$sql = "UPDATE usuario SET idpersona='$idpersona', login='$login', password='$clavehash' WHERE idusuario='$idusuario'";
 		$edit_user = ejecutarConsulta($sql, 'U'); if ($edit_user['status'] == false) {  return $edit_user; }
 
