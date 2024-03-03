@@ -59,7 +59,7 @@
         if ($rspta['status']) {
 
           foreach ($rspta['data'] as $key => $value) {
-            $data  .= '<option value=' . $value['code_sunat'] . ' >' . $value['nombre'] . '</option>';
+            $data  .= '<option value="' . $value['code_sunat'] . '" title ="' . $value['nombre'] . '" >' . $value['abreviatura'] . '</option>';
           }
 
           $retorno = array(
