@@ -1,4 +1,4 @@
-var tabla_zona;
+var tabla_cliente;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -7,34 +7,57 @@ function init() {
 
   $("#mRecurso").addClass("active");
 
-  tabla_principal_zona();
+  tabla_principal_cliente();
 
-  // $("#guardar_registro_zona").on("click", function (e) { $("#submit-form-zona").submit(); });
-  $(".btn-guardarzona").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-zona").submit(); } });
+  $(".btn-guardarzona").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-cliente").submit(); } });
 
 
   lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
   lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
 
+  lista_select2("../ajax/persona_cliente.php?op=select2_plan", '#idplan', null);
+  lista_select2("../ajax/persona_cliente.php?op=select2_zona_antena", '#idzona_antena', null);
+  lista_select2("../ajax/persona_cliente.php?op=select2_trabajador", '#idpersona_trabajador', null);
+
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#tipo_documento").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#distrito").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+ 
+  $("#idplan").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#idzona_antena").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#idpersona_trabajador").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  
   $("#tipo_persona_sunat").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  // $("#idcargo_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-
 
 
 }
-/*==========================================================================================
--------------------------------------------P L A N E S-------------------------------------
-==========================================================================================*/
+function reload_ps() {
+  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
+  $.post("../ajax/usuario.php?op=series&id=", function (r) { $("#series").html(r); });
+}
 //Función limpiar
-function limpiar_zona() {
-  $("#guardar_registro_zona").html('Guardar Cambios').removeClass('disabled');
-  //Mostramos los Materiales
-  $("#idzona_antena").val("");
-  $("#nombre_zona").val("");
-  $("#ip_antena").val("");
+function limpiar_cliente() {
+  $("#guardar_registro_cliente").html('Guardar Cambios').removeClass('disabled');
+
+  $("#tipo_persona_sunat").trigger("change");;
+  $("#tipo_documento").trigger("change");;
+  $("#numero_documento").val("");
+  $("#nombre_razonsocial").val("");
+  $("#apellidos_nombrecomercial").val("");
+  $("#fecha_nacimiento").val("");
+  $("#celular").val("");
+  $("#direccion").val("");
+  $("#distrito").trigger("change");;
+
+  $("#correo").val("");
+
+  $("#idpersona_trabajador").trigger("change");;
+  $("#idzona_antena").trigger("change");;
+  $("#idplan").trigger("change");;
+  $("#ip_personal").val("");
+  $("#fecha_afiliacion").val("");
+  // $("#estado_descuento").val("");
+  // $("#descuento").val("");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -63,8 +86,7 @@ function wiev_tabla_formulario(flag) {
 
 }
 
-function view_names() {
-
+//nombres segun el tipo de doc
 $('#tipo_documento').change(function() {
   var tipo = $(this).val();
 
@@ -78,12 +100,55 @@ $('#tipo_documento').change(function() {
 
 });
 
+function llenar_dep_prov_ubig(input) {
+
+  $(".chargue-pro").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-dep").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+
+  if ($(input).select2("val") == null || $(input).select2("val") == '') { 
+    $("#departamento").val(""); 
+    $("#provincia").val(""); 
+    $("#ubigeo").val(""); 
+
+    $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+  } else {
+    var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
+    $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
+      e = JSON.parse(e); console.log(e);
+      $("#departamento").val(e.data.departamento); 
+      $("#provincia").val(e.data.provincia); 
+      $("#ubigeo").val(e.data.ubigeo_inei); 
+
+      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+      $("#form-cliente").valid();
+    });
+  }  
 }
 
-//Función Listar
-function tabla_principal_zona() {
+function funtion_switch() {  
+  $("#toggleswitchSuccess").val(0);
+  var isChecked = $('#toggleswitchSuccess').prop('checked');
+  if (isChecked) {
 
-  tabla_zona = $('#tabla-zona').dataTable({
+    $("#estado_descuento").val(1);
+    $('#descuento').removeAttr('readonly'); 
+
+  } else {
+
+    $("#estado_descuento").val(0);
+    $("#descuento").val('0');
+    $("#monto_descuento").val('0.00');
+    $('#descuento').attr('readonly', 'readonly');
+
+  }
+}
+
+
+//Función Listar
+function tabla_principal_cliente() {
+
+  tabla_cliente = $('#tabla-cliente').dataTable({
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
@@ -96,7 +161,7 @@ function tabla_principal_zona() {
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: '../ajax/zona.php?op=tabla_principal_zona',
+      url: '../ajax/zona.php?op=tabla_principal_cliente',
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -127,12 +192,12 @@ function tabla_principal_zona() {
 }
 
 //Función para guardar o editar
-function guardar_y_editar_zona(e) {
+function guardar_y_editar_cliente(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-agregar-zona")[0]);
+  var formData = new FormData($("#form-agregar-cliente")[0]);
 
   $.ajax({
-    url: "../ajax/zona.php?op=guardar_y_editar_zona",
+    url: "../ajax/zona.php?op=guardar_y_editar_cliente",
     type: "POST",
     data: formData,
     contentType: false,
@@ -142,12 +207,12 @@ function guardar_y_editar_zona(e) {
       if (e.status == true) {
         Swal.fire("Correcto!", "Color registrado correctamente.", "success");
 
-        tabla_zona.ajax.reload(null, false);
+        tabla_cliente.ajax.reload(null, false);
 
         limpiar();
 
-        $("#modal-agregar-zona").modal("hide");
-        $("#guardar_registro_zona").html('Guardar Cambios').removeClass('disabled');
+        $("#modal-agregar-cliente").modal("hide");
+        $("#guardar_registro_cliente").html('Guardar Cambios').removeClass('disabled');
       } else {
         ver_errores(e);
       }
@@ -158,41 +223,41 @@ function guardar_y_editar_zona(e) {
         if (evt.lengthComputable) {
           var percentComplete = (evt.loaded / evt.total) * 100;
           /*console.log(percentComplete + '%');*/
-          $("#barra_progress_zona").css({ "width": percentComplete + '%' });
-          $("#barra_progress_zona").text(percentComplete.toFixed(2) + " %");
+          $("#barra_progress_cliente").css({ "width": percentComplete + '%' });
+          $("#barra_progress_cliente").text(percentComplete.toFixed(2) + " %");
         }
       }, false);
       return xhr;
     },
     beforeSend: function () {
-      $("#guardar_registro_zona").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-      $("#barra_progress_zona").css({ width: "0%", });
-      $("#barra_progress_zona").text("0%");
+      $("#guardar_registro_cliente").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_cliente").css({ width: "0%", });
+      $("#barra_progress_cliente").text("0%");
     },
     complete: function () {
-      $("#barra_progress_zona").css({ width: "0%", });
-      $("#barra_progress_zona").text("0%");
+      $("#barra_progress_cliente").css({ width: "0%", });
+      $("#barra_progress_cliente").text("0%");
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
-function mostrar_zona(idzona_antena) {
+function mostrar_cliente(idzona_antena) {
   $(".tooltip").remove();
   $("#cargando-3-fomulario").hide();
   $("#cargando-4-fomulario").show();
 
   limpiar();
 
-  $("#modal-agregar-zona").modal("show")
+  $("#modal-agregar-cliente").modal("show")
 
-  $.post("../ajax/zona.php?op=mostrar_zona", { idzona_antena: idzona_antena }, function (e, status) {
+  $.post("../ajax/zona.php?op=mostrar_cliente", { idzona_antena: idzona_antena }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);
 
     if (e.status) {
       $("#idzona_antena").val(e.data.idzona_antena);
-      $("#nombre_zona").val(e.data.nombre);
+      $("#nombre_cliente").val(e.data.nombre);
       $("#ip_antena").val(e.data.ip_antena)
 
       $("#cargando-3-fomulario").show();
@@ -205,7 +270,7 @@ function mostrar_zona(idzona_antena) {
 }
 
 //Función para desactivar registros
-function eliminar_zona(idzona_antena, nombre) {
+function eliminar_cliente(idzona_antena, nombre) {
 
   crud_eliminar_papelera(
     "../ajax/zona.php?op=desactivar",
@@ -215,7 +280,7 @@ function eliminar_zona(idzona_antena, nombre) {
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
     function () { sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado.") },
     function () { sw_success('Eliminado!', 'Tu registro ha sido Eliminado.') },
-    function () { tabla_zona.ajax.reload(null, false); },
+    function () { tabla_cliente.ajax.reload(null, false); },
     false,
     false,
     false,
@@ -225,12 +290,12 @@ function eliminar_zona(idzona_antena, nombre) {
 }
 
 /*==========================================================================================
--------------------------------------------ZONAS-------------------------------------
+-------------------------------------------clienteS-------------------------------------
 ==========================================================================================*/
 //Función Listar
 function tabla_principal_plan() {
 
-  tabla_plan = $('#tabla-zona').dataTable({
+  tabla_plan = $('#tabla-cliente').dataTable({
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
@@ -277,14 +342,51 @@ init();
 
 $(function () {
 
-  $("#form-agregar-zona").validate({
+  $("#form-agregar-cliente").validate({
     rules: {
-      nombre_zona: { required: true },     // terms: { required: true },
-      ip_antena: { required: true }      // terms: { required: true },
+
+      tipo_persona_sunat: { required: true },
+      tipo_documento: { required: true },
+      numero_documento: { required: true },
+      nombre_razonsocial: { required: true },
+      apellidos_nombrecomercial: { required: true },
+      fecha_nacimiento: { required: true },
+      celular: { required: true },
+      direccion: { required: true },
+      distrito: { required: true },
+      departamento: { required: true },
+      provincia: { required: true },
+      ubigeo: { required: true },
+      correo: { required: true },
+      idpersona_trabajador: { required: true },
+      idzona_antena: { required: true },
+      idplan: { required: true },
+      ip_personal: { required: true },
+      fecha_afiliacion: { required: true },
+
+
     },
     messages: {
-      nombre_zona: { required: "Campo requerido.", },
-      ip_antena: { required: "Campo requerido.", },
+
+      tipo_persona_sunat: { required: "Campo requerido.", },
+      tipo_documento: { required: "Campo requerido.", },
+      numero_documento: { required: "Campo requerido.", },
+      nombre_razonsocial: { required: "Campo requerido.", },
+      apellidos_nombrecomercial: { required: "Campo requerido.", },
+      fecha_nacimiento: { required: "Campo requerido.", },
+      celular: { required: "Campo requerido.", },
+      direccion: { required: "Campo requerido.", },
+      distrito: { required: "Campo requerido.", },
+      departamento: { required: "Campo requerido.", },
+      provincia: { required: "Campo requerido.", },
+      ubigeo: { required: "Campo requerido.", },
+      correo: { required: "Campo requerido.", },
+      idpersona_trabajador: { required: "Campo requerido.", },
+      idzona_antena: { required: "Campo requerido.", },
+      idplan: { required: "Campo requerido.", },
+      ip_personal: { required: "Campo requerido.", },
+      fecha_afiliacion: { required: "Campo requerido.", },
+
     },
 
     errorElement: "span",
@@ -303,7 +405,7 @@ $(function () {
     },
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardar_y_editar_zona(e);
+      guardar_y_editar_cliente(e);
     },
 
   });

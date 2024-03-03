@@ -76,8 +76,7 @@ switch ($_GET["op"]){
           "0" => $count++,
           "1" =>  '<div class="hstack gap-2 fs-15">' .
                     '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_gasto_de_trabajador('.($value['idgasto_de_trabajador']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                    ($value['estado'] == '1' ? '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_gasto('.$value['idgasto_de_trabajador'].'.,\''.$value['nombre_razonsocial'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>':
-                    '<button class="btn btn-icon btn-sm btn-success-light product-btn" onclick="activar()" data-bs-toggle="tooltip" title="Activar"><i class="fa fa-check"></i></button>').
+                    '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_gasto('.$value['idgasto_de_trabajador'].'.,\''.$value['nombre_razonsocial'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
                     '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalles_gasto('.($value['idgasto_de_trabajador']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
                   '</div>',
           "2" => ($value['fecha_ingreso']),
@@ -92,7 +91,7 @@ switch ($_GET["op"]){
           "5" => $descripcion,
           "6" => !empty($value['comprobante']) ? '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_comprobante('.($value['idgasto_de_trabajador']).');" data-bs-toggle="tooltip" title="Ver"><i class="ti ti-file-dollar fs-24"></i></button></div>' : 
             '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-danger-light" data-bs-toggle="tooltip" title="no encontrado"><i class="ti ti-file-alert fs-24"></i></button></div>',
-          "7" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Registrado</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Invalido</span>'
+          "7" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Registrado</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Inhalido</span>'
         ];
       }
       $results =[

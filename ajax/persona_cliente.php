@@ -91,20 +91,20 @@ if (!isset($_SESSION["user_nombre"])) {
 
         break;
 
-      case 'select_sunat_doc_identidad':
+      case 'select2_plan':
 
-        $rspta = $gasto_trab->listar_proveedor();
+        $rspta = $persona_cliente->select2_plan();
         $cont = 1;
         $data = "";
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value=' . $value['idpersona']  . '>' . $value['nombre'] . ' ' . $value['apellido'] . '</option>';
+            $data .= '<option  value=' . $value['idplan']  . '>' . $value['nombre'] . ' - Costo: ' . $value['costo'] . '</option>';
           }
 
           $retorno = array(
             'status' => true,
             'message' => 'Salió todo ok',
-            'data' => '<option  value="1" >NINGUNO</option>' . $data,
+            'data' => $data,
           );
           echo json_encode($retorno, true);
         } else {
@@ -112,6 +112,51 @@ if (!isset($_SESSION["user_nombre"])) {
         }
 
         break;
+
+      case 'select2_zona_antena':
+
+        $rspta = $persona_cliente->select2_zona_antena();
+        $cont = 1;
+        $data = "";
+        if ($rspta['status'] == true) {
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value=' . $value['idzona_antena']  . '>' . $value['nombre'] . ' - IP: ' . $value['ip_antena'] . '</option>';
+          }
+
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+
+        break;
+
+      case 'select2_trabajador':
+
+        $rspta = $persona_cliente->select2_trabajador();
+        $cont = 1;
+        $data = "";
+        if ($rspta['status'] == true) {
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value=' . $value['idpersona_trabajador']  . '>' . $value['nombre_completo'] . ' ' . $value['numero_documento'] . '</option>';
+          }
+
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+
+        break;
+
       case 'salir':
         //Limpiamos las variables de sesión
         session_unset();

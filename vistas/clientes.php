@@ -65,7 +65,7 @@ if (!isset($_SESSION["user_nombre"])) {
                     <div>
                       <div class="card custom-card">
                         <div class="card-body table-responsive">
-                          <table id="tabla-zona" class="table table-bordered w-100" style="width: 100%;">
+                          <table id="tabla-cliente" class="table table-bordered w-100" style="width: 100%;">
                             <thead>
                               <tr>
                                 <th class="text-center">#</th>
@@ -94,14 +94,14 @@ if (!isset($_SESSION["user_nombre"])) {
               </section>
               <!-- End::row-1 -->
 
-              <!-- Start FORMULARIO::row-1 -->
-              <section id="seccion_form" style="display: none;">
+              <!-- Start FORMULARIO::row-1 style="display: none;"-->
+              <section id="seccion_form">
                 <div class="row">
                   <div class="col-xxl-12 col-xl-12">
                     <div class="card custom-card">
                       <div class="card-body">
 
-                        <form name="form-empresa" id="form-empresa" method="POST">
+                        <form name="form-cliente" id="form-cliente" method="POST">
 
                           <div class="row" id="cargando-1-fomulario">
 
@@ -110,7 +110,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <div class="row">
                                 <!-- Grupo -->
                                 <div class="col-12 pl-0">
-                                  <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b>DATOS DEL CLIENTE</b></label></div>
+                                  <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b>DATOS PERSONALES</b></label></div>
                                 </div>
                               </div>
 
@@ -122,15 +122,17 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <input type="hidden" id="idtipo_persona" name="idtipo_persona" value="3">
                                   <input type="hidden" id="idbancos" name="idbancos" value="1">
                                   <input type="hidden" id="idcargo_trabajador" name="idcargo_trabajador" value="1">
+                                  <!-- ----------- -->
 
+                                  <input type="hidden" id="idpersona_cliente" name="idpersona_cliente">
 
                                   <!-- TIPO PERSONA -->
                                   <div class="col-12 col-sm-6 col-md-3 col-lg-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="nombre_razonsocial">Tipo Persona <sup class="text-danger">*</sup></label>
+                                      <label class="form-label" for="nombre_razonsocial">Tipo Persona: <sup class="text-danger">*</sup></label>
                                       <select name="tipo_persona_sunat" id="tipo_persona_sunat" class="form-control" placeholder="Tipo Persona">
-                                        <option value="Nacional">Nacional</option>
-                                        <option value="Juridica">Juridica</option>
+                                        <option value="NATURAL">NATURAL</option>
+                                        <option value="JURÍDICA">JURÍDICA</option>
                                       </select>
                                     </div>
                                   </div>
@@ -139,7 +141,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <div class="col-12 col-sm-6 col-md-3 col-lg-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="nombre_razonsocial">Tipo Doc. <sup class="text-danger">*</sup></label>
-                                      <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento" onchange="view_names();"></select>
+                                      <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento"></select>
                                     </div>
                                   </div>
 
@@ -147,12 +149,12 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <div class="col-12 col-sm-6 col-md-3 col-lg-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="num_documento">N° de documento <sup class="text-danger">*</sup></label>
-                                      <div class="input-group">
-                                        <input type="number" name="num_documento" class="form-control inpur_edit" id="num_documento" placeholder="N° de documento" />
-                                        <span class="input-group-text" style="cursor: pointer;" data-bs-toggle="tooltip" title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('');">
-                                          <i class="fas fa-search text-primary" id="search"></i>
-                                          <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
-                                        </span>
+                                      <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="numero_documento" id="numero_documento" placeholder="Contraseña" aria-describedby="icon-view-password">
+                                        <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito' );">
+                                          <i class='bx bx-search-alt' id="search_t"></i>
+                                          <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
+                                        </button>
                                       </div>
                                     </div>
                                   </div>
@@ -161,7 +163,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label nombre_razon" for="nombre">Nombre <sup class="text-danger">*</sup></label>
-                                      <input type="text" name="nombre" class="form-control inpur_edit" id="nombre" />
+                                      <input type="text" name="nombre_razonsocial" class="form-control inpur_edit" id="nombre_razonsocial" />
                                     </div>
                                   </div>
 
@@ -169,25 +171,27 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label apellidos_nombrecomer" for="nombre">Apellidos <sup class="text-danger">*</sup></label>
-                                      <input type="text" name="nombre" class="form-control inpur_edit" id="nombre" />
+                                      <input type="text" name="apellidos_nombrecomercial" class="form-control inpur_edit" id="apellidos_nombrecomercial" />
                                     </div>
                                   </div>
                                   <!-- Fecha cumpleaño -->
-                                  <div class="col-6 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="direccion">Fecha nacimiento <sup class="text-danger">*</sup></label>
-                                      <input type="date" name="direccion" class="form-control inpur_edit" id="direccion" />
+                                      <label class="form-label" for="fecha_nacimiento">Fecha nacimiento <sup class="text-danger">*</sup></label>
+                                      <input type="date" name="fecha_nacimiento" class="form-control inpur_edit" id="fecha_nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" onchange="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" />
+                                      <input type="hidden" name="edad" id="edad" />
                                     </div>
                                   </div>
                                   <!-- Edad -->
-                                  <div class="col-6 col-sm-6 col-md-1 col-lg-1" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-1 col-lg-1" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="Distrito">Edad <sup class="text-danger">*</sup></label>
-                                      <input type="text" name="edad" class="form-control" id="edad" readonly />
+                                      <label class="form-label" for="Edad">Edad <sup class="text-danger">*</sup></label>
+                                      <p class="edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
+
                                     </div>
                                   </div>
                                   <!-- Celular  -->
-                                  <div class="col-6 col-sm-6 col-md-2 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-2 col-lg-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="celular">Celular <sup class="text-danger">*</sup></label>
                                       <input type="number" name="celular" class="form-control inpur_edit" id="celular" />
@@ -195,34 +199,48 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- Dirección -->
-                                  <div class="col-6 col-sm-6 col-md-6 col-lg-7" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-7" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="direccion">Dirección <sup class="text-danger">*</sup></label>
                                       <input type="text" name="direccion" class="form-control inpur_edit" id="direccion" />
                                     </div>
                                   </div>
-                                  
+
                                   <!-- Distrito -->
-                                  <div class="col-6 col-sm-6 col-md-6 col-lg-7" style="margin-bottom: 20px;">
+                                  <div class="col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="Distrito">Distrito <sup class="text-danger">*</sup></label>
-                                      <select name="distrito" id="distrito" class="form-control" placeholder="Selec. Distrito"></select>
+                                      <label for="distrito" class="form-label">Distrito: </label></label>
+                                      <select name="distrito" id="distrito" class="form-control" placeholder="Seleccionar" onchange="llenar_dep_prov_ubig(this);">
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <!-- Departamento -->
+                                  <div class="col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label for="departamento" class="form-label">Departamento: <span class="chargue-pro" readonly></span></label>
+                                      <input type="text" class="form-control" name="departamento" id="departamento">
+                                    </div>
+                                  </div>
+                                  <!-- Provincia -->
+                                  <div class="col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label for="provincia" class="form-label">Provincia: <span class="chargue-dep" readonly></span></label>
+                                      <input type="text" class="form-control" name="provincia" id="provincia">
+                                    </div>
+                                  </div>
+                                  <!-- Ubigeo -->
+                                  <div class="col-12 col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label for="ubigeo" class="form-label">Ubigeo: <span class="chargue-ubi" readonly></span></label>
+                                      <input type="text" class="form-control" name="ubigeo" id="ubigeo">
                                     </div>
                                   </div>
 
-                                  <!-- mapa -->
-                                  <div class="col-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: 20px;">
+                                  <!-- Correo -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="mapa"><span class="badge rounded-pill bg-outline-info cursor-pointer" data-bs-toggle="tooltip" title="Previsualizar" onclick="view_mapa();"><i class="las la-eye fa-lg"></i></span> Mapa Link <sup class="text-danger">*</sup></label>
-                                      <textarea class="form-control inpur_edit" name="mapa" id="mapa" id="" cols="30" rows="2"></textarea>
-                                    </div>
-                                  </div>
-
-                                  <!-- Horario-->
-                                  <div class="col-12 col-sm-12 col-md-12 col-lg-6" style="margin-bottom: 20px;">
-                                    <div class="form-group">
-                                      <label class="form-label" for="horario">Horario <sup class="text-danger">*</sup> </label>
-                                      <textarea name="horario" id="horario" class="form-control inpur_edit" rows="2" readonly></textarea>
+                                      <label class="form-label" for="Correo">Correo <sup class="text-danger">*</sup></label>
+                                      <input type="email" name="correo" id="correo" class="form-control" placeholder="Correo"></input>
                                     </div>
                                   </div>
 
@@ -237,47 +255,72 @@ if (!isset($_SESSION["user_nombre"])) {
                               <div class="row">
                                 <!-- Grupo -->
                                 <div class="col-12 pl-0">
-                                  <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b>CONTACTO</b></label></div>
+                                  <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b>DATOS TÉCNICOS </b></label></div>
                                 </div>
                               </div>
 
                               <div class="card-body" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
                                 <div class="row">
-                                  <!-- Correo -->
-                                  <div class="col-6 col-sm-6 col-md-6 col-lg-12" style="margin-bottom: 20px;">
+
+
+                                  <!-- Select trabajdor -->
+                                  <div class="col-12 col-sm-6 col-md-3 col-lg-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="correo">Correo <sup class="text-danger">*</sup></label>
-                                      <input type="text" name="correo" class="form-control inpur_edit" id="correo" readonly />
+                                      <label class="form-label" for="idpersona_trabajador">Trabajdor <sup class="text-danger">*</sup></label>
+                                      <select name="idpersona_trabajador" id="idpersona_trabajador" class="form-control" placeholder="Selec. Trabajador"></select>
                                     </div>
                                   </div>
 
-                                  <!-- celular -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: 20px;">
+                                  <!-- Select Zona antena -->
+                                  <div class="col-12 col-sm-6 col-md-3 col-lg-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="celular">Celular WhatsApp</label>
-                                      <div class="input-group">
-                                        <span class="input-group-text"><i class="ri-whatsapp-line text-success fa-lg"></i></span>
-                                        <input type="tel" name="celular" class="form-control inpur_edit" id="celular" placeholder="Celular" readonly />
+                                      <label class="form-label" for="idzona_antena">Zona Antena <sup class="text-danger">*</sup></label>
+                                      <select name="idzona_antena" id="idzona_antena" class="form-control" placeholder="Selec. Zona Antena"></select>
+                                    </div>
+                                  </div>
+
+                                  <!-- Select Plan -->
+                                  <div class="col-12 col-sm-6 col-md-3 col-lg-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="idplan">Plan <sup class="text-danger">*</sup></label>
+                                      <select name="idplan" id="idplan" class="form-control" placeholder="Selec. Plan"></select>
+                                    </div>
+                                  </div>
+
+                                  <!-- Ip Personal -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="ip_personal">Ip Personal <sup class="text-danger">*</sup></label>
+                                      <input type="text" name="ip_personal" class="form-control inpur_edit" id="ip_personal" />
+                                    </div>
+                                  </div>
+
+                                  <!-- fecha afiliacion -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="fecha_afiliacion">Fecha Afiliacion <sup class="text-danger">*</sup></label>
+                                      <input type="date" name="fecha_afiliacion" class="form-control inpur_edit" id="fecha_afiliacion" />
+                                    </div>
+                                  </div>
+
+                                  <!-- Descuento -->
+                                  <div class="col-12 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="fecha_afiliacion"><sup class="text-white">*</sup></label>
+                                      <div class="custom-toggle-switch d-flex align-items-center mb-4">
+                                        <input id="toggleswitchSuccess" name="toggleswitch001" type="checkbox" onchange="funtion_switch();">
+                                        <label for="toggleswitchSuccess" class="label-success"></label><span class="ms-3">Descuento</span>
                                       </div>
+                                      <input type="hidden" id="estado_descuento" name="estado_descuento" value="0">
                                     </div>
+
                                   </div>
 
-                                  <!-- Teléfono -->
-                                  <div class="col-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: 20px;">
+                                  <!-- fecha afiliacion -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="telefono">Teléfono Fijo<sup class="text-danger">*</sup></label>
-                                      <input type="text" name="telefono" class="form-control inpur_edit" id="telefono" readonly />
-                                    </div>
-                                  </div>
-
-                                  <!-- Grupo WhatsApp -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-12" style="margin-bottom: 20px;">
-                                    <div class="form-group">
-                                      <label class="form-label" for="link_grupo_whats">Link Grupo WhatsApp</label>
-                                      <div class="input-group">
-                                        <span class="input-group-text"><i class="ri-group-line text-success fa-lg"></i></span>
-                                        <input type="url" name="link_grupo_whats" id="link_grupo_whats" class="form-control inpur_edit" placeholder="Celular" readonly />
-                                      </div>
+                                      <label class="form-label" for="fecha_afiliacion">Monto descuento <sup class="text-danger">*</sup></label>
+                                      <input type="number" name="descuento" class="form-control inpur_edit" id="descuento" readonly />
                                     </div>
                                   </div>
 
@@ -305,7 +348,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
 
                           <!-- Submit -->
-                          <button type="submit" style="display: none;" id="submit-form-usuario">Submit</button>
+                          <button type="submit" style="display: none;" id="submit-form-cliente">Submit</button>
                         </form>
 
                       </div>

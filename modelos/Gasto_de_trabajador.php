@@ -28,12 +28,35 @@
     }
 
     function mostrar_detalle_gasto($id){
-      $sql = "SELECT gt.*, p.*, ct.nombre cargo FROM gasto_de_trabajador as gt, persona as p, cargo_trabajador as ct
-      WHERE gt.idgasto_de_trabajador = '$id' AND gt.idtrabajador = p.idpersona AND p.idtipo_persona = 2 AND p.idcargo_trabajador = ct.idcargo_trabajador
+
+      $sql_1 = "SELECT gt.*, p.* FROM gasto_de_trabajador as gt, persona as p
+      WHERE gt.idgasto_de_trabajador = '$id' AND gt.idtrabajador = p.idpersona AND p.idtipo_persona = 2
       AND gt.estado = 1 AND gt.estado_delete = 1;";
-      return ejecutarConsultaSimpleFila($sql);
+      $trabajador = ejecutarConsultaSimpleFila($sql_1); if ($trabajador['status'] == false) { return $trabajador; }
+
+      $sql_2 = "SELECT p.* FROM gasto_de_trabajador as gt
+      INNER JOIN persona as p ON gt.idproveedor = p.idpersona
+      WHERE gt.idgasto_de_trabajador = '$id'
+        AND p.idtipo_persona IN (1, 4)
+        AND gt.estado = 1
+        AND gt.estado_delete = 1;
+      ";
+      $proveedor = ejecutarConsultaSimpleFila($sql_2); if ($proveedor['status'] == false) { return $proveedor; }
+
+      $results = [
+        "status" => true,
+        "data" => [
+        "trabajador" => $trabajador,
+        "proveedor" => $proveedor,
+        
+      ],
+      "message" => 'Todo oka'
+      ];
+
+      return $results;
 
     }
+
     function listar_tabla(){
       $sql = "SELECT gt.*, p.*, ct.nombre cargo FROM gasto_de_trabajador as gt, persona as p, cargo_trabajador as ct
       WHERE gt.idtrabajador = p.idpersona AND p.idtipo_persona = 2 AND p.idcargo_trabajador = ct.idcargo_trabajador
