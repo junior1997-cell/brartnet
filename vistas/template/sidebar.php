@@ -170,7 +170,7 @@
             <li class="slide"> <a href="task-details.php" class="side-menu__item">Guia remision</a></li>
             <?php } ?>
             <?php  if ($_SESSION['cliente'] == '1') { ?>
-            <li class="slide"> <a href="task-kanban-board.php" class="side-menu__item">Clientes</a></li>
+            <li class="slide"> <a href="clientes.php" class="side-menu__item">Clientes</a></li>
             <?php } ?>
           </ul>
         </li>

@@ -2,43 +2,43 @@
 ob_start();
 
 if (strlen(session_id()) < 1) { session_start(); } //Validamos si existe o no la sesión
-  require_once "../modelos/Plan.php";
+  require_once "../modelos/Zona.php";
 
-  $plan = new Plan();
+  $zona = new Zona();
 
-  $idplan            = isset($_POST["idplan"]) ? limpiarCadena($_POST["idplan"]) : "";
-  $nombre_plan       = isset($_POST["nombre_plan"]) ? limpiarCadena($_POST["nombre_plan"]) : "";
-  $costo_plan        = isset($_POST["costo_plan"]) ? limpiarCadena($_POST["costo_plan"]) : "";
+  $idzona_antena     = isset($_POST["idzona_antena"]) ? limpiarCadena($_POST["idzona_antena"]) : "";
+  $nombre_zona       = isset($_POST["nombre_zona"]) ? limpiarCadena($_POST["nombre_zona"]) : "";
+  $ip_antena         = isset($_POST["ip_antena"]) ? limpiarCadena($_POST["ip_antena"]) : "";
 
   switch ($_GET["op"]) {
-    case 'guardar_y_editar_plan':
-      if (empty($idplan)) {
-        $rspta = $plan->insertar($nombre_plan, $costo_plan);
+    case 'guardar_y_editar_zona':
+      if (empty($idzona_antena)) {
+        $rspta = $zona->insertar_zona($nombre_zona, $ip_antena);
         echo json_encode($rspta, true);
       } else {
-        $rspta = $plan->editar($idplan, $nombre_plan, $costo_plan);
+        $rspta = $zona->editar_zona($idzona_antena, $nombre_zona, $ip_antena);
         echo json_encode($rspta, true);
       }
       break;
 
     case 'desactivar':
-      $rspta = $plan->desactivar($_GET["id_tabla"]);
+      $rspta = $zona->desactivar_zona($_GET["id_tabla"]);
       echo json_encode($rspta, true);
       break;
 
     case 'eliminar':
-      $rspta = $plan->eliminar($_GET["id_tabla"]);
+      $rspta = $zona->eliminar_zona($_GET["id_tabla"]);
       echo json_encode($rspta, true);
       break;
 
-    case 'mostrar_plan':
-      $rspta = $plan->mostrar($idplan);
+    case 'mostrar_zona':
+      $rspta = $zona->mostrar_zona($idzona_antena);
       //Codificar el resultado utilizando json
       echo json_encode($rspta, true);
       break;
 
-    case 'tabla_principal_plan':
-      $rspta = $plan->tabla_principal_plan();
+    case 'tabla_principal_zona':
+      $rspta = $zona->tabla_principal_zona();
       //Vamos a declarar un array
       $data = [];
       $cont = 1;
@@ -51,10 +51,10 @@ if (strlen(session_id()) < 1) { session_start(); } //Validamos si existe o no la
 
           $data[] = array(
             "0" => $cont++,
-            "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_plan(' . $value['idplan'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-              ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_plan(' . $value['idplan'] . ', \'' . encodeCadenaHtml($value['nombre']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',         
+            "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_zona(' . $value['idzona_antena'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+              ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_zona(' . $value['idzona_antena'] . ', \'' . encodeCadenaHtml($value['nombre']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',         
             "2" => $value['nombre'],
-            "3" => $value['costo'],
+            "3" => $value['ip_antena'],
             "4" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
 
           );
