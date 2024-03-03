@@ -65,6 +65,7 @@ Class Ajax_general
     curl_close( $curl );                              // Cerramos curl
     return json_decode( $json, true );
   }  
+  
 
   // ══════════════════════════════════════ SUNAT WFACX ══════════════════════════════════════
   public function datos_sunat_otro($ruc)	{ 
@@ -92,6 +93,14 @@ Class Ajax_general
     // Datos listos para usar
     return json_decode($response);
   }
+
+  /* ══════════════════════════════════════ S U N A T   ══════════════════════════════════════ */
+
+  public function select2_tipo_documento()	{
+    // $data = [];
+		$sql="SELECT * FROM sunat_doc_identidad";
+		return ejecutarConsultaArray($sql);   
+	}
 
   // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
 	public function select2_usuario_trabajador($id)	{
@@ -133,6 +142,13 @@ Class Ajax_general
 	public function select2_cargo()	{
     // $data = [];
 		$sql="SELECT * FROM cargo_trabajador WHERE estado='1' AND estado_delete='1'";
+		return ejecutarConsultaArray($sql);   
+	}
+
+  // ══════════════════════════════════════ B A N C O - S E L E C T 2  ══════════════════════════════════════
+	public function select2_banco()	{
+    // $data = [];
+		$sql="SELECT * FROM bancos WHERE estado='1' AND estado_delete = '1'";
 		return ejecutarConsultaArray($sql);   
 	}
 

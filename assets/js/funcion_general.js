@@ -969,49 +969,42 @@ function reload_zoom() {
 
 /*  ══════════════════════════════════════════ - A P I S - ══════════════════════════════════════════ */
 // Buscar Reniec SUNAT
-function buscar_sunat_reniec(input='') {
+function buscar_sunat_reniec(input='', tipo_documento, dniruc, nombre, apellido, direccion, distrito, titular) {
   //console.log(input);
 
   $(`#search${input}`).hide(); $(`#charge${input}`).show();
 
-  let tipo_doc = $(`#tipo_documento${input}`).val();
+  let tipo_doc = $(tipo_documento).val();
 
-  let dni_ruc = $(`#num_documento${input}`).val(); 
+  let dni_ruc = $(dniruc).val(); 
    
-  if (tipo_doc == "DNI") {
+  if (tipo_doc == "1") { // DNI
 
     if (dni_ruc.length == "8") {
 
-      $.post("../ajax/ajax_general.php?op=reniec", { dni: dni_ruc }, function (data, status) {
+      $.post("../ajax/ajax_general.php?op=reniec_jdl", { dni: dni_ruc }, function (data, status) {
 
         data = JSON.parse(data);  console.log(data);
 
         if (data == null) {
 
-          $(`#search${input}`).show();
-  
-          $(`#charge${input}`).hide();
-
-          $(`#nombre${input}`).val(''); $(`#titular_cuenta${input}`).val('');
-          
+          $(`#search${input}`).show(); $(`#charge${input}`).hide();
+          $(nombre).val(''); $(apellido).val(''); $(titular).val('');          
           toastr_error('Error!!', 'Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.', 700);
           
         } else {
           if (data.success == false) {
 
-            $(`#search${input}`).show();
-
-            $(`#charge${input}`).hide();
+            $(`#search${input}`).show(); $(`#charge${input}`).hide();
 
             toastr_error('Error de búsqueda!!', 'Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!', 700);
           } else {
 
-            $(`#search${input}`).show();
+            $(`#search${input}`).show();  $(`#charge${input}`).hide();
 
-            $(`#charge${input}`).hide();
-
-            $(`#nombre${input}`).val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-            $(`#titular_cuenta${input}`).val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+            $(nombre).val(data.nombres );
+            $(apellido).val( data.apellidoPaterno + " " + data.apellidoMaterno);
+            $(titular).val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
 
             toastr_success('Éxito!!!', 'Persona encontrada!!!', 700);
           }
@@ -1020,123 +1013,85 @@ function buscar_sunat_reniec(input='') {
       });
     } else {
 
-      $(`#num_documento${input}`).addClass("is-invalid");
-
-      $(`#search${input}`).show();
-
-      $(`#charge${input}`).hide();
-
-      $(`#nombre${input}`).val(''); $(`#titular_cuenta${input}`).val('');
-
+      $(dniruc).addClass("is-invalid");
+      $(`#search${input}`).show();   $(`#charge${input}`).hide();
+      $(nombre).val(''); $(apellido).val(''); $(titular).val('');
       toastr_info('Alerta!!', 'Asegurese de que el DNI tenga 8 dígitos!!!', 700);
     }
-  } else {
-    if (tipo_doc == "RUC") {
+  } else if (tipo_doc == "6") {  // RUC
 
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/ajax_general.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
+    if (dni_ruc.length == "11") {
+      $.post("../ajax/ajax_general.php?op=sunat_jdl", { ruc: dni_ruc }, function (data, status) {
 
-          data = JSON.parse(data);    console.log(data);
+        data = JSON.parse(data);    console.log(data);
 
-          if (data == null) {
-            $(`#search${input}`).show();
-    
-            $(`#charge${input}`).hide();
-    
-            toastr.error("");
-            toastr_error('Error!!', 'Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.', 700);
+        if (data == null) {
+          $(`#search${input}`).show();  $(`#charge${input}`).hide();           
+          toastr_error('Error!!', 'Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.', 700);
+          
+        } else {
+
+          if (data.success == false) {
+
+            $(`#search${input}`).show(); $(`#charge${input}`).hide();             
+            $(nombre).val(''); $(apellido).val('');  $(direccion).val(''); $(titular).val('');  
+            toastr_error('Error de búsqueda', 'Datos no encontrados en la SUNAT!!!', 700);
             
           } else {
 
-            if (data.success == false) {
+            if (data.estado == "ACTIVO") {
 
-              $(`#search${input}`).show();
+              $(`#search${input}`).show(); $(`#charge${input}`).hide();
 
-              $(`#charge${input}`).hide();
+              var api_razonSocial     = (data.razonSocial == null ? "" : data.razonSocial);
+              var api_nombreComercial = (data.nombreComercial == null ? "" : data.nombreComercial);
+              var api_direccion       = (data.direccion == null ? "" : data.direccion);
+              var api_distrito        = (data.distrito == null ? "" : data.distrito);
 
-              $(`#nombre${input}`).val(''); $(`#titular_cuenta${input}`).val('');  $(`#empresa${input}`).val('');  $(`#razon_social${input}`).val(''); $(`#direccion${input}`).val('');
-
-              toastr_error('Error de búsqueda', 'Datos no encontrados en la SUNAT!!!', 700);
+              $(nombre).val(api_razonSocial); 
+              $(apellido).val(api_nombreComercial);  
+              $(direccion).val(api_direccion);
+              $(distrito).val(api_distrito).trigger('change');
               
+              toastr_success('', 'Datos encontrados!!', 700);
+
             } else {
 
-              if (data.estado == "ACTIVO") {
+              toastr_info('Alerta!!', 'Se recomienda NO generar FACTURAS ó BOLETAS!!!', 700);
 
-                $(`#search${input}`).show();
+              $(`#search${input}`).show();  $(`#charge${input}`).hide();
 
-                $(`#charge${input}`).hide();
+              var api_razonSocial     = (data.razonSocial == null ? "" : data.razonSocial);
+              var api_nombreComercial = (data.nombreComercial == null ? "" : data.nombreComercial);
+              var api_direccion       = (data.direccion == null ? "" : data.direccion);
+              var api_distrito        = (data.distrito == null ? "" : data.distrito);
 
-                data.razonSocial == null ? $(`#nombre${input}`).val(data.nombreComercial) : $(`#nombre${input}`).val(data.razonSocial);
-                data.razonSocial == null ? $(`#empresa${input}`).val(data.nombreComercial) : $(`#empresa${input}`).val(data.razonSocial);
-                data.razonSocial == null ? $(`#razon_social${input}`).val(data.nombreComercial) : $(`#razon_social${input}`).val(data.razonSocial);
-
-                data.razonSocial == null ? $(`#titular_cuenta${input}`).val(data.nombreComercial) : $(`#titular_cuenta${input}`).val(data.razonSocial);
-
-                var departamento = (data.departamento == null ? "" : data.departamento); 
-                var provincia = (data.provincia == null ? "" : data.provincia);
-                var distrito = (data.distrito == null ? "" : data.distrito);                
-
-                data.direccion == null ? $(`#direccion${input}`).val(`${departamento} - ${provincia} - ${distrito}`) : $(`#direccion${input}`).val(data.direccion);
-                data.direccion == null ? $(`#ubicacion${input}`).val(`${departamento} - ${provincia} - ${distrito}`) : $(`#ubicacion${input}`).val(data.direccion);
-
-                toastr.success("");
-                toastr_success('', 'Datos encontrados!!', 700);
-
-              } else {
-
-                toastr_info('Alerta!!', 'Se recomienda NO generar FACTURAS ó BOLETAS!!!', 700);
-
-                $(`#search${input}`).show();
-
-                $(`#charge${input}`).hide();
-
-                data.razonSocial == null ? $(`#nombre${input}`).val(data.nombreComercial) : $(`#nombre${input}`).val(data.razonSocial);
-                data.razonSocial == null ? $(`#empresa${input}`).val(data.empresaComercial) : $(`#empresa${input}`).val(data.razonSocial);
-
-                data.razonSocial == null ? $(`#titular_cuenta${input}`).val(data.nombreComercial) : $(`#titular_cuenta${input}`).val(data.razonSocial);
-                
-                var departamento = (data.departamento == null ? "" : data.departamento); 
-                var provincia = (data.provincia == null ? "" : data.provincia);
-                var distrito = (data.distrito == null ? "" : data.distrito);
-
-                data.direccion == null ? $(`#direccion${input}`).val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $(`#direccion${input}`).val(data.direccion);
-                data.direccion == null ? $(`#ubicacion${input}`).val(`${departamento} - ${provincia} - ${distrito}`) : $(`#ubicacion${input}`).val(data.direccion);
-
-              }
+              $(nombre).val(api_razonSocial); 
+              $(apellido).val(api_nombreComercial);  
+              $(direccion).val(api_direccion);
+              $(distrito).val(api_distrito).trigger('change');
             }
-          }          
-        });
-      } else {
-        $(`#num_documento${input}`).addClass("is-invalid");
-
-        $(`#search${input}`).show();
-
-        $(`#charge${input}`).hide();
-
-        $(`#nombre${input}`).val(''); $(`#titular_cuenta${input}`).val('');  $(`#empresa${input}`).val('');  $(`#razon_social${input}`).val(''); $(`#direccion${input}`).val('');
-
-        toastr_info('Alerta!!', 'Asegurese de que el RUC tenga 11 dígitos!!!', 700);
-      }
+          }
+        }          
+      });
     } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
 
-        $(`#search${input}`).show();
+      $(dniruc).addClass("is-invalid");
+      $(`#search${input}`).show();  $(`#charge${input}`).hide();
+      $(nombre).val(''); $(apellido).val('');  $(direccion).val(''); $(titular).val('');      
 
-        $(`#charge${input}`).hide();
-
-        toastr_info('Alerta!!', 'No necesita hacer consulta.', 700);
-
-      } else {
-
-        $(`#tipo_documento${input}`).addClass("is-invalid");
-
-        $(`#search${input}`).show();
-
-        $(`#charge${input}`).hide();
-        
-        toastr_error('Error!!', 'Selecione un tipo de documento.', 700);
-      }
+      toastr_info('Alerta!!', 'Asegurese de que el RUC tenga 11 dígitos!!!', 700);
     }
+  } else if (tipo_doc == "0" || tipo_doc == "4" || tipo_doc == "7") {    
+
+    $(`#search${input}`).show();  $(`#charge${input}`).hide();
+    toastr_info('Alerta!!', 'No necesita hacer consulta.', 700);
+
+  } else {
+
+    $(tipo_documento).addClass("is-invalid");
+    $(`#search${input}`).show(); $(`#charge${input}`).hide();    
+    toastr_error('Error!!', 'Selecione un tipo de documento.', 700);
   }
 }
 

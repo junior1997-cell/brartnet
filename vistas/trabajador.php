@@ -98,15 +98,12 @@
                             <!-- idpersona -->
                             <input type="hidden" name="idpersona" id="idpersona" />   
 
-                            <!-- CArgo -->
+                            <!-- Tipo documento -->
                             <div class="col-md-3 col-lg-3 col-xl-3">
                               <div class="form-group">
                                 <label for="nombre_razonsocial" class="form-label">Tipo documento:  </label></label>
                                 <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento">
-                                  <option selected value="DNI">DNI</option>
-                                  <option value="RUC">RUC</option>
-                                  <option value="CEDULA">CEDULA</option>
-                                  <option value="OTRO">OTRO</option>
+                                  
                                 </select>
                               </div>                                         
                             </div>
@@ -114,10 +111,13 @@
                             <!--  Contraseña -->
                             <div class="col-md-3 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="clave" class="form-label">Numero:</label>
+                                <label for="numero_documento" class="form-label">Numero Documento:</label>
                                 <div class="input-group mb-3">                            
-                                  <input type="password" class="form-control" name="clave" id="clave" placeholder="Contraseña" aria-describedby="icon-view-password">
-                                  <button class="btn btn-primary" type="button" onclick="ver_password(this);" id="icon-view-password"><i class="fa-solid fa-eye"></i></button>
+                                  <input type="text" class="form-control" name="numero_documento" id="numero_documento" placeholder="Contraseña" aria-describedby="icon-view-password">
+                                  <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito' );" >
+                                    <i class='bx bx-search-alt' id="search_t"></i>
+                                    <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
+                                  </button>
                                 </div>
                               </div>                        
                             </div>
@@ -133,9 +133,7 @@
                             <div class="col-md-3 col-lg-3 col-xl-3">
                               <div class="form-group">
                                 <label for="idcargo_trabajador" class="form-label">Cargo:  </label></label>
-                                <select name="idcargo_trabajador" id="idcargo_trabajador" class="form-control" >
-                                  
-                                </select>
+                                <select name="idcargo_trabajador" id="idcargo_trabajador" class="form-control" >   </select>
                               </div>                                         
                             </div>
                           
@@ -156,40 +154,67 @@
                             <!-- Usuario -->
                             <div class="col-md-6 col-lg-6 col-xl-6">
                               <div class="form-group">
-                                <label for="login" class="form-label">Direccion:</label>
-                                <input type="text" class="form-control" name="login" id="login" required>
+                                <label for="direccion" class="form-label">Direccion:</label>
+                                <input type="text" class="form-control" name="direccion" id="direccion">
+                              </div>                                         
+                            </div>
+                            <!-- Distrito -->
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                              <div class="form-group">
+                                <label for="distrito" class="form-label">Distrito:  </label></label>
+                                <select name="distrito" id="distrito" class="form-control" placeholder="Seleccionar" onchange="llenar_dep_prov_ubig(this);">                                  
+                                </select>
+                              </div>                                         
+                            </div>
+                            <!-- Usuario -->
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                              <div class="form-group">
+                                <label for="departamento" class="form-label">Departamento: <span class="chargue-pro"></span></label>
+                                <input type="text" class="form-control" name="departamento" id="departamento">
+                              </div>                                         
+                            </div>
+                            <!-- Usuario -->
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                              <div class="form-group">
+                                <label for="provincia" class="form-label">Provincia: <span class="chargue-dep"></span></label>
+                                <input type="text" class="form-control" name="provincia" id="provincia">
+                              </div>                                         
+                            </div>
+                            <!-- Usuario -->
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                              <div class="form-group">
+                                <label for="ubigeo" class="form-label">Ubigeo: <span class="chargue-ubi"></span></label>
+                                <input type="text" class="form-control" name="ubigeo" id="ubigeo">
                               </div>                                         
                             </div>
                             <!-- CArgo -->
                             <div class="col-md-6 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="cargo" class="form-label">Nacimiento:  </label></label>
-                                <input type="date" class="form-control" name="cargo" id="cargo" >
+                                <label for="fecha_nacimiento" class="form-label">Nacimiento:  </label></label>
+                                <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" >
                               </div>                                         
                             </div>
                             <!-- Usuario -->
                             <div class="col-md-6 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="login" class="form-label">Edad:</label>
-                                <input type="text" class="form-control" name="login" id="login" required>
+                                <label for="edad" class="form-label">Edad:</label>
+                                <input type="text" class="form-control" name="edad" id="edad" >
                               </div>                                         
                             </div>
 
                             <!-- Usuario -->
                             <div class="col-md-6 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="login" class="form-label">Celular:</label>
-                                <input type="text" class="form-control" name="login" id="login" required>
+                                <label for="celular" class="form-label">Celular:</label>
+                                <input type="text" class="form-control" name="celular" id="celular" >
                               </div>                                         
-                            </div>
-
-                            
+                            </div>                            
 
                             <!-- Usuario -->
                             <div class="col-md-6 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="login" class="form-label">Correo:</label>
-                                <input type="text" class="form-control" name="login" id="login" required>
+                                <label for="correo" class="form-label">Correo:</label>
+                                <input type="text" class="form-control" name="correo" id="correo">
                               </div>                                         
                             </div>
 
@@ -206,6 +231,31 @@
                               <div class="form-group">
                                 <label for="login" class="form-label">Sueldo dia:</label>
                                 <input type="text" class="form-control" name="login" id="login" required>
+                              </div>                                         
+                            </div>
+
+                            <!-- Banco -->
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                              <div class="form-group">
+                                <label for="idbanco" class="form-label">Banco:  </label></label>
+                                <select name="idbanco" id="idbanco" class="form-control" placeholder="Seleccionar">                                  
+                                </select>
+                              </div>                                         
+                            </div>
+
+                            <!-- Usuario -->
+                            <div class="col-md-6 col-lg-3 col-xl-3">
+                              <div class="form-group">
+                                <label for="cuenta_bancaria" class="form-label">Cuenta Bancaria:</label>
+                                <input type="text" class="form-control" name="cuenta_bancaria" id="cuenta_bancaria" required>
+                              </div>                                         
+                            </div>
+
+                            <!-- Usuario -->
+                            <div class="col-md-6 col-lg-3 col-xl-3">
+                              <div class="form-group">
+                                <label for="cci" class="form-label">CCI:</label>
+                                <input type="text" class="form-control" name="cci" id="cci" required>
                               </div>                                         
                             </div>
                             
