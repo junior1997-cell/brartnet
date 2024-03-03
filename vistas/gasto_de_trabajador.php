@@ -131,7 +131,7 @@
                                 <div class="col-md-2">
                                   <div class="form-group">
                                     <label for="serie_comprobante" class="form-label">Serie Comprobante</label>
-                                    <input type="text" class="form-control" name="serie_comprobante" id="serie_comprobante"/>
+                                    <input type="text" class="form-control" name="serie_comprobante" id="serie_comprobante" onkeyup="mayus(this);"/>
                                   </div>
                                 </div>
                                 <!-- ------------------ FECHA EMISION ------------------ -->
@@ -274,12 +274,65 @@
               <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h6 class="modal-title" id="modal-ver-detalleLabel1">Detalles - Gasto de Trabajador</h6>
+                    <h4 class="modal-title" id="modal-ver-detalleLabel1"><b>Detalles</b> - Gasto de Trabajador</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <label for="test">Falta el diseño -_- Pero si trae los datos de:</label>
-                    <b><span id="test"></span></b>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <label for="trabajador" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" name="trabajador" id="trabajador" readonly>
+                      </div>
+                      <div class="col-lg-6"> </div>
+                      <div class="col-lg-4 mt-3">
+                        <label for="tipo_comb" class="form-label">Tip. comprobante:</label>
+                        <input type="text" class="form-control" name="tipo_comb" id="tipo_comb" readonly>
+                      </div>
+                      <div class="col-lg-4 mt-3">
+                        <label for="d_serie" class="form-label">Serie:</label>
+                        <input type="text" class="form-control" name="d_serie" id="d_serie" readonly>
+                      </div>
+                      <div class="col-lg-4 mt-3">
+                        <label for="fecha_emision" class="form-label">Fecha Emisión:</label>
+                        <input type="text" class="form-control" name="fecha_emision" id="fecha_emision" readonly>
+                      </div>
+                      <div class="col-lg-6 mt-3 proveedor_s" style="display: none;">
+                        <label for="s_proveedor" class="form-label">Proveedor:</label>
+                        <input type="text" class="form-control" name="s_proveedor" id="s_proveedor" readonly>
+                      </div>
+                      <div class="col-lg-6 mt-3 proveedor_s" style="display: none;"></div>
+                      <div class="col-lg-3 mt-3">
+                        <label for="p_sin_igv" class="form-label">Precio:</label>
+                        <input type="text" class="form-control" name="p_sin_igv" id="p_sin_igv" readonly>
+                      </div>
+                      <div class="col-lg-3 mt-3">
+                        <label for="p_igv" class="form-label">IGV:</label>
+                        <input type="text" class="form-control" name="p_igv" id="p_igv" readonly>
+                      </div>
+                      <div class="col-lg-3 mt-3">
+                        <label for="v_igv" class="form-label">Val IGV:</label>
+                        <input type="text" class="form-control" name="v_igv" id="v_igv" readonly>
+                      </div>
+                      <div class="col-lg-3 mt-3">
+                        <label for="p_con_igv" class="form-label">Total:</label>
+                        <input type="text" class="form-control" name="p_con_igv" id="p_con_igv" readonly>
+                      </div>
+                      <div class="col-lg-6 mt-3">
+                        <label for="d_gasto" class="form-label">Descripción de gasto:</label>
+                        <textarea class="form-control" name="d_gasto" id="d_gasto"></textarea>
+                      </div>
+                      <div class="col-lg-6 mt-3">
+                        <label for="d_compb" class="form-label">Descripción de comprobante:</label>
+                        <textarea class="form-control" name="d_compb" id="d_compb"></textarea>
+                      </div>
+                      <div class="col-lg-12 mt-5">
+                        <h6>Comprobante:</h6>
+                        <div class="imagen_comb"></div>
+                      </div>
+
+
+                    </div>
+                    
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
