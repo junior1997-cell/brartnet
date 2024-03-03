@@ -22,7 +22,7 @@
 
     switch ($_GET["op"]) {       
 
-      /* ══════════════════════════════════════ U B I G E O  ══════════════════════════════════════ */
+      /* ══════════════════════════════════════ A P I S  ══════════════════════════════════════ */
 
       // RENIEC JDL
       case 'reniec_jdl':
@@ -49,7 +49,30 @@
         echo json_encode($rspta);
       break;           
       
-      /* ══════════════════════════════════════ U B I G E O  ══════════════════════════════════════ */
+      /* ══════════════════════════════════════ S U N A T   ══════════════════════════════════════ */
+
+      case 'select2_tipo_documento':			
+        $rspta = $ajax_general->select2_tipo_documento();
+        // echo json_encode($rspta, true); die;
+        $data = "";
+
+        if ($rspta['status']) {
+
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value=' . $value['code_sunat'] . ' >' . $value['nombre'] . '</option>';
+          }
+
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+      break;
       
       // ══════════════════════════════════════ U B I G E O - S E L E C T 2    D E P A R T A M E N T O ══════════════════════════════════════
       case 'select2_departamento':

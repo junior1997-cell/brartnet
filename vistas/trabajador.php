@@ -103,10 +103,7 @@
                               <div class="form-group">
                                 <label for="nombre_razonsocial" class="form-label">Tipo documento:  </label></label>
                                 <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento">
-                                  <option selected value="DNI">DNI</option>
-                                  <option value="RUC">RUC</option>
-                                  <option value="CEDULA">CEDULA</option>
-                                  <option value="OTRO">OTRO</option>
+                                  
                                 </select>
                               </div>                                         
                             </div>

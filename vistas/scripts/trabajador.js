@@ -11,6 +11,7 @@ function init() {
 
 	// ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2_cargo", '#idcargo_trabajador', null);
+  lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#tipo_documento").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
