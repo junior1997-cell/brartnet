@@ -24,7 +24,7 @@ function limpiar_form(){
 $("#idgasto_de_trabajador").val("");
 $("#descr_gastos").val("");
 $("#tp_comprobante").val("NINGUNO");
-$("#idproveedor").hide();
+$(".proveedor").hide();
 $("#serie_comprobante").val("");
 $("#fecha").val("");
 $("#sub_total").val("");
@@ -79,7 +79,7 @@ function guardar_editar(e){
         if (e.status == true) {
           Swal.fire("Correcto!", "El registro se guardo exitosamente.", "success");
           tabla.ajax.reload(null, false);
-          show_hide_form(1);
+          show_hide_form(1); limpiar_form();
         }else{ ver_errores(e); }
       } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }
       $("#guardar_registro_gasto").html('Guardar Cambios').removeClass('disabled send-data');
@@ -179,7 +179,7 @@ function listar_proveedor() {
   // MOSTRAR LISTA
   $('#tp_comprobante').change(function() {
     $('.proveedor').toggle($('#tp_comprobante').val() === 'FACTURA' || $('#tp_comprobante').val() === 'NOTA_DE_VENTA');
-  });;
+  });
 }
 
 function mostrar_comprobante(idgasto_de_trabajador) {
@@ -189,10 +189,6 @@ function mostrar_comprobante(idgasto_de_trabajador) {
 
     e = JSON.parse(e);
     if(e.status == true){
-      var archivo = e.data.comprobante;
-      var extension = archivo.split('.').pop().toLowerCase();
-      var $comprobanteContent = $('#comprobante-container');
-
       if (e.data.comprobante == "" || e.data.comprobante == null  ) {   } else {
         $("#comprobante-container").html(doc_view_extencion(e.data.comprobante,'assets/modulo/gasto_de_trabajador', '100%', '500' ));
         $('.jq_image_zoom').zoom({ on:'grab' });
@@ -204,6 +200,7 @@ function mostrar_comprobante(idgasto_de_trabajador) {
 
 }
 
+//liStamos datos para EDITAR
 function mostrar_gasto_de_trabajador(idgasto_de_trabajador) {
   $.post("../ajax/gasto_de_trabajador.php?op=mostrar_gasto_trabajador",{idgasto_de_trabajador: idgasto_de_trabajador}, function(e, status){
     e = JSON.parse(e);
@@ -215,12 +212,12 @@ function mostrar_gasto_de_trabajador(idgasto_de_trabajador) {
       $("#serie_comprobante").val(e.data.serie_comprobante);
       $("#fecha").val(e.data.fecha_ingreso);
       $("#idproveedor").val(e.data.idproveedor);
-      
       $("#sub_total").val(e.data.precio_sin_igv);
       $("#igv").val(e.data.precio_igv);
       $("#val_igv").val(e.data.val_igv);
       $("#total_gasto").val(e.data.precio_con_igv);
       $("#descr_comprobante").val(e.data.descripcion_comprobante);
+      if(e.data.tipo_comprobante == 'FACTURA' || e.data.tipo_comprobante == 'NOTA_DE_VENTA'){ $(".proveedor").show(); }
 
       // ------------ IMAGEN -----------
       if (e.data.comprobante == "" || e.data.comprobante == null  ) {   } else {
@@ -235,13 +232,38 @@ function mostrar_gasto_de_trabajador(idgasto_de_trabajador) {
   });
 }
 
-
+//listamos los datos para MOSTRAR TODO
 function mostrar_detalles_gasto(idgasto_de_trabajador) {
   $("#modal-ver-detalle").modal('show');
   $.post("../ajax/gasto_de_trabajador.php?op=mostrar_detalle_gasto",{idgasto_de_trabajador: idgasto_de_trabajador}, function(e, status){
     e = JSON.parse(e);
     if(e.status == true){
-      $("#test").html(e.data.nombre_razonsocial);
+
+      // existen algunos registros que tiene el apellido = NULL  --> para ocultar el null hacemos esta condicion <(°-°)>
+      var apellido = e.data.trabajador.data.apellidos_nombrecomercial;
+      var nombre = e.data.trabajador.data.nombre_razonsocial;
+      if (apellido !== null && apellido.trim() !== ''){
+        $("#trabajador").val(nombre + ' ' + apellido);
+      }else {$("#trabajador").val(nombre);}
+
+      $("#tipo_comb").val(e.data.trabajador.data.tipo_comprobante);
+      $("#d_serie").val(e.data.trabajador.data.serie_comprobante);
+      $("#fecha_emision").val(e.data.trabajador.data.fecha_ingreso);
+      $("#s_proveedor").val(e.data.proveedor.data.nombre_razonsocial);
+      $("#p_sin_igv").val(e.data.trabajador.data.precio_sin_igv);
+      $("#p_igv").val(e.data.trabajador.data.precio_igv);
+      $("#v_igv").val(e.data.trabajador.data.val_igv);
+      $("#p_con_igv").val(e.data.trabajador.data.precio_con_igv);
+      $("#d_gasto").val(e.data.trabajador.data.descripcion_gasto);
+      $("#d_compb").val(e.data.trabajador.data.descripcion_comprobante);
+
+      $(".imagen_comb").html(doc_view_extencion(e.data.trabajador.data.comprobante,'assets/modulo/gasto_de_trabajador/', '500px', 'auto' ));
+      
+
+      //mostrar el div del proveedor siempre y cuando tp_comprbante sea F - NV
+      if(e.data.trabajador.data.tipo_comprobante == 'FACTURA' || e.data.trabajador.data.tipo_comprobante == 'NOTA_DE_VENTA'){ 
+        $(".proveedor_s").show(); 
+      } else{$(".proveedor_s").hide();}
     }
   });
 }
@@ -273,8 +295,9 @@ function calcularigv(){ //cortesia de chatGPT :)
   $("#sub_total").val(precio_sin_igv.toFixed(2));
 }
 
-
-    
+function mayus(e) {
+	e.value = e.value.toUpperCase();
+}
 
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
