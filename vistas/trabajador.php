@@ -111,10 +111,13 @@
                             <!--  Contraseña -->
                             <div class="col-md-3 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="clave" class="form-label">Numero:</label>
+                                <label for="numero_documento" class="form-label">Numero Documento:</label>
                                 <div class="input-group mb-3">                            
-                                  <input type="password" class="form-control" name="clave" id="clave" placeholder="Contraseña" aria-describedby="icon-view-password">
-                                  <button class="btn btn-primary" type="button" onclick="ver_password(this);" id="icon-view-password"><i class="fa-solid fa-eye"></i></button>
+                                  <input type="text" class="form-control" name="numero_documento" id="numero_documento" placeholder="Contraseña" aria-describedby="icon-view-password">
+                                  <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#distrito' );" >
+                                    <i class='bx bx-search-alt' id="search_t"></i>
+                                    <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
+                                  </button>
                                 </div>
                               </div>                        
                             </div>
@@ -130,9 +133,7 @@
                             <div class="col-md-3 col-lg-3 col-xl-3">
                               <div class="form-group">
                                 <label for="idcargo_trabajador" class="form-label">Cargo:  </label></label>
-                                <select name="idcargo_trabajador" id="idcargo_trabajador" class="form-control" >
-                                  
-                                </select>
+                                <select name="idcargo_trabajador" id="idcargo_trabajador" class="form-control" >   </select>
                               </div>                                         
                             </div>
                           
@@ -153,40 +154,38 @@
                             <!-- Usuario -->
                             <div class="col-md-6 col-lg-6 col-xl-6">
                               <div class="form-group">
-                                <label for="login" class="form-label">Direccion:</label>
-                                <input type="text" class="form-control" name="login" id="login" required>
+                                <label for="direccion" class="form-label">Direccion:</label>
+                                <input type="text" class="form-control" name="direccion" id="direccion">
                               </div>                                         
                             </div>
                             <!-- CArgo -->
                             <div class="col-md-6 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="cargo" class="form-label">Nacimiento:  </label></label>
-                                <input type="date" class="form-control" name="cargo" id="cargo" >
+                                <label for="fecha_nacimiento" class="form-label">Nacimiento:  </label></label>
+                                <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" >
                               </div>                                         
                             </div>
                             <!-- Usuario -->
                             <div class="col-md-6 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="login" class="form-label">Edad:</label>
-                                <input type="text" class="form-control" name="login" id="login" required>
+                                <label for="edad" class="form-label">Edad:</label>
+                                <input type="text" class="form-control" name="edad" id="edad" >
                               </div>                                         
                             </div>
 
                             <!-- Usuario -->
                             <div class="col-md-6 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="login" class="form-label">Celular:</label>
-                                <input type="text" class="form-control" name="login" id="login" required>
+                                <label for="celular" class="form-label">Celular:</label>
+                                <input type="text" class="form-control" name="celular" id="celular" >
                               </div>                                         
-                            </div>
-
-                            
+                            </div>                            
 
                             <!-- Usuario -->
                             <div class="col-md-6 col-lg-3 col-xl-3">
                               <div class="form-group">
-                                <label for="login" class="form-label">Correo:</label>
-                                <input type="text" class="form-control" name="login" id="login" required>
+                                <label for="correo" class="form-label">Correo:</label>
+                                <input type="text" class="form-control" name="correo" id="correo">
                               </div>                                         
                             </div>
 
