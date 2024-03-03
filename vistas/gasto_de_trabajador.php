@@ -9,7 +9,7 @@
 
     ?>
       <!DOCTYPE html>
-      <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
+      <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
 
         <head>
           
@@ -17,7 +17,7 @@
 
         </head> 
 
-        <body id="body-usuario">
+        <body id="body-gastos-trab">
 
           <?php include("template/switcher.php"); ?>
           <?php include("template/loader.php"); ?>
@@ -34,8 +34,10 @@
                 <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                   <div>
                     <div class="d-md-flex d-block align-items-center ">
-                      <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal"  data-bs-target="#modal-registrar-pago"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
-                      <div>
+                      <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);limpiar_form();"><i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                      <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);limpiar_form();" style="display: none;"><i class="ri-arrow-left-line"></i></button>
+                      <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
+                    <div>
                         <p class="fw-semibold fs-18 mb-0">Gastos del Trabajador</p>
                         <span class="fs-semibold text-muted">Administra los gastos del trabajador.</span>
                       </div>                
@@ -54,20 +56,21 @@
                 <!-- End::page-header -->
 
                 <!-- Start::row-1 -->
-                <section id="gasto-trabajador">
-                  <div class="row">
-                    <div class="col-xxl-12 col-xl-12">
-                      <div>
-                        <div class="card custom-card">
-                          <div class="card-body table-responsive">
-                            <table id="tabla-pagos" class="table table-bordered w-100" style="width: 100%;">
+                <div class="row">
+                  <div class="col-xxl-12 col-xl-12">
+                    <div>
+                      <div class="card custom-card">
+                        <div class="card-body">
+                          <!-- ------------- Tabla Gastos del Trabajador ---------------- -->
+                          <div id="div-tabla" class="table-responsive">
+                            <table id="tabla-gastos" class="table table-bordered w-100" style="width: 100%;">
                               <thead>
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
                                   <th>Fecha Ingreso</th>
                                   <th>Trabajador</th>
-                                  <th>Monto</th>
+                                  <th style="background-color: #D2ACFB;">Total Gasto</th>
                                   <th>Descripción</th>
                                   <th>Comprobante</th>
                                   <th class="text-center">Estado</th>
@@ -80,7 +83,7 @@
                                   <th class="text-center">Acciones</th>
                                   <th>Fecha Pago</th>
                                   <th>Trabajador</th>
-                                  <th>Monto</th>
+                                  <th>Total Gasto</th>
                                   <th>Descripción</th>
                                   <th>Comprobante</th>
                                   <th class="text-center">Estado</th>
@@ -88,86 +91,204 @@
                               </tfoot>
                             </table>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-                <!-- End::row-1 -->
 
+                          <!-- ------------- Formulario Gastos del Trabajador ---------------- -->
+                          <div id="div-formulario" style="display: none;">
+                            <form name="formulario-gasto" id="formulario-gasto" method="POST" class="row g-3 needs-validation" novalidate>
+                              
+                              <!-- :::::::::::::: DATOS GENERALES ::::::::::::::::: -->
+                              <div class="row gy-2" id="cargando-1-formulario">
+                                <!-- -------------- ID ------------- -->
+                                <input type="hidden" name="idgasto_de_trabajador" id="idgasto_de_trabajador"/>
 
-                <!-- Start::modal-registrar-pago -->
-                <div class="modal fade modal-effect" id="modal-registrar-pago" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-pagoLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-xl modal-dialog-scrollabel">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h6 class="modal-title" id="modal-agregar-pagoLabel1">Pago del Trabajador</h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <form name="form-agregar-pago" id="form-agregar-pago" method="POST" class="row needs-validation" novalidate>
-                            <div class="row gy-2">
-                              <!-- id gasto trabajador -->
-                              <input type="hidden" name="idgasto_de_trabajador" id="idgasto_de_trabajador">
-
-                              <!-- imagen usuario -->
-                              <div class="col-md-1">
-                                <div class="mb-4 d-sm-flex align-items-center">
-                                  <div class="mb-0 me-5">
-                                    <span class="avatar avatar-xxl avatar-rounded">
-                                      <img src="../assets/images/faces/9.jpg" alt="foto" id="imagenmuestra" onerror="this.src='../assets/modulo/usuario/perfil/no-perfil.jpg';">
-                                    </span>
+                                <!-- ------------ TRABAJADOR --------- -->
+                                <div class="col-md-3">
+                                  <div class="form-group">
+                                    <label for="idtrabajador" class="form-label">Nombre del Trabajador(*)</label>
+                                    <select class="form-select form-select-lg" name="idtrabajador" id="idtrabajador"><!-- List de trabajadores --></select>
+                                  </div>
+                                </div>
+                                <!-- --------- DESCRIPCION GASTO ------ -->
+                                <div class="col-md-3">
+                                  <div class="form-group">
+                                    <label for="descr_gastos" class="form-label">Descripción de Gastos(*)</label>
+                                    <textarea class="form-control" name="descr_gastos" id="descr_gastos"></textarea>
+                                  </div>
+                                </div>
+                                <!-- ----------------- TIPO COMPROBANTE --------------- -->
+                                <div class="col-md-2">
+                                  <div class="form-group">
+                                    <label for="tp_comprobante" class="form-label">Tipo Comprobante</label>
+                                    <select class="form-select form-select-lg" name="tp_comprobante" id="tp_comprobante">
+                                      <option value="NINGUNO">NINGUNO</option>
+                                      <option value="BOLETA">BOLETA</option>
+                                      <option value="FACTURA">FACTURA</option>
+                                      <option value="NOTA_DE_VENTA">NOTA DE VENTA</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <!-- ----------------- SERIE COMPROBANTE --------------- -->
+                                <div class="col-md-2">
+                                  <div class="form-group">
+                                    <label for="serie_comprobante" class="form-label">Serie Comprobante</label>
+                                    <input type="text" class="form-control" name="serie_comprobante" id="serie_comprobante"/>
+                                  </div>
+                                </div>
+                                <!-- ------------------ FECHA EMISION ------------------ -->
+                                <div class="col-md-2">
+                                  <div class="form-group">
+                                    <label for="fecha" class="form-label">Fecha Emisión(*)</label>
+                                    <input type="date" class="form-control" name="fecha" id="fecha"/>
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <div class="form-label">
-                                  <label for="trabajador" class="form-label">Nombre del Trabajador(*)</label>
-                                  <select class="form-control" name="trabajador" id="trabajador"> <!-- lista de trabajadores --> </select>
+
+                              <!-- :::::::::::::: DATO ADICIONAL ::::::::::::::::: -->
+                              <div class="row gy-2 proveedor" id="cargando-2-formulario" style="display: none;">
+                                <!-- ----------------- PROVEEDOR --------------- -->
+                                <div class="col-md-4">
+                                  <div class="form-group">
+                                    <label for="idproveedor" class="form-label">Proveedor</label>
+                                    <select class="form-select" name="idproveedor" id="idproveedor"></select>
+                                  </div>
                                 </div>
                               </div>
-                              <div class="col-md-3">
-                                <div class="form-group">
-                                  <label for="monto" class="form-label">Monto(*)</label>
-                                  <input type="number" class="form-control" name="monto" id="monto"/>
+                              
+                              <!-- :::::::::::::: DATOS GASTO ::::::::::::::::: -->
+                              <div class="row gy-2" id="cargando-3-formulario">
+                                <!-- ----------------- SUB TOTAL --------------- -->
+                                <div class="col-md-2">
+                                  <div class="form-group">
+                                    <label for="sub_total" class="form-label">Sub Total</label>
+                                    <input type="number" class="form-control" name="sub_total" id="sub_total" readonly/>
+                                  </div>
+                                </div>
+                                <!-- ----------------- IGV --------------- -->
+                                <div class="col-md-2">
+                                  <div class="form-group">
+                                    <label for="igv" class="form-label">IGV</label>
+                                    <input type="number" class="form-control" name="igv" id="igv" placeholder="" value="0.00"/>
+                                  </div>
+                                </div>
+                                <!-- -------------- VALOR IGV ------------- -->
+                                <div class="col-md-2">
+                                  <div class="form-group">
+                                    <label for="val_igv" class="form-label">Val. IGV</label>
+                                    <input type="number" class="form-control" name="val_igv" id="val_igv" readonly value="0.00"/>
+                                  </div>
+                                </div>
+                                <!-- ----------------- TOTAL --------------- -->
+                                <div class="col-md-2">
+                                  <div class="form-group">
+                                    <label for="total_gasto" class="form-label">Total(*)</label>
+                                    <input type="number" class="form-control" name="total_gasto" id="total_gasto" onchange="calcularigv();"/>
+                                  </div>
+                                </div>
+                                <!-- --------- DESCRIPCION COMPROBANTE ------ -->
+                                <div class="col-md-3">
+                                  <div class="form-group">
+                                    <label for="descr_comprobante" class="form-label">Descripción del Comprobante</label>
+                                    <textarea class="form-control" name="descr_comprobante" id="descr_comprobante"></textarea>
+                                  </div>
                                 </div>
                               </div>
-                              <div class="col-md-3">
-                                <div class="form-group">
-                                  <label for="fecha_ingreso" class="form-label">Fecha Ingreso(*)</label>
-                                  <input type="date" class="form-control" name="fecha_ingreso" id="fecha_ingreso"/>
+
+                              <!-- ::::::::::::::: BAUCHER ::::::::::::::: -->
+                              <div class="row gy-2" id="cargando-4-fomulario" >
+                                <div class="col-md-6 p-3">
+                                  <h6 class="card-title text-center">Comprobante</h6>
+                                  <div class="col-md-12 border-top p-3">
+
+                                    <div class="my-2 text-center">
+                                      <div class="btn-group edit_img">
+                                        <button type="button" class="btn btn-primary py-1" id="doc1_i"><i class='bx bx-cloud-upload bx-tada fs-5'></i> Subir</button>
+                                        <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                        <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
+                                        <button type="button" class="btn btn-info py-1" onclick="re_visualizacion(1, 'assets/modulo/gasto_de_trabajador', '60%'); reload_zoom();"><i class='bx bx-refresh bx-spin fs-5'></i>Refrescar</button>
+                                      </div>
+                                    </div>
+
+                                    <!-- imagen -->
+                                    <div id="doc1_ver" class="text-center ">
+                                      <img id="img_defect" src="../assets/images/default/img_defecto3.png" alt="" width="60%" />
+                                    </div>
+                                    <div  id="doc1_nombre" ><!-- aqui va el nombre del pdf --></div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
 
+                              <!-- ::::::::::: CARGANDO ... :::::::: -->
+                              <div class="row" id="cargando-5-fomulario" style="display: none;" >
+                                <div class="col-lg-12 text-center">                         
+                                  <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
+                                  <h4 class="bx-flashing">Cargando...</h4>
+                                </div>
+                              </div>
 
-
-
-                          <!-- Chargue -->
-                          <div class="p-l-25px col-lg-12" id="barra_progress_usuario_div" style="display: none;" >
-                            <div  class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 
-                              <div id="barra_progress_usuario" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
-                            </div>
+                              <!-- Chargue -->
+                              <div class="p-l-25px col-lg-12" id="barra_progress_gasto_div" style="display: none;" >
+                                <div  class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 
+                                  <div id="barra_progress_gasto" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
+                                </div>
+                              </div>
+                              <!-- Submit -->
+                              <button type="submit" style="display: none;" id="submit-form-gasto">Submit</button>
+                            </form>
                           </div>
-                          <!-- Submit -->
-                          <button type="submit" style="display: none;" id="submit-form-pago">Submit</button>
-                        </form>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_form();"><i class="las la-times fs-lg"></i> Close</button>
-                        <button type="button" class="btn btn-primary" id="guardar_registro_pago" ><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                        </div>
+                        <div class="card-footer border-top-0">
+                          <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1);" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
+                          <button type="button" class="btn btn-success btn-guardar" id="guardar_registro_gasto" style="display: none;"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                        </div> 
                       </div>
                     </div>
                   </div>
                 </div>
-                <!-- End::modal-registrar-pago -->
-
-
-                
-
+                <!-- End::row-1 -->
               </div>
             </div>
             <!-- End::app-content -->
+
+            <!-- Start::Modal-Comprobante -->
+            <div class="modal fade modal-effect" id="modal-ver-comprobante" tabindex="-1" aria-labelledby="modal-ver-comprobanteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h6 class="modal-title" id="modal-ver-comprobanteLabel1">COMPROBANTE</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div id="comprobante-container" class="text-center"> <!-- archivo --> </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
+                  </div>
+                </div>
+              </div>
+            </div> 
+            <!-- End::Modal-Comprobante -->
+
+
+            <!-- Start::Modal-VerDetalles -->
+            <div class="modal fade modal-effect" id="modal-ver-detalle" tabindex="-1" aria-labelledby="modal-ver-detalleLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h6 class="modal-title" id="modal-ver-detalleLabel1">Detalles - Gasto de Trabajador</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <label for="test">Falta el diseño -_- Pero si trae los datos de:</label>
+                    <b><span id="test"></span></b>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
+                  </div>
+                </div>
+              </div>
+            </div> 
+            <!-- End::Modal-VerDetalles -->
+
 
                      
 
@@ -177,7 +298,7 @@
           </div>
 
           <?php include("template/scripts.php"); ?>
-          <?php include("template/custom_switcherjs.php"); ?>    
+          <?php include("template/custom_switcherjs.php"); ?>
 
           <!-- Select2 Cdn -->
           <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
