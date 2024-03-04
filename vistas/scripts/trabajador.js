@@ -216,6 +216,10 @@ function mostrar(idpersona) {
     $('#cci').val(e.data.cci);
     $('#titular_cuenta').val(e.data.titular_cuenta);
 
+    $("#imagenmuestra").show();
+		$("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/" + e.data.foto_perfil);
+		$("#imagenactual").val(e.data.foto_perfil);
+
     $('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
     $('#form-agregar-trabajador').valid();
 	});	

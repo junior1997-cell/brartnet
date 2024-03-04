@@ -124,7 +124,7 @@
                                     <div class="form-group">
                                       <label for="numero_documento" class="form-label">Numero Documento:</label>
                                       <div class="input-group">                            
-                                        <input type="number" class="form-control" name="numero_documento" id="numero_documento" placeholder="Contraseña" aria-describedby="icon-view-password">
+                                        <input type="number" class="form-control" name="numero_documento" id="numero_documento" placeholder="" aria-describedby="icon-view-password">
                                         <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito' );" >
                                           <i class='bx bx-search-alt' id="search_t"></i>
                                           <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
@@ -185,7 +185,7 @@
                                     <div class="form-group">
                                       <label for="edad" class="form-label">Edad:</label>
                                       <input type="hidden" class="form-control" name="edad" id="edad" >
-                                      <span class="form-control-mejorado edad"></span>
+                                      <span class="form-control-mejorado edad">0</span>
                                     </div>                                         
                                   </div>                                  
 
