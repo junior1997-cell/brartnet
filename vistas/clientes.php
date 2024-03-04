@@ -37,12 +37,12 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                 <div>
                   <div class="d-md-flex d-block align-items-center ">
-                    <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="wiev_tabla_formulario(2); reload_usr_trab(); limpiar_form(); reload_ps();"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                    <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="wiev_tabla_formulario(2); limpiar_form();"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                     <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="wiev_tabla_formulario(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                     <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"> <i class="ri-save-2-line label-btn-icon me-2"></i> Guardar </button>
                     <div>
-                      <p class="fw-semibold fs-18 mb-0">Lista de Trabajadores del sistema!</p>
-                      <span class="fs-semibold text-muted">Adminstra de manera eficiente tus trabajadores.</span>
+                      <p class="fw-semibold fs-18 mb-0">Lista de clientes!</p>
+                      <span class="fs-semibold text-muted">Adminstra de manera eficiente tus clientes.</span>
                     </div>
                   </div>
                 </div>
@@ -70,9 +70,26 @@ if (!isset($_SESSION["user_nombre"])) {
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">Acciones</th>
-                                <th>Descripción</th>
-                                <th>Ip Zona</th>
+                                <th>Cliente</th>
+                                <th>Calular</th>
+                                <th>Distrito</th>
+                                <th>Plan</th>
+                                <th>Zona</th>
+                                <th>Ip Personal</th>
+                                <th>Trabajador</th>
                                 <th class="text-center">Estado</th>
+
+
+                                <th class="text-center">Nombres</th>
+                                <th class="text-center">Tipo Documento</th>
+                                <th class="text-center">Número Documento</th>
+                                <th class="text-center">Distrito Documento</th>
+                                <th class="text-center">Dirección</th>
+                                <th class="text-center">Plan</th>
+                                <th class="text-center">Costo Plan</th>
+                                <th class="text-center">Nombre Zona</th>
+                                <th class="text-center">Ip Antena</th>
+
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -80,12 +97,29 @@ if (!isset($_SESSION["user_nombre"])) {
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">Acciones</th>
-                                <th>Descripción</th>
-                                <th>Ip Zona</th>
+                                <th>Cliente</th>
+                                <th>Calular</th>
+                                <th>Distrito</th>
+                                <th>Plan</th>
+                                <th>Zona</th>
+                                <th>Ip Personal</th>
+                                <th>Trabajador</th>
                                 <th class="text-center">Estado</th>
+
+                                <th class="text-center">Nombres</th>
+                                <th class="text-center">Tipo Documento</th>
+                                <th class="text-center">Número Documento</th>
+                                <th class="text-center">Distrito Documento</th>
+                                <th class="text-center">Dirección</th>
+                                <th class="text-center">Plan</th>
+                                <th class="text-center">Costo Plan</th>
+                                <th class="text-center">Nombre Zona</th>
+                                <th class="text-center">Ip Antena</th>
+                                
                               </tr>
                             </tfoot>
                           </table>
+
                         </div>
                       </div>
                     </div>
@@ -95,13 +129,13 @@ if (!isset($_SESSION["user_nombre"])) {
               <!-- End::row-1 -->
 
               <!-- Start FORMULARIO::row-1 style="display: none;"-->
-              <section id="seccion_form">
+              <section id="seccion_form" style="display: none;">
                 <div class="row">
                   <div class="col-xxl-12 col-xl-12">
                     <div class="card custom-card">
                       <div class="card-body">
 
-                        <form name="form-cliente" id="form-cliente" method="POST">
+                        <form name="form-agregar-cliente" id="form-agregar-cliente" method="POST">
 
                           <div class="row" id="cargando-1-fomulario">
 
@@ -353,7 +387,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                       </div>
                       <div class="card-footer border-top-0">
-                        <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1);" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
+                        <button type="button" class="btn btn-danger btn-cancelar" onclick="wiev_tabla_formulario(1);" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
                         <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"> <i class="ri-save-2-line label-btn-icon me-2"></i> Guardar </button>
 
                       </div>
