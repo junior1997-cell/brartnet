@@ -1,6 +1,6 @@
 <?php
 //Incluímos inicialmente la conexión a la base de datos
-require "../config/Conexion.php";
+require "../config/Conexion_v2.php";
 
 Class Ajax_general
 {
@@ -65,6 +65,7 @@ Class Ajax_general
     curl_close( $curl );                              // Cerramos curl
     return json_decode( $json, true );
   }  
+  
 
   // ══════════════════════════════════════ SUNAT WFACX ══════════════════════════════════════
   public function datos_sunat_otro($ruc)	{ 
@@ -93,16 +94,62 @@ Class Ajax_general
     return json_decode($response);
   }
 
+  /* ══════════════════════════════════════ S U N A T   ══════════════════════════════════════ */
+
+  public function select2_tipo_documento()	{
+    // $data = [];
+		$sql="SELECT * FROM sunat_doc_identidad";
+		return ejecutarConsultaArray($sql);   
+	}
+
   // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
-	public function select2_usuario_persona()	{
-		$sql="SELECT p.idpersona, p.nombres, p.numero_documento,p.foto_perfil, ct.nombre as cargo 
+	public function select2_usuario_trabajador($id)	{
+    // $data = [];
+		$sql="SELECT p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.numero_documento,p.foto_perfil, ct.nombre as cargo 
 		FROM persona p 
 		LEFT JOIN usuario u ON p.idpersona = u.idpersona 
 		INNER JOIN cargo_trabajador ct ON p.idcargo_trabajador = ct.idcargo_trabajador
-		WHERE p.estado = '1' AND p.estado_delete = '1' AND u.idpersona IS NULL;";
-		return ejecutarConsultaSimpleFila($sql);		
+		WHERE p.idtipo_persona = '2' and p.estado = '1' AND p.estado_delete = '1' AND u.idpersona IS NULL;";
+		$select_1 = ejecutarConsultaArray($sql);		
+
+    if ( empty($id) ) {
+      return $select_1;
+    }else{
+
+      $sql="SELECT p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.numero_documento,p.foto_perfil, ct.nombre as cargo 
+      FROM persona p 
+      LEFT JOIN usuario u ON p.idpersona = u.idpersona 
+      INNER JOIN cargo_trabajador ct ON p.idcargo_trabajador = ct.idcargo_trabajador
+      WHERE p.idtipo_persona = '2' and p.estado = '1' AND p.estado_delete = '1' AND u.idusuario = '$id';";
+      $select_2 = ejecutarConsultaSimpleFila($sql);
+
+      $data = [
+        'idpersona'                 =>$select_2['data']['idpersona'],
+        'nombre_razonsocial'        =>$select_2['data']['nombre_razonsocial'],
+        'apellidos_nombrecomercial' =>$select_2['data']['apellidos_nombrecomercial'],
+        'numero_documento'          =>$select_2['data']['numero_documento'],
+        'foto_perfil'               =>$select_2['data']['foto_perfil'],
+        'cargo'                     =>$select_2['data']['cargo'],
+      ];
+
+      array_push( $select_1['data'], $data);
+      
+      return $retorno = ['status'=>true, 'mesage'=>'Todo bien', 'data'=>$select_1['data'], ]; 
+    }
 	}
 
+  // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
+	public function select2_cargo()	{
+    // $data = [];
+		$sql="SELECT * FROM cargo_trabajador WHERE estado='1' AND estado_delete='1'";
+		return ejecutarConsultaArray($sql);   
+	}
 
+  // ══════════════════════════════════════ B A N C O - S E L E C T 2  ══════════════════════════════════════
+	public function select2_banco()	{
+    // $data = [];
+		$sql="SELECT * FROM bancos WHERE estado='1' AND estado_delete = '1'";
+		return ejecutarConsultaArray($sql);   
+	}
 
 }

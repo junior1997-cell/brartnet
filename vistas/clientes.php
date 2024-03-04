@@ -1,0 +1,405 @@
+<?php
+//Activamos el almacenamiento en el buffer
+ob_start();
+
+session_start();
+if (!isset($_SESSION["user_nombre"])) {
+  header("Location: index.php?file=" . basename($_SERVER['PHP_SELF']));
+} else {
+
+?>
+  <!DOCTYPE html>
+  <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
+
+  <head>
+
+    <?php $title_page = "Gastos";
+    include("template/head.php"); ?>
+
+  </head>
+
+  <body id="body-usuario">
+
+    <?php include("template/switcher.php"); ?>
+    <?php include("template/loader.php"); ?>
+
+    <div class="page">
+      <?php include("template/header.php") ?>
+      <?php include("template/sidebar.php") ?>
+
+      <!-- Start::app-content -->
+      <div class="main-content app-content">
+        <div class="container-fluid">
+          <div class="row">
+
+            <div class="col-12">
+              <!-- Start::page-header -->
+              <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                <div>
+                  <div class="d-md-flex d-block align-items-center ">
+                    <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="wiev_tabla_formulario(2); reload_usr_trab(); limpiar_form(); reload_ps();"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                    <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="wiev_tabla_formulario(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
+                    <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"> <i class="ri-save-2-line label-btn-icon me-2"></i> Guardar </button>
+                    <div>
+                      <p class="fw-semibold fs-18 mb-0">Lista de Trabajadores del sistema!</p>
+                      <span class="fs-semibold text-muted">Adminstra de manera eficiente tus trabajadores.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="btn-list mt-md-0 mt-2">
+                  <nav>
+                    <ol class="breadcrumb mb-0">
+                      <li class="breadcrumb-item"><a href="javascript:void(0);">Zonas</a></li>
+                      <li class="breadcrumb-item active" aria-current="page">Home</li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+              <!-- End::page-header -->
+
+              <!-- Start::row-1 -->
+              <section id="seccion_cliente">
+                <div class="row">
+                  <div class="col-xxl-12 col-xl-12">
+                    <div>
+                      <div class="card custom-card">
+                        <div class="card-body table-responsive">
+                          <table id="tabla-cliente" class="table table-bordered w-100" style="width: 100%;">
+                            <thead>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Acciones</th>
+                                <th>Descripción</th>
+                                <th>Ip Zona</th>
+                                <th class="text-center">Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Acciones</th>
+                                <th>Descripción</th>
+                                <th>Ip Zona</th>
+                                <th class="text-center">Estado</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <!-- End::row-1 -->
+
+              <!-- Start FORMULARIO::row-1 style="display: none;"-->
+              <section id="seccion_form">
+                <div class="row">
+                  <div class="col-xxl-12 col-xl-12">
+                    <div class="card custom-card">
+                      <div class="card-body">
+
+                        <form name="form-cliente" id="form-cliente" method="POST">
+
+                          <div class="row" id="cargando-1-fomulario">
+
+                            <div class="col-12">
+
+                              <div class="row">
+                                <!-- Grupo -->
+                                <div class="col-12 pl-0">
+                                  <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b>DATOS PERSONALES</b></label></div>
+                                </div>
+                              </div>
+
+                              <div class="card-body" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+
+                                <div class="row ">
+
+                                  <input type="hidden" id="idpersona" name="idpersona">
+                                  <input type="hidden" id="idtipo_persona" name="idtipo_persona" value="3">
+                                  <input type="hidden" id="idbancos" name="idbancos" value="1">
+                                  <input type="hidden" id="idcargo_trabajador" name="idcargo_trabajador" value="1">
+                                  <!-- ----------- -->
+
+                                  <input type="hidden" id="idpersona_cliente" name="idpersona_cliente">
+
+                                  <!-- TIPO PERSONA -->
+                                  <div class="col-12 col-sm-6 col-md-3 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="nombre_razonsocial">Tipo Persona: <sup class="text-danger">*</sup></label>
+                                      <select name="tipo_persona_sunat" id="tipo_persona_sunat" class="form-control" placeholder="Tipo Persona">
+                                        <option value="NATURAL">NATURAL</option>
+                                        <option value="JURÍDICA">JURÍDICA</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <!-- Tipo Doc -->
+                                  <div class="col-12 col-sm-6 col-md-3 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="nombre_razonsocial">Tipo Doc. <sup class="text-danger">*</sup></label>
+                                      <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento"></select>
+                                    </div>
+                                  </div>
+
+                                  <!-- N° de documento -->
+                                  <div class="col-12 col-sm-6 col-md-3 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="num_documento">N° de documento <sup class="text-danger">*</sup></label>
+                                      <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="numero_documento" id="numero_documento" placeholder="Contraseña" aria-describedby="icon-view-password">
+                                        <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito' );">
+                                          <i class='bx bx-search-alt' id="search_t"></i>
+                                          <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <!-- Nombre -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label nombre_razon" for="nombre">Nombre <sup class="text-danger">*</sup></label>
+                                      <input type="text" name="nombre_razonsocial" class="form-control inpur_edit" id="nombre_razonsocial" />
+                                    </div>
+                                  </div>
+
+                                  <!-- Apellidos -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label apellidos_nombrecomer" for="nombre">Apellidos <sup class="text-danger">*</sup></label>
+                                      <input type="text" name="apellidos_nombrecomercial" class="form-control inpur_edit" id="apellidos_nombrecomercial" />
+                                    </div>
+                                  </div>
+                                  <!-- Fecha cumpleaño -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="fecha_nacimiento">Fecha nacimiento <sup class="text-danger">*</sup></label>
+                                      <input type="date" name="fecha_nacimiento" class="form-control inpur_edit" id="fecha_nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" onchange="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" />
+                                      <input type="hidden" name="edad" id="edad" />
+                                    </div>
+                                  </div>
+                                  <!-- Edad -->
+                                  <div class="col-12 col-sm-6 col-md-1 col-lg-1" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="Edad">Edad <sup class="text-danger">*</sup></label>
+                                      <p class="edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
+
+                                    </div>
+                                  </div>
+                                  <!-- Celular  -->
+                                  <div class="col-12 col-sm-6 col-md-2 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="celular">Celular <sup class="text-danger">*</sup></label>
+                                      <input type="number" name="celular" class="form-control inpur_edit" id="celular" />
+                                    </div>
+                                  </div>
+
+                                  <!-- Dirección -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-7" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="direccion">Dirección <sup class="text-danger">*</sup></label>
+                                      <input type="text" name="direccion" class="form-control inpur_edit" id="direccion" />
+                                    </div>
+                                  </div>
+
+                                  <!-- Distrito -->
+                                  <div class="col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label for="distrito" class="form-label">Distrito: </label></label>
+                                      <select name="distrito" id="distrito" class="form-control" placeholder="Seleccionar" onchange="llenar_dep_prov_ubig(this);">
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <!-- Departamento -->
+                                  <div class="col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label for="departamento" class="form-label">Departamento: <span class="chargue-pro" readonly></span></label>
+                                      <input type="text" class="form-control" name="departamento" id="departamento">
+                                    </div>
+                                  </div>
+                                  <!-- Provincia -->
+                                  <div class="col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label for="provincia" class="form-label">Provincia: <span class="chargue-dep" readonly></span></label>
+                                      <input type="text" class="form-control" name="provincia" id="provincia">
+                                    </div>
+                                  </div>
+                                  <!-- Ubigeo -->
+                                  <div class="col-12 col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label for="ubigeo" class="form-label">Ubigeo: <span class="chargue-ubi" readonly></span></label>
+                                      <input type="text" class="form-control" name="ubigeo" id="ubigeo">
+                                    </div>
+                                  </div>
+
+                                  <!-- Correo -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="Correo">Correo <sup class="text-danger">*</sup></label>
+                                      <input type="email" name="correo" id="correo" class="form-control" placeholder="Correo"></input>
+                                    </div>
+                                  </div>
+
+                                </div>
+
+                              </div>
+
+                            </div>
+
+                            <div class="col-12 ">
+
+                              <div class="row">
+                                <!-- Grupo -->
+                                <div class="col-12 pl-0">
+                                  <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b>DATOS TÉCNICOS </b></label></div>
+                                </div>
+                              </div>
+
+                              <div class="card-body" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                                <div class="row">
+
+
+                                  <!-- Select trabajdor -->
+                                  <div class="col-12 col-sm-6 col-md-3 col-lg-6" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="idpersona_trabajador">Trabajdor <sup class="text-danger">*</sup></label>
+                                      <select name="idpersona_trabajador" id="idpersona_trabajador" class="form-control" placeholder="Selec. Trabajador"></select>
+                                    </div>
+                                  </div>
+
+                                  <!-- Select Zona antena -->
+                                  <div class="col-12 col-sm-6 col-md-3 col-lg-6" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="idzona_antena">Zona Antena <sup class="text-danger">*</sup></label>
+                                      <select name="idzona_antena" id="idzona_antena" class="form-control" placeholder="Selec. Zona Antena"></select>
+                                    </div>
+                                  </div>
+
+                                  <!-- Select Plan -->
+                                  <div class="col-12 col-sm-6 col-md-3 col-lg-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="idplan">Plan <sup class="text-danger">*</sup></label>
+                                      <select name="idplan" id="idplan" class="form-control" placeholder="Selec. Plan"></select>
+                                    </div>
+                                  </div>
+
+                                  <!-- Ip Personal -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="ip_personal">Ip Personal <sup class="text-danger">*</sup></label>
+                                      <input type="text" name="ip_personal" class="form-control inpur_edit" id="ip_personal" />
+                                    </div>
+                                  </div>
+
+                                  <!-- fecha afiliacion -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="fecha_afiliacion">Fecha Afiliacion <sup class="text-danger">*</sup></label>
+                                      <input type="date" name="fecha_afiliacion" class="form-control inpur_edit" id="fecha_afiliacion" />
+                                    </div>
+                                  </div>
+
+                                  <!-- Descuento -->
+                                  <div class="col-12 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="fecha_afiliacion"><sup class="text-white">*</sup></label>
+                                      <div class="custom-toggle-switch d-flex align-items-center mb-4">
+                                        <input id="toggleswitchSuccess" name="toggleswitch001" type="checkbox" onchange="funtion_switch();">
+                                        <label for="toggleswitchSuccess" class="label-success"></label><span class="ms-3">Descuento</span>
+                                      </div>
+                                      <input type="hidden" id="estado_descuento" name="estado_descuento" value="0">
+                                    </div>
+
+                                  </div>
+
+                                  <!-- fecha afiliacion -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="fecha_afiliacion">Monto descuento <sup class="text-danger">*</sup></label>
+                                      <input type="number" name="descuento" class="form-control inpur_edit" id="descuento" readonly />
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Chargue -->
+                            <div class="p-l-25px col-lg-12" id="barra_progress_usuario_div" style="display: none;">
+                              <div class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <div id="barra_progress_usuario" class="progress-bar" style="width: 0%">
+                                  <div class="progress-bar-value">0%</div>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                              <h4 class="bx-flashing">Cargando...</h4>
+                            </div>
+                          </div>
+
+
+                          <!-- Submit -->
+                          <button type="submit" style="display: none;" id="submit-form-cliente">Submit</button>
+                        </form>
+
+                      </div>
+                      <div class="card-footer border-top-0">
+                        <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1);" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
+                        <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"> <i class="ri-save-2-line label-btn-icon me-2"></i> Guardar </button>
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <!-- End FORMULARIO::row-1 -->
+
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+      </div>
+      <!-- End::app-content -->
+
+
+
+      <?php include("template/search_modal.php"); ?>
+      <?php include("template/footer.php"); ?>
+
+    </div>
+
+    <?php include("template/scripts.php"); ?>
+    <?php include("template/custom_switcherjs.php"); ?>
+
+    <!-- Select2 Cdn -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="scripts/persona_cliente.js"></script>
+    <script>
+      $(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+
+
+  </body>
+
+  </html>
+<?php
+}
+ob_end_flush();
+?>

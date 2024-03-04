@@ -14,109 +14,142 @@ class Usuario
   }
 
 	//Implementamos un método para insertar registros
-	public function insertar($nombre, $apellidos, $tipo_documento, $num_documento, $direccion, $telefono, $email, $cargo, $login, $clave, $imagen, $permisos, $series, $empresa)	{
-		$sql = "INSERT into usuario (nombre, apellidos, tipo_documento, num_documento, direccion, telefono, email, cargo, login, clave, imagen)
-    values ('$nombre','$apellidos', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$email','$cargo', '$login', '$clave', '$imagen')";
+	public function insertar($idpersona, $login, $clavehash, $permisos, $series)	{
 
-		$idusuarionew = ejecutarConsulta_retornarID($sql);
+		if (empty($permisos)) {	return [ 'status'=>'error_usuario', 'user'=> $_SESSION['user_nombre'], 'message'=>'No se ha selecionado los permisos de <b>MÓDULOS</b>','data'=>  []  ]; 	}
+		if (empty($series)) {	return [ 'status'=>'error_usuario', 'user'=> $_SESSION['user_nombre'], 'message'=>'No se ha selecionado los permisos de <b>SERIES</b>','data'=>  []  ]; 	}
+		
+     
+		$sql = "INSERT INTO usuario( idpersona, login, password) VALUES ('$idpersona','$login','$clavehash')";
+		$id_new = ejecutarConsulta_retornarID($sql, 'C');	if ($id_new['status'] == false) {  return $id_new; } 		
 
-		// Insertar en vendedorsitio SOLO si cargo es igual a 1 (Ventas)
-		if ($cargo == 1) {
-			$sql_vendedor = "INSERT into vendedorsitio(nombre, estado, idempresa) values ('$nombre', 1, 1)";
-			ejecutarConsulta($sql_vendedor);
+		$id = $id_new['data'];
+		$zz = 0;
+		$yy = 0;
+
+		while ($zz < count($permisos)) {
+			$sql_detalle = "INSERT into usuario_permiso(idusuario, idpermiso) values ('$id', '$permisos[$zz]')";
+			$usr_permiso = ejecutarConsulta($sql_detalle, 'C'); if ($usr_permiso['status'] == false) {  return $usr_permiso; } 
+			$zz = $zz + 1;
 		}
 
-		$num_elementos = 0;
-		$num_elementos2 = 0;
-		$num_elementos3 = 0;
+		while ($yy < count($series)) {
+			$sql_detalle_series = "INSERT into sunat_usuario_comprobante(idusuario, idtipo_comprobante) values ('$id', '$series[$yy]')";
+			$usr_num = ejecutarConsulta($sql_detalle_series, 'C'); if ($usr_num['status'] == false) {  return $usr_num; } 
+			$yy = $yy + 1;
+		}		
 
-		$sw = true;
-
-		while ($num_elementos < count($permisos)) {
-			$sql_detalle = "INSERT into usuario_permiso(idusuario, idpermiso) values ('$idusuarionew', '$permisos[$num_elementos]')";
-			ejecutarConsulta($sql_detalle) or $sw = false;
-			$num_elementos = $num_elementos + 1;
-		}
-
-		while ($num_elementos2 < count($series)) {
-			$sql_detalle_series = "INSERT into detalle_usuario_numeracion(idusuario, idnumeracion) values ('$idusuarionew', '$series[$num_elementos2]')";
-			ejecutarConsulta($sql_detalle_series) or $sw = false;
-			$num_elementos2 = $num_elementos2 + 1;
-		}
-
-		while ($num_elementos3 < count($empresa)) {
-			$sql_usuario_empresa = "INSERT into usuario_empresa(idusuario, idempresa) values ('$idusuarionew', '$empresa[$num_elementos3]')";
-			ejecutarConsulta($sql_usuario_empresa) or $sw = false;
-			$num_elementos3 = $num_elementos3 + 1;
-		}
-
-		return $sw;
+    return $id_new;
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idusuario, $nombre, $apellidos, $tipo_documento, $num_documento, $direccion, $telefono, $email, $cargo, $login, $clave, 
-	$imagen, $permisos, $series, $empresa) {
-		$sql = "UPDATE usuario set nombre='$nombre', apellidos='$apellidos',tipo_documento='$tipo_documento', num_documento='$num_documento', 
-		direccion='$direccion', telefono='$telefono', email='$email', cargo='$cargo' , login='$login' , clave='$clave', imagen='$imagen' where idusuario='$idusuario'";
-		$edit_user = ejecutarConsulta($sql); if ($edit_user['status'] == false) {  return $edit_user; }
+	public function editar($idusuario, $idpersona, $login, $clavehash, $permisos, $series) {
+
+		if (empty($permisos)) {	return [ 'status'=>'error_usuario', 'user'=> $_SESSION['user_nombre'], 'message'=>'No se ha selecionado los permisos de <b>MÓDULOS</b>','data'=>  []  ]; 	}
+		if (empty($series)) {	return [ 'status'=>'error_usuario', 'user'=> $_SESSION['user_nombre'], 'message'=>'No se ha selecionado los permisos de <b>SERIES</b>','data'=>  []  ]; 	}
+		
+
+		$sql = "UPDATE usuario SET idpersona='$idpersona', login='$login', password='$clavehash' WHERE idusuario='$idusuario'";
+		$edit_user = ejecutarConsulta($sql, 'U'); if ($edit_user['status'] == false) {  return $edit_user; }
 
 		//Eliminar todos los permisos asignados para volverlos a registrar
 		$sqldel = "DELETE from usuario_permiso where 	idusuario='$idusuario'";
-		$del_user_permiso = ejecutarConsulta($sqldel); if ($del_user_permiso['status'] == false) {  return $del_user_permiso; }
+		$del_up = ejecutarConsulta($sqldel); if ($del_up['status'] == false) {  return $del_up; }
 
-		$sqldelSeries = "DELETE from detalle_usuario_numeracion where idusuario='$idusuario'";
-		$del_detalle_user_num = ejecutarConsulta($sqldelSeries); if ($del_detalle_user_num['status'] == false) {  return $del_detalle_user_num; }
+		$sqldelSeries = "DELETE from sunat_usuario_comprobante where idusuario='$idusuario'";
+		$del_suc = ejecutarConsulta($sqldelSeries); if ($del_suc['status'] == false) {  return $del_suc; }
 
-		$sqldelEmpresa = "DELETE from usuario_empresa where idusuario='$idusuario'";
-		$del_usuario_empresa = ejecutarConsulta($sqldelEmpresa); if ($del_usuario_empresa['status'] == false) {  return $del_usuario_empresa; }
+		$zz = 0;
+		$yy = 0;
 
-		$ii = 0;
-		$ii2 = 0;
-		$iii = 0;
-
-		$sw = true;
-
-		while ($ii < count($permisos)) {
-			$sql_detalle = "INSERT into usuario_permiso(idusuario, idpermiso) values ('$idusuario', '$permisos[$ii]')";
-			$user_permiso = ejecutarConsulta($sql_detalle); if ($user_permiso['status'] == false) {  return $user_permiso; }
-			$ii = $ii + 1;
+		while ($zz < count($permisos)) {
+			$sql_detalle = "INSERT into usuario_permiso(idusuario, idpermiso) values ('$idusuario', '$permisos[$zz]')";
+			$usr_permiso = ejecutarConsulta($sql_detalle, 'C'); if ($usr_permiso['status'] == false) {  return $usr_permiso; } 
+			$zz = $zz + 1;
 		}
 
-		while ($ii2 < count($series)) {
-			$sql_detalleSeries = "INSERT into detalle_usuario_numeracion(idusuario, idnumeracion) values ('$idusuario', '$series[$ii2]')";
-			$user_num =  ejecutarConsulta($sql_detalleSeries); if ($user_num['status'] == false) {  return $user_num; }
-			$ii2 = $ii2 + 1;
-		}
-		// return count($empresa);
-		while ($iii < count($empresa)) {
-			$sql_Usuario_emresa = "INSERT into usuario_empresa(idusuario, idempresa) values ('$idusuario', '$empresa[$iii]')";
-			$user_empresa = ejecutarConsulta($sql_Usuario_emresa); if ($user_empresa['status'] == false) {  return $user_empresa; }
-			$iii = $iii + 1;
-		}
-		return $edit_user;
+		while ($yy < count($series)) {
+			$sql_detalle_series = "INSERT into sunat_usuario_comprobante(idusuario, idtipo_comprobante) values ('$idusuario', '$series[$yy]')";
+			$usr_num = ejecutarConsulta($sql_detalle_series, 'C'); if ($usr_num['status'] == false) {  return $usr_num; } 
+			$yy = $yy + 1;
+		}		
+
+    return $edit_user;		
 	}
 
 	//Implementamos un método para desactivar usuario
-	public function desactivar($idusuario) {
-		$sql = "UPDATE usuario set condicion='0' where idusuario='$idusuario'";
-		return ejecutarConsulta($sql);
+	public function papelera($idusuario) {
+		$sql = "UPDATE usuario set estado='0' where idusuario='$idusuario'";
+		$papelera = ejecutarConsulta($sql, 'U');
+		//add registro en nuestra bitacora
+		$sql_d = $idusuario;
+		$sql = "INSERT INTO bitacora_bd(idcodigo,nombre_tabla, id_tabla, sql_d, id_user) VALUES (2,'usuario','$idusuario','$sql_d','$this->id_usr_sesion')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+		return $papelera;
+	}
+
+	//Implementamos un método para desactivar usuario
+	public function eliminar($idusuario) {
+		$sql = "UPDATE usuario set estado_delete='0' where idusuario='$idusuario'";
+		$eliminar = ejecutarConsulta($sql, 'U');
+		//add registro en nuestra bitacora
+		$sql_d = $idusuario;
+		$sql = "INSERT INTO bitacora_bd(idcodigo,nombre_tabla, id_tabla, sql_d, id_user) VALUES (4,'usuario','$idusuario','$sql_d','$this->id_usr_sesion')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+		return $eliminar;
 	}
 
 	//Implementamos un método para activar usuario
 	public function activar($idusuario)	{
-		$sql = "UPDATE usuario set condicion='1' where idusuario='$idusuario'";
-		return ejecutarConsulta($sql);
+		$sql = "UPDATE usuario set estado='1' where idusuario='$idusuario'";
+		$activar = ejecutarConsulta($sql, 'U');
+		//add registro en nuestra bitacora
+		$sql_d = $idusuario;
+		$sql = "INSERT INTO bitacora_bd(idcodigo,nombre_tabla, id_tabla, sql_d, id_user) VALUES (1,'usuario','$idusuario','$sql_d','$this->id_usr_sesion')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }
+
+		return $activar;
+	}
+
+	//Implementamos un método para activar usuario
+	public function cargo_persona($idpersona)	{
+		$sql = "SELECT p.idpersona, p.nombre_razonsocial, cp.nombre as cargo_trabajador
+		FROM persona as p
+		INNER JOIN cargo_trabajador as cp on cp.idcargo_trabajador = p.idcargo_trabajador		
+		WHERE p.idpersona = '$idpersona'";
+		$datos = ejecutarConsultaSimpleFila($sql);
+
+		if (empty($datos['data'])) {
+			$data = [ 'status'=>true, 'message'=>'todo okey','data'=> ['idpersona' => '', 'nombre_razonsocial' => '', 'cargo_trabajador' => '' ]  ];
+    	return $data;
+		}
+
+		return $datos;
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idusuario)	{
-		$sql = "SELECT * from usuario where idusuario='$idusuario'";
+		$sql = "SELECT u.idusuario, p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, p.numero_documento, p.celular, p.correo,
+		p.foto_perfil, u.login, DATE_FORMAT(u.last_sesion, '%m/%d/%Y %h:%i: %p') AS last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
+		FROM  usuario as u
+		inner join persona as p on u.idpersona = p.idpersona
+		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
+		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
+		where u.idusuario='$idusuario'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	//Implementar un método para mostrar los datos de un registro a modificar
+	public function mostrar_clave($idusuario)	{
+		$sql = "SELECT u.idusuario, u.idpersona, u.login, u.password, u.estado FROM  usuario as u where u.idusuario='$idusuario'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	public function validar_usuario($idusuario, $user) {
     $validar_user = empty($idusuario) ? "" : "AND u.idusuario != '$idusuario'" ;
-    $sql = "SELECT u.idusuario, u.login, u.clave, u.estado FROM usuario AS u WHERE u.login = '$user' $validar_user;";
+    $sql = "SELECT u.idusuario, u.login, u.password, u.estado FROM usuario AS u WHERE u.login = '$user' $validar_user;";
     $buscando =  ejecutarConsultaArray($sql); if ( $buscando['status'] == false) {return $buscando; }
 
     if (empty($buscando['data'])) { return true; }else { return false; }
@@ -125,12 +158,12 @@ class Usuario
 	//Implementar un método para listar los registros
 	public function listar()	{
 		$sql = "SELECT u.idusuario, p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, p.numero_documento, p.celular, p.correo,
-		p.foto_perfil, u.login, u.last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
-		FROM persona as p
-		inner join usuario as u on u.idusuario = p.idpersona
+		p.foto_perfil, u.login, DATE_FORMAT(u.last_sesion, '%m/%d/%Y %h:%i: %p') AS last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
+		FROM  usuario as u
+		inner join persona as p on u.idpersona = p.idpersona
 		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
-		WHERE u.estado = '1' AND u.estado_delete = '1'";
+		WHERE u.estado_delete = '1' ORDER BY  u.estado DESC, p.nombre_razonsocial ASC ";
 		return ejecutarConsulta($sql);
 	}
 	//Implementar un método para listar los registros y mostrar en el select
@@ -152,6 +185,7 @@ class Usuario
 		where idusuario='$idusuario'
 		GROUP BY p.modulo ORDER BY count(p.modulo) DESC; ";
 		return ejecutarConsultaArray($sql); 		
+			
 	}
 
 	public function listarmarcadosEmpresa($idusuario)	{
@@ -207,4 +241,18 @@ class Usuario
       values ('$idusuario', '','', now())";
 		return ejecutarConsulta($sql);
 	}
+
+	public function last_sesion($idusuario)	{
+		$sql = "UPDATE usuario SET last_sesion = CURRENT_TIMESTAMP WHERE  idusuario='$idusuario';";
+		 ejecutarConsulta($sql);
+		$sql1 = "INSERT INTO bitacora_sesion (idusuario) VALUES ('$idusuario')";
+		return ejecutarConsulta($sql1); 	
+	}
+
+	public function historial_sesion($idusuario) {
+   
+    $sql = "SELECT DATE_FORMAT(bs.fecha_sesion, '%m/%d/%Y %h:%i %p') AS last_sesion , MONTHNAME(bs.fecha_sesion) AS nombre_mes, DAYNAME(bs.fecha_sesion) AS nombre_dia
+		FROM bitacora_sesion as bs WHERE idusuario = '$idusuario' ORDER BY bs.fecha_sesion DESC;";
+    return ejecutarConsultaArray($sql); 
+  }
 }

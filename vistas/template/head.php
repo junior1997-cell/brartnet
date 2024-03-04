@@ -2,13 +2,13 @@
 <meta charset="UTF-8">
 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title><?php echo $title_page; ?> | Admin JDL</title>
+<title><?php echo $title_page; ?> | Facturación Brartnet</title>
 <meta name="Description" content="Sistema de Facturacion Electronica">
 <meta name="Author" content="JDL TECNOLOGY SAC">
 <meta name="keywords" content="admin,admin dashboard,admin panel,admin template,bootstrap,clean,dashboard,flat,jquery,modern,responsive,premium admin templates,responsive admin,ui,ui kit.">
 
 <!-- Favicon -->
-<link rel="icon" href="../assets/images/brand-logos/favicon.ico" type="image/x-icon">
+<link rel="icon" href="../assets/images/brand-logos/ico-brartnet.svg" type="image/x-icon">
 
 <!-- Font Awesome 6.2 -->
 <link rel="stylesheet" href="../assets/libs/fontawesome-free-6.2.0/css/all.min.css" />

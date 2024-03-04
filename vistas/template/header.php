@@ -30,9 +30,10 @@
     <!-- End::header-content-left -->
 
     <!-- Start::header-content-right -->
-    <div class="header-content-right">
+    <div class="header-content-right" >
+
       <!-- Start::header-element -->
-      <div class="header-element header-search">
+      <div class="header-element header-search" style="display: none !important;">
         <!-- Start::header-link -->
         <a href="javascript:void(0);" class="header-link" data-bs-toggle="modal" data-bs-target="#searchModal">
           <i class="bx bx-search-alt-2 header-link-icon"></i>
@@ -45,10 +46,10 @@
       <div class="header-element country-selector">
         <!-- Start::header-link|dropdown-toggle -->
         <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown">
-          <img src="../assets/images/flags/us_flag.jpg" alt="img" class="rounded-circle header-link-icon" />
+          <img src="../assets/images/flags/peru_flag.png" alt="img" class="rounded-circle header-link-icon" />
         </a>
         <!-- End::header-link|dropdown-toggle -->
-        <ul class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
+        <ul class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none" style="display: none !important;">
           <li>
             <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
               <span class="avatar avatar-xs lh-1 me-2">
@@ -121,7 +122,7 @@
       <!-- End::header-element -->
 
       <!-- Start::header-element -->
-      <div class="header-element cart-dropdown">
+      <div class="header-element cart-dropdown" style="display: none !important;">
         <!-- Start::header-link|dropdown-toggle -->
         <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown">
           <i class="bx bx-cart header-link-icon"></i>
@@ -142,7 +143,7 @@
           <ul class="list-unstyled mb-0" id="header-cart-items-scroll">
             <li class="dropdown-item">
               <div class="d-flex align-items-start cart-dropdown-item">
-                <img src="../assets/images/ecommerce/jpg/1.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" />
+                <!-- <img src="../assets/images/ecommerce/jpg/1.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" /> -->
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-start justify-content-between mb-0">
                     <div class="mb-0 fs-13 text-dark fw-semibold">
@@ -164,7 +165,7 @@
             </li>
             <li class="dropdown-item">
               <div class="d-flex align-items-start cart-dropdown-item">
-                <img src="../assets/images/ecommerce/jpg/3.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" />
+                <!-- <img src="../assets/images/ecommerce/jpg/3.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" /> -->
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-start justify-content-between mb-0">
                     <div class="mb-0 fs-13 text-dark fw-semibold">
@@ -186,7 +187,7 @@
             </li>
             <li class="dropdown-item">
               <div class="d-flex align-items-start cart-dropdown-item">
-                <img src="../assets/images/ecommerce/jpg/5.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" />
+                <!-- <img src="../assets/images/ecommerce/jpg/5.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" /> -->
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-start justify-content-between mb-0">
                     <div class="mb-0 fs-13 text-dark fw-semibold">
@@ -207,7 +208,7 @@
             </li>
             <li class="dropdown-item">
               <div class="d-flex align-items-start cart-dropdown-item">
-                <img src="../assets/images/ecommerce/jpg/4.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" />
+                <!-- <img src="../assets/images/ecommerce/jpg/4.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" /> -->
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-start justify-content-between mb-0">
                     <div class="mb-0 fs-13 text-dark fw-semibold">
@@ -229,7 +230,7 @@
             </li>
             <li class="dropdown-item">
               <div class="d-flex align-items-start cart-dropdown-item">
-                <img src="../assets/images/ecommerce/jpg/6.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" />
+                <!-- <img src="../assets/images/ecommerce/jpg/6.jpg" alt="img" class="avatar avatar-sm avatar-rounded br-5 me-3" /> -->
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-start justify-content-between mb-0">
                     <div class="mb-0 fs-13 text-dark fw-semibold">
@@ -271,7 +272,7 @@
       <!-- End::header-element -->
 
       <!-- Start::header-element -->
-      <div class="header-element notifications-dropdown">
+      <div class="header-element notifications-dropdown" style="display: none !important;">
         <!-- Start::header-link|dropdown-toggle -->
         <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false">
           <i class="bx bx-bell header-link-icon"></i>
@@ -402,99 +403,39 @@
         <div class="main-header-dropdown header-shortcuts-dropdown dropdown-menu pb-0 dropdown-menu-end" aria-labelledby="notificationDropdown">
           <div class="p-3">
             <div class="d-flex align-items-center justify-content-between">
-              <p class="mb-0 fs-17 fw-semibold">Related Apps</p>
+              <p class="mb-0 fs-17 fw-semibold">Sobre: JDL Technology SAC</p>
             </div>
           </div>
           <div class="dropdown-divider mb-0"></div>
           <div class="main-header-shortcuts p-2" id="header-shortcut-scroll">
             <div class="row g-2">
               <div class="col-4">
-                <a href="javascript:void(0);">
+                <a href="https://www.facebook.com/profile.php?id=100086343481837" target="_blank">
                   <div class="text-center p-3 related-app">
                     <span class="avatar avatar-sm avatar-rounded">
-                      <img src="../assets/images/apps/figma.png" alt="" />
+                      <img src="../assets/images/jdl/logo-facebook.jpg" alt="" />
                     </span>
-                    <span class="d-block fs-12">Figma</span>
+                    <span class="d-block fs-12">Facebook</span>
                   </div>
                 </a>
               </div>
               <div class="col-4">
-                <a href="javascript:void(0);">
+                <a href="https://www.instagram.com/jdltechnology/" target="_blank">
                   <div class="text-center p-3 related-app">
                     <span class="avatar avatar-sm avatar-rounded">
-                      <img src="../assets/images/apps/microsoft-powerpoint.png" alt="" />
+                      <img src="../assets/images/jdl/logo-instagram.jpg" alt="" />
                     </span>
-                    <span class="d-block fs-12">Power Point</span>
+                    <span class="d-block fs-12">Instagram</span>
                   </div>
                 </a>
               </div>
               <div class="col-4">
-                <a href="javascript:void(0);">
+                <a href="https://www.tiktok.com/@jdltechnology" target="_blank">
                   <div class="text-center p-3 related-app">
                     <span class="avatar avatar-sm avatar-rounded">
-                      <img src="../assets/images/apps/microsoft-word.png" alt="" />
+                      <img src="../assets/images/jdl/logo-tiktok.jpg" alt="" />
                     </span>
-                    <span class="d-block fs-12">MS Word</span>
-                  </div>
-                </a>
-              </div>
-              <div class="col-4">
-                <a href="javascript:void(0);">
-                  <div class="text-center p-3 related-app">
-                    <span class="avatar avatar-sm avatar-rounded">
-                      <img src="../assets/images/apps/calender.png" alt="" />
-                    </span>
-                    <span class="d-block fs-12">Calendar</span>
-                  </div>
-                </a>
-              </div>
-              <div class="col-4">
-                <a href="javascript:void(0);">
-                  <div class="text-center p-3 related-app">
-                    <span class="avatar avatar-sm avatar-rounded">
-                      <img src="../assets/images/apps/sketch.png" alt="" />
-                    </span>
-                    <span class="d-block fs-12">Sketch</span>
-                  </div>
-                </a>
-              </div>
-              <div class="col-4">
-                <a href="javascript:void(0);">
-                  <div class="text-center p-3 related-app">
-                    <span class="avatar avatar-sm avatar-rounded">
-                      <img src="../assets/images/apps/google-docs.png" alt="" />
-                    </span>
-                    <span class="d-block fs-12">Docs</span>
-                  </div>
-                </a>
-              </div>
-              <div class="col-4">
-                <a href="javascript:void(0);">
-                  <div class="text-center p-3 related-app">
-                    <span class="avatar avatar-sm avatar-rounded">
-                      <img src="../assets/images/apps/google.png" alt="" />
-                    </span>
-                    <span class="d-block fs-12">Google</span>
-                  </div>
-                </a>
-              </div>
-              <div class="col-4">
-                <a href="javascript:void(0);">
-                  <div class="text-center p-3 related-app">
-                    <span class="avatar avatar-sm avatar-rounded">
-                      <img src="../assets/images/apps/translate.png" alt="" />
-                    </span>
-                    <span class="d-block fs-12">Translate</span>
-                  </div>
-                </a>
-              </div>
-              <div class="col-4">
-                <a href="javascript:void(0);">
-                  <div class="text-center p-3 related-app">
-                    <span class="avatar avatar-sm avatar-rounded">
-                      <img src="../assets/images/apps/google-sheets.png" alt="" />
-                    </span>
-                    <span class="d-block fs-12">Sheets</span>
+                    <span class="d-block fs-12">TikTok</span>
                   </div>
                 </a>
               </div>
@@ -502,7 +443,7 @@
           </div>
           <div class="p-3 border-top">
             <div class="d-grid">
-              <a href="javascript:void(0);" class="btn btn-primary">View All</a>
+              <a href="https://api.whatsapp.com/send?phone=+51921305769&text=Hola buenos dias, nesecito soporte sobre:" target="_blank" class="btn btn-success">WhatsApp</a>
             </div>
           </div>
         </div>
@@ -547,7 +488,7 @@
             <a class="dropdown-item d-flex" href="https://wa.link/oetgkf" target="_blank"><i class="ti ti-headset fs-18 me-2 op-7"></i>Soporte</a>
           </li>
           <li>
-            <a class="dropdown-item d-flex text-danger" href="../ajax/usuario.php?op=salir"><i class="ti ti-logout fs-18 me-2 op-7"></i>Salir</a>
+            <a class="dropdown-item d-flex text-danger" href="../ajax/usuario.php?op=salir&file=<?php echo basename($_SERVER['PHP_SELF']); ?>"><i class="ti ti-logout fs-18 me-2 op-7"></i>Salir</a>
           </li>
         </ul>
       </div>

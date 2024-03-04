@@ -1,23 +1,23 @@
 <!-- Start Switcher -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="switcher-canvas" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title text-default" id="offcanvasRightLabel">Switcher</h5>
+    <h5 class="offcanvas-title text-default" id="offcanvasRightLabel">Diseño del Sistema</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
     <nav class="border-bottom border-block-end-dashed">
       <div class="nav nav-tabs nav-justified" id="switcher-main-tab" role="tablist">
         <button class="nav-link active" id="switcher-home-tab" data-bs-toggle="tab" data-bs-target="#switcher-home"
-          type="button" role="tab" aria-controls="switcher-home" aria-selected="true">Theme Styles</button>
+          type="button" role="tab" aria-controls="switcher-home" aria-selected="true">Estilos del sistema</button>
         <button class="nav-link" id="switcher-profile-tab" data-bs-toggle="tab" data-bs-target="#switcher-profile"
-          type="button" role="tab" aria-controls="switcher-profile" aria-selected="false">Theme Colors</button>
+          type="button" role="tab" aria-controls="switcher-profile" aria-selected="false">Colores del sistema</button>
       </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade show active border-0" id="switcher-home" role="tabpanel"
         aria-labelledby="switcher-home-tab" tabindex="0">
         <div class="">
-          <p class="switcher-style-head">Theme Color Mode:</p>
+          <p class="switcher-style-head">Modo de color del tema:</p>
           <div class="row switcher-style gx-0">
             <div class="col-4">
               <div class="form-check switch-select">
@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="">
-          <p class="switcher-style-head">Directions:</p>
+          <p class="switcher-style-head">Direcciones:</p>
           <div class="row switcher-style gx-0">
             <div class="col-4">
               <div class="form-check switch-select">
@@ -59,7 +59,7 @@
           </div>
         </div>
         <div class="">
-          <p class="switcher-style-head">Navigation Styles:</p>
+          <p class="switcher-style-head">Estilos de navegación:</p>
           <div class="row switcher-style gx-0">
             <div class="col-4">
               <div class="form-check switch-select">
@@ -80,7 +80,7 @@
           </div>
         </div>
         <div class="navigation-menu-styles">
-          <p class="switcher-style-head">Vertical & Horizontal Menu Styles:</p>
+          <p class="switcher-style-head">Estilos de menú vertical y horizontal:</p>
           <div class="row switcher-style gx-0 pb-2 gy-2">
             <div class="col-4">
               <div class="form-check switch-select">
@@ -117,15 +117,14 @@
           </div>
         </div>
         <div class="sidemenu-layout-styles">
-          <p class="switcher-style-head">Sidemenu Layout Styles:</p>
+          <p class="switcher-style-head">Estilos de diseño del menú lateral:</p>
           <div class="row switcher-style gx-0 pb-2 gy-2">
             <div class="col-sm-6">
               <div class="form-check switch-select">
                 <label class="form-check-label" for="switcher-default-menu">
                   Default Menu
                 </label>
-                <input class="form-check-input" type="radio" name="sidemenu-layout-styles" id="switcher-default-menu"
-                  checked>
+                <input class="form-check-input" type="radio" name="sidemenu-layout-styles" id="switcher-default-menu" >
               </div>
             </div>
             <div class="col-sm-6">
@@ -149,7 +148,7 @@
                 <label class="form-check-label" for="switcher-icon-overlay">
                   Icon Overlay
                 </label>
-                <input class="form-check-input" type="radio" name="sidemenu-layout-styles" id="switcher-icon-overlay">
+                <input class="form-check-input" type="radio" name="sidemenu-layout-styles" id="switcher-icon-overlay" checked>
               </div>
             </div>
             <div class="col-sm-6">
@@ -200,7 +199,7 @@
           </div>
         </div>
         <div class="">
-          <p class="switcher-style-head">Layout Width Styles:</p>
+          <p class="switcher-style-head">Estilos de ancho de diseño:</p>
           <div class="row switcher-style gx-0">
             <div class="col-4">
               <div class="form-check switch-select">
@@ -221,7 +220,7 @@
           </div>
         </div>
         <div class="">
-          <p class="switcher-style-head">Menu Positions:</p>
+          <p class="switcher-style-head">Posiciones del menú:</p>
           <div class="row switcher-style gx-0">
             <div class="col-4">
               <div class="form-check switch-select">
@@ -242,7 +241,7 @@
           </div>
         </div>
         <div class="">
-          <p class="switcher-style-head">Header Positions:</p>
+          <p class="switcher-style-head">Posiciones del encabezado:</p>
           <div class="row switcher-style gx-0">
             <div class="col-4">
               <div class="form-check switch-select">
@@ -288,7 +287,7 @@
         tabindex="0">
         <div>
           <div class="theme-colors">
-            <p class="switcher-style-head">Menu Colors:</p>
+            <p class="switcher-style-head">Colores del menú:</p>
             <div class="d-flex switcher-style pb-2">
               <div class="form-check switch-select me-3">
                 <input class="form-check-input color-input color-white" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -313,11 +312,10 @@
                   id="switcher-menu-transparent">
               </div>
             </div>
-            <div class="px-4 pb-3 text-muted fs-11">Note:If you want to change color Menu dynamically change from below
-              Theme Primary color picker</div>
+            <div class="px-4 pb-3 text-muted fs-11">Nota: Si desea cambiar el color del Menú, cambie dinámicamente desde abajo Tema Selector de color primario</div>
           </div>
           <div class="theme-colors">
-            <p class="switcher-style-head">Header Colors:</p>
+            <p class="switcher-style-head">Colores del encabezado:</p>
             <div class="d-flex switcher-style pb-2">
               <div class="form-check switch-select me-3">
                 <input class="form-check-input color-input color-white" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -343,11 +341,10 @@
                   id="switcher-header-transparent">
               </div>
             </div>
-            <div class="px-4 pb-3 text-muted fs-11">Note:If you want to change color Header dynamically change from
-              below Theme Primary color picker</div>
+            <div class="px-4 pb-3 text-muted fs-11">Nota: Si desea cambiar el color del encabezado, cambie dinámicamente desde abajo Tema Selector de color primario</div>
           </div>
           <div class="theme-colors">
-            <p class="switcher-style-head">Theme Primary:</p>
+            <p class="switcher-style-head">Tema Primario:</p>
             <div class="d-flex flex-wrap align-items-center switcher-style">
               <div class="form-check switch-select me-3">
                 <input class="form-check-input color-input color-primary-1" type="radio" name="theme-primary"
@@ -376,7 +373,7 @@
             </div>
           </div>
           <div class="theme-colors">
-            <p class="switcher-style-head">Theme Background:</p>
+            <p class="switcher-style-head">Fondo del tema:</p>
             <div class="d-flex flex-wrap align-items-center switcher-style">
               <div class="form-check switch-select me-3">
                 <input class="form-check-input color-input color-bg-1" type="radio" name="theme-background"
@@ -405,7 +402,7 @@
             </div>
           </div>
           <div class="menu-image mb-3">
-            <p class="switcher-style-head">Menu With Background Image:</p>
+            <p class="switcher-style-head">Menú con imagen de fondo:</p>
             <div class="d-flex flex-wrap align-items-center switcher-style">
               <div class="form-check switch-select m-2">
                 <input class="form-check-input bgimage-input bg-img1" type="radio" name="theme-background"
@@ -432,7 +429,7 @@
         </div>
       </div>
       <div class="d-grid canvas-footer">
-        <a href="javascript:void(0);" id="reset-all" class="btn btn-danger m-1">Reset</a>
+        <a href="javascript:void(0);" id="reset-all" class="btn btn-danger m-1">Restaurar Valores</a>
       </div>
     </div>
   </div>
