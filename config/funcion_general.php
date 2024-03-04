@@ -135,6 +135,17 @@ if (!function_exists('ejecutarConsulta')) {
     return $ano_diferencia;
   }
 
+  function calcular_edad($fecha)  {
+    if (empty($fecha) || $fecha=='0000-00-00') {  return 0;  } else{   
+      
+      $fecha_nacimiento = new DateTime($fecha); // Crear un objeto DateTime para la fecha de nacimiento      
+      $fecha_actual = new DateTime(); // Crear un objeto DateTime para la fecha actual      
+      $diferencia = $fecha_nacimiento->diff($fecha_actual); // Calcular la diferencia entre las dos fechas      
+      return $diferencia->y; // Obtener la edad
+    } 
+    return 0;
+  }
+
   /*  ══════════════════════════════════════════ - N U M E R I C O S - ══════════════════════════════════════════ */
 
   function multiplo_number($numero, $multiplo) {  if($numero%$multiplo == 0){ return true; }else{ return false; } }

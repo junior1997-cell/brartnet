@@ -8,7 +8,7 @@
   }else{
     ?>
     <!DOCTYPE html>
-    <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
+    <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close" loader="enable">
 
       <head>
         
@@ -34,7 +34,7 @@
               <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                 <div>
                   <div class="d-md-flex d-block align-items-center ">
-                    <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2); reload_usr_trab(); limpiar_form(); reload_ps();"  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                    <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);  limpiar_form(); "  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                     <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                     <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                     <div>
@@ -59,7 +59,7 @@
               <div class="row">
                 <div class="col-xxl-12 col-xl-12">
                   
-                  <div class="card custom-card">                  
+                  <div class="card custom-card ">                  
                     <div class="card-body">
                       <div id="div-tabla" class="table-responsive">
                         <table id="tabla-usuario" class="table table-bordered w-100" style="width: 100%;">
@@ -68,11 +68,11 @@
                               <th>#</th>
                               <th>Opciones</th>                          
                               <th>Nombre</th>
-                              <th>Usuario</th>
+                              <th>Edad</th>
                               <th>Cargo</th>                          
                               <th>Teléfono</th>
-                              <th>Sesión</th>
-                              <th>Estado</th> 
+                              <th>Direccion</th>
+                              <th>Clientes</th> 
                             </tr>
                           </thead>
                           <tbody>
@@ -82,11 +82,11 @@
                               <th>#</th>
                               <th>Opciones</th>                          
                               <th>Nombre</th>
-                              <th>Usuario</th>
+                              <th>Edad</th>
                               <th>Cargo</th>                          
                               <th>Teléfono</th>
-                              <th>Sesión</th>
-                              <th>Estado</th>
+                              <th>Direccion</th>
+                              <th>Clientes</th>
                             </tr>
                           </tfoot>
                         </table>
@@ -98,6 +98,8 @@
                             <!-- idpersona -->
                             <input type="hidden" name="idpersona" id="idpersona" />   
                             <input type="hidden" name="tipo_persona_sunat" id="tipo_persona_sunat" value="NATURAL" />   
+                            <input type="hidden" name="idtipo_persona" id="idtipo_persona" value="2" />   
+                            <input type="hidden" name="idpersona_trabajador" id="idpersona_trabajador"  />   
 
                             <div class="col-lg-12 col-xl-6- col-xxl-6">
                               <div class="row">
@@ -175,14 +177,15 @@
                                   <div class="mb-1 col-md-6 col-lg-3 col-xl-4 col-xxl-6">
                                     <div class="form-group">
                                       <label for="fecha_nacimiento" class="form-label">Nacimiento:  </label></label>
-                                      <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" >
+                                      <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" onclick="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" onchange="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" >
                                     </div>                                         
                                   </div>
                                   <!-- Edad -->
                                   <div class="mb-1 col-md-6 col-lg-3 col-xl-4 col-xxl-6">
                                     <div class="form-group">
                                       <label for="edad" class="form-label">Edad:</label>
-                                      <input type="number" class="form-control" name="edad" id="edad" >
+                                      <input type="hidden" class="form-control" name="edad" id="edad" >
+                                      <span class="form-control-mejorado edad"></span>
                                     </div>                                         
                                   </div>                                  
 
@@ -276,7 +279,7 @@
                                   <div class="mb-1 col-md-6 col-lg-3 col-xl-3 col-xxl-3">
                                     <div class="form-group">
                                       <label for="sueldo_mensual" class="form-label">Sueldo mes:</label>
-                                      <input type="text" class="form-control" name="sueldo_mensual" id="sueldo_mensual" >
+                                      <input type="number" class="form-control" name="sueldo_mensual" id="sueldo_mensual" step="0.01" >
                                     </div>                                         
                                   </div>
 
@@ -284,7 +287,7 @@
                                   <div class="mb-1 col-md-6 col-lg-3 col-xl-3 col-xxl-3">
                                     <div class="form-group">
                                       <label for="sueldo_diario" class="form-label">Sueldo dia:</label>
-                                      <input type="text" class="form-control" name="sueldo_diario" id="sueldo_diario">
+                                      <input type="number" class="form-control" name="sueldo_diario" id="sueldo_diario" step="0.01" >
                                     </div>                                         
                                   </div>
 
@@ -324,6 +327,28 @@
                                 </div> <!-- /.row -->
                               </div> <!-- /.card-body -->
                             </div> <!-- /.col-lg-12 -->
+
+                            <!-- Imgen -->
+                            <div class="col-md-4 col-lg-4 mt-4">
+                              <span class="" > <b>Imagen de Perfil</b> </span>
+                              <div class="mb-4 mt-2 d-sm-flex align-items-center">
+                                <div class="mb-0 me-5">
+                                  <span class="avatar avatar-xxl avatar-rounded">
+                                    <img src="../assets/images/faces/9.jpg" alt="" id="imagenmuestra" onerror="this.src='../assets/modulo/usuario/persona/no-perfil.jpg';">
+                                    <a href="javascript:void(0);" class="badge rounded-pill bg-primary avatar-badge cursor-pointer">
+                                      <input type="file" class="position-absolute w-100 h-100 op-0" name="imagen" id="imagen" accept="image/*">
+                                      <input type="hidden" name="imagenactual" id="imagenactual">
+                                      <i class="fe fe-camera  "></i>
+                                    </a>
+                                  </span>
+                                </div>
+                                <div class="btn-group">
+                                  <a class="btn btn-primary" onclick="cambiarImagen()"><i class='bx bx-cloud-upload bx-tada fs-5'></i> Subir</a>
+                                  <a class="btn btn-light" onclick="removerImagen()"><i class="bi bi-trash fs-6"></i> Remover</a>
+                                </div>
+                              </div>
+                            </div> 
+
                           </div> <!-- /.row -->
 
                           <div class="row" id="cargando-2-fomulario" style="display: none;" >
@@ -334,9 +359,9 @@
                           </div>  <!-- /.row -->                                   
                           
                           <!-- Chargue -->
-                          <div class="p-l-25px col-lg-12" id="barra_progress_usuario_div" style="display: none;" >
+                          <div class="p-l-25px col-lg-12" id="barra_progress_trabajador_div" style="display: none;" >
                             <div  class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 
-                              <div id="barra_progress_usuario" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
+                              <div id="barra_progress_trabajador" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
                             </div>
                           </div>
                           <!-- Submit -->

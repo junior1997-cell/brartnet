@@ -95,6 +95,14 @@ function listar() {
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
 		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      // if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: #
+      // if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center"); }
+      // columna: #
+      // if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
+    },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },

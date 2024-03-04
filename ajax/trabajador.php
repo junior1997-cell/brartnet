@@ -18,67 +18,124 @@ if (!isset($_SESSION["user_nombre"])) {
     $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/front_jdl/admin/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   E M P R E S A ::::::::::::::::::::::::::::::::::::::
-    $id             = isset($_POST["idnosotros"])? limpiarCadena($_POST["idnosotros"]):"";
-    $direccion      = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
-    $nombre         = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
-    $tipo_documento = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
-    $num_documento  = isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
-    $mapa           = isset($_POST["mapa"])? limpiarCadena($_POST["mapa"]):"";    
-    $horario        = isset($_POST["horario"])? limpiarCadena($_POST["horario"]):"";
-    
+
+    $idpersona            = isset($_POST["idpersona"])? limpiarCadena($_POST["idpersona"]):"";
+    $tipo_persona_sunat   = isset($_POST["tipo_persona_sunat"])? limpiarCadena($_POST["tipo_persona_sunat"]):"";
+    $idtipo_persona       = isset($_POST["idtipo_persona"])? limpiarCadena($_POST["idtipo_persona"]):"";
+    $idpersona_trabajador = isset($_POST["idpersona_trabajador"])? limpiarCadena($_POST["idpersona_trabajador"]):"";
+
+    $tipo_documento       = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
+    $numero_documento     = isset($_POST["numero_documento"])? limpiarCadena($_POST["numero_documento"]):"";
+    $idcargo_trabajador   = isset($_POST["idcargo_trabajador"])? limpiarCadena($_POST["idcargo_trabajador"]):"";
+    $nombre_razonsocial   = isset($_POST["nombre_razonsocial"])? limpiarCadena($_POST["nombre_razonsocial"]):"";
+    $apellidos_nombrecomercial = isset($_POST["apellidos_nombrecomercial"])? limpiarCadena($_POST["apellidos_nombrecomercial"]):"";
+    $correo               = isset($_POST["correo"])? limpiarCadena($_POST["correo"]):"";
+    $celular              = isset($_POST["celular"])? limpiarCadena($_POST["celular"]):"";
+    $fecha_nacimiento     = isset($_POST["fecha_nacimiento"])? limpiarCadena($_POST["fecha_nacimiento"]):"";
+    $ruc                  = isset($_POST["ruc"])? limpiarCadena($_POST["ruc"]):"";
+    $usuario_sol          = isset($_POST["usuario_sol"])? limpiarCadena($_POST["usuario_sol"]):"";
+    $clave_sol            = isset($_POST["clave_sol"])? limpiarCadena($_POST["clave_sol"]):"";
+    $direccion            = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
+    $distrito             = isset($_POST["distrito"])? limpiarCadena($_POST["distrito"]):"";
+    $departamento         = isset($_POST["departamento"])? limpiarCadena($_POST["departamento"]):"";
+    $provincia            = isset($_POST["provincia"])? limpiarCadena($_POST["provincia"]):"";
+    $ubigeo               = isset($_POST["ubigeo"])? limpiarCadena($_POST["ubigeo"]):"";
+    $sueldo_mensual       = isset($_POST["sueldo_mensual"])? limpiarCadena($_POST["sueldo_mensual"]):"";
+    $sueldo_diario        = isset($_POST["sueldo_diario"])? limpiarCadena($_POST["sueldo_diario"]):"";
+    $idbanco              = isset($_POST["idbanco"])? limpiarCadena($_POST["idbanco"]):"";
+    $cuenta_bancaria      = isset($_POST["cuenta_bancaria"])? limpiarCadena($_POST["cuenta_bancaria"]):"";
+    $cci                  = isset($_POST["cci"])? limpiarCadena($_POST["cci"]):"";
+    $titular_cuenta       = isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";    
 
     switch ($_GET["op"]) {   
-
       
       // :::::::::::::::::::::::::: S E C C I O N   T R A B A J A D O R   ::::::::::::::::::::::::::
 
       case 'guardar_y_editar':
         //guardar f_img_fondo fondo
-        if ( !file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name']) ) {
-          $f_img_fondo = $_POST["doc_old_1"];
+        if ( !file_exists($_FILES['imagen']['tmp_name']) || !is_uploaded_file($_FILES['imagen']['tmp_name']) ) {
+          $img_perfil = $_POST["imagenactual"];
           $flat_img1 = false; 
         } else {          
-          $ext1 = explode(".", $_FILES["doc1"]["name"]);
+          $ext1 = explode(".", $_FILES["imagen"]["name"]);
           $flat_img1 = true;
-          $f_img_fondo = $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
-          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../assets/modulo/persona/perfil/" . $f_img_fondo);          
+          $img_perfil = $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+          move_uploaded_file($_FILES["imagen"]["tmp_name"], "../assets/modulo/persona/perfil/" . $img_perfil);          
         }        
 
-        if ( empty($idlanding_disenio) ) { #Creamos el registro
+        if ( empty($idpersona) ) { #Creamos el registro
 
-          $rspta = $landing_disenio->insertar($f_titulo,$f_descripcion,$fe_titulo,$fe_descripcion,$f_img_fondo,$f_img_promocion, $fe_img_fondo);
+          $rspta = $trabajador->insertar( $tipo_persona_sunat, $idtipo_persona, $tipo_documento, $numero_documento, $idcargo_trabajador, 
+          $nombre_razonsocial, $apellidos_nombrecomercial, $correo, $celular, $fecha_nacimiento, $ruc, $usuario_sol, $clave_sol, $direccion, $distrito, 
+          $departamento, $provincia, $ubigeo, $sueldo_mensual, $sueldo_diario, $idbanco, $cuenta_bancaria, $cci, $titular_cuenta, $img_perfil );
           echo json_encode($rspta, true);
 
         } else { # Editamos el registro
 
-          if ($flat_img1 == true || empty($f_img_fondo)) {
-            $datos_f1 = $landing_disenio->obtenerImg($idlanding_disenio);
-            $img1_ant = $datos_f1['data']['f_img_fondo'];
+          if ($flat_img1 == true || empty($img_perfil)) {
+            $datos_f1 = $trabajador->perfil_trabajador($idpersona);
+            $img1_ant = $datos_f1['data']['foto_perfil'];
             if (!empty($img1_ant)) { unlink("../assets/modulo/persona/perfil/" . $img1_ant); }         
           }  
          
-          $rspta = $landing_disenio->editar($idlanding_disenio,$f_titulo,$f_descripcion,$fe_titulo,$fe_descripcion,$f_img_fondo,$f_img_promocion, $fe_img_fondo);
+          $rspta = $trabajador->editar($idpersona, $tipo_persona_sunat, $idtipo_persona,  $idpersona_trabajador, $tipo_documento, $numero_documento, $idcargo_trabajador, 
+          $nombre_razonsocial, $apellidos_nombrecomercial, $correo, $celular, $fecha_nacimiento, $ruc, $usuario_sol, $clave_sol, $direccion, $distrito, 
+          $departamento, $provincia, $ubigeo, $sueldo_mensual, $sueldo_diario, $idbanco, $cuenta_bancaria, $cci, $titular_cuenta, $img_perfil);
           echo json_encode($rspta, true);
         }        
 
         
       break;      
 
-      case 'mostrar_empresa':
-        $rspta = $trabajador->mostrar_empresa();
+      case 'mostrar_trabajador':
+        $rspta = $trabajador->mostrar_trabajdor($_POST["idpersona"]);
         echo json_encode($rspta);
-      break;
-      
-      case 'actualizar_datos_empresa':
-        if (empty($id)){
-          $rspta = ['status'=> 'error_personalizado', 'user'=>$_SESSION["nombre"], 'message'=>"No no modifique el codigo por favor", 'data'=>[]];
-          json_encode( $rspta, true) ;
-        }else {
-          // editamos un documento existente
-          $rspta=$trabajador->actualizar_datos_empresa( $id, $direccion,$nombre,$tipo_documento, $num_documento,$celular,$telefono, $link_grupo_whats,$mapa,$correo,$horario, 
-          $rs_facebook,$rs_instagram,$rs_web, $rs_facebook_etiqueta, $rs_instagram_etiqueta, $rs_web_etiqueta);          
-          echo json_encode( $rspta, true) ;
+      break;      
+
+      case 'listar_tabla_principal':
+        $rspta = $trabajador->listar_tabla_principal();
+        //Vamos a declarar un array
+    
+        $data = array(); $count =1;
+    
+        while ($reg = $rspta['data']->fetch_object()) {
+          // Mapear el valor numérico a su respectiva descripción      
+    
+          $img = empty($reg->foto_perfil) ? 'no-perfil.jpg' : $reg->foto_perfil ;
+    
+          $data[] = array(
+            "0" => $count++,
+            "1" => '<div class="hstack gap-2 fs-15">' .
+              '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar(' . $reg->idpersona . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+              ($reg->estado ? '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="desactivar(' . $reg->idpersona . ', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>':
+              '<button class="btn btn-icon btn-sm btn-success-light product-btn" onclick="activar(' . $reg->idpersona . ')" data-bs-toggle="tooltip" title="Activar"><i class="fa fa-check"></i></button>'
+              ).
+            '</div>',        
+            "2" =>'<div class="d-flex flex-fill align-items-center">
+              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')"> </span></div>
+              <div>
+                <span class="d-block fw-semibold text-primary">'.$reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial.'</span>
+                <span class="text-muted">'.$reg->tipo_documento .' '. $reg->numero_documento.'</span>
+              </div>
+            </div>',
+            "3" =>  '<div class="text-start">
+            <span class="d-block text-primary fw-semibold">'.date('d/m/Y', strtotime($reg->fecha_nacimiento)).'</span>
+            <span class="text-muted">'.calcular_edad($reg->fecha_nacimiento).' Años</span>
+          </div>',
+            "4" => $reg->cargo_trabajador,
+            "5" => '<a href="tel:+51'.$reg->celular.'">'.$reg->celular.'</a>',
+            "6" => '<textarea cols="30" rows="2" class="textarea_datatable" readonly="">'.$reg->direccion.'</textarea>',
+            "7" =>  '<span class="badge bg-outline-warning cursor-pointer font-size-12px" data-bs-toggle="tooltip" title="Ver clientes">'.$reg->cant_cliente.'</span>'
+          );
         }
+        $results = array(
+          "sEcho" => 1, //Información para el datatables
+          "iTotalRecords" => count($data),  //enviamos el total registros al datatable
+          "iTotalDisplayRecords" => count($data),  //enviamos el total registros a visualizar
+          "aaData" => $data
+        );
+        echo json_encode($results);
+    
       break;
     
 

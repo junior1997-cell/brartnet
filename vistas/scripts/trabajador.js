@@ -21,9 +21,9 @@ function init() {
   $("#idbanco").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#distrito").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
-	$.post("../ajax/usuario.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	});
-	$.post("../ajax/usuario.php?op=series&id=", function (r) {	$("#series").html(r);	});
-	// $.post("../ajax/usuario.php?op=permisosEmpresaTodos", function (r) {	$("#empresas").html(r);	});
+	$.post("../ajax/trabajador.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	});
+	$.post("../ajax/trabajador.php?op=series&id=", function (r) {	$("#series").html(r);	});
+	// $.post("../ajax/trabajador.php?op=permisosEmpresaTodos", function (r) {	$("#empresas").html(r);	});
 }
 
 
@@ -41,7 +41,14 @@ function limpiar_form() {
 	$("#clave").val("");	
 	$("#idusuario").val(""); 
 
-  $( "#clave" ).rules( "add", { required: true,  messages: {  required: "Campo requerido", } });
+  $("#imagen").val("");
+  $("#imagenactual").val("");
+  $("#imagenmuestra").attr("src", "../assets/modulo/usuario/perfil/no-perfil.jpg");
+  $("#imagenmuestra").attr("src", "../assets/modulo/usuario/perfil/no-perfil.jpg").show();
+  var imagenMuestra = document.getElementById('imagenmuestra');
+  if (!imagenMuestra.src || imagenMuestra.src == "") {
+    imagenMuestra.src = '../assets/modulo/usuario/perfil/no-perfil.jpg';
+  }
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -49,10 +56,6 @@ function limpiar_form() {
   $(".error.invalid-feedback").remove();
 }
 
-function reload_ps() {
-  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
-  $.post("../ajax/usuario.php?op=series&id=", function (r) { $("#series").html(r); });
-}
 
 function show_hide_form(flag) {
 	if (flag == 1) {
@@ -88,7 +91,7 @@ function listar() {
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
 		"ajax":	{
-			url: '../ajax/usuario.php?op=listar',
+			url: '../ajax/trabajador.php?op=listar_tabla_principal',
 			type: "get",
 			dataType: "json",
 			error: function (e) {
@@ -103,6 +106,14 @@ function listar() {
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
 		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      // if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: #
+      // if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center"); }
+      // columna: #
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
+    },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
@@ -115,13 +126,13 @@ function listar() {
 }
 //Función para guardar o editar
 
-function guardar_y_editar_usuario(e) {
+function guardar_y_editar_trabajador(e) {
 	//e.preventDefault(); //No se activará la acción predeterminada del evento
 	
-	var formData = new FormData($("#form-agregar-usuario")[0]);
+	var formData = new FormData($("#form-agregar-trabajador")[0]);
 
 	$.ajax({
-		url: "../ajax/usuario.php?op=guardaryeditar",
+		url: "../ajax/trabajador.php?op=guardar_y_editar",
 		type: "POST",
 		data: formData,
 		contentType: false,
@@ -132,11 +143,35 @@ function guardar_y_editar_usuario(e) {
         if (e.status == true) {	
 					tabla_usuario.ajax.reload(null, false);          
 					show_hide_form(1)
-					sw_success('Exito', 'Usuario guardado correctamente.');
+					sw_success('Exito', 'Trabajador guardado correctamente.');
 				} else {
 					ver_errores(jqXhr);
 				}				
 			} catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+      $(".btn-guardar").html('<i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar').removeClass('disabled send-data');
+		},
+		xhr: function () {
+			var xhr = new window.XMLHttpRequest();
+			xhr.upload.addEventListener("progress", function (evt) {
+				if (evt.lengthComputable) {
+					var percentComplete = (evt.loaded / evt.total) * 100;
+					/*console.log(percentComplete + '%');*/
+					$("#barra_progress_trabajador").css({ "width": percentComplete + '%' });
+					$("#barra_progress_trabajador div").text(percentComplete.toFixed(2) + " %");
+				}
+			}, false);
+			return xhr;
+		},
+		beforeSend: function () {
+			$(".btn-guardar").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled send-data');
+			$("#barra_progress_trabajador").css({ width: "0%", });
+			$("#barra_progress_trabajador div").text("0%");
+      $("#barra_progress_trabajador_div").show();
+		},
+		complete: function () {
+			$("#barra_progress_trabajador").css({ width: "0%", });
+			$("#barra_progress_trabajador div").text("0%");
+      $("#barra_progress_trabajador_div").hide();
 		},
 		error: function (jqXhr, ajaxOptions, thrownError) {
 			ver_errores(jqXhr);
@@ -144,38 +179,45 @@ function guardar_y_editar_usuario(e) {
 	});
 }
 
-function mostrar(idusuario) {
+function mostrar(idpersona) {
   limpiar_form();
 	show_hide_form(2);
-	$('#cargando-1-fomulario').hide();	$('#cargando-2-fomulario').show();
-	$('#cargando-3-fomulario').hide();	$('#cargando-4-fomulario').show();  
+	$('#cargando-1-fomulario').hide();	$('#cargando-2-fomulario').show(); 
 	
-	$.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (e, status) {
+	$.post("../ajax/trabajador.php?op=mostrar_trabajador", { idpersona: idpersona }, function (e, status) {
 		e = JSON.parse(e);
 
-		$.post(`../ajax/ajax_general.php?op=select2_usuario_trabajador&id=${idusuario}`, function (e2, textStatus, jqXHR) {
-      e2 = JSON.parse(e2);
-			$("#idpersona").html(e2.data);
+		$('#idpersona').val(e.data.idpersona);
+		$('#idpersona_trabajador').val(e.data.idpersona_trabajador);
+    $('#tipo_persona_sunat').val(e.data.tipo_persona_sunat);
+    $('#idtipo_persona').val(e.data.idtipo_persona);
 
-			$("#idusuario").val(e.data.idusuario);
-			$("#idpersona").val(e.data.idpersona).trigger("change");
-			$("#cargo").val(e.data.cargo_trabajador);
+    $('#tipo_documento').val(e.data.code_sunat).trigger("change");
+    $('#numero_documento').val(e.data.numero_documento);
+    $('#idcargo_trabajador').val(e.data.idcargo_trabajador).trigger("change");
+    $('#nombre_razonsocial').val(e.data.nombre_razonsocial);
+    $('#apellidos_nombrecomercial').val(e.data.apellidos_nombrecomercial);
+    $('#correo').val(e.data.correo);
+    $('#celular').val(e.data.celular);
+    $('#fecha_nacimiento').val(e.data.fecha_nacimiento).trigger("change")
+    
+    $('#ruc').val(e.data.ruc);
+    $('#usuario_sol').val(e.data.usuario_sol);
+    $('#clave_sol').val(e.data.clave_sol);
+    $('#direccion').val(e.data.direccion);
+    $('#distrito').val(e.data.distrito).trigger("change");
+    $('#departamento').val(e.data.departamento);
+    $('#provincia').val(e.data.provincia);
+    $('#ubigeo').val(e.data.cod_ubigeo);
+    $('#sueldo_mensual').val(e.data.sueldo_mensual);
+    $('#sueldo_diario').val(e.data.sueldo_diario);
+    $('#idbanco').val(e.data.idbancos).trigger("change")
+    $('#cuenta_bancaria').val(e.data.cuenta_bancaria);
+    $('#cci').val(e.data.cci);
+    $('#titular_cuenta').val(e.data.titular_cuenta);
 
-			$("#email").val(e.data.email);		
-			$("#login").val(e.data.login);		
-      
-      $("#clave").rules( "remove", "required" );
-
-			$.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (e3) {
-				$("#permisos").html(e3);
-				$.post("../ajax/usuario.php?op=series&id=" + idusuario, function (e4) {
-					$("#series").html(e4);
-					$('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
-					$('#cargando-3-fomulario').show();	$('#cargando-4-fomulario').hide();
-          $('#form-agregar-usuario').valid();
-				});
-			});
-		});
+    $('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
+    $('#form-agregar-trabajador').valid();
 	});	
 }
 
@@ -184,7 +226,7 @@ function ver_cargo() {
 	$('.charge_cargo').html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);	
 	
   var id = $('#idpersona').val() == '' || $('#idpersona').val() == null ? '0' : $('#idpersona').val();
-	$.post("../ajax/usuario.php?op=cargo_persona", { idpersona: id }, function (e, status) {
+	$.post("../ajax/trabajador.php?op=cargo_persona", { idpersona: id }, function (e, status) {
     e = JSON.parse(e);	
     $('#cargo').val(e.data.cargo_trabajador);
     $('.charge_cargo').html('');
@@ -195,8 +237,8 @@ function ver_cargo() {
 function desactivar(idusuario, nombre) {
 	$('.tooltip').remove();
 	crud_eliminar_papelera(
-    "../ajax/usuario.php?op=papelera",
-    "../ajax/usuario.php?op=eliminar", 
+    "../ajax/trabajador.php?op=papelera",
+    "../ajax/trabajador.php?op=eliminar", 
     idusuario, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
@@ -257,7 +299,7 @@ function historial_sesion(id) {
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_historial) { tabla_historial.ajax.reload(null, false); } } },      
     ],
 		"ajax":	{
-			url: `../ajax/usuario.php?op=historial_sesion&id=${id}`,
+			url: `../ajax/trabajador.php?op=historial_sesion&id=${id}`,
 			type: "get",
 			dataType: "json",
 			error: function (e) {
@@ -319,9 +361,9 @@ $(function () {
       provincia:    			      { required: true, },  
       ubigeo:    			          { required: true, },
 
-      sueldo_mensual:    			  { minlength: 4, maxlength: 20, },
-      sueldo_diario:    			  { minlength: 4, maxlength: 20, },
-      idbanco:    			        { required: true, minlength: 4, maxlength: 20, },
+      sueldo_mensual:    			  { min: 0, },
+      sueldo_diario:    			  { min: 0, },
+      idbanco:    			        { required: true, },
       cuenta_bancaria:    			{ minlength: 4, maxlength: 45, },
       cci:    			            { minlength: 4, maxlength: 45, },
       titular_cuenta:    			  { minlength: 4, maxlength: 45, },
@@ -347,8 +389,8 @@ $(function () {
       provincia:    			      { required: "Campo requerido", }, 
       ubigeo:    			          { required: "Campo requerido", },
 
-      sueldo_mensual:    			  { minlength: "Mínimo {0} caracteres.", }, 
-      sueldo_diario:    			  { minlength: "Mínimo {0} caracteres.", }, 
+      sueldo_mensual:    			  { min: "Mínimo {0}.", }, 
+      sueldo_diario:    			  { min: "Mínimo {0}.", }, 
       idbanco:    			        { required: "Campo requerido", }, 
       cuenta_bancaria:    			{ minlength: "Mínimo {0} caracteres.", }, 
       cci:    			            { minlength: "Mínimo {0} caracteres.", }, 
@@ -372,7 +414,7 @@ $(function () {
     },
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardar_y_editar_usuario(e);      
+      guardar_y_editar_trabajador(e);      
     },
   });
   $('#tipo_documento').rules('add', { required: true, messages: {  required: "Campo requerido" } });
@@ -382,11 +424,41 @@ $(function () {
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+function cambiarImagen() {
+	var imagenInput = document.getElementById('imagen');
+	imagenInput.click();
+}
+function removerImagen() {
+	// var imagenMuestra = document.getElementById('imagenmuestra');
+	// var imagenActualInput = document.getElementById('imagenactual');
+	// var imagenInput = document.getElementById('imagen');
+	// imagenMuestra.src = '../assets/images/faces/9.jpg';
+	$("#imagenmuestra").attr("src", "../assets/images/faces/9.jpg");
+	// imagenActualInput.value = '';
+	// imagenInput.value = '';
+	$("#imagen").val("");
+  $("#imagenactual").val("");
+}
+
+// Esto se encarga de mostrar la imagen cuando se selecciona una nueva
+document.addEventListener('DOMContentLoaded', function () {
+	var imagenMuestra = document.getElementById('imagenmuestra');
+	var imagenInput = document.getElementById('imagen');
+
+	imagenInput.addEventListener('change', function () {
+		if (imagenInput.files && imagenInput.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function (e) { imagenMuestra.src = e.target.result;	}
+			reader.readAsDataURL(imagenInput.files[0]);
+		}
+	});
+});
 
 function ver_img(img, nombre) {
 	$(".title-modal-img").html(`-${nombre}`);
   $('#modal-ver-img').modal("show");
-  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/usuario/perfil', '100%', '550'));
+  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
+  $(`.jq_image_zoom`).zoom({ on:'grab' });
 }
 
 function llenar_dep_prov_ubig(input) {
@@ -410,7 +482,7 @@ function llenar_dep_prov_ubig(input) {
       $("#ubigeo").val(e.data.ubigeo_inei); 
 
       $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
-      $("#form-cliente").valid();
+      $("#form-agregar-trabajador").valid();
     });
   }  
 }

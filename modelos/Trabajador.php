@@ -14,56 +14,41 @@ class Trabajador
   }
 
 	//Implementamos un método para insertar registros
-	public function insertar($idpersona, $login, $clavehash, $permisos, $series)	{
-		$sql = "INSERT INTO usuario( idpersona, login, password) VALUES ('$idpersona','$login','$clavehash')";
+	public function insertar( $tipo_persona_sunat, $idtipo_persona, $tipo_documento, $numero_documento, $idcargo_trabajador, 
+	$nombre_razonsocial, $apellidos_nombrecomercial, $correo, $celular, $fecha_nacimiento,  $ruc, $usuario_sol, $clave_sol, $direccion, $distrito, 
+	$departamento, $provincia, $ubigeo, $sueldo_mensual, $sueldo_diario, $idbanco, $cuenta_bancaria, $cci, $titular_cuenta, $img_perfil)	{
+		$sql = "INSERT INTO persona( idtipo_persona, idbancos, idcargo_trabajador, tipo_persona_sunat, nombre_razonsocial, apellidos_nombrecomercial, 
+		tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, departamento, provincia, distrito, cod_ubigeo, correo, 
+		cuenta_bancaria, cci, titular_cuenta, foto_perfil ) VALUES 
+		('$idtipo_persona', '$idbanco', '$idcargo_trabajador', '$tipo_persona_sunat', '$nombre_razonsocial', '$apellidos_nombrecomercial', '$tipo_documento', '$numero_documento',
+		'$fecha_nacimiento', '$celular', '$direccion', '$departamento', '$provincia', '$distrito', '$ubigeo', '$correo', '$cuenta_bancaria','$cci','$titular_cuenta',	'$img_perfil')";
 		$id_new = ejecutarConsulta_retornarID($sql, 'C');	if ($id_new['status'] == false) {  return $id_new; } 		
 
 		$id = $id_new['data'];
-		$zz = 0;
-		$yy = 0;
 
-		while ($zz < count($permisos)) {
-			$sql_detalle = "INSERT into usuario_permiso(idusuario, idpermiso) values ('$id', '$permisos[$zz]')";
-			$usr_permiso = ejecutarConsulta($sql_detalle, 'C'); if ($usr_permiso['status'] == false) {  return $usr_permiso; } 
-			$zz = $zz + 1;
-		}
-
-		while ($yy < count($series)) {
-			$sql_detalle_series = "INSERT into sunat_usuario_comprobante(idusuario, idtipo_comprobante) values ('$id', '$series[$yy]')";
-			$usr_num = ejecutarConsulta($sql_detalle_series, 'C'); if ($usr_num['status'] == false) {  return $usr_num; } 
-			$yy = $yy + 1;
-		}		
+		$sql_detalle = "INSERT INTO persona_trabajador( idpersona, ruc, usuario_sol, clave_sol, sueldo_mensual, sueldo_diario) VALUES 
+		('$id', '$ruc', '$usuario_sol', '$clave_sol', '$sueldo_mensual', '$sueldo_diario')";
+		$usr_permiso = ejecutarConsulta($sql_detalle, 'C'); if ($usr_permiso['status'] == false) {  return $usr_permiso; }		
 
     return $id_new;
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idusuario, $idpersona, $login, $clavehash, $permisos, $series) {
+	public function editar($idpersona, $tipo_persona_sunat, $idtipo_persona,  $idpersona_trabajador, $tipo_documento, $numero_documento, $idcargo_trabajador, 
+	$nombre_razonsocial, $apellidos_nombrecomercial, $correo, $celular, $fecha_nacimiento, $ruc, $usuario_sol, $clave_sol, $direccion, $distrito, 
+	$departamento, $provincia, $ubigeo, $sueldo_mensual, $sueldo_diario, $idbanco, $cuenta_bancaria, $cci, $titular_cuenta, $img_perfil) {
 
-		$sql = "UPDATE usuario SET idpersona='$idpersona', login='$login', password='$clavehash' WHERE idusuario='$idusuario'";
+		$sql = "UPDATE persona SET idtipo_persona='$idtipo_persona', idbancos='$idbanco', idcargo_trabajador='$idcargo_trabajador',
+		tipo_persona_sunat='$tipo_persona_sunat', nombre_razonsocial='$nombre_razonsocial', apellidos_nombrecomercial='$apellidos_nombrecomercial',
+		tipo_documento='$tipo_documento',	numero_documento='$numero_documento',fecha_nacimiento='$fecha_nacimiento',celular='$celular',direccion='$direccion',
+		departamento='$departamento',	provincia='$provincia', distrito='$distrito', cod_ubigeo='$ubigeo', correo='$correo', cuenta_bancaria='$cuenta_bancaria', cci='$cci',
+		titular_cuenta='$titular_cuenta,',foto_perfil='$img_perfil' 
+		WHERE idpersona = '$idpersona'";
 		$edit_user = ejecutarConsulta($sql, 'U'); if ($edit_user['status'] == false) {  return $edit_user; }
 
-		//Eliminar todos los permisos asignados para volverlos a registrar
-		$sqldel = "DELETE from usuario_permiso where 	idusuario='$idusuario'";
-		$del_up = ejecutarConsulta($sqldel); if ($del_up['status'] == false) {  return $del_up; }
-
-		$sqldelSeries = "DELETE from sunat_usuario_comprobante where idusuario='$idusuario'";
-		$del_suc = ejecutarConsulta($sqldelSeries); if ($del_suc['status'] == false) {  return $del_suc; }
-
-		$zz = 0;
-		$yy = 0;
-
-		while ($zz < count($permisos)) {
-			$sql_detalle = "INSERT into usuario_permiso(idusuario, idpermiso) values ('$idusuario', '$permisos[$zz]')";
-			$usr_permiso = ejecutarConsulta($sql_detalle, 'C'); if ($usr_permiso['status'] == false) {  return $usr_permiso; } 
-			$zz = $zz + 1;
-		}
-
-		while ($yy < count($series)) {
-			$sql_detalle_series = "INSERT into sunat_usuario_comprobante(idusuario, idtipo_comprobante) values ('$idusuario', '$series[$yy]')";
-			$usr_num = ejecutarConsulta($sql_detalle_series, 'C'); if ($usr_num['status'] == false) {  return $usr_num; } 
-			$yy = $yy + 1;
-		}		
+		$sql_detalle = "UPDATE persona_trabajador SET idpersona='$idpersona',ruc='$ruc',usuario_sol='$usuario_sol',
+		clave_sol='$clave_sol',sueldo_mensual='$sueldo_mensual',sueldo_diario='$sueldo_diario' WHERE idpersona_trabajador = '$idpersona_trabajador'";
+		$usr_permiso = ejecutarConsulta($sql_detalle, 'U'); if ($usr_permiso['status'] == false) {  return $usr_permiso; }
 
     return $edit_user;		
 	}
@@ -81,27 +66,35 @@ class Trabajador
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
-	public function mostrar($idusuario)	{
-		$sql = "SELECT u.idusuario, p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, p.numero_documento, p.celular, p.correo,
-		p.foto_perfil, u.login, DATE_FORMAT(u.last_sesion, '%m/%d/%Y %h:%i: %p') AS last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
-		FROM  usuario as u
-		inner join persona as p on u.idpersona = p.idpersona
+	public function mostrar_trabajdor($idpersona)	{
+		$sql = "SELECT p.*, pt.ruc, pt.usuario_sol, pt.clave_sol, pt.sueldo_mensual, pt.sueldo_diario, t.nombre as tipo_persona, c.nombre as cargo_trabajador, 
+		sdi.abreviatura as tipo_documento, sdi.code_sunat, pt.idpersona_trabajador		
+		FROM  persona as p
+		inner join persona_trabajador as pt on pt.idpersona = p.idpersona
 		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
-		where u.idusuario='$idusuario'";
+		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		WHERE p.idpersona='$idpersona' AND p.estado = '1' AND p.estado_delete = '1';";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	//Implementar un método para listar los registros
-	public function listar()	{
-		$sql = "SELECT u.idusuario, p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, p.numero_documento, p.celular, p.correo,
-		p.foto_perfil, u.login, DATE_FORMAT(u.last_sesion, '%m/%d/%Y %h:%i: %p') AS last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
-		FROM  usuario as u
-		inner join persona as p on u.idpersona = p.idpersona
+	public function listar_tabla_principal()	{
+		$sql = "SELECT p.*, pt.ruc, pt.usuario_sol, pt.clave_sol, pt.sueldo_mensual, pt.sueldo_diario, t.nombre as tipo_persona, c.nombre as cargo_trabajador, sdi.abreviatura as tipo_documento, 
+		( SELECT COUNT(*) FROM persona_cliente as pc WHERE pc.idpersona_trabajador = pt.idpersona_trabajador ) AS cant_cliente
+		FROM  persona as p
+		inner join persona_trabajador as pt on pt.idpersona = p.idpersona
 		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
-		WHERE u.estado = '1' AND u.estado_delete = '1'";
+		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		WHERE p.estado = '1' AND p.estado_delete = '1';";
 		return ejecutarConsulta($sql);
+	}
+
+	//Implementar un método para listar los registros
+	public function perfil_trabajador($id)	{
+		$sql = "SELECT p.foto_perfil	FROM persona as p WHERE p.idpersona = '$id' ;";
+		return ejecutarConsultaSimpleFila($sql);
 	}
 
 }

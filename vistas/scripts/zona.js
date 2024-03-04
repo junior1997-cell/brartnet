@@ -66,7 +66,7 @@ function tabla_principal_zona() {
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
     },
 		language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ ",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
@@ -94,10 +94,10 @@ function guardar_y_editar_zona(e) {
 
 	      tabla_zona.ajax.reload(null, false);
          
-				limpiar();
+				limpiar_zona();
 
         $("#modal-agregar-zona").modal("hide");
-        $("#guardar_registro_zona").html('Guardar Cambios').removeClass('disabled');
+        $("#guardar_registro_zona").html('Guardar Cambios').removeClass('disabled send-data');
 			}else{
 				ver_errores(e);
 			}
