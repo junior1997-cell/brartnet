@@ -179,15 +179,15 @@ class Cliente
 		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, 
 		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,
 		CASE 
-		WHEN p.tipo_persona_sunat = 'natural' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-		WHEN p.tipo_persona_sunat = 'juridica' THEN p.nombre_razonsocial 
+		WHEN p.tipo_persona_sunat = 'NATURAL' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+		WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
 		ELSE 'Valor por defecto'
 		END AS nombre_completo, 
 		p.tipo_documento, p.numero_documento, p.celular, p.direccion,p.distrito,p1.nombre_razonsocial, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, 
 		za.ip_antena,pc.estado, i.abreviatura as tipo_doc
 
 		FROM persona_cliente as pc
-		INNER JOIN persona AS P on pc.idpersona=p.idpersona
+		INNER JOIN persona AS p on pc.idpersona=p.idpersona
 		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador
 		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
 		INNER JOIN plan as pl on pc.idplan=pl.idplan
