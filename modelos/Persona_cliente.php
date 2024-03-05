@@ -214,9 +214,9 @@ class Cliente
 	{
 		$sql = "SELECT pt.idpersona_trabajador, p.idpersona, 
 		CASE 
-		WHEN p.tipo_persona_sunat = 'natural' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-		WHEN p.tipo_persona_sunat = 'juridica' THEN p.nombre_razonsocial 
-		ELSE 'Valor por defecto'
+		WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+		WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+		ELSE '-'
 		END AS nombre_completo, 
 		p.tipo_documento, p.numero_documento 
 		FROM persona_trabajador pt 

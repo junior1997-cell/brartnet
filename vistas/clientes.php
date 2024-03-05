@@ -75,9 +75,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th>Distrito</th>
                                 <th>Plan</th>
                                 <th>Zona</th>
-                                <th>Ip Personal</th>
+                                <th>Ip</th>
                                 <th>Trabajador</th>
-                                <th class="text-center">Estado</th>
+                                <!-- <th class="text-center">Estado</th> -->
 
 
                                 <th class="text-center">Nombres</th>
@@ -102,9 +102,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th>Distrito</th>
                                 <th>Plan</th>
                                 <th>Zona</th>
-                                <th>Ip Personal</th>
+                                <th>Ip</th>
                                 <th>Trabajador</th>
-                                <th class="text-center">Estado</th>
+                                <!-- <th class="text-center">Estado</th> -->
 
                                 <th class="text-center">Nombres</th>
                                 <th class="text-center">Tipo Documento</th>
@@ -115,7 +115,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="text-center">Costo Plan</th>
                                 <th class="text-center">Nombre Zona</th>
                                 <th class="text-center">Ip Antena</th>
-                                
+
                               </tr>
                             </tfoot>
                           </table>
@@ -139,7 +139,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                           <div class="row" id="cargando-1-fomulario">
 
-                            <div class="col-12">
+                            <div class="col-6">
 
                               <div class="row">
                                 <!-- Grupo -->
@@ -161,7 +161,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <input type="hidden" id="idpersona_cliente" name="idpersona_cliente">
 
                                   <!-- TIPO PERSONA -->
-                                  <div class="col-12 col-sm-6 col-md-3 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 col-xxl-4" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="nombre_razonsocial">Tipo Persona: <sup class="text-danger">*</sup></label>
                                       <select name="tipo_persona_sunat" id="tipo_persona_sunat" class="form-control" placeholder="Tipo Persona">
@@ -172,7 +172,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- Tipo Doc -->
-                                  <div class="col-12 col-sm-6 col-md-3 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 col-xxl-4" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="nombre_razonsocial">Tipo Doc. <sup class="text-danger">*</sup></label>
                                       <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento"></select>
@@ -180,7 +180,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- N° de documento -->
-                                  <div class="col-12 col-sm-6 col-md-3 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="num_documento">N° de documento <sup class="text-danger">*</sup></label>
                                       <div class="input-group mb-3">
@@ -194,7 +194,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- Nombre -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label nombre_razon" for="nombre">Nombre <sup class="text-danger">*</sup></label>
                                       <input type="text" name="nombre_razonsocial" class="form-control inpur_edit" id="nombre_razonsocial" />
@@ -202,14 +202,14 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- Apellidos -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label apellidos_nombrecomer" for="nombre">Apellidos <sup class="text-danger">*</sup></label>
                                       <input type="text" name="apellidos_nombrecomercial" class="form-control inpur_edit" id="apellidos_nombrecomercial" />
                                     </div>
                                   </div>
                                   <!-- Fecha cumpleaño -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-5 col-xl-5 col-xxl-5" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="fecha_nacimiento">Fecha nacimiento <sup class="text-danger">*</sup></label>
                                       <input type="date" name="fecha_nacimiento" class="form-control inpur_edit" id="fecha_nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" onchange="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" />
@@ -217,7 +217,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                     </div>
                                   </div>
                                   <!-- Edad -->
-                                  <div class="col-12 col-sm-6 col-md-1 col-lg-1" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="Edad">Edad <sup class="text-danger">*</sup></label>
                                       <p class="edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
@@ -225,23 +225,50 @@ if (!isset($_SESSION["user_nombre"])) {
                                     </div>
                                   </div>
                                   <!-- Celular  -->
-                                  <div class="col-12 col-sm-6 col-md-2 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-12 col-lg-5 col-xl-5 col-xxl-5" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="celular">Celular <sup class="text-danger">*</sup></label>
                                       <input type="number" name="celular" class="form-control inpur_edit" id="celular" />
                                     </div>
                                   </div>
 
-                                  <!-- Dirección -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-7" style="margin-bottom: 20px;">
+                                  <!-- Correo -->
+                                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="direccion">Dirección <sup class="text-danger">*</sup></label>
+                                      <label class="form-label" for="Correo">Correo <sup class="text-danger">*</sup></label>
+                                      <input type="email" name="correo" id="correo" class="form-control" placeholder="Correo"></input>
+                                    </div>
+                                  </div>
+
+                                </div>
+
+                              </div>
+
+                            </div>
+                            <!-- --------------DIRECCION -->
+                            <div class="col-6">
+
+                              <div class="row">
+                                <!-- Grupo -->
+                                <div class="col-12 pl-0">
+                                  <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b>UBICACIÓN</b></label></div>
+                                </div>
+                              </div>
+
+                              <div class="card-body" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+
+                                <div class="row ">
+
+                                  <!-- Dirección -->
+                                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="direccion">Dirección: <sup class="text-danger">*</sup></label>
                                       <input type="text" name="direccion" class="form-control inpur_edit" id="direccion" />
                                     </div>
                                   </div>
 
                                   <!-- Distrito -->
-                                  <div class="col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-md-12 col-lg-6 col-xl-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label for="distrito" class="form-label">Distrito: </label></label>
                                       <select name="distrito" id="distrito" class="form-control" placeholder="Seleccionar" onchange="llenar_dep_prov_ubig(this);">
@@ -249,32 +276,24 @@ if (!isset($_SESSION["user_nombre"])) {
                                     </div>
                                   </div>
                                   <!-- Departamento -->
-                                  <div class="col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-md-12 col-lg-6 col-xl-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label for="departamento" class="form-label">Departamento: <span class="chargue-pro" readonly></span></label>
-                                      <input type="text" class="form-control" name="departamento" id="departamento">
+                                      <label for="departamento" class="form-label">Departamento: <span class="chargue-pro" ></span></label>
+                                      <input type="text" class="form-control" name="departamento" id="departamento" readonly>
                                     </div>
                                   </div>
                                   <!-- Provincia -->
-                                  <div class="col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-md-12 col-lg-6 col-xl-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label for="provincia" class="form-label">Provincia: <span class="chargue-dep" readonly></span></label>
-                                      <input type="text" class="form-control" name="provincia" id="provincia">
+                                      <label for="provincia" class="form-label">Provincia: <span class="chargue-dep" ></span></label>
+                                      <input type="text" class="form-control" name="provincia" id="provincia" readonly>
                                     </div>
                                   </div>
                                   <!-- Ubigeo -->
-                                  <div class="col-12 col-md-3 col-lg-3 col-xl-3" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-md-12 col-lg-6 col-xl-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label for="ubigeo" class="form-label">Ubigeo: <span class="chargue-ubi" readonly></span></label>
-                                      <input type="text" class="form-control" name="ubigeo" id="ubigeo">
-                                    </div>
-                                  </div>
-
-                                  <!-- Correo -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
-                                    <div class="form-group">
-                                      <label class="form-label" for="Correo">Correo <sup class="text-danger">*</sup></label>
-                                      <input type="email" name="correo" id="correo" class="form-control" placeholder="Correo"></input>
+                                      <label for="ubigeo" class="form-label">Ubigeo: <span class="chargue-ubi"></span></label>
+                                      <input type="text" class="form-control" name="ubigeo" id="ubigeo" readonly>
                                     </div>
                                   </div>
 
@@ -298,15 +317,15 @@ if (!isset($_SESSION["user_nombre"])) {
 
 
                                   <!-- Select trabajdor -->
-                                  <div class="col-12 col-sm-6 col-md-3 col-lg-6" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="idpersona_trabajador">Trabajdor <sup class="text-danger">*</sup></label>
+                                      <label class="form-label" for="idpersona_trabajador">Trabajador <sup class="text-danger">*</sup></label>
                                       <select name="idpersona_trabajador" id="idpersona_trabajador" class="form-control" placeholder="Selec. Trabajador"></select>
                                     </div>
                                   </div>
 
                                   <!-- Select Zona antena -->
-                                  <div class="col-12 col-sm-6 col-md-3 col-lg-6" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="idzona_antena">Zona Antena <sup class="text-danger">*</sup></label>
                                       <select name="idzona_antena" id="idzona_antena" class="form-control" placeholder="Selec. Zona Antena"></select>
@@ -314,7 +333,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- Select Plan -->
-                                  <div class="col-12 col-sm-6 col-md-3 col-lg-3" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="idplan">Plan <sup class="text-danger">*</sup></label>
                                       <select name="idplan" id="idplan" class="form-control" placeholder="Selec. Plan"></select>
@@ -322,7 +341,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- Ip Personal -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="ip_personal">Ip Personal <sup class="text-danger">*</sup></label>
                                       <input type="text" name="ip_personal" class="form-control inpur_edit" id="ip_personal" />
@@ -330,7 +349,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- fecha afiliacion -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="fecha_afiliacion">Fecha Afiliacion <sup class="text-danger">*</sup></label>
                                       <input type="date" name="fecha_afiliacion" class="form-control inpur_edit" id="fecha_afiliacion" />
@@ -338,7 +357,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- Descuento -->
-                                  <div class="col-12 col-sm-2 col-md-2 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 col-xxl-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="fecha_afiliacion"><sup class="text-white">*</sup></label>
                                       <div class="custom-toggle-switch d-flex align-items-center mb-4">
@@ -351,7 +370,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- fecha afiliacion -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="fecha_afiliacion">Monto descuento <sup class="text-danger">*</sup></label>
                                       <input type="number" name="descuento" class="form-control inpur_edit" id="descuento" readonly />

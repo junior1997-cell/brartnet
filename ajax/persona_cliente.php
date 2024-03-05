@@ -143,33 +143,37 @@ if (!isset($_SESSION["user_nombre"])) {
               "0" => $cont++,
               "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>' .
                 ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',
-              "2" => '<div class="d-flex align-items-center">' .
-                '<img src="' . $imagen_perfil . '" alt="Avatar" class="avatar avatar-lg avatar-rounded">' .
-                '<div class="ms-3">' .
-                '<div class="fw-bold">' . $value['nombre_completo'] . '</div>' .
-                '<div class="text-muted"> ' . $value['tipo_doc'] . ' : ' . $value['numero_documento'] . '</div>' .
-                '</div>' .
-                '</div>',
-              "3" =>$value['celular'],
+              "2" => '<div class="d-flex flex-fill align-items-center">
+              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($value['nombre_completo']) . '\')"> </span></div>
+              <div>
+                <span class="d-block fw-semibold text-primary">' . $value['nombre_completo'] . '</span>
+                <span class="text-muted">' . $value['tipo_doc'] . ' : ' . $value['numero_documento'] . '</span>
+              </div>
+            </div>',
+
+              "3" => $value['celular'],
               // "3" =>'<span class="d-block"><i class="ri-phone-line me-2 align-middle fs-14 text-muted"></i>'.$value['celular'].'</span>',
-              "4" => '<div>' . $value['distrito'] . ' : ' . $value['direccion'] . '</div>',
-              // <span class="badge bg-warning">In Progress</span>
-              // "5" => $value['nombre_plan'] . ' : ' . $value['costo'],
+              "4" => '<textarea cols="30" rows="2" class="textarea_datatable" readonly="">' . $value['distrito'] . ' : ' . $value['direccion'] . '</textarea>',
+
               "5" => '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "6" => '<span class="badge bg-outline-success" onclick="ver_zona(\'' . encodeCadenaHtml($value['zona']) . '\',\'' . encodeCadenaHtml($value['ip_antena']) . '\')">' . $value['zona'] . '</span>',
               // : ' . $value['ip_antena'] . 
-              "7" => $value['ip_personal'],
+              "7" => '<div class="text-start font-size-12px" >
+              <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
+              <span class="text-muted"><i class="bx bx-wifi bx-burst" ></i>' . $value['ip_personal'] . '</span>
+            </div>',
+
               "8" => $value['nombre_razonsocial'],
-              "9" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>',
-              "10" =>$value['nombre_completo'],
-              "11" =>$value['tipo_doc'],
-              "12" =>$value['numero_documento'],
-              "13" =>$value['distrito'],
-              "14" =>$value['direccion'],
-              "15" =>$value['nombre_plan'],
-              "16" =>$value['costo'],
-              "17" =>$value['zona'],
-              "18" =>$value['ip_antena']
+              // "9" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>',
+              "9" => $value['nombre_completo'],
+              "10" => $value['tipo_doc'],
+              "11" => $value['numero_documento'],
+              "12" => $value['distrito'],
+              "13" => $value['direccion'],
+              "14" => $value['nombre_plan'],
+              "15" => $value['costo'],
+              "16" => $value['zona'],
+              "17" => $value['ip_antena']
 
             );
           }

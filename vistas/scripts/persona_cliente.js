@@ -194,7 +194,7 @@ function tabla_principal_cliente() {
     "iDisplayLength": 10,//Paginación
     "order": [[2, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [10,11,12,13,14,15,16,17,18], visible: false, searchable: false, },    
+      { targets: [9,10,11,12,13,14,15,16,17], visible: false, searchable: false, },    
     ],
   }).DataTable();
 }
