@@ -42,7 +42,7 @@ class Trabajador
 		tipo_persona_sunat='$tipo_persona_sunat', nombre_razonsocial='$nombre_razonsocial', apellidos_nombrecomercial='$apellidos_nombrecomercial',
 		tipo_documento='$tipo_documento',	numero_documento='$numero_documento',fecha_nacimiento='$fecha_nacimiento',celular='$celular',direccion='$direccion',
 		departamento='$departamento',	provincia='$provincia', distrito='$distrito', cod_ubigeo='$ubigeo', correo='$correo', cuenta_bancaria='$cuenta_bancaria', cci='$cci',
-		titular_cuenta='$titular_cuenta,',foto_perfil='$img_perfil' 
+		titular_cuenta='$titular_cuenta', foto_perfil='$img_perfil' 
 		WHERE idpersona = '$idpersona'";
 		$edit_user = ejecutarConsulta($sql, 'U'); if ($edit_user['status'] == false) {  return $edit_user; }
 

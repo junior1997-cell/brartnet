@@ -368,7 +368,7 @@ $(function () {
 function ver_img(img, nombre) {
 	$(".title-modal-img").html(`-${nombre}`);
   $('#modal-ver-img').modal("show");
-  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/usuario/perfil', '100%', '550'));
+  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
 }
 
 

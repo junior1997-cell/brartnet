@@ -43,8 +43,8 @@ function limpiar_form() {
 
   $("#imagen").val("");
   $("#imagenactual").val("");
-  $("#imagenmuestra").attr("src", "../assets/modulo/usuario/perfil/no-perfil.jpg");
-  $("#imagenmuestra").attr("src", "../assets/modulo/usuario/perfil/no-perfil.jpg").show();
+  $("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/no-perfil.jpg");
+  $("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/no-perfil.jpg").show();
   var imagenMuestra = document.getElementById('imagenmuestra');
   if (!imagenMuestra.src || imagenMuestra.src == "") {
     imagenMuestra.src = '../assets/modulo/usuario/perfil/no-perfil.jpg';
@@ -189,7 +189,7 @@ function mostrar(idpersona) {
 
 		$('#idpersona').val(e.data.idpersona);
 		$('#idpersona_trabajador').val(e.data.idpersona_trabajador);
-    $('#tipo_persona_sunat').val(e.data.tipo_persona_sunat);
+    // $('#tipo_persona_sunat').val(e.data.tipo_persona_sunat);
     $('#idtipo_persona').val(e.data.idtipo_persona);
 
     $('#tipo_documento').val(e.data.code_sunat).trigger("change");
@@ -359,7 +359,7 @@ $(function () {
       ruc:    			            { minlength: 4, maxlength: 11, },       
       usuario_sol:    			    { minlength: 4, maxlength: 20, },       
       clave_sol:    			      { minlength: 4, maxlength: 20, },       
-      direccion:    			      { minlength: 4, maxlength: 20, },       
+      direccion:    			      { minlength: 4, maxlength: 200, },       
       distrito:    			        { required: true, },       
       departamento:    			    { required: true, },       
       provincia:    			      { required: true, },  

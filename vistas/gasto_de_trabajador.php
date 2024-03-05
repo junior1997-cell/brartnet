@@ -102,21 +102,21 @@
                                 <input type="hidden" name="idgasto_de_trabajador" id="idgasto_de_trabajador"/>
 
                                 <!-- ------------ TRABAJADOR --------- -->
-                                <div class="col-md-3">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="idtrabajador" class="form-label">Nombre del Trabajador(*)</label>
-                                    <select class="form-select form-select-lg" name="idtrabajador" id="idtrabajador"><!-- List de trabajadores --></select>
+                                    <select class="form-select form-select-lg" name="idtrabajador" id="idtrabajador" ><!-- List de trabajadores --></select>
                                   </div>
                                 </div>
                                 <!-- --------- DESCRIPCION GASTO ------ -->
-                                <div class="col-md-3">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="descr_gastos" class="form-label">Descripción de Gastos(*)</label>
-                                    <textarea class="form-control" name="descr_gastos" id="descr_gastos"></textarea>
+                                    <textarea class="form-control" name="descr_gastos" id="descr_gastos" rows="1"></textarea>
                                   </div>
                                 </div>
                                 <!-- ----------------- TIPO COMPROBANTE --------------- -->
-                                <div class="col-md-2">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="tp_comprobante" class="form-label">Tipo Comprobante</label>
                                     <select class="form-select form-select-lg" name="tp_comprobante" id="tp_comprobante">
@@ -128,74 +128,65 @@
                                   </div>
                                 </div>
                                 <!-- ----------------- SERIE COMPROBANTE --------------- -->
-                                <div class="col-md-2">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="serie_comprobante" class="form-label">Serie Comprobante</label>
                                     <input type="text" class="form-control" name="serie_comprobante" id="serie_comprobante" onkeyup="mayus(this);"/>
                                   </div>
                                 </div>
                                 <!-- ------------------ FECHA EMISION ------------------ -->
-                                <div class="col-md-2">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="fecha" class="form-label">Fecha Emisión(*)</label>
                                     <input type="date" class="form-control" name="fecha" id="fecha"/>
                                   </div>
                                 </div>
-                              </div>
-
-                              <!-- :::::::::::::: DATO ADICIONAL ::::::::::::::::: -->
-                              <div class="row gy-2 proveedor" id="cargando-2-formulario" style="display: none;">
+                              
                                 <!-- ----------------- PROVEEDOR --------------- -->
-                                <div class="col-md-4">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="idproveedor" class="form-label">Proveedor</label>
                                     <select class="form-select" name="idproveedor" id="idproveedor"></select>
                                   </div>
                                 </div>
-                              </div>
                               
-                              <!-- :::::::::::::: DATOS GASTO ::::::::::::::::: -->
-                              <div class="row gy-2" id="cargando-3-formulario">
                                 <!-- ----------------- SUB TOTAL --------------- -->
-                                <div class="col-md-2">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="sub_total" class="form-label">Sub Total</label>
                                     <input type="number" class="form-control" name="sub_total" id="sub_total" readonly/>
                                   </div>
                                 </div>
                                 <!-- ----------------- IGV --------------- -->
-                                <div class="col-md-2">
+                                <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-4">
                                   <div class="form-group">
                                     <label for="igv" class="form-label">IGV</label>
                                     <input type="number" class="form-control" name="igv" id="igv" placeholder="" value="0.00"/>
                                   </div>
                                 </div>
                                 <!-- -------------- VALOR IGV ------------- -->
-                                <div class="col-md-2">
+                                <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-4">
                                   <div class="form-group">
                                     <label for="val_igv" class="form-label">Val. IGV</label>
                                     <input type="number" class="form-control" name="val_igv" id="val_igv" readonly value="0.00"/>
                                   </div>
                                 </div>
                                 <!-- ----------------- TOTAL --------------- -->
-                                <div class="col-md-2">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="total_gasto" class="form-label">Total(*)</label>
-                                    <input type="number" class="form-control" name="total_gasto" id="total_gasto" onchange="calcularigv();"/>
+                                    <input type="number" class="form-control" name="total_gasto" id="total_gasto" onkeyup="calcularigv();"  onchange="calcularigv();"/>
                                   </div>
                                 </div>
                                 <!-- --------- DESCRIPCION COMPROBANTE ------ -->
-                                <div class="col-md-3">
+                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="descr_comprobante" class="form-label">Descripción del Comprobante</label>
-                                    <textarea class="form-control" name="descr_comprobante" id="descr_comprobante"></textarea>
+                                    <textarea class="form-control" name="descr_comprobante" id="descr_comprobante" rows="1"></textarea>
                                   </div>
                                 </div>
-                              </div>
-
-                              <!-- ::::::::::::::: BAUCHER ::::::::::::::: -->
-                              <div class="row gy-2" id="cargando-4-fomulario" >
-                                <div class="col-md-6 p-3">
+                              
+                                <div class="p-3 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <h6 class="card-title text-center">Comprobante</h6>
                                   <div class="col-md-12 border-top p-3">
 

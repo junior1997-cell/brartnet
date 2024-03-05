@@ -101,7 +101,7 @@ switch ($_GET["op"]) {
     while ($reg = $rspta['data']->fetch_object()) {
       // Mapear el valor numérico a su respectiva descripción      
 
-      $img = empty($reg->imagen) ? 'no-perfil.jpg' : $reg->imagen ;
+      $img = empty($reg->foto_perfil) ? 'no-perfil.jpg' : $reg->foto_perfil ;
 
       $data[] = array(
         "0" => $count++,
@@ -112,7 +112,7 @@ switch ($_GET["op"]) {
           ).
         '</div>',        
         "2" =>'<div class="d-flex flex-fill align-items-center">
-          <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/usuario/perfil/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')"> </span></div>
+          <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')"> </span></div>
           <div>
             <span class="d-block fw-semibold text-primary">'.$reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial.'</span>
             <span class="text-muted">'.$reg->tipo_documento .' '. $reg->numero_documento.'</span>

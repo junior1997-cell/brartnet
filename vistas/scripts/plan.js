@@ -1,7 +1,7 @@
 var tabla_plan;
 
 //Función que se ejecuta al inicio
-function init() {
+function init2() {
   
   $("#bloc_Recurso").addClass("menu-open");
 
@@ -180,7 +180,9 @@ function eliminar_plan(idplan, nombre) {
 ------------------------------------------- Z O N A S -------------------------------------
 ==========================================================================================*/
 
-init();
+$(document).ready(function () {
+  init2();
+});
 
 $(function () {
 

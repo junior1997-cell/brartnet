@@ -125,7 +125,7 @@
                                       <label for="numero_documento" class="form-label">Numero Documento:</label>
                                       <div class="input-group">                            
                                         <input type="number" class="form-control" name="numero_documento" id="numero_documento" placeholder="" aria-describedby="icon-view-password">
-                                        <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito' );" >
+                                        <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito', '#titular_cuenta' );" >
                                           <i class='bx bx-search-alt' id="search_t"></i>
                                           <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
                                         </button>
@@ -334,7 +334,7 @@
                               <div class="mb-4 mt-2 d-sm-flex align-items-center">
                                 <div class="mb-0 me-5">
                                   <span class="avatar avatar-xxl avatar-rounded">
-                                    <img src="../assets/images/faces/9.jpg" alt="" id="imagenmuestra" onerror="this.src='../assets/modulo/usuario/persona/no-perfil.jpg';">
+                                    <img src="../assets/images/faces/9.jpg" alt="" id="imagenmuestra" onerror="this.src='../assets/modulo/persona/perfil/no-perfil.jpg';">
                                     <a href="javascript:void(0);" class="badge rounded-pill bg-primary avatar-badge cursor-pointer">
                                       <input type="file" class="position-absolute w-100 h-100 op-0" name="imagen" id="imagen" accept="image/*">
                                       <input type="hidden" name="imagenactual" id="imagenactual">
