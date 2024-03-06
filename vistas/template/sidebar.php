@@ -293,13 +293,13 @@
         <!-- End::slide -->
 
         <!-- Start::slide -->
-        <?php  if ($_SESSION['POS'] == '1') { ?>
+        
         <li class="slide">
           <a href="gasto_de_trabajador.php" class="side-menu__item">
             <i class="bx bx-home side-menu__icon"></i><span class="side-menu__label"> Gastos Trabajador</span>
           </a>
         </li>
-        <?php } ?>
+        
         <!-- End::slide -->        
 
         <!-- Start::slide__category -->
