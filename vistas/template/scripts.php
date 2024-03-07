@@ -51,3 +51,4 @@
 
 <!-- Data Table -->
 <script src="../assets/libs/data-table/datatables.js"></script>
+<script src="../assets/libs/data-table/datetime.js"></script>

@@ -58,9 +58,20 @@
     }
 
     function listar_tabla(){
-      $sql = "SELECT gt.*, p.*, ct.nombre cargo FROM gasto_de_trabajador as gt, persona as p, cargo_trabajador as ct
-      WHERE gt.idtrabajador = p.idpersona AND p.idtipo_persona = 2 AND p.idcargo_trabajador = ct.idcargo_trabajador
-      AND gt.estado = 1 AND gt.estado_delete = 1;";
+      $sql = "SELECT gdt.idgasto_de_trabajador, gdt.idproveedor, gdt.idpersona_trabajador, gdt.tipo_comprobante, gdt.serie_comprobante, gdt.fecha_ingreso, gdt.day_name, gdt.month_name, 
+      gdt.year_name, gdt.precio_sin_igv, gdt.precio_igv, gdt.val_igv, gdt.precio_con_igv, gdt.descripcion_comprobante, gdt.descripcion_gasto, gdt.comprobante,  gdt.estado,
+      CASE p.tipo_persona_sunat 
+        WHEN 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial )
+          WHEN 'JURIDICA' THEN p.nombre_razonsocial
+      END AS proveedor, p.foto_perfil as foto_perfil_proveedor, 
+      CASE t.tipo_persona_sunat 
+        WHEN 'NATURAL' THEN CONCAT(t.nombre_razonsocial, ' ', t.apellidos_nombrecomercial )
+          WHEN 'JURIDICA' THEN t.nombre_razonsocial
+      END AS trabajador, t.foto_perfil as foto_perfil_trabajador, t.tipo_documento, t.numero_documento
+      FROM gasto_de_trabajador as gdt
+      INNER JOIN persona as p ON p.idpersona = gdt.idproveedor 
+      INNER JOIN persona as t ON t.idpersona = gdt.idpersona_trabajador
+      WHERE gdt.estado = '1' AND gdt.estado_delete = '1';";
       return ejecutarConsulta($sql);
     }
 

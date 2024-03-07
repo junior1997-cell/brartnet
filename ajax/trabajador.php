@@ -124,7 +124,7 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>',
             "4" => $reg->cargo_trabajador,
             "5" => '<a href="tel:+51'.$reg->celular.'">'.$reg->celular.'</a>',
-            "6" => '<textarea cols="30" rows="2" class="textarea_datatable" readonly="">'.$reg->direccion.'</textarea>',
+            "6" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light" readonly="">'.$reg->direccion.'</textarea>',
             "7" =>  '<span class="badge bg-outline-warning cursor-pointer font-size-12px" data-bs-toggle="tooltip" title="Ver clientes">'.$reg->cant_cliente.'</span>'
           );
         }

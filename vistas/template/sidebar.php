@@ -293,13 +293,13 @@
         <!-- End::slide -->
 
         <!-- Start::slide -->
-        
+        <?php  if ($_SESSION['POS'] == '1') { ?>
         <li class="slide">
           <a href="gasto_de_trabajador.php" class="side-menu__item">
             <i class="bx bx-home side-menu__icon"></i><span class="side-menu__label"> Gastos Trabajador</span>
           </a>
         </li>
-        
+        <?php } ?>
         <!-- End::slide -->        
 
         <!-- Start::slide__category -->
@@ -393,7 +393,7 @@
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"><a href="javascript:void(0)">Empresa</a></li>
             <?php  if ($_SESSION['empresa_configuracion'] == '1') { ?>
-            <li class="slide"><a href="accordions_collpase.php" class="side-menu__item">Empresa</a></li>
+            <li class="slide"><a href="empresa.php" class="side-menu__item">Empresa</a></li>
             <?php } ?>
             <?php  if ($_SESSION['correo_SMTP'] == '1') { ?>
             <li class="slide"><a href="accordions_collpase.php" class="side-menu__item">Correo/SMTP</a></li>
