@@ -14,6 +14,8 @@ if (!isset($_SESSION["user_nombre"])) {
     require_once "../modelos/Persona_cliente.php";
 
     $persona_cliente = new Cliente();
+    date_default_timezone_set('America/Lima');
+    $date_now = date("d_m_Y__h_i_s_A");
 
     $idpersona                  = isset($_POST["idpersona"]) ? limpiarCadena($_POST["idpersona"]) : "";
     $idtipo_persona             = isset($_POST["idtipo_persona"]) ? limpiarCadena($_POST["idtipo_persona"]) : "";
@@ -39,6 +41,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $idplan                     = isset($_POST["idplan"]) ? limpiarCadena($_POST["idplan"]) : "";
     $ip_personal                = isset($_POST["ip_personal"]) ? limpiarCadena($_POST["ip_personal"]) : "";
     $fecha_afiliacion           = isset($_POST["fecha_afiliacion"]) ? limpiarCadena($_POST["fecha_afiliacion"]) : "";
+    $fecha_cancelacion           = isset($_POST["fecha_cancelacion"]) ? limpiarCadena($_POST["fecha_cancelacion"]) : "";
     $estado_descuento           = isset($_POST["estado_descuento"]) ? limpiarCadena($_POST["estado_descuento"]) : "";
     $descuento                  = isset($_POST["descuento"]) ? limpiarCadena($_POST["descuento"]) : "";
 
@@ -48,6 +51,19 @@ if (!isset($_SESSION["user_nombre"])) {
     //---id cliente no va 
     switch ($_GET["op"]) {
       case 'guardar_y_editar_cliente':
+
+        //guardar f_img_fondo fondo
+        if (!file_exists($_FILES['imagen']['tmp_name']) || !is_uploaded_file($_FILES['imagen']['tmp_name'])) {
+          $img_perfil = $_POST["imagenactual"];
+          $flat_img1 = false;
+        } else {
+          $ext1 = explode(".", $_FILES["imagen"]["name"]);
+          $flat_img1 = true;
+          $img_perfil = $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+          move_uploaded_file($_FILES["imagen"]["tmp_name"], "../assets/modulo/persona/perfil/" . $img_perfil);
+        }
+
+
         if (empty($idpersona_cliente)) {
           $rspta = $persona_cliente->insertar_cliente(
             $idtipo_persona,
@@ -72,10 +88,22 @@ if (!isset($_SESSION["user_nombre"])) {
             $ip_personal,
             $fecha_afiliacion,
             $estado_descuento,
-            $descuento
+            $descuento,
+            $fecha_cancelacion,
+            $img_perfil
           );
           echo json_encode($rspta, true);
         } else {
+
+          if ($flat_img1 == true || empty($img_perfil)) {
+            $datos_f1 = $persona_cliente->perfil_trabajador($idpersona);
+            $img1_ant = $datos_f1['data']['foto_perfil'];
+            if (!empty($img1_ant)) {
+              unlink("../assets/modulo/persona/perfil/" . $img1_ant);
+            }
+          }
+
+
           $rspta = $persona_cliente->editar_cliente(
             $idpersona,
             $idtipo_persona,
@@ -101,7 +129,9 @@ if (!isset($_SESSION["user_nombre"])) {
             $ip_personal,
             $fecha_afiliacion,
             $estado_descuento,
-            $descuento
+            $descuento,
+            $fecha_cancelacion,
+            $img_perfil
           );
           echo json_encode($rspta, true);
         }
@@ -129,15 +159,29 @@ if (!isset($_SESSION["user_nombre"])) {
         $data = [];
         $cont = 1;
 
-        //     pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, 
-        // pc.fecha_afiliacion, pc.descuento,pc.estado_descuento , p.nombre_razonsocial, p.apellidos_nombrecomercial, 
-        // p.tipo_documento, p.numero_documento, p.celular, p.direccion,p.distrito,p1.nombre_razonsocial, pl.nombre,pl.costo,za.nombre as zona, za.ip_antena
 
         $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
-        $imagen_perfil = "../assets/images/faces/21.jpg";
+
         if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {
+
+            if (isset($fecha_cancelacion) && $fecha_cancelacion !== null) {
+              // Convertir la fecha de cancelación a un objeto DateTime
+              $fecha_cancelacion_objeto = new DateTime($value['fecha_cancelacion']);
+
+              // Agregar un mes a la fecha de cancelación
+              $fecha_proximo_pago_objeto = clone $fecha_cancelacion_objeto;
+              $fecha_proximo_pago_objeto->modify('+1 month');
+
+              // Obtener la próxima fecha de pago en formato deseado
+              $fecha_proximo_pago = $fecha_proximo_pago_objeto->format('Y-m-d');
+            }else{
+              $fecha_proximo_pago='';
+            }
+
+
+            $imagen_perfil = empty($value['foto_perfil']) ? 'no-perfil.jpg' :   $value['foto_perfil'];
 
             $data[] = array(
               "0" => $cont++,
@@ -150,21 +194,15 @@ if (!isset($_SESSION["user_nombre"])) {
                 <span class="text-muted">' . $value['tipo_doc'] . ' : ' . $value['numero_documento'] . '</span>
               </div>
             </div>',
-
               "3" => $value['celular'],
-              // "3" =>'<span class="d-block"><i class="ri-phone-line me-2 align-middle fs-14 text-muted"></i>'.$value['celular'].'</span>',
-              "4" => '<textarea cols="30" rows="2" class="textarea_datatable" readonly="">' . $value['distrito'] . ' : ' . $value['direccion'] . '</textarea>',
-
-              "5" => '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
-              "6" => '<span class="badge bg-outline-success" onclick="ver_zona(\'' . encodeCadenaHtml($value['zona']) . '\',\'' . encodeCadenaHtml($value['ip_antena']) . '\')">' . $value['zona'] . '</span>',
-              // : ' . $value['ip_antena'] . 
+              "4" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['distrito'] . ' : ' . $value['direccion'] . '</textarea>',
+              "5" => '<span class="badge bg-outline-success">' . $fecha_proximo_pago . '</span>',
+              "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "7" => '<div class="text-start font-size-12px" >
-              <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
-              <span class="text-muted"><i class="bx bx-wifi bx-burst" ></i>' . $value['ip_personal'] . '</span>
-            </div>',
-
+                      <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
+                      <span class="text-muted"><i class="bx bx-wifi bx-burst" ></i>' . $value['ip_personal'] . '</span>
+                    </div>',
               "8" => $value['nombre_razonsocial'],
-              // "9" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>',
               "9" => $value['nombre_completo'],
               "10" => $value['tipo_doc'],
               "11" => $value['numero_documento'],

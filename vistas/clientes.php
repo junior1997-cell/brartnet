@@ -37,7 +37,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                 <div>
                   <div class="d-md-flex d-block align-items-center ">
-                    <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="wiev_tabla_formulario(2); limpiar_form();"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                    <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="wiev_tabla_formulario(2); limpiar_cliente();"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                     <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="wiev_tabla_formulario(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                     <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"> <i class="ri-save-2-line label-btn-icon me-2"></i> Guardar </button>
                     <div>
@@ -78,8 +78,6 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th>Ip</th>
                                 <th>Trabajador</th>
                                 <!-- <th class="text-center">Estado</th> -->
-
-
                                 <th class="text-center">Nombres</th>
                                 <th class="text-center">Tipo Documento</th>
                                 <th class="text-center">Número Documento</th>
@@ -278,14 +276,14 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <!-- Departamento -->
                                   <div class="col-12 col-md-12 col-lg-6 col-xl-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label for="departamento" class="form-label">Departamento: <span class="chargue-pro" ></span></label>
+                                      <label for="departamento" class="form-label">Departamento: <span class="chargue-pro"></span></label>
                                       <input type="text" class="form-control" name="departamento" id="departamento" readonly>
                                     </div>
                                   </div>
                                   <!-- Provincia -->
                                   <div class="col-12 col-md-12 col-lg-6 col-xl-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label for="provincia" class="form-label">Provincia: <span class="chargue-dep" ></span></label>
+                                      <label for="provincia" class="form-label">Provincia: <span class="chargue-dep"></span></label>
                                       <input type="text" class="form-control" name="provincia" id="provincia" readonly>
                                     </div>
                                   </div>
@@ -349,15 +347,22 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- fecha afiliacion -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="fecha_afiliacion">Fecha Afiliacion <sup class="text-danger">*</sup></label>
+                                      <label class="form-label" for="fecha_afiliacion">Fecha Afiliación <sup class="text-danger">*</sup></label>
                                       <input type="date" name="fecha_afiliacion" class="form-control inpur_edit" id="fecha_afiliacion" />
+                                    </div>
+                                  </div>
+                                  <!-- fecha CANCELACION -->
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="fecha_cancelacion">Fecha Cancelación <sup class="text-danger">*</sup></label>
+                                      <input type="date" name="fecha_cancelacion" class="form-control inpur_edit" id="fecha_cancelacion" />
                                     </div>
                                   </div>
 
                                   <!-- Descuento -->
-                                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 col-xxl-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 col-xxl-2" style="margin-bottom: 20px; display: none;">
                                     <div class="form-group">
                                       <label class="form-label" for="fecha_afiliacion"><sup class="text-white">*</sup></label>
                                       <div class="custom-toggle-switch d-flex align-items-center mb-4">
@@ -366,11 +371,10 @@ if (!isset($_SESSION["user_nombre"])) {
                                       </div>
                                       <input type="hidden" id="estado_descuento" name="estado_descuento" value="0">
                                     </div>
-
                                   </div>
 
                                   <!-- fecha afiliacion -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2" style="margin-bottom: 20px; display: none;">
                                     <div class="form-group">
                                       <label class="form-label" for="fecha_afiliacion">Monto descuento <sup class="text-danger">*</sup></label>
                                       <input type="number" name="descuento" class="form-control inpur_edit" id="descuento" readonly />
@@ -380,6 +384,27 @@ if (!isset($_SESSION["user_nombre"])) {
                                 </div>
                               </div>
                             </div>
+
+                            <!-- Imgen -->
+                            <div class="col-md-4 col-lg-4 mt-4">
+                              <span class="" > <b>Imagen de Perfil</b> </span>
+                              <div class="mb-4 mt-2 d-sm-flex align-items-center">
+                                <div class="mb-0 me-5">
+                                  <span class="avatar avatar-xxl avatar-rounded">
+                                    <img src="../assets/images/faces/9.jpg" alt="" id="imagenmuestra" onerror="this.src='../assets/modulo/persona/perfil/no-perfil.jpg';">
+                                    <a href="javascript:void(0);" class="badge rounded-pill bg-primary avatar-badge cursor-pointer">
+                                      <input type="file" class="position-absolute w-100 h-100 op-0" name="imagen" id="imagen" accept="image/*">
+                                      <input type="hidden" name="imagenactual" id="imagenactual">
+                                      <i class="fe fe-camera  "></i>
+                                    </a>
+                                  </span>
+                                </div>
+                                <div class="btn-group">
+                                  <a class="btn btn-primary" onclick="cambiarImagen()"><i class='bx bx-cloud-upload bx-tada fs-5'></i> Subir</a>
+                                  <a class="btn btn-light" onclick="removerImagen()"><i class="bi bi-trash fs-6"></i> Remover</a>
+                                </div>
+                              </div>
+                            </div> 
 
                             <!-- Chargue -->
                             <div class="p-l-25px col-lg-12" id="barra_progress_usuario_div" style="display: none;">

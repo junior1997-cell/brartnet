@@ -54,8 +54,19 @@ function limpiar_cliente() {
   $("#idplan").val('').trigger("change");
   $("#ip_personal").val("");
   $("#fecha_afiliacion").val("");
+  $("#fecha_cancelacion").val("");
   // $("#estado_descuento").val("");
   // $("#descuento").val("");
+
+  $("#imagen").val("");
+  $("#imagenactual").val("");
+  $("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/no-perfil.jpg");
+  $("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/no-perfil.jpg").show();
+  var imagenMuestra = document.getElementById('imagenmuestra');
+  if (!imagenMuestra.src || imagenMuestra.src == "") {
+    imagenMuestra.src = '../assets/modulo/usuario/perfil/no-perfil.jpg';
+  }
+
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -160,9 +171,9 @@ function tabla_principal_cliente() {
     dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla) { tabla.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0, 10,11,12,13,14,15,16,17,18,8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
-      { extend: 'excel', exportOptions: { columns: [0, 10,11,12,13,14,15,16,17,18,8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
-      { extend: 'pdf', exportOptions: { columns: [0, 10,11,12,13,14,15,16,17,18,8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
+      { extend: 'copy', exportOptions: { columns: [0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
+      { extend: 'excel', exportOptions: { columns: [0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
+      { extend: 'pdf', exportOptions: { columns: [0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
@@ -194,7 +205,7 @@ function tabla_principal_cliente() {
     "iDisplayLength": 10,//Paginación
     "order": [[2, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [9,10,11,12,13,14,15,16,17], visible: false, searchable: false, },    
+      { targets: [9, 10, 11, 12, 13, 14, 15, 16, 17], visible: false, searchable: false, },
     ],
   }).DataTable();
 }
@@ -290,6 +301,7 @@ function mostrar_cliente(idpersona_cliente) {
       $("#idplan").val(e.data.idplan).trigger("change");
       $("#ip_personal").val(e.data.ip_personal);
       $("#fecha_afiliacion").val(e.data.fecha_afiliacion);
+      $("#fecha_cancelacion").val(e.data.fecha_cancelacion);
       $("#estado_descuento").val(e.data.estado_descuento);
       $("#descuento").val(e.data.descuento);
 
@@ -308,6 +320,11 @@ function mostrar_cliente(idpersona_cliente) {
         $('#descuento').attr('readonly', 'readonly');
 
       }
+
+      $("#imagenmuestra").show();
+      $("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/" + e.data.foto_perfil);
+      $("#imagenactual").val(e.data.foto_perfil);
+
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
@@ -419,6 +436,46 @@ $(function () {
   $('#idzona_antena').rules('add', { required: true, messages: { required: "Campo requerido" } });
   $('#ip_personal').rules('add', { required: true, messages: { required: "Campo requerido" } });
 });
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+function cambiarImagen() {
+  var imagenInput = document.getElementById('imagen');
+  imagenInput.click();
+}
+function removerImagen() {
+  // var imagenMuestra = document.getElementById('imagenmuestra');
+  // var imagenActualInput = document.getElementById('imagenactual');
+  // var imagenInput = document.getElementById('imagen');
+  // imagenMuestra.src = '../assets/images/faces/9.jpg';
+  $("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/no-perfil.jpg");
+  // imagenActualInput.value = '';
+  // imagenInput.value = '';
+  $("#imagen").val("");
+  $("#imagenactual").val("");
+}
+
+// Esto se encarga de mostrar la imagen cuando se selecciona una nueva
+document.addEventListener('DOMContentLoaded', function () {
+  var imagenMuestra = document.getElementById('imagenmuestra');
+  var imagenInput = document.getElementById('imagen');
+
+  imagenInput.addEventListener('change', function () {
+    if (imagenInput.files && imagenInput.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) { imagenMuestra.src = e.target.result; }
+      reader.readAsDataURL(imagenInput.files[0]);
+    }
+  });
+});
+
+
+
+function ver_img(img, nombre) {
+  $(".title-modal-img").html(`-${nombre}`);
+  $('#modal-ver-img').modal("show");
+  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
+  $(`.jq_image_zoom`).zoom({ on: 'grab' });
+}
+
 
 
 

@@ -37,15 +37,17 @@ class Cliente
 		$ip_personal,
 		$fecha_afiliacion,
 		$estado_descuento,
-		$descuento
+		$descuento,
+		$fecha_cancelacion,
+		$img_perfil
 	) {
 
 		$sql1 = "INSERT INTO persona(idtipo_persona, idbancos, idcargo_trabajador, tipo_persona_sunat, nombre_razonsocial, 
 		apellidos_nombrecomercial, tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, departamento, provincia, 
-		distrito, cod_ubigeo, correo) 
+		distrito, cod_ubigeo, correo,foto_perfil) 
 		VALUES ( '$idtipo_persona', '$idbancos', '$idcargo_trabajador', '$tipo_persona_sunat', '$nombre_razonsocial', 
 		'$apellidos_nombrecomercial', '$tipo_documento', '$numero_documento', '$fecha_nacimiento', '$celular', '$direccion', '$departamento', '$provincia', 
-		'$distrito', '$ubigeo', '$correo')";
+		'$distrito', '$ubigeo', '$correo','$img_perfil')";
 		$inst_persona = ejecutarConsulta_retornarID($sql1, 'C');
 
 		if ($inst_persona['status'] == false) {
@@ -54,8 +56,8 @@ class Cliente
 		$id = $inst_persona['data'];
 
 
-		$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador, ip_personal, fecha_afiliacion, descuento, estado_descuento) 
-		VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador',' $ip_personal', '$fecha_afiliacion', '$descuento', '$estado_descuento')";
+		$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador, ip_personal, fecha_afiliacion, descuento, estado_descuento,fecha_cancelacion) 
+		VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador',' $ip_personal', '$fecha_afiliacion', '$descuento', '$estado_descuento', '$fecha_cancelacion')";
 
 		$insertar =  ejecutarConsulta($sql2, 'C');
 		if ($inst_persona['status'] == false) {
@@ -91,7 +93,9 @@ class Cliente
 		$ip_personal,
 		$fecha_afiliacion,
 		$estado_descuento,
-		$descuento
+		$descuento,
+		$fecha_cancelacion,
+		$img_perfil
 	) {
 
 		$sql1 = "UPDATE persona SET 		
@@ -110,7 +114,8 @@ class Cliente
 						provincia='$provincia',
 						distrito='$distrito',
 						cod_ubigeo='$ubigeo',
-						correo='$correo'		
+						correo='$correo',		
+						foto_perfil='$img_perfil'	
 				WHERE idpersona='$idpersona';";
 
 		$editar1 =  ejecutarConsulta($sql1, 'U');
@@ -126,6 +131,7 @@ class Cliente
 		idpersona_trabajador='$idpersona_trabajador',
 		ip_personal='$ip_personal',
 		fecha_afiliacion='$fecha_afiliacion',
+		fecha_cancelacion='$fecha_cancelacion',
 		descuento='$descuento',
 		estado_descuento='$estado_descuento'
 		WHERE idpersona_cliente='$idpersona_cliente';";
@@ -176,14 +182,14 @@ class Cliente
 	//Implementar un método para listar los registros
 	public function tabla_principal_cliente()
 	{
-		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, 
+		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, pc.fecha_cancelacion,
 		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,
 		CASE 
 		WHEN p.tipo_persona_sunat = 'NATURAL' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 		WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
-		ELSE 'Valor por defecto'
+		ELSE '-'
 		END AS nombre_completo, 
-		p.tipo_documento, p.numero_documento, p.celular, p.direccion,p.distrito,p1.nombre_razonsocial, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, 
+		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, 
 		za.ip_antena,pc.estado, i.abreviatura as tipo_doc
 
 		FROM persona_cliente as pc
@@ -223,5 +229,12 @@ class Cliente
 		INNER JOIN persona AS p ON pt.idpersona = p.idpersona 
 		WHERE pt.estado = '1' AND pt.estado_delete = '1' AND p.idtipo_persona = '2';";
 		return ejecutarConsulta($sql);
+	}
+
+	//Implementar un método para listar los registros
+	public function perfil_trabajador($id)
+	{
+		$sql = "SELECT p.foto_perfil	FROM persona as p WHERE p.idpersona = '$id' ;";
+		return ejecutarConsultaSimpleFila($sql);
 	}
 }
