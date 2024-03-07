@@ -61,37 +61,34 @@ switch ($_GET["op"]){
 
     if($rspta['status'] == true){
 
-      foreach($rspta['data'] as $key => $value){
+      // foreach($rspta['data'] as $key => $value){
+      while ($reg = $rspta['data']->fetch_object()) {
 
-        // -------------- CONDICIONES --------------
-        $nombre_trabajador = empty($value['apellidos_nombrecomercial']) && empty($value['nombre_razonsocial']) 
-          ? "Trabajador no encontrado" 
-          : $value['nombre_razonsocial'] . ' ' . $value['apellidos_nombrecomercial'];
-
-        $imagen_perfil = empty($value['foto_perfil']) ? "../assets/images/faces/21.jpg" : "../assets/images/persona/perfil/{$value['foto_perfil']}";
-
-        $descripcion = empty($value['descripcion_comprobante']) ? '<span class="text-danger">Sin Descripción</span>' : '<textarea class="border-0" style="background-color: transparent;" readonly>' .($value['descripcion_comprobante']). '</textarea>';
-      
+        // -------------- CONDICIONES --------------      
+        $img = empty($reg->foto_perfil_trabajador) ? 'no-perfil.jpg'  : $reg->foto_perfil_trabajador;
         $data[] = [
           "0" => $count++,
           "1" =>  '<div class="hstack gap-2 fs-15">' .
-                    '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_gasto_de_trabajador('.($value['idgasto_de_trabajador']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                    '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_gasto('.$value['idgasto_de_trabajador'].'.,\''.$value['nombre_razonsocial'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
-                    '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalles_gasto('.($value['idgasto_de_trabajador']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
-                  '</div>',
-          "2" => ($value['fecha_ingreso']),
-          "3" => '<div class="d-flex align-items-center">' .
-                    '<img src="'.$imagen_perfil.'" alt="Avatar" class="avatar avatar-lg avatar-rounded">' .
-                    '<div class="ms-3">' .
-                      '<div class="fw-bold">' . $nombre_trabajador . '</div>' .
-                      '<div class="text-muted">' .$value['cargo'] . '</div>' .
-                    '</div>' .
-                  '</div>',
-          "4" => 's/ '.($value['precio_con_igv']),
-          "5" => $descripcion,
-          "6" => !empty($value['comprobante']) ? '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_comprobante('.($value['idgasto_de_trabajador']).');" data-bs-toggle="tooltip" title="Ver"><i class="ti ti-file-dollar fs-24"></i></button></div>' : 
+            '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_gasto_de_trabajador('.($reg->idgasto_de_trabajador).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+            '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_gasto('.$reg->idgasto_de_trabajador.', \''.$reg->trabajador.'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
+            '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalles_gasto('.($reg->idgasto_de_trabajador).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
+          '</div>',
+          "2" => ($reg->fecha_ingreso),
+          "3" => '<div class="d-flex flex-fill align-items-center">
+            <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
+              <span class="avatar"> <img src="../assets/modulo/persona/perfil/'.$img.'" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml($reg->trabajador ) . '\')"> </span>
+            </div>
+            <div>
+              <span class="d-block fw-semibold text-primary">'.$reg->trabajador.'</span>
+              <span class="text-muted">'.$reg->tipo_documento .' '. $reg->numero_documento.'</span>
+            </div>
+          </div>',
+          "4" => $reg->tipo_comprobante .': '. $reg->serie_comprobante,
+          "5" => $reg->precio_con_igv,
+          "6" => '<textarea class="border-0" style="background-color: transparent;" readonly>' .($reg->descripcion_comprobante). '</textarea>',
+          "7" => !empty($reg->comprobante) ? '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_comprobante('.($reg->idgasto_de_trabajador).');" data-bs-toggle="tooltip" title="Ver"><i class="ti ti-file-dollar fs-24"></i></button></div>' : 
             '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-danger-light" data-bs-toggle="tooltip" title="no encontrado"><i class="ti ti-file-alert fs-24"></i></button></div>',
-          "7" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Registrado</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Inhalido</span>'
+          
         ];
       }
       $results =[
@@ -100,7 +97,7 @@ switch ($_GET["op"]){
         "iTotalDisplayRecords" => count($data),
         "aaData" => $data
       ];
-      echo json_encode($results);
+      echo json_encode($results, true);
 
     } else { echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data']; }
   break;

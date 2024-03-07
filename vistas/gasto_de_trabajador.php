@@ -9,7 +9,7 @@
 
     ?>
       <!DOCTYPE html>
-      <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
+      <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close" loader="enable">
 
         <head>
           
@@ -68,12 +68,13 @@
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
-                                  <th>Fecha Ingreso</th>
+                                  <th>Fecha</th>
                                   <th>Trabajador</th>
-                                  <th style="background-color: #D2ACFB;">Total Gasto</th>
+                                  <th >Comprobante</th>
+                                  <th style="background-color: #D2ACFB;">Total</th>
                                   <th>Descripción</th>
-                                  <th>Comprobante</th>
-                                  <th class="text-center">Estado</th>
+                                  <th>CFDI</th>
+                                  
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -81,12 +82,13 @@
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
-                                  <th>Fecha Pago</th>
+                                  <th>Fecha</th>
                                   <th>Trabajador</th>
-                                  <th>Total Gasto</th>
+                                  <th >Comprobante</th>
+                                  <th>Total</th>
                                   <th>Descripción</th>
-                                  <th>Comprobante</th>
-                                  <th class="text-center">Estado</th>
+                                  <th>CFDI</th>
+                                  
                                 </tr>
                               </tfoot>
                             </table>
@@ -179,7 +181,7 @@
                                   </div>
                                 </div>
                                 <!-- --------- DESCRIPCION COMPROBANTE ------ -->
-                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                <div class="col-md-6 col-lg-4 col-xl-12 col-xxl-8">
                                   <div class="form-group">
                                     <label for="descr_comprobante" class="form-label">Descripción del Comprobante</label>
                                     <textarea class="form-control" name="descr_comprobante" id="descr_comprobante" rows="1"></textarea>
@@ -333,7 +335,22 @@
             </div> 
             <!-- End::Modal-VerDetalles -->
 
-
+            <div class="modal fade modal-effect" id="modal-ver-img" tabindex="-1" aria-labelledby="modal-agregar-usuarioLabel" aria-hidden="true">
+              <div class="modal-dialog modal-md modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h6 class="modal-title title-modal-img" id="modal-agregar-usuarioLabel1">Imagen</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body html_ver_img">
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
+                  </div>
+                </div>
+              </div>
+            </div> 
                      
 
             <?php include("template/search_modal.php"); ?>

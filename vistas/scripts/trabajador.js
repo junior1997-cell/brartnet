@@ -30,16 +30,34 @@ function init() {
 
 //Función limpiar
 function limpiar_form() {
-	$("#nombre").val("");
-	$("#apellidos").val("");
-	$("#num_documento").val("");
-	$("#direccion").val("");
-	$("#telefono").val("");
-	$("#email").val("");
-	$("#cargo").val("");
-	$("#login").val("");
-	$("#clave").val("");	
-	$("#idusuario").val(""); 
+	$('#idpersona').val('');
+  $('#idpersona_trabajador').val('');
+  $('#tipo_persona_sunat').val('NATURAL');
+  $('#idtipo_persona').val('2');
+
+  $('#tipo_documento').val(null).trigger("change");
+  $('#numero_documento').val('');
+  $('#idcargo_trabajador').val(null).trigger("change");
+  $('#nombre_razonsocial').val('');
+  $('#apellidos_nombrecomercial').val('');
+  $('#correo').val('');
+  $('#celular').val('');
+  $('#fecha_nacimiento').val(null).trigger("change")
+  
+  $('#ruc').val('');
+  $('#usuario_sol').val('');
+  $('#clave_sol').val('');
+  $('#direccion').val('');
+  $('#distrito').val('').trigger("change");
+  $('#departamento').val('');
+  $('#provincia').val('');
+  $('#ubigeo').val('');
+  $('#sueldo_mensual').val('');
+  $('#sueldo_diario').val('');
+  $('#idbanco').val(null).trigger("change")
+  $('#cuenta_bancaria').val('');
+  $('#cci').val('');
+  $('#titular_cuenta').val('');    
 
   $("#imagen").val("");
   $("#imagenactual").val("");

@@ -144,7 +144,13 @@ function listar_tabla() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[2, "desc"]]//Ordenar (columna,orden)
+    "order": [[2, "desc"]],//Ordenar (columna,orden)
+    columnDefs: [
+      // { targets: [7,8, 9, 10, 11, 12, 13, 14], visible: false, searchable: false, }, 
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
+
+    ],
   }).DataTable();
 }
 
@@ -353,5 +359,16 @@ $(function () {
   });
 });
 
-init();
+$(document).ready(function () {
+  init();
+});
+
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function ver_img(img, nombre) {
+	$(".title-modal-img").html(`-${nombre}`);
+  $('#modal-ver-img').modal("show");
+  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
+  $(`.jq_image_zoom`).zoom({ on:'grab' });
+}
 
