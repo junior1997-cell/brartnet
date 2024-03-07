@@ -1,7 +1,7 @@
 var tabla_zona;
 
 //Función que se ejecuta al inicio
-function init() {
+function init_zona() {
   
   $("#bloc_Recurso").addClass("menu-open");
 
@@ -10,7 +10,7 @@ function init() {
   tabla_principal_zona();
 
   // $("#guardar_registro_zona").on("click", function (e) { $("#submit-form-zona").submit(); });
-  $(".btn-guardarzona").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-zona").submit(); }  });
+  $("#guardar_registro_zona").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-zona").submit(); }  });
 
 }
 /*==========================================================================================
@@ -37,7 +37,7 @@ function tabla_principal_zona() {
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
+    dom:"<'row'<'col-md-4'B><'col-md-3 float-left'l><'col-md-5'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla) { tabla.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [0,2,3], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
@@ -176,15 +176,15 @@ function eliminar_zona(idzona_antena, nombre) {
 
 
 $(document).ready(function () {
-  init();
+  init_zona();
 });
 
 $(function () {
 
   $("#form-agregar-zona").validate({
     rules: {
-      nombre_zona: { required: true } ,     // terms: { required: true },
-      ip_antena: { required: true }      // terms: { required: true },
+      nombre_zona: { required: true,  maxlength: 100, } ,     // terms: { required: true },
+      ip_antena: { required: true, maxlength: 20, }      // terms: { required: true },
     },
     messages: {
       nombre_zona: {  required: "Campo requerido.", },

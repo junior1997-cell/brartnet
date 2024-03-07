@@ -1,16 +1,16 @@
-var tabla_plan;
+var tabla_centro_poblado;
 
 //Función que se ejecuta al inicio
-function init_plan() {
+function init_cp() {
   
   $("#bloc_Recurso").addClass("menu-open");
 
   $("#mRecurso").addClass("active");
 
-  tabla_principal_plan();
+  tabla_principal_centro_poblado();
 
-  // $("#guardar_registro_plan").on("click", function (e) { $("#submit-form-plan").submit(); });
-  $("#guardar_registro_plan").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-plan").submit(); }  });
+  // $("#guardar_registro_centro_poblado").on("click", function (e) { $("#submit-form-plan").submit(); });
+  $("#guardar_registro_cp").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-cp").submit(); }  });
 
 }
 
@@ -19,12 +19,12 @@ function init_plan() {
 ==========================================================================================*/
 
 //Función limpiar_form
-function limpiar_form() {
-  $("#guardar_registro_plan").html('Guardar Cambios').removeClass('disabled');
+function limpiar_centro_poblado() {
+  $("#guardar_registro_cp").html('Guardar Cambios').removeClass('disabled');
   //Mostramos los Materiales
-  $("#idplan").val("");
-  $("#nombre_plan").val("");
-  $("#costo_plan").val("");
+  $("#idcentro_poblado").val("");
+  $("#nombre_cp").val("");
+  $("#descripcion_cp").val("");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -33,9 +33,9 @@ function limpiar_form() {
 }
 
 //Función Listar
-function tabla_principal_plan() {
+function tabla_principal_centro_poblado() {
 
-  tabla_plan = $('#tabla-plan').dataTable({
+  tabla_centro_poblado = $('#tabla-centro-poblado').dataTable({
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
@@ -48,7 +48,7 @@ function tabla_principal_plan() {
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax:{
-      url: '../ajax/plan.php?op=tabla_principal_plan',
+      url: '../ajax/centro_poblado.php?op=tabla_principal_centro_poblado',
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -79,12 +79,12 @@ function tabla_principal_plan() {
 }
 
 //Función para guardar o editar
-function guardar_y_editar_plan(e) {
+function guardar_y_editar_centro_poblado(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-agregar-plan")[0]);
+  var formData = new FormData($("#form-agregar-centro-poblado")[0]);
  
   $.ajax({
-    url: "../ajax/plan.php?op=guardar_y_editar_plan",
+    url: "../ajax/centro_poblado.php?op=guardar_y_editar_centro_poblado",
     type: "POST",
     data: formData,
     contentType: false,
@@ -92,14 +92,14 @@ function guardar_y_editar_plan(e) {
     success: function (e) {
       e = JSON.parse(e);  console.log(e);  
       if (e.status == true) {
-        Swal.fire("Correcto!", "Plan registrado correctamente.", "success");
+        Swal.fire("Correcto!", "Centro poblado registrado correctamente.", "success");
 
-	      tabla_plan.ajax.reload(null, false);
+	      tabla_centro_poblado.ajax.reload(null, false);
          
-				limpiar_form();
+				limpiar_centro_poblado();
 
-        $("#modal-agregar-plan").modal("hide");
-        $("#guardar_registro_plan").html('Guardar Cambios').removeClass('disabled send-data');
+        $("#modal-agregar-centro-poblado").modal("hide");
+        $("#guardar_registro_cp").html('Guardar Cambios').removeClass('disabled send-data');
 			}else{
 				ver_errores(e);
 			}
@@ -110,42 +110,42 @@ function guardar_y_editar_plan(e) {
         if (evt.lengthComputable) {
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
-          $("#barra_progress_plan").css({"width": percentComplete+'%'});
-          $("#barra_progress_plan").text(percentComplete.toFixed(2)+" %");
+          $("#barra_progress_centro_poblado").css({"width": percentComplete+'%'});
+          $("#barra_progress_centro_poblado").text(percentComplete.toFixed(2)+" %");
         }
       }, false);
       return xhr;
     },
     beforeSend: function () {
-      $("#guardar_registro_plan").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-      $("#barra_progress_plan").css({ width: "0%",  });
-      $("#barra_progress_plan").text("0%");
+      $("#guardar_registro_cp").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_centro_poblado").css({ width: "0%",  });
+      $("#barra_progress_centro_poblado").text("0%");
     },
     complete: function () {
-      $("#barra_progress_plan").css({ width: "0%", });
-      $("#barra_progress_plan").text("0%");
+      $("#barra_progress_centro_poblado").css({ width: "0%", });
+      $("#barra_progress_centro_poblado").text("0%");
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
-function mostrar_plan(idplan) {
+function mostrar_centro_poblado(idcentro_poblado) {
   $(".tooltip").remove();
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
-  limpiar_form();
+  limpiar_centro_poblado();
 
-  $("#modal-agregar-plan").modal("show")
+  $("#modal-agregar-centro-poblado").modal("show")
 
-  $.post("../ajax/plan.php?op=mostrar_plan", { idplan: idplan }, function (e, status) {
+  $.post("../ajax/centro_poblado.php?op=mostrar_centro_poblado", { idcentro_poblado: idcentro_poblado }, function (e, status) {
 
     e = JSON.parse(e);  console.log(e);  
 
     if (e.status) {
-      $("#idplan").val(e.data.idplan);
-      $("#nombre_plan").val(e.data.nombre);        
-      $("#costo_plan").val(e.data.costo)    
+      $("#idcentro_poblado").val(e.data.idcentro_poblado);
+      $("#nombre_cp").val(e.data.nombre);        
+      $("#descripcion_cp").val(e.data.descripcion)    
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
@@ -157,17 +157,17 @@ function mostrar_plan(idplan) {
 }
 
 //Función para desactivar registros
-function eliminar_plan(idplan, nombre) {
+function eliminar_centro_poblado(idcentro_poblado, nombre) {
 
   crud_eliminar_papelera(
-    "../ajax/plan.php?op=desactivar",
-    "../ajax/plan.php?op=eliminar", 
-    idplan, 
+    "../ajax/centro_poblado.php?op=desactivar",
+    "../ajax/centro_poblado.php?op=eliminar", 
+    idcentro_poblado, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla_plan.ajax.reload(null, false); },
+    function(){ tabla_centro_poblado.ajax.reload(null, false); },
     false, 
     false, 
     false,
@@ -181,19 +181,19 @@ function eliminar_plan(idplan, nombre) {
 ==========================================================================================*/
 
 $(document).ready(function () {
-  init_plan();
+  init_cp();
 });
 
 $(function () {
 
-  $("#form-agregar-plan").validate({
+  $("#form-agregar-centro-poblado").validate({
     rules: {
-      nombre_plan: { required: true,  maxlength: 60,  } ,     // terms: { required: true },
-      costo_plan: { required: true }      // terms: { required: true },
+      nombre_cp: { required: true, maxlength: 60, } ,     // terms: { required: true },
+      descripcion_cp: {  maxlength: 200, }      // terms: { required: true },
     },
     messages: {
-      nombre_plan: {  required: "Campo requerido.", },
-      costo_plan: {  required: "Campo requerido.", },
+      nombre_cp: {  required: "Campo requerido.", },
+      descripcion_cp: {  maxlength: "Maximo {0} caracteres.", },
     },
         
     errorElement: "span",
@@ -212,7 +212,7 @@ $(function () {
     },
     submitHandler: function (e) { 
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardar_y_editar_plan(e);      
+      guardar_y_editar_centro_poblado(e);      
     },
 
   });

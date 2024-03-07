@@ -31,6 +31,8 @@ if (!isset($_SESSION["user_nombre"])) {
       <div class="main-content app-content">
         <div class="container-fluid">
           <div class="row">
+
+            <!-- :::::::::::::::: P L A N E S :::::::::::::::: -->
             <div class="col-6">
               <!-- Start::page-header -->
               <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
@@ -92,6 +94,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <!-- End::row-1 -->
             </div>
 
+            <!-- :::::::::::::::: Z O N A :::::::::::::::: -->
             <div class="col-6">
               <!-- Start::page-header -->
               <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
@@ -152,9 +155,71 @@ if (!isset($_SESSION["user_nombre"])) {
               </section>
               <!-- End::row-1 -->
             </div>
+
+            <!-- :::::::::::::::: C E N T R O    P O B L A D O :::::::::::::::: -->
+            <div class="col-6">
+              <!-- Start::page-header -->
+              <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                <div>
+                  <div class="d-md-flex d-block align-items-center ">
+                    <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_centro_poblado();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-centro-poblado"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                    <div>
+                      <p class="fw-semibold fs-18 mb-0">Centro Poblado</p>
+                      <span class="fs-semibold text-muted">Administra de manera eficiente tus lugares.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="btn-list mt-md-0 mt-2">
+                  <nav>
+                    <ol class="breadcrumb mb-0">
+                      <li class="breadcrumb-item"><a href="javascript:void(0);">Centro Poblado</a></li>
+                      <li class="breadcrumb-item active" aria-current="page">Home</li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+              <!-- End::page-header -->
+
+              <!-- Start::row-1 -->
+              <section >
+                <div class="row">
+                  <div class="col-xxl-12 col-xl-12">
+                    <div>
+                      <div class="card custom-card">
+                        <div class="card-body table-responsive">
+                          <table id="tabla-centro-poblado" class="table table-bordered w-100" style="width: 100%;">
+                            <thead>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Acciones</th>
+                                <th>Descripción</th>
+                                <th>Ip Zona</th>
+                                <th class="text-center">Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Acciones</th>
+                                <th>Descripción</th>
+                                <th>Ip Zona</th>
+                                <th class="text-center">Estado</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <!-- End::row-1 -->
+            </div>
           </div>
 
-          <!-- Start::modal-registrar-plan -->
+          <!-- MODAL:: REGISTRAR PLAN - charge 1 -->
           <div class="modal fade modal-effect" id="modal-agregar-plan" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-pagoLabel" aria-hidden="true">
             <div class="modal-dialog modal-md modal-dialog-scrollabel">
               <div class="modal-content">
@@ -191,19 +256,19 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_form();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-primary btn-guardar" id="guardar_registro_plan"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                  <button type="button" class="btn btn-primary" id="guardar_registro_plan"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
                 </div>
               </div>
             </div>
           </div>
           <!-- End::modal-registrar-plan -->
 
-          <!-- Start::modal-registrar-zona -->
+          <!-- MODAL:: REGISTRAR ZONA - charge 3 -->
           <div class="modal fade modal-effect" id="modal-agregar-zona" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-zonaLabel" aria-hidden="true">
             <div class="modal-dialog modal-md modal-dialog-scrollabel">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h6 class="modal-title" id="modal-agregar-pagoLabel1">Zona</h6>
+                  <h6 class="modal-title" id="modal-agregar-zonaLabel">Zona</h6>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -235,14 +300,56 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_zona();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-primary btn-guardarzona" id="guardar_registro_zona"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                  <button type="button" class="btn btn-primary" id="guardar_registro_zona"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
                 </div>
               </div>
             </div>
           </div>
           <!-- End::modal-registrar-zona -->
 
+          <!-- MODAL::REGISTRAR CENTRO POBLADO - charge 5 -->
+          <div class="modal fade modal-effect" id="modal-agregar-centro-poblado" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-centro-poblado" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-scrollabel">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-agregar-centro-poblado">Centro poblado</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form name="form-agregar-centro-poblado" id="form-agregar-centro-poblado" method="POST" class="row needs-validation" novalidate>
+                    <div class="row gy-2" id="cargando-5-fomulario">
+                      <input type="hidden" name="idcentro_poblado" id="idcentro_poblado">
 
+                      <div class="col-12">
+                        <div class="form-label">
+                          <label for="nombre_cp" class="form-label">Nombre(*)</label>
+                          <input class="form-control" name="nombre_cp" id="nombre_cp" />
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-group">
+                          <label for="descripcion_cp" class="form-label">Descripcion</label>                          
+                          <textarea class="form-control" name="descripcion_cp" id="descripcion_cp" cols="30" rows="2"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" id="cargando-6-fomulario" style="display: none;">
+                      <div class="col-lg-12 text-center">
+                        <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                        <h4 class="bx-flashing">Cargando...</h4>
+                      </div>
+                    </div>
+                    <button type="submit" style="display: none;" id="submit-form-cp">Submit</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_centro_poblado();"><i class="las la-times fs-lg"></i> Close</button>
+                  <button type="button" class="btn btn-primary" id="guardar_registro_cp"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End::modal-registrar-zona -->
 
 
         </div>
@@ -264,6 +371,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     <script src="scripts/plan.js"></script>
     <script src="scripts/zona.js"></script>
+    <script src="scripts/centro_poblado.js"></script>
     
 
 
