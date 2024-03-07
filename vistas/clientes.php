@@ -73,8 +73,8 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th>Cliente</th>
                                 <th>Calular</th>
                                 <th>Distrito</th>
-                                <th>Plan</th>
-                                <th>Zona</th>
+                                <th>F. Cancelación</th>
+                                <th>Zona/Plan</th>
                                 <th>Ip</th>
                                 <th>Trabajador</th>
                                 <!-- <th class="text-center">Estado</th> -->
@@ -98,8 +98,8 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th>Cliente</th>
                                 <th>Calular</th>
                                 <th>Distrito</th>
-                                <th>Plan</th>
-                                <th>Zona</th>
+                                <th>F. Cancelación</th>
+                                <th>Zona/Plan</th>
                                 <th>Ip</th>
                                 <th>Trabajador</th>
                                 <!-- <th class="text-center">Estado</th> -->
@@ -323,10 +323,17 @@ if (!isset($_SESSION["user_nombre"])) {
                                   </div>
 
                                   <!-- Select Zona antena -->
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
+                                  <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
                                       <label class="form-label" for="idzona_antena">Zona Antena <sup class="text-danger">*</sup></label>
                                       <select name="idzona_antena" id="idzona_antena" class="form-control" placeholder="Selec. Zona Antena"></select>
+                                    </div>
+                                  </div>
+                                  <!-- Select Zona antena -->
+                                  <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                      <label class="form-label" for="idselec_centroProbl">Centro Poblado <sup class="text-danger">*</sup></label>
+                                      <select name="idselec_centroProbl" id="idselec_centroProbl" class="form-control" placeholder="Selecionar"></select>
                                     </div>
                                   </div>
 
@@ -387,7 +394,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                             <!-- Imgen -->
                             <div class="col-md-4 col-lg-4 mt-4">
-                              <span class="" > <b>Imagen de Perfil</b> </span>
+                              <span class=""> <b>Imagen de Perfil</b> </span>
                               <div class="mb-4 mt-2 d-sm-flex align-items-center">
                                 <div class="mb-0 me-5">
                                   <span class="avatar avatar-xxl avatar-rounded">
@@ -404,7 +411,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <a class="btn btn-light" onclick="removerImagen()"><i class="bi bi-trash fs-6"></i> Remover</a>
                                 </div>
                               </div>
-                            </div> 
+                            </div>
 
                             <!-- Chargue -->
                             <div class="p-l-25px col-lg-12" id="barra_progress_usuario_div" style="display: none;">

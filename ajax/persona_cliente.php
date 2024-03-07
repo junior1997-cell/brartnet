@@ -9,7 +9,7 @@ if (!isset($_SESSION["user_nombre"])) {
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
-  if ($_SESSION['empresa'] == 1) {
+  if ($_SESSION['cliente'] == 1) {
 
     require_once "../modelos/Persona_cliente.php";
 
@@ -38,6 +38,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $correo                     = isset($_POST["correo"]) ? limpiarCadena($_POST["correo"]) : "";
     $idpersona_trabajador       = isset($_POST["idpersona_trabajador"]) ? limpiarCadena($_POST["idpersona_trabajador"]) : "";
     $idzona_antena              = isset($_POST["idzona_antena"]) ? limpiarCadena($_POST["idzona_antena"]) : "";
+    $idselec_centroProbl        = isset($_POST["idselec_centroProbl"]) ? limpiarCadena($_POST["idselec_centroProbl"]) : "";
     $idplan                     = isset($_POST["idplan"]) ? limpiarCadena($_POST["idplan"]) : "";
     $ip_personal                = isset($_POST["ip_personal"]) ? limpiarCadena($_POST["ip_personal"]) : "";
     $fecha_afiliacion           = isset($_POST["fecha_afiliacion"]) ? limpiarCadena($_POST["fecha_afiliacion"]) : "";
@@ -84,6 +85,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $correo,
             $idpersona_trabajador,
             $idzona_antena,
+            $idselec_centroProbl,
             $idplan,
             $ip_personal,
             $fecha_afiliacion,
@@ -125,6 +127,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $correo,
             $idpersona_trabajador,
             $idzona_antena,
+            $idselec_centroProbl,
             $idplan,
             $ip_personal,
             $fecha_afiliacion,
@@ -169,6 +172,10 @@ if (!isset($_SESSION["user_nombre"])) {
             if (isset($fecha_cancelacion) && $fecha_cancelacion !== null) {
               // Convertir la fecha de cancelación a un objeto DateTime
               $fecha_cancelacion_objeto = new DateTime($value['fecha_cancelacion']);
+              
+              // Obtener la fecha actual
+              $fecha_actual = date("Y-m-d");
+
 
               // Agregar un mes a la fecha de cancelación
               $fecha_proximo_pago_objeto = clone $fecha_cancelacion_objeto;
@@ -293,6 +300,29 @@ if (!isset($_SESSION["user_nombre"])) {
         }
 
         break;
+
+        case 'selec_centroProbl':
+
+          $rspta = $persona_cliente->selec_centroProbl();
+          $cont = 1;
+          $data = "";
+          if ($rspta['status'] == true) {
+            foreach ($rspta['data'] as $key => $value) {
+              $data .= '<option  value=' . $value['idcentro_poblado']  . '>' . $value['nombre'] . '</option>';
+            }
+  
+            $retorno = array(
+              'status' => true,
+              'message' => 'Salió todo ok',
+              'data' => $data,
+            );
+            echo json_encode($retorno, true);
+          } else {
+            echo json_encode($rspta, true);
+          }
+  
+          break;
+
 
       case 'salir':
         //Limpiamos las variables de sesión

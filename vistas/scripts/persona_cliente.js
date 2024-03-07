@@ -18,6 +18,7 @@ function init() {
   lista_select2("../ajax/persona_cliente.php?op=select2_plan", '#idplan', null);
   lista_select2("../ajax/persona_cliente.php?op=select2_zona_antena", '#idzona_antena', null);
   lista_select2("../ajax/persona_cliente.php?op=select2_trabajador", '#idpersona_trabajador', null);
+  lista_select2("../ajax/persona_cliente.php?op=selec_centroProbl", '#idselec_centroProbl', null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#tipo_documento").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -28,6 +29,7 @@ function init() {
   $("#idpersona_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
   $("#tipo_persona_sunat").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#idselec_centroProbl").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
 
 }
@@ -51,6 +53,7 @@ function limpiar_cliente() {
 
   $("#idpersona_trabajador").val('').trigger("change");
   $("#idzona_antena").val('').trigger("change");
+  $("#idselec_centroProbl").val('').trigger("change");
   $("#idplan").val('').trigger("change");
   $("#ip_personal").val("");
   $("#fecha_afiliacion").val("");
@@ -298,6 +301,7 @@ function mostrar_cliente(idpersona_cliente) {
       $("#correo").val(e.data.correo);
       $("#idpersona_trabajador").val(e.data.idpersona_trabajador).trigger("change");
       $("#idzona_antena").val(e.data.idzona_antena).trigger("change");
+      $("#idselec_centroProbl").val(e.data.idcentro_poblado).trigger("change");
       $("#idplan").val(e.data.idplan).trigger("change");
       $("#ip_personal").val(e.data.ip_personal);
       $("#fecha_afiliacion").val(e.data.fecha_afiliacion);
@@ -366,6 +370,7 @@ $(function () {
 
   $('#idpersona_trabajador').on('change', function () { $(this).trigger('blur'); });
   $('#idzona_antena').on('change', function () { $(this).trigger('blur'); });
+  $('#idselec_centroProbl').on('change', function () { $(this).trigger('blur'); });
   $('#idplan').on('change', function () { $(this).trigger('blur'); });
 
   $("#form-agregar-cliente").validate({
@@ -382,6 +387,7 @@ $(function () {
       ubigeo: { required: true },
       idpersona_trabajador: { required: true },
       idzona_antena: { required: true },
+      idselec_centroProbl: { required: true },
       idplan: { required: true },
       ip_personal: { required: true },
       fecha_afiliacion: { required: true },
@@ -401,6 +407,7 @@ $(function () {
       ubigeo: { required: "Campo requerido.", },
       idpersona_trabajador: { required: "Campo requerido.", },
       idzona_antena: { required: "Campo requerido.", },
+      idselec_centroProbl: { required: "Campo requerido.", },
       idplan: { required: "Campo requerido.", },
       ip_personal: { required: "Campo requerido.", },
       fecha_afiliacion: { required: "Campo requerido.", },
@@ -434,6 +441,7 @@ $(function () {
 
   $('#idpersona_trabajador').rules('add', { required: true, messages: { required: "Campo requerido" } });
   $('#idzona_antena').rules('add', { required: true, messages: { required: "Campo requerido" } });
+  $('#idselec_centroProbl').rules('add', { required: true, messages: { required: "Campo requerido" } });
   $('#ip_personal').rules('add', { required: true, messages: { required: "Campo requerido" } });
 });
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

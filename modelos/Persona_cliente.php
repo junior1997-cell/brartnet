@@ -33,6 +33,7 @@ class Cliente
 		$correo,
 		$idpersona_trabajador,
 		$idzona_antena,
+		$idselec_centroProbl,
 		$idplan,
 		$ip_personal,
 		$fecha_afiliacion,
@@ -56,8 +57,8 @@ class Cliente
 		$id = $inst_persona['data'];
 
 
-		$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador, ip_personal, fecha_afiliacion, descuento, estado_descuento,fecha_cancelacion) 
-		VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador',' $ip_personal', '$fecha_afiliacion', '$descuento', '$estado_descuento', '$fecha_cancelacion')";
+		$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador,idcentro_poblado, ip_personal, fecha_afiliacion, descuento, estado_descuento,fecha_cancelacion) 
+		VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador','$idselec_centroProbl',' $ip_personal', '$fecha_afiliacion', '$descuento', '$estado_descuento', '$fecha_cancelacion')";
 
 		$insertar =  ejecutarConsulta($sql2, 'C');
 		if ($inst_persona['status'] == false) {
@@ -89,6 +90,7 @@ class Cliente
 		$correo,
 		$idpersona_trabajador,
 		$idzona_antena,
+		$idselec_centroProbl,
 		$idplan,
 		$ip_personal,
 		$fecha_afiliacion,
@@ -127,6 +129,7 @@ class Cliente
 		$sql = "UPDATE persona_cliente SET
 		idpersona ='$idpersona',
 		idzona_antena='$idzona_antena',
+		idcentro_poblado='$idselec_centroProbl',
 		idplan='$idplan',
 		idpersona_trabajador='$idpersona_trabajador',
 		ip_personal='$ip_personal',
@@ -170,8 +173,8 @@ class Cliente
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar_cliente($idpersona_cliente)
 	{
-		$sql = "SELECT pc.idpersona_cliente, pc.idpersona, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan, pc.ip_personal, 
-		pc.fecha_afiliacion, pc.nota, pc.descuento, pc.estado_descuento, pc.estado, p.*
+		$sql = "SELECT pc.idpersona_cliente, pc.idpersona, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan, pc.ip_personal, pc.idcentro_poblado,
+		pc.fecha_afiliacion, pc.fecha_cancelacion, pc.nota, pc.descuento, pc.estado_descuento, pc.estado, p.*
 		FROM persona_cliente as pc
 		INNER JOIN persona as p on pc.idpersona=p.idpersona
 		WHERE idpersona_cliente='$idpersona_cliente';";
@@ -236,5 +239,10 @@ class Cliente
 	{
 		$sql = "SELECT p.foto_perfil	FROM persona as p WHERE p.idpersona = '$id' ;";
 		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	public function selec_centroProbl(){
+		$sql="SELECT idcentro_poblado, nombre FROM centro_poblado WHERE estado='1' and estado_delete='1';";
+		return ejecutarConsulta($sql);
 	}
 }
