@@ -407,7 +407,7 @@
         <!-- End::slide -->
 
         <!-- Start::slide -->
-        <?php  if ($_SESSION['empresa'] == '1') { ?>
+        
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
             <i class="bx bx-party side-menu__icon"></i>
@@ -420,7 +420,7 @@
             <li class="slide"><a href="general.php" class="side-menu__item">General</a></li>                  
           </ul>
         </li>
-        <?php } ?>
+        
         <!-- End::slide -->
 
         <!-- Start::slide__category -->

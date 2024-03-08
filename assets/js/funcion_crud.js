@@ -494,7 +494,7 @@ function ver_errores(e) {
     Swal.fire({
       title: '<strong>Tu sesion se ha terminado!!</strong>',
       icon: 'info',
-      html: `Inicia <b>sesion</b> nuevamente , <a href="//sweetalert2.github.io">links.</a>`,
+      html: `Inicia <b>sesion</b> nuevamente , <a href="login.php">Salir.</a>`,
       showCloseButton: true,
       showCancelButton: true,
       focusConfirm: false,
@@ -526,11 +526,11 @@ function ver_errores(e) {
     Swal.fire({
       title: '<strong>No tienes permiso!!</strong>',
       icon: 'info',
-      html: `Puedes pedir a tu administrador que de acceso o regresa al </b>, <a href="//sweetalert2.github.io">home</a>`,
+      html: `Puedes pedir a tu administrador que de acceso o regresa al </b>, <a href="escritorio.php">Escritorio</a>`,
       showCloseButton: true,
       showCancelButton: true,
       focusConfirm: false,
-      confirmButtonText: '<i class="fa fa-thumbs-up"></i> Great!',
+      confirmButtonText: '<i class="fa fa-thumbs-up"></i> Ok!',
       confirmButtonAriaLabel: 'Thumbs up, great!',
       cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
       cancelButtonAriaLabel: 'Thumbs down'

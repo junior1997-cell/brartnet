@@ -62,6 +62,9 @@ function tabla_principal_centro_poblado() {
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
     },
     createdRow: function (row, data, ixdex) {
       // columna: #

@@ -21,12 +21,7 @@ function init() {
   $("#idbanco").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#distrito").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
-	$.post("../ajax/trabajador.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	});
-	$.post("../ajax/trabajador.php?op=series&id=", function (r) {	$("#series").html(r);	});
-	// $.post("../ajax/trabajador.php?op=permisosEmpresaTodos", function (r) {	$("#empresas").html(r);	});
 }
-
-
 
 //Función limpiar
 function limpiar_form() {
@@ -74,7 +69,6 @@ function limpiar_form() {
   $(".error.invalid-feedback").remove();
 }
 
-
 function show_hide_form(flag) {
 	if (flag == 1) {
 		$("#div-tabla").show();
@@ -103,9 +97,9 @@ function listar() {
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_usuario) { tabla_usuario.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [1,2,3,4,5,6], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [1,2,3,4,5,6], }, title: 'Lista de usuarios', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [1,2,3,4,5,6], }, title: 'Lista de usuarios', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { extend: 'copy', exportOptions: { columns: [0,8,9,10,4,5,11,12,6,7], }, title: '', text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,8,9,10,4,5,11,12,6,7], }, title: 'Lista de Trabajadores', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
+      { extend: 'pdf', exportOptions: { columns: [0,8,9,10,4,5,11,12,6,7], }, title: 'Lista de Trabajadores', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
 		"ajax":	{
@@ -123,6 +117,9 @@ function listar() {
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
 		},
     createdRow: function (row, data, ixdex) {
       // columna: #
@@ -139,7 +136,13 @@ function listar() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[2, "desc"]]//Ordenar (columna,orden)
+    "order": [[0, "asc"]],//Ordenar (columna,orden)
+    columnDefs: [
+      // { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      // { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
+      // { targets: [8], render: $.fn.dataTable.render.number( ',', '.', 2) },
+      { targets: [8,9, 10,11,12,],  visible: false,  searchable: false,  },
+    ],
 	}).DataTable();
 }
 //Función para guardar o editar
@@ -204,55 +207,47 @@ function mostrar(idpersona) {
 	
 	$.post("../ajax/trabajador.php?op=mostrar_trabajador", { idpersona: idpersona }, function (e, status) {
 		e = JSON.parse(e);
+    if (e.status == true) {      
+      
+      $('#idpersona').val(e.data.idpersona);
+      $('#idpersona_trabajador').val(e.data.idpersona_trabajador);
+      // $('#tipo_persona_sunat').val(e.data.tipo_persona_sunat);
+      $('#idtipo_persona').val(e.data.idtipo_persona);
 
-		$('#idpersona').val(e.data.idpersona);
-		$('#idpersona_trabajador').val(e.data.idpersona_trabajador);
-    // $('#tipo_persona_sunat').val(e.data.tipo_persona_sunat);
-    $('#idtipo_persona').val(e.data.idtipo_persona);
+      $('#tipo_documento').val(e.data.code_sunat).trigger("change");
+      $('#numero_documento').val(e.data.numero_documento);
+      $('#idcargo_trabajador').val(e.data.idcargo_trabajador).trigger("change");
+      $('#nombre_razonsocial').val(e.data.nombre_razonsocial);
+      $('#apellidos_nombrecomercial').val(e.data.apellidos_nombrecomercial);
+      $('#correo').val(e.data.correo);
+      $('#celular').val(e.data.celular);
+      $('#fecha_nacimiento').val(e.data.fecha_nacimiento).trigger("change")
+      
+      $('#ruc').val(e.data.ruc);
+      $('#usuario_sol').val(e.data.usuario_sol);
+      $('#clave_sol').val(e.data.clave_sol);
+      $('#direccion').val(e.data.direccion);
+      $('#distrito').val(e.data.distrito).trigger("change");
+      $('#departamento').val(e.data.departamento);
+      $('#provincia').val(e.data.provincia);
+      $('#ubigeo').val(e.data.cod_ubigeo);
+      $('#sueldo_mensual').val(e.data.sueldo_mensual);
+      $('#sueldo_diario').val(e.data.sueldo_diario);
+      $('#idbanco').val(e.data.idbancos).trigger("change")
+      $('#cuenta_bancaria').val(e.data.cuenta_bancaria);
+      $('#cci').val(e.data.cci);
+      $('#titular_cuenta').val(e.data.titular_cuenta);
 
-    $('#tipo_documento').val(e.data.code_sunat).trigger("change");
-    $('#numero_documento').val(e.data.numero_documento);
-    $('#idcargo_trabajador').val(e.data.idcargo_trabajador).trigger("change");
-    $('#nombre_razonsocial').val(e.data.nombre_razonsocial);
-    $('#apellidos_nombrecomercial').val(e.data.apellidos_nombrecomercial);
-    $('#correo').val(e.data.correo);
-    $('#celular').val(e.data.celular);
-    $('#fecha_nacimiento').val(e.data.fecha_nacimiento).trigger("change")
-    
-    $('#ruc').val(e.data.ruc);
-    $('#usuario_sol').val(e.data.usuario_sol);
-    $('#clave_sol').val(e.data.clave_sol);
-    $('#direccion').val(e.data.direccion);
-    $('#distrito').val(e.data.distrito).trigger("change");
-    $('#departamento').val(e.data.departamento);
-    $('#provincia').val(e.data.provincia);
-    $('#ubigeo').val(e.data.cod_ubigeo);
-    $('#sueldo_mensual').val(e.data.sueldo_mensual);
-    $('#sueldo_diario').val(e.data.sueldo_diario);
-    $('#idbanco').val(e.data.idbancos).trigger("change")
-    $('#cuenta_bancaria').val(e.data.cuenta_bancaria);
-    $('#cci').val(e.data.cci);
-    $('#titular_cuenta').val(e.data.titular_cuenta);
+      $("#imagenmuestra").show();
+      $("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/" + e.data.foto_perfil);
+      $("#imagenactual").val(e.data.foto_perfil);
 
-    $("#imagenmuestra").show();
-		$("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/" + e.data.foto_perfil);
-		$("#imagenactual").val(e.data.foto_perfil);
-
-    $('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
-    $('#form-agregar-trabajador').valid();
-	});	
-}
-
-function ver_cargo() {
-	
-	$('.charge_cargo').html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);	
-	
-  var id = $('#idpersona').val() == '' || $('#idpersona').val() == null ? '0' : $('#idpersona').val();
-	$.post("../ajax/trabajador.php?op=cargo_persona", { idpersona: id }, function (e, status) {
-    e = JSON.parse(e);	
-    $('#cargo').val(e.data.cargo_trabajador);
-    $('.charge_cargo').html('');
-	});	
+      $('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
+      $('#form-agregar-trabajador').valid();
+    } else {
+      ver_errores(e)
+    }
+	}).fail( function(e) { ver_errores(e); } );
 }
 
 //Función para desactivar registros
@@ -274,7 +269,6 @@ function desactivar(idusuario, nombre) {
   );
 }
 
-
 //Función para activar registros
 function activar(idusuario, nombre) {
 	crud_simple_alerta(
@@ -290,65 +284,6 @@ function activar(idusuario, nombre) {
     false,
     false
   );
-}
-
-function ver_password(click) {
-  var x = document.getElementById("clave"); 
-	//var y = document.getElementById("confirm_password");
-  if (x.type === "password") {
-    x.type = "text"; 
-		//y.type = "text"; 
-		$('#icon-view-password').html(`<i class="fa-solid fa-eye-slash text-white"></i>`); 
-    $(click).attr('data-original-title', 'Ocultar contraseña');
-  } else {
-    x.type = "password"; 
-		//y.type = "password";  
-		$('#icon-view-password').html(`<i class="fa-solid fa-eye text-white"></i>`);
-    $(click).attr('data-original-title', 'Ver contraseña');
-  }
-
-  $('[data-toggle="tooltip"]').tooltip();
-}
-
-function historial_sesion(id) {
-  $('#modal-ver-historial-sesion').modal('show');
-  tabla_historial = $('#tabla-historial-sesion').dataTable({
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom:"<'row'<'col-md-2'B><'col-md-3 float-left'l><'col-md-7'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
-    buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_historial) { tabla_historial.ajax.reload(null, false); } } },      
-    ],
-		"ajax":	{
-			url: `../ajax/trabajador.php?op=historial_sesion&id=${id}`,
-			type: "get",
-			dataType: "json",
-			error: function (e) {
-				console.log(e.responseText);
-			},
-      complete: function () {
-        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');        
-        $('[data-bs-toggle="tooltip"]').tooltip();
-      },
-		},
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
-      // columna: sub total
-      if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap"); } 
-    },
-		language: {
-      lengthMenu: "_MENU_",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
-      emptyTable: "No hay datos"
-    },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[2, "desc"]]//Ordenar (columna,orden)
-	}).DataTable();
-
 }
 
 $(document).ready(function () {
@@ -499,13 +434,17 @@ function llenar_dep_prov_ubig(input) {
     var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
     $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
       e = JSON.parse(e); console.log(e);
-      $("#departamento").val(e.data.departamento); 
-      $("#provincia").val(e.data.provincia); 
-      $("#ubigeo").val(e.data.ubigeo_inei); 
+      if (e.status == true) {
+        $("#departamento").val(e.data.departamento); 
+        $("#provincia").val(e.data.provincia); 
+        $("#ubigeo").val(e.data.ubigeo_inei); 
 
-      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
-      $("#form-agregar-trabajador").valid();
-    });
+        $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+        $("#form-agregar-trabajador").valid();
+      } else {
+        ver_errores(e);
+      }      
+    }).fail( function(e) { ver_errores(e); } );
   }  
 }
 
@@ -525,4 +464,6 @@ $('#tipo_documento').change(function() {
   
 
 
-function reload_usr_trab(){ $('.tipo_persona_venta').html(`(trabajador)`); lista_select2("../ajax/ajax_general.php?op=select2_usuario_trabajador&id=", '#idpersona', null, '.charge_idpersona'); }
+function reload_cargo(){ lista_select2("../ajax/ajax_general.php?op=select2_cargo", '#idcargo_trabajador', null, '.charge_idcargo'); }
+
+function reload_banco(){ lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null, '.charge_idbanco'); }

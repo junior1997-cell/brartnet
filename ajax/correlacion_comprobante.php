@@ -41,6 +41,7 @@ switch ($_GET["op"]){
         ];
       }
       $results =[
+        'status'=> true,
         "sEcho" => 1,
         "iTotalRecords" => count($data),
         "iTotalDisplayRecords" => count($data),

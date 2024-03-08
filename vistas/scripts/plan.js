@@ -62,6 +62,9 @@ function tabla_principal_plan() {
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
     },
     createdRow: function (row, data, ixdex) {
       // columna: #
@@ -142,7 +145,7 @@ function mostrar_plan(idplan) {
 
     e = JSON.parse(e);  console.log(e);  
 
-    if (e.status) {
+    if (e.status == true) {
       $("#idplan").val(e.data.idplan);
       $("#nombre_plan").val(e.data.nombre);        
       $("#costo_plan").val(e.data.costo)    

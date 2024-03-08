@@ -73,6 +73,12 @@
                               <th>Teléfono</th>
                               <th>Direccion</th>
                               <th>Clientes</th> 
+
+                              <th>Nombre</th>
+                              <th>Tipo Doc.</th>
+                              <th>Nro Documento</th>
+                              <th>Fecha Nac.</th>
+                              <th>Edad</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -87,6 +93,12 @@
                               <th>Teléfono</th>
                               <th>Direccion</th>
                               <th>Clientes</th>
+
+                              <th>Nombre</th>
+                              <th>Tipo Doc.</th>
+                              <th>Nro Documento</th>
+                              <th>Fecha Nac.</th>
+                              <th>Edad</th>
                             </tr>
                           </tfoot>
                         </table>
@@ -114,7 +126,7 @@
                                   <!-- Tipo documento -->
                                   <div class="mb-1 col-md-3 col-lg-3 col-xl-3 col-xxl-4">
                                     <div class="form-group">
-                                      <label for="tipo_documento" class="form-label">Tipo documento:  </label></label>
+                                      <label for="tipo_documento" class="form-label">Tipo documento:  </label>
                                       <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento" >  </select>
                                     </div>                                         
                                   </div>
@@ -136,7 +148,11 @@
                                   <!-- Cargo -->
                                   <div class="mb-1 col-md-3 col-lg-3 col-xl-6 col-xxl-4">
                                     <div class="form-group">
-                                      <label for="idcargo_trabajador" class="form-label">Cargo:  </label></label>
+                                      <label for="idcargo_trabajador" class="form-label">
+                                        <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_cargo();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                        Cargo:  
+                                        <span class="charge_idcargo"></span>
+                                      </label>
                                       <select name="idcargo_trabajador" id="idcargo_trabajador" class="form-control" >   </select>
                                     </div>                                         
                                   </div>
@@ -144,7 +160,7 @@
                                   <!-- Nombres -->
                                   <div class="mb-1 col-md-6 col-lg-6 col-xl-4 col-xxl-6">
                                     <div class="form-group">
-                                      <label for="nombre_razonsocial" class="form-label label-nom-raz">Nombres:  </label></label>
+                                      <label for="nombre_razonsocial" class="form-label label-nom-raz">Nombres:  </label>
                                       <input type="text" class="form-control" name="nombre_razonsocial" id="nombre_razonsocial" >
                                     </div>                                         
                                   </div>
@@ -152,7 +168,7 @@
                                   <!-- Apellidos -->
                                   <div class="mb-1 col-md-6 col-lg-6 col-xl-4 col-xxl-6">
                                     <div class="form-group">
-                                      <label for="apellidos_nombrecomercial" class="form-label label-ape-come">Apellidos:  </label></label>
+                                      <label for="apellidos_nombrecomercial" class="form-label label-ape-come">Apellidos:  </label>
                                       <input type="text" class="form-control" name="apellidos_nombrecomercial" id="apellidos_nombrecomercial" >
                                     </div>                                         
                                   </div>
@@ -176,7 +192,7 @@
                                   <!-- Nacimiento -->
                                   <div class="mb-1 col-md-6 col-lg-3 col-xl-4 col-xxl-6">
                                     <div class="form-group">
-                                      <label for="fecha_nacimiento" class="form-label">Nacimiento:  </label></label>
+                                      <label for="fecha_nacimiento" class="form-label">Nacimiento:  </label>
                                       <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" onclick="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" onchange="calcular_edad('#fecha_nacimiento', '#edad', '.edad');" >
                                     </div>                                         
                                   </div>
@@ -205,7 +221,7 @@
                                   <!-- RUC -->
                                   <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
                                     <div class="form-group">
-                                      <label for="ruc" class="form-label">RUC:  </label></label>
+                                      <label for="ruc" class="form-label">RUC:  </label>
                                       <input type="text" class="form-control" name="ruc" id="ruc" >
                                     </div>                                         
                                   </div>
@@ -213,7 +229,7 @@
                                   <!-- Usuario Sol -->
                                   <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
                                     <div class="form-group">
-                                      <label for="usuario_sol" class="form-label">Usuario Sol:  </label></label>
+                                      <label for="usuario_sol" class="form-label">Usuario Sol:  </label>
                                       <input type="text" class="form-control" name="usuario_sol" id="usuario_sol" >
                                     </div>                                         
                                   </div>
@@ -221,7 +237,7 @@
                                   <!-- Clave Sol -->
                                   <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
                                     <div class="form-group">
-                                      <label for="clave_sol" class="form-label">Clave Sol:  </label></label>
+                                      <label for="clave_sol" class="form-label">Clave Sol:  </label>
                                       <input type="text" class="form-control" name="clave_sol" id="clave_sol" >
                                     </div>                                         
                                   </div>
@@ -235,7 +251,7 @@
                                   <!-- Distrito -->
                                   <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-6">
                                     <div class="form-group">
-                                      <label for="distrito" class="form-label">Distrito:  </label></label>
+                                      <label for="distrito" class="form-label">Distrito:  </label>
                                       <select name="distrito" id="distrito" class="form-control" placeholder="Seleccionar" onchange="llenar_dep_prov_ubig(this);">                                  
                                       </select>
                                     </div>                                         
@@ -294,7 +310,11 @@
                                   <!-- Banco -->
                                   <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-6">
                                     <div class="form-group">
-                                      <label for="idbanco" class="form-label">Banco:  </label></label>
+                                      <label for="idbanco" class="form-label">
+                                        <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_banco();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                        Banco:  
+                                        <span class="charge_idbanco"></span>
+                                      </label>
                                       <select name="idbanco" id="idbanco" class="form-control" placeholder="Seleccionar">                                  
                                       </select>
                                     </div>                                         

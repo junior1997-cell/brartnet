@@ -136,6 +136,9 @@ function listar_tabla() {
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -177,8 +180,10 @@ function listar_trabajador() {
     e = JSON.parse(e);
     if (e.status == true) {
       $("#idtrabajador").html(e.data);
+    }else{
+      ver_errores(e);
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function listar_proveedor() {
@@ -186,8 +191,10 @@ function listar_proveedor() {
     e = JSON.parse(e);
     if (e.status == true) {
       $("#idproveedor").html(e.data);
+    }else{
+      ver_errores(e);
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 
   // MOSTRAR LISTA
   $('#tp_comprobante').change(function () {
@@ -196,20 +203,18 @@ function listar_proveedor() {
 }
 
 function mostrar_comprobante(idgasto_de_trabajador) {
-  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_gasto_trabajador",
-    { idgasto_de_trabajador: idgasto_de_trabajador },
-    function (e, status) {
+  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_gasto_trabajador", { idgasto_de_trabajador: idgasto_de_trabajador },  function (e, status) {
 
-      e = JSON.parse(e);
-      if (e.status == true) {
-        if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
-          $("#comprobante-container").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/gasto_de_trabajador', '100%', '500'));
-          $('.jq_image_zoom').zoom({ on: 'grab' });
-        }
-        $('#modal-ver-comprobante').modal('show');
+    e = JSON.parse(e);
+    if (e.status == true) {
+      if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
+        $("#comprobante-container").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/gasto_de_trabajador', '100%', '500'));
+        $('.jq_image_zoom').zoom({ on: 'grab' });
+      }
+      $('#modal-ver-comprobante').modal('show');
 
-      } else { ver_errores(e); }
-    });
+    } else { ver_errores(e); }
+  }).fail( function(e) { ver_errores(e); } );
 
 }
 
@@ -241,8 +246,10 @@ function mostrar_gasto_de_trabajador(idgasto_de_trabajador) {
       }
 
       show_hide_form(2);
+    }else{
+      ver_errores(e);
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //listamos los datos para MOSTRAR TODO
@@ -277,8 +284,10 @@ function mostrar_detalles_gasto(idgasto_de_trabajador) {
       if (e.data.trabajador.data.tipo_comprobante == 'FACTURA' || e.data.trabajador.data.tipo_comprobante == 'NOTA_DE_VENTA') {
         $(".proveedor_s").show();
       } else { $(".proveedor_s").hide(); }
+    }else{
+      ver_errores(e);
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function calcularigv() { //cortesia de chatGPT :)
