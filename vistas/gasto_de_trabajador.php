@@ -71,7 +71,7 @@
                                   <th>Fecha</th>
                                   <th>Trabajador</th>
                                   <th >Comprobante</th>
-                                  <th style="background-color: #D2ACFB;">Total</th>
+                                  <th >Total</th>
                                   <th>Descripción</th>
                                   <th>CFDI</th>
                                   
@@ -85,7 +85,7 @@
                                   <th>Fecha</th>
                                   <th>Trabajador</th>
                                   <th >Comprobante</th>
-                                  <th>Total</th>
+                                  <th class="bg-light">Total</th>
                                   <th>Descripción</th>
                                   <th>CFDI</th>
                                   
@@ -124,8 +124,8 @@
                                 <!-- ----------------- TIPO COMPROBANTE --------------- -->
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
-                                    <label for="tp_comprobante" class="form-label">Tipo Comprobante</label>
-                                    <select class="form-select form-select-lg" name="tp_comprobante" id="tp_comprobante">
+                                    <label for="tipo_comprobante" class="form-label">Tipo Comprobante</label>
+                                    <select class="form-select form-select-lg" name="tipo_comprobante" id="tipo_comprobante">
                                       <option value="NINGUNO">NINGUNO</option>
                                       <option value="BOLETA">BOLETA</option>
                                       <option value="FACTURA">FACTURA</option>
@@ -163,8 +163,8 @@
                                 <!-- ----------------- SUB TOTAL --------------- -->
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
-                                    <label for="sub_total" class="form-label">Sub Total</label>
-                                    <input type="number" class="form-control" name="sub_total" id="sub_total" readonly/>
+                                    <label for="precio_sin_igv" class="form-label">Sub Total</label>
+                                    <input type="number" class="form-control" name="precio_sin_igv" id="precio_sin_igv" readonly/>
                                   </div>
                                 </div>
                                 <!-- ----------------- IGV --------------- -->
@@ -178,14 +178,14 @@
                                 <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-2">
                                   <div class="form-group">
                                     <label for="val_igv" class="form-label">Val. IGV</label>
-                                    <input type="number" class="form-control" name="val_igv" id="val_igv" value="0.00"/>
+                                    <input type="number" class="form-control" name="val_igv" id="val_igv" value="0.00" onkeyup="calculandototales_fact();" />
                                   </div>
                                 </div>
                                 <!-- ----------------- TOTAL --------------- -->
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
-                                    <label for="total_gasto" class="form-label">Total(*)</label>
-                                    <input type="number" class="form-control" name="total_gasto" id="total_gasto" onkeyup="calcularigv();"  onchange="calcularigv();"/>
+                                    <label for="precio_con_igv" class="form-label">Total(*)</label>
+                                    <input type="number" class="form-control" name="precio_con_igv" id="precio_con_igv" onkeyup="comprob_factura();"  onchange="comprob_factura();"/>
                                   </div>
                                 </div>
                                 <!-- --------- DESCRIPCION COMPROBANTE ------ -->

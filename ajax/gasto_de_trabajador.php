@@ -18,14 +18,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
   $idtrabajador      = isset($_POST["idtrabajador"]) ? limpiarCadena($_POST["idtrabajador"]) : "";
   $descr_gastos      = isset($_POST["descr_gastos"]) ? limpiarCadena($_POST["descr_gastos"]) : "";
-  $tp_comprobante    = isset($_POST["tp_comprobante"]) ? limpiarCadena($_POST["tp_comprobante"]) : "";
+  $tipo_comprobante  = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
   $serie_comprobante = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";
   $fecha             = isset($_POST["fecha"]) ? limpiarCadena($_POST["fecha"]) : "";
   $idproveedor       = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
-  $sub_total         = isset($_POST["sub_total"]) ? limpiarCadena($_POST["sub_total"]) : "";
+  $precio_sin_igv    = isset($_POST["precio_sin_igv"]) ? limpiarCadena($_POST["precio_sin_igv"]) : "";
   $igv               = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
   $val_igv           = isset($_POST["val_igv"]) ? limpiarCadena($_POST["val_igv"]) : "";
-  $total_gasto       = isset($_POST["total_gasto"]) ? limpiarCadena($_POST["total_gasto"]) : "";
+  $precio_con_igv    = isset($_POST["precio_con_igv"]) ? limpiarCadena($_POST["precio_con_igv"]) : "";
   $descr_comprobante = isset($_POST["descr_comprobante"]) ? limpiarCadena($_POST["descr_comprobante"]) : "";
   $img_comprob       = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : "";
 
@@ -46,14 +46,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
       if ( empty($idgasto_de_trabajador) ) { #Creamos el registro
 
-        $rspta = $gasto_trab->insertar($idtrabajador, $descr_gastos, $tp_comprobante, $serie_comprobante, 
-        $fecha, $idproveedor, $sub_total, $igv, $val_igv, $total_gasto, $descr_comprobante, $img_comprob);
+        $rspta = $gasto_trab->insertar($idtrabajador, $descr_gastos, $tipo_comprobante, $serie_comprobante, 
+        $fecha, $idproveedor, $precio_sin_igv, $igv, $val_igv, $precio_con_igv, $descr_comprobante, $img_comprob);
         echo json_encode($rspta, true);
 
       } else { # Editamos el registro
 
-        $rspta = $gasto_trab->editar($idgasto_de_trabajador, $idtrabajador, $descr_gastos, $tp_comprobante, $serie_comprobante, 
-        $fecha, $idproveedor, $sub_total, $igv, $val_igv, $total_gasto, $descr_comprobante, $img_comprob);
+        $rspta = $gasto_trab->editar($idgasto_de_trabajador, $idtrabajador, $descr_gastos, $tipo_comprobante, $serie_comprobante, 
+        $fecha, $idproveedor, $precio_sin_igv, $igv, $val_igv, $precio_con_igv, $descr_comprobante, $img_comprob);
         echo json_encode($rspta, true);
       }
 
@@ -74,7 +74,7 @@ if (!isset($_SESSION["user_nombre"])) {
           $data[] = [
             "0" => $count++,
             "1" =>  '<div class="hstack gap-2 fs-15">' .
-              '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_gasto_de_trabajador('.($reg->idgasto_de_trabajador).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+              '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_editar_gdt('.($reg->idgasto_de_trabajador).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
               '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_gasto('.$reg->idgasto_de_trabajador.', \''.$reg->trabajador.'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
               '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalles_gasto('.($reg->idgasto_de_trabajador).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
             '</div>',
@@ -122,7 +122,7 @@ if (!isset($_SESSION["user_nombre"])) {
       $rspta = $gasto_trab->listar_trabajador(); $cont = 1; $data = "";
       if($rspta['status'] == true){
         foreach ($rspta['data'] as $key => $value) {
-          $data .= '<option  value=' . $value['idpersona']  . '>' . $value['nombre_razonsocial'] . ' '. $value['apellidos_nombrecomercial'] . ' - ' . $value['numero_documento']. '</option>';
+          $data .= '<option  value=' . $value['idpersona_trabajador']  . '>' . $value['nombre_razonsocial'] . ' '. $value['apellidos_nombrecomercial'] . ' - ' . $value['numero_documento']. '</option>';
         }
 
         $retorno = array(
@@ -152,13 +152,18 @@ if (!isset($_SESSION["user_nombre"])) {
       } else { echo json_encode($rspta, true); }      
     break; 
 
-    case 'mostrar_gasto_trabajador':
-      $rspta = $gasto_trab->ver_gasto_trabajador($idgasto_de_trabajador);
+    case 'mostrar_editar_gdt':
+      $rspta = $gasto_trab->mostrar_editar_gdt($idgasto_de_trabajador);
       echo json_encode($rspta, true);
     break;
 
     case 'mostrar_detalle_gasto':
       $rspta = $gasto_trab->mostrar_detalle_gasto($idgasto_de_trabajador);
+      echo json_encode($rspta, true);
+    break;
+
+    default:
+      $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
       echo json_encode($rspta, true);
     break;
 

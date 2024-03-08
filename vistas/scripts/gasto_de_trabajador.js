@@ -13,7 +13,7 @@ function init() {
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idtrabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#tp_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
 }
@@ -30,14 +30,16 @@ function doc1_eliminar() {
 
 function limpiar_form() {
   $("#idgasto_de_trabajador").val("");
+  $("#idtrabajador").val(null).trigger("change"); 
+  $("#idproveedor").val(null).trigger("change"); 
+
   $("#descr_gastos").val("");
-  $("#tp_comprobante").val("NINGUNO");
-  $(".proveedor").hide();
+  $("#tipo_comprobante").val("NINGUNO").trigger("change");  
   $("#serie_comprobante").val("");
   $("#fecha").val("");
-  $("#sub_total").val("");
+  $("#precio_sin_igv").val("");
   $("#igv").val("");
-  $("#total_gasto").val("");
+  $("#precio_con_igv").val("");
   $("#descr_comprobante").val("");
   
   //limpiamos imagen
@@ -144,6 +146,10 @@ function listar_tabla() {
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api1 = this.api(); var total1 = api1.column( 5 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      $( api1.column( 5 ).footer() ).html( `S/ ${formato_miles(total1)}` );       
+    },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
     "order": [[2, "desc"]],//Ordenar (columna,orden)
@@ -174,14 +180,8 @@ function eliminar_gasto(idgasto_de_trabajador, nombre_razonsocial) {
   );
 }
 
-// MOSTRAR LISTA
-$('#tp_comprobante').change(function () {
-  $('.proveedor').toggle($('#tp_comprobante').val() === 'FACTURA' || $('#tp_comprobante').val() === 'NOTA_DE_VENTA');
-  $('#formulario-gasto').valid();
-});
-
 function mostrar_comprobante(idgasto_de_trabajador) {
-  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_gasto_trabajador", { idgasto_de_trabajador: idgasto_de_trabajador },  function (e, status) {
+  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_editar_gdt", { idgasto_de_trabajador: idgasto_de_trabajador },  function (e, status) {
 
     e = JSON.parse(e);
     if (e.status == true) {
@@ -197,23 +197,24 @@ function mostrar_comprobante(idgasto_de_trabajador) {
 }
 
 //liStamos datos para EDITAR
-function mostrar_gasto_de_trabajador(idgasto_de_trabajador) {
-  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_gasto_trabajador", { idgasto_de_trabajador: idgasto_de_trabajador }, function (e, status) {
+function mostrar_editar_gdt(idgasto_de_trabajador) {
+  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_editar_gdt", { idgasto_de_trabajador: idgasto_de_trabajador }, function (e, status) {
     e = JSON.parse(e);
     if (e.status == true) {
       $("#idgasto_de_trabajador").val(e.data.idgasto_de_trabajador);
-      $("#idtrabajador").val(e.data.idtrabajador);
+      $("#idtrabajador").val(e.data.idpersona_trabajador).trigger("change");
+      $("#idproveedor").val(e.data.idproveedor).trigger("change");
+
       $("#descr_gastos").val(e.data.descripcion_gasto);
-      $("#tp_comprobante").val(e.data.tipo_comprobante);
+      $("#tipo_comprobante").val(e.data.tipo_comprobante);
       $("#serie_comprobante").val(e.data.serie_comprobante);
       $("#fecha").val(e.data.fecha_ingreso);
-      $("#idproveedor").val(e.data.idproveedor);
-      $("#sub_total").val(e.data.precio_sin_igv);
+      
+      $("#precio_sin_igv").val(e.data.precio_sin_igv);
       $("#igv").val(e.data.precio_igv);
       $("#val_igv").val(e.data.val_igv);
-      $("#total_gasto").val(e.data.precio_con_igv);
-      $("#descr_comprobante").val(e.data.descripcion_comprobante);
-      if (e.data.tipo_comprobante == 'FACTURA' || e.data.tipo_comprobante == 'NOTA_DE_VENTA') { $(".proveedor").show(); }
+      $("#precio_con_igv").val(e.data.precio_con_igv);
+      $("#descr_comprobante").val(e.data.descripcion_comprobante);      
 
       // ------------ IMAGEN -----------
       if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
@@ -268,35 +269,189 @@ function mostrar_detalles_gasto(idgasto_de_trabajador) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function calcularigv() { //cortesia de chatGPT :)
-  var tipo_comprobante  = $("#tp_comprobante").val();
-  var precio_sin_igv    = $("#sub_total").val() == null   || $("#sub_total").val() == ''  ? 0 : parseFloat($("#sub_total").val());
-  var precio_igv        = $("#igv").val() == null         || $("#igv").val() == ''        ? 0 : parseFloat($("#igv").val());
-  var valor_igv         = $("#val_igv").val() == null     || $("#val_igv").val() == ''    ? 0 : parseFloat($("#val_igv").val());
-  var precio_con_igv    = $("#total_gasto").val() == null || $("#total_gasto").val() == ''? 0 : parseFloat($("#total_gasto").val());
+// MOSTRAR LISTA
+$('#tipo_comprobante').change(function () {
+  $('.proveedor').toggle($('#tipo_comprobante').val() === 'FACTURA' || $('#tipo_comprobante').val() === 'NOTA_DE_VENTA');
+  $('#formulario-gasto').valid();  
+  comprob_factura();
+  validando_igv();
+});
 
-  // Verificar el tipo de comprobante
-  if (tipo_comprobante === "FACTURA" || tipo_comprobante === "BOLETA" ) {
-    // Calcular el precio del IGV y el precio sin IGV   
-    valor_igv = (valor_igv/100) + 1;
-    precio_sin_igv = (precio_con_igv / valor_igv) ;
-    precio_igv = precio_con_igv - precio_sin_igv;
-  } else if ( tipo_comprobante === "NINGUNO" || tipo_comprobante === "NOTA_DE_VENTA") {
-    // Configurar valores para comprobante BOLETA o NINGUNO
-    valor_igv = 0;
-    precio_igv = 0;
-    precio_sin_igv = precio_con_igv;
-  }
+//segun tipo de comprobante
+function comprob_factura() {
 
-  // Actualizar los valores en los elementos HTML
-  $("#igv").val(precio_igv.toFixed(2));
-  $("#val_igv").val(valor_igv.toFixed(2));
-  $("#sub_total").val(precio_sin_igv.toFixed(2));
+  var precio_con_igv = $("#precio_con_igv").val(); 
+  
+  if ($("#tipo_comprobante").select2('val') == "" || $("#tipo_comprobante").select2('val') == null) {
+
+    $(".nro_comprobante").html("Núm. Comprobante");
+
+    $("#val_igv").val(""); $("#tipo_gravada").val(""); 
+
+    if (precio_con_igv == null || precio_con_igv == "") {
+      $("#precio_sin_igv").val(0);
+      $("#igv").val(0);    
+    } else {
+      $("#precio_sin_igv").val(parseFloat(precio_con_igv).toFixed(2));
+      $("#igv").val(0);    
+    }   
+
+  } else if ($("#tipo_comprobante").select2('val') == "NINGUNO") {     
+
+    $(".nro_comprobante").html("Núm. de Operación");
+    $("#val_igv").prop("readonly",true);
+
+    if (precio_con_igv == null || precio_con_igv == "") {
+      $("#precio_sin_igv").val(0);
+      $("#igv").val(0);
+      
+      $("#val_igv").val("0"); 
+      $("#tipo_gravada").val("NO GRAVADA");  
+
+    } else {
+      $("#precio_sin_igv").val(parseFloat(precio_con_igv).toFixed(2));
+      $("#igv").val(0); 
+
+      $("#val_igv").val("0"); 
+      $("#tipo_gravada").val("NO GRAVADA"); 
+
+    }   
+
+  } else if ($("#tipo_comprobante").select2("val") == "FACTURA") {          
+
+    $(".nro_comprobante").html("Núm. Comprobante");
+    $(".div_ruc").show(); $(".div_razon_social").show();      
+    calculandototales_fact();     
+  
+  } else if ($("#tipo_comprobante").select2("val") == "BOLETA") {       
+
+    
+    $("#val_igv").prop("readonly",true);
+    $(".nro_comprobante").html("Núm. Comprobante");
+
+    $(".div_ruc").show(); $(".div_razon_social").show();
+    
+    if (precio_con_igv == null || precio_con_igv == "") {
+      $("#precio_sin_igv").val(0);
+      $("#igv").val(0); 
+      $("#val_igv").val("0");   
+    } else {
+              
+      $("#precio_sin_igv").val("");
+      $("#igv").val("");
+
+      $("#precio_sin_igv").val(parseFloat(precio_con_igv).toFixed(2));
+      $("#igv").val(0); 
+      
+      $("#val_igv").val("0"); 
+      $("#tipo_gravada").val("NO GRAVADA"); 
+    } 
+      
+  } else {
+    $("#val_igv").prop("readonly",true);    
+    $(".nro_comprobante").html("Núm. Comprobante");
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
+    $("#ruc").val(""); $("#razon_social").val("");
+
+    if (precio_con_igv == null || precio_con_igv == "") {
+      
+      $("#precio_sin_igv").val(0);
+      $("#igv").val(0);
+
+      $("#val_igv").val("0"); 
+      $("#tipo_gravada").val("NO GRAVADA");  
+
+    } else {
+
+      $("#precio_sin_igv").val(parseFloat(precio_con_igv).toFixed(2));
+      $("#igv").val(0); 
+
+      $("#val_igv").val("0"); 
+      $("#tipo_gravada").val("NO GRAVADA");  
+
+    } 
+    
+  }   
 }
 
-function mayus(e) {
-  e.value = e.value.toUpperCase();
+function validando_igv() {
+  if ($("#tipo_comprobante").select2("val") == "FACTURA") {
+    $("#val_igv").prop("readonly",false);
+    $("#val_igv").val(18); 
+  }else {
+    $("#val_igv").val(0); 
+  }  
 }
+
+function calculandototales_fact() {
+  //----------------
+  $("#tipo_gravada").val("GRAVADA");         
+  $(".nro_comprobante").html("Núm. Comprobante");
+  var precio_con_igv = $("#precio_con_igv").val();
+  var val_igv = $('#val_igv').val();
+
+  if (precio_con_igv == null || precio_con_igv == "") {
+
+    $("#precio_sin_igv").val(0);
+    $("#igv").val(0); 
+
+  } else {
+ 
+    var precio_sin_igv = 0;
+    var igv = 0;
+
+    if (val_igv == null || val_igv == "") {
+
+      $("#precio_sin_igv").val(parseFloat(precio_con_igv));
+      $("#igv").val(0);
+
+    }else{
+
+      $("precio_sin_igv").val("");
+      $("#igv").val("");
+
+      precio_sin_igv = quitar_igv_del_precio(precio_con_igv, val_igv, 'entero');
+      igv = precio_con_igv - precio_sin_igv;
+
+      $("#precio_sin_igv").val(parseFloat(precio_sin_igv).toFixed(2));
+      $("#igv").val(parseFloat(igv).toFixed(2));
+
+    }
+  }  
+}
+
+function quitar_igv_del_precio(precio , igv, tipo ) {
+  console.log(precio , igv, tipo);
+  var precio_sin_igv = 0;
+
+  switch (tipo) {
+    case 'decimal':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+
+    case 'entero':
+
+      if (parseFloat(precio) != NaN && igv > 0 && igv <= 100 ) {
+        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
+      }else{
+        precio_sin_igv = precio;
+      }
+    break;
+  
+    default:
+      $(".val_igv").html('IGV (0%)');
+      toastr.success('No has difinido un tipo de calculo de IGV.')
+    break;
+  } 
+  
+  return precio_sin_igv; 
+}
+
 
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -306,11 +461,11 @@ $(function () {
       idtrabajador:     { required: true },
       descr_gastos:     { required: true, minlength: 2, maxlength: 500 },
       fecha:            { required: true },
-      total_gasto:      { required: true, min: 1, },
+      precio_con_igv:      { required: true, min: 1, },
       val_igv:          { required: true, minlength: 1, maxlength: 100 },
       serie_comprobante:{
         required: function (element) {
-          return $("#tp_comprobante").val() !== "NINGUNO";
+          return $("#tipo_comprobante").val() !== "NINGUNO";
         }
       }
     },
@@ -320,7 +475,7 @@ $(function () {
       descr_gastos:     { required: "Campo requerido" },
       serie_comprobante:{ required: "Campo requerido" },
       fecha:            { required: "Campo requerido" },
-      total_gasto:      { required: "Campo requerido" },
+      precio_con_igv:      { required: "Campo requerido" },
     },
 
 
@@ -351,6 +506,10 @@ $(document).ready(function () {
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function mayus(e) {
+  e.value = e.value.toUpperCase();
+}
 
 function ver_img(img, nombre) {
 	$(".title-modal-img").html(`-${nombre}`);

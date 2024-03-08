@@ -96,7 +96,7 @@
     }
     
     function listar_trabajador(){
-      $sql = "SELECT p.*, sdi.nombre as nombre_tipo_documento, pt.sueldo_mensual, c.nombre as cargo
+      $sql = "SELECT p.*, pt.idpersona_trabajador, sdi.nombre as nombre_tipo_documento, pt.sueldo_mensual, c.nombre as cargo
       FROM persona AS p
       INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
@@ -111,7 +111,7 @@
       return ejecutarConsultaArray($sql);
     }
 
-    function ver_gasto_trabajador($id){
+    function mostrar_editar_gdt($id){
       $sql = "SELECT * FROM gasto_de_trabajador WHERE idgasto_de_trabajador = '$id'";
       return ejecutarConsultaSimpleFila($sql);
     }
