@@ -72,6 +72,20 @@
                               <th>Cuenta Bancaria</th>
                               <th>Ubicación</th>
                               <th>estado</th> 
+
+                              <th>Nombre</th>
+                              <th>Tipo Doc.</th>
+                              <th>Nro Documento</th>
+                              <th>Telefono</th>
+                              <th>Correo</th>
+                              <th>Banco</th>
+                              <th>Cuenta</th>
+                              <th>CCI</th>
+                              <th>Dirección</th>
+                              <th>Provincia</th>
+                              <th>departamento</th>
+                              <th>Distrito</th>
+
                             </tr>
                           </thead>
                           <tbody>
@@ -85,6 +99,20 @@
                               <th>Cuenta Bancaria</th>
                               <th>Ubicación</th>
                               <th>estado</th>
+
+                              <th>Nombre</th>
+                              <th>Tipo Doc.</th>
+                              <th>Nro Documento</th>
+                              <th>Telefono</th>
+                              <th>Correo</th>
+                              <th>Banco</th>
+                              <th>Cuenta</th>
+                              <th>CCI</th>
+                              <th>Dirección</th>
+                              <th>Provincia</th>
+                              <th>departamento</th>
+                              <th>Distrito</th>
+
                             </tr>
                           </tfoot>
                         </table>

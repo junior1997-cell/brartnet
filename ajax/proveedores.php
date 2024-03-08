@@ -63,18 +63,31 @@ if (!isset($_SESSION["user_nombre"])) {
                         '<b>Correo </b>: ' . $value['correo'] . '<br>' .
                         '<b>Dirección </b>: ' . $value['direccion'] . '<br>' .
                       '</div>',
-              "4" => '<div >' .
-                        '<b>Provincia </b>: ' . $value['provincia'] . '<br>' .
-                        '<b>Departamento </b>: ' . $value['departamento'] . '<br>' .
-                        '<b>Distrito </b>: ' . $value['distrito'] . '<br>' .
-                      '</div>',
-              "5" => ($value['idbancos'] == '1') ? '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Sin Banco</span>' :
+              "4" => ($value['idbancos'] == '1') ? '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Sin Banco</span>' :
                     '<div >' .
                       '<b>Banco: </b> ' . $value['banco'] . '<br>' .
                       '<b>Cuenta </b>: ' . $value['cuenta_bancaria'] . '<br>' .
                       '<b>CCI </b>: ' . $value['cci'] . '<br>' .
                     '</div>',
-              "6" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
+              "5" => '<div >' .
+                        '<b>Provincia </b>: ' . $value['provincia'] . '<br>' .
+                        '<b>Departamento </b>: ' . $value['departamento'] . '<br>' .
+                        '<b>Distrito </b>: ' . $value['distrito'] . '<br>' .
+                      '</div>',
+              "6" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>',
+
+              "7" => ($value['nombre_razonsocial']) .' '. ($value['apellidos_nombrecomercial']),
+              "8" => ($value['tipo_documento']),
+              "9" => ($value['numero_documento']),
+              "10" => ($value['celular']),
+              "11" => ($value['correo']),
+              "12" => ($value['banco']),
+              "13" => ($value['cuenta_bancaria']),
+              "14" => ($value['cci']),
+              "15" => ($value['direccion']),
+              "16" => ($value['provincia']),
+              "17" => ($value['departamento']),
+              "18" => ($value['distrito'])
             ];
           }
           $results =[

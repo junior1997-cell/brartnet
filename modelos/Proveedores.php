@@ -114,9 +114,10 @@
     }
 
     function mostrar($id){
-      $sql = "SELECT p.*, b.idbancos, b.nombre as banco
+      $sql = "SELECT p.*, b.idbancos, b.nombre banco, sdi.code_sunat
       FROM persona p
       INNER JOIN bancos b ON p.idbancos = b.idbancos
+		  INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       WHERE p.idpersona = '$id'
         AND p.idtipo_persona = 4
         AND p.estado = 1
