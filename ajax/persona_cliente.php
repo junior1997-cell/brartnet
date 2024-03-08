@@ -171,7 +171,8 @@ if (!isset($_SESSION["user_nombre"])) {
 
             if (isset($fecha_cancelacion) && $fecha_cancelacion !== null) {
               // Convertir la fecha de cancelación a un objeto DateTime
-              $fecha_cancelacion_objeto = new DateTime($value['fecha_cancelacion']);
+              $dateString = $value['fecha_cancelacion'];
+              $fecha_cancelacion_objeto = new DateTime($dateString);
               
               // Obtener la fecha actual
               $fecha_actual = date("Y-m-d");
@@ -203,7 +204,7 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>',
               "3" => $value['celular'],
               "4" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['distrito'] . ' : ' . $value['direccion'] . '</textarea>',
-              "5" => '<span class="badge bg-outline-success">' . $fecha_proximo_pago . '</span>',
+              "5" => '<span class="badge bg-outline-success">' . $fecha_proximo_pago .' - '. $value['fecha_cancelacion'].'</span>',
               "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "7" => '<div class="text-start font-size-12px" >
                       <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
