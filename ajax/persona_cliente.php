@@ -162,6 +162,7 @@ if (!isset($_SESSION["user_nombre"])) {
         $data = [];
         $cont = 1;
         $dateString="";
+        $fecha_proximo_pago='';
 
         $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
@@ -169,24 +170,34 @@ if (!isset($_SESSION["user_nombre"])) {
 
           foreach ($rspta['data'] as $key => $value) {
 
-            if (isset($fecha_cancelacion) && $fecha_cancelacion !== null) {
-              // Convertir la fecha de cancelación a un objeto DateTime
+            /*if (isset($value['fecha_cancelacion']) && $value['fecha_cancelacion'] !== null) {
+
               $dateString = $value['fecha_cancelacion'];
-              $fecha_cancelacion_objeto = new DateTime($dateString);
+
+              $fecha = new DateTime($dateString);
+
+              $dia_f_can = $fecha->format("d");
               
               // Obtener la fecha actual
               $fecha_actual = date("Y-m-d");
 
+              $dia_act = date("d", strtotime($fecha_actual));
+              
 
               // Agregar un mes a la fecha de cancelación
               $fecha_proximo_pago_objeto = clone $fecha_cancelacion_objeto;
+
+
               $fecha_proximo_pago_objeto->modify('+1 month');
 
               // Obtener la próxima fecha de pago en formato deseado
               $fecha_proximo_pago = $fecha_proximo_pago_objeto->format('Y-m-d');
+
             }else{
+
               $fecha_proximo_pago='';
-            }
+
+            }*/
 
 
             $imagen_perfil = empty($value['foto_perfil']) ? 'no-perfil.jpg' :   $value['foto_perfil'];
@@ -204,7 +215,7 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>',
               "3" => $value['celular'],
               "4" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['distrito'] . ' : ' . $value['direccion'] . '</textarea>',
-              "5" => '<span class="badge bg-outline-success">' . $fecha_proximo_pago .' - '. $value['fecha_cancelacion'].'</span>',
+              "5" => '<span class="badge bg-outline-success">' .$value['fecha_cancelacion'].'</span>',
               "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "7" => '<div class="text-start font-size-12px" >
                       <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
