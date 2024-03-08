@@ -54,7 +54,7 @@
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"> <a href="javascript:void(0)">Compras</a>  </li>
             <?php  if ($_SESSION['proveedores'] == '1') { ?>
-            <li class="slide"> <a href="index.php" class="side-menu__item">Proveedores</a> </li>
+            <li class="slide"> <a href="proveedores.php" class="side-menu__item">Proveedores</a> </li>
             <?php } ?>
             <?php  if ($_SESSION['lista_de_compras'] == '1') { ?>
             <li class="slide"> <a href="index-1.php" class="side-menu__item">Ingresar compra</a> </li>

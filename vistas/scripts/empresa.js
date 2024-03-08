@@ -332,13 +332,28 @@ init();
 $(function () {
   $("#formulario-empresa").validate({
     rules: {
-      number: { required: true },
+      tipo_doc: { required: true },
+      documento: { required: true, minlength: 11, maxlength:11},
       razon_social: { required: true},
+      nomb_comercial: { required: true},
+      telefono1: { required: true, minlength: 9},
+      codg_pais: { required: true},
+      domicilio_fiscal: { required: true},
+      distrito: { required: true},
+      banco1: { required: true},
+
     },
 
     messages: {
-      number: { required: "Por favor selecciones un trabajador" },
+      tipo_doc: { required: "Por favor selecciones un tipo de Doc" },
+      documento: { required: "Por favor rellena el campo" },
       razon_social: { required: "Por favor rellena el campo" },
+      nomb_comercial: { required: "Por favor rellena el campo" },
+      telefono1: { required: "Por favor rellena el campo" },
+      codg_pais: { required: "Por favor rellena el campo" },
+      domicilio_fiscal: { required: "Por favor rellena el campo" },
+      distrito: { required: "Por favor rellena el campo" },
+      banco1: { required: "Por favor selecciones una opción" },
     },
 
 

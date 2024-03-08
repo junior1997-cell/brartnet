@@ -342,14 +342,14 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="col-md-4 mt-3">
                               <div class="form-group">
                                 <label for="departamento" class="form-label">Departamento: <span class="chargue-pro"></span></label>
-                                <input type="text" name="departamento" id="departamento" class="form-control"/>
+                                <input type="text" name="departamento" id="departamento" class="form-control" readonly/>
                               </div>
                             </div>
                             <!-- ----------- Provincia -------------- -->
                             <div class="col-md-4 mt-3">
                               <div class="form-group">
                                 <label for="provincia" class="form-label">Provincia: <span class="chargue-dep"></span></label>
-                                <input type="text" name="provincia" id="provincia" class="form-control"/>
+                                <input type="text" name="provincia" id="provincia" class="form-control" readonly/>
                               </div>
                             </div>
                             <!-- ----------- Ubigeo -------------- -->
@@ -363,7 +363,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="col-md-4 mt-3">
                               <div class="form-group">
                                 <label for="codg_ubigeo" class="form-label">Código Ubigeo: <span class="chargue-ubi"></span></label>
-                                <input type="text" name="codg_ubigeo" id="codg_ubigeo" class="form-control"/>
+                                <input type="text" name="codg_ubigeo" id="codg_ubigeo" class="form-control" readonly/>
                               </div>
                             </div>
                             <!-- ----------- Referencia -------------- -->
