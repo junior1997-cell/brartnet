@@ -41,11 +41,11 @@ function limpiar_form() {
 
   $("#imagen").val("");
   $("#imagenactual").val("");
-  $("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/no-perfil.jpg");
-  $("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/no-perfil.jpg").show();
+  $("#imagenmuestra").attr("src", "../assets/modulo/proveedor/no-proveedor.png");
+  $("#imagenmuestra").attr("src", "../assets/modulo/proveedor/no-proveedor.png").show();
   var imagenMuestra = document.getElementById('imagenmuestra');
   if (!imagenMuestra.src || imagenMuestra.src == "") {
-    imagenMuestra.src = '../assets/modulo/usuario/perfil/no-perfil.jpg';
+    imagenMuestra.src = '../assets/modulo/proveedor/no-proveedor.png';
   }
 
   // Limpiamos las validaciones
@@ -131,7 +131,7 @@ function guardar_editar_proveedor(e) {
 					show_hide_form(1)
 					sw_success('Exito', 'proveedor guardado correctamente.');
 				} else {
-					ver_errores(jqXhr);
+					ver_errores(e);
 				}				
 			} catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
       $(".btn-guardar").html('<i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar').removeClass('disabled send-data');
@@ -193,7 +193,7 @@ function mostrar_proveedor(idpersona){
     $('#cci').val(e.data.cci);
 
     $("#imagenmuestra").show();
-		$("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/" + e.data.foto_perfil);
+		$("#imagenmuestra").attr("src", "../assets/modulo/proveedor/" + e.data.foto_perfil);
 		$("#imagenactual").val(e.data.foto_perfil);
 
     $('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
@@ -219,10 +219,13 @@ function eliminar_papelera_proveedor(idpersona, nombre){
   );
 }
 
-
-init();
-
+$(document).ready(function () {
+  init();
+});
 $(function () {
+  $('#tipo_documento').on('change', function() { $(this).trigger('blur'); });
+  $('#distrito').on('change', function() { $(this).trigger('blur'); });
+  $('#idbanco').on('change', function() { $(this).trigger('blur'); });
   $("#form-agregar-proveedor").validate({
     ignore: "",
     rules: {           
@@ -299,7 +302,7 @@ function removerImagen() {
 	// var imagenActualInput = document.getElementById('imagenactual');
 	// var imagenInput = document.getElementById('imagen');
 	// imagenMuestra.src = '../assets/images/faces/9.jpg';
-	$("#imagenmuestra").attr("src", "../assets/images/faces/9.jpg");
+	$("#imagenmuestra").attr("src", "../assets/proveedor/no-proveedor.png");
 	// imagenActualInput.value = '';
 	// imagenInput.value = '';
 	$("#imagen").val("");
@@ -323,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function ver_img(img, nombre) {
 	$(".title-modal-img").html(`-${nombre}`);
   $('#modal-ver-img').modal("show");
-  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
+  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/proveedor', '100%', '550'));
   $(`.jq_image_zoom`).zoom({ on:'grab' });
 }
 
