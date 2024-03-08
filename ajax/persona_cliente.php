@@ -161,7 +161,7 @@ if (!isset($_SESSION["user_nombre"])) {
         //Vamos a declarar un array
         $data = [];
         $cont = 1;
-
+        $dateString="";
 
         $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
