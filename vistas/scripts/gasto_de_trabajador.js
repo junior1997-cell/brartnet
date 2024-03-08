@@ -6,10 +6,13 @@ function init() {
   
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $(".btn-guardar").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-gasto").submit(); } });
+  $("#guardar_registro_proveedor").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-proveedor").submit(); } });
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/gasto_de_trabajador.php?op=listar_trabajador", '#idtrabajador', null);
   lista_select2("../ajax/gasto_de_trabajador.php?op=listar_proveedor", '#idproveedor', null);
+
+  
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idtrabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -452,6 +455,102 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
   return precio_sin_igv; 
 }
 
+// .....:::::::::::::::::::::::::::::::::::::::::: P R O V E E D O R :::::::::::::::::::::::::::::::::::::::::::..
+function limpiar_proveedor() {
+
+  lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
+  lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);
+  lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
+  
+  $("#tipo_documento").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#idbanco").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#distrito").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+
+	$('#idpersona').val('');
+  $('#tipo_persona_sunat').val('NATURAL');
+  $('#idtipo_persona').val('4');
+
+  $('#tipo_documento').val(null).trigger("change");
+  $('#numero_documento').val('');
+  $('#nombre_razonsocial').val('');
+  $('#apellidos_nombrecomercial').val('');
+  $('#correo').val('');
+  $('#celular').val('');
+  
+  $('#direccion').val('');
+  $('#distrito').val('').trigger("change");
+  $('#departamento').val('');
+  $('#provincia').val('');
+  $('#ubigeo').val('');
+  $('#idbanco').val(null).trigger("change")
+  $('#cuenta_bancaria').val('');
+  $('#cci').val(''); 
+
+  $("#imagen").val("");
+  $("#imagenactual").val("");
+  $("#imagenmuestra").attr("src", "../assets/modulo/proveedor/no-proveedor.png");
+  $("#imagenmuestra").attr("src", "../assets/modulo/proveedor/no-proveedor.png").show();
+  var imagenMuestra = document.getElementById('imagenmuestra');
+  if (!imagenMuestra.src || imagenMuestra.src == "") {
+    imagenMuestra.src = '../assets/modulo/proveedor/no-proveedor.png';
+  }
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+}
+function guardar_editar_proveedor(e) {
+
+	var formData = new FormData($("#form-agregar-proveedor")[0]);
+
+	$.ajax({
+		url: "../ajax/proveedores.php?op=guardar_editar",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+		success: function (e) {
+			try {
+				e = JSON.parse(e);  //console.log(e); 
+        if (e.status == true) {	
+					tabla_proveedores.ajax.reload(null, false);          
+					show_hide_form(1)
+					sw_success('Exito', 'proveedor guardado correctamente.');
+				} else {
+					ver_errores(e);
+				}				
+			} catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+      $("#guardar_registro_trabajador").html('<i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar').removeClass('disabled send-data');
+		},
+		xhr: function () {
+			var xhr = new window.XMLHttpRequest();
+			xhr.upload.addEventListener("progress", function (evt) {
+				if (evt.lengthComputable) {
+					var percentComplete = (evt.loaded / evt.total) * 100;
+					/*console.log(percentComplete + '%');*/
+					$("#barra_progress_proveedor").css({ "width": percentComplete + '%' });
+					$("#barra_progress_proveedor div").text(percentComplete.toFixed(2) + " %");
+				}
+			}, false);
+			return xhr;
+		},
+		beforeSend: function () {
+			$("#guardar_registro_trabajador").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled send-data');
+			$("#barra_progress_proveedor").css({ width: "0%", });
+			$("#barra_progress_proveedor div").text("0%");
+      $("#barra_progress_proveedor_div").show();
+		},
+		complete: function () {
+			$("#barra_progress_proveedor").css({ width: "0%", });
+			$("#barra_progress_proveedor div").text("0%");
+      $("#barra_progress_proveedor_div").hide();
+		},
+		error: function (jqXhr, ajaxOptions, thrownError) {
+			ver_errores(jqXhr);
+		}
+	});
+}
 
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -521,3 +620,43 @@ function ver_img(img, nombre) {
 
 function reload_idtrabajador(){ lista_select2("../ajax/gasto_de_trabajador.php?op=listar_trabajador", '#idtrabajador', null, '.charge_idtrabajador'); }
 function reload_idproveedor(){ lista_select2("../ajax/gasto_de_trabajador.php?op=listar_proveedor", '#idproveedor', null, '.charge_idproveedor'); }
+
+function llenar_dep_prov_ubig(input) {
+
+  $(".chargue-pro").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-dep").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+
+  if ($(input).select2("val") == null || $(input).select2("val") == '') { 
+    $("#departamento").val(""); 
+    $("#provincia").val(""); 
+    $("#ubigeo").val(""); 
+
+    $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+  } else {
+    var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
+    $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
+      e = JSON.parse(e); console.log(e);
+      $("#departamento").val(e.data.departamento); 
+      $("#provincia").val(e.data.provincia); 
+      $("#ubigeo").val(e.data.ubigeo_inei); 
+
+      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+      $("#form-agregar-proveedor").valid();
+    });
+  }  
+}
+
+// Modificar nombre segun  el tipo de documento
+$('#tipo_documento').change(function() {
+  var tipo = $(this).val();
+
+  if (tipo !== null && tipo !== '' && tipo == '6') {
+    $('.label-nom-raz').html('Razón Social <sup class="text-danger">*</sup>');
+    $('.label-ape-come').html('Nombre comercial <sup class="text-danger">*</sup>');
+  }else{
+    $('.label-nom-raz').html('Nombres <sup class="text-danger">*</sup>');
+    $('.label-ape-come').html('Apellidos <sup class="text-danger">*</sup>');
+  }
+
+});

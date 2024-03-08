@@ -15,13 +15,13 @@
     }
 
     function insertar($idtrabajador, $descr_gastos, $tp_comprobante, $serie_comprobante, $fecha, $idproveedor, $sub_total, $igv, $val_igv, $total_gasto, $descr_comprobante, $img_comprob){
-      $sql = "INSERT INTO gasto_de_trabajador (idpersona_trabajador, descripcion_gasto, tipo_comprobante, serie_comprobante, fecha_ingreso, idproveedor, precio_sin_igv, precio_igv, val_igv, precio_con_igv, descripcion_comprobante, comprobante)
+      $sql = "INSERT INTO gasto_de_trabajador (idtrabajador, descripcion_gasto, tipo_comprobante, serie_comprobante, fecha_ingreso, idproveedor, precio_sin_igv, precio_igv, val_igv, precio_con_igv, descripcion_comprobante, comprobante)
       VALUES ('$idtrabajador', '$descr_gastos', '$tp_comprobante', '$serie_comprobante', '$fecha', '$idproveedor', '$sub_total', '$igv', '$val_igv', '$total_gasto', '$descr_comprobante', '$img_comprob')";
       return ejecutarConsulta_retornarID($sql, 'C');
     }
 
     function editar($id, $idtrabajador, $descr_gastos, $tp_comprobante, $serie_comprobante, $fecha, $idproveedor, $sub_total, $igv, $val_igv, $total_gasto, $descr_comprobante, $img_comprob){
-      $sql = "UPDATE gasto_de_trabajador  SET idpersona_trabajador = '$idtrabajador', descripcion_gasto = '$descr_gastos', tipo_comprobante = '$tp_comprobante', serie_comprobante = '$serie_comprobante', fecha_ingreso = '$fecha', 
+      $sql = "UPDATE gasto_de_trabajador  SET idtrabajador = '$idtrabajador', descripcion_gasto = '$descr_gastos', tipo_comprobante = '$tp_comprobante', serie_comprobante = '$serie_comprobante', fecha_ingreso = '$fecha', 
       idproveedor = '$idproveedor', precio_sin_igv = '$sub_total', precio_igv = '$igv', val_igv = '$val_igv', precio_con_igv = '$total_gasto', descripcion_comprobante = '$descr_comprobante', comprobante = '$img_comprob'
       WHERE idgasto_de_trabajador = '$id' ";
       return ejecutarConsulta($sql, 'U');
@@ -54,7 +54,7 @@
     }
 
     function listar_tabla(){
-      $sql = "SELECT gdt.idgasto_de_trabajador, gdt.idproveedor, gdt.idpersona_trabajador, gdt.tipo_comprobante, gdt.serie_comprobante, gdt.fecha_ingreso, gdt.day_name, gdt.month_name, 
+      $sql = "SELECT gdt.idgasto_de_trabajador, gdt.idproveedor, gdt.idtrabajador, gdt.tipo_comprobante, gdt.serie_comprobante, gdt.fecha_ingreso, gdt.day_name, gdt.month_name, 
       gdt.year_name, gdt.precio_sin_igv, gdt.precio_igv, gdt.val_igv, gdt.precio_con_igv, gdt.descripcion_comprobante, gdt.descripcion_gasto, gdt.comprobante,  gdt.estado,
       CASE p.tipo_persona_sunat 
         WHEN 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial )
@@ -66,7 +66,7 @@
       END AS trabajador, t.foto_perfil as foto_perfil_trabajador, t.tipo_documento, t.numero_documento
       FROM gasto_de_trabajador as gdt
       INNER JOIN persona as p ON p.idpersona = gdt.idproveedor 
-      INNER JOIN persona as t ON t.idpersona = gdt.idpersona_trabajador
+      INNER JOIN persona as t ON t.idpersona = gdt.idtrabajador
       WHERE gdt.estado = '1' AND gdt.estado_delete = '1';";
       return ejecutarConsulta($sql);
     }
