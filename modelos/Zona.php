@@ -12,40 +12,70 @@ Class Zona
 
 	//Implementamos un método para insertar registros
 	public function insertar_zona($nombre_zona,$ip_antena) {
-		//var_dump($nombre);die();
-		$sql="INSERT INTO zona_antena(nombre, ip_antena)VALUES('$nombre_zona', '$ip_antena')";
+		$sql_0 = "SELECT * FROM zona_antena  WHERE ip_antena = '$ip_antena';";
+    $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
+      
+    if ( empty($existe['data']) ) {
+			$sql="INSERT INTO zona_antena(nombre, ip_antena)VALUES('$nombre_zona', '$ip_antena')";
+			$insertar =  ejecutarConsulta_retornarID($sql, 'C'); if ($insertar['status'] == false) {  return $insertar; } 
+			
+			//add registro en nuestra bitacora
+			// $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('zona_antena','".$insertar['data']."','Nueva zona_antena registrado','" . $_SESSION['idusuario'] . "')";
+			// $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+			
+			return $insertar;
+		} else {
+			$info_repetida = ''; 
 
-		$insertar =  ejecutarConsulta_retornarID($sql); 
-		if ($insertar['status'] == false) {  return $insertar; } 
-		
-		//add registro en nuestra bitacora
-		// $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('zona_antena','".$insertar['data']."','Nueva zona_antena registrado','" . $_SESSION['idusuario'] . "')";
-		// $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
-		
-		return $insertar;
+			foreach ($existe['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+					<span class="font-size-15px text-danger"><b>IP: </b>'.$value['ip_antena'].'</span><br>
+					<b>Nombre: </b>'.$value['nombre'].'<br>
+					<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+					<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+					<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+			return array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
+		}		
 	}
 
 	//Implementamos un método para editar registros
 	public function editar_zona($idzona_antena, $nombre_zona, $ip_antena) {
-		//  var_dump($idzona_antena .'-'. $nombre_zona.'-'. $ip_antena); die();
-		$sql="UPDATE zona_antena SET nombre='$nombre_zona', ip_antena ='$ip_antena' WHERE idzona_antena='$idzona_antena'";
-		$editar =  ejecutarConsulta($sql);
-		if ( $editar['status'] == false) {return $editar; } 
-	
-		//add registro en nuestra bitacora
-		// $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) 
-		// VALUES ('zona_antena','$idzona_antena','zona_antena editada','" . $_SESSION['idusuario'] . "')";
-		// $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
-	
-		return $editar;
+		
+		$sql_0 = "SELECT * FROM zona_antena  WHERE ip_antena = '$ip_antena' AND idzona_antena <> '$idzona_antena';";
+    $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
+      
+    if ( empty($existe['data']) ) {
+			$sql="UPDATE zona_antena SET nombre='$nombre_zona', ip_antena ='$ip_antena' WHERE idzona_antena='$idzona_antena'";
+			$editar =  ejecutarConsulta($sql, 'U');	if ( $editar['status'] == false) {return $editar; } 
+		
+			//add registro en nuestra bitacora
+			// $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) 
+			// VALUES ('zona_antena','$idzona_antena','zona_antena editada','" . $_SESSION['idusuario'] . "')";
+			// $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+			return $editar;
+		} else {
+			$info_repetida = ''; 
+
+			foreach ($existe['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+					<span class="font-size-15px text-danger"><b>IP: </b>'.$value['ip_antena'].'</span><br>
+					<b>Nombre: </b>'.$value['nombre'].'<br>
+					<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+					<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+					<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+			return array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
+		}		
 	}
 
 	//Implementamos un método para desactivar color
 	public function desactivar_zona($idzona_antena) {
-		$sql="UPDATE zona_antena SET estado='0', user_trash= '" . $_SESSION['idusuario'] . "' WHERE idzona_antena='$idzona_antena'";
-		$desactivar= ejecutarConsulta($sql);
-
-		// if ($desactivar['status'] == false) {  return $desactivar; }
+		$sql="UPDATE zona_antena SET estado='0' WHERE idzona_antena='$idzona_antena'";
+		$desactivar= ejecutarConsulta($sql, 'T'); if ($desactivar['status'] == false) {  return $desactivar; }
 		
 		// //add registro en nuestra bitacora
 		// $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('zona_antena','".$idzona_antena."','zona_antena desactivada','" . $_SESSION['idusuario'] . "')";
@@ -64,8 +94,7 @@ Class Zona
 	public function eliminar_zona($idzona_antena) {
 		
 		$sql="UPDATE zona_antena SET estado_delete='0' WHERE idzona_antena='$idzona_antena'";
-		$eliminar =  ejecutarConsulta($sql);
-		if ( $eliminar['status'] == false) {return $eliminar; }  
+		$eliminar =  ejecutarConsulta($sql, 'D');	if ( $eliminar['status'] == false) {return $eliminar; }  
 		
 		//add registro en nuestra bitacora
 		// $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('zona_antena', '$idzona_antena', 'zona_antena Eliminada','" . $_SESSION['idusuario'] . "')";

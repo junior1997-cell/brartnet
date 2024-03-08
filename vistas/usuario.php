@@ -119,7 +119,7 @@
                                 <!-- CArgo -->
                                 <div class="col-md-6">
                                   <div class="form-group">
-                                    <label for="cargo" class="form-label">Cargo:  <span class="charge_cargo"></span></label></label>
+                                    <label for="cargo" class="form-label">Cargo:  <span class="charge_cargo"></span></label>
                                     <input type="text" class="form-control" name="cargo" id="cargo" readonly>
                                   </div>                                         
                                 </div>

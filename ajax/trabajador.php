@@ -3,7 +3,7 @@ ob_start();
 if (strlen(session_id()) < 1) { session_start(); }//Validamos si existe o no la sesión
 
 if (!isset($_SESSION["user_nombre"])) {
-  $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+  $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [], 'aaData' => [] ];
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
@@ -115,20 +115,27 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')"> </span></div>
               <div>
                 <span class="d-block fw-semibold text-primary">'.$reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial.'</span>
-                <span class="text-muted">'.$reg->tipo_documento .' '. $reg->numero_documento.'</span>
+                <span class="text-muted"><b>'.$reg->tipo_documento .'</b>: '. $reg->numero_documento.'</span>
               </div>
             </div>',
             "3" =>  '<div class="text-start">
-            <span class="d-block text-primary fw-semibold">'.date('d/m/Y', strtotime($reg->fecha_nacimiento)).'</span>
-            <span class="text-muted">'.calcular_edad($reg->fecha_nacimiento).' Años</span>
-          </div>',
+              <span class="d-block text-primary fw-semibold">'.date('d/m/Y', strtotime($reg->fecha_nacimiento)).'</span>
+              <span class="text-muted">'.calcular_edad($reg->fecha_nacimiento).' Años</span>
+            </div>',
             "4" => $reg->cargo_trabajador,
             "5" => '<a href="tel:+51'.$reg->celular.'">'.$reg->celular.'</a>',
             "6" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light" readonly="">'.$reg->direccion.'</textarea>',
-            "7" =>  '<span class="badge bg-outline-warning cursor-pointer font-size-12px" data-bs-toggle="tooltip" title="Ver clientes">'.$reg->cant_cliente.'</span>'
+            "7" =>  '<span class="badge bg-outline-warning cursor-pointer font-size-12px" data-bs-toggle="tooltip" title="Ver clientes">'.$reg->cant_cliente.'</span>',
+            
+            "8" => $reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial,
+            "9" => $reg->tipo_documento,
+            "10" => $reg->numero_documento,
+            "11" => $reg->fecha_nacimiento,
+            "12" => calcular_edad($reg->fecha_nacimiento),
           );
         }
         $results = array(
+          'status'=> true,
           "sEcho" => 1, //Información para el datatables
           "iTotalRecords" => count($data),  //enviamos el total registros al datatable
           "iTotalDisplayRecords" => count($data),  //enviamos el total registros a visualizar
@@ -145,7 +152,7 @@ if (!isset($_SESSION["user_nombre"])) {
     }
 
   } else {
-    $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    $retorno = ['status'=>'nopermiso', 'message'=>'No tienes acceso a este modulo, pide acceso a tu administrador', 'data' => [], 'aaData' => [] ];
     echo json_encode($retorno);
   }  
 }

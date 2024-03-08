@@ -15,8 +15,8 @@ function init() {
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idpersona").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
-	$.post("../ajax/usuario.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	});
-	$.post("../ajax/usuario.php?op=series&id=", function (r) {	$("#series").html(r);	});
+	$.post("../ajax/usuario.php?op=permisos&id=", function (r) {	$("#permisos").html(r);	}).fail( function(e) { ver_errores(e); } );
+	$.post("../ajax/usuario.php?op=series&id=", function (r) {	$("#series").html(r);	}).fail( function(e) { ver_errores(e); } );
 	// $.post("../ajax/usuario.php?op=permisosEmpresaTodos", function (r) {	$("#empresas").html(r);	});
 }
 
@@ -42,8 +42,8 @@ function limpiar_form() {
 }
 
 function reload_ps() {
-  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); });
-  $.post("../ajax/usuario.php?op=series&id=", function (r) { $("#series").html(r); });
+  $.post("../ajax/usuario.php?op=permisos&id=", function (r) { $("#permisos").html(r); }).fail( function(e) { ver_errores(e); } );
+  $.post("../ajax/usuario.php?op=series&id=", function (r) { $("#series").html(r); }).fail( function(e) { ver_errores(e); } );
 }
 
 function show_hide_form(flag) {
@@ -74,9 +74,9 @@ function listar() {
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_usuario) { tabla_usuario.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [1,2,3,4,5,6], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [1,2,3,4,5,6], }, title: 'Lista de usuarios', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [1,2,3,4,5,6], }, title: 'Lista de usuarios', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6,7], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6,7], }, title: 'Lista de usuarios', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
+      { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6,7], }, title: 'Lista de usuarios', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
 		"ajax":	{
@@ -94,6 +94,9 @@ function listar() {
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
 		},
     createdRow: function (row, data, ixdex) {
       // columna: #
@@ -110,7 +113,13 @@ function listar() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[0, "asc"]]//Ordenar (columna,orden)
+    "order": [[0, "asc"]],//Ordenar (columna,orden)
+    columnDefs: [
+      // { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      // { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
+      // { targets: [8], render: $.fn.dataTable.render.number( ',', '.', 2) },
+      // { targets: [9, 10,11,12,13],  visible: false,  searchable: false,  },
+    ],
 	}).DataTable();
 }
 //Función para guardar o editar
@@ -176,31 +185,34 @@ function mostrar(idusuario) {
 	
 	$.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (e, status) {
 		e = JSON.parse(e);
+    if (e.status == true) {
+      $.post(`../ajax/ajax_general.php?op=select2_usuario_trabajador&id=${idusuario}`, function (e2, textStatus, jqXHR) {
+        e2 = JSON.parse(e2);
+        $("#idpersona").html(e2.data);
 
-		$.post(`../ajax/ajax_general.php?op=select2_usuario_trabajador&id=${idusuario}`, function (e2, textStatus, jqXHR) {
-      e2 = JSON.parse(e2);
-			$("#idpersona").html(e2.data);
+        $("#idusuario").val(e.data.idusuario);
+        $("#idpersona").val(e.data.idpersona).trigger("change");
+        $("#cargo").val(e.data.cargo_trabajador);
 
-			$("#idusuario").val(e.data.idusuario);
-			$("#idpersona").val(e.data.idpersona).trigger("change");
-			$("#cargo").val(e.data.cargo_trabajador);
+        $("#email").val(e.data.email);		
+        $("#login").val(e.data.login);		
+        
+        $("#clave").rules( "remove", "required" );
 
-			$("#email").val(e.data.email);		
-			$("#login").val(e.data.login);		
-      
-      $("#clave").rules( "remove", "required" );
-
-			$.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (e3) {
-				$("#permisos").html(e3);
-				$.post("../ajax/usuario.php?op=series&id=" + idusuario, function (e4) {
-					$("#series").html(e4);
-					$('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
-					$('#cargando-3-fomulario').show();	$('#cargando-4-fomulario').hide();
-          $('#form-agregar-usuario').valid();
-				});
-			});
-		});
-	});	
+        $.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (e3) {
+          $("#permisos").html(e3);
+          $.post("../ajax/usuario.php?op=series&id=" + idusuario, function (e4) {
+            $("#series").html(e4);
+            $('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
+            $('#cargando-3-fomulario').show();	$('#cargando-4-fomulario').hide();
+            $('#form-agregar-usuario').valid();
+          }).fail( function(e) { ver_errores(e); } );
+        }).fail( function(e) { ver_errores(e); } );
+      }).fail( function(e) { ver_errores(e); } );
+    } else {
+      ver_errores(e);
+    }  
+	}).fail( function(e) { ver_errores(e); } );
 }
 
 function ver_cargo() {
@@ -210,9 +222,13 @@ function ver_cargo() {
   var id = $('#idpersona').val() == '' || $('#idpersona').val() == null ? '0' : $('#idpersona').val();
 	$.post("../ajax/usuario.php?op=cargo_persona", { idpersona: id }, function (e, status) {
     e = JSON.parse(e);	
-    $('#cargo').val(e.data.cargo_trabajador);
-    $('.charge_cargo').html('');
-	});	
+    if (e.status == true) {
+      $('#cargo').val(e.data.cargo_trabajador);
+      $('.charge_cargo').html('');
+    } else {
+      ver_errores(e);
+    }    
+	}).fail( function(e) { ver_errores(e); } );
 }
 
 //Función para desactivar registros
@@ -290,6 +306,9 @@ function historial_sesion(id) {
         $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');        
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
 		},
     createdRow: function (row, data, ixdex) {
       // columna: #
@@ -374,4 +393,4 @@ function ver_img(img, nombre) {
 
 
 
-function reload_usr_trab(){ $('.tipo_persona_venta').html(`(trabajador)`); lista_select2("../ajax/ajax_general.php?op=select2_usuario_trabajador&id=", '#idpersona', null, '.charge_idpersona'); }
+function reload_usr_trab(){ lista_select2("../ajax/ajax_general.php?op=select2_usuario_trabajador&id=", '#idpersona', null, '.charge_idpersona'); }

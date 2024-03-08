@@ -122,6 +122,9 @@ function listar_tabla(){
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
 		},
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -219,8 +222,10 @@ function mostrar_editar_empresa(idempresa){
       }
 
       show_hide_form(2);
+    }else{
+      ver_errores(e);
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function eliminar_papelera_empresa(id, nombre){
@@ -285,8 +290,10 @@ function mostrar_detalles_empresa(id){
       e.data.cuenta2 ? $(".div-banco2").show() : null;
       e.data.cuenta3 ? $(".div-banco3").show() : null;
       e.data.cuenta4 ? $(".div-banco4").show() : null;
+    }else{
+      ver_errores(e);
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 
 }
 
@@ -305,12 +312,16 @@ function ubicacion_geografica(input){
     var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
     $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
       e = JSON.parse(e); console.log(e);
-      $("#departamento").val(e.data.departamento); 
-      $("#provincia").val(e.data.provincia); 
-      $("#codg_ubigeo").val(e.data.ubigeo_inei); 
+      if (e.status == true) {
+        $("#departamento").val(e.data.departamento); 
+        $("#provincia").val(e.data.provincia); 
+        $("#codg_ubigeo").val(e.data.ubigeo_inei); 
 
-      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
-    });
+        $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+      } else {
+        ver_errores(e);
+      }      
+    }).fail( function(e) { ver_errores(e); } );
   } 
 }
 

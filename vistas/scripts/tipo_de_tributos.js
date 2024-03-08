@@ -32,6 +32,9 @@ function listar_tabla(){
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
 		},
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -87,7 +90,7 @@ function mostrar_tp_tribulo(idsunat_tipo_tributo){
 
   $.post("../ajax/tipo_de_tributos.php?op=mostrar_tp_tributo", { idsunat_tipo_tributo: idsunat_tipo_tributo }, function (e, status) {
     e = JSON.parse(e); 
-    if (e.status) {
+    if (e.status == true) {
       $("#idsunat_tipo_tributo").val(e.data.idsunat_tipo_tributo);
       $("#codg_sunat").val(e.data.code_sunat);        
       $("#nombre").val(e.data.nombre);        
