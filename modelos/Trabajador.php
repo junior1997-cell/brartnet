@@ -17,20 +17,47 @@ class Trabajador
 	public function insertar( $tipo_persona_sunat, $idtipo_persona, $tipo_documento, $numero_documento, $idcargo_trabajador, 
 	$nombre_razonsocial, $apellidos_nombrecomercial, $correo, $celular, $fecha_nacimiento,  $ruc, $usuario_sol, $clave_sol, $direccion, $distrito, 
 	$departamento, $provincia, $ubigeo, $sueldo_mensual, $sueldo_diario, $idbanco, $cuenta_bancaria, $cci, $titular_cuenta, $img_perfil)	{
-		$sql = "INSERT INTO persona( idtipo_persona, idbancos, idcargo_trabajador, tipo_persona_sunat, nombre_razonsocial, apellidos_nombrecomercial, 
-		tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, departamento, provincia, distrito, cod_ubigeo, correo, 
-		cuenta_bancaria, cci, titular_cuenta, foto_perfil ) VALUES 
-		('$idtipo_persona', '$idbanco', '$idcargo_trabajador', '$tipo_persona_sunat', '$nombre_razonsocial', '$apellidos_nombrecomercial', '$tipo_documento', '$numero_documento',
-		'$fecha_nacimiento', '$celular', '$direccion', '$departamento', '$provincia', '$distrito', '$ubigeo', '$correo', '$cuenta_bancaria','$cci','$titular_cuenta',	'$img_perfil')";
-		$id_new = ejecutarConsulta_retornarID($sql, 'C');	if ($id_new['status'] == false) {  return $id_new; } 		
 
-		$id = $id_new['data'];
+		$sql_0 = "SELECT p.*, sdi.nombre as nombre_tipo_documento, pt.sueldo_mensual, c.nombre as cargo
+		FROM persona AS p
+		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
+		INNER JOIN persona_trabajador as pt ON pt.idpersona = p.idpersona
+		WHERE p.tipo_documento = '$tipo_documento' AND p.numero_documento = '$numero_documento';";
+    $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
+      
+    if ( empty($existe['data']) ) {
+			$sql = "INSERT INTO persona( idtipo_persona, idbancos, idcargo_trabajador, tipo_persona_sunat, nombre_razonsocial, apellidos_nombrecomercial, 
+			tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, departamento, provincia, distrito, cod_ubigeo, correo, 
+			cuenta_bancaria, cci, titular_cuenta, foto_perfil ) VALUES 
+			('$idtipo_persona', '$idbanco', '$idcargo_trabajador', '$tipo_persona_sunat', '$nombre_razonsocial', '$apellidos_nombrecomercial', '$tipo_documento', '$numero_documento',
+			'$fecha_nacimiento', '$celular', '$direccion', '$departamento', '$provincia', '$distrito', '$ubigeo', '$correo', '$cuenta_bancaria','$cci','$titular_cuenta',	'$img_perfil')";
+			$id_new = ejecutarConsulta_retornarID($sql, 'C');	if ($id_new['status'] == false) {  return $id_new; } 		
 
-		$sql_detalle = "INSERT INTO persona_trabajador( idpersona, ruc, usuario_sol, clave_sol, sueldo_mensual, sueldo_diario) VALUES 
-		('$id', '$ruc', '$usuario_sol', '$clave_sol', '$sueldo_mensual', '$sueldo_diario')";
-		$usr_permiso = ejecutarConsulta($sql_detalle, 'C'); if ($usr_permiso['status'] == false) {  return $usr_permiso; }		
+			$id = $id_new['data'];
 
-    return $id_new;
+			$sql_detalle = "INSERT INTO persona_trabajador( idpersona, ruc, usuario_sol, clave_sol, sueldo_mensual, sueldo_diario) VALUES 
+			('$id', '$ruc', '$usuario_sol', '$clave_sol', '$sueldo_mensual', '$sueldo_diario')";
+			$usr_permiso = ejecutarConsulta($sql_detalle, 'C'); if ($usr_permiso['status'] == false) {  return $usr_permiso; }		
+
+			return $id_new;
+		} else {
+			$info_repetida = ''; 
+
+			foreach ($existe['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+					<span class="font-size-15px text-danger"><b>'.$value['nombre_tipo_documento'].': </b>'.$value['numero_documento'].'</span><br>
+					<b>Nombre: </b>'.$value['nombre_razonsocial'].' '.$value['apellidos_nombrecomercial'].'<br>
+					<b>Cargo: </b>'.$value['cargo'].'<br>
+					<b>Sueldo: </b>'.$value['sueldo_mensual'].'<br>
+					<b>Fecha Nac.: </b>'.$value['fecha_nacimiento'].'<br>
+					<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+					<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+					<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+			return array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
+		}			
 	}
 
 	//Implementamos un método para editar registros
@@ -38,19 +65,45 @@ class Trabajador
 	$nombre_razonsocial, $apellidos_nombrecomercial, $correo, $celular, $fecha_nacimiento, $ruc, $usuario_sol, $clave_sol, $direccion, $distrito, 
 	$departamento, $provincia, $ubigeo, $sueldo_mensual, $sueldo_diario, $idbanco, $cuenta_bancaria, $cci, $titular_cuenta, $img_perfil) {
 
-		$sql = "UPDATE persona SET idtipo_persona='$idtipo_persona', idbancos='$idbanco', idcargo_trabajador='$idcargo_trabajador',
-		tipo_persona_sunat='$tipo_persona_sunat', nombre_razonsocial='$nombre_razonsocial', apellidos_nombrecomercial='$apellidos_nombrecomercial',
-		tipo_documento='$tipo_documento',	numero_documento='$numero_documento',fecha_nacimiento='$fecha_nacimiento',celular='$celular',direccion='$direccion',
-		departamento='$departamento',	provincia='$provincia', distrito='$distrito', cod_ubigeo='$ubigeo', correo='$correo', cuenta_bancaria='$cuenta_bancaria', cci='$cci',
-		titular_cuenta='$titular_cuenta', foto_perfil='$img_perfil' 
-		WHERE idpersona = '$idpersona'";
-		$edit_user = ejecutarConsulta($sql, 'U'); if ($edit_user['status'] == false) {  return $edit_user; }
+		$sql_0 = "SELECT p.*, sdi.nombre as nombre_tipo_documento, pt.sueldo_mensual, c.nombre as cargo
+		FROM persona AS p
+		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
+		INNER JOIN persona_trabajador as pt ON pt.idpersona = p.idpersona
+		WHERE p.tipo_documento = '$tipo_documento' AND p.numero_documento = '$numero_documento' AND p.idpersona <> '$idpersona';";
+    $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
+      
+    if ( empty($existe['data']) ) {
+			$sql = "UPDATE persona SET idtipo_persona='$idtipo_persona', idbancos='$idbanco', idcargo_trabajador='$idcargo_trabajador',
+			tipo_persona_sunat='$tipo_persona_sunat', nombre_razonsocial='$nombre_razonsocial', apellidos_nombrecomercial='$apellidos_nombrecomercial',
+			tipo_documento='$tipo_documento',	numero_documento='$numero_documento',fecha_nacimiento='$fecha_nacimiento',celular='$celular',direccion='$direccion',
+			departamento='$departamento',	provincia='$provincia', distrito='$distrito', cod_ubigeo='$ubigeo', correo='$correo', cuenta_bancaria='$cuenta_bancaria', cci='$cci',
+			titular_cuenta='$titular_cuenta', foto_perfil='$img_perfil' 
+			WHERE idpersona = '$idpersona'";
+			$edit_user = ejecutarConsulta($sql, 'U'); if ($edit_user['status'] == false) {  return $edit_user; }
 
-		$sql_detalle = "UPDATE persona_trabajador SET idpersona='$idpersona',ruc='$ruc',usuario_sol='$usuario_sol',
-		clave_sol='$clave_sol',sueldo_mensual='$sueldo_mensual',sueldo_diario='$sueldo_diario' WHERE idpersona_trabajador = '$idpersona_trabajador'";
-		$usr_permiso = ejecutarConsulta($sql_detalle, 'U'); if ($usr_permiso['status'] == false) {  return $usr_permiso; }
+			$sql_detalle = "UPDATE persona_trabajador SET idpersona='$idpersona',ruc='$ruc',usuario_sol='$usuario_sol',
+			clave_sol='$clave_sol',sueldo_mensual='$sueldo_mensual',sueldo_diario='$sueldo_diario' WHERE idpersona_trabajador = '$idpersona_trabajador'";
+			$usr_permiso = ejecutarConsulta($sql_detalle, 'U'); if ($usr_permiso['status'] == false) {  return $usr_permiso; }
 
-    return $edit_user;		
+			return $edit_user;	
+		} else {
+			$info_repetida = ''; 
+
+			foreach ($existe['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+					<span class="font-size-15px text-danger"><b>'.$value['nombre_tipo_documento'].': </b>'.$value['numero_documento'].'</span><br>
+					<b>Nombre: </b>'.$value['nombre_razonsocial'].' '.$value['apellidos_nombrecomercial'].'<br>
+					<b>Cargo: </b>'.$value['cargo'].'<br>
+					<b>Sueldo: </b>'.$value['sueldo_mensual'].'<br>
+					<b>Fecha Nac.: </b>'.$value['fecha_nacimiento'].'<br>
+					<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+					<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+					<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+			return array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
+		}			
 	}
 
 	//Implementamos un método para desactivar usuario

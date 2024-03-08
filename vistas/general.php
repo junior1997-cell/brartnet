@@ -9,14 +9,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
 ?>
   <!DOCTYPE html>
-  <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
+  <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close" loader="enable">
 
   <head>
 
     <?php $title_page = "Gastos";
     include("template/head.php"); ?>
 
-  </head>
+  </head> 
 
   <body id="body-usuario">
 

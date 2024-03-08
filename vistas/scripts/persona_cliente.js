@@ -484,6 +484,28 @@ function ver_img(img, nombre) {
   $(`.jq_image_zoom`).zoom({ on: 'grab' });
 }
 
+function reload_select(r_text) {
+
+  switch (r_text) {
+    case 'trab':
+      lista_select2("../ajax/persona_cliente.php?op=select2_trabajador", '#idpersona_trabajador', null, '.charge_idtrabaj');
+      break;
+    case 'zona':
+      lista_select2("../ajax/persona_cliente.php?op=select2_zona_antena", '#idzona_antena', null, '.charge_idzona');
+      break;
+    case 'centroPbl':
+      lista_select2("../ajax/persona_cliente.php?op=selec_centroProbl", '#idselec_centroProbl', null, '.charge_idctroPbl');
+      break;
+    case 'plan':
+      lista_select2("../ajax/persona_cliente.php?op=select2_plan", '#idplan', null, '.charge_idplan');
+      break;
+    default:
+      console.log('Caso no encontrado.');
+  }
+ 
+}
+
+
 
 
 

@@ -1,7 +1,12 @@
 <?php
 ob_start();
-
 if (strlen(session_id()) < 1) { session_start(); } //Validamos si existe o no la sesión
+
+if (!isset($_SESSION["user_nombre"])) {
+  $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [], 'aaData' => [] ];
+  echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
+} else {
+
   require_once "../modelos/Centro_poblado.php";
 
   $centro_poblado = new CentroPoblado();
@@ -60,6 +65,7 @@ if (strlen(session_id()) < 1) { session_start(); } //Validamos si existe o no la
           );
         }
         $results = [
+          'status'=> true,
           "sEcho" => 1, //Información para el datatables
           "iTotalRecords" => count($data), //enviamos el total registros al datatable
           "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
@@ -87,5 +93,5 @@ if (strlen(session_id()) < 1) { session_start(); } //Validamos si existe o no la
       echo json_encode($rspta, true);
       break;
   }
-
+}
 ob_end_flush();

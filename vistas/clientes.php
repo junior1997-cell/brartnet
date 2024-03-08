@@ -306,7 +306,8 @@ if (!isset($_SESSION["user_nombre"])) {
                               <div class="row">
                                 <!-- Grupo -->
                                 <div class="col-12 pl-0">
-                                  <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b>DATOS TÉCNICOS </b></label></div>
+                                  <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b>DATOS TÉCNICOS </b>
+                                </label></div>
                                 </div>
                               </div>
 
@@ -317,7 +318,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <!-- Select trabajdor -->
                                   <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="idpersona_trabajador">Trabajador <sup class="text-danger">*</sup></label>
+                                      <label class="form-label" for="idpersona_trabajador">
+                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('trab');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                      Trabajador <sup class="text-danger">*</sup><span class="charge_idtrabaj"></span></label>
                                       <select name="idpersona_trabajador" id="idpersona_trabajador" class="form-control" placeholder="Selec. Trabajador"></select>
                                     </div>
                                   </div>
@@ -325,14 +328,18 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <!-- Select Zona antena -->
                                   <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="idzona_antena">Zona Antena <sup class="text-danger">*</sup></label>
+                                      <label class="form-label" for="idzona_antena">
+                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('zona');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span> 
+                                      Zona Antena <sup class="text-danger">*</sup> <span class="charge_idzona"></span></label>
                                       <select name="idzona_antena" id="idzona_antena" class="form-control" placeholder="Selec. Zona Antena"></select>
                                     </div>
                                   </div>
                                   <!-- Select Zona antena -->
                                   <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="idselec_centroProbl">Centro Poblado <sup class="text-danger">*</sup></label>
+                                      <label class="form-label" for="idselec_centroProbl">
+                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('centroPbl');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                      Centro Poblado <sup class="text-danger">*</sup><span class="charge_idctroPbl"></span></label>
                                       <select name="idselec_centroProbl" id="idselec_centroProbl" class="form-control" placeholder="Selecionar"></select>
                                     </div>
                                   </div>
@@ -340,7 +347,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <!-- Select Plan -->
                                   <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
                                     <div class="form-group">
-                                      <label class="form-label" for="idplan">Plan <sup class="text-danger">*</sup></label>
+                                      <label class="form-label" for="idplan">
+                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('plan');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                      Plan <sup class="text-danger">*</sup><span class="charge_idplan"></span></label>
                                       <select name="idplan" id="idplan" class="form-control" placeholder="Selec. Plan"></select>
                                     </div>
                                   </div>

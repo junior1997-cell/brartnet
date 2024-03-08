@@ -106,7 +106,11 @@
                                 <!-- ------------ TRABAJADOR --------- -->
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
-                                    <label for="idtrabajador" class="form-label">Nombre del Trabajador(*)</label>
+                                    <label for="idtrabajador" class="form-label">
+                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idtrabajador();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                      Nombre del Trabajador(*)
+                                      <span class="charge_idtrabajador"></span>
+                                    </label>
                                     <select class="form-select form-select-lg" name="idtrabajador" id="idtrabajador" ><!-- List de trabajadores --></select>
                                   </div>
                                 </div>
@@ -140,14 +144,18 @@
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="fecha" class="form-label">Fecha Emisión(*)</label>
-                                    <input type="date" class="form-control" name="fecha" id="fecha"/>
+                                    <input type="date" class="form-control" name="fecha" id="fecha" max="<?php echo date('Y-m-d');?>" />
                                   </div>
                                 </div>
                               
                                 <!-- ----------------- PROVEEDOR --------------- -->
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
-                                    <label for="idproveedor" class="form-label">Proveedor</label>
+                                    <label for="idproveedor" class="form-label">
+                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idproveedor();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                      Proveedor
+                                      <span class="charge_idproveedor"></span>
+                                    </label>
                                     <select class="form-select" name="idproveedor" id="idproveedor"></select>
                                   </div>
                                 </div>
@@ -160,17 +168,17 @@
                                   </div>
                                 </div>
                                 <!-- ----------------- IGV --------------- -->
-                                <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-4">
+                                <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-2">
                                   <div class="form-group">
                                     <label for="igv" class="form-label">IGV</label>
-                                    <input type="number" class="form-control" name="igv" id="igv" placeholder="" value="0.00"/>
+                                    <input type="number" class="form-control" name="igv" id="igv" placeholder="" value="0.00" readonly />
                                   </div>
                                 </div>
                                 <!-- -------------- VALOR IGV ------------- -->
-                                <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-4">
+                                <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-2">
                                   <div class="form-group">
                                     <label for="val_igv" class="form-label">Val. IGV</label>
-                                    <input type="number" class="form-control" name="val_igv" id="val_igv" readonly value="0.00"/>
+                                    <input type="number" class="form-control" name="val_igv" id="val_igv" value="0.00"/>
                                   </div>
                                 </div>
                                 <!-- ----------------- TOTAL --------------- -->
@@ -181,7 +189,7 @@
                                   </div>
                                 </div>
                                 <!-- --------- DESCRIPCION COMPROBANTE ------ -->
-                                <div class="col-md-6 col-lg-4 col-xl-12 col-xxl-8">
+                                <div class="col-md-6 col-lg-4 col-xl-12 col-xxl-12">
                                   <div class="form-group">
                                     <label for="descr_comprobante" class="form-label">Descripción del Comprobante</label>
                                     <textarea class="form-control" name="descr_comprobante" id="descr_comprobante" rows="1"></textarea>

@@ -126,6 +126,7 @@ switch ($_GET["op"]) {
       );
     }
     $results = array(
+      'status'=> true,
       "sEcho" => 1, //Información para el datatables
       "iTotalRecords" => count($data),  //enviamos el total registros al datatable
       "iTotalDisplayRecords" => count($data),  //enviamos el total registros a visualizar

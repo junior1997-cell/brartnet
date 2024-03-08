@@ -23,6 +23,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <div class="page">
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
+      <?php if($_SESSION['registrar_trabajador']==1) { ?>
 
       <!-- Start::app-content -->
       <div class="main-content app-content">
@@ -411,6 +412,7 @@ if (!isset($_SESSION["user_nombre"])) {
         </div>
       </div>
       <!-- End::app-content -->
+      <?php } else { $title_submodulo ='Empresa'; $descripcion ='Lista de Empresa del sistema!'; $title_modulo = 'Empresa'; include("403_error.php"); }?>   
 
       <!-- Start::Modal-Ver-Empresa -->
       <div class="modal fade modal-effect" id="modal-empresa" tabindex="-1" aria-labelledby="modal-empresaLabel" aria-hidden="true">
@@ -435,56 +437,56 @@ if (!isset($_SESSION["user_nombre"])) {
                       <!-- Tipo documento -->
                       <div class="mt-4 mb-2 col-md-2 col-lg-2 col-xl-2 col-xxl-3" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_tp_doc" class="form-label">Tipo documento:  </label></label>
+                          <label for="e_tp_doc" class="form-label">Tipo documento:  </label>
                           <input type="text" id="e_tp_doc" name="e_tp_doc" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Numero documento -->
                       <div class="mt-4 mb-2 col-md-2 col-lg-2 col-xl-2 col-xxl-3" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_documento" class="form-label">Número Documento:  </label></label>
+                          <label for="e_documento" class="form-label">Número Documento:  </label>
                           <input type="text" id="e_documento" name="e_documento" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Razon Social -->
                       <div class="mt-4 mb-2 col-md-4 col-lg-4 col-xl-4 col-xxl-5" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_razon_social" class="form-label">Razon Social:  </label></label>
+                          <label for="e_razon_social" class="form-label">Razon Social:  </label>
                           <input type="text" id="e_razon_social" name="e_razon_social" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Nombre Comercial -->
                       <div id="div-nomb-comercial" class="mt-2 mb-2 col-md-4 col-lg-4 col-xl-4 col-xxl-5" style="margin-left: 0.6cm; display: none;">
                         <div class="form-group">
-                          <label for="e_nomb_comercial" class="form-label">Nombre Comercial:  </label></label>
+                          <label for="e_nomb_comercial" class="form-label">Nombre Comercial:  </label>
                           <input type="text" id="e_nomb_comercial" name="e_nomb_comercial" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Telefono 1 -->
                       <div class="mt-2 mb-2 col-md-4 col-lg-4 col-xl-4 col-xxl-3" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_telefono1" class="form-label">Telefono 1:  </label></label>
+                          <label for="e_telefono1" class="form-label">Telefono 1:  </label>
                           <input type="text" id="e_telefono1" name="e_telefono1" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Telefono 2 -->
                       <div id="div-telefono2" class="mt-2 mb-2 col-md-4 col-lg-4 col-xl-4 col-xxl-3" style="margin-left: 0.6cm; display: none;">
                         <div class="form-group">
-                          <label for="e_telefono2" class="form-label">Telefono 2:  </label></label>
+                          <label for="e_telefono2" class="form-label">Telefono 2:  </label>
                           <input type="text" id="e_telefono2" name="e_telefono" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Correo -->
                       <div class="mt-2 mb-2 col-md-4 col-lg-4 col-xl-4 col-xxl-5" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_correo" class="form-label">Correo:  </label></label>
+                          <label for="e_correo" class="form-label">Correo:  </label>
                           <input type="text" id="e_correo" name="e_correo" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Web -->
                       <div class="mt-2 mb-2 col-md-4 col-lg-4 col-xl-4 col-xxl-5" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_web" class="form-label">Web:  </label></label>
+                          <label for="e_web" class="form-label">Web:  </label>
                           <input type="text" id="e_web" name="e_web" class="form-control" readonly/>
                         </div>                                         
                       </div>
@@ -593,49 +595,49 @@ if (!isset($_SESSION["user_nombre"])) {
                       <!-- Cidigo pais -->
                       <div class="mt-4 mb-2 col-md-2 col-lg-2 col-xl-2 col-xxl-3" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_codg_pais" class="form-label">Código País:  </label></label>
+                          <label for="e_codg_pais" class="form-label">Código País:  </label>
                           <input type="text" id="e_codg_pais" name="e_codg_pais" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- ubigue -->
                       <div class="mt-4 mb-2 col-md-2 col-lg-2 col-xl-2 col-xxl-3" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_codg_ubigeo" class="form-label">Ubigeo:  </label></label>
+                          <label for="e_codg_ubigeo" class="form-label">Ubigeo:  </label>
                           <input type="text" id="e_codg_ubigeo" name="e_codg_ubigeo" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Domicilio Fiscal -->
                       <div class="mt-4 mb-2 col-md-4 col-lg-4 col-xl-4 col-xxl-5" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_domicilio_fiscal" class="form-label">Domicilio Fiscal:  </label></label>
+                          <label for="e_domicilio_fiscal" class="form-label">Domicilio Fiscal:  </label>
                           <input type="text" id="e_domicilio_fiscal" name="e_domicilio_fiscal" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Distrito -->
                       <div class="mt-2 mb-2 col-md-2 col-lg-2 col-xl-2 col-xxl-3" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_distrito" class="form-label">Distrito:  </label></label>
+                          <label for="e_distrito" class="form-label">Distrito:  </label>
                           <input type="text" id="e_distrito" name="e_distrito" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- departamento -->
                       <div class="mt-2 mb-2 col-md-2 col-lg-2 col-xl-2 col-xxl-3" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_departamento" class="form-label">Departamento:  </label></label>
+                          <label for="e_departamento" class="form-label">Departamento:  </label>
                           <input type="text" id="e_departamento" name="e_departamento" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- provincia -->
                       <div class="mt-2 mb-2 col-md-2 col-lg-2 col-xl-2 col-xxl-3" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_provincia" class="form-label">provincia:  </label></label>
+                          <label for="e_provincia" class="form-label">provincia:  </label>
                           <input type="text" id="e_provincia" name="e_provincia" class="form-control" readonly/>
                         </div>                                         
                       </div>
                       <!-- Referencia -->
                       <div class="mt-2 mb-2 col-md-4 col-lg-4 col-xl-4 col-xxl-5" style="margin-left: 0.6cm;">
                         <div class="form-group">
-                          <label for="e_referencia" class="form-label">Referencia:  </label></label>
+                          <label for="e_referencia" class="form-label">Referencia:  </label>
                           <input type="text" id="e_referencia" name="e_referencia" class="form-control" readonly/>
                         </div>                                         
                       </div>
