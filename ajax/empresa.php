@@ -6,7 +6,7 @@ if (!isset($_SESSION["user_nombre"])) {
   $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [], 'aaData' => [] ];
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
-  if ($_SESSION['venta_por_cliente'] == 1) {
+  if ($_SESSION['empresa_configuracion'] == 1) {
 
     require_once "../modelos/Empresa.php";
     $empresa = new Empresa();

@@ -115,7 +115,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')"> </span></div>
               <div>
                 <span class="d-block fw-semibold text-primary">'.$reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial.'</span>
-                <span class="text-muted">'.$reg->tipo_documento .' '. $reg->numero_documento.'</span>
+                <span class="text-muted"><b>'.$reg->tipo_documento .'</b>: '. $reg->numero_documento.'</span>
               </div>
             </div>',
             "3" =>  '<div class="text-start">

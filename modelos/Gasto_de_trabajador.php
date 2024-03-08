@@ -15,13 +15,13 @@
     }
 
     function insertar($idtrabajador, $descr_gastos, $tp_comprobante, $serie_comprobante, $fecha, $idproveedor, $sub_total, $igv, $val_igv, $total_gasto, $descr_comprobante, $img_comprob){
-      $sql = "INSERT INTO gasto_de_trabajador (idtrabajador, descripcion_gasto, tipo_comprobante, serie_comprobante, fecha_ingreso, idproveedor, precio_sin_igv, precio_igv, val_igv, precio_con_igv, descripcion_comprobante, comprobante)
+      $sql = "INSERT INTO gasto_de_trabajador (idpersona_trabajador, descripcion_gasto, tipo_comprobante, serie_comprobante, fecha_ingreso, idproveedor, precio_sin_igv, precio_igv, val_igv, precio_con_igv, descripcion_comprobante, comprobante)
       VALUES ('$idtrabajador', '$descr_gastos', '$tp_comprobante', '$serie_comprobante', '$fecha', '$idproveedor', '$sub_total', '$igv', '$val_igv', '$total_gasto', '$descr_comprobante', '$img_comprob')";
       return ejecutarConsulta_retornarID($sql, 'C');
     }
 
     function editar($id, $idtrabajador, $descr_gastos, $tp_comprobante, $serie_comprobante, $fecha, $idproveedor, $sub_total, $igv, $val_igv, $total_gasto, $descr_comprobante, $img_comprob){
-      $sql = "UPDATE gasto_de_trabajador  SET idtrabajador = '$idtrabajador', descripcion_gasto = '$descr_gastos', tipo_comprobante = '$tp_comprobante', serie_comprobante = '$serie_comprobante', fecha_ingreso = '$fecha', 
+      $sql = "UPDATE gasto_de_trabajador  SET idpersona_trabajador = '$idtrabajador', descripcion_gasto = '$descr_gastos', tipo_comprobante = '$tp_comprobante', serie_comprobante = '$serie_comprobante', fecha_ingreso = '$fecha', 
       idproveedor = '$idproveedor', precio_sin_igv = '$sub_total', precio_igv = '$igv', val_igv = '$val_igv', precio_con_igv = '$total_gasto', descripcion_comprobante = '$descr_comprobante', comprobante = '$img_comprob'
       WHERE idgasto_de_trabajador = '$id' ";
       return ejecutarConsulta($sql, 'U');
@@ -36,11 +36,7 @@
 
       $sql_2 = "SELECT p.* FROM gasto_de_trabajador as gt
       INNER JOIN persona as p ON gt.idproveedor = p.idpersona
-      WHERE gt.idgasto_de_trabajador = '$id'
-        AND p.idtipo_persona IN (1, 4)
-        AND gt.estado = 1
-        AND gt.estado_delete = 1;
-      ";
+      WHERE gt.idgasto_de_trabajador = '$id' AND p.idtipo_persona IN (1, 4)  AND gt.estado = 1  AND gt.estado_delete = 1; ";
       $proveedor = ejecutarConsultaSimpleFila($sql_2); if ($proveedor['status'] == false) { return $proveedor; }
 
       $results = [
@@ -62,11 +58,11 @@
       gdt.year_name, gdt.precio_sin_igv, gdt.precio_igv, gdt.val_igv, gdt.precio_con_igv, gdt.descripcion_comprobante, gdt.descripcion_gasto, gdt.comprobante,  gdt.estado,
       CASE p.tipo_persona_sunat 
         WHEN 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial )
-          WHEN 'JURIDICA' THEN p.nombre_razonsocial
+        WHEN 'JURIDICA' THEN p.nombre_razonsocial
       END AS proveedor, p.foto_perfil as foto_perfil_proveedor, 
       CASE t.tipo_persona_sunat 
         WHEN 'NATURAL' THEN CONCAT(t.nombre_razonsocial, ' ', t.apellidos_nombrecomercial )
-          WHEN 'JURIDICA' THEN t.nombre_razonsocial
+        WHEN 'JURIDICA' THEN t.nombre_razonsocial
       END AS trabajador, t.foto_perfil as foto_perfil_trabajador, t.tipo_documento, t.numero_documento
       FROM gasto_de_trabajador as gdt
       INNER JOIN persona as p ON p.idpersona = gdt.idproveedor 
@@ -100,13 +96,17 @@
     }
     
     function listar_trabajador(){
-      $sql = "SELECT idpersona, nombre_razonsocial nombre, apellidos_nombrecomercial apellido 
-      FROM persona WHERE idtipo_persona = 2 AND estado = 1 AND estado_delete = 1;";
+      $sql = "SELECT p.*, sdi.nombre as nombre_tipo_documento, pt.sueldo_mensual, c.nombre as cargo
+      FROM persona AS p
+      INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
+      INNER JOIN persona_trabajador as pt ON pt.idpersona = p.idpersona
+      WHERE p.idtipo_persona = 2 AND p.estado = 1 AND p.estado_delete = 1;";
       return ejecutarConsultaArray($sql);
     }
 
     function listar_proveedor(){
-      $sql = "SELECT idpersona, nombre_razonsocial nombre, apellidos_nombrecomercial apellido 
+      $sql = "SELECT idpersona, nombre_razonsocial AS nombre, apellidos_nombrecomercial AS apellido, numero_documento
       FROM persona WHERE idtipo_persona = 4 AND estado = 1 AND estado_delete = 1;";
       return ejecutarConsultaArray($sql);
     }

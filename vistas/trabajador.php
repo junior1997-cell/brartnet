@@ -27,7 +27,7 @@
           <?php if($_SESSION['registrar_trabajador']==1) { ?>
 
           <!-- Start::app-content -->
-          <div class="main-content app-content">
+          <div class="main-content app-content ">
             <div class="container-fluid">
 
               <!-- Start::page-header -->

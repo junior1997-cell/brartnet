@@ -166,7 +166,7 @@ function guardar_y_editar_trabajador(e) {
 					show_hide_form(1)
 					sw_success('Exito', 'Trabajador guardado correctamente.');
 				} else {
-					ver_errores(jqXhr);
+					ver_errores(e);
 				}				
 			} catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
       $(".btn-guardar").html('<i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar').removeClass('disabled send-data');
