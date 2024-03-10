@@ -185,8 +185,8 @@ class Cliente
 	//Implementar un método para listar los registros
 	public function tabla_principal_cliente()
 	{
-		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, pc.fecha_cancelacion,
-		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,
+		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion,
+		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado,
 		CASE 
 		WHEN p.tipo_persona_sunat = 'NATURAL' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 		WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
@@ -202,6 +202,7 @@ class Cliente
 		INNER JOIN plan as pl on pc.idplan=pl.idplan
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
 		INNER JOIN sunat_doc_identidad as i on p.tipo_documento=i.code_sunat  
+		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
 		where pc.estado='1' and pc.estado_delete='1' ORDER BY idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}

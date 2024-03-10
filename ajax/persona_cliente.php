@@ -161,43 +161,77 @@ if (!isset($_SESSION["user_nombre"])) {
         //Vamos a declarar un array
         $data = [];
         $cont = 1;
-        $dateString="";
-        $fecha_proximo_pago='';
-
+        $dia_cancel = "";
+        $fecha_proximo_pago = '';
+        $fecha_pago = "";
+        $falta="";
+        $fecha_pago_of="";
+        $class_dia = "";
         $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
         if ($rspta['status'] == true) {
-
+          //dia_cancelacion
           foreach ($rspta['data'] as $key => $value) {
 
-            /*if (isset($value['fecha_cancelacion']) && $value['fecha_cancelacion'] !== null) {
+            if (isset($value['dia_cancelacion']) && $value['dia_cancelacion'] !== null) {
 
-              $dateString = $value['fecha_cancelacion'];
+              $dia_cancel = $value['dia_cancelacion'];
 
-              $fecha = new DateTime($dateString);
-
-              $dia_f_can = $fecha->format("d");
-              
               // Obtener la fecha actual
               $fecha_actual = date("Y-m-d");
 
               $dia_act = date("d", strtotime($fecha_actual));
+
+              if ($dia_cancel >= $dia_act) {
+
+                $anio_mes_actual  = date('Y-m');
+
+                $dif_dias=$dia_cancel-$dia_act;
+
+                $fecha_pago_of = $anio_mes_actual . '-' . $dia_cancel;
+
+                $falta = "Falta ".$dif_dias." Días"; 
+
               
+                if($dif_dias>5){
+                  $class_dia="bg-success";
 
-              // Agregar un mes a la fecha de cancelación
-              $fecha_proximo_pago_objeto = clone $fecha_cancelacion_objeto;
+                }elseif ($dif_dias<=5 && $dif_dias>=3){
+                  $class_dia="bg-warning";
+                } else{
+                  $class_dia="bg-danger";
+                }
 
 
-              $fecha_proximo_pago_objeto->modify('+1 month');
 
-              // Obtener la próxima fecha de pago en formato deseado
-              $fecha_proximo_pago = $fecha_proximo_pago_objeto->format('Y-m-d');
+              } elseif ($value['dia_cancelacion'] < $dia_act) {
 
-            }else{
+                $anio_mes_siguiente = date('Y-m', strtotime('+1 month'));
 
-              $fecha_proximo_pago='';
+                $fecha_pago_of = $anio_mes_siguiente . '-' . $value['dia_cancelacion'];
 
-            }*/
+                $dif =diferencia_days_months_years($fecha_pago_of, date('Y-m-d'), 'days');
+
+
+
+                $falta = "Falta ".$dif." Días";
+
+                if($dif>5){
+                  $class_dia="bg-success";
+
+                }elseif ($dif<=5 && $dif>=3){
+                  $class_dia="bg-warning";
+                } else{
+                  $class_dia="bg-danger";
+                }
+
+
+              } else {
+              }
+            } else {
+
+              $fecha_proximo_pago = '';
+            }
 
 
             $imagen_perfil = empty($value['foto_perfil']) ? 'no-perfil.jpg' :   $value['foto_perfil'];
@@ -214,8 +248,8 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>',
               "3" => $value['celular'],
-              "4" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['distrito'] . ' : ' . $value['direccion'] . '</textarea>',
-              "5" => '<span class="badge bg-outline-success">' .$value['fecha_cancelacion'].'</span>',
+              "4" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['centro_poblado'] . ' : ' . $value['direccion'] . '</textarea>',
+              "5" => '<span class="badge '.$class_dia.'">' .   date("d/m/Y", strtotime($fecha_pago_of)) .'- '. $falta .'</span>',
               "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "7" => '<div class="text-start font-size-12px" >
                       <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
@@ -225,7 +259,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "9" => $value['nombre_completo'],
               "10" => $value['tipo_doc'],
               "11" => $value['numero_documento'],
-              "12" => $value['distrito'],
+              "12" => $value['centro_poblado'],
               "13" => $value['direccion'],
               "14" => $value['nombre_plan'],
               "15" => $value['costo'],
@@ -313,27 +347,27 @@ if (!isset($_SESSION["user_nombre"])) {
 
         break;
 
-        case 'selec_centroProbl':
+      case 'selec_centroProbl':
 
-          $rspta = $persona_cliente->selec_centroProbl();
-          $cont = 1;
-          $data = "";
-          if ($rspta['status'] == true) {
-            foreach ($rspta['data'] as $key => $value) {
-              $data .= '<option  value=' . $value['idcentro_poblado']  . '>' . $value['nombre'] . '</option>';
-            }
-  
-            $retorno = array(
-              'status' => true,
-              'message' => 'Salió todo ok',
-              'data' => $data,
-            );
-            echo json_encode($retorno, true);
-          } else {
-            echo json_encode($rspta, true);
+        $rspta = $persona_cliente->selec_centroProbl();
+        $cont = 1;
+        $data = "";
+        if ($rspta['status'] == true) {
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value=' . $value['idcentro_poblado']  . '>' . $value['nombre'] . '</option>';
           }
-  
-          break;
+
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+
+        break;
 
 
       case 'salir':

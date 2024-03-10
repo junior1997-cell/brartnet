@@ -72,7 +72,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="text-center">Acciones</th>
                                 <th>Cliente</th>
                                 <th>Calular</th>
-                                <th>Distrito</th>
+                                <th>C. Poblado</th>
                                 <th>F. Cancelación</th>
                                 <th>Zona/Plan</th>
                                 <th>Ip</th>
@@ -81,7 +81,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="text-center">Nombres</th>
                                 <th class="text-center">Tipo Documento</th>
                                 <th class="text-center">Número Documento</th>
-                                <th class="text-center">Distrito Documento</th>
+                                <th class="text-center">Centro Poblado</th>
                                 <th class="text-center">Dirección</th>
                                 <th class="text-center">Plan</th>
                                 <th class="text-center">Costo Plan</th>
@@ -97,7 +97,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="text-center">Acciones</th>
                                 <th>Cliente</th>
                                 <th>Calular</th>
-                                <th>Distrito</th>
+                                <th>C. Poblado</th>
                                 <th>F. Cancelación</th>
                                 <th>Zona/Plan</th>
                                 <th>Ip</th>
@@ -107,7 +107,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="text-center">Nombres</th>
                                 <th class="text-center">Tipo Documento</th>
                                 <th class="text-center">Número Documento</th>
-                                <th class="text-center">Distrito Documento</th>
+                                <th class="text-center">Centro Poblado</th>
                                 <th class="text-center">Dirección</th>
                                 <th class="text-center">Plan</th>
                                 <th class="text-center">Costo Plan</th>

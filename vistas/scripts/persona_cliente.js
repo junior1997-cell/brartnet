@@ -51,6 +51,9 @@ function limpiar_cliente() {
 
   $("#correo").val("");
 
+  $("#idpersona").val('');
+  $("#idpersona_cliente").val('');
+
   $("#idpersona_trabajador").val('').trigger("change");
   $("#idzona_antena").val('').trigger("change");
   $("#idselec_centroProbl").val('').trigger("change");
@@ -206,7 +209,7 @@ function tabla_principal_cliente() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[2, "asc"]], //Ordenar (columna,orden)
+    "order": [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
       { targets: [9, 10, 11, 12, 13, 14, 15, 16, 17], visible: false, searchable: false, },
     ],
