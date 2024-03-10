@@ -169,7 +169,7 @@ if (!isset($_SESSION["user_nombre"])) {
       } else {
         echo json_encode($rspta, true);
       }
-      break;
+    break;
 
       // ══════════════════════════════════════ C A R G O - S E L E C T 2  ══════════════════════════════════════
     case 'select2_cargo':
@@ -193,9 +193,9 @@ if (!isset($_SESSION["user_nombre"])) {
       } else {
         echo json_encode($rspta, true);
       }
-      break;
+    break;
 
-      // ══════════════════════════════════════ B A N C O - S E L E C T 2  ══════════════════════════════════════
+    // ══════════════════════════════════════ B A N C O - S E L E C T 2  ══════════════════════════════════════
     case 'select2_banco':
       $rspta = $ajax_general->select2_banco();
       // echo json_encode($rspta, true); die;
@@ -217,13 +217,36 @@ if (!isset($_SESSION["user_nombre"])) {
       } else {
         echo json_encode($rspta, true);
       }
-      break;
+    break;
 
-      // ══════════════════════════════════════ DEFAULT ══════════════════════════════════════
+    case 'selectChoice_banco':
+      $rspta = $ajax_general->select2_banco();
+      
+      $data = [];
+
+      if ($rspta['status'] == true) {
+
+        foreach ($rspta['data'] as $key => $value) {
+          $data[] = ['value' => $value['idbancos'], 'label' => $value['nombre'], 'disabled'  => false,];
+        }
+
+        $retorno = array(
+          'status' => true,
+          'message' => 'Salió todo ok',
+          'data' => $data,
+        );
+
+        echo json_encode($retorno, true);
+      } else {
+        echo json_encode($rspta, true);
+      }
+    break;
+
+    // ══════════════════════════════════════ DEFAULT ══════════════════════════════════════
     default:
       $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
       echo json_encode($rspta, true);
-      break;
+    break;
   }
 }
 

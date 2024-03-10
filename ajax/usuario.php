@@ -235,11 +235,11 @@ switch ($_GET["op"]) {
     $id = $_GET['id'];
     $marcados = $usuario->listarmarcadosNumeracion($id);
     //Declaramos el array para almacenar todos los permisos marcados
-    $valores = array();
+    $series_array = array();
 
     //Almacenar los permisos asignados al usuario en el array
     while ($per = $marcados['data']->fetch_object()) {
-      array_push($valores, $per->idsunat_usuario_comprobante);
+      array_push($series_array, $per->idtipo_comprobante);
     }
 
     //Mostramos la lista de permisos en la vista y si están o no marcados
@@ -248,7 +248,8 @@ switch ($_GET["op"]) {
 
       if ($key % 3 === 0) {   echo '<div class="col-lg-4 col-xl-3 col-xxl-3" >';   } # abrimos el: col-lg-2      
       
-      $sw = in_array($val['idtipo_comprobante'], $valores) ? 'checked' : '';
+      $sw = in_array($val['idtipo_comprobante'], $series_array) ? 'checked' : '';
+
       echo '<div class="custom-toggle-switch d-flex align-items-center mb-2 mt-2">
         <input id="serie_' . $val['idtipo_comprobante'] . '" name="serie[]" value="' . $val['idtipo_comprobante'] . '" type="checkbox" ' . $sw . '>
         <label for="serie_' . $val['idtipo_comprobante'] . '" class="label-primary"></label><span class="ms-3">' . $val['abreviatura'] .': <b>'.  $val['serie'] . '-' . $val['numero'] . '</b></span>

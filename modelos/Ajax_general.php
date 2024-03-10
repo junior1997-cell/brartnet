@@ -123,16 +123,17 @@ Class Ajax_general
       WHERE p.idtipo_persona = '2' and p.estado = '1' AND p.estado_delete = '1' AND u.idusuario = '$id';";
       $select_2 = ejecutarConsultaSimpleFila($sql);
 
-      $data = [
-        'idpersona'                 =>$select_2['data']['idpersona'],
-        'nombre_razonsocial'        =>$select_2['data']['nombre_razonsocial'],
-        'apellidos_nombrecomercial' =>$select_2['data']['apellidos_nombrecomercial'],
-        'numero_documento'          =>$select_2['data']['numero_documento'],
-        'foto_perfil'               =>$select_2['data']['foto_perfil'],
-        'cargo'                     =>$select_2['data']['cargo'],
-      ];
-
-      array_push( $select_1['data'], $data);
+      if ( empty($select_2['data']) ) {    }else{
+        $data = [
+          'idpersona'                 =>$select_2['data']['idpersona'],
+          'nombre_razonsocial'        =>$select_2['data']['nombre_razonsocial'],
+          'apellidos_nombrecomercial' =>$select_2['data']['apellidos_nombrecomercial'],
+          'numero_documento'          =>$select_2['data']['numero_documento'],
+          'foto_perfil'               =>$select_2['data']['foto_perfil'],
+          'cargo'                     =>$select_2['data']['cargo'],
+        ];
+        array_push( $select_1['data'], $data);
+      }
       
       return $retorno = ['status'=>true, 'mesage'=>'Todo bien', 'data'=>$select_1['data'], ]; 
     }

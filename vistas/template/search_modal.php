@@ -4,9 +4,9 @@
       <div class="modal-body">
         <div class="input-group">
           <a href="javascript:void(0);" class="input-group-text" id="Search-Grid"><i class="fe fe-search header-link-icon fs-18"></i></a>
-          <input type="search" class="form-control border-0 px-2" placeholder="Search" aria-label="Username">
-          <a href="javascript:void(0);" class="input-group-text" id="voice-search"><i class="fe fe-mic header-link-icon"></i></a>
-          <a href="javascript:void(0);" class="btn btn-light btn-icon" data-bs-toggle="dropdown" aria-expanded="false">
+          <input type="search" class="form-control border-0 px-2" placeholder="Buscar modulo" aria-label="Username">
+          <!-- <a href="javascript:void(0);" class="input-group-text" id="voice-search"><i class="fe fe-mic header-link-icon"></i></a> -->
+          <!-- <a href="javascript:void(0);" class="btn btn-light btn-icon" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fe fe-more-vertical"></i>
           </a>
           <ul class="dropdown-menu">
@@ -17,35 +17,35 @@
               <hr class="dropdown-divider">
             </li>
             <li><a class="dropdown-item" href="javascript:void(0);">Separated link</a></li>
-          </ul>
+          </ul> -->
         </div>
         <div class="mt-4">
-          <p class="font-weight-semibold text-muted mb-2">Are You Looking For...</p>
-          <span class="search-tags"><i class="fe fe-user me-2"></i>People<a href="javascript:void(0)" class="tag-addon"><i class="fe fe-x"></i></a></span>
-          <span class="search-tags"><i class="fe fe-file-text me-2"></i>Pages<a href="javascript:void(0)" class="tag-addon"><i class="fe fe-x"></i></a></span>
-          <span class="search-tags"><i class="fe fe-align-left me-2"></i>Articles<a href="javascript:void(0)" class="tag-addon"><i class="fe fe-x"></i></a></span>
-          <span class="search-tags"><i class="fe fe-server me-2"></i>Tags<a href="javascript:void(0)" class="tag-addon"><i class="fe fe-x"></i></a></span>
+          <p class="font-weight-semibold text-muted mb-2">Más utilizados:</p>
+          <a href="clientes.php" target="_blank" class="search-tags cursor-pointer"><i class="fe fe-user me-2"></i>Clientes</a>
+          <a href="trabajador.php" target="_blank" class="search-tags cursor-pointer"><i class="fe fe-file-text me-2"></i>Trabajadores</a>
+          <a href="proveedores.php" target="_blank" class="search-tags cursor-pointer"><i class="fe fe-align-left me-2"></i>Proveedor</a>
+          <a href="general.php" target="_blank" class="search-tags cursor-pointer"><i class="fe fe-server me-2"></i>General</a>
         </div>
         <div class="my-4">
-          <p class="font-weight-semibold text-muted mb-2">Recent Search :</p>
+          <p class="font-weight-semibold text-muted mb-2">Lista de busqueda: </p>
           <div class="p-2 border br-5 d-flex align-items-center text-muted mb-2 alert">
-            <a href="notifications.html"><span>Notifications</span></a>
+            <a href="usuario.php"><span>Usuarios</span></a>
             <a class="ms-auto lh-1" href="javascript:void(0);" data-bs-dismiss="alert" aria-label="Close"><i class="fe fe-x text-muted"></i></a>
           </div>
           <div class="p-2 border br-5 d-flex align-items-center text-muted mb-2 alert">
-            <a href="alerts.html"><span>Alerts</span></a>
+            <a href="empresa.php"><span>Empresa</span></a>
             <a class="ms-auto lh-1" href="javascript:void(0);" data-bs-dismiss="alert" aria-label="Close"><i class="fe fe-x text-muted"></i></a>
           </div>
           <div class="p-2 border br-5 d-flex align-items-center text-muted mb-0 alert">
-            <a href="mail.html"><span>Mail</span></a>
+            <a href="gasto_de_trabajador.php"><span>Gastos de Trabajdor</span></a>
             <a class="ms-auto lh-1" href="javascript:void(0);" data-bs-dismiss="alert" aria-label="Close"><i class="fe fe-x text-muted"></i></a>
           </div>
         </div>
       </div>
       <div class="modal-footer">
         <div class="btn-group ms-auto">
-          <button class="btn btn-sm btn-primary-light">Search</button>
-          <button class="btn btn-sm btn-primary">Clear Recents</button>
+          <button class="btn btn-sm btn-danger-light" data-bs-dismiss="modal">Cerrar</button>
+          <!-- <button class="btn btn-sm btn-primary">Clear Recents</button> -->
         </div>
       </div>
     </div>
