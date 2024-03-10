@@ -286,6 +286,56 @@ function activar(idusuario, nombre) {
   );
 }
 
+function clientes_x_trabajador(id) {
+  $('#modal-ver-cliente').modal('show');
+  tabla_historial = $('#tabla-cliente').dataTable({
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom:"<'row'<'col-md-2'B><'col-md-3 float-left'l><'col-md-7'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
+    buttons: [
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_historial) { tabla_historial.ajax.reload(null, false); } } },      
+    ],
+		"ajax":	{
+			url: `../ajax/trabajador.php?op=clientes_x_trabajador&idtrabajador=${id}`,
+			type: "get",
+			dataType: "json",
+			error: function (e) {
+				console.log(e.responseText);
+			},
+      complete: function () {
+        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');        
+        $('[data-bs-toggle="tooltip"]').tooltip();
+      },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
+		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
+      // columna: sub total
+      if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap"); } 
+    },
+		language: {
+      lengthMenu: "_MENU_",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      emptyTable: "No hay datos"
+    },
+    columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      // { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
+      // { targets: [8], render: $.fn.dataTable.render.number( ',', '.', 2) },
+      // { targets: [8,9, 10,11,12,],  visible: false,  searchable: false,  },
+    ],
+    "bDestroy": true,
+    "iDisplayLength": 10,//Paginación
+    "order": [[0, "asc"]]//Ordenar (columna,orden)
+	}).DataTable();
+
+}
+
 $(document).ready(function () {
   init();
 });

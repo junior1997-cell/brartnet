@@ -157,12 +157,13 @@ class Usuario
 
 	//Implementar un método para listar los registros
 	public function listar()	{
-		$sql = "SELECT u.idusuario, p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, p.numero_documento, p.celular, p.correo,
-		p.foto_perfil, u.login, DATE_FORMAT(u.last_sesion, '%m/%d/%Y %h:%i: %p') AS last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
+		$sql = "SELECT u.idusuario, p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, sdi.abreviatura as tipo_documento, p.numero_documento, p.celular, 
+		p.correo,	p.foto_perfil, u.login, DATE_FORMAT(u.last_sesion, '%m/%d/%Y %h:%i: %p') AS last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
 		FROM  usuario as u
 		inner join persona as p on u.idpersona = p.idpersona
 		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
+		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
 		WHERE u.estado_delete = '1' ORDER BY  u.estado DESC, p.nombre_razonsocial ASC ";
 		return ejecutarConsulta($sql);
 	}
@@ -251,7 +252,7 @@ class Usuario
 
 	public function historial_sesion($idusuario) {
    
-    $sql = "SELECT DATE_FORMAT(bs.fecha_sesion, '%m/%d/%Y %h:%i %p') AS last_sesion , MONTHNAME(bs.fecha_sesion) AS nombre_mes, DAYNAME(bs.fecha_sesion) AS nombre_dia
+    $sql = "SELECT DATE_FORMAT(bs.fecha_sesion, '%d/%m/%Y %h:%i %p') AS last_sesion , MONTHNAME(bs.fecha_sesion) AS nombre_mes, DAYNAME(bs.fecha_sesion) AS nombre_dia
 		FROM bitacora_sesion as bs WHERE idusuario = '$idusuario' ORDER BY bs.fecha_sesion DESC;";
     return ejecutarConsultaArray($sql); 
   }

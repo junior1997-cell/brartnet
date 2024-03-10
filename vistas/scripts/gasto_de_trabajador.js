@@ -23,7 +23,7 @@ function init() {
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function () { $('#doc1').trigger('click'); });
-$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id"), null, null, null, true) });
+$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id"), null, '100%', '300px', true) });
 
 function doc1_eliminar() {
   $("#doc1").val("");
@@ -120,9 +120,9 @@ function listar_tabla() {
     dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla) { tabla.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [1, 2, 3, 4, 5, 6], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
-      { extend: 'excel', exportOptions: { columns: [1, 2, 3, 4, 5, 6], }, title: 'Lista de usuarios', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
-      { extend: 'pdf', exportOptions: { columns: [1, 2, 3, 4, 5, 6], }, title: 'Lista de usuarios', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
+      { extend: 'copy', exportOptions: { columns: [0,8,9,10,11,2,12,13,4,14,15,5,16,17], }, title:'', text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
+      { extend: 'excel', exportOptions: { columns: [0,8,9,10,11,2,12,13,4,14,15,5,16,17], }, title: 'Lista de gasto', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
+      { extend: 'pdf', exportOptions: { columns: [0,8,9,10,11,2,12,13,4,14,15,5,16,17], }, title: 'Lista de gasto', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     "ajax": {
@@ -155,9 +155,9 @@ function listar_tabla() {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[2, "desc"]],//Ordenar (columna,orden)
+    "order": [[0, "asc"]],//Ordenar (columna,orden)
     columnDefs: [
-      // { targets: [7,8, 9, 10, 11, 12, 13, 14], visible: false, searchable: false, }, 
+      { targets: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17], visible: false, searchable: false, }, 
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
 
@@ -183,24 +183,12 @@ function eliminar_gasto(idgasto_de_trabajador, nombre_razonsocial) {
   );
 }
 
-function mostrar_comprobante(idgasto_de_trabajador) {
-  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_editar_gdt", { idgasto_de_trabajador: idgasto_de_trabajador },  function (e, status) {
-
-    e = JSON.parse(e);
-    if (e.status == true) {
-      if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
-        $("#comprobante-container").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/gasto_de_trabajador', '100%', '500'));
-        $('.jq_image_zoom').zoom({ on: 'grab' });
-      }
-      $('#modal-ver-comprobante').modal('show');
-
-    } else { ver_errores(e); }
-  }).fail( function(e) { ver_errores(e); } );
-
-}
-
 //liStamos datos para EDITAR
 function mostrar_editar_gdt(idgasto_de_trabajador) {
+  show_hide_form(2);
+  $('#cargando-1-fomulario').hide();	
+  $('#cargando-2-fomulario').show();
+  limpiar_form();
   $.post("../ajax/gasto_de_trabajador.php?op=mostrar_editar_gdt", { idgasto_de_trabajador: idgasto_de_trabajador }, function (e, status) {
     e = JSON.parse(e);
     if (e.status == true) {
@@ -226,8 +214,9 @@ function mostrar_editar_gdt(idgasto_de_trabajador) {
         // cargamos la imagen adecuada par el archivo
         $("#doc1_ver").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/gasto_de_trabajador', '50%', '110'));   //ruta imagen          
       }
-
-      show_hide_form(2);
+      $('#cargando-1-fomulario').show();	
+      $('#cargando-2-fomulario').hide();
+      
     }else{
       ver_errores(e);
     }
@@ -237,38 +226,36 @@ function mostrar_editar_gdt(idgasto_de_trabajador) {
 //listamos los datos para MOSTRAR TODO
 function mostrar_detalles_gasto(idgasto_de_trabajador) {
   $("#modal-ver-detalle").modal('show');
+  $("#html-detalle-comprobante").html('');
   $.post("../ajax/gasto_de_trabajador.php?op=mostrar_detalle_gasto", { idgasto_de_trabajador: idgasto_de_trabajador }, function (e, status) {
     e = JSON.parse(e);
     if (e.status == true) {
-
-      // existen algunos registros que tiene el apellido = NULL  --> para ocultar el null hacemos esta condicion <(°-°)>
-      var apellido = e.data.trabajador.data.apellidos_nombrecomercial;
-      var nombre = e.data.trabajador.data.nombre_razonsocial;
-      if (apellido !== null && apellido.trim() !== '') {
-        $("#trabajador").val(nombre + ' ' + apellido);
-      } else { $("#trabajador").val(nombre); }
-
-      $("#tipo_comb").val(e.data.trabajador.data.tipo_comprobante);
-      $("#d_serie").val(e.data.trabajador.data.serie_comprobante);
-      $("#fecha_emision").val(e.data.trabajador.data.fecha_ingreso);
-      $("#s_proveedor").val(e.data.proveedor.data.nombre_razonsocial);
-      $("#p_sin_igv").val(e.data.trabajador.data.precio_sin_igv);
-      $("#p_igv").val(e.data.trabajador.data.precio_igv);
-      $("#v_igv").val(e.data.trabajador.data.val_igv);
-      $("#p_con_igv").val(e.data.trabajador.data.precio_con_igv);
-      $("#d_gasto").val(e.data.trabajador.data.descripcion_gasto);
-      $("#d_compb").val(e.data.trabajador.data.descripcion_comprobante);
-
-      $(".imagen_comb").html(doc_view_extencion(e.data.trabajador.data.comprobante, 'assets/modulo/gasto_de_trabajador/', '500px', 'auto'));
-
-
-      //mostrar el div del proveedor siempre y cuando tp_comprbante sea F - NV
-      if (e.data.trabajador.data.tipo_comprobante == 'FACTURA' || e.data.trabajador.data.tipo_comprobante == 'NOTA_DE_VENTA') {
-        $(".proveedor_s").show();
-      } else { $(".proveedor_s").hide(); }
+     
+      $("#html-detalle-compra").html(e.data);
+      $("#html-detalle-comprobante").html(doc_view_download_expand(e.comprobante, 'assets/modulo/gasto_de_trabajador/', e.nombre_doc, '100%', '400px'));
+      
     }else{
       ver_errores(e);
     }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function mostrar_comprobante(idgasto_de_trabajador) {
+  $('#modal-ver-comprobante').modal('show');
+  $("#comprobante-container").html(`<div class="row" > <div class="col-lg-12 text-center"> <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div> </div>`);
+
+  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_editar_gdt", { idgasto_de_trabajador: idgasto_de_trabajador },  function (e, status) {
+
+    e = JSON.parse(e);
+    if (e.status == true) {
+      if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
+        // $("#comprobante-container").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/gasto_de_trabajador', '100%', '100%'));
+        var nombre_comprobante = `${e.data.tipo_comprobante} ${e.data.serie_comprobante}`;
+        $('.title-modal-comprobante').html(nombre_comprobante);
+        $("#comprobante-container").html(doc_view_download_expand(e.data.comprobante, 'assets/modulo/gasto_de_trabajador',nombre_comprobante , '100%', '400px'));
+        $('.jq_image_zoom').zoom({ on: 'grab' });
+      }
+    } else { ver_errores(e); }
   }).fail( function(e) { ver_errores(e); } );
 }
 

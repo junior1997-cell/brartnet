@@ -1,7 +1,7 @@
 <?php
   //Activamos el almacenamiento en el buffer
   ob_start();
-
+  require "../config/funcion_general.php";
   session_start();
   if (!isset($_SESSION["user_nombre"])){
     header("Location: index.php?file=".basename($_SERVER['PHP_SELF']));
@@ -75,6 +75,16 @@
                                   <th>Descripción</th>
                                   <th>CFDI</th>
                                   
+                                  <th>Trabajador</th>
+                                  <th>Tipo Doc.</th>
+                                  <th>Nro. Doc.</th>
+                                  <th>Proveedor</th>
+                                  <th>Dia</th>
+                                  <th>Mes</th>
+                                  <th>Subtotal</th>
+                                  <th>IGV</th>
+                                  <th>Descripción de Gasto</th>
+                                  <th>Descripción Comprobante</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -89,6 +99,16 @@
                                   <th>Descripción</th>
                                   <th>CFDI</th>
                                   
+                                  <th>Trabajador</th>
+                                  <th>Tipo Doc.</th>
+                                  <th>Nro. Doc.</th>
+                                  <th>Proveedor</th>
+                                  <th>Dia</th>
+                                  <th>Mes</th>
+                                  <th>Subtotal</th>
+                                  <th>IGV</th>
+                                  <th>Descripción de Gasto</th>
+                                  <th>Descripción Comprobante</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -118,7 +138,7 @@
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="descr_gastos" class="form-label">Descripción de Gastos(*)</label>
-                                    <textarea class="form-control" name="descr_gastos" id="descr_gastos" rows="1"></textarea>
+                                    <textarea class="form-control" name="descr_gastos" id="descr_gastos" rows="1" placeholder="ejemp: Por reparación de una torre." ></textarea>
                                   </div>
                                 </div>
                                 <!-- ----------------- TIPO COMPROBANTE --------------- -->
@@ -137,7 +157,7 @@
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="serie_comprobante" class="form-label">Serie Comprobante</label>
-                                    <input type="text" class="form-control" name="serie_comprobante" id="serie_comprobante" onkeyup="mayus(this);"/>
+                                    <input type="text" class="form-control" name="serie_comprobante" id="serie_comprobante" onkeyup="mayus(this);" placeholder="ejemp: F001-00453" />
                                   </div>
                                 </div>
                                 <!-- ------------------ FECHA EMISION ------------------ -->
@@ -193,7 +213,7 @@
                                 <div class="col-md-6 col-lg-4 col-xl-12 col-xxl-12">
                                   <div class="form-group">
                                     <label for="descr_comprobante" class="form-label">Descripción del Comprobante</label>
-                                    <textarea class="form-control" name="descr_comprobante" id="descr_comprobante" rows="1"></textarea>
+                                    <textarea class="form-control" name="descr_comprobante" id="descr_comprobante" rows="1" placeholder="ejemp: Menu Ají de gallina, Gaseoa, Galletas." ></textarea>
                                   </div>
                                 </div>
                               
@@ -206,7 +226,7 @@
                                         <button type="button" class="btn btn-primary py-1" id="doc1_i"><i class='bx bx-cloud-upload bx-tada fs-5'></i> Subir</button>
                                         <input type="hidden" id="doc_old_1" name="doc_old_1" />
                                         <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
-                                        <button type="button" class="btn btn-info py-1" onclick="re_visualizacion(1, 'assets/modulo/gasto_de_trabajador', '60%'); reload_zoom();"><i class='bx bx-refresh bx-spin fs-5'></i>Refrescar</button>
+                                        <button type="button" class="btn btn-info py-1" onclick="re_visualizacion(1, 'assets/modulo/gasto_de_trabajador', '100%', '300px'); reload_zoom();"><i class='bx bx-refresh bx-spin fs-5'></i>Refrescar</button>
                                       </div>
                                     </div>
 
@@ -220,7 +240,7 @@
                               </div>
 
                               <!-- ::::::::::: CARGANDO ... :::::::: -->
-                              <div class="row" id="cargando-5-fomulario" style="display: none;" >
+                              <div class="row" id="cargando-2-fomulario" style="display: none;" >
                                 <div class="col-lg-12 text-center">                         
                                   <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
                                   <h4 class="bx-flashing">Cargando...</h4>
@@ -256,20 +276,23 @@
               <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h6 class="modal-title" id="modal-ver-comprobanteLabel1">COMPROBANTE</h6>
+                    <h6 class="modal-title title-modal-comprobante" id="modal-ver-comprobanteLabel1">COMPROBANTE</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <div id="comprobante-container" class="text-center"> <!-- archivo --> </div>
+                    <div id="comprobante-container" class="text-center"> <!-- archivo --> 
+                      <div class="row" >
+                        <div class="col-lg-12 text-center"> <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div>
+                      </div>
+                    </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
+                    <button type="button" class="btn btn-sm btn-danger py-1" data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
                   </div>
                 </div>
               </div>
             </div> 
             <!-- End::Modal-Comprobante -->
-
 
             <!-- Start::Modal-VerDetalles -->
             <div class="modal fade modal-effect" id="modal-ver-detalle" tabindex="-1" aria-labelledby="modal-ver-detalleLabel" aria-hidden="true">
@@ -279,73 +302,17 @@
                     <h4 class="modal-title" id="modal-ver-detalleLabel1"><b>Detalles</b> - Gasto de Trabajador</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <div class="modal-body">
-                    <div class="row">
-                      <div class="col-lg-6">
-                        <label for="trabajador" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" name="trabajador" id="trabajador" readonly>
-                      </div>
-                      <div class="col-lg-6"> </div>
-                      <div class="col-lg-4 mt-3">
-                        <label for="tipo_comb" class="form-label">Tip. comprobante:</label>
-                        <input type="text" class="form-control" name="tipo_comb" id="tipo_comb" readonly>
-                      </div>
-                      <div class="col-lg-4 mt-3">
-                        <label for="d_serie" class="form-label">Serie:</label>
-                        <input type="text" class="form-control" name="d_serie" id="d_serie" readonly>
-                      </div>
-                      <div class="col-lg-4 mt-3">
-                        <label for="fecha_emision" class="form-label">Fecha Emisión:</label>
-                        <input type="text" class="form-control" name="fecha_emision" id="fecha_emision" readonly>
-                      </div>
-                      <div class="col-lg-6 mt-3 proveedor_s" style="display: none;">
-                        <label for="s_proveedor" class="form-label">Proveedor:</label>
-                        <input type="text" class="form-control" name="s_proveedor" id="s_proveedor" readonly>
-                      </div>
-                      <div class="col-lg-6 mt-3 proveedor_s" style="display: none;"></div>
-                      <div class="col-lg-3 mt-3">
-                        <label for="p_sin_igv" class="form-label">Precio:</label>
-                        <input type="text" class="form-control" name="p_sin_igv" id="p_sin_igv" readonly>
-                      </div>
-                      <div class="col-lg-3 mt-3">
-                        <label for="p_igv" class="form-label">IGV:</label>
-                        <input type="text" class="form-control" name="p_igv" id="p_igv" readonly>
-                      </div>
-                      <div class="col-lg-3 mt-3">
-                        <label for="v_igv" class="form-label">Val IGV:</label>
-                        <input type="text" class="form-control" name="v_igv" id="v_igv" readonly>
-                      </div>
-                      <div class="col-lg-3 mt-3">
-                        <label for="p_con_igv" class="form-label">Total:</label>
-                        <input type="text" class="form-control" name="p_con_igv" id="p_con_igv" readonly>
-                      </div>
-                      <div class="col-lg-6 mt-3">
-                        <label for="d_gasto" class="form-label">Descripción de gasto:</label>
-                        <textarea class="form-control" name="d_gasto" id="d_gasto"></textarea>
-                      </div>
-                      <div class="col-lg-6 mt-3">
-                        <label for="d_compb" class="form-label">Descripción de comprobante:</label>
-                        <textarea class="form-control" name="d_compb" id="d_compb"></textarea>
-                      </div>
-                      <div class="col-lg-12 mt-5">
-                        <h6>Comprobante:</h6>
-                        <div class="imagen_comb"></div>
-                      </div>
-
-
-                    </div>
-                    
+                  <div class="modal-body" >            
+                    <div id="html-detalle-compra"></div>
+                    <div class="text-center" id="html-detalle-comprobante"></div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
                   </div>
                 </div>
               </div>
             </div> 
             <!-- End::Modal-VerDetalles -->
-
-
-
 
             <!-- Start::Modal-Agregar-Proveedor -->
             <div class="modal fade modal-effect" id="Modal-agregar-proveedor" tabindex="-1" aria-labelledby="Modal-agregar-proveedorLabel" aria-hidden="true">
@@ -358,7 +325,7 @@
                   <div class="modal-body">
                   <form name="form-agregar-proveedor" id="form-agregar-proveedor" method="POST" class="needs-validation" novalidate>                          
                            
-                    <div class="row gy-2" id="cargando-1-fomulario">
+                    <div class="row gy-2" id="cargando-3-fomulario">
                       <!-- idpersona -->
                       <input type="hidden" name="idpersona" id="idpersona" />   
                       <input type="hidden" name="tipo_persona_sunat" id="tipo_persona_sunat" value="NATURAL" />   
@@ -544,7 +511,7 @@
 
                     </div> <!-- /.row -->
 
-                    <div class="row" id="cargando-2-fomulario" style="display: none;" >
+                    <div class="row" id="cargando-4-fomulario" style="display: none;" >
                       <div class="col-lg-12 text-center">                         
                         <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
                         <h4 class="bx-flashing">Cargando...</h4>
@@ -562,8 +529,8 @@
                   </form>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-danger"  data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
-                    <button type="button" class="btn btn-success" id="guardar_registro_trabajador" style="display: none;"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                    <button type="button" class="btn btn-sm btn-danger"  data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
+                    <button type="button" class="btn btn-sm btn-success" id="guardar_registro_trabajador" style="display: none;"><i class="bx bx-save bx-tada"></i> Guardar</button>
                   </div>
                 </div>
               </div>
@@ -581,7 +548,7 @@
                     
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
                   </div>
                 </div>
               </div>

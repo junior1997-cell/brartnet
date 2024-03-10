@@ -324,7 +324,7 @@ function historial_sesion(id) {
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[2, "desc"]]//Ordenar (columna,orden)
+    "order": [[0, "asc"]]//Ordenar (columna,orden)
 	}).DataTable();
 
 }

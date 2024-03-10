@@ -557,7 +557,7 @@ function addImage(e, id, img_default='') {
 			toastr.error('Este tipo de ARCHIVO no esta permitido <br> elija formato: <b>.png .jpeg .jpg .webp etc... </b>');
 
 			if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
-        $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+        $("#"+id+"_i").attr("src", "../assets/img/default/img_defecto.png");
       } else {
         $("#"+id+"_i").attr("src", img_default);
       }
@@ -584,7 +584,7 @@ function addImage(e, id, img_default='') {
 				reader.readAsDataURL(file);
 			} else {
 				toastr.warning('La imagen: '+file.name.toUpperCase()+' es muy pesada. Tamaño máximo 10mb');
-				$("#"+id+"_i").attr("src", "../dist/img/default/img_error.png");
+				$("#"+id+"_i").attr("src", "../assets/img/default/img_error.png");
 				$("#"+id).val("");
 			}
 		}
@@ -593,7 +593,7 @@ function addImage(e, id, img_default='') {
 
 		toastr.error('Seleccione una Imagen');
     if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
-      $("#"+id+"_i").attr("src", "../dist/img/default/img_defecto.png");
+      $("#"+id+"_i").attr("src", "../assets/img/default/img_defecto.png");
     } else {
       $("#"+id+"_i").attr("src", img_default);
     }  
@@ -603,7 +603,7 @@ function addImage(e, id, img_default='') {
 
 /* PREVISUALIZA: img, pdf, doc, excel,  */
 function addImageApplication(e, id, img_default='', width='100%', height='310', detalle_upload=false) {
-  console.log(id, img_default, width, height, detalle_upload);
+  
   $(`#${id}_ver`).html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br>');	
 
 	var file = e.target.files[0], archivoType = /image.*|application.*/; console.log(file);
@@ -626,7 +626,7 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
       });
 
       if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
-        $(`#${id}_ver`).html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+        $(`#${id}_ver`).html('<img src="../assets/svg/doc_uploads.svg" alt="" width="50%" >'); 
       } else {
         $(`#${id}_ver`).html(`<img src="${img_default}" alt="" width="50%" >`); 
       }      
@@ -639,19 +639,19 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
 					var result = e.target.result;
           // cargamos la imagen adecuada par el archivo				  
 
-          $(`#${id}_ver`).html( identificando_archivo(file.name, result ) );
+          $(`#${id}_ver`).html( identificando_archivo(file.name, result, width, height ) );
           $(`.jq_image_zoom`).zoom({ on:'grab' });
           
           if (detalle_upload == true) {
             $(`#${id}_nombre`).html(`<div class="row">
-              <div class="col-sm-11 col-md-10 col-lg-11 col-xl-11 mt-2">
-                <p><b>Nombre:</b><i> ${file.name}</i></p>
-                <p><b>Tamaño:</b> ${formato_miles(sizemegaBytes)} mb</p>
-                <p><b>Tipo:</b> ${file.type}</p>
+              <div class="col-sm-1 col-md-2 col-lg-2 col-xl-2 mt-2 text-center">
+                <button class="btn btn-danger  btn-xs h-100" onclick="${id}_eliminar();" type="button" data-bs-toggle="tooltip" title="Eliminar" ><i class='bx bx-trash' ></i></button>
               </div>
-              <div class="col-sm-1 col-md-2 col-lg-1 col-xl-1 mt-2">
-                <button class="btn btn-danger btn-block btn-xs h-100" onclick="${id}_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button>
-              </div>
+              <div class="col-sm-11 col-md-10 col-lg-10 col-xl-10 mt-2 text-left">
+                <p class="my-0"><b>Nombre:</b><ins><i> ${file.name}</i></ins></p>
+                <p class="my-0"><b>Tamaño:</b> ${formato_miles(sizemegaBytes)} mb</p>
+                <p class="my-0"><b>Tipo:</b> ${file.type}</p>
+              </div>              
             </div>`);
           } else {
             $(`#${id}_nombre`).html(`<div class="row">
@@ -659,17 +659,14 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
                 <i> ${file.name} </i>
               </div>
               <div class="col-md-12">
-                <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button>
+                <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" data-bs-toggle="tooltip" title="Eliminar" ><i class='bx bx-trash' ></i></button>
               </div>
             </div>`);
-          }					
+          }			
+          $('[data-bs-toggle="tooltip"]').tooltip();		
 
           Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: `El documento: ${file.name.toUpperCase()} es aceptado.`,
-            showConfirmButton: false,
-            timer: 1500
+            position: 'top-end',  icon: 'success',  title: `El documento: ${file.name.toUpperCase()} es aceptado.`, showConfirmButton: false, timer: 1500
           });
 				}
 
@@ -677,15 +674,11 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
 
 			} else {
         Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: `El documento: ${file.name.toUpperCase()} es muy pesado.`,
-          showConfirmButton: false,
-          timer: 1500
+          position: 'top-end',  icon: 'warning',  title: `El documento: ${file.name.toUpperCase()} es muy pesado.`, showConfirmButton: false,  timer: 1500
         })
 
         if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
-          $(`#${id}_ver`).html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+          $(`#${id}_ver`).html('<img src="../assets/svg/doc_uploads.svg" alt="" width="50%" >'); 
         } else {
           $(`#${id}_ver`).html(`<img src="${img_default}" alt="" width="50%" >`); 
         }
@@ -696,15 +689,11 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
 		}
 	}else{
     Swal.fire({
-      position: 'top-end',
-      icon: 'error',
-      title: 'Seleccione un documento',
-      showConfirmButton: false,
-      timer: 1500
+      position: 'top-end',  icon: 'error', title: 'Seleccione un documento',  showConfirmButton: false,  timer: 1500
     });
 
     if (img_default == '' || img_default == null || img_default == false || img_default == true ) {
-      $(`#${id}_ver`).html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
+      $(`#${id}_ver`).html('<img src="../assets/svg/doc_uploads.svg" alt="" width="50%" >'); 
     } else {
       $(`#${id}_ver`).html(`<img src="${img_default}" alt="" width="50%" >`); 
     }		 
@@ -712,6 +701,7 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
 		$("#"+id+"_nombre").html("");
     $("#"+id).val("");
 	}	
+  
 }
 
 // recargar un doc para ver
@@ -735,7 +725,7 @@ function re_visualizacion(id,  url_carpeta, width='100%', height='310') {
         timer: 1500
       })
 
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+      $("#doc"+id+"_ver").html('<img src="../assets/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
 		  $("#doc"+id+"_nombre").html("");
 
@@ -791,7 +781,7 @@ function doc_view_extencion(filename, url_carpeta='',  width='50%', height='auto
       </div>`;
       extencion = extrae_extencion(filename);
     } else {
-      var html_img_error =  `<img src="${error_img}" alt="" width="${width}" onerror="this.src='../dist/svg/404-v2.svg';"  >`;
+      var html_img_error =  `<img src="${error_img}" alt="" width="${width}" onerror="this.src='../assets/svg/404-v2.svg';"  >`;
       return html_img_error;      
     }
   }else  {
@@ -820,12 +810,12 @@ function doc_view_download_expand(filename, ruta='', nombre_decarga='', width='5
       extencion = extrae_extencion(filename);
       return html
     } else {
-      var html_img_error = `<img src="${error_img}" alt="" width="${width}" onerror="this.src='../dist/svg/404-v2.svg';"  >`;
+      var html_img_error = `<img src="${error_img}" alt="" width="${width}" onerror="this.src='../assets/svg/404-v2.svg';"  >`;
       return html_img_error;     
     }
   }else {
 
-    html = identificando_archivo(filename, ruta_file);
+    html = identificando_archivo(filename, ruta_file, width, height);
     extencion = extrae_extencion(filename);
     expand_disabled = pdf_o_img(filename) ? '' : 'disabled';  
   
@@ -833,10 +823,10 @@ function doc_view_download_expand(filename, ruta='', nombre_decarga='', width='5
 
   var div_html = `<div class="row">
     <div class="col-6 col-md-6">
-      <a class="btn btn-xs btn-block btn-warning" href="${ruta_file}" download="${nombre_decarga}" type="button"><i class="fas fa-download"></i> Descargar</a>
+      <a class="btn btn-sm btn-block btn-warning" href="${ruta_file}" download="${nombre_decarga}" type="button"><i class="fas fa-download"></i> Descargar</a>
     </div>
     <div class="col-6 col-md-6">
-      <a class="btn btn-xs btn-block btn-info ${expand_disabled}" href="${ruta_file}" target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo</a>
+      <a class="btn btn-sm btn-block btn-info ${expand_disabled}" href="${ruta_file}" target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo</a>
     </div>
     <div class="col-12 col-md-12 mt-2"  width="auto">   
       ${html} 
@@ -891,37 +881,38 @@ function doc_view_icon(filename, color_class='', font_size_class='' ) {
 }
 
 function identificando_archivo(filename, ruta, width = '100%', height = 'auto') {
+  console.log(filename, width, height);
   if ( extrae_extencion(filename) == "xls") {
-    return `<img src="../dist/svg/xls.svg" alt="" width="50%" height="50%" >`;    
+    return `<img src="../assets/svg/xls.svg" alt="" width="50%" height="50%" >`;    
   } else if ( extrae_extencion(filename) == "xlsx" ) {    
-    return `<img src="../dist/svg/xlsx.svg" alt="" width="50%" height="50%" >`;
+    return `<img src="../assets/svg/xlsx.svg" alt="" width="50%" height="50%" >`;
   }else if ( extrae_extencion(filename) == "csv" ) {
-    return `<img src="../dist/svg/csv.svg" alt="" width="50%" height="50%" >`;
+    return `<img src="../assets/svg/csv.svg" alt="" width="50%" height="50%" >`;
   }else if ( extrae_extencion(filename) == "xlsm" ) {
-    return `<img src="../dist/svg/xlsm.svg" alt="" width="50%" height="50%" >`;
+    return `<img src="../assets/svg/xlsm.svg" alt="" width="50%" height="50%" >`;
   }else if ( extrae_extencion(filename) == "xlsb" ) {
-    return `<img src="../dist/svg/xlsb.svg" alt="" width="50%" height="50%" >`;
+    return `<img src="../assets/svg/xlsb.svg" alt="" width="50%" height="50%" >`;
   }else if ( extrae_extencion(filename) == "docx" ||  extrae_extencion(filename) == "docm"  || extrae_extencion(filename) == "dot" ||  extrae_extencion(filename) == "dotx" ||  extrae_extencion(filename) == "dotm") {
-    return `<img src="../dist/svg/docx.svg" alt="" width="50%" height="50%" >`;
+    return `<img src="../assets/svg/docx.svg" alt="" width="50%" height="50%" >`;
   }else if ( extrae_extencion(filename) == "doc") {
-    return `<img src="../dist/svg/doc.svg" alt="" width="50%" height="50%" >`;
+    return `<img src="../assets/svg/doc.svg" alt="" width="50%" height="50%" >`;
   }else if ( extrae_extencion(filename) == "dwg") {
-    return `<img src="../dist/svg/dwg.svg" alt="" width="50%" height="50%" >`;
+    return `<img src="../assets/svg/dwg.svg" alt="" width="50%" height="50%" >`;
   }else if ( extrae_extencion(filename) == "zip" || extrae_extencion(filename) == "rar" || extrae_extencion(filename) == "iso") {
-    return `<img src="../dist/img/default/zip.png" alt="" width="50%" height="50%" >`;
+    return `<img src="../assets/img/default/zip.png" alt="" width="50%" height="50%" >`;
   }else if ( extrae_extencion(filename) == "pdf" || extrae_extencion(filename) == "PDF" ) {
     //recomendado - height="210" 
-    return `<iframe src="${ruta}" onerror="this.src='../dist/svg/404-v2.svg';" frameborder="0" scrolling="no" width="${width}" height="${height}"> </iframe>`;
+    return `<iframe src="${ruta}" onerror="this.src='../assets/svg/404-v2.svg';" frameborder="0" scrolling="no" width="${width}" height="${height}"> </iframe>`;
   } else if ( extrae_extencion(filename) == "pfx" || extrae_extencion(filename) == "p12" ) {    
-    return `<img src="../dist/img/default/pfx.jpg" alt="" width="50%" >`;
+    return `<img src="../assets/img/default/pfx.jpg" alt="" width="50%" >`;
   } else if (
     extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "jpe" ||
     extrae_extencion(filename) == "jfif" || extrae_extencion(filename) == "gif" || extrae_extencion(filename) == "png" ||
     extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
     extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" ) {
-    return `<center><span class="jq_image_zoom"><img id="_cargando_img_" src="${ruta}" alt="" width="${width}" onerror="this.src='../dist/svg/404-v2.svg';"  ></span></center>`;    
+    return `<center><span class="jq_image_zoom"><img id="_cargando_img_" src="${ruta}" alt="" width="${width}" onerror="this.src='../assets/svg/404-v2.svg';"  ></span></center>`;    
   }else{
-    return `<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" height="50%"  >`;
+    return `<img src="../assets/svg/doc_si_extencion.svg" alt="" width="50%" height="50%"  >`;
   }
 }
 

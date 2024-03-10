@@ -85,15 +85,25 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
               <div>
                 <span class="d-block fw-semibold text-primary">'.$reg->trabajador.'</span>
-                <span class="text-muted">'.$reg->tipo_documento .' '. $reg->numero_documento.'</span>
+                <span class="text-muted">'.$reg->tipo_documento_nombre .' '. $reg->numero_documento.'</span>
               </div>
             </div>',
             "4" => $reg->tipo_comprobante .': '. $reg->serie_comprobante,
             "5" => $reg->precio_con_igv,
-            "6" => '<textarea class="border-0" style="background-color: transparent;" readonly>' .($reg->descripcion_comprobante). '</textarea>',
-            "7" => !empty($reg->comprobante) ? '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_comprobante('.($reg->idgasto_de_trabajador).');" data-bs-toggle="tooltip" title="Ver"><i class="ti ti-file-dollar fs-24"></i></button></div>' : 
-              '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-danger-light" data-bs-toggle="tooltip" title="no encontrado"><i class="ti ti-file-alert fs-24"></i></button></div>',
+            "6" => '<textarea class="textarea_datatable bg-light"  readonly>' .($reg->descripcion_comprobante). '</textarea>',
+            "7" => !empty($reg->comprobante) ? '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_comprobante('.($reg->idgasto_de_trabajador).');" data-bs-toggle="tooltip" title="Ver"><i class="ti ti-file-dollar fs-lg"></i></button></div>' : 
+              '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-danger-light" data-bs-toggle="tooltip" title="no encontrado"><i class="ti ti-file-alert fs-lg"></i></button></div>',
             
+            "8" => $reg->trabajador,
+            "9" => $reg->tipo_documento_nombre,
+            "10" => $reg->numero_documento,
+            "11" => $reg->proveedor,
+            "12" => $reg->day_name,
+            "13" => $reg->month_name,
+            "14" => $reg->precio_sin_igv,
+            "15" => $reg->precio_igv,
+            "16" => $reg->descripcion_gasto,
+            "17" => $reg->descripcion_comprobante,
           ];
         }
         $results =[
@@ -159,6 +169,76 @@ if (!isset($_SESSION["user_nombre"])) {
 
     case 'mostrar_detalle_gasto':
       $rspta = $gasto_trab->mostrar_detalle_gasto($idgasto_de_trabajador);
+      $img_t = empty($rspta['data']['foto_perfil_trabajador']) ? 'no-perfil.jpg'  : $rspta['data']['foto_perfil_trabajador'];
+      $img_p = empty($rspta['data']['foto_perfil_proveedor']) ? 'no-perfil.jpg'  : $rspta['data']['foto_perfil_proveedor'];
+      $nombre_doc = $rspta['data']['tipo_comprobante'] .' ' .$rspta['data']['serie_comprobante'];
+      $html_table = '
+      <div class="my-3" ><span class="h6"> Datos del Trabajador </span></div>
+      <table class="table text-nowrap table-bordered">        
+        <tbody>
+          <tr>
+            <th scope="col">Trabajador</th>
+            <th scope="row">
+              <div class="d-flex align-items-center">
+                <span class="avatar avatar-xs me-2 online avatar-rounded"> <img src="../assets/modulo/persona/perfil/'.$img_t.'" alt="img"> </span>
+                '.$rspta['data']['trabajador'].'
+              </div>
+            </th>            
+          </tr>              
+          <tr>
+            <th scope="col">'.$rspta['data']['tipo_documento_nombre_t'].'</th>
+            <th scope="row">'.$rspta['data']['numero_documento_t'].'</th>
+          </tr> 
+          <tr>
+            <th scope="col">Descripción</th>
+            <th scope="row">'.$rspta['data']['descripcion_gasto'].'</th>
+          </tr>                  
+        </tbody>
+      </table>
+      <div class="my-3" ><span class="h6"> Datos del comprobante </span></div>
+      <table class="table text-nowrap table-bordered">        
+        <tbody>
+          <tr>
+            <th scope="col">Proveedor</th>
+            <th scope="row">
+              <div class="d-flex align-items-center">
+                <span class="avatar avatar-xs me-2 online avatar-rounded"> <img src="../assets/modulo/persona/perfil/'.$img_p.'" alt="img"> </span>
+                '.$rspta['data']['proveedor'].'
+              </div>
+            </th>            
+          </tr>    
+          <tr>
+            <th scope="col">'.$rspta['data']['tipo_documento_nombre_p'].'</th>
+            <th scope="row">'.$rspta['data']['numero_documento_p'].'</th>
+          </tr> 
+          <tr>
+            <th scope="col">'.$rspta['data']['tipo_comprobante'].'</th>
+            <th scope="row">'.$rspta['data']['serie_comprobante'].'</th>
+          </tr>  
+          <tr>
+            <th scope="col">Fecha</th>
+            <th scope="row">'.$rspta['data']['fecha_ingreso_f'].' | '.$rspta['data']['day_name'].' | '.$rspta['data']['month_name'].'</th>
+          </tr>    
+          <tr>
+            <th scope="col">Subtotal</th>
+            <th scope="row">'. number_format($rspta['data']['precio_sin_igv'], 2, '.', ',') .'</th>
+          </tr> 
+          <tr>
+            <th scope="col">IGV</th>
+            <th scope="row">'.number_format($rspta['data']['precio_igv'], 2, '.', ',') .'</th>
+          </tr>  
+          <tr>
+            <th scope="col">Total</th>
+            <th scope="row">'.number_format($rspta['data']['precio_con_igv'], 2, '.', ',') .'</th>
+          </tr>
+          <tr>
+            <th scope="col">Descripción</th>
+            <th scope="row">'.$rspta['data']['descripcion_comprobante'].'</th>
+          </tr>                 
+        </tbody>
+      </table> 
+      <div class="my-3" ><span class="h6"> Comprobante </span></div>';
+      $rspta = ['status' => true, 'message' => 'Todo bien', 'data' => $html_table, 'comprobante' => $rspta['data']['comprobante'], 'nombre_doc'=> $nombre_doc];
       echo json_encode($rspta, true);
     break;
 

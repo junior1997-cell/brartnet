@@ -1,7 +1,7 @@
 <?php
   //Activamos el almacenamiento en el buffer
   ob_start();
-
+  require "../config/funcion_general.php";
   session_start();
   if (!isset($_SESSION["user_nombre"])){
     header("Location: index.php?file=".basename($_SERVER['PHP_SELF']));
@@ -230,11 +230,11 @@
             </div>
           </div>    
           
-          <div class="modal fade modal-effect" id="modal-ver-historial-sesion" tabindex="-1" aria-labelledby="modal-agregar-usuarioLabel" aria-hidden="true">
+          <div class="modal fade modal-effect" id="modal-ver-historial-sesion" tabindex="-1" aria-labelledby="modal-agregar-historialLabel" aria-hidden="true">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h6 class="modal-title title-modal-img" id="modal-agregar-usuarioLabel1">Imagen</h6>
+                  <h6 class="modal-title title-modal-img" id="modal-agregar-historialLabel1">Imagen</h6>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body ">

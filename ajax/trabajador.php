@@ -115,7 +115,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')"> </span></div>
               <div>
                 <span class="d-block fw-semibold text-primary">'.$reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial.'</span>
-                <span class="text-muted"><b>'.$reg->tipo_documento .'</b>: '. $reg->numero_documento.'</span>
+                <span class="text-muted"><b>'.$reg->tipo_documento .'</b>: '. $reg->numero_documento .' | <i class="ti ti-fingerprint fs-18"></i> '. zero_fill($reg->idpersona_trabajador, 5).'</span>
               </div>
             </div>',
             "3" =>  '<div class="text-start">
@@ -125,13 +125,45 @@ if (!isset($_SESSION["user_nombre"])) {
             "4" => $reg->cargo_trabajador,
             "5" => '<a href="tel:+51'.$reg->celular.'">'.$reg->celular.'</a>',
             "6" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light" readonly="">'.$reg->direccion.'</textarea>',
-            "7" =>  '<span class="badge bg-outline-warning cursor-pointer font-size-12px" data-bs-toggle="tooltip" title="Ver clientes">'.$reg->cant_cliente.'</span>',
+            "7" =>  '<span class="badge bg-outline-warning cursor-pointer font-size-12px" onclick="clientes_x_trabajador('.$reg->idpersona_trabajador.');" data-bs-toggle="tooltip" title="Ver clientes">'.$reg->cant_cliente.'</span>',
             
             "8" => $reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial,
             "9" => $reg->tipo_documento,
             "10" => $reg->numero_documento,
             "11" => $reg->fecha_nacimiento,
             "12" => calcular_edad($reg->fecha_nacimiento),
+          );
+        }
+        $results = array(
+          'status'=> true,
+          "sEcho" => 1, //Información para el datatables
+          "iTotalRecords" => count($data),  //enviamos el total registros al datatable
+          "iTotalDisplayRecords" => count($data),  //enviamos el total registros a visualizar
+          "aaData" => $data
+        );
+        echo json_encode($results);
+    
+      break;
+
+      case 'clientes_x_trabajador':
+        $rspta = $trabajador->clientes_x_trabajador($_GET["idtrabajador"]);
+        //Vamos a declarar un array
+    
+        $data = array(); $count =1;
+    
+        while ($reg = $rspta['data']->fetch_object()) {
+          // Mapear el valor numérico a su respectiva descripción      
+    
+          $img = empty($reg->foto_perfil) ? 'no-perfil.jpg' : $reg->foto_perfil ;
+    
+          $data[] = array(
+            "0" => $count++,                        
+            "1" =>  '<span class="text-primary">'.$reg->nombre_completo.'</span> <br> <span class="text-muted">'.$reg->tipo_doc .': '. $reg->numero_documento.'</span> ',
+            "2" => '<div class="text-start font-size-12px" >
+              <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $reg->ip_antena . '</span>
+              <span class="text-muted"><i class="bx bx-wifi bx-burst" ></i>' . $reg->ip_personal . '</span>
+            </div>',
+            "3" => $reg->fecha_cancelacion,
           );
         }
         $results = array(

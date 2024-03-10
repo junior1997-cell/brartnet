@@ -120,7 +120,7 @@ class Trabajador
 
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar_trabajdor($idpersona)	{
-		$sql = "SELECT p.*, pt.ruc, pt.usuario_sol, pt.clave_sol, pt.sueldo_mensual, pt.sueldo_diario, t.nombre as tipo_persona, c.nombre as cargo_trabajador, 
+		$sql = "SELECT p.*, pt.idpersona_trabajador, pt.ruc, pt.usuario_sol, pt.clave_sol, pt.sueldo_mensual, pt.sueldo_diario, t.nombre as tipo_persona, c.nombre as cargo_trabajador, 
 		sdi.abreviatura as tipo_documento, sdi.code_sunat, pt.idpersona_trabajador		
 		FROM  persona as p
 		inner join persona_trabajador as pt on pt.idpersona = p.idpersona
@@ -133,7 +133,7 @@ class Trabajador
 
 	//Implementar un método para listar los registros
 	public function listar_tabla_principal()	{
-		$sql = "SELECT p.*, pt.ruc, pt.usuario_sol, pt.clave_sol, pt.sueldo_mensual, pt.sueldo_diario, t.nombre as tipo_persona, c.nombre as cargo_trabajador, sdi.abreviatura as tipo_documento, 
+		$sql = "SELECT p.*, pt.idpersona_trabajador, pt.ruc, pt.usuario_sol, pt.clave_sol, pt.sueldo_mensual, pt.sueldo_diario, t.nombre as tipo_persona, c.nombre as cargo_trabajador, sdi.abreviatura as tipo_documento, 
 		( SELECT COUNT(*) FROM persona_cliente as pc WHERE pc.idpersona_trabajador = pt.idpersona_trabajador ) AS cant_cliente
 		FROM  persona as p
 		inner join persona_trabajador as pt on pt.idpersona = p.idpersona
@@ -141,6 +141,28 @@ class Trabajador
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
 		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
 		WHERE p.estado = '1' AND p.estado_delete = '1';";
+		return ejecutarConsulta($sql);
+	}
+	//Implementar un método para listar los registros
+	public function clientes_x_trabajador($id)	{
+		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, pc.fecha_cancelacion,
+		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,
+		CASE 
+		WHEN p.tipo_persona_sunat = 'NATURAL' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+		WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+		ELSE '-'
+		END AS nombre_completo, 
+		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, 
+		za.ip_antena,pc.estado, i.abreviatura as tipo_doc
+
+		FROM persona_cliente as pc
+		INNER JOIN persona AS p on pc.idpersona=p.idpersona
+		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador
+		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
+		INNER JOIN plan as pl on pc.idplan=pl.idplan
+		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
+		INNER JOIN sunat_doc_identidad as i on p.tipo_documento=i.code_sunat  
+		where pc.estado='1' and pc.estado_delete='1' AND  pc.idpersona_trabajador = '$id'  ORDER BY idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 

@@ -1,7 +1,7 @@
 <?php
   //Activamos el almacenamiento en el buffer
   ob_start();
-
+  require "../config/funcion_general.php";
   session_start();
   if (!isset($_SESSION["user_nombre"])){
     header("Location: index.php?file=".basename($_SERVER['PHP_SELF']));
@@ -421,21 +421,21 @@
             </div>
           </div>    
           
-          <div class="modal fade modal-effect" id="modal-ver-historial-sesion" tabindex="-1" aria-labelledby="modal-agregar-usuarioLabel" aria-hidden="true">
-            <div class="modal-dialog modal-md modal-dialog-scrollable">
+          <div class="modal fade modal-effect" id="modal-ver-cliente" tabindex="-1" aria-labelledby="modal-agregar-clienteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h6 class="modal-title title-modal-img" id="modal-agregar-usuarioLabel1">Imagen</h6>
+                  <h6 class="modal-title title-modal-cliente" id="modal-agregar-clienteLabel1">Lista</h6>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body ">
-                  <table id="tabla-historial-sesion" class="table table-bordered w-100" style="width: 100%;">
+                  <table id="tabla-cliente" class="table table-bordered w-100" style="width: 100%;">
                     <thead>
                       <tr>
                         <th class="text-center">#</th>                          
-                        <th>Fecha</th>
-                        <th>Dia</th>
-                        <th>Mes</th>     
+                        <th>Nombre</th>
+                        <th>IP</th>
+                        <th>Fecha</th>    
                       </tr>
                     </thead>
                     <tbody>
@@ -443,15 +443,15 @@
                     <tfoot>
                       <tr>
                         <th class="text-center">#</th>                          
-                        <th>Fecha</th>
+                        <th>Nombre</th>
                         <th>Dia</th>
-                        <th>Mes</th>   
+                        <th>Fecha</th>   
                       </tr>
                     </tfoot>
                   </table>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
                 </div>
               </div>
             </div>
