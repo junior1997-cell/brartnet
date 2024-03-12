@@ -235,11 +235,11 @@ switch ($_GET["op"]) {
     $id = $_GET['id'];
     $marcados = $usuario->listarmarcadosNumeracion($id);
     //Declaramos el array para almacenar todos los permisos marcados
-    $valores = array();
+    $series_array = array();
 
     //Almacenar los permisos asignados al usuario en el array
     while ($per = $marcados['data']->fetch_object()) {
-      array_push($valores, $per->idsunat_usuario_comprobante);
+      array_push($series_array, $per->idtipo_comprobante);
     }
 
     //Mostramos la lista de permisos en la vista y si están o no marcados
@@ -248,7 +248,8 @@ switch ($_GET["op"]) {
 
       if ($key % 3 === 0) {   echo '<div class="col-lg-4 col-xl-3 col-xxl-3" >';   } # abrimos el: col-lg-2      
       
-      $sw = in_array($val['idtipo_comprobante'], $valores) ? 'checked' : '';
+      $sw = in_array($val['idtipo_comprobante'], $series_array) ? 'checked' : '';
+
       echo '<div class="custom-toggle-switch d-flex align-items-center mb-2 mt-2">
         <input id="serie_' . $val['idtipo_comprobante'] . '" name="serie[]" value="' . $val['idtipo_comprobante'] . '" type="checkbox" ' . $sw . '>
         <label for="serie_' . $val['idtipo_comprobante'] . '" class="label-primary"></label><span class="ms-3">' . $val['abreviatura'] .': <b>'.  $val['serie'] . '-' . $val['numero'] . '</b></span>
@@ -371,31 +372,33 @@ switch ($_GET["op"]) {
       in_array(29, $valores) ? $_SESSION['creditos_Pendientes']   = 1 : $_SESSION['creditos_Pendientes'] = 0;
       // Kardex
       in_array(30, $valores) ? $_SESSION['kardex_por_articulos']  = 1 : $_SESSION['kardex_por_articulos'] = 0;
+      in_array(31, $valores) ? $_SESSION['gastos']  = 1 : $_SESSION['gastos'] = 0;
       // Reporte
-      in_array(31, $valores) ? $_SESSION['venta_dia_mes']         = 1 : $_SESSION['venta_dia_mes'] = 0;
-      in_array(32, $valores) ? $_SESSION['venta_por_vendedor']    = 1 : $_SESSION['venta_por_vendedor'] = 0;
-      in_array(33, $valores) ? $_SESSION['venta_agrupada']        = 1 : $_SESSION['venta_agrupada'] = 0;
-      in_array(34, $valores) ? $_SESSION['venta_por_cliente']     = 1 : $_SESSION['venta_por_cliente'] = 0;
-      in_array(35, $valores) ? $_SESSION['PLE_ventas']            = 1 : $_SESSION['PLE_ventas'] = 0;
-      in_array(36, $valores) ? $_SESSION['reporte_compras']       = 1 : $_SESSION['reporte_compras'] = 0;
-      in_array(37, $valores) ? $_SESSION['margen_de_ganancia']    = 1 : $_SESSION['margen_de_ganancia'] = 0;
-      in_array(38, $valores) ? $_SESSION['correo_enviado']        = 1 : $_SESSION['correo_enviado'] = 0;
+      in_array(32, $valores) ? $_SESSION['venta_dia_mes']         = 1 : $_SESSION['venta_dia_mes'] = 0;
+      in_array(33, $valores) ? $_SESSION['venta_por_vendedor']    = 1 : $_SESSION['venta_por_vendedor'] = 0;
+      in_array(34, $valores) ? $_SESSION['venta_agrupada']        = 1 : $_SESSION['venta_agrupada'] = 0;
+      in_array(35, $valores) ? $_SESSION['venta_por_cliente']     = 1 : $_SESSION['venta_por_cliente'] = 0;
+      in_array(36, $valores) ? $_SESSION['PLE_ventas']            = 1 : $_SESSION['PLE_ventas'] = 0;
+      in_array(37, $valores) ? $_SESSION['reporte_compras']       = 1 : $_SESSION['reporte_compras'] = 0;
+      in_array(38, $valores) ? $_SESSION['margen_de_ganancia']    = 1 : $_SESSION['margen_de_ganancia'] = 0;
+      in_array(39, $valores) ? $_SESSION['correo_enviado']        = 1 : $_SESSION['correo_enviado'] = 0;
       // Administracion
-      in_array(39, $valores) ? $_SESSION['usuario']               = 1 : $_SESSION['usuario'] = 0;
+      in_array(40, $valores) ? $_SESSION['usuario']               = 1 : $_SESSION['usuario'] = 0;
       // Planilla Personal
-      in_array(40, $valores) ? $_SESSION['registrar_trabajador']  = 1 : $_SESSION['registrar_trabajador'] = 0;
-      in_array(41, $valores) ? $_SESSION['tipo_de_seguro']        = 1 : $_SESSION['tipo_de_seguro'] = 0;
-      in_array(42, $valores) ? $_SESSION['boleta_de_pago']        = 1 : $_SESSION['boleta_de_pago'] = 0;
+      in_array(41, $valores) ? $_SESSION['registrar_trabajador']  = 1 : $_SESSION['registrar_trabajador'] = 0;
+      in_array(42, $valores) ? $_SESSION['tipo_de_seguro']        = 1 : $_SESSION['tipo_de_seguro'] = 0;
+      in_array(43, $valores) ? $_SESSION['boleta_de_pago']        = 1 : $_SESSION['boleta_de_pago'] = 0;
       // SUNAT
-      in_array(43, $valores) ? $_SESSION['tipo_de_tributos']      = 1 : $_SESSION['tipo_de_tributos'] = 0;
-      in_array(44, $valores) ? $_SESSION['documento_de_identidad']= 1 : $_SESSION['documento_de_identidad'] = 0;
-      in_array(45, $valores) ? $_SESSION['tipo_de_afeccion_IGV']  = 1 : $_SESSION['tipo_de_afeccion_IGV'] = 0;
-      in_array(46, $valores) ? $_SESSION['correlativo_numeracion']= 1 : $_SESSION['correlativo_numeracion'] = 0;
-      in_array(47, $valores) ? $_SESSION['cargar_certificado']    = 1 : $_SESSION['cargar_certificado'] = 0;
+      in_array(44, $valores) ? $_SESSION['tipo_de_tributos']      = 1 : $_SESSION['tipo_de_tributos'] = 0;
+      in_array(45, $valores) ? $_SESSION['documento_de_identidad']= 1 : $_SESSION['documento_de_identidad'] = 0;
+      in_array(46, $valores) ? $_SESSION['tipo_de_afeccion_IGV']  = 1 : $_SESSION['tipo_de_afeccion_IGV'] = 0;
+      in_array(47, $valores) ? $_SESSION['correlativo_numeracion']= 1 : $_SESSION['correlativo_numeracion'] = 0;
+      in_array(48, $valores) ? $_SESSION['cargar_certificado']    = 1 : $_SESSION['cargar_certificado'] = 0;
       // Empresa
-      in_array(48, $valores) ? $_SESSION['empresa_configuracion'] = 1 : $_SESSION['empresa_configuracion'] = 0;
-      in_array(49, $valores) ? $_SESSION['correo_SMTP']           = 1 : $_SESSION['correo_SMTP'] = 0;
-      in_array(50, $valores) ? $_SESSION['notificaciones']        = 1 : $_SESSION['notificaciones'] = 0;
+      in_array(49, $valores) ? $_SESSION['empresa_configuracion'] = 1 : $_SESSION['empresa_configuracion'] = 0;
+      in_array(50, $valores) ? $_SESSION['correo_SMTP']           = 1 : $_SESSION['correo_SMTP'] = 0;
+      in_array(51, $valores) ? $_SESSION['notificaciones']        = 1 : $_SESSION['notificaciones'] = 0;
+      in_array(52, $valores) ? $_SESSION['configuracion']        = 1 : $_SESSION['general'] = 0;
       
 
       $data = [ 'status'=>true, 'message'=>'todo okey','data'=> $rspta['data']  ];

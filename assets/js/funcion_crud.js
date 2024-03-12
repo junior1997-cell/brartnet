@@ -67,6 +67,36 @@ function lista_select2(url, nombre_input, id_tabla, span_charge = null, callback
   }).fail( function(e) { ver_errores(e); } );
 }
 
+function lista_selectChoice(url, nombre_input, id_tabla, span_charge = null, callback_charge = "", callback_true = '') {
+  if (span_charge == null || span_charge == '' || span_charge == false ) { /*No hacemos nada*/ } else {
+    if (callback_charge == null || callback_charge == '' || callback_charge == false ) { 
+      $(span_charge).html('<div class="spinner-border spinner-border-sm" role="status"></div>'); } else {  $(span_charge).html(callback_charge);
+    }    
+  }
+  $.get(url, function (e, status) {
+    try {
+      e = JSON.parse(e);   //console.log(e);
+      // console.log(url, nombre_input, id_tabla);
+      if (e.status==true) {
+        
+        nombre_input.setChoiceByValue([
+          { value: 'One', label: 'Label One' },
+          { value: 'Two', label: 'Label Two' },
+          { value: 'Three', label: 'Label Three' },
+        ]);
+        
+        if ( !id_tabla || id_tabla == "NaN" || id_tabla == "" || id_tabla == null || id_tabla == "Infinity" || id_tabla === undefined) {
+          $(nombre_input).val(null).trigger("change");   } else {  $(nombre_input).val(id_tabla).trigger("change");  
+        }
+        if (span_charge == null || span_charge == '' || span_charge == false ) { } else {  $(span_charge).html(callback_true); }
+      } else {
+        ver_errores(e);
+      }
+    } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
 
 function crud_guardar_editar_card_xhr( url, formData, name_progress, table_reload_1, table_reload_2 = false, table_reload_3 = false, table_reload_4 = false, table_reload_5 = false, table_reload_6 = false, table_reload_7 = false, table_reload_8 = false, table_reload_9 = false) {
   //event.preventDefault();
