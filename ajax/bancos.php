@@ -99,8 +99,8 @@
 
             $data[] = [
               "0"=>$cont++,
-              "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar_banco(' . $value['idbancos'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
-                     '<button class="btn btn-danger  btn-sm" onclick="eliminar_banco(' . $value['idbancos'] .', \''.encodeCadenaHtml($value['nombre']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>',
+              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_banco(' . $value['idbancos'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                     '<button class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_banco(' . $value['idbancos'] .', \''.encodeCadenaHtml($value['nombre']).'\')" data-bs-toggle="tooltip" title="Eliminar o papelera"><i class="ri-delete-bin-line"></i></button>',
 
               "2" =>  '<div class="d-flex flex-fill align-items-center">
                         <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/bancos/' . $imagen . '" alt="" onclick="ver_imagen_banco(\'' . $imagen . '\', \'' . encodeCadenaHtml($value['nombre']) . '\')"> </span></div>
@@ -108,7 +108,7 @@
                           <span class="d-block fw-semibold text-primary">'.$value['nombre'].'</span>
                         </div>
                       </div>',
-              "3" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;">'.
+              "3" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px;">'.
                 '<span> <b>Formato CTA :</b>' . $value['formato_cta'] . '<br><b>Ej. cta: </b>' . darFormatoBanco($cta, ($value['formato_cta'])) .'</span> <br>'. 
                 '<span> <b>Formato CCI :</b>' . $value['formato_cci'] . '<br> <b>Ej. cci: </b>' . darFormatoBanco($cci, ($value['formato_cci'])) . '</span><br>'.
                 '<span> <b>Formato Detrac. :</b>' . $value['formato_detracciones'] . '<br>  

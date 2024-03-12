@@ -346,7 +346,9 @@
                                 <div class="mb-1 col-md-3 col-lg-3 col-xl-3 col-xxl-6">
                                   <div class="form-group">
                                     <label for="tipo_documento" class="form-label">Tipo documento:  </label></label>
-                                    <select name="tipo_documento" id="tipo_documento" data-trigger class="form-control" placeholder="Tipo de documento" >  </select>
+                                    <select name="tipo_documento" id="tipo_documento" class="form-select" placeholder="Tipo de documento" >
+                                      
+                                    </select>
                                   </div>                                         
                                 </div>
                                 
@@ -421,7 +423,7 @@
                                 <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-6 mt-3">
                                   <div class="form-group">
                                     <label for="distrito" class="form-label">Distrito:  </label></label>
-                                    <select name="distrito" id="distrito" class="form-control" placeholder="Seleccionar" onchange="llenar_dep_prov_ubig(this);">                                  
+                                    <select name="distrito" id="distrito" class="form-select" placeholder="Seleccionar" onchange="llenar_dep_prov_ubig(this);">                                  
                                     </select>
                                   </div>                                         
                                 </div>
@@ -464,8 +466,10 @@
                                 <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-4 mt-3">
                                   <div class="form-group">
                                     <label for="idbanco" class="form-label">Entidad Financiera:  </label></label>
-                                    <select name="idbanco" id="idbanco" class="form-control" placeholder="Seleccionar">
-                                      <option value="">This is a placeholder</option>                      
+                                    <select name="idbanco" id="idbanco" class="form-select" placeholder="Seleccionar"> 
+                                      <option value="1">ninguno</option>
+                                      <option value="7">BCP</option>
+                                      <option value="2">BBVA</option>
                                     </select>
                                   </div>                                         
                                 </div>
@@ -533,7 +537,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-danger"  data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
-                    <button type="button" class="btn btn-sm btn-success" id="guardar_registro_trabajador" style="display: none;"><i class="bx bx-save bx-tada"></i> Guardar</button>
+                    <button type="button" class="btn btn-sm btn-success label-btn" id="guardar_registro_proveedor "><i class="bx bx-save bx-tada"></i> Guardar</button>
                   </div>
                 </div>
               </div>

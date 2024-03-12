@@ -32,36 +32,51 @@ if (!isset($_SESSION["user_nombre"])) {
         <div class="container-fluid">
           <div class="row">
 
-            <!-- :::::::::::::::: P L A N E S :::::::::::::::: -->
-            <div class="col-6">
-              <!-- Start::page-header -->
-              <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
-                <div>
-                  <div class="d-md-flex d-block align-items-center ">
-                    <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-plan"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
-                    <div>
-                      <p class="fw-semibold fs-18 mb-0">Planes</p>
-                      <span class="fs-semibold text-muted">Administra los planes de manera eficiente.</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="btn-list mt-md-0 mt-2">
-                  <nav>
-                    <ol class="breadcrumb mb-0">
-                      <li class="breadcrumb-item"><a href="javascript:void(0);">Planes</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">Home</li>
-                    </ol>
-                  </nav>
+            <div class="col-12 col-sm-12 mt-4">
+              <div class="card card-primary card-outline card-tabs">
+                <div class="card-header p-0 pt-1 border-bottom-0">
+                  <ul class="nav nav-tabs tab-style-2 mb-3"  role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="dato-cliente" data-bs-toggle="tab" data-bs-target="#dato-cliente-pane" type="button" role="tab" aria-selected="true"><i class="ri-user-line me-1 align-middle"></i>CLIENTE</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="rol-trab" data-bs-toggle="tab" data-bs-target="#rol-trab-pane" type="button" role="tab" aria-selected="false"><i class="ri-tools-line me-1 align-middle"></i>TRABAJADOR</button>
+                    </li> 
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="rol-general" data-bs-toggle="tab" data-bs-target="#rol-general-pane" type="button" role="tab" aria-selected="false"><i class="ri-dashboard-line me-1 align-middle"></i>GENERAL</button>
+                    </li>                  
+                  </ul>
                 </div>
               </div>
-              <!-- End::page-header -->
+            </div>
 
-              <!-- Start::row-1 -->
-              <section id="Planes">
-                <div class="row">
-                  <div class="col-xxl-12 col-xl-12">
-                    <div>
+            <div class="col-12 col-lg-12 col-xl-12 p-0">
+              <div class="tab-content">
+                <div class="tab-pane fade show active" id="dato-cliente-pane" role="tabpanel" tabindex="0">
+                  <div class="row">
+
+                    <!-- :::::::::::::::: P L A N E S :::::::::::::::: -->
+                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
+                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                        <div>
+                          <div class="d-md-flex d-block align-items-center ">
+                            <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-plan"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                            <div>
+                              <p class="fw-semibold fs-18 mb-0">Planes</p>
+                              <span class="fs-semibold text-muted">Administra los planes de manera eficiente.</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="btn-list mt-md-0 mt-2">
+                          <nav>
+                            <ol class="breadcrumb mb-0">
+                              <li class="breadcrumb-item"><a href="javascript:void(0);">Planes</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Home</li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
                       <div class="card custom-card">
                         <div class="card-body table-responsive">
                           <table id="tabla-plan" class="table table-bordered w-100" style="width: 100%;">
@@ -88,42 +103,29 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </section>
-              <!-- End::row-1 -->
-            </div>
 
-            <!-- :::::::::::::::: Z O N A :::::::::::::::: -->
-            <div class="col-6">
-              <!-- Start::page-header -->
-              <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
-                <div>
-                  <div class="d-md-flex d-block align-items-center ">
-                    <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_zona();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-zona"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
-                    <div>
-                      <p class="fw-semibold fs-18 mb-0">Zonas</p>
-                      <span class="fs-semibold text-muted">Administra de manera eficiente las zonas.</span>
-                    </div>
-                  </div>
-                </div>
+                    <!-- :::::::::::::::: Z O N A :::::::::::::::: -->
+                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
+                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                        <div>
+                          <div class="d-md-flex d-block align-items-center ">
+                            <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_zona();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-zona"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                            <div>
+                              <p class="fw-semibold fs-18 mb-0"><b>Zonas</b></p>
+                              <span class="fs-semibold text-muted">Administra de manera eficiente las zonas.</span>
+                            </div>
+                          </div>
+                        </div>
 
-                <div class="btn-list mt-md-0 mt-2">
-                  <nav>
-                    <ol class="breadcrumb mb-0">
-                      <li class="breadcrumb-item"><a href="javascript:void(0);">Zonas</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">Home</li>
-                    </ol>
-                  </nav>
-                </div>
-              </div>
-              <!-- End::page-header -->
-
-              <!-- Start::row-1 -->
-              <section id="zona">
-                <div class="row">
-                  <div class="col-xxl-12 col-xl-12">
-                    <div>
+                        <div class="btn-list mt-md-0 mt-2">
+                          <nav>
+                            <ol class="breadcrumb mb-0">
+                              <li class="breadcrumb-item"><a href="javascript:void(0);">Zonas</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Home</li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
                       <div class="card custom-card">
                         <div class="card-body table-responsive">
                           <table id="tabla-zona" class="table table-bordered w-100" style="width: 100%;">
@@ -150,42 +152,28 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </section>
-              <!-- End::row-1 -->
-            </div>
 
-            <!-- :::::::::::::::: C E N T R O    P O B L A D O :::::::::::::::: -->
-            <div class="col-6">
-              <!-- Start::page-header -->
-              <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
-                <div>
-                  <div class="d-md-flex d-block align-items-center ">
-                    <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_centro_poblado();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-centro-poblado"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
-                    <div>
-                      <p class="fw-semibold fs-18 mb-0">Centro Poblado</p>
-                      <span class="fs-semibold text-muted">Administra de manera eficiente tus lugares.</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="btn-list mt-md-0 mt-2">
-                  <nav>
-                    <ol class="breadcrumb mb-0">
-                      <li class="breadcrumb-item"><a href="javascript:void(0);">Centro Poblado</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">Home</li>
-                    </ol>
-                  </nav>
-                </div>
-              </div>
-              <!-- End::page-header -->
-
-              <!-- Start::row-1 -->
-              <section >
-                <div class="row">
-                  <div class="col-xxl-12 col-xl-12">
-                    <div>
+                    <!-- :::::::::::::::: C E N T R O    P O B L A D O :::::::::::::::: -->
+                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
+                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                        <div>
+                          <div class="d-md-flex d-block align-items-center ">
+                            <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_centro_poblado();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-centro-poblado"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                            <div>
+                              <p class="fw-semibold fs-18 mb-0">Centro Poblado</p>
+                              <span class="fs-semibold text-muted">Administra de manera eficiente tus lugares.</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="btn-list mt-md-0 mt-2">
+                          <nav>
+                            <ol class="breadcrumb mb-0">
+                              <li class="breadcrumb-item"><a href="javascript:void(0);">Centro Poblado</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Home</li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
                       <div class="card custom-card">
                         <div class="card-body table-responsive">
                           <table id="tabla-centro-poblado" class="table table-bordered w-100" style="width: 100%;">
@@ -212,42 +200,84 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                     </div>
+
                   </div>
                 </div>
-              </section>
-              <!-- End::row-1 -->
-            </div>
+                <div class="tab-pane fade" id="rol-trab-pane" role="tabpanel" tabindex="0">
+                  <div class="row">
+                    <!-- :::::::::::::::: C A R G O    T R A B A J A D O R :::::::::::::::: -->
+                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
+                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                        <div>
+                          <div class="d-md-flex d-block align-items-center ">
+                            <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form_ct();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-c-t"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                            <div>
+                              <p class="fw-semibold fs-18 mb-0">Cargo Trabajador</p>
+                              <span class="fs-semibold text-muted">Administra de manera eficiente los cargos.</span>
+                            </div>
+                          </div>
+                        </div>
 
-            <!-- :::::::::::::::: B A N C O S :::::::::::::::: -->
-            <div class="col-6" id="bancos">
-              <!-- Start::page-header -->
-              <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
-                <div>
-                  <div class="d-md-flex d-block align-items-center ">
-                    <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_banco();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-bancos"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
-                    <div>
-                      <p class="fw-semibold fs-18 mb-0">Bancos</p>
-                      <span class="fs-semibold text-muted">Administra de manera eficiente tus bancos.</span>
+                        <div class="btn-list mt-md-0 mt-2">
+                          <nav>
+                            <ol class="breadcrumb mb-0">
+                              <li class="breadcrumb-item"><a href="javascript:void(0);">Cargo Trabajador</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Home</li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
+                      <div class="card custom-card">
+                        <div class="card-body table-responsive">
+                          <table id="tabla-cargo-trabajador" class="table table-bordered w-100" style="width: 100%;">
+                            <thead>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Acciones</th>
+                                <th>Nombre</th>
+                                <th class="text-center">Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Acciones</th>
+                                <th>Nombre</th>
+                                <th class="text-center">Estado</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="btn-list mt-md-0 mt-2">
-                  <nav>
-                    <ol class="breadcrumb mb-0">
-                      <li class="breadcrumb-item"><a href="javascript:void(0);">Bancos</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">Home</li>
-                    </ol>
-                  </nav>
-                </div>
-              </div>
-              <!-- End::page-header -->
+                <div class="tab-pane fade" id="rol-general-pane" role="tabpanel" tabindex="0">
+                  <div class="row">
+                    <!-- :::::::::::::::: B A N C O S :::::::::::::::: -->
+                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
+                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                        <div>
+                          <div class="d-md-flex d-block align-items-center ">
+                            <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_banco();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-bancos"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                            <div>
+                              <p class="fw-semibold fs-18 mb-0">Bancos</p>
+                              <span class="fs-semibold text-muted">Administra de manera eficiente tus bancos.</span>
+                            </div>
+                          </div>
+                        </div>
 
-              <!-- Start::row-1 -->
-              <section >
-                <div class="row">
-                  <div class="col-xxl-12 col-xl-12">
-                    <div>
+                        <div class="btn-list mt-md-0 mt-2">
+                          <nav>
+                            <ol class="breadcrumb mb-0">
+                              <li class="breadcrumb-item"><a href="javascript:void(0);">Bancos</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Home</li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
                       <div class="card custom-card">
                         <div class="card-body table-responsive">
                           <table id="tabla-bancos" class="table table-bordered w-100" style="width: 100%;">
@@ -288,69 +318,10 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
                   </div>
                 </div>
-              </section>
-              <!-- End::row-1 -->
-            </div>
-
-            <!-- :::::::::::::::: C A R G O    T R A B A J A D O R :::::::::::::::: -->
-            <div class="col-6">
-              <!-- Start::page-header -->
-              <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
-                <div>
-                  <div class="d-md-flex d-block align-items-center ">
-                    <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form_ct();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-c-t"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
-                    <div>
-                      <p class="fw-semibold fs-18 mb-0">Cargo Trabajador</p>
-                      <span class="fs-semibold text-muted">Administra de manera eficiente los cargos.</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="btn-list mt-md-0 mt-2">
-                  <nav>
-                    <ol class="breadcrumb mb-0">
-                      <li class="breadcrumb-item"><a href="javascript:void(0);">Cargo Trabajador</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">Home</li>
-                    </ol>
-                  </nav>
-                </div>
               </div>
-              <!-- End::page-header -->
-
-              <!-- Start::row-1 -->
-              <section >
-                <div class="row">
-                  <div class="col-xxl-12 col-xl-12">
-                    <div>
-                      <div class="card custom-card">
-                        <div class="card-body table-responsive">
-                          <table id="tabla-cargo-trabajador" class="table table-bordered w-100" style="width: 100%;">
-                            <thead>
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th class="text-center">Acciones</th>
-                                <th>Nombre</th>
-                                <th class="text-center">Estado</th>
-                              </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th class="text-center">Acciones</th>
-                                <th>Nombre</th>
-                                <th class="text-center">Estado</th>
-                              </tr>
-                            </tfoot>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <!-- End::row-1 -->
             </div>
+
+
 
           </div>
 

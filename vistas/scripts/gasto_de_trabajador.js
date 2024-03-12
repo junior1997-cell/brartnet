@@ -444,19 +444,25 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
 
 // .....:::::::::::::::::::::::::::::::::::::::::: P R O V E E D O R :::::::::::::::::::::::::::::::::::::::::::..
 function modal_add_trabajador() {
-  // $("#modal-agregar-proveedor").modal('show');
-  toastr_info('Proximamente!!', 'Esta opción estará terminada en unos días, tenga paciencia por favor.', 700);
+  $("#modal-agregar-proveedor").modal('show');
+  // toastr_info('Proximamente!!', 'Esta opción estará terminada en unos días, tenga paciencia por favor.', 700);
+
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+  lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
+  lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);
+  lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
+
 }
 function limpiar_proveedor() {
 
-  lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
+  // lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
   // lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", select_idbanco, null);
-  lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
-  select_idbanco.setChoiceByValue([
-    { value: 'One', label: 'Label One' },
-    { value: 'Two', label: 'Label Two' },
-    { value: 'Three', label: 'Label Three' },
-  ]);
+  // lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
+  // select_idbanco.setChoiceByValue([
+  //   { value: 'One', label: 'Label One' },
+  //   { value: 'Two', label: 'Label Two' },
+  //   { value: 'Three', label: 'Label Three' },
+  // ]);
   
   // $("#tipo_documento").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   // $("#idbanco").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -511,9 +517,8 @@ function guardar_editar_proveedor(e) {
 			try {
 				e = JSON.parse(e);  //console.log(e); 
         if (e.status == true) {	
-					tabla_proveedores.ajax.reload(null, false);          
-					show_hide_form(1)
 					sw_success('Exito', 'proveedor guardado correctamente.');
+          $("#modal-agregar-proveedor").modal('hide');
 				} else {
 					ver_errores(e);
 				}				
@@ -548,9 +553,75 @@ function guardar_editar_proveedor(e) {
 		}
 	});
 }
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  P R O V E E D O R    :::::::::::::::::::::::::::::::::::::::..
+$(function () {
+  $("#form-agregar-proveedor").validate({
+    ignore: "",
+    rules: {           
+      // tipo_documento:           { required: true, minlength: 1, maxlength: 2, },       
+      numero_documento:    			{ required: true, minlength: 8, maxlength: 20, },       
+      // nombre_razonsocial:    		{ required: true, minlength: 4, maxlength: 200, },       
+      // apellidos_nombrecomercial:{ required: true, minlength: 4, maxlength: 200, },       
+      // correo:    			          { minlength: 4, maxlength: 100, },       
+      // celular:    			        { minlength: 8, maxlength: 9, },       
+
+      // direccion:    			      { minlength: 4, maxlength: 200, },       
+      // distrito:    			        { required: true, },       
+      // departamento:    			    { required: true, },       
+      // provincia:    			      { required: true, },  
+      // ubigeo:    			          { required: true, },
+
+      // idbanco:    			        { required: true, },
+      // cuenta_bancaria:    			{ minlength: 4, maxlength: 45, },
+      // cci:    			            { minlength: 4, maxlength: 45, },
+			
+    },
+    messages: {     
+      // tipo_documento:    			  { required: "Campo requerido", },
+      numero_documento:    			{ required: "Campo requerido", }, 
+      // nombre_razonsocial:    		{ required: "Campo requerido", }, 
+      // apellidos_nombrecomercial:{ required: "Campo requerido", }, 
+      // correo:    			          { minlength: "Mínimo {0} caracteres.", }, 
+      // celular:    			        { minlength: "Mínimo {0} caracteres.", }, 
+
+      // direccion:    			      { minlength: "Mínimo {0} caracteres.", },
+      // distrito:    			        { required: "Campo requerido", }, 
+      // departamento:    			    { required: "Campo requerido", }, 
+      // provincia:    			      { required: "Campo requerido", }, 
+      // ubigeo:    			          { required: "Campo requerido", },
+
+      // idbanco:    			        { required: "Campo requerido", }, 
+      // cuenta_bancaria:    			{ minlength: "Mínimo {0} caracteres.", }, 
+      // cci:    			            { minlength: "Mínimo {0} caracteres.", }, 
+      // titular_cuenta:    			  { minlength: "Mínimo {0} caracteres.", }, 
+
+    },
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");   
+    },
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_editar_proveedor(e);      
+    },
+  });
+});
 
 
-// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
+
+
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  T R A B A J A D O R    :::::::::::::::::::::::::::::::::::::::..
 $(function () {
   $("#formulario-gasto").validate({
     rules: {
@@ -639,7 +710,6 @@ function llenar_dep_prov_ubig(input) {
       $("#ubigeo").val(e.data.ubigeo_inei); 
 
       $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
-      $("#form-agregar-proveedor").valid();
     });
   }  
 }
