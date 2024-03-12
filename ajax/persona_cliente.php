@@ -264,7 +264,8 @@ if (!isset($_SESSION["user_nombre"])) {
               "14" => $value['nombre_plan'],
               "15" => $value['costo'],
               "16" => $value['zona'],
-              "17" => $value['ip_antena']
+              "17" =>  date("d/m/Y", strtotime($fecha_pago_of)),
+              "18" => $value['ip_antena']
 
             );
           }

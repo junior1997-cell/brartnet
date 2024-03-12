@@ -86,6 +86,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="text-center">Plan</th>
                                 <th class="text-center">Costo Plan</th>
                                 <th class="text-center">Nombre Zona</th>
+                                <th class="text-center">Siguiente Pago</th>
                                 <th class="text-center">Ip Antena</th>
 
                               </tr>
@@ -112,6 +113,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="text-center">Plan</th>
                                 <th class="text-center">Costo Plan</th>
                                 <th class="text-center">Nombre Zona</th>
+                                <th class="text-center">Siguiente Pago</th>
                                 <th class="text-center">Ip Antena</th>
 
                               </tr>
