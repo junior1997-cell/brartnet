@@ -1,6 +1,6 @@
 var tabla;
 
-var select_idbanco = new Choices('#idbanco', { allowHTML: true,  removeItemButton: true, });
+// var select_idbanco = new Choices('#idbanco', { allowHTML: true,  removeItemButton: true, });
 
 function init() {
 
@@ -445,28 +445,9 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
 // .....:::::::::::::::::::::::::::::::::::::::::: P R O V E E D O R :::::::::::::::::::::::::::::::::::::::::::..
 function modal_add_trabajador() {
   $("#modal-agregar-proveedor").modal('show');
-  // toastr_info('Proximamente!!', 'Esta opción estará terminada en unos días, tenga paciencia por favor.', 700);
-
-  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
-  lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);
-  lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
-
 }
-function limpiar_proveedor() {
 
-  // lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
-  // lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", select_idbanco, null);
-  // lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
-  // select_idbanco.setChoiceByValue([
-  //   { value: 'One', label: 'Label One' },
-  //   { value: 'Two', label: 'Label Two' },
-  //   { value: 'Three', label: 'Label Three' },
-  // ]);
-  
-  // $("#tipo_documento").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  // $("#idbanco").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  // $("#distrito").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+function limpiar_proveedor() {
 
 	$('#idpersona').val('');
   $('#tipo_persona_sunat').val('NATURAL');
@@ -488,22 +469,13 @@ function limpiar_proveedor() {
   $('#cuenta_bancaria').val('');
   $('#cci').val(''); 
 
-  $("#imagen").val("");
-  $("#imagenactual").val("");
-  $("#imagenmuestra").attr("src", "../assets/modulo/proveedor/no-proveedor.png");
-  $("#imagenmuestra").attr("src", "../assets/modulo/proveedor/no-proveedor.png").show();
-  var imagenMuestra = document.getElementById('imagenmuestra');
-  if (!imagenMuestra.src || imagenMuestra.src == "") {
-    imagenMuestra.src = '../assets/modulo/proveedor/no-proveedor.png';
-  }
-
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
 }
 
-function guardar_editar_proveedor(e) {
+function guardar_proveedor(e) {
 
 	var formData = new FormData($("#form-agregar-proveedor")[0]);
 
@@ -518,7 +490,7 @@ function guardar_editar_proveedor(e) {
 				e = JSON.parse(e);  //console.log(e); 
         if (e.status == true) {	
 					sw_success('Exito', 'proveedor guardado correctamente.');
-          $("#modal-agregar-proveedor").modal('hide');
+          $("#modal-agregar-proveedor").modal('hide'); limpiar_proveedor();
 				} else {
 					ver_errores(e);
 				}				
@@ -553,47 +525,85 @@ function guardar_editar_proveedor(e) {
 		}
 	});
 }
-// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  P R O V E E D O R    :::::::::::::::::::::::::::::::::::::::..
+
+$('#tipo_documento').change(function() {
+  var tipo = $(this).val();
+
+  if (tipo !== null && tipo !== '' && tipo == '6') {
+    $('.label-nom-raz').html('Razón Social <sup class="text-danger">*</sup>');
+    $('.label-ape-come').html('Nombre comercial <sup class="text-danger">*</sup>');
+  }else{
+    $('.label-nom-raz').html('Nombres <sup class="text-danger">*</sup>');
+    $('.label-ape-come').html('Apellidos <sup class="text-danger">*</sup>');
+  }
+
+});
+
+function cambiarImagen() {
+	var imagenInput = document.getElementById('imagen');
+	imagenInput.click();
+}
+
+function removerImagen() {
+	$("#imagenmuestra").attr("src", "../assets/proveedor/no-proveedor.png");
+	$("#imagen").val("");
+  $("#imagenactual").val("");
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+	var imagenMuestra = document.getElementById('imagenmuestra');
+	var imagenInput = document.getElementById('imagen');
+
+	imagenInput.addEventListener('change', function () {
+		if (imagenInput.files && imagenInput.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function (e) { imagenMuestra.src = e.target.result;	}
+			reader.readAsDataURL(imagenInput.files[0]);
+		}
+	});
+});
+
 $(function () {
+  $('#distrito').on('change', function() { $(this).trigger('blur'); });
   $("#form-agregar-proveedor").validate({
     ignore: "",
     rules: {           
-      // tipo_documento:           { required: true, minlength: 1, maxlength: 2, },       
+      tipo_documento:           { required: true, minlength: 1, maxlength: 2, },       
       numero_documento:    			{ required: true, minlength: 8, maxlength: 20, },       
-      // nombre_razonsocial:    		{ required: true, minlength: 4, maxlength: 200, },       
-      // apellidos_nombrecomercial:{ required: true, minlength: 4, maxlength: 200, },       
-      // correo:    			          { minlength: 4, maxlength: 100, },       
-      // celular:    			        { minlength: 8, maxlength: 9, },       
+      nombre_razonsocial:    		{ required: true, minlength: 4, maxlength: 200, },       
+      apellidos_nombrecomercial:{ required: true, minlength: 4, maxlength: 200, },       
+      correo:    			          { minlength: 4, maxlength: 100, },       
+      celular:    			        { minlength: 8, maxlength: 9, },       
 
-      // direccion:    			      { minlength: 4, maxlength: 200, },       
-      // distrito:    			        { required: true, },       
-      // departamento:    			    { required: true, },       
-      // provincia:    			      { required: true, },  
-      // ubigeo:    			          { required: true, },
+      direccion:    			      { minlength: 4, maxlength: 200, },       
+      distrito:    			        { required: true, },       
+      departamento:    			    { required: true, },       
+      provincia:    			      { required: true, },  
+      ubigeo:    			          { required: true, },
 
-      // idbanco:    			        { required: true, },
-      // cuenta_bancaria:    			{ minlength: 4, maxlength: 45, },
-      // cci:    			            { minlength: 4, maxlength: 45, },
+      idbanco:    			        { required: true, },
+      cuenta_bancaria:    			{ minlength: 4, maxlength: 45, },
+      cci:    			            { minlength: 4, maxlength: 45, },
 			
     },
     messages: {     
-      // tipo_documento:    			  { required: "Campo requerido", },
+      tipo_documento:    			  { required: "Campo requerido", },
       numero_documento:    			{ required: "Campo requerido", }, 
-      // nombre_razonsocial:    		{ required: "Campo requerido", }, 
-      // apellidos_nombrecomercial:{ required: "Campo requerido", }, 
-      // correo:    			          { minlength: "Mínimo {0} caracteres.", }, 
-      // celular:    			        { minlength: "Mínimo {0} caracteres.", }, 
+      nombre_razonsocial:    		{ required: "Campo requerido", }, 
+      apellidos_nombrecomercial:{ required: "Campo requerido", }, 
+      correo:    			          { minlength: "Mínimo {0} caracteres.", }, 
+      celular:    			        { minlength: "Mínimo {0} caracteres.", }, 
 
-      // direccion:    			      { minlength: "Mínimo {0} caracteres.", },
-      // distrito:    			        { required: "Campo requerido", }, 
-      // departamento:    			    { required: "Campo requerido", }, 
-      // provincia:    			      { required: "Campo requerido", }, 
-      // ubigeo:    			          { required: "Campo requerido", },
+      direccion:    			      { minlength: "Mínimo {0} caracteres.", },
+      distrito:    			        { required: "Campo requerido", }, 
+      departamento:    			    { required: "Campo requerido", }, 
+      provincia:    			      { required: "Campo requerido", }, 
+      ubigeo:    			          { required: "Campo requerido", },
 
-      // idbanco:    			        { required: "Campo requerido", }, 
-      // cuenta_bancaria:    			{ minlength: "Mínimo {0} caracteres.", }, 
-      // cci:    			            { minlength: "Mínimo {0} caracteres.", }, 
-      // titular_cuenta:    			  { minlength: "Mínimo {0} caracteres.", }, 
+      idbanco:    			        { required: "Campo requerido", }, 
+      cuenta_bancaria:    			{ minlength: "Mínimo {0} caracteres.", }, 
+      cci:    			            { minlength: "Mínimo {0} caracteres.", }, 
+      titular_cuenta:    			  { minlength: "Mínimo {0} caracteres.", },  
 
     },
         
@@ -613,9 +623,10 @@ $(function () {
     },
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardar_editar_proveedor(e);      
+      guardar_proveedor(e);      
     },
   });
+  $('#distrito').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 
@@ -678,52 +689,5 @@ function mayus(e) {
   e.value = e.value.toUpperCase();
 }
 
-function ver_img(img, nombre) {
-	$(".title-modal-img").html(`-${nombre}`);
-  $('#modal-ver-img').modal("show");
-  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
-  $(`.jq_image_zoom`).zoom({ on:'grab' });
-}
-
-
 function reload_idtrabajador(){ lista_select2("../ajax/gasto_de_trabajador.php?op=listar_trabajador", '#idtrabajador', null, '.charge_idtrabajador'); }
 function reload_idproveedor(){ lista_select2("../ajax/gasto_de_trabajador.php?op=listar_proveedor", '#idproveedor', null, '.charge_idproveedor'); }
-
-function llenar_dep_prov_ubig(input) {
-
-  $(".chargue-pro").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
-  $(".chargue-dep").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
-  $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
-
-  if ($(input).val() == null || $(input).val() == '') { 
-    $("#departamento").val(""); 
-    $("#provincia").val(""); 
-    $("#ubigeo").val(""); 
-
-    $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
-  } else {
-    var iddistrito = 0 //  $(input).select2('data')[0].element.attributes.iddistrito.value;
-    $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
-      e = JSON.parse(e); console.log(e);
-      $("#departamento").val(e.data.departamento); 
-      $("#provincia").val(e.data.provincia); 
-      $("#ubigeo").val(e.data.ubigeo_inei); 
-
-      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
-    });
-  }  
-}
-
-// Modificar nombre segun  el tipo de documento
-$('#tipo_documento').change(function() {
-  var tipo = $(this).val();
-
-  if (tipo !== null && tipo !== '' && tipo == '6') {
-    $('.label-nom-raz').html('Razón Social <sup class="text-danger">*</sup>');
-    $('.label-ape-come').html('Nombre comercial <sup class="text-danger">*</sup>');
-  }else{
-    $('.label-nom-raz').html('Nombres <sup class="text-danger">*</sup>');
-    $('.label-ape-come').html('Apellidos <sup class="text-danger">*</sup>');
-  }
-
-});

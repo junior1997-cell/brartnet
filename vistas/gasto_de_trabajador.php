@@ -172,7 +172,7 @@
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="idproveedor" class="form-label">
-                                      <span class="badge bg-success m-r-4px cursor-pointer"  onclick=" modal_add_trabajador();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span>
+                                      <span class="badge bg-success m-r-4px cursor-pointer"  onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span>
                                       <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idproveedor();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
                                       Proveedor
                                       <span class="charge_idproveedor"></span>
@@ -323,8 +323,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body px-4">
-                    <div>                    
-                      <form name="form-agregar-proveedor" id="form-agregar-proveedor" method="POST" class="needs-validation" novalidate>                          
+                                       
+                      <form name="form-agregar-proveedor" id="form-agregar-proveedor" method="POST" class="needs-validation" novalidate>
                               
                         <div class="row" id="cargando-3-fomulario">
                           <!-- idpersona -->
@@ -345,9 +345,12 @@
                                 <!-- Tipo documento -->
                                 <div class="mb-1 col-md-3 col-lg-3 col-xl-3 col-xxl-6">
                                   <div class="form-group">
-                                    <label for="tipo_documento" class="form-label">Tipo documento:  </label></label>
-                                    <select name="tipo_documento" id="tipo_documento" class="form-select" placeholder="Tipo de documento" >
-                                      
+                                    <label for="tipo_documento" class="form-label">Tipo documento:  </label>
+                                    <select name="tipo_documento" id="tipo_documento" class="form-select" required>
+                                      <option value="0">NINGUNO</option>
+                                      <option value="1">DNI</option>
+                                      <option value="4">CE</option>
+                                      <option value="6">RUC</option>
                                     </select>
                                   </div>                                         
                                 </div>
@@ -422,8 +425,11 @@
                                 <!-- Distrito -->
                                 <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-6 mt-3">
                                   <div class="form-group">
-                                    <label for="distrito" class="form-label">Distrito:  </label></label>
-                                    <select name="distrito" id="distrito" class="form-select" placeholder="Seleccionar" onchange="llenar_dep_prov_ubig(this);">                                  
+                                    <label for="distrito" class="form-label">Distrito: </label>
+                                    <select name="distrito" id="distrito" class="form-select" readonly>
+                                      <option value="CHACHAPOYAS">CHACHAPOYAS</option>
+                                      <option value="ASUNCION">ASUNCION</option>
+                                      <option value="BALSAS">BALSAS</option>
                                     </select>
                                   </div>                                         
                                 </div>
@@ -431,21 +437,21 @@
                                 <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="departamento" class="form-label">Departamento: <span class="chargue-pro"></span></label>
-                                    <input type="text" class="form-control" name="departamento" id="departamento" readonly>
+                                    <input type="text" class="form-control" name="departamento" id="departamento">
                                   </div>                                         
                                 </div>
                                 <!-- Provincia -->
                                 <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="provincia" class="form-label">Provincia: <span class="chargue-dep"></span></label>
-                                    <input type="text" class="form-control" name="provincia" id="provincia" readonly>
+                                    <input type="text" class="form-control" name="provincia" id="provincia">
                                   </div>                                         
                                 </div>
                                 <!-- Ubigeo -->
                                 <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="ubigeo" class="form-label">Ubigeo: <span class="chargue-ubi"></span></label>
-                                    <input type="text" class="form-control" name="ubigeo" id="ubigeo" readonly>
+                                    <input type="text" class="form-control" name="ubigeo" id="ubigeo">
                                   </div>                                         
                                 </div>
                               </div> <!-- /.row -->
@@ -465,11 +471,11 @@
                                 <!-- Banco -->
                                 <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-4 mt-3">
                                   <div class="form-group">
-                                    <label for="idbanco" class="form-label">Entidad Financiera:  </label></label>
-                                    <select name="idbanco" id="idbanco" class="form-select" placeholder="Seleccionar"> 
-                                      <option value="1">ninguno</option>
-                                      <option value="7">BCP</option>
+                                    <label for="idbanco" class="form-label">Entidad Financiera:  </label>
+                                    <select name="idbanco" id="idbanco" class="form-select" required> 
+                                      <option value="1">NINGUNO</option>
                                       <option value="2">BBVA</option>
+                                      <option value="3">SCOTIA BANK</option>
                                     </select>
                                   </div>                                         
                                 </div>
@@ -533,11 +539,11 @@
                         <!-- Submit -->
                         <button type="submit" style="display: none;" id="submit-form-proveedor">Submit</button>
                       </form>
-                    </div>
+                    
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-danger"  data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
-                    <button type="button" class="btn btn-sm btn-success label-btn" id="guardar_registro_proveedor "><i class="bx bx-save bx-tada"></i> Guardar</button>
+                    <button type="button" class="btn btn-sm btn-success label-btn" id="guardar_registro_proveedor"><i class="bx bx-save bx-tada"></i> Guardar</button>
                   </div>
                 </div>
               </div>
