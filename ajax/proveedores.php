@@ -3,7 +3,7 @@ ob_start();
 if (strlen(session_id()) < 1) { session_start(); }
 
 if (!isset($_SESSION["user_nombre"])) {
-  $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+  $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [], 'aaData' => [] ];
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
@@ -17,25 +17,24 @@ if (!isset($_SESSION["user_nombre"])) {
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
     $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-      $idpersona            = isset($_POST["idpersona"])? limpiarCadena($_POST["idpersona"]):"";
-      $tipo_persona_sunat   = isset($_POST["tipo_persona_sunat"])? limpiarCadena($_POST["tipo_persona_sunat"]):"";
-      $idtipo_persona       = isset($_POST["idtipo_persona"])? limpiarCadena($_POST["idtipo_persona"]):"";
+    $idpersona            = isset($_POST["idpersona"])? limpiarCadena($_POST["idpersona"]):"";
+    $tipo_persona_sunat   = isset($_POST["tipo_persona_sunat"])? limpiarCadena($_POST["tipo_persona_sunat"]):"";
+    $idtipo_persona       = isset($_POST["idtipo_persona"])? limpiarCadena($_POST["idtipo_persona"]):"";
 
-      $tipo_documento       = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
-      $numero_documento     = isset($_POST["numero_documento"])? limpiarCadena($_POST["numero_documento"]):"";
-      $nombre_razonsocial   = isset($_POST["nombre_razonsocial"])? limpiarCadena($_POST["nombre_razonsocial"]):"";
-      $apellidos_nombrecomercial = isset($_POST["apellidos_nombrecomercial"])? limpiarCadena($_POST["apellidos_nombrecomercial"]):"";
-      $correo               = isset($_POST["correo"])? limpiarCadena($_POST["correo"]):"";
-      $celular              = isset($_POST["celular"])? limpiarCadena($_POST["celular"]):"";
-      $direccion            = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
-      $distrito             = isset($_POST["distrito"])? limpiarCadena($_POST["distrito"]):"";
-      $departamento         = isset($_POST["departamento"])? limpiarCadena($_POST["departamento"]):"";
-      $provincia            = isset($_POST["provincia"])? limpiarCadena($_POST["provincia"]):"";
-      $ubigeo               = isset($_POST["ubigeo"])? limpiarCadena($_POST["ubigeo"]):"";
-      $idbanco              = isset($_POST["idbanco"])? limpiarCadena($_POST["idbanco"]):"";
-      $cuenta_bancaria      = isset($_POST["cuenta_bancaria"])? limpiarCadena($_POST["cuenta_bancaria"]):"";
-      $cci                  = isset($_POST["cci"])? limpiarCadena($_POST["cci"]):"";
-
+    $tipo_documento       = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
+    $numero_documento     = isset($_POST["numero_documento"])? limpiarCadena($_POST["numero_documento"]):"";
+    $nombre_razonsocial   = isset($_POST["nombre_razonsocial"])? limpiarCadena($_POST["nombre_razonsocial"]):"";
+    $apellidos_nombrecomercial = isset($_POST["apellidos_nombrecomercial"])? limpiarCadena($_POST["apellidos_nombrecomercial"]):"";
+    $correo               = isset($_POST["correo"])? limpiarCadena($_POST["correo"]):"";
+    $celular              = isset($_POST["celular"])? limpiarCadena($_POST["celular"]):"";
+    $direccion            = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
+    $distrito             = isset($_POST["distrito"])? limpiarCadena($_POST["distrito"]):"";
+    $departamento         = isset($_POST["departamento"])? limpiarCadena($_POST["departamento"]):"";
+    $provincia            = isset($_POST["provincia"])? limpiarCadena($_POST["provincia"]):"";
+    $ubigeo               = isset($_POST["ubigeo"])? limpiarCadena($_POST["ubigeo"]):"";
+    $idbanco              = isset($_POST["idbanco"])? limpiarCadena($_POST["idbanco"]):"";
+    $cuenta_bancaria      = isset($_POST["cuenta_bancaria"])? limpiarCadena($_POST["cuenta_bancaria"]):"";
+    $cci                  = isset($_POST["cci"])? limpiarCadena($_POST["cci"]):"";
 
     switch ($_GET["op"]){
 
@@ -91,6 +90,7 @@ if (!isset($_SESSION["user_nombre"])) {
             ];
           }
           $results =[
+            'status'=> true,
             "sEcho" => 1,
             "iTotalRecords" => count($data),
             "iTotalDisplayRecords" => count($data),
@@ -155,7 +155,7 @@ if (!isset($_SESSION["user_nombre"])) {
     }
   
   } else {
-    $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
+    $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [], 'aaData' => [] ];
     echo json_encode($retorno);
   }  
 }

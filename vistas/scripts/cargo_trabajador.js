@@ -9,7 +9,7 @@ function init_ct(){
 }
 
 function limpiar_form_ct(){
-  $("#guardar_registro_ct").html('Guardar Cambios').removeClass('disabled');
+  $("#guardar_registro_ct").html('<i class="bx bx-save bx-tada"></i> Guardar').removeClass('disabled');
   //Mostramos los Materiales
   $("#idcargo_trabajador").val("");
   $("#nombre_ct").val("");
@@ -64,8 +64,8 @@ function tabla_cargo_trabajador(){
       emptyTable: "Ningún dato disponible en esta tabla", zeroRecords: "No se encontraron resultados",
     },
     "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[2, "asc"]]//Ordenar (columna,orden)
+    "iDisplayLength": 5,//Paginación
+    "order": [[0, "asc"]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
@@ -91,7 +91,7 @@ function guardar_editar_cargo_trabajador(e) {
 			}else{
 				ver_errores(e);
 			}
-      $("#guardar_registro_ct").html('Guardar Cambios').removeClass('disabled send-data');
+      $("#guardar_registro_ct").html('<i class="bx bx-save bx-tada"></i> Guardar').removeClass('disabled send-data');
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();

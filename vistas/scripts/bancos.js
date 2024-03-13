@@ -5,7 +5,8 @@ function init_b(){
   tabla_principal_bancos();
   
   $("#guardar_registro_banco").on("click", function(e){if($(this).hasClass('send-data')==false){$("#submit-form-bancos").submit();}});
-
+  // Formato para telefono
+  $("[data-mask]").inputmask();
 }
 
 
@@ -25,7 +26,7 @@ function limpiar_imagen_banco() {
 
 function limpiar_banco(){
 
-  $("#guardar_registro_banco").html('Guardar Cambios').removeClass('disabled');
+  $("#guardar_registro_banco").html('<i class="bx bx-save bx-tada"></i> Guardar').removeClass('disabled');
   //Mostramos los Materiales
   $("#idbancos").val("");
   $("#nombre_b").val("");
@@ -52,7 +53,7 @@ function tabla_principal_bancos() {
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-4'B><'col-md-2 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-2 btn btn-sm btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla) { tabla.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-2 btn btn-sm btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_bancos) { tabla_bancos.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [0,5,6,7,8,9], }, text: `<i class="fas fa-copy" ></i>`, className: "px-2 btn btn-sm btn-outline-dark btn-wave ", footer: true,  }, 
       { extend: 'excel', exportOptions: { columns: [0,5,6,7,8,9], }, title: 'Lista de bancos', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-2 btn btn-sm btn-outline-success btn-wave ", footer: true,  }, 
       { extend: 'pdf', exportOptions: { columns: [0,5,6,7,8,9], }, title: 'Lista de bancos', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-2 btn btn-sm btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
@@ -88,8 +89,8 @@ function tabla_principal_bancos() {
       emptyTable: "Ningún dato disponible en esta tabla", zeroRecords: "No se encontraron resultados",
     },
     "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[2, "asc"]],//Ordenar (columna,orden)
+    "iDisplayLength": 5,//Paginación
+    "order": [[0, "asc"]],//Ordenar (columna,orden)
     columnDefs: [
       { targets: [5], visible: false, searchable: false, },
       { targets: [6], visible: false, searchable: false, },
@@ -122,7 +123,7 @@ function guardar_editar_banco(e) {
 			}else{
 				ver_errores(e);
 			}
-      $("#guardar_registro_banco").html('Guardar Cambios').removeClass('disabled send-data');
+      $("#guardar_registro_banco").html('<i class="bx bx-save bx-tada"></i> Guardar').removeClass('disabled send-data');
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();

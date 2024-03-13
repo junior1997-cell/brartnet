@@ -27,15 +27,16 @@ if (!isset($_SESSION["user_nombre"])) {
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
 
+      <?php if($_SESSION['configuracion']==1) { ?>
       <!-- Start::app-content -->
       <div class="main-content app-content">
         <div class="container-fluid">
           <div class="row">
 
             <div class="col-12 col-sm-12 mt-4">
-              <div class="card card-primary card-outline card-tabs">
+              <div class="card card-primary card-outline card-tabs mb-0">
                 <div class="card-header p-0 pt-1 border-bottom-0">
-                  <ul class="nav nav-tabs tab-style-2 mb-3"  role="tablist">
+                  <ul class="nav nav-tabs tab-style-2 mb-1"  role="tablist">
                     <li class="nav-item" role="presentation">
                       <button class="nav-link active" id="dato-cliente" data-bs-toggle="tab" data-bs-target="#dato-cliente-pane" type="button" role="tab" aria-selected="true"><i class="ri-user-line me-1 align-middle"></i>CLIENTE</button>
                     </li>
@@ -57,7 +58,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                     <!-- :::::::::::::::: P L A N E S :::::::::::::::: -->
                     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
-                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                      <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
                         <div>
                           <div class="d-md-flex d-block align-items-center ">
                             <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-plan"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
@@ -106,7 +107,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                     <!-- :::::::::::::::: Z O N A :::::::::::::::: -->
                     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
-                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                      <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
                         <div>
                           <div class="d-md-flex d-block align-items-center ">
                             <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_zona();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-zona"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
@@ -155,7 +156,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                     <!-- :::::::::::::::: C E N T R O    P O B L A D O :::::::::::::::: -->
                     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
-                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                      <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
                         <div>
                           <div class="d-md-flex d-block align-items-center ">
                             <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_centro_poblado();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-centro-poblado"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
@@ -181,8 +182,8 @@ if (!isset($_SESSION["user_nombre"])) {
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">Acciones</th>
+                                <th>Nombre</th>
                                 <th>Descripción</th>
-                                <th>Ip Zona</th>
                                 <th class="text-center">Estado</th>
                               </tr>
                             </thead>
@@ -191,8 +192,8 @@ if (!isset($_SESSION["user_nombre"])) {
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">Acciones</th>
+                                <th>Nombre</th>
                                 <th>Descripción</th>
-                                <th>Ip Zona</th>
                                 <th class="text-center">Estado</th>
                               </tr>
                             </tfoot>
@@ -207,7 +208,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="row">
                     <!-- :::::::::::::::: C A R G O    T R A B A J A D O R :::::::::::::::: -->
                     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
-                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                      <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
                         <div>
                           <div class="d-md-flex d-block align-items-center ">
                             <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form_ct();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-c-t"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
@@ -258,7 +259,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="row">
                     <!-- :::::::::::::::: B A N C O S :::::::::::::::: -->
                     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
-                      <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                      <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
                         <div>
                           <div class="d-md-flex d-block align-items-center ">
                             <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_banco();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-bancos"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
@@ -320,9 +321,6 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
               </div>
             </div>
-
-
-
           </div>
 
           <!-- MODAL:: REGISTRAR PLAN - charge 1 -->
@@ -334,8 +332,8 @@ if (!isset($_SESSION["user_nombre"])) {
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form name="form-agregar-plan" id="form-agregar-plan" method="POST" class="row needs-validation" novalidate>
-                    <div class="row gy-2" id="cargando-1-fomulario">
+                  <form name="form-agregar-plan" id="form-agregar-plan" method="POST" class="needs-validation" novalidate>
+                    <div class="row" id="cargando-1-fomulario">
                       <input type="hidden" name="idplan" id="idplan">
 
                       <div class="col-md-8">
@@ -360,9 +358,9 @@ if (!isset($_SESSION["user_nombre"])) {
                     <button type="submit" style="display: none;" id="submit-form-plan">Submit</button>
                   </form>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_form();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-primary" id="guardar_registro_plan"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_form();"><i class="las la-times"></i> Close</button>
+                  <button type="button" class="btn btn-sm btn-primary" id="guardar_registro_plan"><i class="bx bx-save bx-tada"></i> Guardar</button>
                 </div>
               </div>
             </div>
@@ -378,8 +376,8 @@ if (!isset($_SESSION["user_nombre"])) {
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form name="form-agregar-zona" id="form-agregar-zona" method="POST" class="row needs-validation" novalidate>
-                    <div class="row gy-2" id="cargando-3-fomulario">
+                  <form name="form-agregar-zona" id="form-agregar-zona" method="POST" class="needs-validation" novalidate>
+                    <div class="row" id="cargando-3-fomulario">
                       <input type="hidden" name="idzona_antena" id="idzona_antena">
 
                       <div class="col-12">
@@ -404,9 +402,9 @@ if (!isset($_SESSION["user_nombre"])) {
                     <button type="submit" style="display: none;" id="submit-form-zona">Submit</button>
                   </form>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_zona();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-primary" id="guardar_registro_zona"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_zona();"><i class="las la-times"></i> Close</button>
+                  <button type="button" class="btn btn-sm btn-primary" id="guardar_registro_zona"><i class="bx bx-save bx-tada"></i> Guardar</button>
                 </div>
               </div>
             </div>
@@ -422,8 +420,8 @@ if (!isset($_SESSION["user_nombre"])) {
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form name="form-agregar-centro-poblado" id="form-agregar-centro-poblado" method="POST" class="row needs-validation" novalidate>
-                    <div class="row gy-2" id="cargando-5-fomulario">
+                  <form name="form-agregar-centro-poblado" id="form-agregar-centro-poblado" method="POST" class="needs-validation" novalidate>
+                    <div class="row" id="cargando-5-fomulario">
                       <input type="hidden" name="idcentro_poblado" id="idcentro_poblado">
 
                       <div class="col-12">
@@ -448,9 +446,9 @@ if (!isset($_SESSION["user_nombre"])) {
                     <button type="submit" style="display: none;" id="submit-form-cp">Submit</button>
                   </form>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_centro_poblado();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-primary" id="guardar_registro_cp"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_centro_poblado();"><i class="las la-times"></i> Close</button>
+                  <button type="button" class="btn btn-sm btn-primary" id="guardar_registro_cp"><i class="bx bx-save bx-tada"></i> Guardar</button>
                 </div>
               </div>
             </div>
@@ -548,8 +546,8 @@ if (!isset($_SESSION["user_nombre"])) {
                   </form>
                 </div>
                 <div class="modal-footer justify-content-between">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_banco();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="submit" class="btn btn-success" id="guardar_registro_banco">Guardar Cambios</button>
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_banco();"><i class="las la-times"></i> Close</button>
+                  <button type="submit" class="btn btn-sm btn-success" id="guardar_registro_banco"><i class="bx bx-save bx-tada"></i> Guardar</button>
                 </div>
               </div>
             </div>
@@ -561,7 +559,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <div class="modal-dialog modal-dialog-centered modal-md">
               <div class="modal-content bg-color-0202022e shadow-none border-0">
                 <div class="modal-header">
-                  <h4 class="modal-title text-white foto-banco">Imagen</h4>
+                  <h4 class="modal-title text-light foto-banco">Imagen</h4>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -603,9 +601,9 @@ if (!isset($_SESSION["user_nombre"])) {
                     <button type="submit" style="display: none;" id="submit-form-ct">Submit</button>
                   </form>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_form_ct();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-primary" id="guardar_registro_ct"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_form_ct();"><i class="las la-times"></i> Close</button>
+                  <button type="button" class="btn btn-sm btn-primary" id="guardar_registro_ct"><i class="bx bx-save bx-tada"></i> Guardar</button>
                 </div>
               </div>
             </div>
@@ -616,8 +614,7 @@ if (!isset($_SESSION["user_nombre"])) {
         </div>
       </div>
       <!-- End::app-content -->
-
-
+      <?php } else { $title_submodulo ='General'; $descripcion ='Lista de General del sistema!'; $title_modulo = 'Configuracion'; include("403_error.php"); }?>   
 
       <?php include("template/search_modal.php"); ?>
       <?php include("template/footer.php"); ?>

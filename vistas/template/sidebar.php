@@ -142,7 +142,7 @@
         <?php  if ($_SESSION['realizar_venta'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-task side-menu__icon"></i>
+            <i class='bx bx-cart-add side-menu__icon'></i>
             <span class="side-menu__label">Realizar venta<span class="badge bg-secondary-transparent ms-2">New</span></span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
@@ -181,7 +181,7 @@
         <?php  if ($_SESSION['comprobante'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-fingerprint side-menu__icon"></i>
+            <i class='bx bxs-file-doc side-menu__icon'></i>
             <span class="side-menu__label">Comprobante</span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
@@ -257,7 +257,7 @@
         <?php  if ($_SESSION['reporte'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-box side-menu__icon"></i>
+            <box-icon name='bar-chart-square side-menu__icon'></box-icon>
             <span class="side-menu__label">Reportes</span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
@@ -293,13 +293,13 @@
         <!-- End::slide -->
 
         <!-- Start::slide -->
-        
+        <?php  if ($_SESSION['gastos_trabajador'] == '1') { ?>
         <li class="slide">
           <a href="gasto_de_trabajador.php" class="side-menu__item">
-            <i class="bx bx-home side-menu__icon"></i><span class="side-menu__label"> Gastos Trabajador</span>
+            <i class='bx bx-dollar-circle side-menu__icon' ></i><span class="side-menu__label"> Gastos Trabajador</span>
           </a>
         </li>
-       
+        <?php } ?>
         <!-- End::slide -->        
 
         <!-- Start::slide__category -->
@@ -310,7 +310,7 @@
         <?php  if ($_SESSION['administracion'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-medal side-menu__icon"></i>
+            <i class='bx bxs-briefcase-alt-2 side-menu__icon'  ></i>
             <span class="side-menu__label">Administracion</span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
@@ -328,7 +328,7 @@
         <?php  if ($_SESSION['planilla_personal'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-file side-menu__icon"></i>
+            <i class='bx bx-user-check side-menu__icon'></i>
             <span class="side-menu__label">Planilla personal</span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
@@ -356,7 +356,7 @@
         <?php  if ($_SESSION['SUNAT'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-party side-menu__icon"></i>
+            <i class='bx bx-building side-menu__icon'></i>
             <span class="side-menu__label">SUNAT</span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
@@ -386,7 +386,7 @@
         <?php  if ($_SESSION['empresa'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-party side-menu__icon"></i>
+            <i class='bx bxs-building-house side-menu__icon' ></i>
             <span class="side-menu__label">Empresa</span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
@@ -407,10 +407,10 @@
         <!-- End::slide -->
 
         <!-- Start::slide -->
-        
+        <?php  if ($_SESSION['configuracion'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-party side-menu__icon"></i>
+            <i class='bx bx-cog side-menu__icon'></i>
             <span class="side-menu__label">Configuración</span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
@@ -420,7 +420,15 @@
             <li class="slide"><a href="general.php" class="side-menu__item">General</a></li>                  
           </ul>
         </li>
-        
+        <?php } ?>
+        <!-- End::slide -->
+
+        <!-- Start::slide -->
+        <li class="slide">
+          <a href="papelera.php" class="side-menu__item" target="_blank">
+            <i class='bx bx-trash side-menu__icon'></i><span class="side-menu__label"> Papelera</span>
+          </a>
+        </li>
         <!-- End::slide -->
 
         <!-- Start::slide__category -->

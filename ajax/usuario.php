@@ -372,7 +372,7 @@ switch ($_GET["op"]) {
       in_array(29, $valores) ? $_SESSION['creditos_Pendientes']   = 1 : $_SESSION['creditos_Pendientes'] = 0;
       // Kardex
       in_array(30, $valores) ? $_SESSION['kardex_por_articulos']  = 1 : $_SESSION['kardex_por_articulos'] = 0;
-      in_array(31, $valores) ? $_SESSION['gastos']  = 1 : $_SESSION['gastos'] = 0;
+      in_array(31, $valores) ? $_SESSION['gastos_trabajador']     = 1 : $_SESSION['gastos_trabajador'] = 0;
       // Reporte
       in_array(32, $valores) ? $_SESSION['venta_dia_mes']         = 1 : $_SESSION['venta_dia_mes'] = 0;
       in_array(33, $valores) ? $_SESSION['venta_por_vendedor']    = 1 : $_SESSION['venta_por_vendedor'] = 0;
@@ -381,7 +381,7 @@ switch ($_GET["op"]) {
       in_array(36, $valores) ? $_SESSION['PLE_ventas']            = 1 : $_SESSION['PLE_ventas'] = 0;
       in_array(37, $valores) ? $_SESSION['reporte_compras']       = 1 : $_SESSION['reporte_compras'] = 0;
       in_array(38, $valores) ? $_SESSION['margen_de_ganancia']    = 1 : $_SESSION['margen_de_ganancia'] = 0;
-      in_array(39, $valores) ? $_SESSION['correo_enviado']        = 1 : $_SESSION['correo_enviado'] = 0;
+      in_array(39, $valores) ? $_SESSION['correo_enviado']        = 1 : $_SESSION['correo_enviado'] = 0;      
       // Administracion
       in_array(40, $valores) ? $_SESSION['usuario']               = 1 : $_SESSION['usuario'] = 0;
       // Planilla Personal
@@ -398,7 +398,7 @@ switch ($_GET["op"]) {
       in_array(49, $valores) ? $_SESSION['empresa_configuracion'] = 1 : $_SESSION['empresa_configuracion'] = 0;
       in_array(50, $valores) ? $_SESSION['correo_SMTP']           = 1 : $_SESSION['correo_SMTP'] = 0;
       in_array(51, $valores) ? $_SESSION['notificaciones']        = 1 : $_SESSION['notificaciones'] = 0;
-      in_array(52, $valores) ? $_SESSION['configuracion']        = 1 : $_SESSION['general'] = 0;
+      in_array(52, $valores) ? $_SESSION['configuracion']        = 1 : $_SESSION['configuracion'] = 0;
       
 
       $data = [ 'status'=>true, 'message'=>'todo okey','data'=> $rspta['data']  ];

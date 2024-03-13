@@ -18,7 +18,7 @@ function init_zona() {
 ==========================================================================================*/
 //Función limpiar
 function limpiar_zona() {
-  $("#guardar_registro_zona").html('Guardar Cambios').removeClass('disabled');
+  $("#guardar_registro_zona").html('<i class="bx bx-save bx-tada"></i> Guardar').removeClass('disabled');
   //Mostramos los Materiales
   $("#idzona_antena").val("");
   $("#nombre_zona").val("");
@@ -41,8 +41,8 @@ function tabla_principal_zona() {
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-2 btn btn-sm btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_zona) { tabla_zona.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [0,2,3], }, text: `<i class="fas fa-copy" ></i>`, className: "px-2 btn btn-sm btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,2,3], }, title: 'Lista de planes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-2 btn btn-sm btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [0,2,3], }, title: 'Lista de planes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-2 btn btn-sm btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { extend: 'excel', exportOptions: { columns: [0,2,3], }, title: 'Lista de zonas', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-2 btn btn-sm btn-outline-success btn-wave ", footer: true,  }, 
+      { extend: 'pdf', exportOptions: { columns: [0,2,3], }, title: 'Lista de zonas', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-2 btn btn-sm btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "px-2 btn btn-sm btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax:{
@@ -66,7 +66,7 @@ function tabla_principal_zona() {
     },
     createdRow: function (row, data, ixdex) {
       // columna: #
-      if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
     },
 		language: {
       lengthMenu: "_MENU_ ",
@@ -74,7 +74,7 @@ function tabla_principal_zona() {
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
+    "iDisplayLength": 5,//Paginación
     "order": [[2, "asc"]]//Ordenar (columna,orden)
   }).DataTable();
 }
@@ -100,7 +100,7 @@ function guardar_y_editar_zona(e) {
 			}else{
 				ver_errores(e);
 			}
-      $("#guardar_registro_zona").html('Guardar Cambios').removeClass('disabled send-data');
+      $("#guardar_registro_zona").html('<i class="bx bx-save bx-tada"></i> Guardar').removeClass('disabled send-data');
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
