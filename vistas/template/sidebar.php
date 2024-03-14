@@ -81,7 +81,7 @@
             <li class="slide"> <a href="producto.php" class="side-menu__item">Producto</a></li>
             <?php } ?>
             <?php  if ($_SESSION['servicio'] == '1') { ?>
-            <li class="slide"> <a href="index-3.php" class="side-menu__item">Servicio</a></li>
+            <li class="slide"> <a href="servicio.php" class="side-menu__item">Servicio</a></li>
             <?php } ?>
             <?php  if ($_SESSION['categoria_y_marca'] == '1') { ?>
             <li class="slide"> <a href="categoria_y_marca.php" class="side-menu__item">Categoria y Marca</a></li>

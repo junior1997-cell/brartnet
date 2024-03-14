@@ -234,11 +234,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
                           <!-- Imgen -->
                           <div class="col-md-4 col-lg-4 mt-4">
-                            <span class="" > <b>Logo Proveedor</b> </span>
+                            <span class="" > <b>Imagen Prducto</b> </span>
                             <div class="mb-4 mt-2 d-sm-flex align-items-center">
                               <div class="mb-0 me-5">
                                 <span class="avatar avatar-xxl avatar-rounded">
-                                  <img src="../assets/images/default/default_proveedor.png" alt="" id="imagenmuestra" onerror="this.src='../assets/images/default/default_proveedor.png';">
+                                  <img src="../assets/modulo/productos/no-producto.png" alt="" id="imagenmuestra" onerror="this.src='../assets/modulo/productos/no-producto.png';">
                                   <a href="javascript:void(0);" class="badge rounded-pill bg-primary avatar-badge cursor-pointer">
                                     <input type="file" class="position-absolute w-100 h-100 op-0" name="imagen" id="imagen" accept="image/*">
                                     <input type="hidden" name="imagenactual" id="imagenactual">
