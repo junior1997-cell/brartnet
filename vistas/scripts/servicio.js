@@ -6,6 +6,8 @@ function init(){
 
   $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-servicio").submit(); }  });
 
+  $("#idcategoria").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+
 }
 
 //  :::::::::::::::: S E R V I C I O :::::::::::::::: 

@@ -96,7 +96,6 @@ if (!isset($_SESSION["user_nombre"])) {
                         <div class="row gy-2" id="cargando-1-formulario">
                           <!-- ID -->
                           <input type="hidden" name="idproducto" id="idproducto"/>
-                          <input type="hidden" name="idcategoria" id="idcategoria" value="3"/>   <!--  idcategoria = 3 | nombre = SERVICIO -->
                           <input type="hidden" name="idmarca" id="idmarca" value="1"/>           <!--  idmarca = 1 | nombre = NINGUNO -->
                           <input type="hidden" name="idsunat_unidad_medida" id="idsunat_unidad_medida" value="1"/> <!--  idsunat_unidad_medida = 1 | nombre = NINGUNO -->
 
@@ -112,7 +111,11 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                             <div class="form-group">
                               <label for="categoria" class="form-label"> Categoría </label>
-                              <input type="text" class="form-control" name="categoria" id="categoria" value="SERVICIO" readonly />
+                              
+                              <select class="form-comtrol" name="idcategoria" id="idcategoria">
+                                <option value="1">NINGUNO</option>
+                                <option value="2">SERVICIO</option>
+                              </select>
                             </div>
                           </div>
 
