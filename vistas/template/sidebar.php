@@ -78,16 +78,16 @@
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"> <a href="javascript:void(0)">Articulos</a></li>
             <?php  if ($_SESSION['producto'] == '1') { ?>
-            <li class="slide"> <a href="index-2.php" class="side-menu__item">Producto</a></li>
+            <li class="slide"> <a href="producto.php" class="side-menu__item">Producto</a></li>
             <?php } ?>
             <?php  if ($_SESSION['servicio'] == '1') { ?>
             <li class="slide"> <a href="index-3.php" class="side-menu__item">Servicio</a></li>
             <?php } ?>
             <?php  if ($_SESSION['categoria_y_marca'] == '1') { ?>
-            <li class="slide"> <a href="index.php" class="side-menu__item">Categoria y Marca</a></li>
+            <li class="slide"> <a href="categoria_y_marca.php" class="side-menu__item">Categoria y Marca</a></li>
             <?php } ?>
             <?php  if ($_SESSION['unidad_de_medida'] == '1') { ?>
-            <li class="slide"> <a href="index-1.php" class="side-menu__item">Unidad Medida</a></li>  
+            <li class="slide"> <a href="unidad_medida.php" class="side-menu__item">Unidad Medida</a></li>  
             <?php } ?>
             <?php  if ($_SESSION['stok_precio'] == '1') { ?>          
             <li class="slide"> <a href="index-4.php" class="side-menu__item">Stok / Precio</a></li>
