@@ -26,6 +26,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <div class="page">
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
+      <?php if($_SESSION['cliente']==1) { ?>
 
       <!-- Start::app-content -->
       <div class="main-content app-content">
@@ -71,11 +72,11 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="text-center">#</th>
                                 <th class="text-center">Acciones</th>
                                 <th>Cliente</th>
-                                <th>Calular</th>
-                                <th>C. Poblado</th>
-                                <th>F. Cancelación</th>
+                                <th>Direccion</th>
+                                <th>Falta</th>
+                                <th>Cancelación</th>
                                 <th>Zona/Plan</th>
-                                <th>Ip</th>
+                                <th>IP</th>
                                 <th>Trabajador</th>
                                 <!-- <th class="text-center">Estado</th> -->
                                 <th class="text-center">Nombres</th>
@@ -97,11 +98,11 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="text-center">#</th>
                                 <th class="text-center">Acciones</th>
                                 <th>Cliente</th>
-                                <th>Calular</th>
-                                <th>C. Poblado</th>
-                                <th>F. Cancelación</th>
+                                <th>Direccion</th>
+                                <th>Falta</th>
+                                <th>Cancelación</th>
                                 <th>Zona/Plan</th>
-                                <th>Ip</th>
+                                <th>IP</th>
                                 <th>Trabajador</th>
                                 <!-- <th class="text-center">Estado</th> -->
 
@@ -471,6 +472,7 @@ if (!isset($_SESSION["user_nombre"])) {
       </div>
       <!-- End::app-content -->
 
+      <?php } else { $title_submodulo ='Clientes'; $descripcion ='Lista de Clientes del sistema!'; $title_modulo = 'Ventas'; include("403_error.php"); }?>   
 
 
       <?php include("template/search_modal.php"); ?>

@@ -5,7 +5,7 @@ if (strlen(session_id()) < 1) {
 } //Validamos si existe o no la sesión
 
 if (!isset($_SESSION["user_nombre"])) {
-  $retorno = ['status' => 'login', 'message' => 'Tu sesion a terminado pe, inicia nuevamente', 'data' => []];
+  $retorno = ['status' => 'login', 'message' => 'Tu sesion a terminado pe, inicia nuevamente', 'data' => [], 'aaData' => []];
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
@@ -190,7 +190,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                 $fecha_pago_of = $anio_mes_actual . '-' . $dia_cancel;
 
-                $falta = $dif_dias." Días"; 
+                $falta = $dif_dias; 
 
               
                 if($dif_dias>5){
@@ -210,11 +210,9 @@ if (!isset($_SESSION["user_nombre"])) {
 
                 $fecha_pago_of = $anio_mes_siguiente . '-' . $value['dia_cancelacion'];
 
-                $dif =diferencia_days_months_years($fecha_pago_of, date('Y-m-d'), 'days');
+                $dif = diferencia_days($fecha_pago_of, date("Y-m-d"));
 
-
-
-                $falta = $dif." Días";
+                $falta = $dif;
 
                 if($dif>5){
                   $class_dia="bg-outline-success";
@@ -239,24 +237,26 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[] = array(
               "0" => $cont++,
               "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>' .
-                ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',
+                ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',
               "2" => '<div class="d-flex flex-fill align-items-center">
-              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($value['nombre_completo']) . '\')"> </span></div>
+              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"> </span></div>
               <div>
-                <span class="d-block fw-semibold text-primary">' . $value['nombre_completo'] . '</span>
-                <span class="text-muted">' . $value['tipo_doc'] . ' : ' . $value['numero_documento'] . '</span>
+                <span class="d-block fw-semibold text-primary">' . $value['cliente_nombre_completo'] . '</span>
+                <span class="text-muted">' . $value['tipo_doc'] . ' : ' . $value['numero_documento'] . '</span> |
+                <span class="text-muted">Cel.: ' . '<a href="tel:+51'.$value['celular'].'">'.$value['celular'].'</a>' . '</span>
               </div>
             </div>',
-              "3" => '<a href="tel:+51'.$value['celular'].'">'.$value['celular'].'</a>',
-              "4" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['centro_poblado'] . ' : ' . $value['direccion'] . '</textarea>',
-              "5" => '<span class="badge '.$class_dia.'">'. $falta .'- ' .   date("d/m/Y", strtotime($fecha_pago_of)) .'</span>',
-              "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
+              "3" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['centro_poblado'] . ' : ' . $value['direccion'] . '</textarea>',
+              "4" => $falta,
+              "5" => '<span class="badge '.$class_dia.'">'.   date("d/m/Y", strtotime($fecha_pago_of)) .'</span>',
+              "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '<br>' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "7" => '<div class="text-start font-size-12px" >
                       <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
-                      <span class="text-muted"><i class="bx bx-wifi bx-burst" ></i>' . $value['ip_personal'] . '</span>
+                      <span class="text-muted"><i class="bx bx-wifi bx-burst" ></i> ' . $value['ip_personal'] . '</span>
                     </div>',
-              "8" => $value['nombre_razonsocial'],
-              "9" => $value['nombre_completo'],
+              "8" => $value['trabajador_nombre'],
+              
+              "9" => $value['cliente_nombre_completo'],
               "10" => $value['tipo_doc'],
               "11" => $value['numero_documento'],
               "12" => $value['centro_poblado'],
@@ -270,6 +270,7 @@ if (!isset($_SESSION["user_nombre"])) {
             );
           }
           $results = [
+            'status'=> true,
             "sEcho" => 1, //Información para el datatables
             "iTotalRecords" => count($data), //enviamos el total registros al datatable
             "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
@@ -382,12 +383,12 @@ if (!isset($_SESSION["user_nombre"])) {
         break;
 
       default:
-        $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
+        $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => [], 'aaData' => []];
         echo json_encode($rspta, true);
         break;
     }
   } else {
-    $retorno = ['status' => 'nopermiso', 'message' => 'Tu sesion a terminado pe, inicia nuevamente', 'data' => []];
+    $retorno = ['status' => 'nopermiso', 'message' => 'Tu sesion a terminado pe, inicia nuevamente', 'data' => [], 'aaData' => []];
     echo json_encode($retorno);
   }
 }

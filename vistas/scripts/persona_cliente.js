@@ -176,7 +176,7 @@ function tabla_principal_cliente() {
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla) { tabla.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_cliente) { tabla_cliente.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
       { extend: 'excel', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
       { extend: 'pdf', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
@@ -197,6 +197,9 @@ function tabla_principal_cliente() {
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         // $('[data-bs-toggle="tooltip"]').tooltip();
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
     },
     createdRow: function (row, data, ixdex) {
       // columna: #
@@ -211,7 +214,22 @@ function tabla_principal_cliente() {
     "iDisplayLength": 10,//Paginación
     "order": [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [9, 10, 11, 12, 13, 14, 15, 16, 17], visible: false, searchable: false, },
+      { targets: [4], render: function (data, type) { 
+        var number = $.fn.dataTable.render.number(',', '.', 0).display(data); 
+        if (type === 'display') { 
+          let class_dia = 'numero_positivos';           
+          if(data>5){
+            class_dia="bg-outline-success";
+          }else if (data<=5 && data>=3){
+            class_dia="bg-outline-warning";
+          } else{
+            class_dia="bg-outline-danger";
+          }
+          return `<span class="badge ${class_dia}">${number} Días.</span>`; 
+        } return number; 
+      }, },
+      // { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18], visible: false, searchable: false, },
     ],
   }).DataTable();
 }

@@ -185,14 +185,15 @@ class Cliente
 	//Implementar un método para listar los registros
 	public function tabla_principal_cliente()
 	{
-		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion,
-		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado,
+		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
+		pc.fecha_cancelacion,	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado,
 		CASE 
 		WHEN p.tipo_persona_sunat = 'NATURAL' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 		WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
 		ELSE '-'
-		END AS nombre_completo, 
-		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, 
+		END AS cliente_nombre_completo, 
+
+		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, 
 		za.ip_antena,pc.estado, i.abreviatura as tipo_doc
 
 		FROM persona_cliente as pc

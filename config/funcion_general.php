@@ -87,20 +87,37 @@ if (!function_exists('ejecutarConsulta')) {
 
     $diferencia = 0;
 
-    if (empty($fecha_1) || $fecha_1 == '0000-00-00' || empty($fecha_2) || $fecha_2 == '0000-00-00' ) { }else{
-
-      $dateDifference = abs(strtotime($fecha_2) - strtotime($fecha_1));
-
-      $years  = floor($dateDifference / (365 * 60 * 60 * 24));
-      $months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
-      $days   = floor(($dateDifference - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 *24) / (60 * 60 * 24));
-
-      if        ($tipo == 'days')   {  $diferencia = $days;
-      } else if ($tipo == 'months') {  $diferencia = $months;
-      } else if ($tipo == 'years')  {  $diferencia = $years;
-      }
+    if (empty($fecha_1) || $fecha_1 == '0000-00-00' || empty($fecha_2) || $fecha_2 == '0000-00-00' ) { }else{      
+      $fecha_2 = new DateTime($fecha_2);
+      $fecha_1 = new DateTime($fecha_1);
+      $diferencia = $fecha_2->diff($fecha_1);
+      return $diferencia->days;      
     }    
-    
+    return $diferencia;
+  }
+  function diferencia_days_now($fecha) {
+
+    $diferencia = 0;
+
+    if (empty($fecha) || $fecha == '0000-00-00'  ) { }else{      
+      $hoy = new DateTime();
+      $fecha = new DateTime($fecha);
+      $diferencia = $hoy->diff($fecha);
+      return $diferencia->days;      
+    }    
+    return $diferencia;
+  }
+
+  function diferencia_days($fecha1, $fecha2) {
+
+    $diferencia = 0;
+
+    if (empty($fecha1) || $fecha1 == '0000-00-00' || empty($fecha2) || $fecha2 == '0000-00-00'  ) { }else{      
+      $hoy = new DateTime($fecha2);
+      $fecha1 = new DateTime($fecha1);
+      $diferencia = $hoy->diff($fecha1);
+      return $diferencia->days;      
+    }    
     return $diferencia;
   }
 
