@@ -4,9 +4,13 @@ require "../config/Conexion_v2.php";
 
 class Cliente
 {
+	public $id_usr_sesion; public $id_persona_sesion; public $id_trabajador_sesion;
 	//Implementamos nuestro constructor
 	public function __construct()
 	{
+		$this->id_usr_sesion =  isset($_SESSION['idusuario']) ? $_SESSION["idusuario"] : 0;
+		$this->id_persona_sesion = isset($_SESSION['idpersona']) ? $_SESSION["idpersona"] : 0;
+		$this->id_trabajador_sesion = isset($_SESSION['idpersona_trabajador']) ? $_SESSION["idpersona_trabajador"] : 0;
 	}
 	/*T-- paepelera --desacctivar
 	C-- crear
@@ -183,8 +187,12 @@ class Cliente
 	}
 
 	//Implementar un método para listar los registros
-	public function tabla_principal_cliente()
-	{
+	public function tabla_principal_cliente()	{
+		$filtro_id_trabajador  = '';
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+			$filtro_id_trabajador = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";
+		} 
+		
 		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
 		pc.fecha_cancelacion,	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado,
 		CASE 
@@ -204,7 +212,7 @@ class Cliente
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
 		INNER JOIN sunat_doc_identidad as i on p.tipo_documento=i.code_sunat  
 		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
-		where pc.estado='1' and pc.estado_delete='1' ORDER BY idpersona_cliente DESC";
+		where pc.estado='1' and pc.estado_delete='1' $filtro_id_trabajador ORDER BY pc.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 

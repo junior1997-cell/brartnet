@@ -291,6 +291,8 @@ switch ($_GET["op"]) {
       
       //Declaramos las variables de sesión
       $_SESSION['idusuario']      = $rspta['data']['usuario']['idusuario'];
+      $_SESSION['idpersona']      = $rspta['data']['usuario']['idpersona'];
+      $_SESSION['idpersona_trabajador'] = $rspta['data']['usuario']['idpersona_trabajador'];
       $_SESSION['user_nombre']    = $rspta['data']['usuario']['nombre_razonsocial'];
       $_SESSION['user_apellido']  = $rspta['data']['usuario']['apellidos_nombrecomercial'];
       $_SESSION['user_tipo_doc']  = $rspta['data']['usuario']['tipo_documento'];
