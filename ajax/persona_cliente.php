@@ -247,7 +247,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 <span class="text-muted">' . $value['tipo_doc'] . ' : ' . $value['numero_documento'] . '</span>
               </div>
             </div>',
-              "3" => $value['celular'],
+              "3" => '<a href="tel:+51'.$value['celular'].'">'.$value['celular'].'</a>',
               "4" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['centro_poblado'] . ' : ' . $value['direccion'] . '</textarea>',
               "5" => '<span class="badge '.$class_dia.'">'. $falta .'- ' .   date("d/m/Y", strtotime($fecha_pago_of)) .'</span>',
               "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
