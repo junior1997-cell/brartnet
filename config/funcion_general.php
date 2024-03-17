@@ -95,7 +95,7 @@ if (!function_exists('ejecutarConsulta')) {
       $months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
       $days   = floor(($dateDifference - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 *24) / (60 * 60 * 24));
 
-      if        ($tipo == 'days')   {  $diferencia = $days+1;
+      if        ($tipo == 'days')   {  $diferencia = $days-1;
       } else if ($tipo == 'months') {  $diferencia = $months;
       } else if ($tipo == 'years')  {  $diferencia = $years;
       }
