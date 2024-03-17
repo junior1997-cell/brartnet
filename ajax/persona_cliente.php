@@ -217,12 +217,12 @@ if (!isset($_SESSION["user_nombre"])) {
                 $falta = "Falta ".$dif." Días";
 
                 if($dif>5){
-                  $class_dia="bg-success";
+                  $class_dia="bg-outline-success";
 
                 }elseif ($dif<=5 && $dif>=3){
-                  $class_dia="bg-warning";
+                  $class_dia="bg-outline-warning";
                 } else{
-                  $class_dia="bg-danger";
+                  $class_dia="bg-outline-danger";
                 }
 
 
@@ -249,7 +249,7 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>',
               "3" => $value['celular'],
               "4" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['centro_poblado'] . ' : ' . $value['direccion'] . '</textarea>',
-              "5" => '<span class="badge '.$class_dia.'">' .   date("d/m/Y", strtotime($fecha_pago_of)) .'- '. $falta .'</span>',
+              "5" => '<span class="badge '.$class_dia.'">'. $falta .'- ' .   date("d/m/Y", strtotime($fecha_pago_of)) .'</span>',
               "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "7" => '<div class="text-start font-size-12px" >
                       <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
