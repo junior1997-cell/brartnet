@@ -190,16 +190,16 @@ if (!isset($_SESSION["user_nombre"])) {
 
                 $fecha_pago_of = $anio_mes_actual . '-' . $dia_cancel;
 
-                $falta = "Falta ".$dif_dias." Días"; 
+                $falta = $dif_dias." Días"; 
 
               
                 if($dif_dias>5){
-                  $class_dia="bg-success";
+                  $class_dia="bg-outline-success";
 
                 }elseif ($dif_dias<=5 && $dif_dias>=3){
-                  $class_dia="bg-warning";
+                  $class_dia="bg-outline-warning";
                 } else{
-                  $class_dia="bg-danger";
+                  $class_dia="bg-outline-danger";
                 }
 
 
@@ -214,7 +214,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
 
 
-                $falta = "Falta ".$dif." Días";
+                $falta = $dif." Días";
 
                 if($dif>5){
                   $class_dia="bg-outline-success";
