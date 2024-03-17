@@ -7,19 +7,20 @@ if (!isset($_SESSION["user_nombre"])) {
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
-  if ($_SESSION['configuracion'] == 1) {
+  if ($_SESSION['categoria_y_marca'] == 1) {
     
-    require_once "../modelos/Cargo_trabajador.php";
-    $cargo_t = new Cargo_trabajador();
+    require_once "../modelos/Categoria.php";
+    $categoria = new Categoria();
 
-    $idcargo_trabajador   = isset($_POST["idcargo_trabajador"]) ? limpiarCadena($_POST["idcargo_trabajador"]) : "";
-    $nombre_ct             = isset($_POST["nombre_ct"]) ? limpiarCadena($_POST["nombre_ct"]) : "";
+    $idcategoria      = isset($_POST["idcategoria"]) ? limpiarCadena($_POST["idcategoria"]) : "";
+    $nombre       = isset($_POST["nombre_cat"]) ? limpiarCadena($_POST["nombre_cat"]) : "";
+    $descripcion  = isset($_POST["descr_cat"]) ? limpiarCadena($_POST["descr_cat"]) : "";
 
 
     switch ($_GET["op"]) {
 
-      case 'tabla_cargo_trabajador':
-        $rspta = $cargo_t->listar();
+      case 'listar_tabla_categoria':
+        $rspta = $categoria->listar_categoria();
         //Vamos a declarar un array
         $data = [];
         $cont = 1;
@@ -32,10 +33,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = array(
               "0" => $cont++,
-              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_cargo_trabajador(' . $value['idcargo_trabajador'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_cargo_trabajador(' . $value['idcargo_trabajador'] . ', \'' . encodeCadenaHtml($value['nombre']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',         
+              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_categoria(' . $value['idcategoria'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_categoria(' . $value['idcategoria'] . ', \'' . encodeCadenaHtml($value['nombre']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',         
               "2" => $value['nombre'],
-              "3" =>  ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
+              "3" => $value['descripcion'],
+              "4" =>  ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
 
             );
           }
@@ -53,31 +55,30 @@ if (!isset($_SESSION["user_nombre"])) {
 
       break;
 
-      case 'guardar_editar_cargo_trabajador':
-        if (empty($idcargo_trabajador)) {
-          $rspta = $cargo_t->insertar($nombre_ct);
+      case 'guardar_editar_cat':
+        if (empty($idcategoria)) {
+          $rspta = $categoria->insertar_cat($nombre, $descripcion);
           echo json_encode($rspta, true);
         } else {
-          $rspta = $cargo_t->editar($idcargo_trabajador, $nombre_ct);
+          $rspta = $categoria->editar_cat($idcategoria, $nombre, $descripcion);
           echo json_encode($rspta, true);
         }
       break;
 
-      case 'mostrar_ct':
-        $rspta = $cargo_t->mostrar($idcargo_trabajador);
+      case 'mostrar_categoria':
+        $rspta = $categoria->mostrar($idcategoria);
         echo json_encode($rspta, true);
       break;
 
       case 'desactivar':
-        $rspta = $cargo_t->desactivar($_GET["id_tabla"]);
+        $rspta = $categoria->desactivar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
       break;
 
       case 'eliminar':
-        $rspta = $cargo_t->eliminar($_GET["id_tabla"]);
+        $rspta = $categoria->eliminar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
       break;
-      
 
     }
 

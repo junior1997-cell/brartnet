@@ -20,7 +20,7 @@ function init_plan() {
 
 //Función limpiar_form
 function limpiar_form() {
-  $("#guardar_registro_plan").html('Guardar Cambios').removeClass('disabled');
+  $("#guardar_registro_plan").html('<i class="bx bx-save bx-tada"></i> Guardar').removeClass('disabled');
   //Mostramos los Materiales
   $("#idplan").val("");
   $("#nombre_plan").val("");
@@ -76,8 +76,8 @@ function tabla_principal_plan() {
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[2, "asc"]]//Ordenar (columna,orden)
+    "iDisplayLength": 5,//Paginación
+    "order": [[0, "asc"]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
@@ -102,7 +102,7 @@ function guardar_y_editar_plan(e) {
 			}else{
 				ver_errores(e);
 			}
-      $("#guardar_registro_plan").html('Guardar Cambios').removeClass('disabled send-data');
+      $("#guardar_registro_plan").html('<i class="bx bx-save bx-tada"></i> Guardar').removeClass('disabled send-data');
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();

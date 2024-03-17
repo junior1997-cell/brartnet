@@ -7,19 +7,20 @@ if (!isset($_SESSION["user_nombre"])) {
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
-  if ($_SESSION['configuracion'] == 1) {
+  if ($_SESSION['unidad_de_medida'] == 1) {
     
-    require_once "../modelos/Cargo_trabajador.php";
-    $cargo_t = new Cargo_trabajador();
+    require_once "../modelos/Unidad_medida.php";
+    $unidad_medida = new Unidad_medida();
 
-    $idcargo_trabajador   = isset($_POST["idcargo_trabajador"]) ? limpiarCadena($_POST["idcargo_trabajador"]) : "";
-    $nombre_ct             = isset($_POST["nombre_ct"]) ? limpiarCadena($_POST["nombre_ct"]) : "";
+    $idsunat_unidad_medida   = isset($_POST["idsunat_unidad_medida"]) ? limpiarCadena($_POST["idsunat_unidad_medida"]) : "";
+    $nombre             = isset($_POST["nombre_um"]) ? limpiarCadena($_POST["nombre_um"]) : "";
+    $descripcion             = isset($_POST["descr_um"]) ? limpiarCadena($_POST["descr_um"]) : "";
 
 
     switch ($_GET["op"]) {
 
-      case 'tabla_cargo_trabajador':
-        $rspta = $cargo_t->listar();
+      case 'listar_tabla_um':
+        $rspta = $unidad_medida->listar();
         //Vamos a declarar un array
         $data = [];
         $cont = 1;
@@ -32,10 +33,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = array(
               "0" => $cont++,
-              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_cargo_trabajador(' . $value['idcargo_trabajador'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_cargo_trabajador(' . $value['idcargo_trabajador'] . ', \'' . encodeCadenaHtml($value['nombre']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',         
+              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_u_m(' . $value['idsunat_unidad_medida'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_u_m(' . $value['idsunat_unidad_medida'] . ', \'' . encodeCadenaHtml($value['nombre']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',         
               "2" => $value['nombre'],
-              "3" =>  ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
+              "3" => $value['descripcion'],
+              "4" =>  ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
 
             );
           }
@@ -53,28 +55,28 @@ if (!isset($_SESSION["user_nombre"])) {
 
       break;
 
-      case 'guardar_editar_cargo_trabajador':
-        if (empty($idcargo_trabajador)) {
-          $rspta = $cargo_t->insertar($nombre_ct);
+      case 'guardar_editar_UM':
+        if (empty($idsunat_unidad_medida)) {
+          $rspta = $unidad_medida->insertar($nombre, $descripcion);
           echo json_encode($rspta, true);
         } else {
-          $rspta = $cargo_t->editar($idcargo_trabajador, $nombre_ct);
+          $rspta = $unidad_medida->editar($idsunat_unidad_medida, $nombre, $descripcion);
           echo json_encode($rspta, true);
         }
       break;
 
-      case 'mostrar_ct':
-        $rspta = $cargo_t->mostrar($idcargo_trabajador);
+      case 'mostrar_u_m':
+        $rspta = $unidad_medida->mostrar($idsunat_unidad_medida);
         echo json_encode($rspta, true);
       break;
 
       case 'desactivar':
-        $rspta = $cargo_t->desactivar($_GET["id_tabla"]);
+        $rspta = $unidad_medida->desactivar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
       break;
 
       case 'eliminar':
-        $rspta = $cargo_t->eliminar($_GET["id_tabla"]);
+        $rspta = $unidad_medida->eliminar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
       break;
       

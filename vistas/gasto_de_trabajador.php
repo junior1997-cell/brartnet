@@ -25,6 +25,7 @@
           <div class="page">
             <?php include("template/header.php") ?>
             <?php include("template/sidebar.php") ?>
+            <?php if($_SESSION['gastos_trabajador']==1) { ?>
 
             <!-- Start::app-content -->
             <div class="main-content app-content">
@@ -270,6 +271,7 @@
               </div>
             </div>
             <!-- End::app-content -->
+            <?php } else { $title_submodulo ='Gasto de Trabajador'; $descripcion ='Lista de Gasto de Trabajador del sistema!'; $title_modulo = 'Gasto'; include("403_error.php"); }?>   
 
             <!-- MODAL - VER COMPROBANTE -->
             <div class="modal fade modal-effect" id="modal-ver-comprobante" tabindex="-1" aria-labelledby="modal-ver-comprobanteLabel" aria-hidden="true">
@@ -346,11 +348,7 @@
                                 <div class="mb-1 col-md-3 col-lg-3 col-xl-3 col-xxl-6">
                                   <div class="form-group">
                                     <label for="tipo_documento" class="form-label">Tipo documento:  </label>
-                                    <select name="tipo_documento" id="tipo_documento" class="form-select" required>
-                                      <option value="0">NINGUNO</option>
-                                      <option value="1">DNI</option>
-                                      <option value="4">CE</option>
-                                      <option value="6">RUC</option>
+                                    <select name="tipo_documento" id="tipo_documento" class="form-select" required>                                      
                                     </select>
                                   </div>                                         
                                 </div>
@@ -426,10 +424,8 @@
                                 <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-6 mt-3">
                                   <div class="form-group">
                                     <label for="distrito" class="form-label">Distrito: </label>
-                                    <select name="distrito" id="distrito" class="form-select" readonly>
-                                      <option value="CHACHAPOYAS">CHACHAPOYAS</option>
-                                      <option value="ASUNCION">ASUNCION</option>
-                                      <option value="BALSAS">BALSAS</option>
+                                    <select name="distrito" id="distrito" class="form-select" >
+                                      
                                     </select>
                                   </div>                                         
                                 </div>
@@ -437,21 +433,21 @@
                                 <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="departamento" class="form-label">Departamento: <span class="chargue-pro"></span></label>
-                                    <input type="text" class="form-control" name="departamento" id="departamento">
+                                    <input type="text" class="form-control" name="departamento" id="departamento" readonly>
                                   </div>                                         
                                 </div>
                                 <!-- Provincia -->
                                 <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="provincia" class="form-label">Provincia: <span class="chargue-dep"></span></label>
-                                    <input type="text" class="form-control" name="provincia" id="provincia">
+                                    <input type="text" class="form-control" name="provincia" id="provincia" readonly>
                                   </div>                                         
                                 </div>
                                 <!-- Ubigeo -->
                                 <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
                                   <div class="form-group">
                                     <label for="ubigeo" class="form-label">Ubigeo: <span class="chargue-ubi"></span></label>
-                                    <input type="text" class="form-control" name="ubigeo" id="ubigeo">
+                                    <input type="text" class="form-control" name="ubigeo" id="ubigeo" readonly>
                                   </div>                                         
                                 </div>
                               </div> <!-- /.row -->
@@ -472,10 +468,7 @@
                                 <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-4 mt-3">
                                   <div class="form-group">
                                     <label for="idbanco" class="form-label">Entidad Financiera:  </label>
-                                    <select name="idbanco" id="idbanco" class="form-select" required> 
-                                      <option value="1">NINGUNO</option>
-                                      <option value="2">BBVA</option>
-                                      <option value="3">SCOTIA BANK</option>
+                                    <select name="idbanco" id="idbanco" class="form-select" required>                                       
                                     </select>
                                   </div>                                         
                                 </div>

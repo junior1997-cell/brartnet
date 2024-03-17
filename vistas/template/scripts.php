@@ -24,6 +24,8 @@
 <script src="../assets/libs/@simonwep/pickr/pickr.es5.min.js"></script>
 
 <!-- :::::::::::::::::: P L U G I N   D I F E R E N T E S   A L   P R O Y E C T O :::::::::::::::::: -->
+<!-- InputMask -->
+<script src="../assets/libs/inputmask/jquery.inputmask.min.js"></script>
 
 <!-- Moment -->
 <script src="../assets/libs/moment/moment.js"></script>

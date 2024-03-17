@@ -7,19 +7,20 @@ if (!isset($_SESSION["user_nombre"])) {
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
-  if ($_SESSION['configuracion'] == 1) {
+  if ($_SESSION['categoria_y_marca'] == 1) {
     
-    require_once "../modelos/Cargo_trabajador.php";
-    $cargo_t = new Cargo_trabajador();
+    require_once "../modelos/Marca.php";
+    $marca = new Marca();
 
-    $idcargo_trabajador   = isset($_POST["idcargo_trabajador"]) ? limpiarCadena($_POST["idcargo_trabajador"]) : "";
-    $nombre_ct             = isset($_POST["nombre_ct"]) ? limpiarCadena($_POST["nombre_ct"]) : "";
+    $idmarca      = isset($_POST["idmarca"]) ? limpiarCadena($_POST["idmarca"]) : "";
+    $nombre       = isset($_POST["nombre_marca"]) ? limpiarCadena($_POST["nombre_marca"]) : "";
+    $descripcion  = isset($_POST["descr_marca"]) ? limpiarCadena($_POST["descr_marca"]) : "";
 
 
     switch ($_GET["op"]) {
-
-      case 'tabla_cargo_trabajador':
-        $rspta = $cargo_t->listar();
+      
+      case 'listar_tabla_marca':
+        $rspta = $marca->listar_marca();
         //Vamos a declarar un array
         $data = [];
         $cont = 1;
@@ -32,10 +33,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = array(
               "0" => $cont++,
-              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_cargo_trabajador(' . $value['idcargo_trabajador'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_cargo_trabajador(' . $value['idcargo_trabajador'] . ', \'' . encodeCadenaHtml($value['nombre']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',         
+              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_marca(' . $value['idmarca'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_marca(' . $value['idmarca'] . ', \'' . encodeCadenaHtml($value['nombre']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',         
               "2" => $value['nombre'],
-              "3" =>  ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
+              "3" => $value['descripcion'],
+              "4" =>  ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
 
             );
           }
@@ -53,31 +55,30 @@ if (!isset($_SESSION["user_nombre"])) {
 
       break;
 
-      case 'guardar_editar_cargo_trabajador':
-        if (empty($idcargo_trabajador)) {
-          $rspta = $cargo_t->insertar($nombre_ct);
+      case 'guardar_editar_marca':
+        if (empty($idmarca)) {
+          $rspta = $marca->insertar($nombre, $descripcion);
           echo json_encode($rspta, true);
         } else {
-          $rspta = $cargo_t->editar($idcargo_trabajador, $nombre_ct);
+          $rspta = $marca->editar($idmarca, $nombre, $descripcion);
           echo json_encode($rspta, true);
         }
       break;
 
-      case 'mostrar_ct':
-        $rspta = $cargo_t->mostrar($idcargo_trabajador);
+      case 'mostrar_marca':
+        $rspta = $marca->mostrar($idmarca);
         echo json_encode($rspta, true);
       break;
 
       case 'desactivar':
-        $rspta = $cargo_t->desactivar($_GET["id_tabla"]);
+        $rspta = $marca->desactivar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
       break;
 
       case 'eliminar':
-        $rspta = $cargo_t->eliminar($_GET["id_tabla"]);
+        $rspta = $marca->eliminar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
       break;
-      
 
     }
 

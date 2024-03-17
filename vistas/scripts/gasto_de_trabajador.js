@@ -14,6 +14,10 @@ function init() {
   lista_select2("../ajax/gasto_de_trabajador.php?op=listar_trabajador", '#idtrabajador', null);
   lista_select2("../ajax/gasto_de_trabajador.php?op=listar_proveedor", '#idproveedor', null);  
 
+  lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);  
+  lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);  
+  lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);  
+
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idtrabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
