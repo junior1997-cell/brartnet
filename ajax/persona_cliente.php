@@ -202,8 +202,6 @@ if (!isset($_SESSION["user_nombre"])) {
                   $class_dia="bg-outline-danger";
                 }
 
-
-
               } elseif ($value['dia_cancelacion'] < $dia_act) {
 
                 $anio_mes_siguiente = date('Y-m', strtotime('+1 month'));
