@@ -47,7 +47,7 @@ function limpiar_cliente() {
   $("#fecha_nacimiento").val("");
   $("#celular").val("");
   $("#direccion").val("");
-  $("#distrito").val('').trigger("change");;
+  $("#distrito").val('TOCACHE').trigger("change");;
 
   $("#correo").val("");
 
@@ -61,6 +61,8 @@ function limpiar_cliente() {
   $("#ip_personal").val("");
   $("#fecha_afiliacion").val("");
   $("#fecha_cancelacion").val("");
+  $("#usuario_microtick").val("");
+  $("#nota").val("");
   // $("#estado_descuento").val("");
   // $("#descuento").val("");
 
@@ -151,21 +153,16 @@ function funtion_switch() {
   var isChecked = $('#toggleswitchSuccess').prop('checked');
   if (isChecked) {
     toastr_success("Estado", "Descuento Activado", 700);
-
-
     $("#estado_descuento").val(1);
     $('#descuento').removeAttr('readonly');
-
   } else {
     toastr_warning("Estado", "Descuento Desactivado", 700);
     $("#estado_descuento").val(0);
     $("#descuento").val('0');
     $("#monto_descuento").val('0.00');
     $('#descuento').attr('readonly', 'readonly');
-
   }
 }
-
 
 //Función Listar
 function tabla_principal_cliente() {
@@ -195,7 +192,7 @@ function tabla_principal_cliente() {
         $(".buttons-excel").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Excel');
         $(".buttons-pdf").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'PDF');
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
-        // $('[data-bs-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip();
       },
       dataSrc: function (e) {
 				if (e.status != true) {  ver_errores(e); }  return e.aaData;
@@ -203,7 +200,7 @@ function tabla_principal_cliente() {
     },
     createdRow: function (row, data, ixdex) {
       // columna: #
-      // if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -229,7 +226,7 @@ function tabla_principal_cliente() {
         } return number; 
       }, },
       // { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18], visible: false, searchable: false, },
+      { targets: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], visible: false, searchable: false, },
     ],
   }).DataTable();
 }
@@ -320,6 +317,7 @@ function mostrar_cliente(idpersona_cliente) {
       $("#provincia").val(e.data.provincia);
       $("#ubigeo").val(e.data.cod_ubigeo);
       $("#correo").val(e.data.correo);
+
       $("#idpersona_trabajador").val(e.data.idpersona_trabajador).trigger("change");
       $("#idzona_antena").val(e.data.idzona_antena).trigger("change");
       $("#idselec_centroProbl").val(e.data.idcentro_poblado).trigger("change");
@@ -327,6 +325,9 @@ function mostrar_cliente(idpersona_cliente) {
       $("#ip_personal").val(e.data.ip_personal);
       $("#fecha_afiliacion").val(e.data.fecha_afiliacion);
       $("#fecha_cancelacion").val(e.data.fecha_cancelacion);
+      $("#usuario_microtick").val(e.data.usuario_microtick);
+      $("#nota").val(e.data.nota);
+
       $("#estado_descuento").val(e.data.estado_descuento);
       $("#descuento").val(e.data.descuento);
 
@@ -362,27 +363,115 @@ function mostrar_cliente(idpersona_cliente) {
 }
 
 //Función para desactivar registros
-function eliminar_cliente(idpersona_cliente, nombre) {
+// function eliminar_cliente(idpersona_cliente, nombre) {
 
-  crud_eliminar_papelera(
-    "../ajax/persona_cliente.php?op=desactivar",
-    "../ajax/persona_cliente.php?op=eliminar",
-    idpersona_cliente,
-    "!Elija una opción¡",
-    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
-    function () { sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado.") },
-    function () { sw_success('Eliminado!', 'Tu registro ha sido Eliminado.') },
-    function () { tabla_cliente.ajax.reload(null, false); },
-    false,
-    false,
+//   crud_eliminar_papelera(
+//     "../ajax/persona_cliente.php?op=desactivar",
+//     "../ajax/persona_cliente.php?op=eliminar",
+//     idpersona_cliente,
+//     "!Elija una opción¡",
+//     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
+//     function () { sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado.") },
+//     function () { sw_success('Eliminado!', 'Tu registro ha sido Eliminado.') },
+//     function () { tabla_cliente.ajax.reload(null, false); },
+//     false,
+//     false,
+//     false,
+//     false
+//   );
+
+// }
+
+//Función para activar registros
+function activar(idusuario, nombre) {
+	crud_simple_alerta(
+		`../ajax/persona_cliente.php?op=activar_cliente&descripcion=`,
+    idusuario, 
+    "!Reactivar¡", 
+    `<b class="text-success">${nombre}</b> <br> Se <b>eliminara</b> la NOTA que ha sido registrado!`, 
+		`Aceptar`,
+    function(){ sw_success('Recuperado', "Tu cliente ha sido restaurado." ) }, 
+    function(){ tabla_cliente.ajax.reload(null, false); },
+    false, 
+    false, 
     false,
     false
   );
+}
 
+//Función para desactivar registros
+function eliminar_cliente(idtrabajador, nombre) {
+  $(".tooltip").removeClass("show").addClass("hidde");
+  Swal.fire({
+    title: "!Elija una opción¡",
+    html: `<b class="text-danger"><del>${nombre}</del></b> <br> Al <b>dar de baja</b> Padrá encontrar el registro en la papelera! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
+    icon: "warning",
+    showCancelButton: true,
+    showDenyButton: true,
+    confirmButtonColor: "#17a2b8",
+    denyButtonColor: "#d33",
+    cancelButtonColor: "#6c757d",    
+    confirmButtonText: `<i class="fas fa-times"></i> Dar de Baja`,
+    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,    
+    showLoaderOnDeny: true,
+    preDeny: (input) => {       
+      return fetch(`../ajax/persona_cliente.php?op=eliminar_cliente&id_tabla=${idtrabajador}`).then(response => {
+        console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+    console.log(result );
+    if (result.isConfirmed) {    
+      Swal.fire({
+        icon: "warning",
+        title: 'Antes de dar de baja ingrese una Observación',
+        input: 'textarea',
+        inputAttributes: { autocapitalize: 'off' },
+        showCancelButton: true,
+        cancelButtonColor: "#d33",
+        confirmButtonText: 'Si, dar de baja!',
+        confirmButtonColor: "#28a745",
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          // console.log(login);
+          return fetch(`../ajax/persona_cliente.php?op=desactivar_cliente&id_tabla=${idtrabajador}&descripcion=${login}`).then(response => {
+            console.log(response);
+            if (!response.ok) { throw new Error(response.statusText); }
+            return response.json();
+          }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        console.log(result );
+        if (result.isConfirmed) {
+          if (result.value.status) {
+            Swal.fire("Expulsado!", "Tu trabajador ha sido expulsado.", "success");
+            tabla_cliente.ajax.reload(null, false); 
+          }else{
+            ver_errores(result.value);
+          }     
+        }
+      });
+
+    }else if (result.isDenied) {
+      //op=eliminar
+      if (result.value.status) {
+        Swal.fire("Eliminado!", "Tu trabajador ha sido Eliminado.", "success");
+        tabla_cliente.ajax.reload(null, false); 
+      }else{
+        ver_errores(result.value);
+      }      
+    }
+  });
 }
 
 
-init();
+$(document).ready(function () {
+  init();
+});
 
 $(function () {
   $('#tipo_persona_sunat').on('change', function () { $(this).trigger('blur'); });
@@ -397,41 +486,49 @@ $(function () {
   $("#form-agregar-cliente").validate({
     rules: {
 
-      tipo_persona_sunat: { required: true },
-      tipo_documento: { required: true },
-      numero_documento: { required: true },
-      nombre_razonsocial: { required: true },
-      apellidos_nombrecomercial: { required: true },
-      distrito: { required: true },
-      departamento: { required: true },
-      provincia: { required: true },
-      ubigeo: { required: true },
-      idpersona_trabajador: { required: true },
-      idzona_antena: { required: true },
-      idselec_centroProbl: { required: true },
-      idplan: { required: true },
-      ip_personal: { required: true },
-      fecha_afiliacion: { required: true },
+      tipo_persona_sunat:   { required: true },
+      tipo_documento:       { required: true, minlength: 1, maxlength: 2, },
+      numero_documento:     { required: true, minlength: 8, maxlength: 20, },
+      nombre_razonsocial:   { required: true, minlength: 4, maxlength: 200, },
+      apellidos_nombrecomercial: { required: true, minlength: 4, maxlength: 200, },
+      correo:    			      { minlength: 4, maxlength: 100, },       
+      celular:    			    { minlength: 8, maxlength: 9, },       
+      fecha_nacimiento:    	{  },  
 
+      direccion:    			  { minlength: 4, maxlength: 200, },
+      distrito:             { required: true },
+      departamento:         { required: true },
+      provincia:            { required: true },
+      ubigeo:               { required: true },
+
+      idpersona_trabajador: { required: true },
+      idzona_antena:        { required: true },
+      idselec_centroProbl:  { required: true },
+      idplan:               { required: true },
+      ip_personal:          { minlength: 9, maxlength: 45, },
+      fecha_afiliacion:     { required: true },
+      fecha_cancelacion:     { required: true },
+      usuario_microtick:    { required: true, minlength: 4, maxlength: 60, },
+      nota:                 { minlength: 4, maxlength: 400, },
 
     },
     messages: {
 
-      tipo_persona_sunat: { required: "Campo requerido.", },
-      tipo_documento: { required: "Campo requerido.", },
-      numero_documento: { required: "Campo requerido.", },
-      nombre_razonsocial: { required: "Campo requerido.", },
+      tipo_persona_sunat:   { required: "Campo requerido.", },
+      tipo_documento:       { required: "Campo requerido.", },
+      numero_documento:     { required: "Campo requerido.", },
+      nombre_razonsocial:   { required: "Campo requerido.", },
       apellidos_nombrecomercial: { required: "Campo requerido.", },
-      distrito: { required: "Campo requerido.", },
-      departamento: { required: "Campo requerido.", },
-      provincia: { required: "Campo requerido.", },
-      ubigeo: { required: "Campo requerido.", },
+      distrito:             { required: "Campo requerido.", },
+      departamento:         { required: "Campo requerido.", },
+      provincia:            { required: "Campo requerido.", },
+      ubigeo:               { required: "Campo requerido.", },
       idpersona_trabajador: { required: "Campo requerido.", },
-      idzona_antena: { required: "Campo requerido.", },
-      idselec_centroProbl: { required: "Campo requerido.", },
-      idplan: { required: "Campo requerido.", },
-      ip_personal: { required: "Campo requerido.", },
-      fecha_afiliacion: { required: "Campo requerido.", },
+      idzona_antena:        { required: "Campo requerido.", },
+      idselec_centroProbl:  { required: "Campo requerido.", },
+      idplan:               { required: "Campo requerido.", },
+      
+      fecha_afiliacion:     { required: "Campo requerido.", },
 
     },
 
@@ -463,7 +560,7 @@ $(function () {
   $('#idpersona_trabajador').rules('add', { required: true, messages: { required: "Campo requerido" } });
   $('#idzona_antena').rules('add', { required: true, messages: { required: "Campo requerido" } });
   $('#idselec_centroProbl').rules('add', { required: true, messages: { required: "Campo requerido" } });
-  $('#ip_personal').rules('add', { required: true, messages: { required: "Campo requerido" } });
+  
 });
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 function cambiarImagen() {

@@ -18,34 +18,10 @@ class Cliente
 	U-- actualizar
 	D-- delete -- eliminar*/
 	//Implementamos un método para insertar registros
-	public function insertar_cliente(
-		$idtipo_persona,
-		$idbancos,
-		$idcargo_trabajador,
-		$tipo_persona_sunat,
-		$tipo_documento,
-		$numero_documento,
-		$nombre_razonsocial,
-		$apellidos_nombrecomercial,
-		$fecha_nacimiento,
-		$celular,
-		$direccion,
-		$distrito,
-		$departamento,
-		$provincia,
-		$ubigeo,
-		$correo,
-		$idpersona_trabajador,
-		$idzona_antena,
-		$idselec_centroProbl,
-		$idplan,
-		$ip_personal,
-		$fecha_afiliacion,
-		$estado_descuento,
-		$descuento,
-		$fecha_cancelacion,
-		$img_perfil
-	) {
+	public function insertar_cliente(	$idtipo_persona, $idbancos, $idcargo_trabajador, $tipo_persona_sunat, $tipo_documento, $numero_documento, $nombre_razonsocial, 
+		$apellidos_nombrecomercial,	$fecha_nacimiento, $celular, $direccion, $distrito, $departamento, $provincia, $ubigeo, $correo,	$idpersona_trabajador,
+		$idzona_antena, $idselec_centroProbl, $idplan, $ip_personal, $fecha_afiliacion,  $fecha_cancelacion,	$usuario_microtick,$nota, 
+		$estado_descuento, $descuento,	$img_perfil	) {
 
 		$sql1 = "INSERT INTO persona(idtipo_persona, idbancos, idcargo_trabajador, tipo_persona_sunat, nombre_razonsocial, 
 		apellidos_nombrecomercial, tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, departamento, provincia, 
@@ -61,8 +37,8 @@ class Cliente
 		$id = $inst_persona['data'];
 
 
-		$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador,idcentro_poblado, ip_personal, fecha_afiliacion, descuento, estado_descuento,fecha_cancelacion) 
-		VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador','$idselec_centroProbl',' $ip_personal', '$fecha_afiliacion', '$descuento', '$estado_descuento', '$fecha_cancelacion')";
+		$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador,idcentro_poblado, ip_personal, fecha_afiliacion, fecha_cancelacion,usuario_microtick,nota, descuento, estado_descuento) 
+		VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador','$idselec_centroProbl','$ip_personal', '$fecha_afiliacion', '$fecha_cancelacion', '$usuario_microtick','$nota', '$descuento', '$estado_descuento')";
 
 		$insertar =  ejecutarConsulta($sql2, 'C');
 		if ($inst_persona['status'] == false) {
@@ -73,36 +49,10 @@ class Cliente
 	}
 
 	//Implementamos un método para editar registros
-	public function editar_cliente(
-		$idpersona,
-		$idtipo_persona,
-		$idbancos,
-		$idcargo_trabajador,
-		$idpersona_cliente,
-		$tipo_persona_sunat,
-		$tipo_documento,
-		$numero_documento,
-		$nombre_razonsocial,
-		$apellidos_nombrecomercial,
-		$fecha_nacimiento,
-		$celular,
-		$direccion,
-		$distrito,
-		$departamento,
-		$provincia,
-		$ubigeo,
-		$correo,
-		$idpersona_trabajador,
-		$idzona_antena,
-		$idselec_centroProbl,
-		$idplan,
-		$ip_personal,
-		$fecha_afiliacion,
-		$estado_descuento,
-		$descuento,
-		$fecha_cancelacion,
-		$img_perfil
-	) {
+	public function editar_cliente(	$idpersona,	$idtipo_persona,	$idbancos,	$idcargo_trabajador,	$idpersona_cliente,	$tipo_persona_sunat,	$tipo_documento,
+		$numero_documento,	$nombre_razonsocial,	$apellidos_nombrecomercial,	$fecha_nacimiento,	$celular,	$direccion,	$distrito, $departamento, $provincia, $ubigeo, 
+		$correo, $idpersona_trabajador,	$idzona_antena,	$idselec_centroProbl,	$idplan, $ip_personal, $fecha_afiliacion, $fecha_cancelacion, $usuario_microtick,$nota,
+		$estado_descuento, $descuento,	$img_perfil	) {
 
 		$sql1 = "UPDATE persona SET 		
 						idtipo_persona='$idtipo_persona',
@@ -139,9 +89,11 @@ class Cliente
 		ip_personal='$ip_personal',
 		fecha_afiliacion='$fecha_afiliacion',
 		fecha_cancelacion='$fecha_cancelacion',
+		usuario_microtick='$usuario_microtick',
+		nota='$nota',
 		descuento='$descuento',
 		estado_descuento='$estado_descuento'
-		WHERE idpersona_cliente='$idpersona_cliente';";
+		WHERE idpersona_cliente='$idpersona_cliente';"; 
 
 		$editar =  ejecutarConsulta($sql, 'U');
 
@@ -153,32 +105,33 @@ class Cliente
 	}
 
 	//Implementamos un método para desactivar color
-	public function desactivar_cliente($idpersona_cliente)
-	{
-		$sql = "UPDATE persona_cliente SET estado='0' WHERE idpersona_cliente='$idpersona_cliente'";
+	public function desactivar_cliente($idpersona_cliente, $descripcion)	{
+		$sql = "UPDATE persona_cliente SET estado='0', nota ='$descripcion' WHERE idpersona_cliente='$idpersona_cliente'";
+		$desactivar = ejecutarConsulta($sql, 'T');
+
+		return $desactivar;
+	}
+
+	//Implementamos un método para desactivar color
+	public function activar_cliente($idpersona_cliente, $descripcion)	{
+		$sql = "UPDATE persona_cliente SET estado='1', nota ='$descripcion' WHERE idpersona_cliente='$idpersona_cliente'";
 		$desactivar = ejecutarConsulta($sql, 'T');
 
 		return $desactivar;
 	}
 
 	//Implementamos un método para eliminar persona_cliente
-	public function eliminar_cliente($idpersona_cliente)
-	{
-
+	public function eliminar_cliente($idpersona_cliente)	{
 		$sql = "UPDATE persona_cliente SET estado_delete='0' WHERE idpersona_cliente='$idpersona_cliente'";
-		$eliminar =  ejecutarConsulta($sql, 'D');
-		if ($eliminar['status'] == false) {
-			return $eliminar;
-		}
+		$eliminar =  ejecutarConsulta($sql, 'D');		if ($eliminar['status'] == false) {	return $eliminar;	}
 
 		return $eliminar;
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
-	public function mostrar_cliente($idpersona_cliente)
-	{
+	public function mostrar_cliente($idpersona_cliente)	{
 		$sql = "SELECT pc.idpersona_cliente, pc.idpersona, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan, pc.ip_personal, pc.idcentro_poblado,
-		pc.fecha_afiliacion, pc.fecha_cancelacion, pc.nota, pc.descuento, pc.estado_descuento, pc.estado, p.*
+		pc.fecha_afiliacion, pc.fecha_cancelacion, pc.nota, pc.usuario_microtick, pc.descuento, pc.estado_descuento, pc.estado, p.*
 		FROM persona_cliente as pc
 		INNER JOIN persona as p on pc.idpersona=p.idpersona
 		WHERE idpersona_cliente='$idpersona_cliente';";
@@ -194,16 +147,14 @@ class Cliente
 		} 
 		
 		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
-		pc.fecha_cancelacion,	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado,
+		pc.fecha_cancelacion,	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
 		CASE 
-		WHEN p.tipo_persona_sunat = 'NATURAL' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-		WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
-		ELSE '-'
+			WHEN p.tipo_persona_sunat = 'NATURAL' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+			ELSE '-'
 		END AS cliente_nombre_completo, 
-
 		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, 
 		za.ip_antena,pc.estado, i.abreviatura as tipo_doc
-
 		FROM persona_cliente as pc
 		INNER JOIN persona AS p on pc.idpersona=p.idpersona
 		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador
@@ -212,7 +163,7 @@ class Cliente
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
 		INNER JOIN sunat_doc_identidad as i on p.tipo_documento=i.code_sunat  
 		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
-		where pc.estado='1' and pc.estado_delete='1' $filtro_id_trabajador ORDER BY pc.idpersona_cliente DESC";
+		where pc.estado_delete='1' $filtro_id_trabajador ORDER BY pc.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 

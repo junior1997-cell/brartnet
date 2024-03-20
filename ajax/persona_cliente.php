@@ -16,6 +16,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $persona_cliente = new Cliente();
     date_default_timezone_set('America/Lima');
     $date_now = date("d_m_Y__h_i_s_A");
+    $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
     $idpersona                  = isset($_POST["idpersona"]) ? limpiarCadena($_POST["idpersona"]) : "";
     $idtipo_persona             = isset($_POST["idtipo_persona"]) ? limpiarCadena($_POST["idtipo_persona"]) : "";
@@ -42,11 +43,14 @@ if (!isset($_SESSION["user_nombre"])) {
     $idplan                     = isset($_POST["idplan"]) ? limpiarCadena($_POST["idplan"]) : "";
     $ip_personal                = isset($_POST["ip_personal"]) ? limpiarCadena($_POST["ip_personal"]) : "";
     $fecha_afiliacion           = isset($_POST["fecha_afiliacion"]) ? limpiarCadena($_POST["fecha_afiliacion"]) : "";
-    $fecha_cancelacion           = isset($_POST["fecha_cancelacion"]) ? limpiarCadena($_POST["fecha_cancelacion"]) : "";
+    $fecha_cancelacion          = isset($_POST["fecha_cancelacion"]) ? limpiarCadena($_POST["fecha_cancelacion"]) : "";
+    $usuario_microtick          = isset($_POST["usuario_microtick"]) ? limpiarCadena($_POST["usuario_microtick"]) : "";
+    $nota                       = isset($_POST["nota"]) ? limpiarCadena($_POST["nota"]) : "";
+
     $estado_descuento           = isset($_POST["estado_descuento"]) ? limpiarCadena($_POST["estado_descuento"]) : "";
     $descuento                  = isset($_POST["descuento"]) ? limpiarCadena($_POST["descuento"]) : "";
 
-
+    
     // $idpersona_cliente, $idzona_antena, $idplan, $id_tecnico, $ip_personal, $fecha_afiliacion, $nota, $descuento, $estado_descuento
     //`idpersona_cliente`, `idzona_antena`, `idplan`, `id_tecnico`, `ip_personal`, `ip_antena`, `fecha_afiliacion`, `nota`, `descuento`, `estado_descuento`
     //---id cliente no va 
@@ -88,10 +92,9 @@ if (!isset($_SESSION["user_nombre"])) {
             $idselec_centroProbl,
             $idplan,
             $ip_personal,
-            $fecha_afiliacion,
-            $estado_descuento,
-            $descuento,
-            $fecha_cancelacion,
+            $fecha_afiliacion, $fecha_cancelacion, $usuario_microtick,$nota,
+            $estado_descuento, 
+            $descuento,            
             $img_perfil
           );
           echo json_encode($rspta, true);
@@ -100,9 +103,7 @@ if (!isset($_SESSION["user_nombre"])) {
           if ($flat_img1 == true || empty($img_perfil)) {
             $datos_f1 = $persona_cliente->perfil_trabajador($idpersona);
             $img1_ant = $datos_f1['data']['foto_perfil'];
-            if (!empty($img1_ant)) {
-              unlink("../assets/modulo/persona/perfil/" . $img1_ant);
-            }
+            if (!empty($img1_ant)) { unlink("../assets/modulo/persona/perfil/" . $img1_ant); }
           }
 
 
@@ -130,31 +131,35 @@ if (!isset($_SESSION["user_nombre"])) {
             $idselec_centroProbl,
             $idplan,
             $ip_personal,
-            $fecha_afiliacion,
+            $fecha_afiliacion,$fecha_cancelacion, $usuario_microtick,$nota,
             $estado_descuento,
-            $descuento,
-            $fecha_cancelacion,
+            $descuento,            
             $img_perfil
           );
           echo json_encode($rspta, true);
         }
-        break;
+      break;
 
-      case 'desactivar':
-        $rspta = $persona_cliente->desactivar_cliente($_GET["id_tabla"]);
+      case 'desactivar_cliente':
+        $rspta = $persona_cliente->desactivar_cliente($_GET["id_tabla"], $_GET["descripcion"]);
         echo json_encode($rspta, true);
-        break;
+      break;
 
-      case 'eliminar':
+      case 'activar_cliente':
+        $rspta = $persona_cliente->activar_cliente($_GET["id_tabla"], $_GET["descripcion"]);
+        echo json_encode($rspta, true);
+      break;
+
+      case 'eliminar_cliente':
         $rspta = $persona_cliente->eliminar_cliente($_GET["id_tabla"]);
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'mostrar_cliente':
         $rspta = $persona_cliente->mostrar_cliente($idpersona_cliente);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'tabla_principal_cliente':
         $rspta = $persona_cliente->tabla_principal_cliente();
@@ -163,11 +168,9 @@ if (!isset($_SESSION["user_nombre"])) {
         $cont = 1;
         $dia_cancel = "";
         $fecha_proximo_pago = '';
-        $fecha_pago = "";
-        $falta="";
+        $fecha_pago = "";        
         $fecha_pago_of="";
-        $class_dia = "";
-        $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+        $class_dia = "";        
 
         if ($rspta['status'] == true) {
           //dia_cancelacion
@@ -175,95 +178,75 @@ if (!isset($_SESSION["user_nombre"])) {
 
             if (isset($value['dia_cancelacion']) && $value['dia_cancelacion'] !== null) {
 
-              $dia_cancel = $value['dia_cancelacion'];
-
-              // Obtener la fecha actual
-              $fecha_actual = date("Y-m-d");
-
+              $dia_cancel = $value['dia_cancelacion'];              
+              $fecha_actual = date("Y-m-d"); // Obtener la fecha actual
               $dia_act = date("d", strtotime($fecha_actual));
+              $dif_dias = 0;
 
               if ($dia_cancel >= $dia_act) {
 
                 $anio_mes_actual  = date('Y-m');
-
-                $dif_dias=$dia_cancel-$dia_act;
-
-                $fecha_pago_of = $anio_mes_actual . '-' . $dia_cancel;
-
-                $falta = $dif_dias; 
-
-              
-                if($dif_dias>5){
-                  $class_dia="bg-outline-success";
-
-                }elseif ($dif_dias<=5 && $dif_dias>=3){
-                  $class_dia="bg-outline-warning";
-                } else{
-                  $class_dia="bg-outline-danger";
-                }
+                $dif_dias         = $dia_cancel-$dia_act;
+                $fecha_pago_of    = $anio_mes_actual . '-' . $dia_cancel;                 
 
               } elseif ($value['dia_cancelacion'] < $dia_act) {
 
                 $anio_mes_siguiente = date('Y-m', strtotime('+1 month'));
-
-                $fecha_pago_of = $anio_mes_siguiente . '-' . $value['dia_cancelacion'];
-
-                $dif = diferencia_days($fecha_pago_of, date("Y-m-d"));
-
-                $falta = $dif;
-
-                if($dif>5){
-                  $class_dia="bg-outline-success";
-
-                }elseif ($dif<=5 && $dif>=3){
-                  $class_dia="bg-outline-warning";
-                } else{
-                  $class_dia="bg-outline-danger";
-                }
-
-
-              } else {
-              }
+                $fecha_pago_of      = $anio_mes_siguiente . '-' . $value['dia_cancelacion'];
+                $dif_dias           = diferencia_days($fecha_pago_of, date("Y-m-d"));
+              } 
             } else {
-
               $fecha_proximo_pago = '';
             }
 
+            if($dif_dias>5){  $class_dia="bg-outline-success";  }elseif ($dif_dias<=5 && $dif_dias>=3){ $class_dia="bg-outline-warning";  } else{ $class_dia="bg-outline-danger";  }
 
             $imagen_perfil = empty($value['foto_perfil']) ? 'no-perfil.jpg' :   $value['foto_perfil'];
 
             $data[] = array(
               "0" => $cont++,
               "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>' .
-                ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',
+                ( $value['estado'] ? ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Dar de baja o Eliminar"><i class="ri-delete-bin-line"></i></button>' : 
+                ' <button  class="btn btn-icon btn-sm btn-success-light product-btn" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Reactivar"><i class="ri-check-line"></i></button>').
+              ' <div class="btn-group ">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-coin"></i> Realizar Pago</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-checkup-list"></i> Listar pagos</a></li>                  
+                </ul>
+              </div>',
               "2" => '<div class="d-flex flex-fill align-items-center">
-              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"> </span></div>
-              <div>
-                <span class="d-block fw-semibold text-primary">' . $value['cliente_nombre_completo'] . '</span>
-                <span class="text-muted">' . $value['tipo_doc'] . ' : ' . $value['numero_documento'] . '</span> |
-                <span class="text-muted">Cel.: ' . '<a href="tel:+51'.$value['celular'].'">'.$value['celular'].'</a>' . '</span>
-              </div>
-            </div>',
+                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
+                  <span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"> </span>
+                </div>
+                <div>
+                  <span class="d-block fw-semibold text-primary">' . $value['cliente_nombre_completo'] . '</span>
+                  <span class="text-muted text-nowrap">' . $value['tipo_doc'] . ' : ' . $value['numero_documento'] . '</span> |
+                  <span class="text-muted text-nowrap">Cel.: ' . '<a href="tel:+51'.$value['celular'].'" data-bs-toggle="tooltip" title="Clic para hacer llamada">'.$value['celular'].'</a>' . '</span>
+                </div>
+              </div>',
               "3" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['centro_poblado'] . ' : ' . $value['direccion'] . '</textarea>',
-              "4" => $falta,
+              "4" => $dif_dias,
               "5" => '<span class="badge '.$class_dia.'">'.   date("d/m/Y", strtotime($fecha_pago_of)) .'</span>',
               "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '<br>' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "7" => '<div class="text-start font-size-12px" >
-                      <span class="d-block text-primary fw-semibold"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
-                      <span class="text-muted"><i class="bx bx-wifi bx-burst" ></i> ' . $value['ip_personal'] . '</span>
+                      <span class="d-block text-primary fw-semibold text-nowrap"> <i class="bx bx-broadcast bx-burst fa-1x" ></i> ' . $value['ip_antena'] . '</span>
+                      <span class="d-block text-muted text-nowrap"><i class="bx bx-wifi bx-burst" ></i> ' . $value['ip_personal'] . '</span>
+                      <span class="text-muted text-nowrap"><i class="bx bx-user-pin fa-1x"></i> ' . $value['usuario_microtick'] . '</span>
                     </div>',
               "8" => $value['trabajador_nombre'],
+              "9" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['nota'] . '</textarea>',
               
-              "9" => $value['cliente_nombre_completo'],
-              "10" => $value['tipo_doc'],
-              "11" => $value['numero_documento'],
-              "12" => $value['centro_poblado'],
-              "13" => $value['direccion'],
-              "14" => $value['nombre_plan'],
-              "15" => $value['costo'],
-              "16" => $value['zona'],
-              "17" =>  date("d/m/Y", strtotime($fecha_pago_of)),
-              "18" => $value['ip_antena']
+              "10" => $value['cliente_nombre_completo'],
+              "11" => $value['tipo_doc'],
+              "12" => $value['numero_documento'],
+              "13" => $value['centro_poblado'],
+              "14" => $value['direccion'],
+              "15" => $value['nombre_plan'],
+              "16" => $value['costo'],
+              "17" => $value['zona'],
+              "18" =>  date("d/m/Y", strtotime($fecha_pago_of)),
+              "19" => $value['ip_antena']
 
             );
           }
