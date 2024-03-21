@@ -143,7 +143,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="cool-md-6 col-lg-4 col-xl-3 col-xxl-3">
                             <div class="form-group">
                               <label for="impuesto" class="form-label">Impuesto</label>
-                              <input type="number" class="form-control" name="impuesto" id="impuesto" value="0">
+                              <input type="number" class="form-control" name="impuesto" id="impuesto">
                             </div>
                           </div>
 

@@ -113,17 +113,17 @@ function default_val_igv() { if ($("#tipo_comprobante").select2("val") == "01") 
 
 function modificarSubtotales() {  
 
-  var val_igv = $('#impuesto').val(); //console.log(array_data_compra);
+  var val_igv = document.getElementById("impuesto").value;
 
   if ($("#tipo_comprobante").select2("val") == null) {    
 
     $("#impuesto").val(0);
     $(".val_igv").html('IGV (0%)');
 
-    $("#tipo_gravada").val('NO GRAVADA');
-    $(".tipo_gravada").html('NO GRAVADA');
+    $("#tipo_gravada").val('SUBTOTAL');
+    $(".tipo_gravada").html('SUBTOTAL');
 
-    if (array_data_compra.length === 0) {
+    if (array_data_compra.length == 0) {
     } else {
       array_data_compra.forEach((element, index) => {
         var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
@@ -150,8 +150,8 @@ function modificarSubtotales() {
 
     if (array_data_compra.length === 0) {
       if (val_igv == '' || val_igv <= 0) {
-        $("#tipo_gravada").val('NO GRAVADA');
-        $(".tipo_gravada").html('NO GRAVADA');
+        $("#tipo_gravada").val('SUBTOTAL');
+        $(".tipo_gravada").html('SUBTOTAL');
         $(".val_igv").html(`IGV (0%)`);
       } else {
         $("#tipo_gravada").val('GRAVADA');
@@ -189,8 +189,8 @@ function modificarSubtotales() {
     $("#impuesto").val(0);    
     $(".val_igv").html('IGV (0%)');
 
-    $("#tipo_gravada").val('NO GRAVADA');
-    $(".tipo_gravada").html('NO GRAVADA');
+    $("#tipo_gravada").val('SUBTOTAL');
+    $(".tipo_gravada").html('SUBTOTAL');
 
     if (array_data_compra.length === 0) {
     } else {
