@@ -82,14 +82,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'guardar_editar':
         //guardar f_img_fondo fondo
-        if ( !file_exists($_FILES['imagen']['tmp_name']) || !is_uploaded_file($_FILES['imagen']['tmp_name']) ) {
-          $img_producto = $_POST["imagenactual"];
+        if ( !file_exists($_FILES['imagenProducto']['tmp_name']) || !is_uploaded_file($_FILES['imagenProducto']['tmp_name']) ) {
+          $img_producto = $_POST["imagenactualProducto"];
           $flat_img = false; 
         } else {          
-          $ext = explode(".", $_FILES["imagen"]["name"]);
+          $ext = explode(".", $_FILES["imagenProducto"]["name"]);
           $flat_img = true;
           $img_producto = $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);
-          move_uploaded_file($_FILES["imagen"]["tmp_name"], "../assets/modulo/productos/" . $img_producto);          
+          move_uploaded_file($_FILES["imagenProducto"]["tmp_name"], "../assets/modulo/productos/" . $img_producto);          
         }        
 
         if ( empty($idproducto) ) { #Creamos el registro
@@ -102,7 +102,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
           if ($flat_img == true || empty($img_producto)) {
             $datos_f1 = $productos->mostrar($idproducto);
-            $img1_ant = $datos_f1['data']['imagen'];
+            $img1_ant = $datos_f1['data']['imagenProducto'];
             if (!empty($img1_ant)) { unlink("../assets/modulo/productos/" . $img1_ant); }         
           }  
         

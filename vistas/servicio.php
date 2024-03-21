@@ -114,7 +114,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               
                               <select class="form-comtrol" name="idcategoria" id="idcategoria">
                                 <option value="1">NINGUNO</option>
-                                <option value="2">SERVICIO</option>
+                                <option value="3">SERVICIO</option>
                               </select>
                             </div>
                           </div>

@@ -16,7 +16,7 @@
     }
 
     function listar_tabla(){
-      $sql= "SELECT * FROM producto WHERE idcategoria = 1 OR idcategoria = 2
+      $sql= "SELECT * FROM producto WHERE idcategoria = 1 OR idcategoria = 3
       AND estado = 1 AND estado_delete = 1;";
       return ejecutarConsulta($sql);
     }

@@ -204,7 +204,7 @@ $(function () {
     rules: {           
       codigo:         { required: true, minlength: 2, maxlength: 20, },       
       categaria:    	{ required: true },       
-      nombre:    			{ required: true, minlength: 2, maxlength: 20,  },       
+      nombre:    			{ required: true, minlength: 2, maxlength: 200,  },       
       descripcion:    { required: true, minlength: 2, maxlength: 500, }, 
       precio_v:       { required: true, minlength: 2, maxlength: 500, },       
 

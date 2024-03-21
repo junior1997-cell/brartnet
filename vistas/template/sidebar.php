@@ -60,7 +60,7 @@
             <li class="slide"> <a href="index-1.php" class="side-menu__item">Ingresar compra</a> </li>
             <?php } ?>
             <?php  if ($_SESSION['lista_de_compras'] == '1') { ?>
-            <li class="slide"> <a href="index-2.php" class="side-menu__item">Lista de compra</a> </li>         
+            <li class="slide"> <a href="compras.php" class="side-menu__item">Lista de compra</a> </li>         
             <?php } ?>
           </ul>
         </li>

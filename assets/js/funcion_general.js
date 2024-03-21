@@ -1374,3 +1374,8 @@ function extrae_ruc(select = null, input = null) {
 function replicar_value_input(cont, input_entrada, input_salida) {
   var value = $(input_entrada).val(); $(`${input_salida}`).val(value).trigger("change");
 }
+
+function replicar_value_input2(id, name_input, valor) {
+  var value = $(valor).val(); console.log(value);
+  $(`${name_input}`).val(value).trigger("change");
+}

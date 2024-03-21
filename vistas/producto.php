@@ -42,6 +42,10 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
             <div class="btn-list mt-md-0 mt-2">
+              <div class="form-check form-switch mb-0" style="transform: scale(1.5); margin-top: 10px;">
+                <label class="form-check-label" for="generar-cod-correlativo"></label>
+                <input class="form-check-input" type="checkbox" id="generar-cod-correlativo" name="generar-cod-correlativo" checked data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Activar generador código de barra correlativamente automático">
+              </div>
               <nav>
                 <ol class="breadcrumb mb-0">
                   <li class="breadcrumb-item"><a href="javascript:void(0);">Productos</a></li>
@@ -238,10 +242,10 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="mb-4 mt-2 d-sm-flex align-items-center">
                               <div class="mb-0 me-5">
                                 <span class="avatar avatar-xxl avatar-rounded">
-                                  <img src="../assets/modulo/productos/no-producto.png" alt="" id="imagenmuestra" onerror="this.src='../assets/modulo/productos/no-producto.png';">
+                                  <img src="../assets/modulo/productos/no-producto.png" alt="" id="imagenmuestraProducto" onerror="this.src='../assets/modulo/productos/no-producto.png';">
                                   <a href="javascript:void(0);" class="badge rounded-pill bg-primary avatar-badge cursor-pointer">
-                                    <input type="file" class="position-absolute w-100 h-100 op-0" name="imagen" id="imagen" accept="image/*">
-                                    <input type="hidden" name="imagenactual" id="imagenactual">
+                                    <input type="file" class="position-absolute w-100 h-100 op-0" name="imagenProducto" id="imagenProducto" accept="image/*">
+                                    <input type="hidden" name="imagenactualProducto" id="imagenactualProducto">
                                     <i class="fe fe-camera  "></i>
                                   </a>
                                 </span>

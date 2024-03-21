@@ -88,6 +88,12 @@
 		
 		return $eliminar;
 	}
+
+  public function listar_crl_comprobante(){
+    $sql="SELECT idtipo_comprobante, abreviatura AS tipo_comprobante, serie
+    FROM sunat_correlacion_comprobante WHERE estado = 1 AND estado_delete = 1;";
+    return ejecutarConsultaArray($sql);
+  }
     
 
   }

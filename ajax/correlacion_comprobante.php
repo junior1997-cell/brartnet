@@ -105,6 +105,23 @@ switch ($_GET["op"]){
     echo json_encode($rspta, true);
   break;
 
+  case 'listar_crl_comprobante':
+    $rspta = $correlacion_compb->listar_crl_comprobante(); $cont = 1; $data = "";
+      if($rspta['status'] == true){
+        foreach ($rspta['data'] as $key => $value) {
+          $data .= '<option  value=' . $value['idtipo_comprobante']  . '>' . $value['tipo_comprobante'] . '</option>';
+        }
+
+        $retorno = array(
+          'status' => true, 
+          'message' => 'Salió todo ok', 
+          'data' => $data, 
+        );
+        echo json_encode($retorno, true);
+
+      } else { echo json_encode($rspta, true); }
+  break;
+
 }
 
 ob_end_flush();

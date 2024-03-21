@@ -41,11 +41,11 @@ function limpiar_form_producto(){
 	$('#precio_dist').val('');
 	$('#precio_esp').val('');
 
-  $("#imagen").val("");
-  $("#imagenactual").val("");
-  $("#imagenmuestra").attr("src", "../assets/modulo/productos/no-producto.png");
-  $("#imagenmuestra").attr("src", "../assets/modulo/productos/no-producto.png").show();
-  var imagenMuestra = document.getElementById('imagenmuestra');
+  $("#imagenProducto").val("");
+  $("#imagenactualProducto").val("");
+  $("#imagenmuestraProducto").attr("src", "../assets/modulo/productos/no-producto.png");
+  $("#imagenmuestraProducto").attr("src", "../assets/modulo/productos/no-producto.png").show();
+  var imagenMuestra = document.getElementById('imagenmuestraProducto');
   if (!imagenMuestra.src || imagenMuestra.src == "") {
     imagenMuestra.src = '../assets/modulo/productos/no-producto.png';
   }
@@ -192,9 +192,9 @@ function mostrar_producto(idproducto){
     $('#precio_dist').val(e.data.precioC);
     $('#precio_esp').val(e.data.precioD);
 
-    $("#imagenmuestra").show();
-		$("#imagenmuestra").attr("src", "../assets/modulo/productos/" + e.data.imagen);
-		$("#imagenactual").val(e.data.imagen);
+    $("#imagenmuestraProducto").show();
+		$("#imagenmuestraProducto").attr("src", "../assets/modulo/productos/" + e.data.imagen);
+		$("#imagenactualProducto").val(e.data.imagen);
 
     $('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
     $('#form-agregar-producto').valid();
@@ -536,19 +536,19 @@ $(function () {
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 function cambiarImagen() {
-	var imagenInput = document.getElementById('imagen');
+	var imagenInput = document.getElementById('imagenProducto');
 	imagenInput.click();
 }
 
 function removerImagen() {
-	$("#imagenmuestra").attr("src", "../assets/modulo/productos/no-producto.png");
-	$("#imagen").val("");
-  $("#imagenactual").val("");
+	$("#imagenmuestraProducto").attr("src", "../assets/modulo/productos/no-producto.png");
+	$("#imagenProducto").val("");
+  $("#imagenactualProducto").val("");
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-	var imagenMuestra = document.getElementById('imagenmuestra');
-	var imagenInput = document.getElementById('imagen');
+	var imagenMuestra = document.getElementById('imagenmuestraProducto');
+	var imagenInput = document.getElementById('imagenProducto');
 
 	imagenInput.addEventListener('change', function () {
 		if (imagenInput.files && imagenInput.files[0]) {
