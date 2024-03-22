@@ -23,7 +23,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <div class="page">
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
-
+      <?php if($_SESSION['lista_de_compras']==1) { ?>
       <!-- Start::app-content -->
       <div class="main-content app-content">
         <div class="container-fluid">
@@ -111,7 +111,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3">
                             <div class="form-group">
                               <label for="tipo_comprobante" class="form-label">Tipo Comprobante</label>
-                              <select class="form-control" name="tipo_comprobante" id="tipo_comprobante"></select>
+                              <select class="form-control" name="tipo_comprobante" id="tipo_comprobante" onchange="default_val_igv(); modificarSubtotales();"></select>
                             </div>
                           </div>
 
@@ -270,8 +270,6 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::row-1 -->
 
-
-
           <!-- MODAL - VER COMPROBANTE COMPRA -->
           <div class="modal fade modal-effect" id="modal-ver-comprobante1" tabindex="-1" aria-labelledby="modal-ver-comprobante1Label" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -315,7 +313,6 @@ if (!isset($_SESSION["user_nombre"])) {
           </div> 
           <!-- End::Modal - Ver foto proveedor -->
 
-
           <!-- Start::Modal-Producto -->
           <div class="modal fade modal-effect" id="modal-producto" tabindex="-1" aria-labelledby="modal-productoLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -344,7 +341,6 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
           </div>
           <!-- End::Modal-Producto -->
-
 
           <!-- MODAL - DETALLE COMPRA -->
           <div class="modal fade modal-effect" id="modal-detalle-compra" tabindex="-1" aria-labelledby="modal-detalle-compraLabel" aria-hidden="true">
@@ -388,8 +384,6 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
           </div> 
           <!-- End::Modal-Detalle-Compra -->
-
-
 
           <!-- MODAL - AGREGAR PROVEEDOR - charge 3 -->
           <div class="modal fade modal-effect" id="modal-agregar-proveedor" tabindex="-1" aria-labelledby="Modal-agregar-proveedorLabel" aria-hidden="true">
@@ -499,7 +493,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-6 mt-3">
                                 <div class="form-group">
                                   <label for="distrito" class="form-label">Distrito: </label>
-                                  <select name="distrito" id="distrito" class="form-select" >
+                                  <select name="distrito" id="distrito" class="form-select" onchange="llenar_dep_prov_ubig(this);" >
                                     
                                   </select>
                                 </div>                                         
@@ -617,8 +611,6 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
           </div> 
           <!-- End::Modal-Agregar-Proveedor -->
-
-
           
           <!-- Start::Modal-Agregar-Producto -->
           <div class="modal fade modal-effect" id="modal-agregar-producto" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-productoLabel">
@@ -775,15 +767,10 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::Modal-Agregar-Producto -->
 
-
-          
-
-
-
-
         </div>
       </div>
       <!-- End::app-content -->
+      <?php } else { $title_submodulo ='Compra'; $descripcion ='Lista de Compras del sistema!'; $title_modulo = 'Compras'; include("403_error.php"); }?>   
 
       <?php include("template/search_modal.php"); ?>
       <?php include("template/footer.php"); ?>

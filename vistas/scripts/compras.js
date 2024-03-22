@@ -7,27 +7,26 @@ function init(){
   listar_tabla_compra();
   listar_tabla_producto();
 
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-compra").submit(); }  });
   $("#guardar_registro_proveedor").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-proveedor").submit(); } });
   $("#guardar_registro_producto").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-producto").submit(); } });
 
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+  lista_select2("../ajax/compras.php?op=listar_proveedor", '#idproveedor', null);
+  lista_select2("../ajax/compras.php?op=listar_crl_comprobante", '#tipo_comprobante', null);
 
-  lista_select2("../ajax/gasto_de_trabajador.php?op=listar_proveedor", '#idproveedor', null);
-  lista_select2("../ajax/correlacion_comprobante.php?op=listar_crl_comprobante", '#tipo_comprobante', null);
-
-  lista_select2("../ajax/producto.php?op=select_categoria", '#categoria', null);
-  lista_select2("../ajax/producto.php?op=select_u_medida", '#u_medida', null);
-  lista_select2("../ajax/producto.php?op=select_marca", '#marca', null);
+  lista_select2("../ajax/compras.php?op=select_categoria", '#categoria', null);
+  lista_select2("../ajax/compras.php?op=select_u_medida", '#u_medida', null);
+  lista_select2("../ajax/compras.php?op=select_marca", '#marca', null);
 
   lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);  
   lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);  
-  lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);
-  
+  lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);  
   
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-
   
 }
 
@@ -50,7 +49,6 @@ function show_hide_form(flag) {
 		$(".btn-cancelar").show();
 	}
 }
-
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   C O M P R A S :::::::::::::::::::::::::::::::::::::::::::::
 
@@ -183,17 +181,13 @@ function guardar_editar_compra(e) {
 function mostrar_detalle_compra(idcompra){
   $("#modal-detalle-compra").modal("show");
 
-  $.post("../ajax/compras.php?op=mostrar_detalle_compra", { idcompra: idcompra }, function (e, status) {
-    
-         
+  $.post("../ajax/compras.php?op=mostrar_detalle_compra", { idcompra: idcompra }, function (e, status) {          
       
-      $('#custom-tabContent').html(e);      
-      $('#custom-datos1_html-tab').click(); // click para ver el primer - Tab Panel
-      $(".jq_image_zoom").zoom({ on: "grab" });      
-      $("#excel_compra").attr("href",`../reportes/export_xlsx_venta_tours.php?id=${idcompra}`);      
-      $("#print_pdf_compra").attr("href",`../reportes/comprobante_venta_tours.php?id=${idcompra}`);
-      
-   
+    $('#custom-tabContent').html(e);      
+    $('#custom-datos1_html-tab').click(); // click para ver el primer - Tab Panel
+    $(".jq_image_zoom").zoom({ on: "grab" });      
+    $("#excel_compra").attr("href",`../reportes/export_xlsx_venta_tours.php?id=${idcompra}`);      
+    $("#print_pdf_compra").attr("href",`../reportes/comprobante_venta_tours.php?id=${idcompra}`);    
     
   }).fail( function(e) { ver_errores(e); } );
 
@@ -222,7 +216,6 @@ function ver_img_comprobante(idcompra) {
   $("#comprobante-container1").html(`<div class="row" > <div class="col-lg-12 text-center"> <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div> </div>`);
 
   $.post("../ajax/compras.php?op=mostrar_compra", { idcompra: idcompra },  function (e, status) {
-
     e = JSON.parse(e);
     if (e.status == true) {
       if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
@@ -235,10 +228,7 @@ function ver_img_comprobante(idcompra) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-
-
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O D U C T O S :::::::::::::::::::::::::::::::::::::::::::::
-
 function limpiar_form_producto(){
 
 	$('#idproducto').val('');
@@ -522,10 +512,11 @@ function guardar_proveedor(e) {
 		processData: false,
 		success: function (e) {
 			try {
-				e = JSON.parse(e);  //console.log(e); 
+				e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {	
 					sw_success('Exito', 'proveedor guardado correctamente.');
           $("#modal-agregar-proveedor").modal('hide'); limpiar_proveedor();
+          lista_select2("../ajax/compras.php?op=listar_proveedor", '#idproveedor', e.data, '.charge_idproveedor');
 				} else {
 					ver_errores(e);
 				}				
@@ -606,6 +597,33 @@ function ver_img_proveedor(img, nombre) {
   $(`.jq_image_zoom`).zoom({ on:'grab' });
 }
 
+function llenar_dep_prov_ubig(input) {
+
+  $(".chargue-pro").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-dep").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+
+  // if ($(input).select2("val") == null || $(input).select2("val") == '') { 
+  if ($(input).val() == null || $(input).val() == '') { 
+    $("#departamento").val(""); 
+    $("#provincia").val(""); 
+    $("#ubigeo").val(""); 
+
+    $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+  } else {
+    // var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
+    var iddistrito = $(input).find(':selected').data('iddistrito');
+    $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
+      e = JSON.parse(e); console.log(e);
+      $("#departamento").val(e.data.departamento); 
+      $("#provincia").val(e.data.provincia); 
+      $("#ubigeo").val(e.data.ubigeo_inei); 
+
+      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+      $("#form-agregar-proveedor").valid();
+    });
+  }  
+}
 
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -713,11 +731,6 @@ $(function(){
   });
   $('#distrito').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 
-
-});
-
-$(function(){
-
   $("#form-agregar-producto").validate({
     ignore: "",
     rules: {           
@@ -772,4 +785,4 @@ $(function(){
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-function reload_idproveedor(){ lista_select2("../ajax/gasto_de_trabajador.php?op=listar_proveedor", '#idproveedor', null, '.charge_idproveedor'); }
+function reload_idproveedor(){ lista_select2("../ajax/compras.php?op=listar_proveedor", '#idproveedor', null, '.charge_idproveedor'); }

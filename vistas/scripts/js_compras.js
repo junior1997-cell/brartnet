@@ -109,11 +109,11 @@ function agregarDetalleComprobante(idproducto, individual) {
   }
 }
 
-function default_val_igv() { if ($("#tipo_comprobante").select2("val") == "01") { $("#impuesto").val(); } } // FACTURA
+function default_val_igv() { if ($("#tipo_comprobante").select2("val") == "01") { $("#impuesto").val(18); } } // FACTURA
 
 function modificarSubtotales() {  
 
-  var val_igv = document.getElementById("impuesto").value;
+  var val_igv = $("#impuesto").val();
 
   if ($("#tipo_comprobante").select2("val") == null) {    
 
@@ -180,6 +180,49 @@ function modificarSubtotales() {
         subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
         $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto));
         $(`#subtotal_producto_${element.id_cont}`).val(redondearExp(subtotal_producto, 2 ));
+      });
+
+      calcularTotalesConIgv();
+    }
+  } else if ($("#tipo_comprobante").select2("val") == "01" ) {
+
+    $(".hidden").show(); //Mostramos: IGV, PRECIO SIN IGV
+
+    $("#colspan_subtotal").attr("colspan", 7); //cambiamos el: colspan
+    
+    $("#val_igv").prop("readonly",false);
+
+    if (array_class_compra.length === 0) {
+      if (val_igv == '' || val_igv <= 0) {
+        $("#tipo_gravada").val('NO GRAVADA');
+        $(".tipo_gravada").html('NO GRAVADA');
+        $(".val_igv").html(`IGV (0%)`);
+      } else {
+        $("#tipo_gravada").val('GRAVADA');
+        $(".tipo_gravada").html('GRAVADA');
+        $(".val_igv").html(`IGV (${(parseFloat(val_igv) * 100).toFixed(2)}%)`);
+      }
+      
+    } else {
+      // validamos el valor del igv ingresado        
+
+      array_class_compra.forEach((key, index) => {
+        var cantidad = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
+        var precio_con_igv = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
+        var deacuento = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());
+        var subtotal_producto = 0;
+
+        // Calculamos: Precio sin IGV
+        var precio_sin_igv = ( quitar_igv_del_precio(precio_con_igv, val_igv, 'decimal')).toFixed(2);
+        $(`.precio_sin_igv_${key.id_cont}`).val(precio_sin_igv);
+
+        // Calculamos: IGV
+        var igv = (parseFloat(precio_con_igv) - parseFloat(precio_sin_igv)).toFixed(2);
+        $(`.precio_igv_${key.id_cont}`).val(igv);
+
+        // Calculamos: Subtotal de cada producto
+        subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
+        $(`.subtotal_producto_${key.id_cont}`).html(formato_miles(subtotal_producto.toFixed(2)));
       });
 
       calcularTotalesConIgv();
@@ -256,7 +299,7 @@ function calcularTotalesConIgv() {
 
   //console.log(total); 
 
-  subotal_sin_igv = redondearExp(quitar_igv_del_precio(total, val_igv, 'decimal') , 2);
+  subotal_sin_igv = redondearExp(quitar_igv_del_precio(total, val_igv, 'entero') , 2);
   igv = (parseFloat(total) - parseFloat(subotal_sin_igv)).toFixed(2);
 
   $(".subtotal_compra").html(`S/ ${formato_miles(subotal_sin_igv)}`);

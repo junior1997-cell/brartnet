@@ -10,7 +10,14 @@ if (!isset($_SESSION["user_nombre"])) {
   if ($_SESSION['lista_de_compras'] == 1) {
 
     require_once "../modelos/compras.php";
-    $compras = new Compras();
+    require_once "../modelos/Gasto_de_trabajador.php";
+    require_once "../modelos/Correlacion_comprobante.php";
+    require_once "../modelos/Producto.php";
+
+    $compras            = new Compras();    
+    $gasto_trab         = new Gasto_de_trabajador();    
+    $correlacion_compb  = new Correlacion_comprobante();    
+    $productos          = new Producto();
 
     date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
@@ -28,8 +35,6 @@ if (!isset($_SESSION["user_nombre"])) {
     $impuesto           = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : ""; 
     $img_comprob       = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : ""; 
     $fecha_compra           = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";   
-
-
 
 
     switch ($_GET["op"]){
@@ -178,8 +183,6 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta = $compras->desactivar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
       break;
-      
-
 
       case 'mostrar_producto':
         $rspta=$compras->mostrar_producto($_POST["idproducto"]);
@@ -227,23 +230,113 @@ if (!isset($_SESSION["user_nombre"])) {
     
       break;
 
+      // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+      case 'listar_proveedor':
+        $rspta = $gasto_trab->listar_proveedor(); $cont = 1; $data = "";
+        if($rspta['status'] == true){
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value=' . $value['idpersona']  . '>' . $value['nombre'] . ' '. $value['apellido'] . ' - '. $value['numero_documento'] . '</option>';
+          }
 
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => '<option  value="1" >NINGUNO</option>'.$data, 
+          );
+          echo json_encode($retorno, true);
 
+        } else { echo json_encode($rspta, true); }      
+      break; 
+
+      case 'listar_crl_comprobante':
+        $rspta = $correlacion_compb->listar_crl_comprobante(); $cont = 1; $data = "";
+          if($rspta['status'] == true){
+            foreach ($rspta['data'] as $key => $value) {
+              $data .= '<option  value=' . $value['codigo']  . '>' . $value['tipo_comprobante'] . '</option>';
+            }
+    
+            $retorno = array(
+              'status' => true, 
+              'message' => 'Salió todo ok', 
+              'data' => $data, 
+            );
+            echo json_encode($retorno, true);
+    
+          } else { echo json_encode($rspta, true); }
+      break;
+
+      case 'select_categoria':
+        $rspta = $productos->select_categoria();
+        $data = "";
+  
+        if ($rspta['status']) {
+  
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value="' . $value['idcategoria'] . '" title ="' . $value['nombre'] . '" >' . $value['nombre'] . '</option>';
+          }
+  
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+  
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+      break;
+
+      case 'select_u_medida':
+        $rspta = $productos->select_u_medida();
+        $data = "";
+  
+        if ($rspta['status']) {
+  
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value="' . $value['idsunat_unidad_medida'] . '" title ="' . $value['nombre'] . '" >' . $value['nombre'] . '</option>';
+          }
+  
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+  
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+      break;
+
+      case 'select_marca':
+        $rspta = $productos->select_marca();
+        $data = "";
+  
+        if ($rspta['status']) {
+  
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value="' . $value['idmarca'] . '" title ="' . $value['nombre'] . '" >' . $value['nombre'] . '</option>';
+          }
+  
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+  
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+      break;
 
     }
-
-
-
 
   }else {
     $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [], 'aaData' => [] ];
     echo json_encode($retorno);
   }
-
-
-
-
-
 }
 ob_end_flush();
 
