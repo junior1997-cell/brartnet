@@ -63,6 +63,8 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th class="text-center">#</th>
                             <th class="text-center">Acciones</th>
                             <th>Nombre</th>
+                            <th>Abreviatura</th>
+                            <th>Equivalencia</th>
                             <th>Descripción</th>
                             <th>Estado</th>
                           </tr>
@@ -73,6 +75,8 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th class="text-center">#</th>
                             <th class="text-center">Acciones</th>
                             <th>Nombre</th>
+                            <th>Abreviatura</th>
+                            <th>Equivalencia</th>
                             <th>Descripción</th>
                             <th>Estado</th>
                           </tr>
@@ -113,8 +117,20 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
                   </div>
                   <div class="col-md-6">
+                    <div class="form-label">
+                      <label for="abreviatura_um" class="form-label">Abreviatura(*)</label>
+                      <input type="text" class="form-control" name="abreviatura_um" id="abreviatura_um" onkeyup="mayus(this);" />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-label">
+                      <label for="equivalencia_um" class="form-label">Equivalencia(*)</label>
+                      <input type="number" class="form-control" name="equivalencia_um" id="equivalencia_um" />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
-                      <label for="descr_um" class="form-label">Descripción(*)</label>
+                      <label for="descr_um" class="form-label">Descripción</label>
                       <input type="text" class="form-control" name="descr_um" id="descr_um" onkeyup="mayus(this);" />
                     </div>
                   </div>

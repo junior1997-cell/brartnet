@@ -11,12 +11,12 @@
     }
 
     //Implementamos un método para insertar registros
-    public function insertar($nombre, $descripcion) {		
+    public function insertar($nombre, $abreviatura, $equivalencia, $descripcion) {		
       $sql_0 = "SELECT * FROM sunat_unidad_medida  WHERE nombre = '$nombre';";
       $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
         
       if ( empty($existe['data']) ) {
-        $sql="INSERT INTO sunat_unidad_medida(nombre, descripcion)VALUES('$nombre', '$descripcion')";
+        $sql="INSERT INTO sunat_unidad_medida(nombre, abreviatura, equivalencia, descripcion)VALUES('$nombre', '$abreviatura', '$equivalencia', '$descripcion') ";
         $insertar =  ejecutarConsulta_retornarID($sql, 'C'); if ($insertar['status'] == false) {  return $insertar; } 
         
         //add registro en nuestra bitacora
@@ -40,12 +40,12 @@
     }
 
     //Implementamos un método para editar registros
-    public function editar($idsunat_unidad_medida, $nombre, $descripcion) {
+    public function editar($idsunat_unidad_medida, $nombre, $abreviatura, $equivalencia, $descripcion) {
       $sql_0 = "SELECT * FROM sunat_unidad_medida  WHERE nombre = '$nombre' AND idsunat_unidad_medida <> '$idsunat_unidad_medida';";
       $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
         
       if ( empty($existe['data']) ) {
-        $sql="UPDATE sunat_unidad_medida SET nombre='$nombre', descripcion='$descripcion' WHERE idsunat_unidad_medida='$idsunat_unidad_medida';";
+        $sql="UPDATE sunat_unidad_medida SET nombre='$nombre', abreviatura = '$abreviatura', equivalencia = '$equivalencia', descripcion='$descripcion' WHERE idsunat_unidad_medida='$idsunat_unidad_medida';";
         $editar =  ejecutarConsulta($sql, 'U');	if ( $editar['status'] == false) {return $editar; } 
       
         //add registro en nuestra bitacora

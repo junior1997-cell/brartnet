@@ -14,6 +14,8 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $idsunat_unidad_medida   = isset($_POST["idsunat_unidad_medida"]) ? limpiarCadena($_POST["idsunat_unidad_medida"]) : "";
     $nombre             = isset($_POST["nombre_um"]) ? limpiarCadena($_POST["nombre_um"]) : "";
+    $abreviaruta             = isset($_POST["abreviatura_um"]) ? limpiarCadena($_POST["abreviatura_um"]) : "";
+    $equivalencia             = isset($_POST["equivalencia_um"]) ? limpiarCadena($_POST["equivalencia_um"]) : "";
     $descripcion             = isset($_POST["descr_um"]) ? limpiarCadena($_POST["descr_um"]) : "";
 
 
@@ -36,8 +38,10 @@ if (!isset($_SESSION["user_nombre"])) {
               "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_u_m(' . $value['idsunat_unidad_medida'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
                 ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_u_m(' . $value['idsunat_unidad_medida'] . ', \'' . encodeCadenaHtml($value['nombre']) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',         
               "2" => $value['nombre'],
-              "3" => $value['descripcion'],
-              "4" =>  ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
+              "3" => $value['abreviatura'],
+              "4" => $value['equivalencia'],
+              "5" => $value['descripcion'],
+              "6" =>  ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
 
             );
           }
@@ -57,10 +61,10 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'guardar_editar_UM':
         if (empty($idsunat_unidad_medida)) {
-          $rspta = $unidad_medida->insertar($nombre, $descripcion);
+          $rspta = $unidad_medida->insertar($nombre, $abreviaruta, $equivalencia, $descripcion);
           echo json_encode($rspta, true);
         } else {
-          $rspta = $unidad_medida->editar($idsunat_unidad_medida, $nombre, $descripcion);
+          $rspta = $unidad_medida->editar($idsunat_unidad_medida, $nombre, $abreviaruta, $equivalencia, $descripcion);
           echo json_encode($rspta, true);
         }
       break;
