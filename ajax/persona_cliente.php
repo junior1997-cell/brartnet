@@ -262,7 +262,7 @@ if (!isset($_SESSION["user_nombre"])) {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
         }
 
-        break;
+      break;
 
       case 'select2_plan':
 
@@ -284,7 +284,7 @@ if (!isset($_SESSION["user_nombre"])) {
           echo json_encode($rspta, true);
         }
 
-        break;
+      break;
 
       case 'select2_zona_antena':
 
@@ -305,8 +305,7 @@ if (!isset($_SESSION["user_nombre"])) {
         } else {
           echo json_encode($rspta, true);
         }
-
-        break;
+      break;
 
       case 'select2_trabajador':
 
@@ -328,7 +327,7 @@ if (!isset($_SESSION["user_nombre"])) {
           echo json_encode($rspta, true);
         }
 
-        break;
+      break;
 
       case 'selec_centroProbl':
 
@@ -350,7 +349,7 @@ if (!isset($_SESSION["user_nombre"])) {
           echo json_encode($rspta, true);
         }
 
-        break;
+      break;
 
 
       case 'salir':
@@ -360,13 +359,12 @@ if (!isset($_SESSION["user_nombre"])) {
         session_destroy();
         //Redireccionamos al login
         header("Location: ../index.php");
-
-        break;
+      break;
 
       default:
         $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => [], 'aaData' => []];
         echo json_encode($rspta, true);
-        break;
+      break;
     }
   } else {
     $retorno = ['status' => 'nopermiso', 'message' => 'Tu sesion a terminado pe, inicia nuevamente', 'data' => [], 'aaData' => []];

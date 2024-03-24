@@ -1379,3 +1379,14 @@ function replicar_value_input2(id, name_input, valor) {
   var value = $(valor).val(); console.log(value);
   $(`${name_input}`).val(value).trigger("change");
 }
+
+/**
+ * Funcion para agergar toltip personalizado:
+ *
+ * @param {text} div              #identificador.
+ * @param {text} title_toltip     Mensaje del toltip.
+*/
+function add_tooltip_custom(div, title_toltip) {
+  $(div).attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', title_toltip);
+  $('[data-bs-toggle="tooltip"]').tooltip();
+}

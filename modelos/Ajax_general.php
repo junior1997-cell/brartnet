@@ -153,4 +153,26 @@ Class Ajax_general
 		return ejecutarConsultaArray($sql);   
 	}
 
+  // ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════
+
+  public function create_code_producto($pre_codigo)	{
+    
+		// Consulta para obtener el último código que comienza con 'PR' de la tabla: where codigo like 'PR%'
+    $sql = "SELECT max(idproducto) as last_code from producto";
+    $result = ejecutarConsultaSimpleFila($sql);
+    
+    $last_code = $result['data']['last_code'];
+
+    if ($last_code == NULL) {
+      $new_num = 1;                               # SE INICIA EN EL NUMERO 1 SI NO HAY REGISTROS
+    } else {      
+      // $num_part = (int) substr($last_code, 2); # RECORTE EL PRE NOMBRE      
+      $new_num  = $last_code + 1;                 # AUMENTAMOS +1
+    }
+
+    $new_code = $pre_codigo.str_pad($new_num, 5, "0", STR_PAD_LEFT); # CREAMOS EL CODIGO
+
+    return ['status' => true,  'message' => 'Salió todo ok',  'data' => ['nombre_codigo' => $new_code, 'pre_codigo' => $pre_codigo, 'numeracion' => $new_num] ] ; 
+	}
+
 }

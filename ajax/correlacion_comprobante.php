@@ -107,19 +107,23 @@ switch ($_GET["op"]){
 
   case 'listar_crl_comprobante':
     $rspta = $correlacion_compb->listar_crl_comprobante(); $cont = 1; $data = "";
-      if($rspta['status'] == true){
-        foreach ($rspta['data'] as $key => $value) {
-          $data .= '<option  value=' . $value['idtipo_comprobante']  . '>' . $value['tipo_comprobante'] . '</option>';
-        }
+    if($rspta['status'] == true){
+      foreach ($rspta['data'] as $key => $value) {
+        $data .= '<option  value=' . $value['idtipo_comprobante']  . '>' . $value['tipo_comprobante'] . '</option>';
+      }
 
-        $retorno = array(
-          'status' => true, 
-          'message' => 'Salió todo ok', 
-          'data' => $data, 
-        );
-        echo json_encode($retorno, true);
+      $retorno = array(
+        'status' => true, 
+        'message' => 'Salió todo ok', 
+        'data' => $data, 
+      );
+      echo json_encode($retorno, true);
 
-      } else { echo json_encode($rspta, true); }
+    } else { echo json_encode($rspta, true); }
+  break;
+
+  default: 
+    $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
   break;
 
 }

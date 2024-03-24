@@ -32,7 +32,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
             <div>
               <div class="d-md-flex d-block align-items-center ">
-                <button type="button" class="btn-modal-effect btn btn-primary label-btn m-r-10px" data-bs-toggle="modal" data-bs-target="#modal-agregar-u-m" onclick="limpiar_form_um();"><i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                <!-- <button type="button" class="btn-modal-effect btn btn-primary label-btn m-r-10px" data-bs-toggle="modal" data-bs-target="#modal-agregar-u-m" onclick="limpiar_form_um();"><i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button> -->
                 <div>
                   <p class="fw-semibold fs-18 mb-0">Unidad de Medida</p>
                   <span class="fs-semibold text-muted">Administra las unidades de medida.</span>
@@ -67,6 +67,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th>Equivalencia</th>
                             <th>Descripción</th>
                             <th>Estado</th>
+                            <th>ID</th>
                           </tr>
                         </thead>
                         <tbody></tbody>
@@ -79,6 +80,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th>Equivalencia</th>
                             <th>Descripción</th>
                             <th>Estado</th>
+                            <th>ID</th>
                           </tr>
                         </tfoot>
 

@@ -19,8 +19,9 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $idproducto     = isset($_POST["idproducto"])? limpiarCadena($_POST["idproducto"]):"";
 
-    $codigo         = isset($_POST["codigo"])? limpiarCadena($_POST["codigo"]):"";
-    $categoria         = isset($_POST["categoria"])? limpiarCadena($_POST["categoria"]):"";
+    $tipo           = isset($_POST["tipo"])? limpiarCadena($_POST["tipo"]):"";
+    $codigo_alterno = isset($_POST["codigo_alterno"])? limpiarCadena($_POST["codigo_alterno"]):"";
+    $categoria      = isset($_POST["categoria"])? limpiarCadena($_POST["categoria"]):"";
     $u_medida       = isset($_POST["u_medida"])? limpiarCadena($_POST["u_medida"]):"";
     $marca          = isset($_POST["marca"])? limpiarCadena($_POST["marca"]):"";
     $nombre         = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
@@ -36,7 +37,7 @@ if (!isset($_SESSION["user_nombre"])) {
     switch ($_GET["op"]){
 
       case 'listar_tabla':
-        $rspta = $productos->listar_tabla();
+        $rspta = $productos->listar_tabla($_GET["categoria"], $_GET["unidad_medida"], $_GET["marca"]);
         $data = []; $count = 1;
         if($rspta['status'] == true){
           foreach($rspta['data'] as $key => $value){
@@ -44,11 +45,11 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[]=[
               "0" => $count++,
               "1" =>  '<div class="hstack gap-2 fs-15">' .
-                        '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_producto('.($value['idproducto']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                        '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_producto('.$value['idproducto'].'.,\''.$value['nombre'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
-                        '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalle_producto('.($value['idproducto']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
+                        '<button class="btn btn-icon btn-sm btn-warning-light border-warning" onclick="mostrar_producto('.($value['idproducto']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                        '<button  class="btn btn-icon btn-sm btn-danger-light border-danger product-btn" onclick="eliminar_papelera_producto('.$value['idproducto'].'.,\''.$value['nombre'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
+                        '<button class="btn btn-icon btn-sm btn-info-light border-info" onclick="mostrar_detalle_producto('.($value['idproducto']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
                       '</div>',
-              "2" =>  ($value['codigo']),
+              "2" =>  ('<i class="bi bi-upc"></i> '.$value['codigo'] .'<br> <i class="bi bi-person"></i> '.$value['codigo_alterno']),
               "3" => '<div class="d-flex flex-fill align-items-center">
                         <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/productos/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml(($value['nombre'])) . '\')"> </span></div>
                         <div>
@@ -65,7 +66,10 @@ if (!isset($_SESSION["user_nombre"])) {
               
               "10" =>($value['categoria']),
               "11" =>($value['marca']),
-              "12" =>($value['nombre'])
+              "12" =>($value['nombre']),
+              "13" =>($value['codigo']),
+              "14" =>($value['codigo_alterno'])
+
             ];
           }
           $results =[
@@ -94,7 +98,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
         if ( empty($idproducto) ) { #Creamos el registro
 
-          $rspta = $productos->insertar($codigo, $categoria, $u_medida, $marca, $nombre, $descripcion, $stock, 
+          $rspta = $productos->insertar($tipo,$codigo_alterno, $categoria, $u_medida, $marca, $nombre, $descripcion, $stock, 
           $stock_min, $precio_v, $precio_c, $precio_x_mayor, $precio_dist, $precio_esp, $img_producto);
           echo json_encode($rspta, true);
 
@@ -102,11 +106,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
           if ($flat_img == true || empty($img_producto)) {
             $datos_f1 = $productos->mostrar($idproducto);
-            $img1_ant = $datos_f1['data']['imagenProducto'];
+            $img1_ant = $datos_f1['data']['imagen'];
             if (!empty($img1_ant)) { unlink("../assets/modulo/productos/" . $img1_ant); }         
           }  
         
-          $rspta = $productos->editar($idproducto, $codigo, $categoria, $u_medida, $marca, $nombre, $descripcion, 
+          $rspta = $productos->editar($idproducto, $tipo, $codigo_alterno, $categoria, $u_medida, $marca, $nombre, $descripcion, 
           $stock, $stock_min, $precio_v, $precio_c, $precio_x_mayor, $precio_dist, $precio_esp, $img_producto);
           echo json_encode($rspta, true);
         }        
@@ -191,11 +195,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </tr>               
             </tbody>
           </table>
-        <div class="my-3" ><span class="h6"> Imagen </span></div>
-
-        
-        
-        ';
+        <div class="my-3" ><span class="h6"> Imagen </span></div>';
         $rspta = ['status' => true, 'message' => 'Todo bien', 'data' => $html_table, 'imagen' => $rspta['data']['imagen'], 'nombre_doc'=> $nombre_doc];
         echo json_encode($rspta, true);
 
@@ -211,6 +211,13 @@ if (!isset($_SESSION["user_nombre"])) {
         echo json_encode($rspta, true);
       break;
 
+      // ══════════════════════════════════════  VALIDACION DE CODIGO  ══════════════════════════════════════
+      case 'validar_code_producto':
+        $rspta = $productos->validar_code_producto($_GET["idproducto"], $_GET["codigo_alterno"]);
+        echo json_encode($rspta, true);
+      break;
+
+      // ══════════════════════════════════════  S E L E C T 2 - P A R A   F O R M  ══════════════════════════════════════
 
       case 'select_categoria':
         $rspta = $productos->select_categoria();
@@ -219,14 +226,10 @@ if (!isset($_SESSION["user_nombre"])) {
         if ($rspta['status']) {
   
           foreach ($rspta['data'] as $key => $value) {
-            $data  .= '<option value="' . $value['idcategoria'] . '" title ="' . $value['nombre'] . '" >' . $value['nombre'] . '</option>';
+            $data  .= '<option value="' . $value['idcategoria'] . '" title ="' . $value['descripcion'] . '" >' . $value['nombre'] . '</option>';
           }
   
-          $retorno = array(
-            'status' => true,
-            'message' => 'Salió todo ok',
-            'data' => $data,
-          );
+          $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data, );
   
           echo json_encode($retorno, true);
         } else {
@@ -241,14 +244,10 @@ if (!isset($_SESSION["user_nombre"])) {
         if ($rspta['status']) {
   
           foreach ($rspta['data'] as $key => $value) {
-            $data  .= '<option value="' . $value['idsunat_unidad_medida'] . '" title ="' . $value['nombre'] . '" >' . $value['nombre'] . '</option>';
+            $data  .= '<option value="' . $value['idsunat_unidad_medida'] . '" title ="' . $value['descripcion'] . '" >' . $value['nombre'] .' - '. $value['abreviatura']. '</option>';
           }
   
-          $retorno = array(
-            'status' => true,
-            'message' => 'Salió todo ok',
-            'data' => $data,
-          );
+          $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data, );
   
           echo json_encode($retorno, true);
         } else {
@@ -263,14 +262,10 @@ if (!isset($_SESSION["user_nombre"])) {
         if ($rspta['status']) {
   
           foreach ($rspta['data'] as $key => $value) {
-            $data  .= '<option value="' . $value['idmarca'] . '" title ="' . $value['nombre'] . '" >' . $value['nombre'] . '</option>';
+            $data  .= '<option value="' . $value['idmarca'] . '" title ="' . $value['descripcion'] . '" >' . $value['nombre'] . '</option>';
           }
   
-          $retorno = array(
-            'status' => true,
-            'message' => 'Salió todo ok',
-            'data' => $data,
-          );
+          $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data, );
   
           echo json_encode($retorno, true);
         } else {
@@ -278,7 +273,62 @@ if (!isset($_SESSION["user_nombre"])) {
         }
       break;
 
+      // ══════════════════════════════════════  S E L E C T 2 - PARA FILTROS ══════════════════════════════════════ 
+      case 'select2_filtro_categoria':
+        $rspta = $productos->select2_filtro_categoria();
+        $data = "";
+  
+        if ($rspta['status']) {
+  
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value="' . $value['idcategoria'] . '" title ="' . $value['descripcion'] . '" >' . $value['nombre'] . '</option>';
+          }
+  
+          $retorno = array( 'status' => true,  'message' => 'Salió todo ok', 'data' => $data, );  
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+      break;
 
+      case 'select2_filtro_u_medida':
+        $rspta = $productos->select2_filtro_u_medida();
+        $data = "";
+  
+        if ($rspta['status']) {
+  
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value="' . $value['idsunat_unidad_medida'] . '" title ="' . $value['descripcion'] . '" >' . $value['nombre'] .' - '. $value['abreviatura']. '</option>';
+          }
+  
+          $retorno = array('status' => true, 'message' => 'Salió todo ok', 'data' => $data, );  
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+      break;
+
+      case 'select2_filtro_marca':
+        $rspta = $productos->select2_filtro_marca();
+        $data = "";
+  
+        if ($rspta['status']) {
+  
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value="' . $value['idmarca'] . '" title ="' . $value['descripcion'] . '" >' . $value['nombre'] . '</option>';
+          }
+  
+          $retorno = array('status' => true,'message' => 'Salió todo ok', 'data' => $data, );
+  
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+      break;
+
+      default: 
+        $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
+      break;
     }
 
   }else {

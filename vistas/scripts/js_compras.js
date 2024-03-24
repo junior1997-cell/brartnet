@@ -187,12 +187,10 @@ function modificarSubtotales() {
   } else if ($("#tipo_comprobante").select2("val") == "01" ) {
 
     $(".hidden").show(); //Mostramos: IGV, PRECIO SIN IGV
-
-    $("#colspan_subtotal").attr("colspan", 7); //cambiamos el: colspan
-    
+    $("#colspan_subtotal").attr("colspan", 7); //cambiamos el: colspan    
     $("#val_igv").prop("readonly",false);
 
-    if (array_class_compra.length === 0) {
+    if (array_data_compra.length === 0) {
       if (val_igv == '' || val_igv <= 0) {
         $("#tipo_gravada").val('NO GRAVADA');
         $(".tipo_gravada").html('NO GRAVADA');
@@ -206,7 +204,7 @@ function modificarSubtotales() {
     } else {
       // validamos el valor del igv ingresado        
 
-      array_class_compra.forEach((key, index) => {
+      array_data_compra.forEach((key, index) => {
         var cantidad = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
         var precio_con_igv = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
         var deacuento = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());

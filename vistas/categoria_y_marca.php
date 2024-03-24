@@ -38,8 +38,8 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="d-md-flex d-block align-items-center ">
                     <button type="button" class="btn-modal-effect btn btn-primary label-btn m-r-10px" data-bs-toggle="modal" data-bs-target="#modal-agregar-categoria" onclick="limpiar_form_cat();"><i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                     <div>
-                      <p class="fw-semibold fs-18 mb-0">Categoría</p>
-                      <span class="fs-semibold text-muted">Administra las categorías.</span>
+                      <p class="fw-semibold fs-18 mb-0">Categoría de producto</p>
+                      <span class="fs-semibold text-muted">Administra las categorías de tus productos.</span>
                     </div>
                   </div>
                 </div>
@@ -70,6 +70,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
+                                <th>ID</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -80,6 +81,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
+                                <th>ID</th>
                               </tr>
                             </tfoot>
 
@@ -105,8 +107,8 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="d-md-flex d-block align-items-center ">
                     <button type="button" class="btn-modal-effect btn btn-primary label-btn m-r-10px" data-bs-toggle="modal" data-bs-target="#modal-agregar-marca" onclick="limpiar_form_marca();"><i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                     <div>
-                      <p class="fw-semibold fs-18 mb-0">Marca</p>
-                      <span class="fs-semibold text-muted">Administra las Marcas de artículos.</span>
+                      <p class="fw-semibold fs-18 mb-0">Marca de producto</p>
+                      <span class="fs-semibold text-muted">Administra las Marcas de tus productos.</span>
                     </div>
                   </div>
                 </div>
@@ -137,6 +139,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
+                                <th>ID</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -147,6 +150,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
+                                <th>ID</th>
                               </tr>
                             </tfoot>
 
@@ -176,20 +180,20 @@ if (!isset($_SESSION["user_nombre"])) {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form name="formulario-categoria" id="formulario-categoria" method="POST" class="row needs-validation" novalidate>
-                <div class="row gy-2" id="cargando-1-fomulario">
+              <form name="formulario-categoria" id="formulario-categoria" method="POST" class="needs-validation" novalidate>
+                <div class="row" id="cargando-1-fomulario">
                   <input type="hidden" name="idcategoria" id="idcategoria">
                   
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <div class="form-label">
                       <label for="nombre_cat" class="form-label">Nombre(*)</label>
                       <input type="text" class="form-control" name="nombre_cat" id="nombre_cat" onkeyup="mayus(this);"/>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <div class="form-group">
                       <label for="descr_cat" class="form-label">Descripción(*)</label>
-                      <input type="text" class="form-control" name="descr_cat" id="descr_cat" onkeyup="mayus(this);"/>
+                      <textarea  class="form-control" name="descr_cat" id="descr_cat" onkeyup="mayus(this);" cols="30" rows="3"></textarea>                      
                     </div>
                   </div>
                 </div>
@@ -221,20 +225,20 @@ if (!isset($_SESSION["user_nombre"])) {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form name="formulario-marca" id="formulario-marca" method="POST" class="row needs-validation" novalidate>
-                <div class="row gy-2" id="cargando-3-fomulario">
+              <form name="formulario-marca" id="formulario-marca" method="POST" class="needs-validation" novalidate>
+                <div class="row" id="cargando-3-fomulario">
                   <input type="hidden" name="idmarca" id="idmarca">
                   
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <div class="form-label">
                       <label for="nombre_marca" class="form-label">Nombre(*)</label>
                       <input type="text" class="form-control" name="nombre_marca" id="nombre_marca" onkeyup="mayus(this);"/>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                     <div class="form-group">
                       <label for="descr_marca" class="form-label">Descripción(*)</label>
-                      <input type="text" class="form-control" name="descr_marca" id="descr_marca" onkeyup="mayus(this);"/>
+                      <textarea class="form-control" name="descr_marca" id="descr_marca" onkeyup="mayus(this);" cols="30" rows="3"></textarea>                      
                     </div>
                   </div>
                 </div>

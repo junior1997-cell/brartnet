@@ -165,7 +165,11 @@ if (!isset($_SESSION["user_nombre"])) {
         } else {
           echo json_encode($rspta, true);
         }
-        break;
+      break;
+
+      default: 
+        $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
+      break;
 
     }
   } else {

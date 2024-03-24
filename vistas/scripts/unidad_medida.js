@@ -36,6 +36,16 @@ function listar_tabla(){
 				if (e.status != true) {  ver_errores(e); }  return e.aaData;
 			},
 		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: #
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center") }
+      // columna: #
+      // if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
+      // columna: 5
+      if (data[7] <= 63 ) { $("td", row).eq(1).attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'No tienes opcion a modificar'); }
+    },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
@@ -43,7 +53,10 @@ function listar_tabla(){
     },
     "bDestroy": true,
     "iDisplayLength": 10,
-    "order": [[0, "asc"]]
+    "order": [[0, "asc"]],
+    columnDefs:[
+      { targets: [7],  visible: false,  searchable: false,  },
+    ],
   }).DataTable();
   
 }
@@ -134,7 +147,9 @@ function mayus(e) {
   e.value = e.value.toUpperCase();
 }
 
-init();
+$(document).ready(function () {
+  init();
+});
 
 $(function () {
 

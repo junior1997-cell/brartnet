@@ -26,32 +26,32 @@ if (!isset($_SESSION["user_nombre"])) {
 
       /* ══════════════════════════════════════ A P I S  ══════════════════════════════════════ */
 
-      // RENIEC JDL
+    // RENIEC JDL
     case 'reniec_jdl':
       $dni = $_POST["dni"];
       $rspta = $ajax_general->datos_reniec_jdl($dni);
       echo json_encode($rspta);
-      break;
-      // RENIEC WFACX
+    break;
+    // RENIEC WFACX
     case 'reniec_otro':
       $dni = $_POST["dni"];
       $rspta = $ajax_general->datos_reniec_otro($dni);
       echo json_encode($rspta);
-      break;
-      // SUNAT JDL
+    break;
+    // SUNAT JDL
     case 'sunat_jdl':
       $ruc = $_POST["ruc"];
       $rspta = $ajax_general->datos_sunat_jdl($ruc);
       echo json_encode($rspta, true);
-      break;
-      // SUNAT WFACX
+    break;
+    // SUNAT WFACX
     case 'sunat_otro':
       $ruc = $_POST["ruc"];
       $rspta = $ajax_general->datos_sunat_otro($ruc);
       echo json_encode($rspta);
-      break;
+    break;
 
-      /* ══════════════════════════════════════ S U N A T   ══════════════════════════════════════ */
+    /* ══════════════════════════════════════ S U N A T   ══════════════════════════════════════ */
 
     case 'select2_tipo_documento':
       $rspta = $ajax_general->select2_tipo_documento();
@@ -74,42 +74,42 @@ if (!isset($_SESSION["user_nombre"])) {
       } else {
         echo json_encode($rspta, true);
       }
-      break;
+    break;
 
-      // ══════════════════════════════════════ U B I G E O - S E L E C T 2    D E P A R T A M E N T O ══════════════════════════════════════
+    // ══════════════════════════════════════ U B I G E O - S E L E C T 2    D E P A R T A M E N T O ══════════════════════════════════════
     case 'select2_departamento':
       $rspta = $_ubigeo->select2_departamento();
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value="' . $reg->nombre . '" iddepartamento = "' . $reg->iddepartamento . '" macroregion_minsa = "' . $reg->macroregion_minsa . '" iso_3166_2 = "' . $reg->iso_3166_2 . '" >' . $reg->nombre . '</option>';
       }
-      break;
+    break;
 
     case 'select2_departamento_id':
       $rspta = $_ubigeo->select2_departamento_id($_GET['id']);
       echo json_encode($rspta, true);
-      break;
+    break;
 
-      // ══════════════════════════════════════ U B I G E O - S E L E C T 2    P R O V I N C I A ══════════════════════════════════════
+    // ══════════════════════════════════════ U B I G E O - S E L E C T 2    P R O V I N C I A ══════════════════════════════════════
     case 'select2_provincia':
       $rspta = $_ubigeo->select2_provincia();
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value="' . $reg->nombre . '" idprovincia = "' . $reg->idprovincia . '" iddepartamento = "' . $reg->iddepartamento . '" >' . $reg->nombre . '</option>';
       }
-      break;
+    break;
 
     case 'select2_provincia_departamento':
       $rspta = $_ubigeo->select2_provincia_departamento($_GET['id']);
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value=' . $reg->nombre . ' idprovincia = "' . $reg->idprovincia . '" iddepartamento = "' . $reg->iddepartamento . '" >' . $reg->nombre . '</option>';
       }
-      break;
+    break;
 
     case 'select2_provincia_id':
       $rspta = $_ubigeo->select2_provincia_id($_GET['id']);
       echo json_encode($rspta, true);
-      break;
+    break;
 
-      // ══════════════════════════════════════ U B I G E O - S E L E C T 2    D I S T R I T O ══════════════════════════════════════
+    // ══════════════════════════════════════ U B I G E O - S E L E C T 2    D I S T R I T O ══════════════════════════════════════
     case 'select2_distrito':
       $rspta = $_ubigeo->select2_distrito();
       $data = "";
@@ -126,28 +126,28 @@ if (!isset($_SESSION["user_nombre"])) {
       } else {
         echo json_encode($rspta, true);
       }
-      break;
+    break;
 
     case 'select2_distrito_departamento':
       $rspta = $_ubigeo->select2_distrito_departamento($_GET['id']);
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value="' . $reg->nombre . '" iddistrito="' . $reg->iddistrito . '" iddepartamento= "' . $reg->iddepartamento . '" ubigeo_inei="' . $reg->ubigeo_inei . '" latitud="' . $reg->latitud . '" longitud="' . $reg->longitud . '" Frontera="' . $reg->Frontera . '" >' . $reg->nombre . '</option>';
       }
-      break;
+    break;
 
     case 'select2_distrito_provincia':
       $rspta = $_ubigeo->select2_distrito_provincia($_GET['id']);
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value="' . $reg->nombre . '" iddistrito="' . $reg->iddistrito . '" iddepartamento= "' . $reg->iddepartamento . '" ubigeo_inei="' . $reg->ubigeo_inei . '" latitud="' . $reg->latitud . '" longitud="' . $reg->longitud . '" Frontera="' . $reg->Frontera . '" >' . $reg->nombre . '</option>';
       }
-      break;
+    break;
 
     case 'select2_distrito_id':
       $rspta = $_ubigeo->select2_distrito_id($_GET['id']);
       echo json_encode($rspta, true);
-      break;
+    break;
 
-      // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
+    // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
     case 'select2_usuario_trabajador':
       $rspta = $ajax_general->select2_usuario_trabajador($_GET['id']);
       // echo json_encode($rspta, true); die;
@@ -159,11 +159,7 @@ if (!isset($_SESSION["user_nombre"])) {
           $data  .= '<option value=' . $value['idpersona'] . ' title="' . $value['foto_perfil'] . '" cargo="' . $value['cargo'] . '">' . $value['nombre_razonsocial'] . ' ' . $value['apellidos_nombrecomercial'] . ' - ' . $value['numero_documento'] . '</option>';
         }
 
-        $retorno = array(
-          'status' => true,
-          'message' => 'Salió todo ok',
-          'data' => $data,
-        );
+        $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data, );
 
         echo json_encode($retorno, true);
       } else {
@@ -171,7 +167,7 @@ if (!isset($_SESSION["user_nombre"])) {
       }
     break;
 
-      // ══════════════════════════════════════ C A R G O - S E L E C T 2  ══════════════════════════════════════
+    // ══════════════════════════════════════ C A R G O - S E L E C T 2  ══════════════════════════════════════
     case 'select2_cargo':
       $rspta = $ajax_general->select2_cargo();
       // echo json_encode($rspta, true); die;
@@ -240,6 +236,12 @@ if (!isset($_SESSION["user_nombre"])) {
       } else {
         echo json_encode($rspta, true);
       }
+    break;
+
+    // ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════
+    case 'create_code_producto' :
+      $rspta = $ajax_general->create_code_producto($_GET["pre_codigo"]);
+      echo json_encode($rspta, true);
     break;
 
     // ══════════════════════════════════════ DEFAULT ══════════════════════════════════════

@@ -294,7 +294,7 @@ if (!isset($_SESSION["user_nombre"])) {
         if ($rspta['status']) {
   
           foreach ($rspta['data'] as $key => $value) {
-            $data  .= '<option value="' . $value['idsunat_unidad_medida'] . '" title ="' . $value['nombre'] . '" >' . $value['nombre'] . '</option>';
+            $data  .= '<option value="' . $value['idsunat_unidad_medida'] . '" title ="' . $value['nombre'] . '" >' . $value['nombre'] .' - '. $value['abreviatura'] . '</option>';
           }
   
           $retorno = array(
@@ -329,6 +329,10 @@ if (!isset($_SESSION["user_nombre"])) {
         } else {
           echo json_encode($rspta, true);
         }
+      break;
+
+      default: 
+        $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
       break;
 
     }

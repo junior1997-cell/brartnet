@@ -32,7 +32,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
             <div>
               <div class="d-md-flex d-block align-items-center ">
-                <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);  limpiar_form_producto(); "  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);  limpiar_form_producto(); create_code_producto('PR');"  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                 <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                 <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                 <div>
@@ -41,13 +41,15 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
               </div>
             </div>
-            <div class="btn-list mt-md-0 mt-2">
-              <div class="form-check form-switch mb-0" style="transform: scale(1.5); margin-top: 10px;">
-                <label class="form-check-label" for="generar-cod-correlativo"></label>
-                <input class="form-check-input" type="checkbox" id="generar-cod-correlativo" name="generar-cod-correlativo" checked data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Activar generador código de barra correlativamente automático">
-              </div>
+            <div class="btn-list mt-md-0 mt-2">              
               <nav>
                 <ol class="breadcrumb mb-0">
+                  <!-- <li class="breadcrumb-item">
+                    <div class="form-check form-switch mb-0">
+                      <label class="form-check-label" for="generar-cod-correlativo"></label>
+                      <input class="form-check-input cursor-pointer" type="checkbox" id="generar-cod-correlativo" name="generar-cod-correlativo" onchange="create_code_producto('PR');" checked data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Activar generador código de barra correlativamente automático">
+                    </div>
+                  </li> -->
                   <li class="breadcrumb-item"><a href="javascript:void(0);">Productos</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Articulos</li>
                 </ol>
@@ -61,26 +63,66 @@ if (!isset($_SESSION["user_nombre"])) {
             <div class="col-xxl-12 col-xl-12">
               <div>
                 <div class="card custom-card">
+                  <div class="card-header">
+                    <!-- ::::::::::::::::::::: FILTRO CATEGORIA :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                      <div class="form-group">
+                        <label for="filtro_categoria" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_categoria();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Categoría
+                          <span class="charge_filtro_categoria"></span>
+                        </label>
+                        <select class="form-control" name="filtro_categoria" id="filtro_categoria" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO UNIDAD DE MEDIDA :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                      <div class="form-group">
+                        <label for="filtro_unidad_medida" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_unidad_medida();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Unidad Medida
+                          <span class="charge_filtro_unidad_medida"></span>
+                        </label>
+                        <select class="form-control" name="filtro_unidad_medida" id="filtro_unidad_medida" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO MARCA :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                      <div class="form-group">
+                        <label for="filtro_marca" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_marca();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Unidad Marca
+                          <span class="charge_filtro_marca"></span>
+                        </label>
+                        <select class="form-control" name="filtro_marca" id="filtro_marca" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
+                    </div>
+                  </div>
                   <div class="card-body">
                     <!-- ------------ Tabla de Productos ------------- -->
                     <div class="table-responsive" id="div-tabla">
                       <table class="table table-bordered w-100" style="width: 100%;" id="tabla-productos">
                         <thead>
-                          <tr>
-                            <th class="text-center">#</th>
-                            <th class="text-center">Acciones</th>
-                            <th>Código</th>
-                            <th>Nombre</th>
-                            <th>Stock</th>
-                            <th>U.M.</th>
-                            <th>Precio Compra</th>
-                            <th>Precio Venta</th>
-                            <th>Descripción</th>
-                            <th>Estado</th>
+                          <tr > 
+                            <th colspan="15" class="bg-danger buscando_tabla" style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                          </tr>
+                          <tr >
+                            <th style="border-top: 1px solid #f3f3f3 !important;" class="text-center">#</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;" class="text-center">Acciones</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Código</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Nombre</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Stock</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">U.M.</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Compra</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Venta</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Descripción</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Estado</th>
                             
-                            <th>Categoria</th>
-                            <th>Marca</th>
-                            <th>Nombre</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Categoria</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Marca</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Nombre</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Código</th>
+                            <th style="border-top: 1px solid #f3f3f3 !important;">Código Alterno</th>
                           </tr>
                         </thead>
                         <tbody></tbody>
@@ -100,6 +142,8 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th>Categoria</th>
                             <th>Marca</th>
                             <th>Nombre</th>
+                            <th>Código</th>
+                            <th>Código Alterno</th>
                           </tr>
                         </tfoot>
 
@@ -112,12 +156,36 @@ if (!isset($_SESSION["user_nombre"])) {
                         <div class="row gy-2" id="cargando-1-formulario">
                           <!-- ID -->
                           <input type="hidden" name="idproducto" id="idproducto"/>
+                          <input type="hidden" name="tipo" id="tipo" value="PR" />
 
                           <!-- ----------------- CODIGO --------------- -->
-                          <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                          <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
                             <div class="form-group">
-                              <label for="codigo" class="form-label">Código(*)</label>
-                              <input type="text" class="form-control" name="codigo" id="codigo" onkeyup="mayus(this);" placeholder="ejemp: 00453" />
+                              <label for="codigo" class="form-label">Código Sistema <span class="charge_codigo"></span></label>
+                              <input type="text" class="form-control bg-light" name="codigo" id="codigo" onkeyup="mayus(this);"  readonly data-bs-toggle="tooltip" data-bs-original-title="No se puede editar" />
+                            </div>
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                            <div class="form-group">
+                              <label for="codigo_alterno" class="form-label">
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="generarcodigonarti();" data-bs-toggle="tooltip" title="Generar Codigo con el nombre de producto."><i class="las la-sync-alt"></i></span>
+                                Código Propio <span class="charge_codigo_alterno"></span>
+                              </label>
+                              <input type="text" class="form-control " name="codigo_alterno" id="codigo_alterno" onkeyup="mayus(this);" placeholder="ejemp: PR00001" />
+                            </div>
+                          </div>
+                          <!-- ----------------- Unidad Medida --------------- -->
+                          <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                            <div class="form-group">
+                              <label for="u_medida" class="form-label">
+                                <!-- <span class="badge bg-success m-r-4px cursor-pointer"  onclick=" modal_add_u_medida(); limpiar_form_um();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idunidad_medida();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                U. Medida
+                                <span class="charge_idunidad_medida"></span>
+                              </label>
+                              <select class="form-control" name="u_medida" id="u_medida">
+                                <!-- lista de u medidas -->
+                              </select>
                             </div>
                           </div>
                           <!-- ----------------- Categoria --------------- -->
@@ -133,22 +201,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <!-- lista de categorias -->
                               </select>
                             </div>
-                          </div>
-
-                          <!-- ----------------- Unidad Medida --------------- -->
-                          <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
-                            <div class="form-group">
-                              <label for="u_medida" class="form-label">
-                                <span class="badge bg-success m-r-4px cursor-pointer"  onclick=" modal_add_u_medida(); limpiar_form_um();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span>
-                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idunidad_medida();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                U. Medida
-                                <span class="charge_idunidad_medida"></span>
-                              </label>
-                              <select class="form-control" name="u_medida" id="u_medida">
-                                <!-- lista de u medidas -->
-                              </select>
-                            </div>
-                          </div>
+                          </div>                         
 
                           <!-- ----------------- Marca --------------- -->
                           <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
@@ -175,7 +228,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!-- --------- DESCRIPCION ------ -->
                           <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3 mt-3">
                             <div class="form-group">
-                              <label for="descripcion" class="form-label">Descrición(*)</label>
+                              <label for="descripcion" class="form-label">Descripción(*)</label>
                               <textarea class="form-control" name="descripcion" id="descripcion" rows="1"></textarea>
                             </div>
                           </div>
@@ -194,21 +247,21 @@ if (!isset($_SESSION["user_nombre"])) {
                               <label for="stock_min" class="form-label">Stock Minimo(*)</label>
                               <input type="number" class="form-control" name="stock_min" id="stock_min" />
                             </div>
-                          </div>
-
-                          <!-- ----------------- PRECIO VENTA --------------- -->
-                          <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3 mt-3">
-                            <div class="form-group">
-                              <label for="precio_v" class="form-label">Precio Venta(*)</label>
-                              <input type="number" class="form-control" name="precio_v" id="precio_v" />
-                            </div>
-                          </div>
+                          </div>                         
 
                           <!-- ----------------- PRECIO COMPRA --------------- -->
                           <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3 mt-3">
                             <div class="form-group">
                               <label for="precio_c" class="form-label">Precio Compra(*)</label>
-                              <input type="number" class="form-control" name="precio_c" id="precio_c" />
+                              <input type="number" class="form-control" name="precio_c" id="precio_c" step="0.01" />
+                            </div>
+                          </div>
+
+                           <!-- ----------------- PRECIO VENTA --------------- -->
+                           <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3 mt-3">
+                            <div class="form-group">
+                              <label for="precio_v" class="form-label">Precio Venta(*)</label>
+                              <input type="number" class="form-control" name="precio_v" id="precio_v" step="0.01" />
                             </div>
                           </div>
 
@@ -216,7 +269,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2 mt-3">
                             <div class="form-group">
                               <label for="precio_x_mayor" class="form-label">Precio por Mayor</label>
-                              <input type="text" class="form-control" name="precio_x_mayor" id="precio_x_mayor" placeholder="precioB" />
+                              <input type="number" class="form-control" name="precio_x_mayor" id="precio_x_mayor" step="0.01" placeholder="precioB" />
                             </div>
                           </div>
 
@@ -224,7 +277,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2 mt-3">
                             <div class="form-group">
                               <label for="precio_dist" class="form-label">Precio Distribuidor</label>
-                              <input type="text" class="form-control" name="precio_dist" id="precio_dist" placeholder="precioC"/>
+                              <input type="number" class="form-control" name="precio_dist" id="precio_dist" step="0.01" placeholder="precioC"/>
                             </div>
                           </div>
 
@@ -232,7 +285,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2 mt-3">
                             <div class="form-group">
                               <label for="precio_esp" class="form-label">Precio Especial</label>
-                              <input type="text" class="form-control" name="precio_esp" id="precio_esp" placeholder="precioD"/>
+                              <input type="number" class="form-control" name="precio_esp" id="precio_esp" placeholder="precioD"/>
                             </div>
                           </div>
 

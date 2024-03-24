@@ -18,6 +18,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $ip_antena         = isset($_POST["ip_antena"]) ? limpiarCadena($_POST["ip_antena"]) : "";
 
     switch ($_GET["op"]) {
+
       case 'guardar_y_editar_zona':
         if (empty($idzona_antena)) {
           $rspta = $zona->insertar_zona($nombre_zona, $ip_antena);
@@ -26,23 +27,23 @@ if (!isset($_SESSION["user_nombre"])) {
           $rspta = $zona->editar_zona($idzona_antena, $nombre_zona, $ip_antena);
           echo json_encode($rspta, true);
         }
-        break;
+      break;
 
       case 'desactivar':
         $rspta = $zona->desactivar_zona($_GET["id_tabla"]);
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'eliminar':
         $rspta = $zona->eliminar_zona($_GET["id_tabla"]);
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'mostrar_zona':
         $rspta = $zona->mostrar_zona($idzona_antena);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'tabla_principal_zona':
         $rspta = $zona->tabla_principal_zona();
@@ -78,7 +79,7 @@ if (!isset($_SESSION["user_nombre"])) {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
         }
 
-        break;
+      break;
 
       case 'salir':
         //Limpiamos las variables de sesión
@@ -87,13 +88,12 @@ if (!isset($_SESSION["user_nombre"])) {
         session_destroy();
         //Redireccionamos al login
         header("Location: ../index.php");
-
-        break;
+      break;
 
       default:
         $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
         echo json_encode($rspta, true);
-        break;
+      break;
     }
     
   } else {

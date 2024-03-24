@@ -26,23 +26,23 @@ if (!isset($_SESSION["user_nombre"])) {
           $rspta = $plan->editar($idplan, $nombre_plan, $costo_plan);
           echo json_encode($rspta, true);
         }
-        break;
+      break;
 
       case 'desactivar':
         $rspta = $plan->desactivar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'eliminar':
         $rspta = $plan->eliminar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'mostrar_plan':
         $rspta = $plan->mostrar($idplan);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'tabla_principal_plan':
         $rspta = $plan->tabla_principal_plan();
@@ -78,7 +78,7 @@ if (!isset($_SESSION["user_nombre"])) {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
         }
 
-        break;
+      break;
 
       case 'salir':
         //Limpiamos las variables de sesión
@@ -87,13 +87,12 @@ if (!isset($_SESSION["user_nombre"])) {
         session_destroy();
         //Redireccionamos al login
         header("Location: ../index.php");
-
-        break;
+      break;
 
       default:
         $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
         echo json_encode($rspta, true);
-        break;
+      break;
     }
     
   } else {

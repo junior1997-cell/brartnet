@@ -145,7 +145,6 @@
           session_destroy();
           //Redireccionamos al login
           header("Location: ../index.php");
-
         break;
 
         default: 

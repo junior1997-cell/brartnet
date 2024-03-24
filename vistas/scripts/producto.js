@@ -2,18 +2,28 @@ var tabla_productos;
 
 function init(){
 
-  listar_tabla();
+  // listar_tabla();
 
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-producto").submit(); }  });
 
 	$("#guardar_registro_categoria").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-categoria").submit(); } });
 	$("#guardar_registro_marca").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-marca").submit(); } });
 	$("#guardar_registro_u_m").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-u-m").submit(); } });
 
-
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/producto.php?op=select_categoria", '#categoria', null);
   lista_select2("../ajax/producto.php?op=select_u_medida", '#u_medida', null);
   lista_select2("../ajax/producto.php?op=select_marca", '#marca', null);
+
+  lista_select2("../ajax/producto.php?op=select2_filtro_categoria", '#filtro_categoria', null);
+  lista_select2("../ajax/producto.php?op=select2_filtro_u_medida", '#filtro_unidad_medida', null);
+  lista_select2("../ajax/producto.php?op=select2_filtro_marca", '#filtro_marca', null);
+
+  // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════ 
+  $("#filtro_categoria").select2({  theme: "bootstrap4", placeholder: "Seleccione categoria", allowClear: true, });
+  $("#filtro_unidad_medida").select2({  theme: "bootstrap4", placeholder: "Seleccione unidad medida", allowClear: true, });
+  $("#filtro_marca").select2({  theme: "bootstrap4", placeholder: "Seleccione marca", allowClear: true, });
 
   $("#categoria").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#u_medida").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -27,10 +37,12 @@ function limpiar_form_producto(){
 
 	$('#idproducto').val('');
   
+	$('#tipo').val('PR');
 	$('#codigo').val('');
-	$('#categoria').val('');
-	$('#u_medida').val('');
-	$('#marca').val('');
+	$('#codigo_alterno').val('');
+	$('#categoria').val('').trigger('change');
+	$('#u_medida').val('58').trigger('change'); // por defecto: NIU
+	$('#marca').val('').trigger('change');
 	$('#nombre').val('');
 	$('#descripcion').val('');
 	$('#stock').val('');
@@ -59,6 +71,7 @@ function limpiar_form_producto(){
 
 function show_hide_form(flag) {
 	if (flag == 1) {
+    $(".card-header").show();
 		$("#div-tabla").show();
 		$(".div-form").hide();
 
@@ -67,6 +80,7 @@ function show_hide_form(flag) {
 		$(".btn-cancelar").hide();
 		
 	} else if (flag == 2) {
+    $(".card-header").hide();
 		$("#div-tabla").hide();
 		$(".div-form").show();
 
@@ -76,21 +90,21 @@ function show_hide_form(flag) {
 	}
 }
 
-function listar_tabla(){
+function listar_tabla(filtro_categoria = '', filtro_unidad_medida = '', filtro_marca = ''){
   tabla_productos = $('#tabla-productos').dataTable({
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla) { tabla.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0,2,12,10,11,4,5,6,7,8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,2,12,10,11,4,5,6,7,8], }, title: 'Lista de Productos', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [0,2,12,10,11,4,5,6,7,8], }, title: 'Lista de Productos', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_productos) { tabla_productos.ajax.reload(null, false); } } },
+      { extend: 'copy', exportOptions: { columns: [0,13,14,12,10,11,4,5,6,7,8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,13,14,12,10,11,4,5,6,7,8], }, title: 'Lista de Productos', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
+      { extend: 'pdf', exportOptions: { columns: [0,13,14,12,10,11,4,5,6,7,8], }, title: 'Lista de Productos', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     "ajax":	{
-			url: '../ajax/producto.php?op=listar_tabla',
+			url: `../ajax/producto.php?op=listar_tabla&categoria=${filtro_categoria}&unidad_medida=${filtro_unidad_medida}&marca=${filtro_marca}`,
 			type: "get",
 			dataType: "json",
 			error: function (e) {
@@ -103,8 +117,20 @@ function listar_tabla(){
         $(".buttons-pdf").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'PDF');
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         $('[data-bs-toggle="tooltip"]').tooltip();
+        $('.buscando_tabla').hide()
       },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
 		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: #
+      // if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center") }
+      // columna: #
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+    },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
@@ -114,7 +140,7 @@ function listar_tabla(){
     "iDisplayLength": 10,
     "order": [[0, "asc"]],
     columnDefs:[
-      { targets: [10,11,12],  visible: false,  searchable: false,  },
+      { targets: [10,11,12,13,14],  visible: false,  searchable: false,  },
     ],
   }).DataTable();
 }
@@ -178,10 +204,12 @@ function mostrar_producto(idproducto){
 		e = JSON.parse(e);
 
 		$('#idproducto').val(e.data.idproducto);
+    $('#categoria').val(e.data.idcategoria).trigger('change');
+    $('#u_medida').val(e.data.idsunat_unidad_medida).trigger('change');
+    $('#marca').val(e.data.idmarca).trigger('change');
+
     $('#codigo').val(e.data.codigo);
-    $('#categoria').val(e.data.idcategoria);
-    $('#u_medida').val(e.data.idsunat_unidad_medida);
-    $('#marca').val(e.data.idmarca);
+    $('#codigo_alterno').val(e.data.codigo_alterno);
     $('#nombre').val(e.data.nombre);
     $('#descripcion').val(e.data.descripcion);
     $('#stock').val(e.data.stock);
@@ -373,9 +401,41 @@ function mayus(e) {
   e.value = e.value.toUpperCase();
 }
 
-//  :::::::::::::::::::: F O R M U L A R I O   P R O D U C T O ::::::::::::::::::::
+function generarcodigonarti() {
+
+  var name_producto = $("#nombre").val() == null || $("#nombre").val() == '' ? '' : $("#nombre").val() ;  
+  if (name_producto == '') { toastr_warning('Vacio!!','El nombre esta vacio, digita para completar el codigo aletarorio.', 700); }
+  name_producto = name_producto.substring(-3, 3);
+  var cod_letra = Math.random().toString(36).substring(2, 5);  
+  var cod_number = Math.floor(Math.random() * 10) +''+ Math.floor(Math.random() * 10);  
+  $("#codigo_alterno").val(`${name_producto.toUpperCase()}${cod_number}${cod_letra.toUpperCase()}`);
+}
+
+function create_code_producto(pre_codigo) {
+  $('.charge_codigo').html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
+ 
+  $.getJSON(`../ajax/ajax_general.php?op=create_code_producto&pre_codigo=${pre_codigo}`, function (e, textStatus, jqXHR) {
+    if (e.status == true) {
+      $('#codigo').val(e.data.nombre_codigo);
+      $('#codigo').attr('readonly', 'readonly').addClass('bg-light'); // Asegura que el campo esté como solo lectura
+      add_tooltip_custom('#codigo', 'No se puede editar');            //  Agrega tooltip personalizado a un element
+      $('.charge_codigo').html('')                                    // limpiamos la carga
+    } else {
+      ver_errores(e);
+    }      
+  }).fail( function(jqxhr, textStatus, error) { ver_errores(jqxhr); } );
+  
+}
+
+
+
 
 $(function () {
+  $('#categoria').on('change', function() { $(this).trigger('blur'); });
+  $('#u_medida').on('change', function() { $(this).trigger('blur'); });
+  $('#marca').on('change', function() { $(this).trigger('blur'); });
+
+  //  :::::::::::::::::::: F O R M U L A R I O   P R O D U C T O ::::::::::::::::::::
   $("#form-agregar-producto").validate({
     ignore: "",
     rules: {           
@@ -383,12 +443,25 @@ $(function () {
       categaria:    	{ required: true },       
       u_medida:    		{ required: true },       
       marca:    			{ required: true },       
-      nombre:    			{ required: true, minlength: 2, maxlength: 20,  },       
-      descripcion:    { required: true, minlength: 2, maxlength: 500, },       
-      stock:          { required: true, minlength: 1, maxlength: 500, },       
-      stock_min:      { required: true, minlength: 1, maxlength: 500, }, 
-      precio_v:       { required: true, minlength: 2, maxlength: 500, },       
-      precio_c:       { required: true, minlength: 2, maxlength: 500, },	
+      nombre:    			{ required: true, minlength: 2, maxlength: 250,  },       
+      descripcion:    { minlength: 2, maxlength: 500, },       
+      stock:          { required: true, min: 0, step: 0.01,},       
+      stock_min:      { required: true, min: 0, step: 0.01,}, 
+      precio_v:       { required: true, min: 0, step: 0.01,},       
+      precio_c:       { required: true, min: 0, step: 0.01,},	
+      precio_x_mayor: { min: 0, step: 0.01,},	
+      precio_dist:    { min: 0, step: 0.01,},	
+      precio_esp:     { min: 0, step: 0.01,},	
+      codigo_alterno: { required: true, minlength: 4, maxlength: 20,
+        remote: {
+          url: "../ajax/producto.php?op=validar_code_producto",
+          type: "get",
+          data: {
+            action: function () { return "validar_codigo";  },
+            idproducto: function() { var idproducto = $("#idproducto").val(); return idproducto; }
+          }
+        }
+      },
     },
     messages: {     
       cogido:    			{ required: "Campo requerido", },
@@ -396,11 +469,15 @@ $(function () {
       u_medida:    		{ required: "Seleccione una opción", },
       marca:    			{ required: "Seleccione una opción", },
       nombre:    			{ required: "Campo requerido", }, 
-      descripcion:    { required: "Campo requerido", },       
-      stock:          { required: "Campo requerido", },       
-      stock_min:      { required: "Campo requerido", }, 
-      precio_v:       { required: "Campo requerido", },       
-      precio_c:       { required: "Campo requerido", },	
+      descripcion:    { minlength: "Minimo {0} caracteres.", },       
+      stock:          { required: "Campo requerido", step: 'Maximo 2 decimales.'},       
+      stock_min:      { required: "Campo requerido", step: 'Maximo 2 decimales.'}, 
+      precio_v:       { required: "Campo requerido", step: 'Maximo 2 decimales.'},       
+      precio_c:       { required: "Campo requerido", step: 'Maximo 2 decimales.'},	
+      precio_x_mayor: { step: 'Maximo 2 decimales.'},	
+      precio_dist:    { step: 'Maximo 2 decimales.'},	
+      precio_esp:     { step: 'Maximo 2 decimales.'},
+      codigo_alterno:    			{ required: "Campo requerido", remote:"Código en uso."},
     },
         
     errorElement: "span",
@@ -422,11 +499,8 @@ $(function () {
       guardar_editar_producto(e);      
     },
   });
-});
 
-//  :::::::::::::::::::: F O R M U L A R I O   C A T E G O R I A ::::::::::::::::::::
-
-$(function () {
+  //  :::::::::::::::::::: F O R M U L A R I O   C A T E G O R I A ::::::::::::::::::::
 
   $("#formulario-categoria").validate({
     rules: {
@@ -458,11 +532,8 @@ $(function () {
     },
 
   });
-});
 
-//  :::::::::::::::::::::: F O R M U L A R I O   U.   M E D I D A :::::::::::::::::::::::::::
-
-$(function () {
+  //  :::::::::::::::::::::: F O R M U L A R I O   U.   M E D I D A :::::::::::::::::::::::::::
 
   $("#formulario-u-m").validate({
     rules: {
@@ -494,12 +565,8 @@ $(function () {
     },
 
   });
-});
 
-
-//  :::::::::::::::::::::: F O R M U L A R I O   M A R C A :::::::::::::::::::::::::::
-
-$(function () {
+  //  :::::::::::::::::::::: F O R M U L A R I O   M A R C A :::::::::::::::::::::::::::
 
   $("#formulario-marca").validate({
     rules: {
@@ -531,9 +598,43 @@ $(function () {
     },
 
   });
+
+  $('#categoria').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#u_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#marca').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function cargando_search() {
+  $('.buscando_tabla').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
+}
+
+function filtros() {  
+
+  var filtro_categoria      = $("#filtro_categoria").select2('val');
+  var filtro_unidad_medida  = $("#filtro_unidad_medida").select2('val');  
+  var filtro_marca          = $("#filtro_marca").select2('val');
+  
+  var nombre_categoria      = $('#filtro_categoria').find(':selected').text();
+  var nombre_um             = ' ─ ' + $('#filtro_unidad_medida').find(':selected').text();
+  var nombre_marca          = ' ─ ' + $('#filtro_marca').find(':selected').text();
+
+  // filtro de fechas
+  if (filtro_categoria == '' || filtro_categoria == 0 || filtro_categoria == null) { filtro_categoria = ""; nombre_categoria = ""; }
+
+  // filtro de proveedor
+  if (filtro_unidad_medida == '' || filtro_unidad_medida == 0 || filtro_unidad_medida == null) { filtro_unidad_medida = ""; nombre_um = ""; }
+
+  // filtro de trabajdor
+  if (filtro_marca == '' || filtro_marca == 0 || filtro_marca == null) { filtro_marca = ""; nombre_marca = ""; }
+
+  $('.buscando_tabla').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_categoria} ${nombre_um} ${nombre_marca}...`);
+  //console.log(filtro_categoria, fecha_2, filtro_marca, comprobante);
+
+  listar_tabla(filtro_categoria, filtro_unidad_medida, filtro_marca);
+}
+
 
 function cambiarImagen() {
 	var imagenInput = document.getElementById('imagenProducto');
@@ -569,3 +670,7 @@ function ver_img(img, nombre) {
 function reload_idcategoria(){ lista_select2("../ajax/producto.php?op=select_categoria", '#categoria', null, '.charge_idcategoria'); }
 function reload_idmarca(){ lista_select2("../ajax/producto.php?op=select_marca", '#marca', null, '.charge_idmarca'); }
 function reload_idunidad_medida(){ lista_select2("../ajax/producto.php?op=select_u_medida", '#u_medida', null, '.charge_idunidad_medida'); }
+
+function reload_filtro_categoria() { lista_select2("../ajax/producto.php?op=select2_filtro_categoria", '#filtro_categoria', null, '.charge_filtro_categoria'); }
+function reload_filtro_unidad_medida() { lista_select2("../ajax/producto.php?op=select2_filtro_u_medida", '#filtro_unidad_medida', null, '.charge_filtro_unidad_medida'); }
+function reload_filtro_marca() { lista_select2("../ajax/producto.php?op=select2_filtro_marca", '#filtro_marca', null, '.charge_filtro_marca'); }
