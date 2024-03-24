@@ -9,8 +9,10 @@ if (!isset($_SESSION["user_nombre"])) {
 
   if ($_SESSION['servicio'] == 1) {
    
-
+    require_once "../modelos/Producto.php";
     require_once "../modelos/Servicio.php";
+
+    $productos = new Producto();    
     $servicios = new Servicio();
 
     date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
@@ -23,11 +25,13 @@ if (!isset($_SESSION["user_nombre"])) {
     $idcategoria    = isset($_POST["idcategoria"])? limpiarCadena($_POST["idcategoria"]):"";
     $idmarca        = isset($_POST["idmarca"])? limpiarCadena($_POST["idmarca"]):"";
 
-    $codigo         = isset($_POST["codigo"])? limpiarCadena($_POST["codigo"]):"";
+    $codigo_alterno = isset($_POST["codigo_alterno"])? limpiarCadena($_POST["codigo_alterno"]):"";
+    $tipo           = isset($_POST["tipo"])? limpiarCadena($_POST["tipo"]):"";
     $idcategoria    = isset($_POST["idcategoria"])? limpiarCadena($_POST["idcategoria"]):"";
     $nombre         = isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
     $descripcion    = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
     $precio_v       = isset($_POST["precio_v"])? limpiarCadena($_POST["precio_v"]):"";
+    $stock          = isset($_POST["stock"])? limpiarCadena($_POST["stock"]):"";
     
     switch ($_GET["op"]){
 
@@ -39,22 +43,25 @@ if (!isset($_SESSION["user_nombre"])) {
             $img = empty($value['imagen']) ? 'no-servicio.png' : $value['imagen'];
             $data[]=[
               "0" => $count++,
-              "1" =>  '<div class="hstack gap-2 fs-15">' .
+              "1" =>  '<div class="hstack gap-2 fs-15 text-center">' .
                         '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_servicio('.($value['idproducto']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
                         '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_servicio('.$value['idproducto'].'.,\''.$value['nombre'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
                       '</div>',
-              "2" =>  ($value['codigo']),
+              "2" =>  ('<i class="bi bi-upc"></i> '.$value['codigo'] .'<br> <i class="bi bi-person"></i> '.$value['codigo_alterno']),
               "3" => '<div class="d-flex flex-fill align-items-center">
-                        <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/servicios/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml(($value['nombre'])) . '\')"> </span></div>
-                        <div>
-                          <h6 class="d-block fw-semibold text-primary">'.$value['nombre'] .'</h6>
-                        </div>
-                      </div>',
+                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/servicios/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml(($value['nombre'])) . '\')"> </span></div>
+                <div>
+                  <h6 class="d-block fw-semibold text-primary">'.$value['nombre'] .'</h6>
+                  <span class="d-block fs-12 text-muted">UM: <b>'.$value['unidad_medida'].'</b></span> 
+                </div>
+              </div>',
               "4" => ($value['stock']),
               "5" => ($value['precio_venta']),
               "6" => '<textarea class="textarea_datatable bg-light"  readonly>' .($value['descripcion']). '</textarea>',
-              "7" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
+              "7" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>',
               
+              "8" => ($value['nombre']),
+              "8" => ($value['unidad_medida']),
             ];
           }
           $results =[
@@ -83,8 +90,8 @@ if (!isset($_SESSION["user_nombre"])) {
 
         if ( empty($idproducto) ) { #Creamos el registro
 
-          $rspta = $servicios->insertar($codigo, $idcategoria, $idsunat_unidad_medida, $idmarca, $nombre, $descripcion, 
-          $precio_v, $img_servicio);
+          $rspta = $servicios->insertar($tipo, $codigo_alterno, $idcategoria, $idsunat_unidad_medida, $idmarca, $nombre, $descripcion, 
+          $precio_v, $stock, $img_servicio);
           echo json_encode($rspta, true);
 
         } else { # Editamos el registro
@@ -95,8 +102,7 @@ if (!isset($_SESSION["user_nombre"])) {
             if (!empty($img1_ant)) { unlink("../assets/modulo/servicios/" . $img1_ant); }         
           }  
         
-          $rspta = $servicios->editar($idproducto, $codigo, $idcategoria, $idsunat_unidad_medida, $idmarca, $nombre, $descripcion, 
-          $precio_v, $img_servicio);
+          $rspta = $servicios->editar($idproducto, $tipo, $codigo_alterno, $idcategoria, $idsunat_unidad_medida, $idmarca, $nombre, $descripcion, $precio_v, $stock, $img_servicio);
           echo json_encode($rspta, true);
         }        
 
@@ -114,6 +120,12 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'papelera':
         $rspta = $servicios->papelera($_GET["id_tabla"]);
+        echo json_encode($rspta, true);
+      break;
+
+      // ══════════════════════════════════════  VALIDACION DE CODIGO  ══════════════════════════════════════
+      case 'validar_code_producto':
+        $rspta = $productos->validar_code_producto($_GET["idproducto"], $_GET["codigo_alterno"]);
         echo json_encode($rspta, true);
       break;
 

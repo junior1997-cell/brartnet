@@ -4,9 +4,11 @@ function init(){
 
   listar_tabla();
 
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-servicio").submit(); }  });
 
-  $("#idcategoria").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════ 
+  $("#idcategoria").select2({  theme: "bootstrap4", placeholder: "Seleccione", });
 
 }
 
@@ -62,7 +64,7 @@ function listar_tabla(){
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla) { tabla.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_servicios) { tabla_servicios.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
       { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de Servicios', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
       { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de Servicios', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
@@ -84,6 +86,14 @@ function listar_tabla(){
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
 		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: #
+      // if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center") }
+      // columna: #
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+    },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
@@ -155,7 +165,9 @@ function mostrar_servicio(idproducto){
 
 		$('#idproducto').val(e.data.idproducto);
     $('#codigo').val(e.data.codigo);
+    $('#codigo_alterno').val(e.data.codigo_alterno);
     $('#nombre').val(e.data.nombre);
+    $('#stock').val(e.data.stock);
     $('#descripcion').val(e.data.descripcion);
     $('#precio_v').val(e.data.precio_venta);
 
@@ -196,6 +208,32 @@ function mayus(e) {
   e.value = e.value.toUpperCase();
 }
 
+function generarcodigonarti() {
+
+  var name_producto = $("#nombre").val() == null || $("#nombre").val() == '' ? '' : $("#nombre").val() ;  
+  if (name_producto == '') { toastr_warning('Vacio!!','El nombre esta vacio, digita para completar el codigo aletarorio.', 700); }
+  name_producto = name_producto.substring(-3, 3);
+  var cod_letra = Math.random().toString(36).substring(2, 5);  
+  var cod_number = Math.floor(Math.random() * 10) +''+ Math.floor(Math.random() * 10);  
+  $("#codigo_alterno").val(`${name_producto.toUpperCase()}${cod_number}${cod_letra.toUpperCase()}`);
+}
+
+function create_code_producto(pre_codigo) {
+  $('.charge_codigo').html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
+ 
+  $.getJSON(`../ajax/ajax_general.php?op=create_code_producto&pre_codigo=${pre_codigo}`, function (e, textStatus, jqXHR) {
+    if (e.status == true) {
+      $('#codigo').val(e.data.nombre_codigo);
+      $('#codigo').attr('readonly', 'readonly').addClass('bg-light'); // Asegura que el campo esté como solo lectura
+      add_tooltip_custom('#codigo', 'No se puede editar');            //  Agrega tooltip personalizado a un element
+      $('.charge_codigo').html('')                                    // limpiamos la carga
+    } else {
+      ver_errores(e);
+    }      
+  }).fail( function(jqxhr, textStatus, error) { ver_errores(jqxhr); } );
+  
+}
+
 //  :::::::::::::::::::: F O R M U L A R I O   S E R V I C I O ::::::::::::::::::::
 
 $(function () {
@@ -205,16 +243,27 @@ $(function () {
       codigo:         { required: true, minlength: 2, maxlength: 20, },       
       categaria:    	{ required: true },       
       nombre:    			{ required: true, minlength: 2, maxlength: 200,  },       
-      descripcion:    { required: true, minlength: 2, maxlength: 500, }, 
-      precio_v:       { required: true, minlength: 2, maxlength: 500, },       
-
+      descripcion:    { minlength: 2, maxlength: 500, }, 
+      precio_v:       { required: true, min: 0, },       
+      stock:          { required: true, min: 0, },       
+      codigo_alterno: { required: true, minlength: 4, maxlength: 20,
+        remote: {
+          url: "../ajax/servicio.php?op=validar_code_producto",
+          type: "get",
+          data: {
+            action: function () { return "validar_codigo";  },
+            idproducto: function() { var idproducto = $("#idproducto").val(); return idproducto; }
+          }
+        }
+      },
     },
     messages: {     
       cogido:    			{ required: "Campo requerido", },
       categaria:    	{ required: "Campo requerido", },
       nombre:    			{ required: "Campo requerido", },       
-      descripcion:    { required: "Campo requerido", }, 
-      precio_v:       { required: "Campo requerido", },       
+      descripcion:    { minlength: "Minimo {0} caracteres.", }, 
+      precio_v:       { required: "Campo requerido", },      
+      codigo_alterno: { required: "Campo requerido", remote:"Código en uso."}, 
     },
         
     errorElement: "span",

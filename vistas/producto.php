@@ -9,7 +9,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
 ?>
   <!DOCTYPE html>
-  <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
+  <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-bg-img="bgimg4" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
 
   <head>
     <?php $title_page = "Productos";
@@ -23,6 +23,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <div class="page">
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
+      <?php if($_SESSION['producto']==1) { ?> <!-- .:::: PERMISO DE MODULO ::::. -->
 
       <!-- Start::app-content -->
       <div class="main-content app-content">
@@ -499,6 +500,7 @@ if (!isset($_SESSION["user_nombre"])) {
         </div>
       </div>
       <!-- End::app-content -->
+      <?php } else { $title_submodulo ='Producto'; $descripcion ='Lista de Producto del sistema!'; $title_modulo = 'Articulos'; include("403_error.php"); }?>   
 
       <?php include("template/search_modal.php"); ?>
       <?php include("template/footer.php"); ?>

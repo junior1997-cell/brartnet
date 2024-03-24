@@ -9,7 +9,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
 ?>
   <!DOCTYPE html>
-  <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
+  <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-bg-img="bgimg4" data-menu-styles="dark" data-toggled="icon-overlay-close">
 
   <head>
     <?php $title_page = "Servicios";
@@ -23,6 +23,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <div class="page">
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
+      <?php if($_SESSION['servicio']==1) { ?> <!-- .:::: PERMISO DE MODULO ::::. -->
 
       <!-- Start::app-content -->
       <div class="main-content app-content">
@@ -32,7 +33,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
             <div>
               <div class="d-md-flex d-block align-items-center ">
-                <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);  limpiar_form_servicio(); "  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);  limpiar_form_servicio(); create_code_producto('SR');"  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                 <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                 <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                 <div>
@@ -68,7 +69,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Stock</th>
-                            <th>Precio Venta</th>
+                            <th>Venta</th>
                             <th>Descripción</th>
                             <th>Estado</th>
                           </tr>
@@ -81,7 +82,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Stock</th>
-                            <th>Precio Venta</th>
+                            <th>Venta</th>
                             <th>Descripción</th>
                             <th>Estado</th>
                           </tr>
@@ -96,15 +97,25 @@ if (!isset($_SESSION["user_nombre"])) {
                         <div class="row gy-2" id="cargando-1-formulario">
                           <!-- ID -->
                           <input type="hidden" name="idproducto" id="idproducto"/>
+                          <input type="hidden" name="tipo" id="tipo" value="SR" />
                           <input type="hidden" name="idmarca" id="idmarca" value="1"/>           <!--  idmarca = 1 | nombre = NINGUNO -->
-                          <input type="hidden" name="idsunat_unidad_medida" id="idsunat_unidad_medida" value="1"/> <!--  idsunat_unidad_medida = 1 | nombre = NINGUNO -->
-
+                          <input type="hidden" name="idsunat_unidad_medida" id="idsunat_unidad_medida" value="58"/> <!--  idsunat_unidad_medida = 1 | nombre = NINGUNO -->
+                          <input type="hidden" name="precio_c" id="precio_c" value="0" />
 
                           <!-- ----------------- CODIGO --------------- -->
                           <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                             <div class="form-group">
-                              <label for="codigo" class="form-label">Código(*)</label>
-                              <input type="text" class="form-control" name="codigo" id="codigo" onkeyup="mayus(this);" placeholder="ejemp: 0001" />
+                              <label for="codigo" class="form-label">Código Sistema <span class="charge_codigo"></span></label>
+                              <input type="text" class="form-control bg-light" name="codigo" id="codigo" onkeyup="mayus(this);"  readonly data-bs-toggle="tooltip" data-bs-original-title="No se puede editar" />
+                            </div>
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                            <div class="form-group">
+                              <label for="codigo_alterno" class="form-label">
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="generarcodigonarti();" data-bs-toggle="tooltip" title="Generar Codigo con el nombre de producto."><i class="las la-sync-alt"></i></span>
+                                Código Propio <span class="charge_codigo_alterno"></span>
+                              </label>
+                              <input type="text" class="form-control " name="codigo_alterno" id="codigo_alterno" onkeyup="mayus(this);" placeholder="ejemp: PR00001" />
                             </div>
                           </div>
                           <!-- ----------------- Categoria --------------- -->
@@ -113,30 +124,37 @@ if (!isset($_SESSION["user_nombre"])) {
                               <label for="categoria" class="form-label"> Categoría </label>
                               
                               <select class="form-comtrol" name="idcategoria" id="idcategoria">
-                                <option value="1">NINGUNO</option>
-                                <option value="3">SERVICIO</option>
+                                <option value="2">SERVICIO</option>
                               </select>
                             </div>
                           </div>
 
-                          <!-- --------- NOMBRE ------ -->
-                          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-                            <div class="form-group">
-                              <label for="nombre" class="form-label">Nombre(*)</label>
-                              <textarea class="form-control" name="nombre" id="nombre" rows="1"></textarea>
-                            </div>
-                          </div>
-
                           <!-- ----------------- PRECIO VENTA --------------- -->
-                          <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3 mt-3">
+                          <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
                             <div class="form-group">
                               <label for="precio_v" class="form-label">Precio Venta(*)</label>
                               <input type="number" class="form-control" name="precio_v" id="precio_v" />
                             </div>
                           </div>
 
+                          <!-- ----------------- STOCK --------------- -->
+                          <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                            <div class="form-group">
+                              <label for="stock" class="form-label">Stock(*)</label>
+                              <input type="number" class="form-control" name="stock" id="stock" />
+                            </div>
+                          </div>
+
+                          <!-- --------- NOMBRE ------ -->
+                          <div class="col-md-6 col-lg-6 col-xl-9 col-xxl-9">
+                            <div class="form-group">
+                              <label for="nombre" class="form-label">Nombre de servicio(*)</label>
+                              <textarea class="form-control" name="nombre" id="nombre" rows="1" onkeyup="mayus(this);"></textarea>
+                            </div>
+                          </div>                          
+
                           <!-- --------- DESCRIPCION ------ -->
-                          <div class="col-md-6 col-lg-6 col-xl-9 col-xxl-9 mt-3">
+                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="form-group">
                               <label for="descripcion" class="form-label">Descrición(*)</label>
                               <textarea class="form-control" name="descripcion" id="descripcion" rows="1"></textarea>
@@ -200,6 +218,7 @@ if (!isset($_SESSION["user_nombre"])) {
         </div>
       </div>
       <!-- End::app-content -->
+      <?php } else { $title_submodulo ='Servicio'; $descripcion ='Lista de Servicio del sistema!'; $title_modulo = 'Articulos'; include("403_error.php"); }?>   
 
       <?php include("template/search_modal.php"); ?>
       <?php include("template/footer.php"); ?>

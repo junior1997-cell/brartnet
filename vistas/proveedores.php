@@ -24,7 +24,7 @@
         <div class="page">
           <?php include("template/header.php") ?>
           <?php include("template/sidebar.php") ?>
-          <?php if($_SESSION['proveedores']==1) { ?>
+          <?php if($_SESSION['proveedores']==1) { ?> <!-- .:::: PERMISO DE MODULO ::::. -->
 
           <!-- Start::app-content -->
           <div class="main-content app-content">

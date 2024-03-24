@@ -38,17 +38,18 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'listar_tabla':
         $rspta = $productos->listar_tabla($_GET["categoria"], $_GET["unidad_medida"], $_GET["marca"]);
-        $data = []; $count = 1;
+        $data = []; $count = 2;
         if($rspta['status'] == true){
           foreach($rspta['data'] as $key => $value){
             $img = empty($value['imagen']) ? 'no-producto.png' : $value['imagen'];
             $data[]=[
-              "0" => $count++,
-              "1" =>  '<div class="hstack gap-2 fs-15">' .
-                        '<button class="btn btn-icon btn-sm btn-warning-light border-warning" onclick="mostrar_producto('.($value['idproducto']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                        '<button  class="btn btn-icon btn-sm btn-danger-light border-danger product-btn" onclick="eliminar_papelera_producto('.$value['idproducto'].'.,\''.$value['nombre'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
-                        '<button class="btn btn-icon btn-sm btn-info-light border-info" onclick="mostrar_detalle_producto('.($value['idproducto']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
-                      '</div>',
+              "0" => $value['idproducto'] == 1 ? 1 : $count++,
+              "1" => ($value['idproducto'] == 1 ? '<i class="bi bi-exclamation-triangle text-danger fs-6"></i>' :
+              '<div class="hstack gap-2 fs-15 text-center"> 
+                <button class="btn btn-icon btn-sm btn-warning-light border-warning" onclick="mostrar_producto('.($value['idproducto']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                '<button  class="btn btn-icon btn-sm btn-danger-light border-danger product-btn" onclick="eliminar_papelera_producto('.$value['idproducto'].'.,\''.$value['nombre'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
+                '<button class="btn btn-icon btn-sm btn-info-light border-info" onclick="mostrar_detalle_producto('.($value['idproducto']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button> 
+              </div>'),
               "2" =>  ('<i class="bi bi-upc"></i> '.$value['codigo'] .'<br> <i class="bi bi-person"></i> '.$value['codigo_alterno']),
               "3" => '<div class="d-flex flex-fill align-items-center">
                         <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/productos/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml(($value['nombre'])) . '\')"> </span></div>
@@ -68,8 +69,8 @@ if (!isset($_SESSION["user_nombre"])) {
               "11" =>($value['marca']),
               "12" =>($value['nombre']),
               "13" =>($value['codigo']),
-              "14" =>($value['codigo_alterno'])
-
+              "14" =>($value['codigo_alterno']),
+              "15" =>($value['idproducto'])
             ];
           }
           $results =[

@@ -127,9 +127,11 @@ function listar_tabla(filtro_categoria = '', filtro_unidad_medida = '', filtro_m
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: #
-      // if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center") }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center") }
       // columna: #
       if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: 5
+      if (data[15] == 1 ) { $("td", row).eq(1).attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'No tienes opcion a modificar'); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -140,7 +142,7 @@ function listar_tabla(filtro_categoria = '', filtro_unidad_medida = '', filtro_m
     "iDisplayLength": 10,
     "order": [[0, "asc"]],
     columnDefs:[
-      { targets: [10,11,12,13,14],  visible: false,  searchable: false,  },
+      { targets: [10,11,12,13,14,15],  visible: false,  searchable: false,  },
     ],
   }).DataTable();
 }
@@ -426,8 +428,6 @@ function create_code_producto(pre_codigo) {
   }).fail( function(jqxhr, textStatus, error) { ver_errores(jqxhr); } );
   
 }
-
-
 
 
 $(function () {
