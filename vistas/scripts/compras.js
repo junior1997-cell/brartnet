@@ -14,7 +14,7 @@ function init(){
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/compras.php?op=listar_proveedor", '#idproveedor', null);
-  lista_select2("../ajax/compras.php?op=listar_crl_comprobante", '#tipo_comprobante', null);
+  lista_select2("../ajax/compras.php?op=listar_crl_comprobante&tipos='00','01','03','12'", '#tipo_comprobante', null);
 
   lista_select2("../ajax/compras.php?op=select_categoria", '#categoria', null);
   lista_select2("../ajax/compras.php?op=select_u_medida", '#u_medida', null);
@@ -44,8 +44,7 @@ function show_hide_form(flag) {
 		$("#div-tabla").hide();
 		$(".div-formulario").show();
 
-		$(".btn-agregar").hide();
-		$(".btn-guardar").show();
+		$(".btn-agregar").hide();		
 		$(".btn-cancelar").show();
 	}
 }
@@ -137,6 +136,10 @@ function listar_tabla_compra(){
     "bDestroy": true,
     "iDisplayLength": 10,
     "order": [[0, "asc"]],
+    columnDefs: [      
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      // { targets: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], visible: false, searchable: false, },
+    ],
   }).DataTable();
 }
 
@@ -271,7 +274,7 @@ function listar_tabla_producto(){
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
     buttons: [  
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla) { tabla.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_productos) { tabla_productos.ajax.reload(null, false); } } },
     ],
     ajax: {
       url: `../ajax/compras.php?op=listar_tabla_producto`,
@@ -285,6 +288,15 @@ function listar_tabla_producto(){
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
 		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-nowrap text-center"); }
+      // columna: #
+      // if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center") }
+      // columna: #
+      // if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      
+    },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
@@ -293,93 +305,121 @@ function listar_tabla_producto(){
     "bDestroy": true,
     "iDisplayLength": 10,
     "order": [[0, "asc"]],
+    columnDefs: [      
+      // { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      // { targets: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], visible: false, searchable: false, },
+    ],
   }).DataTable();
 }
 
 function listar_producto_x_codigo() {
  
-    var codigo = document.getElementById("codigob").value;
-    var cantidad = 1;
-
-    $.post("../ajax/compras.php?op=listar_producto_x_codigo", { codigo: codigo }, function (e, status) {
-      e = JSON.parse(e); console.log(e);
-      if (e.status == true) {         
-
-        if ($("#tipo_comprobante").select2("val") == "01") {
-          var subtotal = cantidad * e.data.precio_venta;
-        }else{
-          var subtotal = cantidad * e.data.precio_venta;
-        }
-        
-        var img = e.data.imagen == "" || e.data.imagen == null ?img = `../assets/modulo/productos/no-producto.png` : `../assets/modulo/productos/${e.data.imagen}` ;          
-
-        var fila = `
-        <tr class="filas" id="fila${cont}"> 
-
-          <td class="py-1">
-            <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${e.data.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
-            <button type="button" class="btn btn-danger btn-sm btn-file-delete-${cont}" onclick="eliminarDetalle(${e.data.idproducto}, ${cont});"><i class="fas fa-times"></i></button>
-          </td>
-
-          <td class="py-1">         
-            <input type="hidden" name="idproducto[]" value="${e.data.idproducto}">
-
-            <div class="d-flex flex-fill align-items-center">
-              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(e.data.nombre)}')"> </span></div>
-              <div>
-                <h6 class="d-block fw-semibold text-primary">${e.data.nombre}</h6>
-                <span class="d-block fs-12 text-muted">Marca: <b>${e.data.marca}</b> | Categoría: <b>${e.data.categoria}</b></span> 
-              </div>
-            </div>
-          </td>
-
-          <td class="py-1">
-            <span class="unidad_medida_${cont}">UNIDAD</span> 
-            <input type="hidden" class="unidad_medida_${cont}" name="unidad_medida[]" id="unidad_medida[]" value="UNIDAD">
-          </td>
-
-          <td class="py-1 form-group">
-            <input type="number" class="w-100px valid_cantidad form-control producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); " onchange="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); ">
-            <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${cantidad}" min="0.01" required  >            
-          </td> 
-
-          <td class="py-1 form-group">
-            <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${cont}]" id="valid_precio_con_igv_${cont}" value="${e.data.precio_venta}" min="0.01" required onkeyup="replicar_value_input2(${cont}, '#precio_con_igv_${cont}', this); update_price(); " onchange="replicar_value_input2(${cont}, '#precio_con_igv_${cont}', this); update_price(); ">
-            <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${e.data.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
-            <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
-            <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
-          </td> 
-
-          <td class="py-1 form-group">
-            <input type="number" class="w-135px form-control descuento_${cont}" name="descuento[]" value="0" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
-          </td>
-
-          <td class="py-1 text-right"><span class="text-right subtotal_producto_${cont}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="0" > </td>
-          <td class="py-1"><button type="button" onclick="modificarSubtotales();" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
-        </tr>`;
-
-        detalles = detalles + 1;
-        $("#tabla-productos-seleccionados").append(fila);
-        array_data_compra.push({ id_cont: cont });
-        modificarSubtotales();        
-        toastr_success("Agregado!!",`Producto: ${e.data.nombre} agregado !!`, 700);
-
-        // reglas de validación     
-        $('.valid_precio_con_igv').each(function(e) { 
-          $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-          $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
-        });
-        $('.valid_cantidad').each(function(e) { 
-          $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-          $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
-        });
-
-        cont++;   
+  var codigo = document.getElementById("codigob").value;
+  if (codigo == null || codigo == '') { toastr_info('Vacio!!', 'El campo de codigo esta vacío.'); return;  }
+  var cantidad = 1; 
+  $(`.buscar_x_code`).html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
+  $.post("../ajax/compras.php?op=listar_producto_x_codigo", { codigo: codigo }, function (e, status) {
+    e = JSON.parse(e); console.log(e);
+    if (e.status == true) {         
+      if (e.data == null) {
+        toastr_warning('No existe', 'Proporcione un codigo existente o el producto pertenece a otra categoria.');
       } else {
-        ver_errores(e);
-      } 
-    }).fail( function(e) { ver_errores(e); } );
-  
+        if ($(`.producto_${e.data.idproducto}`).hasClass("producto_selecionado")) {
+          if (document.getElementsByClassName(`producto_${e.data.idproducto}`).length == 1) {
+            var cant_producto = $(`.producto_${e.data.idproducto}`).val();
+            var sub_total = parseInt(cant_producto, 10) + 1;
+            $(`.producto_${e.data.idproducto}`).val(sub_total).trigger('change');
+            toastr_success("Agregado!!",`Producto: ${$(`.nombre_producto_${e.data.idproducto}`).text()} agregado !!`, 700);
+            modificarSubtotales();          
+          }  
+                  
+          $(`.buscar_x_code`).html(`<i class='bx bx-search-alt'></i>`);
+        } else {      
+        
+
+          if ($("#tipo_comprobante").select2("val") == "01") {
+            var subtotal = cantidad * e.data.precio_venta;
+          }else{
+            var subtotal = cantidad * e.data.precio_venta;
+          }
+          
+          var img = e.data.imagen == "" || e.data.imagen == null ?img = `../assets/modulo/productos/no-producto.png` : `../assets/modulo/productos/${e.data.imagen}` ;          
+
+          var fila = `
+          <tr class="filas" id="fila${cont}"> 
+
+            <td class="py-1">
+            <!--  <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${e.data.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>-->
+              <button type="button" class="btn btn-danger btn-sm btn-file-delete-${cont}" onclick="eliminarDetalle(${e.data.idproducto}, ${cont});"><i class="fas fa-times"></i></button>
+            </td>
+            <td class="py-1 text-nowrap">
+              <i class="bi bi-upc"></i> ${e.data.codigo} <br> <i class="bi bi-person"></i> ${e.data.codigo_alterno}
+            </td>
+            <td class="py-1">         
+              <input type="hidden" name="idproducto[]" value="${e.data.idproducto}">
+
+              <div class="d-flex flex-fill align-items-center">
+                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(e.data.nombre)}')"> </span></div>
+                <div>
+                  <h6 class="d-block fw-semibold text-primary">${e.data.nombre}</h6>
+                  <span class="d-block fs-12 text-muted">Marca: <b>${e.data.marca}</b> | Categoría: <b>${e.data.categoria}</b></span> 
+                </div>
+              </div>
+            </td>
+
+            <td class="py-1">
+              <span class="unidad_medida_${cont}">UNIDAD</span> 
+              <input type="hidden" class="unidad_medida_${cont}" name="unidad_medida[]" id="unidad_medida[]" value="UNIDAD">
+            </td>
+
+            <td class="py-1 form-group">
+              <input type="number" class="w-100px valid_cantidad form-control producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); " onchange="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); ">
+              <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${cantidad}" min="0.01" required  >            
+            </td> 
+
+            <td class="py-1 form-group">
+              <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${cont}]" id="valid_precio_con_igv_${cont}" value="${e.data.precio_venta}" min="0.01" required onkeyup="replicar_value_input2(${cont}, '#precio_con_igv_${cont}', this); update_price(); " onchange="replicar_value_input2(${cont}, '#precio_con_igv_${cont}', this); update_price(); ">
+              <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${e.data.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
+              <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
+              <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
+            </td> 
+
+            <td class="py-1 form-group">
+              <input type="number" class="w-135px form-control descuento_${cont}" name="descuento[]" value="0" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+            </td>
+
+            <td class="py-1 text-right"><span class="text-right subtotal_producto_${cont}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="0" > </td>
+            <td class="py-1"><button type="button" onclick="modificarSubtotales();" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+          </tr>`;
+
+          detalles = detalles + 1;
+          $("#tabla-productos-seleccionados tbody").append(fila);
+          array_data_compra.push({ id_cont: cont });
+          modificarSubtotales();        
+          toastr_success("Agregado!!",`Producto: ${e.data.nombre} agregado !!`, 700);
+
+          // reglas de validación     
+          $('.valid_precio_con_igv').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
+          });
+          $('.valid_cantidad').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
+          });
+
+          cont++;  
+          
+        }
+      }
+      $(`.buscar_x_code`).html(`<i class='bx bx-search-alt'></i>`);
+      $(`.tooltip`).remove();
+      
+    } else {
+      ver_errores(e);
+    } 
+  }).fail( function(e) { ver_errores(e); } );
+
 }
 
 function guardar_editar_producto(e){
@@ -635,16 +675,17 @@ $(function(){
     rules: {
       idproveedor:        { required: true },
       tipo_comprobante:   { required: true },
-      serie:              { required: true, minlength: 2 },
-      descripcion:        { required: true, minlength: 4 },
-      fecha_compra:       { required: true}
+      serie:              { required: true, minlength: 4 },
+      descripcion:        { minlength: 4 },
+      fecha_compra:       { required: true},
+      impuesto:           { min: 0, max:100}
     },
     messages: {
       idproveedor:        { required: "Campo requerido", },
       tipo_comprobante:   { required: "Campo requerido", },
       fecha_compra:       { required: "Campo requerido", },
-      serie:              { minlength: "Minimo 2 caracteres", },
-      descripcion:        { minlength: "Minimo 4 caracteres", },
+      serie:              { minlength: "Minimo {0} caracteres", },
+      descripcion:        { minlength: "Minimo {0} caracteres", },
     },
 
     errorElement: "span",

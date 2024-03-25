@@ -295,6 +295,7 @@ function guardar_editar_categoria(e){
     success: function (e) {
       e = JSON.parse(e);  console.log(e);  
       if (e.status == true) {
+        lista_select2("../ajax/producto.php?op=select_categoria", '#categoria', e.data, '.charge_idcategoria');
         Swal.fire("Correcto!", "Categoría registrada correctamente.", "success");
 				limpiar_form_cat();
         $("#modal-agregar-categoria").modal("hide");        
@@ -382,6 +383,7 @@ function guardar_editar_marca(e){
     success: function (e) {
       e = JSON.parse(e);  console.log(e);  
       if (e.status == true) {
+        lista_select2("../ajax/producto.php?op=select_marca", '#marca', e.data, '.charge_idmarca');
         Swal.fire("Correcto!", "Marca registrada correctamente.", "success");
 				limpiar_form_marca();
         $("#modal-agregar-marca").modal("hide");        

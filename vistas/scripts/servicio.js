@@ -19,6 +19,8 @@ function limpiar_form_servicio(){
 	$('#idproducto').val('');
   
 	$('#codigo').val('');
+	$('#codigo_alterno').val('');
+	$('#stock').val('1000');
 	$('#nombre').val('');
 	$('#descripcion').val('');
 	$('#precio_v').val('');
@@ -216,6 +218,7 @@ function generarcodigonarti() {
   var cod_letra = Math.random().toString(36).substring(2, 5);  
   var cod_number = Math.floor(Math.random() * 10) +''+ Math.floor(Math.random() * 10);  
   $("#codigo_alterno").val(`${name_producto.toUpperCase()}${cod_number}${cod_letra.toUpperCase()}`);
+  $('#form-agregar-servicio').valid();
 }
 
 function create_code_producto(pre_codigo) {
@@ -226,7 +229,8 @@ function create_code_producto(pre_codigo) {
       $('#codigo').val(e.data.nombre_codigo);
       $('#codigo').attr('readonly', 'readonly').addClass('bg-light'); // Asegura que el campo esté como solo lectura
       add_tooltip_custom('#codigo', 'No se puede editar');            //  Agrega tooltip personalizado a un element
-      $('.charge_codigo').html('')                                    // limpiamos la carga
+      $('.charge_codigo').html('');                                    // limpiamos la carga
+      $('#form-agregar-servicio').valid();
     } else {
       ver_errores(e);
     }      

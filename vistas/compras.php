@@ -1,8 +1,8 @@
 <?php
 //Activamos el almacenamiento en el buffer
 ob_start();
-require "../config/funcion_general.php";
-session_start();
+date_default_timezone_set('America/Lima'); require "../config/funcion_general.php";
+session_start(); 
 if (!isset($_SESSION["user_nombre"])) {
   header("Location: index.php?file=" . basename($_SERVER['PHP_SELF']));
 } else {
@@ -88,7 +88,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         </tfoot>
                       </table>
                     </div>
-                    <!-- -------- Formulario Comprobante ----------- -->
+                    <!-- FORM - COMPROBANTE -->
                     <div class="div-formulario" style="display: none;">
                       <form name="form-agregar-compra" id="form-agregar-compra" method="POST" class="needs-validation" novalidate>
                         <div class="row gy-2">
@@ -119,7 +119,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3">
                             <div class="form-group">
                               <label for="serie" class="form-label">Serie</label>
-                              <input class="form-control" name="serie" id="serie"/>
+                              <input class="form-control" name="serie" id="serie" onkeyup="mayus(this);" />
                             </div>
                           </div>
 
@@ -135,7 +135,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="cool-md-6 col-lg-4 col-xl-3 col-xxl-3">
                             <div class="form-group">
                               <label for="fecha_compra" class="form-label">Fecha</label>
-                              <input type="date" class="form-control" name="fecha_compra" id="fecha_compra">
+                              <input type="date" class="form-control" name="fecha_compra" id="fecha_compra"  max="<?php echo date('Y-m-d'); ?>">
                             </div>
                           </div>
 
@@ -143,7 +143,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="cool-md-6 col-lg-4 col-xl-3 col-xxl-3">
                             <div class="form-group">
                               <label for="impuesto" class="form-label">Impuesto</label>
-                              <input type="number" class="form-control" name="impuesto" id="impuesto">
+                              <input type="number" class="form-control" name="impuesto" id="impuesto" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">
                             </div>
                           </div>
 
@@ -160,8 +160,8 @@ if (!isset($_SESSION["user_nombre"])) {
 
                           <div class="col-lg-5 col-xl-5 col-xxl-5">
                             <div class="input-group">                              
-                              <button class="input-group-text" onclick="listar_producto_x_codigo();"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Buscar por codigo de producto."><i class='bx bx-search-alt' id="search_t"></i></button>
-                              <input type="text" name="codigob" id="codigob" class="form-control" onkeyup="mayus(this);" placeholder="Digite el código de producto." style="background-color: #F5F589;">
+                              <button type="button" class="input-group-text buscar_x_code" onclick="listar_producto_x_codigo();"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Buscar por codigo de producto."><i class='bx bx-search-alt'></i></button>
+                              <input type="text" name="codigob" id="codigob" class="form-control" onkeyup="mayus(this);" placeholder="Digite el código de producto." >
                             </div>
                           </div>
 
@@ -179,21 +179,23 @@ if (!isset($_SESSION["user_nombre"])) {
                             </div>
                           </div>
 
-                          <!-- ------- TABLA PRODUCTOS SELECCIONADOS ------ -->
+                          <!-- ------- TABLA PRODUCTOS SELECCIONADOS ------ --> 
                           <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive pt-3">
                             <table id="tabla-productos-seleccionados" class="table table-striped table-bordered table-condensed table-hover">
                               <thead class="bg-color-dark text-white">
-                                <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
-                                <th>Producto</th>
-                                <th>Unidad</th>
-                                <th>Cantidad</th>                                        
-                                <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
-                                <th>Descuento</th>
-                                <th>Subtotal</th>
+                                <th class="py-1" data-toggle="tooltip" data-original-title="Opciones">Op.</th>
+                                <th class="py-1">Cod</th>
+                                <th class="py-1">Producto</th>
+                                <th class="py-1">Unidad</th>
+                                <th class="py-1">Cantidad</th>                                        
+                                <th class="py-1" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
+                                <th class="py-1">Descuento</th>
+                                <th class="py-1">Subtotal</th>
+                                <th class="py-1 text-center" ><i class='bx bx-cog fs-4'></i></th>
                               </thead>
                               <tbody></tbody>
                               <tfoot>
-                                <td colspan="5"></td>
+                                <td colspan="6"></td>
 
                                 <th class="text-right">
                                   <h6 class="tipo_gravada">SUBTOTAL</h6>
@@ -212,6 +214,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <input type="hidden" name="total_compra" id="total_compra" />
                                   
                                 </th>
+                                <th></th>
                               </tfoot>
                             </table>
                           </div>
@@ -293,8 +296,7 @@ if (!isset($_SESSION["user_nombre"])) {
           </div> 
           <!-- End::Modal-Ver-Comprobante compra -->
 
-
-          <!-- Start::MODAL - VER FOTO PROVEEDOR -->
+          <!-- MODAL - VER FOTO PROVEEDOR -->
           <div class="modal fade modal-effect" id="modal-ver-foto-proveedor" tabindex="-1" aria-labelledby="modal-ver-foto-proveedor" aria-hidden="true">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
               <div class="modal-content">
@@ -313,7 +315,7 @@ if (!isset($_SESSION["user_nombre"])) {
           </div> 
           <!-- End::Modal - Ver foto proveedor -->
 
-          <!-- Start::Modal-Producto -->
+          <!-- MODAL - SELECIONAR PRODUCTO -->
           <div class="modal fade modal-effect" id="modal-producto" tabindex="-1" aria-labelledby="modal-productoLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
               <div class="modal-content">
@@ -385,7 +387,7 @@ if (!isset($_SESSION["user_nombre"])) {
           </div> 
           <!-- End::Modal-Detalle-Compra -->
 
-          <!-- MODAL - AGREGAR PROVEEDOR - charge 3 -->
+          <!-- MODAL - AGREGAR PROVEEDOR - charge 3,4 -->
           <div class="modal fade modal-effect" id="modal-agregar-proveedor" tabindex="-1" aria-labelledby="Modal-agregar-proveedorLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-scrollable">
               <div class="modal-content">
@@ -612,7 +614,7 @@ if (!isset($_SESSION["user_nombre"])) {
           </div> 
           <!-- End::Modal-Agregar-Proveedor -->
           
-          <!-- Start::Modal-Agregar-Producto -->
+          <!-- MODAL - AGREGAR PRODUCTO - charge p1 -->
           <div class="modal fade modal-effect" id="modal-agregar-producto" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-productoLabel">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
               <div class="modal-content">
@@ -777,10 +779,7 @@ if (!isset($_SESSION["user_nombre"])) {
     </div>
 
     <?php include("template/scripts.php"); ?>
-    <?php include("template/custom_switcherjs.php"); ?>
-
-    <!-- Select2 Cdn -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <?php include("template/custom_switcherjs.php"); ?>   
 
     <script src="scripts/js_compras.js"></script>
     <script src="scripts/compras.js"></script>

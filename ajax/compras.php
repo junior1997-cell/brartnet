@@ -9,7 +9,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
   if ($_SESSION['lista_de_compras'] == 1) {
 
-    require_once "../modelos/compras.php";
+    require_once "../modelos/Compras.php";
     require_once "../modelos/Gasto_de_trabajador.php";
     require_once "../modelos/Correlacion_comprobante.php";
     require_once "../modelos/Producto.php";
@@ -200,15 +200,15 @@ if (!isset($_SESSION["user_nombre"])) {
           foreach($rspta['data'] as $key => $value){
 
             $img = empty($value['imagen']) ? 'no-producto.png' : $value['imagen'];
-
+            $data_btn_1 = 'btn-add-producto-1-'.$value['idproducto']; $data_btn_2 = 'btn-add-producto-2-'.$value['idproducto'];
             $datas[] = [
-              "0" => '<button class="btn btn-warning mr-1 px-1 py-1" onclick="agregarDetalleComprobante(' . $value['idproducto'] . ', false)" data-toggle="tooltip" data-original-title="Agregar continuo"><span class="fa fa-plus"></span></button>
-              <button class="btn btn-success px-1 py-1" onclick="agregarDetalleComprobante(' . $value['idproducto'] . ', true)" data-toggle="tooltip" data-original-title="Agregar individual"><i class="fa-solid fa-list-ol"></i></button>',
-              "1" => zero_fill($value['idproducto'], 5) ,
+              "0" => '<button class="btn btn-warning '.$data_btn_1.' mr-1 px-1 py-1" onclick="agregarDetalleComprobante(' . $value['idproducto'] . ', false)" data-toggle="tooltip" data-original-title="Agregar continuo"><span class="fa fa-plus"></span></button>
+              <button class="btn btn-success '.$data_btn_2.' px-1 py-1" onclick="agregarDetalleComprobante(' . $value['idproducto'] . ', true)" data-toggle="tooltip" data-original-title="Agregar individual"><i class="fa-solid fa-list-ol"></i></button>',
+              "1" => ('<i class="bi bi-upc"></i> '.$value['codigo'] .'<br> <i class="bi bi-person"></i> '.$value['codigo_alterno']) ,
               "2" =>  '<div class="d-flex flex-fill align-items-center">
                         <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/productos/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml(($value['nombre'])) . '\')"> </span></div>
                         <div>
-                          <h6 class="d-block fw-semibold text-primary">'.$value['nombre'] .'</h6>
+                          <h6 class="d-block fw-semibold text-primary nombre_producto_' . $value['idproducto'] . '">'.$value['nombre'] .'</h6>
                           <span class="d-block fs-12 text-muted">Marca: <b>'.$value['marca'].'</b> | Categoría: <b>'.$value['categoria'].'</b></span> 
                         </div>
                       </div>',             
@@ -249,7 +249,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break; 
 
       case 'listar_crl_comprobante':
-        $rspta = $correlacion_compb->listar_crl_comprobante(); $cont = 1; $data = "";
+        $rspta = $correlacion_compb->listar_crl_comprobante($_GET["tipos"]); $cont = 1; $data = "";
           if($rspta['status'] == true){
             foreach ($rspta['data'] as $key => $value) {
               $data .= '<option  value=' . $value['codigo']  . '>' . $value['tipo_comprobante'] . '</option>';
