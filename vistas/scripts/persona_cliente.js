@@ -489,7 +489,7 @@ $(function () {
       tipo_persona_sunat:   { required: true },
       tipo_documento:       { required: true, minlength: 1, maxlength: 2, },
       numero_documento:     { required: true, minlength: 8, maxlength: 20, },
-      nombre_razonsocial:   { required: true, minlength: 4, maxlength: 200, },
+      nombre_razonsocial:   { required: true, minlength: 2, maxlength: 200, },
       apellidos_nombrecomercial: { required: true, minlength: 4, maxlength: 200, },
       correo:    			      { minlength: 4, maxlength: 100, },       
       celular:    			    { minlength: 8, maxlength: 9, },       
