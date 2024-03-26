@@ -362,7 +362,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <!-- End::Modal-VerDetalles -->
 
 
-          <!-- Start::Modal-Agregar-Cartegoria -->
+          <!-- MODAL - AGREGAR CATEGORIA -->
           <div class="modal fade modal-effect" id="modal-agregar-categoria" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-categoriaLabel">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
               <div class="modal-content">
@@ -371,17 +371,17 @@ if (!isset($_SESSION["user_nombre"])) {
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form name="formulario-categoria" id="formulario-categoria" method="POST" class="row needs-validation" novalidate>
+                  <form name="formulario-categoria" id="formulario-categoria" method="POST" class="needs-validation" novalidate>
                     <div class="row gy-2" id="cargando-3-fomulario">
                       <input type="hidden" name="idcategoria" id="idcategoria">
                       
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <div class="form-label">
                           <label for="nombre_cat" class="form-label">Nombre(*)</label>
                           <input type="text" class="form-control" name="nombre_cat" id="nombre_cat" onkeyup="mayus(this);"/>
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <div class="form-group">
                           <label for="descr_cat" class="form-label">Descripción(*)</label>
                           <input type="text" class="form-control" name="descr_cat" id="descr_cat" onkeyup="mayus(this);"/>
@@ -399,7 +399,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_form_cat();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-primary btn-guardar" id="guardar_registro_categoria"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                  <button type="button" class="btn btn-primary" id="guardar_registro_categoria"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
                 </div>
               </div>
             </div>
@@ -407,7 +407,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <!-- End::Modal-Agregar-Cartegoria -->
 
 
-          <!-- Start::Modal-Agregar-Marca -->
+          <!-- MODAL - AGREGAR MARCA -->
           <div class="modal fade modal-effect" id="modal-agregar-marca" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-marcaLabel">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
               <div class="modal-content">
@@ -416,17 +416,17 @@ if (!isset($_SESSION["user_nombre"])) {
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form name="formulario-marca" id="formulario-marca" method="POST" class="row needs-validation" novalidate>
+                  <form name="formulario-marca" id="formulario-marca" method="POST" class="needs-validation" novalidate>
                     <div class="row gy-2" id="cargando-5-fomulario">
                       <input type="hidden" name="idmarca" id="idmarca">
                       
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <div class="form-label">
                           <label for="nombre_marca" class="form-label">Nombre(*)</label>
                           <input type="text" class="form-control" name="nombre_marca" id="nombre_marca" onkeyup="mayus(this);"/>
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-12">
                         <div class="form-group">
                           <label for="descr_marca" class="form-label">Descripción(*)</label>
                           <input type="text" class="form-control" name="descr_marca" id="descr_marca" onkeyup="mayus(this);"/>
@@ -444,7 +444,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_form_marca();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-primary btn-guardar" id="guardar_registro_marca"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                  <button type="button" class="btn btn-primary" id="guardar_registro_marca"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
                 </div>
               </div>
             </div>
@@ -452,7 +452,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <!-- End::Modal-Agregar-Marca -->
 
 
-          <!-- Start::Modal-registrar-unidad-medida -->
+          <!-- MODAL - AGREGAR UM -->
           <div class="modal fade modal-effect" id="modal-agregar-u-m" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-u-mLabel">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
               <div class="modal-content">
@@ -490,7 +490,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiar_form_um();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-primary btn-guardar" id="guardar_registro_u_m"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                  <button type="button" class="btn btn-primary" id="guardar_registro_u_m"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
                 </div>
               </div>
             </div>

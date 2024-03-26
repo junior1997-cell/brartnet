@@ -6,6 +6,9 @@ var conNO = 1;
 
 function agregarDetalleComprobante(idproducto, individual) {
   
+  $(`.btn-add-producto-1-${idproducto}`).html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);  
+  $(`.btn-add-producto-2-${idproducto}`).html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);  
+  
   // var precio_venta = 0;
   var precio_sin_igv =0;
   var cantidad = 1;
@@ -19,9 +22,11 @@ function agregarDetalleComprobante(idproducto, individual) {
         var cant_producto = $(`.producto_${idproducto}`).val();
         var sub_total = parseInt(cant_producto, 10) + 1;
         $(`.producto_${idproducto}`).val(sub_total).trigger('change');
-        toastr_success("Agregado!!",`Producto: ${$(`.nombre_producto_${idproducto}`)[0].innerText} agregado !!`, 700);
-        modificarSubtotales();      
-      }      
+        toastr_success("Agregado!!",`Producto: ${$(`.nombre_producto_${idproducto}`).text()} agregado !!`, 700);
+        modificarSubtotales();          
+      }  
+      $(`.btn-add-producto-1-${idproducto}`).html(`<span class="fa fa-plus"></span>`);        
+      $(`.btn-add-producto-2-${idproducto}`).html(`<i class="fa-solid fa-list-ol"></i>`);          
     } else {         
       $.post("../ajax/compras.php?op=mostrar_producto", {'idproducto': idproducto}, function (e, textStatus, jqXHR) {          
         
@@ -40,8 +45,12 @@ function agregarDetalleComprobante(idproducto, individual) {
           <tr class="filas" id="fila${cont}"> 
 
             <td class="py-1">
-              <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${e.data.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
+              <!--  <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${e.data.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button> -->
               <button type="button" class="btn btn-danger btn-sm btn-file-delete-${cont}" onclick="eliminarDetalle(${e.data.idproducto}, ${cont});"><i class="fas fa-times"></i></button>
+            </td>
+
+            <td class="py-1 text-nowrap">
+              <i class="bi bi-upc"></i> ${e.data.codigo} <br> <i class="bi bi-person"></i> ${e.data.codigo_alterno}
             </td>
 
             <td class="py-1">         
@@ -63,7 +72,7 @@ function agregarDetalleComprobante(idproducto, individual) {
 
             <td class="py-1 form-group">
               <input type="number" class="w-100px valid_cantidad form-control producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); " onchange="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); ">
-              <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${cantidad}" min="0.01" required  >            
+              <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();" >            
             </td> 
 
             <td class="py-1 form-group">
@@ -79,10 +88,11 @@ function agregarDetalleComprobante(idproducto, individual) {
 
             <td class="py-1 text-right"><span class="text-right subtotal_producto_${cont}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="0" > </td>
             <td class="py-1"><button type="button" onclick="modificarSubtotales();" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+            
           </tr>`;
 
           detalles = detalles + 1;
-          $("#tabla-productos-seleccionados").append(fila);
+          $("#tabla-productos-seleccionados tbody").append(fila);
           array_data_compra.push({ id_cont: cont });
           modificarSubtotales();        
           toastr_success("Agregado!!",`Producto: ${e.data.nombre} agregado !!`, 700);
@@ -90,17 +100,22 @@ function agregarDetalleComprobante(idproducto, individual) {
           // reglas de validación     
           $('.valid_precio_con_igv').each(function(e) { 
             $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-            $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
           });
           $('.valid_cantidad').each(function(e) { 
             $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-            $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
           });
 
           cont++;   
+          evaluar();
         } else {
           ver_errores(e);
-        }   
+        }           
+        
+        $(`.btn-add-producto-1-${idproducto}`).html(`<span class="fa fa-plus"></span>`);        
+        $(`.btn-add-producto-2-${idproducto}`).html(`<i class="fa-solid fa-list-ol"></i>`);
+        
       });  
     }
   } else {
@@ -109,93 +124,25 @@ function agregarDetalleComprobante(idproducto, individual) {
   }
 }
 
+function evaluar() {
+  if (detalles > 0) {
+    $(".btn-guardar").show();
+  } else {
+    $(".btn-guardar").hide();
+    cont = 0;
+    $(".subtotal_compra").html("S/ 0.00");
+    $("#subtotal_compra").val(0);
 
-function mostrarEditar_detalles_compra(idcompra) {
+    $(".igv_compra").html("S/ 0.00");
+    $("#igv_compra").val(0);
 
-  $.post("../ajax/compras.php?op=mostrarEditar_detalles_compra", {'idcompra': idcompra}, function (e, status) {
+    $(".total_venta").html("S/ 0.00");
+    $("#total_compra").val(0);
 
-    e = JSON.parse(e); console.log(e);
-    if (e.status == true) { 
-      $.each(e.data, function(index, producto) {
-        var img = producto.imagen == "" || producto.imagen == null ?img = `../assets/modulo/productos/no-producto.png` : `../assets/modulo/productos/${producto.imagen}` ;          
-
-        if ($("#tipo_comprobante").select2("val") == "01") {
-          var subtotal = producto.cantidad * producto.precio_venta;
-        }else{
-          var subtotal = producto.cantidad * producto.precio_venta;
-        }
-
-        var fila = `
-        <tr class="filas" id="fila${index}"> 
-
-          <td class="py-1">
-            <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${producto.idproducto}, ${index})"><i class="fas fa-pencil-alt"></i></button>
-            <button type="button" class="btn btn-danger btn-sm btn-file-delete-${index}" onclick="eliminarDetalle(${producto.idproducto}, ${index});"><i class="fas fa-times"></i></button>
-          </td>
-
-          <td class="py-1">         
-            <input type="hidden" name="idproducto[]" value="${producto.idproducto}">
-
-            <div class="d-flex flex-fill align-items-center">
-              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(producto.nombre)}')"> </span></div>
-              <div>
-                <h6 class="d-block fw-semibold text-primary">${producto.nombre}</h6>
-                <span class="d-block fs-12 text-muted">Marca: <b>${producto.marca}</b> | Categoría: <b>${producto.categoria}</b></span> 
-              </div>
-            </div>
-          </td>
-
-          <td class="py-1">
-            <span class="unidad_medida_${index}">UNIDAD</span> 
-            <input type="hidden" class="unidad_medida_${index}" name="unidad_medida[]" id="unidad_medida[]" value="UNIDAD">
-          </td>
-
-          <td class="py-1 form-group">
-            <input type="number" class="w-100px valid_cantidad form-control producto_${producto.idproducto} producto_selecionado" name="valid_cantidad[${index}]" id="valid_cantidad_${index}" value="${producto.cantidad}" min="0.01" required onkeyup="replicar_value_input2(${index}, '#cantidad_${index}', this); update_price(); " onchange="replicar_value_input2(${index}, '#cantidad_${index}', this); update_price(); ">
-            <input type="hidden" class="cantidad_${index}" name="cantidad[]" id="cantidad_${index}" value="${producto.cantidad}" min="0.01" required  >            
-          </td> 
-
-          <td class="py-1 form-group">
-            <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${index}]" id="valid_precio_con_igv_${index}" value="${producto.precio_venta}" min="0.01" required onkeyup="replicar_value_input2(${index}, '#precio_con_igv_${index}', this); update_price(); " onchange="replicar_value_input2(${index}, '#precio_con_igv_${index}', this); update_price(); ">
-            <input type="hidden" class="precio_con_igv_${index}" name="precio_con_igv[]" id="precio_con_igv_${index}" value="${producto.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
-            <input type="hidden" class="precio_sin_igv_${index}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
-            <input type="hidden" class="precio_igv_${index}" name="precio_igv[]" id="precio_igv[]" value="0"  >
-          </td> 
-
-          <td class="py-1 form-group">
-            <input type="number" class="w-135px form-control descuento_${index}" name="descuento[]" value="${producto.descuento}" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
-          </td>
-
-          <td class="py-1 text-right"><span class="text-right subtotal_producto_${index}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${index}" value="${subtotal}" > </td>
-          <td class="py-1"><button type="button" onclick="modificarSubtotales();" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
-        </tr>`;
-
-        detalles = detalles + 1;
-        $("#tabla-productos-seleccionados").append(fila);
-        array_data_compra.push({ id_cont: index });
-        modificarSubtotales();        
-        toastr_success("Agregado!!",`Producto: ${producto.nombre} agregado !!`, 700);
-
-        // reglas de validación     
-        $('.valid_precio_con_igv').each(function(e) { 
-          $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-          $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
-        });
-        $('.valid_cantidad').each(function(e) { 
-          $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-          $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
-        });
-
-        index++;
-      });
-
-    } else{ ver_errores(e); }
-    
-  });
-
+  }
 }
 
-function default_val_igv() { if ($("#tipo_comprobante").select2("val") == "01") { $("#impuesto").val(18); } } // FACTURA
+function default_val_igv() { if ($("#tipo_comprobante").select2("val") == "01") { $("#impuesto").val(0); } } // FACTURA
 
 function modificarSubtotales() {  
 
@@ -405,6 +352,7 @@ function eliminarDetalle(idproducto, indice) {
   modificarSubtotales();
   detalles = detalles - 1;
   toastr_warning("Removido!!","Producto removido", 700);
+  evaluar();
 }
 
 
@@ -446,7 +394,6 @@ function quitasuge1() {
   if ($("#numero_documento").val() == "") {
     $("#suggestions").fadeOut();
   }
-
   $("#suggestions").fadeOut();
 }
 
@@ -454,7 +401,6 @@ function quitasuge2() {
   if ($("#razon_social").val() == "") {
     $("#suggestions2").fadeOut();
   }
-
   $("#suggestions2").fadeOut();
 }
 

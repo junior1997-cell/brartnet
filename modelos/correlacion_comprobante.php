@@ -89,9 +89,9 @@
 		return $eliminar;
 	}
 
-  public function listar_crl_comprobante(){
+  public function listar_crl_comprobante($tipos){
     $sql="SELECT idtipo_comprobante, codigo, abreviatura AS tipo_comprobante, serie
-    FROM sunat_correlacion_comprobante WHERE estado = 1 AND estado_delete = 1;";
+    FROM sunat_correlacion_comprobante WHERE codigo in ($tipos) and estado = 1 AND estado_delete = 1;";
     return ejecutarConsultaArray($sql);
   }
     

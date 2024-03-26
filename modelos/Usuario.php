@@ -158,7 +158,7 @@ class Usuario
 	//Implementar un método para listar los registros
 	public function listar()	{
 		$sql = "SELECT u.idusuario, p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, sdi.abreviatura as tipo_documento, p.numero_documento, p.celular, 
-		p.correo,	p.foto_perfil, u.login, DATE_FORMAT(u.last_sesion, '%m/%d/%Y %h:%i: %p') AS last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
+		p.correo,	p.foto_perfil, u.login, DATE_FORMAT(u.last_sesion, '%d/%m/%Y %h:%i %p') AS last_sesion, u.estado,	t.nombre as tipo_persona, c.nombre as cargo_trabajador
 		FROM  usuario as u
 		inner join persona as p on u.idpersona = p.idpersona
 		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
