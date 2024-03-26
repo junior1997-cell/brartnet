@@ -187,7 +187,7 @@ function mostrarEditar_compra(idcompra){
   show_hide_form(2);
   $.post("../ajax/compras.php?op=mostrar_compra", { idcompra: idcompra }, function (e, status) {
     e = JSON.parse(e); 
-    if (e.status) {
+    if (e.status == true) {
       $("#idcompra").val(e.data.idcompra);
       $("#idproveedor").val(e.data.idproveedor);
       $("#tipo_comprobante").val(e.data.tipo_comprobante);

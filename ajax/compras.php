@@ -55,7 +55,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[] = [
               "0" => $count,
               "1" => '<div class="hstack gap-2 fs-15">' .
-                        '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrarEditar_compra('.($value['idcompra']).'); mostrarEditar_detalles_compra('.($value['idcompra']).'); limpiar_form_compra();" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                        '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrarEditar_compra('.($value['idcompra']).'); mostrarEditar_detalles_compra('.($value['idcompra']).');" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
                         '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_compra('.$value['idcompra'].'.,\''.$value['serie_comprobante'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
                         '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalle_compra('.($value['idcompra']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
                       '</div>',
@@ -118,12 +118,12 @@ if (!isset($_SESSION["user_nombre"])) {
           echo json_encode($rspta, true);
         } else {
 
-          // $rspta = $compras->editar( $idcompra, $idcliente, $num_doc,  $tipo_comprobante, $impuesto, $descripcion,
-          // $subtotal_compra, $tipo_gravada, $igv_compra, $total_compra, $metodo_pago, $code_vaucher, $pagar_con_ctdo, $pagar_con_tarj , $vuelto_venta, $subtotal_producto, $val_igv, $subtotal_compra, $categoria, $cantidad_old,
-          // $_POST["idtours"], $_POST["unidad_medida"], $_POST["tipo_tours"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
-          // $_POST["descuento"], $_POST["subtotal_producto"]);
+          $rspta = $compras->editar( $idcompra, $idproveedor,  $tipo_comprobante, $serie, $impuesto, $descripcion,
+          $subtotal_compra, $tipo_gravada, $igv_compra, $total_compra, $fecha_compra, $img_comprob,
+          $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
+          $_POST["descuento"], $_POST["subtotal_producto"]);
     
-          // echo json_encode($rspta, true);
+          echo json_encode($rspta, true);
         }
     
       break; 
