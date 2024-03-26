@@ -86,6 +86,25 @@
       return ejecutarConsultaSimpleFila($sql);
     }
 
+    public function mostrarEditar_detalles_compra($id){
+      $sql = "SELECT 
+        dc.idcompra, dc.cantidad, dc.subtotal, dc.descuento,
+        p.idproducto, p.nombre, p.imagen, p.precio_venta, 
+        sum.nombre AS unidad_medida, 
+        cat.nombre AS categoria, 
+        mc.nombre AS marca
+      FROM compra_detalle AS dc
+        INNER JOIN producto AS p ON p.idproducto = dc.idproducto
+        INNER JOIN sunat_unidad_medida AS sum ON p.idsunat_unidad_medida = sum.idsunat_unidad_medida
+        INNER JOIN categoria AS cat ON p.idcategoria = cat.idcategoria
+        INNER JOIN marca AS mc ON p.idmarca = mc.idmarca
+      WHERE dc.idcompra = '$id'
+        AND p.idcategoria <> 3
+        AND p.estado = 1
+        AND p.estado_delete = 1;";
+    return ejecutarConsultaArray($sql);
+    }
+
     public function eliminar($id){
       $sql = "UPDATE compra SET estado_delete = 0
       WHERE idcompra = '$id'";

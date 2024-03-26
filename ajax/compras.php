@@ -55,7 +55,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[] = [
               "0" => $count,
               "1" => '<div class="hstack gap-2 fs-15">' .
-                        '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_compra('.($value['idcompra']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                        '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrarEditar_compra('.($value['idcompra']).'); mostrarEditar_detalles_compra('.($value['idcompra']).'); limpiar_form_compra();" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
                         '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_compra('.$value['idcompra'].'.,\''.$value['serie_comprobante'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
                         '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalle_compra('.($value['idcompra']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
                       '</div>',
@@ -168,6 +168,11 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta=$compras->mostrar_compra($_POST["idcompra"]);
         echo json_encode($rspta, true);
       break; 
+
+      case 'mostrarEditar_detalles_compra':
+        $rspta=$compras->mostrarEditar_detalles_compra($_POST["idcompra"]);
+        echo json_encode($rspta, true);
+      break;
 
       case 'listar_producto_x_codigo':
         $rspta=$compras->listar_producto_x_codigo($_POST["codigo"]);

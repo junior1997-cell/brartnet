@@ -178,6 +178,34 @@ function guardar_editar_compra(e) {
   });  
 }
 
+function mostrarEditar_compra(idcompra){
+
+  limpiar_form_compra();
+  show_hide_form(2);
+  $.post("../ajax/compras.php?op=mostrar_compra", { idcompra: idcompra }, function (e, status) {
+    e = JSON.parse(e); 
+    if (e.status) {
+      $("#idcompra").val(e.data.idcompra);
+      $("#idproveedor").val(e.data.idproveedor);
+      $("#tipo_comprobante").val(e.data.tipo_comprobante);
+      $("#serie").val(e.data.serie_comprobante);
+      $("#descripcion").val(e.data.descripcion);
+      $("#fecha_compra").val(e.data.fecha_compra);
+      $("#impuesto").val(e.data.val_igv);  
+      
+      // ------------ IMAGEN -----------
+      if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
+        $("#doc_old_1").val(e.data.comprobante);
+        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>imagen.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
+        // cargamos la imagen adecuada par el archivo
+        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/comprobante_compra', '50%', '110'));   //ruta imagen          
+      }
+
+    } else { ver_errores(e); }
+    
+  }).fail( function(e) { ver_errores(e); } );
+}
+
 function mostrar_detalle_compra(idcompra){
   $("#modal-detalle-compra").modal("show");
 

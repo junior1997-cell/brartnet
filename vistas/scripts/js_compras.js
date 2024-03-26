@@ -109,6 +109,92 @@ function agregarDetalleComprobante(idproducto, individual) {
   }
 }
 
+
+function mostrarEditar_detalles_compra(idcompra) {
+
+  $.post("../ajax/compras.php?op=mostrarEditar_detalles_compra", {'idcompra': idcompra}, function (e, status) {
+
+    e = JSON.parse(e); console.log(e);
+    if (e.status == true) { 
+      $.each(e.data, function(index, producto) {
+        var img = producto.imagen == "" || producto.imagen == null ?img = `../assets/modulo/productos/no-producto.png` : `../assets/modulo/productos/${producto.imagen}` ;          
+
+        if ($("#tipo_comprobante").select2("val") == "01") {
+          var subtotal = producto.cantidad * producto.precio_venta;
+        }else{
+          var subtotal = producto.cantidad * producto.precio_venta;
+        }
+
+        var fila = `
+        <tr class="filas" id="fila${index}"> 
+
+          <td class="py-1">
+            <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${producto.idproducto}, ${index})"><i class="fas fa-pencil-alt"></i></button>
+            <button type="button" class="btn btn-danger btn-sm btn-file-delete-${index}" onclick="eliminarDetalle(${producto.idproducto}, ${index});"><i class="fas fa-times"></i></button>
+          </td>
+
+          <td class="py-1">         
+            <input type="hidden" name="idproducto[]" value="${producto.idproducto}">
+
+            <div class="d-flex flex-fill align-items-center">
+              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(producto.nombre)}')"> </span></div>
+              <div>
+                <h6 class="d-block fw-semibold text-primary">${producto.nombre}</h6>
+                <span class="d-block fs-12 text-muted">Marca: <b>${producto.marca}</b> | Categoría: <b>${producto.categoria}</b></span> 
+              </div>
+            </div>
+          </td>
+
+          <td class="py-1">
+            <span class="unidad_medida_${index}">UNIDAD</span> 
+            <input type="hidden" class="unidad_medida_${index}" name="unidad_medida[]" id="unidad_medida[]" value="UNIDAD">
+          </td>
+
+          <td class="py-1 form-group">
+            <input type="number" class="w-100px valid_cantidad form-control producto_${producto.idproducto} producto_selecionado" name="valid_cantidad[${index}]" id="valid_cantidad_${index}" value="${producto.cantidad}" min="0.01" required onkeyup="replicar_value_input2(${index}, '#cantidad_${index}', this); update_price(); " onchange="replicar_value_input2(${index}, '#cantidad_${index}', this); update_price(); ">
+            <input type="hidden" class="cantidad_${index}" name="cantidad[]" id="cantidad_${index}" value="${producto.cantidad}" min="0.01" required  >            
+          </td> 
+
+          <td class="py-1 form-group">
+            <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${index}]" id="valid_precio_con_igv_${index}" value="${producto.precio_venta}" min="0.01" required onkeyup="replicar_value_input2(${index}, '#precio_con_igv_${index}', this); update_price(); " onchange="replicar_value_input2(${index}, '#precio_con_igv_${index}', this); update_price(); ">
+            <input type="hidden" class="precio_con_igv_${index}" name="precio_con_igv[]" id="precio_con_igv_${index}" value="${producto.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
+            <input type="hidden" class="precio_sin_igv_${index}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
+            <input type="hidden" class="precio_igv_${index}" name="precio_igv[]" id="precio_igv[]" value="0"  >
+          </td> 
+
+          <td class="py-1 form-group">
+            <input type="number" class="w-135px form-control descuento_${index}" name="descuento[]" value="${producto.descuento}" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+          </td>
+
+          <td class="py-1 text-right"><span class="text-right subtotal_producto_${index}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${index}" value="${subtotal}" > </td>
+          <td class="py-1"><button type="button" onclick="modificarSubtotales();" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+        </tr>`;
+
+        detalles = detalles + 1;
+        $("#tabla-productos-seleccionados").append(fila);
+        array_data_compra.push({ id_cont: index });
+        modificarSubtotales();        
+        toastr_success("Agregado!!",`Producto: ${producto.nombre} agregado !!`, 700);
+
+        // reglas de validación     
+        $('.valid_precio_con_igv').each(function(e) { 
+          $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+          $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
+        });
+        $('.valid_cantidad').each(function(e) { 
+          $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+          $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
+        });
+
+        index++;
+      });
+
+    } else{ ver_errores(e); }
+    
+  });
+
+}
+
 function default_val_igv() { if ($("#tipo_comprobante").select2("val") == "01") { $("#impuesto").val(18); } } // FACTURA
 
 function modificarSubtotales() {  
