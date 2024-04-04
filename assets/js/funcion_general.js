@@ -1371,12 +1371,12 @@ function extrae_ruc(select = null, input = null) {
   $('[data-toggle="tooltip"]').tooltip();
 }
 
-function replicar_value_input(cont, input_entrada, input_salida) {
+function replicar_value_input( input_entrada, input_salida) {
   var value = $(input_entrada).val(); $(`${input_salida}`).val(value).trigger("change");
 }
 
 function replicar_value_input2(id, name_input, valor) {
-  var value = $(valor).val(); console.log(value);
+  var value = $(valor).val(); 
   $(`${name_input}`).val(value).trigger("change");
 }
 

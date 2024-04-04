@@ -62,8 +62,12 @@ function doc1_eliminar() {
 }
 
 function limpiar_form_compra(){
-  $("#idproveedor").val('');
-  $("#tipo_comprobante").val('');
+
+  array_data_compra = [];
+  $("#idcompra").val('');
+
+  $("#idproveedor").val('').trigger('change');
+  $("#tipo_comprobante").val('').trigger('change');
   $("#serie").val('');
   $("#descripcion").val('');
   $("#fecha_compra").val('');
@@ -74,13 +78,16 @@ function limpiar_form_compra(){
   $("#total_compra").val("");     
   $(".total_compra").html("0");
 
-  $(".subtotal_compra").html("S/ 0.00");
+  $(".subtotal_compra").html("<span>S/</span> 0.00");
   $("#subtotal_compra").val("");
 
-  $(".igv_compra").html("S/ 0.00");
+  $(".descuento_compra").html("<span>S/</span> 0.00");
+  $("#descuento_compra").val("");
+
+  $(".igv_compra").html("<span>S/</span> 0.00");
   $("#igv_compra").val("");
 
-  $(".total_compra").html("S/ 0.00");
+  $(".total_compra").html("<span>S/</span> 0.00");
   $("#total_compra").val("");
 
   $("#estado_detraccion").val("0");
@@ -181,34 +188,6 @@ function guardar_editar_compra(e) {
   });  
 }
 
-function mostrarEditar_compra(idcompra){
-
-  limpiar_form_compra();
-  show_hide_form(2);
-  $.post("../ajax/compras.php?op=mostrar_compra", { idcompra: idcompra }, function (e, status) {
-    e = JSON.parse(e); 
-    if (e.status == true) {
-      $("#idcompra").val(e.data.idcompra);
-      $("#idproveedor").val(e.data.idproveedor);
-      $("#tipo_comprobante").val(e.data.tipo_comprobante);
-      $("#serie").val(e.data.serie_comprobante);
-      $("#descripcion").val(e.data.descripcion);
-      $("#fecha_compra").val(e.data.fecha_compra);
-      $("#impuesto").val(e.data.val_igv);  
-      
-      // ------------ IMAGEN -----------
-      if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
-        $("#doc_old_1").val(e.data.comprobante);
-        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>imagen.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
-        // cargamos la imagen adecuada par el archivo
-        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/comprobante_compra', '50%', '110'));   //ruta imagen          
-      }
-
-    } else { ver_errores(e); }
-    
-  }).fail( function(e) { ver_errores(e); } );
-}
-
 function mostrar_detalle_compra(idcompra){
   $("#modal-detalle-compra").modal("show");
 
@@ -266,7 +245,7 @@ function limpiar_form_producto(){
   
 	$('#codigo').val('');
 	$('#categoria').val('');
-	$('#u_medida').val('');
+	$('#u_medida').val('58');
 	$('#marca').val('');
 	$('#nombre').val('');
 	$('#descripcion').val('');
@@ -401,19 +380,20 @@ function listar_producto_x_codigo() {
             </td>
 
             <td class="py-1 form-group">
-              <input type="number" class="w-100px valid_cantidad form-control producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); " onchange="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); ">
+              <input type="number" class="w-100px valid_cantidad form-control producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
               <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${cantidad}" min="0.01" required  >            
             </td> 
 
             <td class="py-1 form-group">
-              <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${cont}]" id="valid_precio_con_igv_${cont}" value="${e.data.precio_venta}" min="0.01" required onkeyup="replicar_value_input2(${cont}, '#precio_con_igv_${cont}', this); update_price(); " onchange="replicar_value_input2(${cont}, '#precio_con_igv_${cont}', this); update_price(); ">
+              <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${cont}]" id="valid_precio_con_igv_${cont}" value="${e.data.precio_venta}" min="0.01" required onkeyup="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); " onchange="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); ">
               <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${e.data.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
               <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
               <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
             </td> 
 
             <td class="py-1 form-group">
-              <input type="number" class="w-135px form-control descuento_${cont}" name="descuento[]" value="0" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+              <input type="number" class="w-100px form-control valid_descuento" name="valid_descuento_${cont}" value="0" min="0.00" required onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
+              <input type="hidden" class="descuento_${cont}" name="descuento[]" value="0" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
             </td>
 
             <td class="py-1 text-right"><span class="text-right subtotal_producto_${cont}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="0" > </td>
@@ -435,9 +415,13 @@ function listar_producto_x_codigo() {
             $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
             $(this).rules('add', { min:0.01, messages: { min:"Mínimo 0.01" } }); 
           });
+          $('.valid_descuento').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
+          });
 
           cont++;  
-          
+          evaluar();
         }
       }
       $(`.buscar_x_code`).html(`<i class='bx bx-search-alt'></i>`);
@@ -809,10 +793,10 @@ $(function(){
       marca:    			{ required: true },       
       nombre:    			{ required: true, minlength: 2, maxlength: 20,  },       
       descripcion:    { required: true, minlength: 2, maxlength: 500, },       
-      stock:          { required: true, minlength: 1, maxlength: 500, },       
-      stock_min:      { required: true, minlength: 1, maxlength: 500, }, 
-      precio_v:       { required: true, minlength: 2, maxlength: 500, },       
-      precio_c:       { required: true, minlength: 2, maxlength: 500, },	
+      stock:          { required: true, min: 0,  },       
+      stock_min:      { required: true, min: 0,  }, 
+      precio_v:       { required: true, min: 0,  },       
+      precio_c:       { required: true, min: 0,  },	
     },
     messages: {     
       cogido:    			{ required: "Campo requerido", },

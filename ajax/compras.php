@@ -55,7 +55,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[] = [
               "0" => $count,
               "1" => '<div class="hstack gap-2 fs-15">' .
-                        '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrarEditar_compra('.($value['idcompra']).'); mostrarEditar_detalles_compra('.($value['idcompra']).');" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                        '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_editar_detalles_compra('.($value['idcompra']).');" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
                         '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_compra('.$value['idcompra'].'.,\''.$value['serie_comprobante'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
                         '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalle_compra('.($value['idcompra']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
                       '</div>',
@@ -152,13 +152,27 @@ if (!isset($_SESSION["user_nombre"])) {
         echo '<div class="table-responsive p-0">
           <table class="table table-hover table-bordered  mt-4">  
             <thead>
-              <tr> <th>#</th> <th>Nombre</th> <th>Cantidad</th> <th>Precio Unitario</th> <th>Dcto.</th>  <th>Subtotal</th> </tr>
+              <tr> <th>#</th> <th>Nombre</th> <th>Cantidad</th> <th>P/U</th> <th>Dcto.</th>  <th>Subtotal</th> </tr>
             </thead>        
             <tbody>';
             foreach ($rspta['data']['detalle'] as $key => $val) {
-              echo '<tr> <td>'. $key + 1 .'</td> <td>'.$val['nombre'].'</td> <td>'.$val['cantidad'].'</td> <td>'.$val['precio_con_igv'].'</td> <td>'.$val['descuento'].'</td> <td>'.$val['subtotal'].'</td> </tr>';
+              echo '<tr> <td>'. $key + 1 .'</td> <td>'.$val['nombre'].'</td> <td class="text-center">'.$val['cantidad'].'</td> <td class="text-right">'.$val['precio_con_igv'].'</td> <td class="text-right">'.$val['descuento'].'</td> <td class="text-right" >'.$val['subtotal'].'</td> </tr>';
             }
         echo '</tbody>
+            <tfoot>
+              <td colspan="4"></td>
+
+              <th class="text-right">
+                <h6 class="tipo_gravada">SUBTOTAL</h6>
+                <h6 class="val_igv">IGV (18%)</h6>
+                <h5 class="font-weight-bold">TOTAL</h5>
+              </th>
+              <th class="text-right text-nowrap"> 
+                <h6 class="font-weight-bold subtotal_compra">S/ '.$rspta['data']['compra']['subtotal'].'</h6> 
+                <h6 class="font-weight-bold igv_compra">S/ '.$rspta['data']['compra']['igv'].'</h6>                 
+                <h5 class="font-weight-bold total_compra">S/ '.$rspta['data']['compra']['total'].'</h5>                 
+              </th>              
+            </tfoot>
           </table>
         </div>';
         echo'</div>';# div-content
@@ -169,8 +183,8 @@ if (!isset($_SESSION["user_nombre"])) {
         echo json_encode($rspta, true);
       break; 
 
-      case 'mostrarEditar_detalles_compra':
-        $rspta=$compras->mostrarEditar_detalles_compra($_POST["idcompra"]);
+      case 'mostrar_editar_detalles_compra':
+        $rspta=$compras->mostrar_editar_detalles_compra($_POST["idcompra"]);
         echo json_encode($rspta, true);
       break;
 

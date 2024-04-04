@@ -89,9 +89,9 @@ if (!isset($_SESSION["user_nombre"])) {
                       </table>
                     </div>
                     <!-- FORM - COMPROBANTE -->
-                    <div class="div-formulario" style="display: none;">
+                    <div class="div-formulario"  style="display: none;">
                       <form name="form-agregar-compra" id="form-agregar-compra" method="POST" class="needs-validation" novalidate>
-                        <div class="row gy-2">
+                        <div class="row gy-2" id="cargando-1-formulario">
                           <input type="hidden" name="idcompra" id="idcompra" />
 
                           <!-- ----------------- PROVEEDOR --------------- -->
@@ -132,7 +132,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>
 
                           <!-- ----------- FECHA EMISION ------- -->
-                          <div class="cool-md-6 col-lg-4 col-xl-3 col-xxl-3">
+                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3">
                             <div class="form-group">
                               <label for="fecha_compra" class="form-label">Fecha</label>
                               <input type="date" class="form-control" name="fecha_compra" id="fecha_compra"  max="<?php echo date('Y-m-d'); ?>">
@@ -140,16 +140,17 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>
 
                           <!-- ----------- FECHA EMISION ------- -->
-                          <div class="cool-md-6 col-lg-4 col-xl-3 col-xxl-3">
+                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3">
                             <div class="form-group">
-                              <label for="impuesto" class="form-label">Impuesto</label>
+                              <label for="impuesto" class="form-label">Impuesto (%)</label>
                               <input type="number" class="form-control" name="impuesto" id="impuesto" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">
                             </div>
                           </div>
 
-                        </div>
-                        <!-- ------------ BOTON SELECCIONAR PRODUCTOS ----------- -->
-                        <div class="row pt-5" id="cargando-2-formulario">
+                          <div class="col-md-12 col-lg-12 col-xl-12 mt-3">
+
+                          </div>
+                          <!-- ------------ BOTON SELECCIONAR PRODUCTOS ----------- -->                        
 
                           <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-2">
                             <button class="btn btn-info label-btn m-r-10px" type="button" data-bs-toggle="modal" data-bs-target="#modal-producto"  >
@@ -166,18 +167,13 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>
 
                           <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-2">
-                            <button class="btn btn-primary label-btn m-r-10px" type="button" data-bs-toggle="modal" data-bs-target="#modal-agregar-producto"  >
+                            <button class="btn btn-primary label-btn m-r-10px" type="button" data-bs-toggle="modal" data-bs-target="#modal-agregar-producto" onclick="limpiar_form_producto();"  >
                             <i class="ri-add-fill label-btn-icon me-2"></i> 
                               Crear Producto 
                             </button>
                           </div>
 
-                          <div class="col-lg-1" style="display: none;">
-                            <div class="form-group">
-                              <label for="impuesto">IGV <sup class="text-danger">*</sup></label>
-                              <input type="text" name="impuesto" id="impuesto" class="form-control" value="0" onkeyup="modificarSubtotales();" />
-                            </div>
-                          </div>
+                          
 
                           <!-- ------- TABLA PRODUCTOS SELECCIONADOS ------ --> 
                           <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive pt-3">
@@ -199,18 +195,22 @@ if (!isset($_SESSION["user_nombre"])) {
 
                                 <th class="text-right">
                                   <h6 class="tipo_gravada">SUBTOTAL</h6>
+                                  <h6 >DESCUENTO</h6>
                                   <h6 class="val_igv">IGV (18%)</h6>
                                   <h5 class="font-weight-bold">TOTAL</h5>
                                 </th>
                                 <th class="text-right"> 
-                                  <h6 class="font-weight-bold subtotal_compra">S/ 0.00</h6>
+                                  <h6 class="font-weight-bold d-flex justify-content-between subtotal_compra"> <span>S/</span>  0.00</h6>
                                   <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
                                   <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
 
-                                  <h6 class="font-weight-bold igv_compra">S/ 0.00</h6>
+                                  <h6 class="font-weight-bold d-flex justify-content-between descuento_compra"><span>S/</span> 0.00</h6>
+                                  <input type="hidden" name="descuento_compra" id="descuento_compra" />
+
+                                  <h6 class="font-weight-bold d-flex justify-content-between igv_compra"><span>S/</span> 0.00</h6>
                                   <input type="hidden" name="igv_compra" id="igv_compra" />
                                   
-                                  <h5 class="font-weight-bold total_compra">S/ 0.00</h5>
+                                  <h5 class="font-weight-bold d-flex justify-content-between total_compra"><span>S/</span> 0.00</h5>
                                   <input type="hidden" name="total_compra" id="total_compra" />
                                   
                                 </th>
@@ -241,11 +241,11 @@ if (!isset($_SESSION["user_nombre"])) {
                             </div>
                           </div>
 
-                        </div>
-
+                        </div>  
+                        
                         <!-- ::::::::::: CARGANDO ... :::::::: -->
-                        <div class="row" id="cargando-3-fomulario" style="display: none;" >
-                          <div class="col-lg-12 text-center">                         
+                        <div class="row" id="cargando-2-fomulario" style="display: none;" >
+                          <div class="col-lg-12 mt-5 text-center">                         
                             <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
                             <h4 class="bx-flashing">Cargando...</h4>
                           </div>
@@ -262,9 +262,11 @@ if (!isset($_SESSION["user_nombre"])) {
                       </form>
                     </div>
 
+                    
+
                   </div>
                   <div class="card-footer border-top-0">
-                    <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1);" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
+                    <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1); limpiar_form_compra();" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
                     <button type="button" class="btn btn-success btn-guardar" id="guardar_registro_compra" style="display: none;"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
                   </div>
                 </div>
@@ -658,7 +660,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                       <!-- --------- NOMBRE ------ -->
-                      <div class="col-md-4 col-lg-4 col-xl-4 col-xxl-4 mt-3">
+                      <div class="col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-3">
                         <div class="form-group">
                           <label for="nombre" class="form-label">Nombre(*)</label>
                           <textarea class="form-control" name="nombre" id="nombre" rows="1"></textarea>
@@ -666,7 +668,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       </div>
 
                       <!-- --------- DESCRIPCION ------ -->
-                      <div class="col-md-4 col-lg-4 col-xl-8 col-xxl-8 mt-3">
+                      <div class="col-md-4 col-lg-4 col-xl-6 col-xxl-6 mt-3">
                         <div class="form-group">
                           <label for="descripcion" class="form-label">Descrición(*)</label>
                           <textarea class="form-control" name="descripcion" id="descripcion" rows="1"></textarea>

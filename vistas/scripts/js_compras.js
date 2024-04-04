@@ -71,19 +71,20 @@ function agregarDetalleComprobante(idproducto, individual) {
             </td>
 
             <td class="py-1 form-group">
-              <input type="number" class="w-100px valid_cantidad form-control producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); " onchange="replicar_value_input2(${cont}, '#cantidad_${cont}', this); update_price(); ">
+              <input type="number" class="w-100px valid_cantidad form-control producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input( this, '#cantidad_${cont}'); update_price(); ">
               <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();" >            
             </td> 
 
             <td class="py-1 form-group">
-              <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${cont}]" id="valid_precio_con_igv_${cont}" value="${e.data.precio_venta}" min="0.01" required onkeyup="replicar_value_input2(${cont}, '#precio_con_igv_${cont}', this); update_price(); " onchange="replicar_value_input2(${cont}, '#precio_con_igv_${cont}', this); update_price(); ">
+              <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${cont}]" id="valid_precio_con_igv_${cont}" value="${e.data.precio_venta}" min="0.01" required onkeyup="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); " onchange="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); ">
               <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${e.data.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
               <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
               <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
             </td> 
 
             <td class="py-1 form-group">
-              <input type="number" class="w-135px form-control descuento_${cont}" name="descuento[]" value="0" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+              <input type="number" class="w-100px form-control valid_descuento" name="valid_descuento_${cont}" value="0" min="0.00" required onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
+              <input type="hidden" class="descuento_${cont}" name="descuento[]" value="0" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
             </td>
 
             <td class="py-1 text-right"><span class="text-right subtotal_producto_${cont}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="0" > </td>
@@ -125,77 +126,96 @@ function agregarDetalleComprobante(idproducto, individual) {
 }
 
 
-function mostrarEditar_detalles_compra(idcompra) {
-
-  $.post("../ajax/compras.php?op=mostrarEditar_detalles_compra", {'idcompra': idcompra}, function (e, status) {
+function mostrar_editar_detalles_compra(idcompra) {
+  $("#cargando-1-formulario").hide();
+  $("#cargando-2-fomulario").show();
+  limpiar_form_compra();
+  show_hide_form(2);
+  $.post("../ajax/compras.php?op=mostrar_editar_detalles_compra", {'idcompra': idcompra}, function (e, status) {
 
     e = JSON.parse(e); console.log(e);
-    if (e.status == true) { 
-      $.each(e.data, function(index, producto) {
-        var img = producto.imagen == "" || producto.imagen == null ?img = `../assets/modulo/productos/no-producto.png` : `../assets/modulo/productos/${producto.imagen}` ;          
+    if (e.status == true) {    
 
-        if ($("#tipo_comprobante").select2("val") == "01") {
-          var subtotal = producto.cantidad * producto.precio_venta;
-        }else{
-          var subtotal = producto.cantidad * producto.precio_venta;
-        }
+      $("#idcompra").val(e.data.compra.idcompra);
+      $("#idproveedor").val(e.data.compra.idproveedor).trigger('change');
+      $("#tipo_comprobante").val(e.data.compra.tipo_comprobante).trigger('change');
+      $("#serie").val(e.data.compra.serie_comprobante);
+      $("#descripcion").val(e.data.compra.descripcion);
+      $("#fecha_compra").val(e.data.compra.fecha_compra);
+        
+      
+      // ------------ IMAGEN -----------
+      if (e.data.compra.comprobante == "" || e.data.compra.comprobante == null) { } else {
+        $("#doc_old_1").val(e.data.compra.comprobante);
+        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>imagen.${extrae_extencion(e.data.compra.comprobante)}</i></div></div>`);
+        // cargamos la imagen adecuada par el archivo
+        $("#doc1_ver").html(doc_view_extencion(e.data.compra.comprobante, 'assets/modulo/comprobante_compra', '100%', '210'));   //ruta imagen          
+      }
+
+      $("#impuesto").val(e.data.compra.val_igv);
+
+      $.each(e.data.compra_detalle, function(index, val1) {
+        var img = val1.imagen == "" || val1.imagen == null ?img = `../assets/modulo/productos/no-producto.png` : `../assets/modulo/productos/${val1.imagen}` ;          
 
         var fila = `
-          <tr class="filas" id="fila${index}"> 
+          <tr class="filas" id="fila${cont}"> 
 
             <td class="py-1">
-              <!--  <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${producto.idproducto}, ${index})"><i class="fas fa-pencil-alt"></i></button> -->
-              <button type="button" class="btn btn-danger btn-sm btn-file-delete-${index}" onclick="eliminarDetalle(${producto.idproducto}, ${index});"><i class="fas fa-times"></i></button>
+              <!--  <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${val1.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button> -->
+              <button type="button" class="btn btn-danger btn-sm btn-file-delete-${cont}" onclick="eliminarDetalle(${val1.idproducto}, ${cont});"><i class="fas fa-times"></i></button>
             </td>
 
             <td class="py-1 text-nowrap">
-              <i class="bi bi-upc"></i> ${producto.codigo} <br> <i class="bi bi-person"></i> ${producto.codigo_alterno}
+              <i class="bi bi-upc"></i> ${val1.codigo} <br> <i class="bi bi-person"></i> ${val1.codigo_alterno}
             </td>
 
             <td class="py-1">         
-              <input type="hidden" name="idproducto[]" value="${producto.idproducto}">
+              <input type="hidden" name="idproducto[]" value="${val1.idproducto}">
 
               <div class="d-flex flex-fill align-items-center">
-                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(producto.nombre)}')"> </span></div>
+                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(val1.nombre)}')"> </span></div>
                 <div>
-                  <h6 class="d-block fw-semibold text-primary">${producto.nombre}</h6>
-                  <span class="d-block fs-12 text-muted">Marca: <b>${producto.marca}</b> | Categoría: <b>${producto.categoria}</b></span> 
+                  <h6 class="d-block fw-semibold text-primary">${val1.nombre}</h6>
+                  <span class="d-block fs-12 text-muted">Marca: <b>${val1.marca}</b> | Categoría: <b>${val1.categoria}</b></span> 
                 </div>
               </div>
             </td>
 
             <td class="py-1">
-              <span class="unidad_medida_${index}">UNIDAD</span> 
-              <input type="hidden" class="unidad_medida_${index}" name="unidad_medida[]" id="unidad_medida[]" value="UNIDAD">
+              <span class="unidad_medida_${cont}">UNIDAD</span> 
+              <input type="hidden" class="unidad_medida_${cont}" name="unidad_medida[]" id="unidad_medida[]" value="UNIDAD">
             </td>
 
             <td class="py-1 form-group">
-              <input type="number" class="w-100px valid_cantidad form-control producto_${producto.idproducto} producto_selecionado" name="valid_cantidad[${index}]" id="valid_cantidad_${index}" value="${producto.cantidad}" min="0.01" required onkeyup="replicar_value_input2(${index}, '#cantidad_${index}', this); update_price(); " onchange="replicar_value_input2(${index}, '#cantidad_${index}', this); update_price(); ">
-              <input type="hidden" class="cantidad_${index}" name="cantidad[]" id="cantidad_${index}" value="${producto.cantidad}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();" >            
+              <input type="number" class="w-100px valid_cantidad form-control producto_${val1.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${val1.cantidad}" min="0.01" required onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
+              <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${val1.cantidad}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();" >            
             </td> 
 
             <td class="py-1 form-group">
-              <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${index}]" id="valid_precio_con_igv_${index}" value="${producto.precio_venta}" min="0.01" required onkeyup="replicar_value_input2(${index}, '#precio_con_igv_${index}', this); update_price(); " onchange="replicar_value_input2(${index}, '#precio_con_igv_${index}', this); update_price(); ">
-              <input type="hidden" class="precio_con_igv_${index}" name="precio_con_igv[]" id="precio_con_igv_${index}" value="${producto.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
-              <input type="hidden" class="precio_sin_igv_${index}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
-              <input type="hidden" class="precio_igv_${index}" name="precio_igv[]" id="precio_igv[]" value="0"  >
+              <input type="number" class="w-135px form-control valid_precio_con_igv" name="valid_precio_con_igv[${cont}]" id="valid_precio_con_igv_${cont}" value="${val1.precio_con_igv}" min="0.01" required onkeyup="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); " onchange="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); ">
+              <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${val1.precio_con_igv}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
+              <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
+              <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
             </td> 
 
             <td class="py-1 form-group">
-              <input type="number" class="w-135px form-control descuento_${index}" name="descuento[]" value="0" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+              <input type="number" class="w-100px form-control valid_descuento" name="valid_descuento_${cont}" value="${val1.descuento}" min="0.00" required onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
+              <input type="hidden" class="descuento_${cont}" name="descuento[]" value="${val1.descuento}" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
             </td>
 
-            <td class="py-1 text-right"><span class="text-right subtotal_producto_${index}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${index}" value="0" > </td>
+            <td class="py-1 text-right">
+              <span class="text-right subtotal_producto_${cont}" id="subtotal_producto">${val1.subtotal}</span> 
+              <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="${val1.subtotal}" > 
+            </td>
             <td class="py-1"><button type="button" onclick="modificarSubtotales();" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
             
           </tr>`;
 
         detalles = detalles + 1;
-        $("#tabla-productos-seleccionados").append(fila);
-        array_data_compra.push({ id_cont: index });
+        $("#tabla-productos-seleccionados tbody").append(fila);
+        array_data_compra.push({ id_cont: cont });
         modificarSubtotales();        
-        toastr_success("Agregado!!",`Producto: ${producto.nombre} agregado !!`, 700);
-
+        
         // reglas de validación     
         $('.valid_precio_con_igv').each(function(e) { 
           $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
@@ -205,11 +225,17 @@ function mostrarEditar_detalles_compra(idcompra) {
           $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
           $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
         });
+        $('.valid_descuento').each(function(e) { 
+          $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+          $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
+        });
 
-        index++;
+        cont++;
         evaluar();
       });
-
+      
+      $("#cargando-1-formulario").show();
+      $("#cargando-2-fomulario").hide();
     } else{ ver_errores(e); }
     
   });
@@ -222,13 +248,16 @@ function evaluar() {
   } else {
     $(".btn-guardar").hide();
     cont = 0;
-    $(".subtotal_compra").html("S/ 0.00");
+    $(".subtotal_compra").html("<span>S/</span> 0.00");
     $("#subtotal_compra").val(0);
 
-    $(".igv_compra").html("S/ 0.00");
+    $(".descuento_compra").html("<span>S/</span> 0.00");
+    $("#descuento_compra").val(0);
+
+    $(".igv_compra").html("<span>S/</span> 0.00");
     $("#igv_compra").val(0);
 
-    $(".total_venta").html("S/ 0.00");
+    $(".total_venta").html("<span>S/</span> 0.00");
     $("#total_compra").val(0);
 
   }
@@ -309,7 +338,7 @@ function modificarSubtotales() {
 
       calcularTotalesConIgv();
     }
-  } else if ($("#tipo_comprobante").select2("val") == "01" ) {
+  } else if ($("#tipo_comprobante").select2("val") == "01" || $("#tipo_comprobante").select2("val") == "03" ) { // FACTURA O BOLETA 
 
     $(".hidden").show(); //Mostramos: IGV, PRECIO SIN IGV
     $("#colspan_subtotal").attr("colspan", 7); //cambiamos el: colspan    
@@ -346,6 +375,7 @@ function modificarSubtotales() {
         // Calculamos: Subtotal de cada producto
         subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
         $(`.subtotal_producto_${key.id_cont}`).html(formato_miles(subtotal_producto.toFixed(2)));
+        $(`#subtotal_producto_${key.id_cont}`).val(redondearExp(subtotal_producto, 2 ));
       });
 
       calcularTotalesConIgv();
@@ -388,22 +418,26 @@ function modificarSubtotales() {
 function calcularTotalesSinIgv() {
   var total = 0.0;
   var igv = 0;
-  var mtotal = 0;
+  var descuento = 0;
 
   if (array_data_compra.length === 0) {
   } else {
     array_data_compra.forEach((element, index) => {
       total += parseFloat(quitar_formato_miles($(`.subtotal_producto_${element.id_cont}`).text()));
+      descuento += parseFloat( $(`.descuento_${element.id_cont}`).val() );
     });
 
-    $(".subtotal_compra").html("S/ " + formato_miles(total));
+    $(".subtotal_compra").html("<span>S/</span> " + formato_miles(total));
     $("#subtotal_compra").val(redondearExp(total, 2));
 
-    $(".igv_compra").html("S/ 0.00");
+    $(".descuento_compra").html("<span>S/</span> " + formato_miles(descuento));
+    $("#descuento_compra").val(redondearExp(descuento, 2));
+
+    $(".igv_compra").html("<span>S/</span> 0.00");
     $("#igv_compra").val(0.0);
     $(".val_igv").html('IGV (0%)');
 
-    $(".total_compra").html("S/ " + formato_miles(total));
+    $(".total_compra").html("<span>S/</span> " + formato_miles(total));
     $("#total_compra").val(redondearExp(total, 2));
     $(".pago_rapido").html(redondearExp(total, 2));
   }
@@ -413,11 +447,13 @@ function calcularTotalesConIgv() {
   var val_igv = $('#impuesto').val();
   var igv = 0;
   var total = 0.0;
+  var descuento = 0.0;
 
   var subotal_sin_igv = 0;
 
   array_data_compra.forEach((element, index) => {
     total += parseFloat(quitar_formato_miles($(`.subtotal_producto_${element.id_cont}`).text()));
+    descuento += parseFloat( $(`.descuento_${element.id_cont}`).val() );
   });
 
   //console.log(total); 
@@ -425,13 +461,16 @@ function calcularTotalesConIgv() {
   subotal_sin_igv = redondearExp(quitar_igv_del_precio(total, val_igv, 'entero') , 2);
   igv = (parseFloat(total) - parseFloat(subotal_sin_igv)).toFixed(2);
 
-  $(".subtotal_compra").html(`S/ ${formato_miles(subotal_sin_igv)}`);
+  $(".subtotal_compra").html(`<span>S/</span> ${formato_miles(subotal_sin_igv)}`);
   $("#subtotal_compra").val(redondearExp(subotal_sin_igv, 2));
 
-  $(".igv_compra").html("S/ " + formato_miles(igv));
+  $(".descuento_compra").html("<span>S/</span> " + formato_miles(descuento));
+  $("#descuento_compra").val(redondearExp(descuento, 2));
+
+  $(".igv_compra").html("<span>S/</span> " + formato_miles(igv));
   $("#igv_compra").val(igv);
 
-  $(".total_compra").html("S/ " + formato_miles(total));
+  $(".total_compra").html("<span>S/</span> " + formato_miles(total));
   $("#total_compra").val(redondearExp(total, 2));
   $(".pago_rapido").html(redondearExp(total, 2));
 
