@@ -16,7 +16,7 @@
 
   <!-- Bootstrap Css -->
   <link id="style" href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  
+
   <!-- Style Css -->
   <link href="assets/css/styles.css" rel="stylesheet">
 
@@ -35,6 +35,12 @@
 
   <!-- Choices Css -->
   <link rel="stylesheet" href="assets/libs/choices.js/public/assets/styles/choices.min.css">
+
+  <!-- Sweetalerts CSS -->
+  <link rel="stylesheet" href="../assets/libs/sweetalert2/sweetalert2.min.css">
+
+  <!-- Toastr -->
+  <link rel="stylesheet" href="assets/libs/toastr/toastr.min.css">
 
   <script>
     if (localStorage.ynexlandingdarktheme) {
@@ -178,7 +184,8 @@
           <div class="header-element align-items-center">
             <!-- Start::header-link|switcher-icon -->
             <div class="btn-list d-lg-none d-block">
-              <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-primary-light"> <i class="ti ti-brand-whatsapp"></i> Contactanos</a>
+              <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-primary-light"> <i class="ti ti-brand-whatsapp"></i>Soy Cliente</a>
+              <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-primary-light"> <i class="ti ti-brand-whatsapp"></i></a>
               <button class="btn btn-icon btn-success switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                 <i class="ri-settings-3-line"></i>
               </button>
@@ -284,7 +291,7 @@
                   </li>
                   <li class="slide">
                     <a href="#testimonials" class="side-menu__item">Testimonios</a>
-                  </li>                  
+                  </li>
                 </ul>
               </li>
               <!-- End::slide -->
@@ -297,7 +304,8 @@
             </div>
             <div class="d-lg-flex d-none">
               <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
-                <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-wave btn-primary"><i class="ti ti-brand-whatsapp"></i> Contactanos</a>
+                <button type="button" class="btn btn-wave btn-primary" data-bs-toggle="modal" data-bs-target="#login-cliente"><i class="ti ti-user"></i> Soy cliente</button>
+                <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-wave btn-primary"><i class="ti ti-brand-whatsapp"></i></a>
                 <button class="btn btn-wave btn-icon btn-light switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                   <i class="ri-settings-3-line"></i>
                 </button>
@@ -328,8 +336,8 @@
                   </div>
                   <p class="landing-banner-heading mb-3">Conexión rápida, navegación sin límites. <span class="text-secondary">Brartnet !</span></p>
                   <div class="fs-16 mb-5 text-fixed-white op-7">Brartnet - Conéctate con el mundo sin límites, con nuestra velocidad y fiabilidad. ¡Descubre un nuevo nivel de navegación con nosotros!</div>
-                  <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="m-1 btn btn-primary"> 
-                    Contactanos <i class="ti ti-brand-whatsapp ms-2 align-middle"></i> 
+                  <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="m-1 btn btn-primary">
+                    Contactanos <i class="ti ti-brand-whatsapp ms-2 align-middle"></i>
                   </a>
                 </div>
               </div>
@@ -375,7 +383,7 @@
                     <p class="mb-1 fs-20"><s>Plan a S/ 80</s></p>
                     <h4><b>S/ 70</b></h4>
                       <button type="button" class="btn btn-primary rounded-pill btn-wave mt-4">Me Interesa</button>
-                  
+
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-3 ">
@@ -389,7 +397,7 @@
                     <div class="align-self-end">
                       <button type="button" class="btn btn-primary rounded-pill btn-wave mt-4">Me Interesa</button>
                     </div>
-                    
+
                   </div>
                 </div>
               </div>
@@ -413,38 +421,38 @@
           <div class="row justify-content-between align-items-center mx-0">
             <div class="col-xxl-5 col-xl-5 col-lg-5 customize-image text-center">
               <div class="text-lg-end">
-              <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-indicators">
-          <button type="button" data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="0" class="active" aria-current="true"
-              aria-label="Slide 1"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="1" aria-label="Slide 2"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="2" aria-label="Slide 3"></button>
-      </div>
-      <div class="carousel-inner">
-          <div class="carousel-item active">
-              <img src="assets/images/media/landing/3.png" class="d-block w-100" alt="...">
-          </div>
-          <div class="carousel-item">
-              <img src="assets/images/media/landing/2.jpg" class="d-block w-100" alt="...">
-          </div>
-          <div class="carousel-item">
-              <img src="assets/images/media/landing/1.png" class="d-block w-100" alt="...">
-          </div>
-      </div>
-      <button class="carousel-control-prev" type="button"
-          data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button"
-          data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-      </button>
-  </div>
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide-to="0" class="active" aria-current="true"
+                        aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide-to="2" aria-label="Slide 3"></button>
+                  </div>
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="assets/images/media/landing/3.png" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/images/media/landing/2.jpg" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/images/media/landing/1.png" class="d-block w-100" alt="...">
+                    </div>
+                  </div>
+                  <button class="carousel-control-prev" type="button"
+                    data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button"
+                    data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
               </div>
             </div>
             <div class="col-xxl-6 col-xl-6 col-lg-6 pt-5 pb-0 px-lg-2 px-5 text-start">
@@ -560,46 +568,42 @@
       <!-- Start:: Section-5 -->
       <section class="section landing-Features" id="features">
         <div class="container text-center">
-          <p class="fs-12 fw-semibold text-success mb-1"><span class="landing-section-heading">TIPO DE SERVICIO</span></p>
-          <h2 class="fw-semibold mb-2 text-fixed-white ">PLANES DISPONIBLES SOLO PARA TI</h2>
+          <p class="fs-12 fw-semibold text-success mb-1"><span class="landing-section-heading">EXCELENCIA</span></p>
+          <h2 class="fw-semibold mb-2 text-fixed-white ">Conéctate a la excelencia</h2>
           <div class="row justify-content-center">
             <div class="col-xl-7">
-              <p class="text-fixed-white op-8 fs-15 mb-3 fw-normal">Elije el plan de internet que deseas adquirir </p>
+              <p class="text-fixed-white op-8 fs-15 mb-3 fw-normal">Nos esforzamos por brindarte una experiencia de excelencia en cada conexión. Sé parte de nuestra red y opten estos beneficios</p>
             </div>
           </div>
-            <div class="row d-flex justify-content-evenly mt-3">
-              <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-3">
-                <div class="p-3 text-center rounded-4 bg-secondary">
-                  <div class="btn btn-secondary">
-                    <span class="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                      <i class="las la-user-tie la-2x"></i>
-                    </span>
-                    <h5 class="fw-semibold mb-0 text-dark">INTERNET BASICO</h5>
+          <div class="text-start">
+            <div class="justify-content-center">
+              <div class="">
+                <div class="feature-logos mt-sm-5 flex-wrap">
+                  <div class="ms-sm-5 ms-2 text-center">
+                    <img src="assets/images/media/landing/web/calidad.png" alt="image" class="featur-icon">
+                    <h5 class="mt-3 text-fixed-white ">Calidad</h5>
                   </div>
-                </div>
-              </div>
-              <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-3">
-                <div class="p-3 text-center rounded-4 bg-secondary">
-                  <div class="btn btn-secondary">
-                    <span class="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                      <i class="las la-home la-2x"></i>
-                    </span>
-                    <h5 class="fw-semibold mb-0 text-dark">INTERNET HOGAR</h5>
+                  <div class="ms-sm-5 ms-2 text-center">
+                    <img src="assets/images/media/landing/web/velocidad.png" alt="image" class="featur-icon">
+                    <h5 class="mt-3 text-fixed-white ">Velocidad </h5>
                   </div>
-                </div>
-              </div>
-              <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-12 mb-3">
-                <div class="p-3 text-center rounded-4 bg-secondary">
-                  <div class="btn btn-secondary">
-                    <span class="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                      <i class="las la-building la-2x"></i>
-                    </span>
-                    <h5 class="fw-semibold mb-0 text-dark">INTERNET EMPRESA</h5>
+                  <div class="ms-sm-5 ms-2 text-center">
+                    <img src="assets/images/media/landing/web/estabilidad.png" alt="image" class="featur-icon">
+                    <h5 class="mt-3 text-fixed-white ">Estabilidad</h5>
+                  </div>
+                  <div class="ms-sm-5 ms-2 text-center">
+                    <img src="assets/images/media/landing/web/eficiencia.png" alt="image" class="featur-icon">
+                    <h5 class="mt-3 text-fixed-white ">Eficiencia</h5>
+                  </div>
+                  <div class="ms-sm-5 ms-2 text-center">
+                    <img src="assets/images/media/landing/web/disponibilidad.png" alt="image" class="featur-icon">
+                    <h5 class="mt-3 text-fixed-white ">Disponibilidad</h5>
                   </div>
                 </div>
               </div>
             </div>
-          
+            <div class="swiper-pagination mt-4"></div>
+          </div>
         </div>
       </section>
       <!-- End:: Section-5 -->
@@ -903,6 +907,305 @@
       </section>
       <!-- End:: Section-7 -->
 
+      <!-- Start:: Section-8 -->
+      <section class="section  " id="pricing">
+        <div class="container text-center">
+          <p class="fs-12 fw-semibold text-success mb-1"><span class="landing-section-heading">PAGOS</span></p>
+          <h3 class="fw-semibold mb-2">Métodos de pagos</h3>
+          <div class="row justify-content-center">
+            <div class="col-xl-9">
+              <p class="text-muted fs-15 mb-5 fw-normal">Nuestro servicio de internet viene con el rango de precios más asequible.</p>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center mb-4">
+            <ul class="nav nav-tabs mb-3 tab-style-6 bg-primary-transparent" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pricing-monthly" data-bs-toggle="tab" data-bs-target="#pricing-monthly-pane" type="button" role="tab" aria-controls="pricing-monthly-pane" aria-selected="true">Pago Mensual</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pricing-yearly" data-bs-toggle="tab" data-bs-target="#pago-anual" type="button" role="tab" aria-controls="pago-anual" aria-selected="true">Pago Mensual</button>
+              </li>
+            </ul>
+          </div>
+          <div class="card custom-card overflow-hidden shadow-none">
+            <div class="card-body p-0">
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane show active p-0" id="pricing-monthly-pane" role="tabpanel" aria-labelledby="pricing-monthly" tabindex="0">
+                  <div class="row">
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4">
+                        <h6 class="fw-semibold text-center">BASICO</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">s/ 50</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">Por mes</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">10 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte en línea</span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Contrato por 8 meses</span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Empezar</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4">
+                        <h6 class="fw-semibold text-center">BASICO+</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">S/ 60</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte en línea</span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Contrato por 8 meses</span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Empezar</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4 pricing-offer overflow-hidden">
+                        <!-- <span class="pricing-offer-details shadow">
+                          <span class="fw-semibold">10%</span> <span class="fs-10 op-8 ms-1">desc</span>
+                        </span> -->
+                        <h6 class="fw-semibold text-center">ESTANDAR</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">s/ 70</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte en línea</span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Contrato por 8 meses</span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Empezar</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4 pricing-offer overflow-hidden">
+                        <!-- <span class="pricing-offer-details shadow">
+                          <span class="fw-semibold">10%</span> <span class="fs-10 op-8 ms-1">desc</span>
+                        </span> -->
+                        <h6 class="fw-semibold text-center">ESTANDAR+</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">s/ 80</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte en línea</span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Contrato por 8 meses</span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Empezar</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4">
+                        <h6 class="fw-semibold text-center">PREMIUM</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">S/ 100</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte en línea</span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Contrato por 8 meses</span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Empezar</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4">
+                        <h6 class="fw-semibold text-center">PREMIUM ASPROC</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">S/ 210</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte en línea</span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Contrato por 8 meses</span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Empezar</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4">
+                        <h6 class="fw-semibold text-center">PREMIUM OLPESA</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">S/ 600</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte en línea</span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Contrato por 8 meses</span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Empezar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="toast-container position-fixed top-0 end-0 p-3" id="pricing-yearly-pane">
+                  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-default">
+                        <img class="bd-placeholder-img rounded me-2" src="assets/images/brand-logos/favicon.ico" alt="...">
+                        <strong class="me-auto">Ynex</strong>
+                        <small>11 mins ago</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">Hello, world! This is a toast message.</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End:: Section-8 -->
+
       <!-- Start:: Section-9 -->
       <section class="section section-bg" id="faq">
         <div class="container text-center">
@@ -978,7 +1281,7 @@
                         </div>
                       </div>
                     </div>
-                    
+
                   </div>
                 </div>
                 <div class="col-xl-6">
@@ -1043,7 +1346,7 @@
                         </div>
                       </div>
                     </div>
-                    
+
                   </div>
                 </div>
               </div>
@@ -1132,7 +1435,7 @@
               <div class="px-4">
                 <p class="fw-semibold mb-3"><a href="index.html"><img src="assets/images/brand-logos/desktop-dark.png" alt=""></a></p>
                 <p class="mb-2 op-6 fw-normal">
-                  Experimenta la velocidad y confiabilidad incomparables con BrartNet, tu proveedor de Internet de confianza en Perú! Con nuestra conexión de fibra óptica de alta velocidad, te ofrecemos una experiencia de navegación fluida y sin interrupciones. 
+                  Experimenta la velocidad y confiabilidad incomparables con BrartNet, tu proveedor de Internet de confianza en Perú! Con nuestra conexión de fibra óptica de alta velocidad, te ofrecemos una experiencia de navegación fluida y sin interrupciones.
                 </p>
                 <p class="mb-0 op-6 fw-normal">Conéctate al futuro, hoy mismo.</p>
               </div>
@@ -1241,6 +1544,64 @@
     </div>
     <!-- End::app-content -->
 
+    <!-- :::::::::::::::::::::::::::: Toast :::::::::::::::::::::::::::: -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+      <div id="pago-anual" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header text-default">
+          <img class="bd-placeholder-img rounded me-2" src="assets/images/brand-logos/logo-short.png" alt="...">
+          <strong class="me-auto">Pago Anual</strong>
+          <small>1 seg</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-white"> Este plan no está disponible en este momento, tenga paciencia.</div>
+      </div>
+
+    </div>
+    <!-- /.toast-container -->
+
+    <!-- :::::::::::::::::::::::::::: Modal Login - Usiario :::::::::::::::::::::::::::: -->
+    <div class="modal fade" id="login-cliente" tabindex="-1" aria-labelledby="login-clienteLabel" aria-hidden="true">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Iniciar Sesión</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form name="frmAcceso_c" id="frmAcceso_c" method="post"> 
+              <div class="mb-3">
+              <label for="login-cliente" class="form-label text-default">Usuario</label>
+                <input type="text" class="form-control form-control-lg" id="login-cliente" placeholder="nombre de usuario" required >
+              </div>
+              <div class="mb-3">
+                <label for="clave-cliente" class="form-label text-default d-block">Contraseña<a href="https://wa.link/oetgkf" target="_blank" class="float-end text-danger">Olvidaste tu contraseña ?</a></label>
+                <div class="input-group">
+                  <input type="password" class="form-control form-control-lg" id="clave-cliente" placeholder="password" required >
+                  <button class="btn btn-light" type="button" onclick="createpassword('clavea',this)" id="button-addon2"><i class="ri-eye-off-line align-middle"></i></button>
+                </div>
+                <div class="mt-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                    <label class="form-check-label text-muted fw-normal" for="defaultCheck1">
+                      Recordar contraseña ?
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-12 d-grid mt-2">
+                <a type="submit" class="btn btn-lg btn-primary login-btn"  href="ver_pagos.php">Iniciar sesion</a>
+              </div>
+            </form>
+            <div class="text-center">
+              <p class="fs-12 text-muted mt-4 ">¿No tienes una cuenta? <a href="https://wa.link/oetgkf" target="_blank" class="text-primary">Inscribirse</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.modal -->
+
+
   </div>
 
   <div class="scrollToTop">
@@ -1274,6 +1635,13 @@
 
   <!-- Sticky JS -->
   <script src="assets/js/sticky.js"></script>
+  <!-- Sweetalerts JS -->
+  <script src="../assets/libs/sweetalert2/sweetalert2.min.js"></script>
+
+  <!-- Toastr -->
+  <script src="assets/libs/toastr/toastr.min.js"></script>
+
+  <script src="assets/js/funcion_crud.js"></script>
 
 </body>
 
