@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-nav-layout="horizontal" data-nav-style="menu-click" data-menu-position="fixed" data-theme-mode="light">
+<html lang="es" dir="ltr" data-nav-layout="horizontal" data-nav-style="menu-click" data-menu-position="fixed" data-theme-mode="light">
 
 <head>
 
@@ -7,12 +7,12 @@
   <meta charset="UTF-8">
   <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title> YNEX - Bootstrap 5 Premium Admin & Dashboard Template </title>
+  <title> Brartnet | Soy Cliente</title>
   <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
   <meta name="Author" content="Spruko Technologies Private Limited">
 
   <!-- Favicon -->
-  <link rel="icon" href="assets/images/brand-logos/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="assets/images/brand-logos/ico-brartnet.svg" type="image/x-icon">
 
   <!-- Bootstrap Css -->
   <link id="style" href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -179,7 +179,7 @@
             <!-- Start::header-link|switcher-icon -->
             <div class="btn-list d-lg-none d-block">
               <a href="sign-up-basic.html" class="btn btn-primary-light">
-                Sign Up
+                Mis Datos
               </a>
               <button class="btn btn-icon btn-success switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                 <i class="ri-settings-3-line"></i>
@@ -221,74 +221,73 @@
             <ul class="main-menu">
               <!-- Start::slide -->
               <li class="slide">
-                <a class="side-menu__item" href="#home">
-                  <span class="side-menu__label">Home</span>
+                <a href="landing_v2.php" class="side-menu__item">
+                  <span class="side-menu__label">Inicio</span>
                 </a>
               </li>
               <!-- End::slide -->
               <!-- Start::slide -->
               <li class="slide">
-                <a href="#jobs" class="side-menu__item">
-                  <span class="side-menu__label">Jobs</span>
+                <a href="#about" class="side-menu__item">
+                  <span class="side-menu__label">Nosotros</span>
                 </a>
               </li>
               <!-- End::slide -->
               <!-- Start::slide -->
               <li class="slide">
-                <a href="#candidate" class="side-menu__item">
-                  <span class="side-menu__label">Candidates</span>
+                <a href="#testimonials" class="side-menu__item">
+                  <span class="side-menu__label">Clientes</span>
+                </a>
+              </li>
+              <!-- End::slide -->
+              <!-- Start::slide -->
+              <li class="slide">
+                <a href="#team" class="side-menu__item">
+                  <span class="side-menu__label">Equipo</span>
+                </a>
+              </li>
+              <!-- End::slide -->
+              <!-- Start::slide -->
+              <li class="slide">
+                <a href="#pricing" class="side-menu__item">
+                  <span class="side-menu__label">Precios</span>
+                </a>
+              </li>
+              <!-- End::slide -->
+              <!-- Start::slide -->
+              <li class="slide">
+                <a href="#faq" class="side-menu__item">
+                  <span class="side-menu__label">Faq's</span>
+                </a>
+              </li>
+              <!-- End::slide -->
+              <!-- Start::slide -->
+              <li class="slide">
+                <a href="#contact" class="side-menu__item">
+                  <span class="side-menu__label">Contacto</span>
                 </a>
               </li>
               <!-- End::slide -->
               <!-- Start::slide -->
               <li class="slide has-sub">
                 <a href="javascript:void(0);" class="side-menu__item">
-                  <span class="side-menu__label me-2">More</span>
+                  <span class="side-menu__label me-2">Más</span>
                   <i class="fe fe-chevron-right side-menu__angle op-8"></i>
                 </a>
                 <ul class="slide-menu child1">
                   <li class="slide">
-                    <a href="javascript:void(0);" class="side-menu__item">Level-1</a>
+                    <a href="#statistics" class="side-menu__item">Ver Pagos</a>
                   </li>
                   <li class="slide">
-                    <a href="javascript:void(0);" class="side-menu__item">Level-1-1</a>
+                    <a href="#our-mission" class="side-menu__item">Cotizar Precios</a>
                   </li>
-                  <li class="slide has-sub">
-                    <a href="javascript:void(0);" class="side-menu__item">Level-2
-                      <i class="fe fe-chevron-right side-menu__angle"></i></a>
-                    <ul class="slide-menu child2">
-                      <li class="slide">
-                        <a href="javascript:void(0);" class="side-menu__item">Level-2-1</a>
-                      </li>
-                      <li class="slide has-sub">
-                        <a href="javascript:void(0);" class="side-menu__item">Level-2-2
-                          <i class="fe fe-chevron-right side-menu__angle"></i></a>
-                        <ul class="slide-menu child3">
-                          <li class="slide">
-                            <a href="javascript:void(0);" class="side-menu__item">Level-2-2-1</a>
-                          </li>
-                          <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item">Level-2-2-2</a>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
+                  <li class="slide">
+                    <a href="#features" class="side-menu__item">Cobertura</a>
+                  </li>
+                  <li class="slide">
+                    <a href="#testimonials" class="side-menu__item">Testimonios</a>
                   </li>
                 </ul>
-              </li>
-              <!-- End::slide -->
-              <!-- Start::slide -->
-              <li class="slide">
-                <a href="#employers" class="side-menu__item">
-                  <span class="side-menu__label">For Employers</span>
-                </a>
-              </li>
-              <!-- End::slide -->
-              <!-- Start::slide -->
-              <li class="slide">
-                <a href="#career-advice" class="side-menu__item">
-                  <span class="side-menu__label">Career Advice</span>
-                </a>
               </li>
               <!-- End::slide -->
 
@@ -299,10 +298,10 @@
             <div class="d-lg-flex d-none">
               <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
                 <a href="sign-up-basic.html" class="btn btn-wave btn-primary">
-                  Sign Up
+                  <i class="ti ti-user"></i> Mis Datos
                 </a>
                 <a href="job-post.html" class="btn btn-wave btn-secondary">
-                  Job Post
+                   <i class="ri-logout-box-r-line"></i>
                 </a>
                 <button class="btn btn-wave btn-icon btn-light switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                   <i class="ri-settings-3-line"></i>
@@ -329,13 +328,13 @@
             <div class="row justify-content-center text-center">
               <div class="col-xxl-7 col-xl-7 col-lg-8">
                 <div class="">
-                  <h5 class="landing-banner-heading mb-3"><span class="text-secondary fw-bold">6000+ </span>Jobs, Find your dream job</h5>
-                  <p class="fs-18 mb-5 op-8 fw-normal text-fixed-white">Register &amp; get free access to latest openings worldwide. Create &amp; submit your resume with few easy steps.</p>
+                  <h5 class="landing-banner-heading mb-3"><span class="text-secondary fw-bold">Bienvenido</span> Jorge Martín del Águila </h5>
+                  <p class="fs-18 mb-5 op-8 fw-normal text-fixed-white">Explora los beneficios de tu servicio de internet con Brartnet. Revisa tus pagos, promociones y beneficios disponibles solo para ti</p>
                   <div class="mb-3 custom-form-group">
-                    <input type="text" class="form-control form-control-lg shadow-sm" placeholder="Job title, Keywords or Company.." aria-label="Recipient's username">
+                    <input type="text" class="form-control form-control-lg shadow-sm" placeholder="Buscar pagos" aria-label="Recipient's username">
                     <div class="custom-form-btn bg-transparent">
                       <a href="javascript:void(0);" class="gps-location"><i class="ti ti-current-location"></i></a>
-                      <button class="btn btn-primary border-0" type="button"><i class="bi bi-search me-sm-2"></i> <span>Search</span></button>
+                      <button class="btn btn-primary border-0" type="button"><i class="bi bi-search me-sm-2"></i> <span>Buscar</span></button>
                     </div>
                   </div>
                 </div>
@@ -351,13 +350,13 @@
         <div class="container">
           <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-5">
             <div>
-              <p class="fs-12 fw-semibold mb-1">Find jobs</p>
-              <h3 class="fw-semibold mb-0">Browse Jobs by Top Categories</h3>
-              <span class="text-muted fs-15 fw-normal d-block">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</span>
+              <p class="fs-12 fw-semibold mb-1">+ SERVICIOS</p>
+              <h3 class="fw-semibold mb-0">Conoce nuestros servicios disponibles</h3>
+              <span class="text-muted fs-15 fw-normal d-block">Estos servicios son exclusivos para clientes registrados</span>
             </div>
             <div>
               <a href="javascript:void(0);" class="btn btn-wave btn-primary">
-                View All Categories <i class="bi bi-arrow-right"></i>
+                Ver Todos <i class="bi bi-arrow-right"></i>
               </a>
             </div>
           </div>
@@ -370,9 +369,9 @@
                   </div>
                   <div class="col-md-9 col-8 my-auto">
                     <div class="card-body">
-                      <h5 class="card-title fw-semibold">Business Development</h5>
-                      <p><span class="text-default fw-semibold">120 Jobs</span> available</p>
-                      <a class="text-primary fw-semibold" href="javascript:void(0);">Explore Jobs<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
+                      <h5 class="card-title fw-semibold">Consulta en línea</h5>
+                      <p><span class="text-default fw-semibold">50 operadoras</span> en línea</p>
+                      <a class="text-primary fw-semibold" href="javascript:void(0);">Consultar<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
                     </div>
                   </div>
                 </div>
@@ -386,9 +385,25 @@
                   </div>
                   <div class="col-md-9 col-8 my-auto">
                     <div class="card-body">
-                      <h5 class="card-title fw-semibold">Customer Support</h5>
-                      <p><span class="text-default fw-semibold">370 Jobs</span> available</p>
-                      <a class="text-primary fw-semibold" href="javascript:void(0);">Explore Jobs<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
+                      <h5 class="card-title fw-semibold">Soporte Técnico</h5>
+                      <p><span class="text-default fw-semibold">50 Técnicos en Redes</span> disponibles</p>
+                      <a class="text-primary fw-semibold" href="javascript:void(0);">Solicitar<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="card custom-card border">
+                <div class="row g-0">
+                  <div class="col-md-3 col-4">
+                    <img src="assets/images/media/jobs-landing/5.jpg" class="img-fluid rounded-start h-100 browse-jobs-image" alt="...">
+                  </div>
+                  <div class="col-md-9 col-8 my-auto">
+                    <div class="card-body">
+                      <h5 class="card-title fw-semibold">Estado Financiero</h5>
+                      <p>¿está retrasado en sus pagos?</p>
+                      <a class="text-primary fw-semibold" href="javascript:void(0);">Consultar<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
                     </div>
                   </div>
                 </div>
@@ -403,40 +418,8 @@
                   <div class="col-md-9 col-8 my-auto">
                     <div class="card-body">
                       <h5 class="card-title fw-semibold">Marketing</h5>
-                      <p><span class="text-default fw-semibold">743 Jobs</span> available</p>
-                      <a class="text-primary fw-semibold" href="javascript:void(0);">Explore Jobs<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-12">
-              <div class="card custom-card border">
-                <div class="row g-0">
-                  <div class="col-md-3 col-4">
-                    <img src="assets/images/media/jobs-landing/4.jpg" class="img-fluid rounded-start h-100 browse-jobs-image" alt="...">
-                  </div>
-                  <div class="col-md-9 col-8 my-auto">
-                    <div class="card-body">
-                      <h5 class="card-title fw-semibold">Product Management</h5>
-                      <p><span class="text-default fw-semibold">156 Jobs</span> available</p>
-                      <a class="text-primary fw-semibold" href="javascript:void(0);">Explore Jobs<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-12">
-              <div class="card custom-card border">
-                <div class="row g-0">
-                  <div class="col-md-3 col-4">
-                    <img src="assets/images/media/jobs-landing/5.jpg" class="img-fluid rounded-start h-100 browse-jobs-image" alt="...">
-                  </div>
-                  <div class="col-md-9 col-8 my-auto">
-                    <div class="card-body">
-                      <h5 class="card-title fw-semibold">Accountant</h5>
-                      <p><span class="text-default fw-semibold">67 Jobs</span> available</p>
-                      <a class="text-primary fw-semibold" href="javascript:void(0);">Explore Jobs<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
+                      <p><span class="text-default fw-semibold">30 Acesores de ventas</span></p>
+                      <a class="text-primary fw-semibold" href="javascript:void(0);">Consultar<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
                     </div>
                   </div>
                 </div>
@@ -450,9 +433,25 @@
                   </div>
                   <div class="col-md-9 col-8 my-auto">
                     <div class="card-body">
-                      <h5 class="card-title fw-semibold">Technical Support</h5>
-                      <p><span class="text-default fw-semibold">140 Jobs</span> available</p>
-                      <a class="text-primary fw-semibold" href="javascript:void(0);">Explore Jobs<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
+                      <h5 class="card-title fw-semibold">Quiero ser Trabajador</h5>
+                      <p>Ofrece nuestros servicios y <span class="text-default fw-semibold">gana dinero</span></p>
+                      <a class="text-primary fw-semibold" href="javascript:void(0);">Consultar<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="card custom-card border">
+                <div class="row g-0">
+                  <div class="col-md-3 col-4">
+                    <img src="assets/images/media/jobs-landing/4.jpg" class="img-fluid rounded-start h-100 browse-jobs-image" alt="...">
+                  </div>
+                  <div class="col-md-9 col-8 my-auto">
+                    <div class="card-body">
+                      <h5 class="card-title fw-semibold">Equipo Brartnet</h5>
+                      <p>Conoce a nuestro equipo</p>
+                      <a class="text-primary fw-semibold" href="javascript:void(0);">Consultar<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
                     </div>
                   </div>
                 </div>
@@ -468,86 +467,230 @@
         <div class="container text-center">
           <div class="row justify-content-center text-center mb-5">
             <div class="col-xl-6">
-              <p class="fs-12 fw-semibold mb-1"><span class="landing-section-heading">Steps</span></p>
-              <h3 class="fw-semibold mb-2">How it works ?</h3>
-              <span class="text-muted fs-15 fw-normal d-block">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</span>
+              <p class="fs-12 fw-semibold mb-1"><span class="landing-section-heading">LISTA</span></p>
+              <h3 class="fw-semibold mb-2">Mis Pagos Realizados</h3>
+              <span class="text-muted fs-15 fw-normal d-block">Aquí se visualizan todos los pagos que realizaste cada mes</span>
             </div>
           </div>
-          <div class="row text-start">
-            <div class="col-12 col-md-4">
-              <div class="card custom-card border">
-                <div class="card-body rounded">
-                  <div class="mb-3 ms-1">
-                    <div class="icon-style">
-                      <span class="avatar avatar-lg avatar-rounded bg-primary svg-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-                          <path style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none" d="m12.5 4.9999251c-2.4670541 0-4.5 2.0329459-4.5 4.5v45c0 2.4670541 2.0329521 4.4999916 4.5 4.5h22a1.5001499 1.5001499 0 1 0 0-3h-22c-0.85695207-2.92e-6 -1.5-0.64305409-1.5-1.5v-45c0-0.85694591 0.64305409-1.5 1.5-1.5h33c0.85694591 0 1.5 0.64305409 1.5 1.5v18a1.5001499 1.5001499 0 1 0 3 0v-18c0-2.4670541-2.0329459-4.5-4.5-4.5z" color="#000" />
-                          <rect width="20" height="3" x="19.021" y="20" rx="1.5" ry="1.5" />
-                          <rect width="20" height="3" x="19.021" y="26" rx="1.5" ry="1.5" />
-                          <rect width="12" height="3" x="19.021" y="32" rx="1.5" ry="1.5" />
-                          <path style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none" d="m54.890477 30.837319c-2.1365316-1.2335271-4.9135872-0.48941726-6.1471143 1.6471143l-6.9990234 12.122664a1.50015 1.50015 0 1 0 2.5980762 1.5l6.9990234-12.122664c0.42847293-0.74213689 1.3069012-0.97751103 2.0490381-0.54903811l0.8660254 0.5c0.7421369 0.42847293 0.97751103 1.3069012 0.54903811 2.0490381l-10.717773 18.563728-2.8746289 0.97900337-0.58947268-2.9790034 1.21875-2.1109369a1.50015 1.50015 0 1 0-2.5980762-1.5l-1.5 2.5980762a1.50015 1.50015 0 0 0-0.17276402 1.0414236l1.0310889 5.2141016a1.50015 1.50015 0 0 0 1.955323 1.1289062l5.0310889-1.7141016a1.50015 1.50015 0 0 0 0.81551724-0.6703298l10.999023-19.050867c1.2335271-2.1365316 0.48941727-4.9135872-1.6471143-6.1471143z" color="#000" />
-                        </svg>
-                      </span>
+          <div class="row">
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4">
+                        <h6 class="fw-semibold text-center">Boleta Electronica 001</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">s/ 70</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">03/03/2024</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">N° Operación<span class="badge bg-light text-default ms-1">00128</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Cod. Cliente<span class="badge bg-light text-default ms-1">20132024</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Plan<span class="badge bg-light text-default ms-1">STANDAR</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha Vencimiento<span class="badge bg-light text-default ms-1">05/03/2024</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Descuento<span class="badge bg-light text-default ms-1">--</span></span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Ver Comprobante</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4">
+                        <h6 class="fw-semibold text-center">Boleta Electronica 002</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">S/ 70</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">03/04/2024</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">N° Operación<span class="badge bg-light text-default ms-1">00128</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Cod. Cliente<span class="badge bg-light text-default ms-1">20132024</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Plan<span class="badge bg-light text-default ms-1">STANDAR</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha Vencimiento<span class="badge bg-light text-default ms-1">05/03/2024</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Descuento<span class="badge bg-light text-default ms-1">--</span></span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Ver Comprobante</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4 pricing-offer overflow-hidden">
+                        <!-- <span class="pricing-offer-details shadow">
+                          <span class="fw-semibold">10%</span> <span class="fs-10 op-8 ms-1">desc</span>
+                        </span> -->
+                        <h6 class="fw-semibold text-center">Boleta Electronica 003</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">s/ 70</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">03/05/2024</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">N° Operación<span class="badge bg-light text-default ms-1">00128</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Cod. Cliente<span class="badge bg-light text-default ms-1">20132024</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Plan<span class="badge bg-light text-default ms-1">STANDAR</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha Vencimiento<span class="badge bg-light text-default ms-1">05/03/2024</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Descuento<span class="badge bg-light text-default ms-1">--</span></span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Ver Comprobante</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4 pricing-offer overflow-hidden">
+                        <!-- <span class="pricing-offer-details shadow">
+                          <span class="fw-semibold">10%</span> <span class="fs-10 op-8 ms-1">desc</span>
+                        </span> -->
+                        <h6 class="fw-semibold text-center">Boleta Electronica 004</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">s/ 70</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">03/06/2024</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">N° Operación<span class="badge bg-light text-default ms-1">00128</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Cod. Cliente<span class="badge bg-light text-default ms-1">20132024</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Plan<span class="badge bg-light text-default ms-1">STANDAR</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha Vencimiento<span class="badge bg-light text-default ms-1">05/03/2024</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Descuento<span class="badge bg-light text-default ms-1">--</span></span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Ver Comprobante</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4">
+                        <h6 class="fw-semibold text-center">Boleta Electronica 005</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">S/ 70</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">03/07/2024</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">N° Operación<span class="badge bg-light text-default ms-1">00128</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Cod. Cliente<span class="badge bg-light text-default ms-1">20132024</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Plan<span class="badge bg-light text-default ms-1">STANDAR</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha Vencimiento<span class="badge bg-light text-default ms-1">05/03/2024</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Descuento<span class="badge bg-light text-default ms-1">--</span></span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Ver Comprobante</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+                      <div class="p-4">
+                        <h6 class="fw-semibold text-center">Boleta Electronica 006</h6>
+                        <div class="py-3 d-flex align-items-center justify-content-center">
+                          <i class="ri-router-line la-4x text-primary"></i>
+                          <div class="text-end ms-5">
+                            <p class="fs-25 fw-semibold mb-0">S/ 70</p>
+                            <p class="text-muted fs-11 fw-semibold mb-0">03/08/2024</p>
+                          </div>
+                        </div>
+                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+                          <li class="mb-3">
+                            <span class="text-muted">N° Operación<span class="badge bg-light text-default ms-1">00128</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Cod. Cliente<span class="badge bg-light text-default ms-1">20132024</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Plan<span class="badge bg-light text-default ms-1">STANDAR</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Velocidad<span class="badge bg-light text-default ms-1">100 mbps</span></span>
+                          </li>
+                          <li class="mb-3">
+                            <span class="text-muted">Fecha Vencimiento<span class="badge bg-light text-default ms-1">05/03/2024</span></span>
+                          </li>
+                          <li class="mb-4">
+                            <span class="text-muted">Descuento<span class="badge bg-light text-default ms-1">--</span></span>
+                          </li>
+                        </ul>
+                        <div class="d-grid">
+                          <button class="btn btn-primary-light btn-wave">Ver Comprobante</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <h5 class="fw-semibold">
-                    Register Your Account
-                  </h5>
-                  <p class="op-8">
-                    Est amet sit vero sanctus labore no sed ipsum ipsum nonumy. Sit ipsum sanctus ea.
-                  </p>
-                  <a class="mx-1 text-primary fw-semibold" href="javascript:void(0);">Register Now<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="card custom-card border">
-                <div class="card-body rounded">
-                  <div class="mb-3 ms-1">
-                    <div class="icon-style">
-                      <span class="avatar avatar-lg avatar-rounded bg-primary svg-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-                          <path style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none" d="M25.5 32c-9.1150542 0-16.5 7.3849458-16.5 16.5v6c0 2.4670542 2.0329458 4.5 4.5 4.5h18a1.50015 1.50015 0 1 0 0-3h-18c-.85694585 0-1.5-.64305415-1.5-1.5v-6c0-7.5049458 5.9950542-13.5 13.5-13.5h13c1.3451063 0 2.6376951.19436413 3.8574219.5546875a1.50015 1.50015 0 1 0 .84960937-2.8769531c-1.4925263-.44091195-3.0733463-.67773438-4.7070312-.67773438zM32 5c-6.60965 0-12 5.39035-12 12s5.39035 12 12 12 12-5.39035 12-12-5.39035-12-12-12zm0 3c4.9883297 0 9 4.0116703 9 9s-4.0116703 9-9 9-9-4.0116703-9-9 4.0116703-9 9-9z" color="#000" />
-                          <path style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none" d="m45 37c-6.60965 0-12 5.39035-12 12s5.39035 12 12 12c2.1925542 0 4.343574-0.60010252 6.21875-1.7363281a1.5002912 1.5002912 0 1 0-1.5546875-2.5664063c-1.4065214 0.85225367-3.0194839 1.3027344-4.6640625 1.3027344-4.9883297 0-9-4.0116703-9-9s4.0116703-9 9-9 9 4.0116703 9 9c0 1.644402-0.45065351 3.2576429-1.3027344 4.6640625a1.5002912 1.5002912 0 1 0 2.5664063 1.5546875c1.1359953-1.8750403 1.7363281-4.0264313 1.7363281-6.21875 0-6.60965-5.39035-12-12-12z" color="#000" />
-                          <path d="m45 43.999848c-0.831 0-1.5 0.669-1.5 1.5v2h-2c-0.831 0-1.5 0.669-1.5 1.5s0.669 1.5 1.5 1.5h2v2c0 0.831 0.669 1.5 1.5 1.5 0.83100001 0 1.5-0.669 1.5-1.5v-2h2c0.83100001 0 1.5-0.669 1.5-1.5s-0.66899999-1.5-1.5-1.5h-2v-2c0-0.831-0.66899999-1.5-1.5-1.5z" />
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                  <h5 class="fw-semibold">
-                    Complete Your Profile
-                  </h5>
-                  <p class="op-8">
-                    Est amet sit vero sanctus labore no sed ipsum ipsum nonumy. Sit ipsum sanctus ea.
-                  </p>
-                  <a class="mx-1 text-primary fw-semibold" href="javascript:void(0);">Complete Profile<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="card custom-card border">
-                <div class="card-body rounded">
-                  <div class="mb-3 ms-1">
-                    <div class="icon-style">
-                      <span class="avatar avatar-lg avatar-rounded bg-primary svg-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 64 64" viewBox="0 0 64 64">
-                          <path style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none" d="m24.5 8c-2.4675144 0-4.5 2.0324856-4.5 4.5v3.5h-10.5c-2.4675142 0-4.5 2.0324854-4.5 4.5v4.0625c0 0.95311676 0.30189465 1.892559 0.875 2.6679688 2.2780134 3.0821421 10.711221 12.769531 26.125 12.769531s23.846986-9.6873908 26.125-12.769531c0.57310844-0.77541208 0.875-1.7148549 0.875-2.6679688v-4.0625c0-2.4675155-2.0324866-4.5-4.5-4.5h-10.5v-3.5c0-2.4675155-2.0324866-4.5-4.5-4.5zm0 3h15c0.84619198 0 1.5 0.65380634 1.5 1.5v5a1.50015 1.50015 0 0 0 1.5 1.5h12c0.84619198 0 1.5 0.65380634 1.5 1.5v4.0625c0 0.32871995-0.0983236 0.6293397-0.28710938 0.88476562-1.9720162 2.6681266-9.555297 11.552734-23.712891 11.552734s-21.740877-8.8846093-23.712891-11.552734c-0.18878705-0.25542828-0.28710938-0.55604878-0.28710938-0.88476562v-4.0625c0-0.84619457 0.65380578-1.5 1.5-1.5h28a1.50015 1.50015 0 1 0 0-3h-14.5v-3.5c0-0.84619481 0.65380519-1.5 1.5-1.5z" color="#000" />
-                          <path style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none" d="m6.4765625 30.978516a1.50015 1.50015 0 0 0-1.4765625 1.5214844v19c0 2.4670537 2.0329452 4.5 4.5 4.5h45c2.4670543 0 4.5-2.0329457 4.5-4.5v-19a1.50015 1.50015 0 1 0-3 0v19c0 0.85694314-0.64305686 1.5-1.5 1.5h-45c-0.85694462 0-1.5-0.64305626-1.5-1.5v-19a1.50015 1.50015 0 0 0-1.5234375-1.5214844z" color="#000" />
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                  <h5 class="fw-semibold">
-                    Apply job / Hire
-                  </h5>
-                  <p class="op-8">
-                    Est amet sit vero sanctus labore no sed ipsum ipsum nonumy. Sit ipsum sanctus ea.
-                  </p>
-                  <a class="mx-1 text-primary fw-semibold" href="javascript:void(0);">Apply Now<i class="ri-arrow-right-s-line align-middle transform-arrow lh-1"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
       <!-- End:: Section-3 -->
