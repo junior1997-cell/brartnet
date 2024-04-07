@@ -23,18 +23,18 @@ if (!isset($_SESSION["user_nombre"])) {
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
     $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-    $idcompra           = isset($_POST["idcompra"]) ? limpiarCadena($_POST["idcompra"]) : "";    
-    $idproveedor           = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";    
-    $tipo_comprobante           = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
-    $serie           = isset($_POST["serie"]) ? limpiarCadena($_POST["serie"]) : "";    
-    $descripcion           = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";    
-    $subtotal_compra           = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";    
-    $tipo_gravada           = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";    
-    $igv_compra           = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";    
-    $total_compra           = isset($_POST["total_compra"]) ? limpiarCadena($_POST["total_compra"]) : "";   
-    $impuesto           = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : ""; 
-    $img_comprob       = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : ""; 
-    $fecha_compra           = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";   
+    $idcompra         = isset($_POST["idcompra"]) ? limpiarCadena($_POST["idcompra"]) : "";    
+    $idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";    
+    $tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
+    $serie            = isset($_POST["serie"]) ? limpiarCadena($_POST["serie"]) : "";    
+    $descripcion      = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";    
+    $subtotal_compra  = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";    
+    $tipo_gravada     = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";    
+    $igv_compra       = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";    
+    $total_compra     = isset($_POST["total_compra"]) ? limpiarCadena($_POST["total_compra"]) : "";   
+    $impuesto         = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : ""; 
+    $img_comprob      = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : ""; 
+    $fecha_compra     = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";   
 
 
     switch ($_GET["op"]){

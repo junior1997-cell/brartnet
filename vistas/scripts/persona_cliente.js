@@ -5,12 +5,15 @@ function init() {
 
   $("#bloc_Recurso").addClass("menu-open");
 
-  $("#mRecurso").addClass("active");
-
-  tabla_principal_cliente();
+  $("#mRecurso").addClass("active");  
 
   $(".btn-guardar").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-cliente").submit(); } else { toastr_warning("Espera", "Procesando Datos", 3000); } });
 
+  // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 
+  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', null, '.charge_filtro_trabajador');
+  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_dia_pago",   '#filtro_dia_pago',       null, '.charge_filtro_dia_pago');
+  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan", '#filtro_plan', null, '.charge_filtro_plan');
+  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena", '#filtro_zona_antena', null, '.charge_filtro_zona_antena');
 
   lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
   lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
@@ -19,8 +22,19 @@ function init() {
   lista_select2("../ajax/persona_cliente.php?op=select2_zona_antena", '#idzona_antena', null);
   lista_select2("../ajax/persona_cliente.php?op=select2_trabajador", '#idpersona_trabajador', null);
   lista_select2("../ajax/persona_cliente.php?op=selec_centroProbl", '#idselec_centroProbl', null);
-
+  
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
+  $("#filtro_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_dia_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_plan").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_zona_antena").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+
+  $("#filtro_p_all_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_p_all_anio_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_p_all_dia_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_p_all_plan").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_p_all_zona_antena").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  
   $("#tipo_documento").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#distrito").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
@@ -30,8 +44,6 @@ function init() {
 
   $("#tipo_persona_sunat").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#idselec_centroProbl").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-
-
 }
 
 //Función limpiar
@@ -86,27 +98,55 @@ function limpiar_cliente() {
 function wiev_tabla_formulario(flag) {
 
   if (flag == 1) {
-
-    $("#seccion_cliente").show();
-    $("#seccion_form").hide();
+    $(".div-filtro").show();
+    $("#div-tabla").show();
+    $("#div-form").hide();
+    $("#div-pago-x-cliente").hide();
+    $("#div-pago-all-cliente").hide();
 
     $(".btn-agregar").show();
+    $(".btn-pagos-all").show();
     $(".btn-guardar").hide();
     $(".btn-cancelar").hide();
     limpiar_cliente();
 
-  } else if (flag == 2) {
-
-    $("#seccion_cliente").hide();
-    $("#seccion_form").show();
+  } else if (flag == 2) { // EDITAR O REGISTRA UN CLIENTE
+    $(".div-filtro").hide();
+    $("#div-tabla").hide();
+    $("#div-form").show();
+    $("#div-pago-x-cliente").hide();
+    $("#div-pago-all-cliente").hide();
 
     $(".btn-agregar").hide();
+    $(".btn-pagos-all").hide();
     $(".btn-guardar").show();
     $(".btn-cancelar").show();
+  } else if (flag == 3) { // VER PAGOS POR CLIENTE
+    $(".div-filtro").hide();
+    $("#div-tabla").hide();
+    $("#div-form").hide();
+    $("#div-pago-x-cliente").show();
+    $("#div-pago-all-cliente").hide();
 
-  }
+    $(".btn-agregar").hide();
+    $(".btn-pagos-all").hide();
+    $(".btn-guardar").hide();
+    $(".btn-regresar").show();
+  } else if (flag == 4) { // VER PAGOS TODOS CLIENTE
+    $(".div-filtro").hide();
+    $("#div-tabla").hide();
+    $("#div-form").hide();
+    $("#div-pago-x-cliente").hide();
+    $("#div-pago-all-cliente").show();
+
+    $(".btn-agregar").hide();
+    $(".btn-pagos-all").hide();
+    $(".btn-guardar").hide();
+    $(".btn-cancelar").show();
+  }  
 
 }
+
 
 //nombres segun el tipo de doc
 $('#tipo_documento').change(function () {
@@ -137,7 +177,7 @@ function llenar_dep_prov_ubig(input) {
   } else {
     var iddistrito = $(input).select2('data')[0].element.attributes.iddistrito.value;
     $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {
-      e = JSON.parse(e); console.log(e);
+      e = JSON.parse(e); 
       $("#departamento").val(e.data.departamento);
       $("#provincia").val(e.data.provincia);
       $("#ubigeo").val(e.data.ubigeo_inei);
@@ -165,7 +205,7 @@ function funtion_switch() {
 }
 
 //Función Listar
-function tabla_principal_cliente() {
+function tabla_principal_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
 
   tabla_cliente = $('#tabla-cliente').dataTable({
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
@@ -180,7 +220,7 @@ function tabla_principal_cliente() {
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: '../ajax/persona_cliente.php?op=tabla_principal_cliente',
+      url: `../ajax/persona_cliente.php?op=tabla_principal_cliente&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -193,6 +233,7 @@ function tabla_principal_cliente() {
         $(".buttons-pdf").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'PDF');
         $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
         $('[data-bs-toggle="tooltip"]').tooltip();
+        $('#id_buscando_tabla').remove();
       },
       dataSrc: function (e) {
 				if (e.status != true) {  ver_errores(e); }  return e.aaData;
@@ -362,26 +403,6 @@ function mostrar_cliente(idpersona_cliente) {
   }).fail(function (e) { ver_errores(e); });
 }
 
-//Función para desactivar registros
-// function eliminar_cliente(idpersona_cliente, nombre) {
-
-//   crud_eliminar_papelera(
-//     "../ajax/persona_cliente.php?op=desactivar",
-//     "../ajax/persona_cliente.php?op=eliminar",
-//     idpersona_cliente,
-//     "!Elija una opción¡",
-//     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
-//     function () { sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado.") },
-//     function () { sw_success('Eliminado!', 'Tu registro ha sido Eliminado.') },
-//     function () { tabla_cliente.ajax.reload(null, false); },
-//     false,
-//     false,
-//     false,
-//     false
-//   );
-
-// }
-
 //Función para activar registros
 function activar(idusuario, nombre) {
 	crud_simple_alerta(
@@ -423,29 +444,35 @@ function eliminar_cliente(idtrabajador, nombre) {
     },
     allowOutsideClick: () => !Swal.isLoading()
   }).then((result) => {
-    console.log(result );
+    
     if (result.isConfirmed) {    
       Swal.fire({
         icon: "warning",
         title: 'Antes de dar de baja ingrese una Observación',
-        input: 'textarea',
-        inputAttributes: { autocapitalize: 'off' },
+        input: 'textarea',        
+        inputAttributes: { autocapitalize: 'off', Class: 'form-control', Placeholder: 'ejemp: Corte de servicio por falta de pago.',  },
+        customClass: {
+          validationMessage: 'my-validation-message',
+        },
         showCancelButton: true,
         cancelButtonColor: "#d33",
         confirmButtonText: 'Si, dar de baja!',
         confirmButtonColor: "#28a745",
         showLoaderOnConfirm: true,
-        preConfirm: (login) => {
-          // console.log(login);
-          return fetch(`../ajax/persona_cliente.php?op=desactivar_cliente&id_tabla=${idtrabajador}&descripcion=${login}`).then(response => {
-            console.log(response);
-            if (!response.ok) { throw new Error(response.statusText); }
-            return response.json();
-          }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+        preConfirm: (value) => {
+          console.log(value);
+          if (!value) {
+            Swal.showValidationMessage('La <i class="fw-bold">&nbsp;NOTA&nbsp;</i> es requerido.')
+          }else{            
+            return fetch(`../ajax/persona_cliente.php?op=desactivar_cliente&id_tabla=${idtrabajador}&descripcion=${value}`).then(response => {
+              console.log(response);
+              if (!response.ok) { throw new Error(response.statusText); }
+              return response.json();
+            }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+          }          
         },
         allowOutsideClick: () => !Swal.isLoading()
-      }).then((result) => {
-        console.log(result );
+      }).then((result) => {       
         if (result.isConfirmed) {
           if (result.value.status) {
             Swal.fire("Expulsado!", "Tu trabajador ha sido expulsado.", "success");
@@ -465,6 +492,47 @@ function eliminar_cliente(idtrabajador, nombre) {
         ver_errores(result.value);
       }      
     }
+  });
+}
+
+// .....::::::::::::::::::::::::::::::::::::: V E R   P A G O S  X  C L I E N T E   :::::::::::::::::::::::::::::::::::::::..
+function ver_pagos_x_cliente(idcliente) {
+  wiev_tabla_formulario(3);
+  $('#div_tabla_x_cliente').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
+  
+  $.get(`../ajax/persona_cliente.php?op=ver_pagos_x_cliente&idcliente=${idcliente}`,  function (e, textStatus, jqXHR) {
+    $('#div_tabla_x_cliente').html(e);
+    
+    $('[data-bs-toggle="tooltip"]').tooltip();
+  });
+}
+
+// .....::::::::::::::::::::::::::::::::::::: V E R   P A G O S  ALL  C L I E N T E   :::::::::::::::::::::::::::::::::::::::..
+
+var reload_filtro_pagos_all = false;
+
+function cargar_fltros_pagos_all_cliente() {
+  wiev_tabla_formulario(4);
+  if (reload_filtro_pagos_all == false) {
+    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador",   '#filtro_p_all_trabajador',   null, '.charge_p_all_filtro_trabajador');
+    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_dia_pago",     '#filtro_p_all_dia_pago',     null, '.charge_filtro_p_all_dia_pago');
+    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_anio_pago",    '#filtro_p_all_anio_pago',    moment().format('YYYY'), '.charge_filtro_p_all_anio_pago');
+    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan",         '#filtro_p_all_plan',         null, '.charge_p_all_filtro_plan');
+    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena",  '#filtro_p_all_zona_antena',  null, '.charge_p_all_filtro_zona_antena');
+    reload_filtro_pagos_all = true;
+  } else {
+    filtros_pago_all();
+  }
+}
+
+function ver_pagos_all_cliente(filtro_trabajador ='', filtro_dia_pago ='', filtro_anio_pago='', filtro_plan ='', filtro_zona_antena ='') {  
+
+  $('#div_tabla_all_pagos').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
+  
+  $.get(`../ajax/persona_cliente.php?op=ver_pagos_all_cliente&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_anio_pago=${filtro_anio_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,  function (e, textStatus, jqXHR) {
+    $('#div_tabla_all_pagos').html(e);
+    $('#id_buscando_tabla_pago_all').hide();
+    $('[data-bs-toggle="tooltip"]').tooltip();
   });
 }
 
@@ -562,11 +630,76 @@ $(function () {
   $('#idselec_centroProbl').rules('add', { required: true, messages: { required: "Campo requerido" } });
   
 });
+
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+function cargando_search() {
+  if ($('#id_buscando_tabla').length) { } else {
+    $('.buscando_tabla').prepend(`<tr id="id_buscando_tabla"> 
+      <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+    </tr>`);
+  }  
+}
+
+function filtros() {  
+
+  var filtro_trabajador   = $("#filtro_trabajador").select2('val');
+  var filtro_dia_pago     = $("#filtro_dia_pago").select2('val');  
+  var filtro_plan         = $("#filtro_plan").select2('val');
+  var filtro_zona_antena  = $("#filtro_zona_antena").select2('val');
+  
+  var nombre_trabajador   = $('#filtro_trabajador').find(':selected').text();
+  var nombre_dia_pago     = ' ─ ' + $('#filtro_unidad_medida').find(':selected').text();
+  var nombre_plan         = ' ─ ' + $('#filtro_plan').find(':selected').text();
+  var nombre_zona_antena  = ' ─ ' + $('#filtro_zona_antena').find(':selected').text();
+
+  
+  if (filtro_trabajador == '' || filtro_trabajador == 0 || filtro_trabajador == null) { filtro_trabajador = ""; nombre_trabajador = ""; }       // filtro de trabajador  
+  if (filtro_dia_pago == '' || filtro_dia_pago == 0 || filtro_dia_pago == null) { filtro_dia_pago = ""; nombre_dia_pago = ""; }                 // filtro de dia pago  
+  if (filtro_plan == '' || filtro_plan == 0 || filtro_plan == null) { filtro_plan = ""; nombre_plan = ""; }                                     // filtro de plan
+  if (filtro_zona_antena == '' || filtro_zona_antena == 0 || filtro_zona_antena == null) { filtro_zona_antena = ""; nombre_zona_antena = ""; }  // filtro de zona antena
+
+  $('#id_buscando_tabla').html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_trabajador} ${nombre_dia_pago} ${nombre_plan}...`);
+  //console.log(filtro_categoria, fecha_2, filtro_plan, comprobante);
+
+  tabla_principal_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
+}
+
+function cargando_search_pago_all() {
+  $('#id_buscando_tabla_pago_all').show();  
+}
+
+function filtros_pago_all() {  
+
+  var filtro_trabajador   = $("#filtro_p_all_trabajador").select2('val');
+  var filtro_dia_pago     = $("#filtro_p_all_dia_pago").select2('val');  
+  var filtro_anio_pago     = $("#filtro_p_all_anio_pago").select2('val');  
+  var filtro_plan         = $("#filtro_p_all_plan").select2('val');
+  var filtro_zona_antena  = $("#filtro_p_all_zona_antena").select2('val');
+  
+  var nombre_trabajador   = $('#filtro_p_all_trabajador').find(':selected').text();
+  var nombre_dia_pago     = ' ─ ' + $('#filtro_p_all_dia_pago').find(':selected').text();
+  var nombre_anio_pago     = ' ─ ' + $('#filtro_p_all_anio_pago').find(':selected').text();
+  var nombre_plan         = ' ─ ' + $('#filtro_p_all_plan').find(':selected').text();
+  var nombre_zona_antena  = ' ─ ' + $('#filtro_p_all_zona_antena').find(':selected').text();
+
+  
+  if (filtro_trabajador == '' || filtro_trabajador == 0 || filtro_trabajador == null) { filtro_trabajador = ""; nombre_trabajador = ""; }       // filtro de trabajador  
+  if (filtro_dia_pago == '' || filtro_dia_pago == 0 || filtro_dia_pago == null) { filtro_dia_pago = ""; nombre_dia_pago = ""; }                 // filtro de dia pago  
+  if (filtro_anio_pago == '' || filtro_anio_pago == 0 || filtro_anio_pago == null) { filtro_anio_pago = ""; nombre_anio_pago = ""; }                 // filtro de dia pago  
+  if (filtro_plan == '' || filtro_plan == 0 || filtro_plan == null) { filtro_plan = ""; nombre_plan = ""; }                                     // filtro de plan
+  if (filtro_zona_antena == '' || filtro_zona_antena == 0 || filtro_zona_antena == null) { filtro_zona_antena = ""; nombre_zona_antena = ""; }  // filtro de zona antena
+
+  // $('#id_buscando_tabla').html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_trabajador} ${nombre_dia_pago} ${nombre_plan}...`);
+  //console.log(filtro_categoria, fecha_2, filtro_plan, comprobante);
+
+  ver_pagos_all_cliente(filtro_trabajador,  filtro_dia_pago, filtro_anio_pago, filtro_plan, filtro_zona_antena);
+}
+
 function cambiarImagen() {
   var imagenInput = document.getElementById('imagen');
   imagenInput.click();
 }
+
 function removerImagen() {
   // var imagenMuestra = document.getElementById('imagenmuestra');
   // var imagenActualInput = document.getElementById('imagenactual');
@@ -605,27 +738,65 @@ function ver_img(img, nombre) {
 function reload_select(r_text) {
 
   switch (r_text) {
+    case 'filtro_trabajador':
+      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador',     null, '.charge_filtro_trabajador');
+    break;   
+    case 'filtro_dia':
+      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_dia_pago",   '#filtro_dia_pago',       null, '.charge_filtro_dia_pago');
+    break;
+    case 'filtro_plan':
+      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan",       '#filtro_plan',           null, '.charge_filtro_plan');
+    break;
+    case 'filtro_zona_antena':
+      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena",'#filtro_zona_antena',    null, '.charge_filtro_zona_antena');
+    break;   
+
+    case 'filtro_trabajador':
+      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_p_all_trabajador', null, '.charge_filtro_p_all_trabajador');
+    break;
+    case 'filtro_dia_pago':
+      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_dia_pago",   '#filtro_p_all_dia_pago',   null, '.charge_filtro_p_all_dia_pago');
+    break;
+    case 'filtro_anio_pago':
+      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_anio_pago",  '#filtro_p_all_anio_pago',  moment().format('YYYY'), '.charge_filtro_p_all_anio_pago');
+    break;    
+    case 'filtro_plan':
+      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan",       '#filtro_p_all_plan',       null, '.charge_filtro_p_all_plan');
+    break;
+    case 'filtro_zona_antena':
+      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena",'#filtro_p_all_zona_antena',null, '.charge_filtro_p_all_zona_antena');
+    break;   
+
     case 'trab':
       lista_select2("../ajax/persona_cliente.php?op=select2_trabajador", '#idpersona_trabajador', null, '.charge_idtrabaj');
-      break;
+    break;
     case 'zona':
       lista_select2("../ajax/persona_cliente.php?op=select2_zona_antena", '#idzona_antena', null, '.charge_idzona');
-      break;
+    break;
     case 'centroPbl':
       lista_select2("../ajax/persona_cliente.php?op=selec_centroProbl", '#idselec_centroProbl', null, '.charge_idctroPbl');
-      break;
+    break;
     case 'plan':
       lista_select2("../ajax/persona_cliente.php?op=select2_plan", '#idplan', null, '.charge_idplan');
-      break;
+    break;
     default:
       console.log('Caso no encontrado.');
   }
  
 }
 
+function crear_dias_pagos(input) {
+  $(input).append(`<option value="TODOS">TODOS</option>`);
+  for (let index = 1; index <= 31; index++) {
+    $(input).append(`<option value="${index}">Día ${index}</option>`); 
+  }
+  
+}
 
-
-
-
-
+function crear_anio_pagos(input) {
+  var anio =parseFloat(moment().format('YYYY')) + (1);
+  var html = "";  
+  for (let i = 1; i < 6; i++) { anio--; html = html.concat(`<option value="${anio}">${anio}</option> `); }
+  $(input).html(html);
+}
 

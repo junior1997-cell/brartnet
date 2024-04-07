@@ -393,7 +393,7 @@ function listar_producto_x_codigo() {
 
             <td class="py-1 form-group">
               <input type="number" class="w-100px form-control valid_descuento" name="valid_descuento_${cont}" value="0" min="0.00" required onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
-              <input type="hidden" class="descuento_${cont}" name="descuento[]" value="0" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+              <input type="hidden" class="descuento_${cont}" name="descuento[]" value="0" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
             </td>
 
             <td class="py-1 text-right"><span class="text-right subtotal_producto_${cont}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="0" > </td>
