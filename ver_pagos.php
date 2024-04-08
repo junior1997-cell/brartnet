@@ -447,9 +447,9 @@
       <!-- Start:: Section-6 -->
       <section class="section ">
         <div class="container">
-          <div class="row justify-content-center text-center mb-5 text-fixed-white">
+          <div class="row justify-content-center text-center mb-5">
             <div class="col-xl-6">
-              <h3 class="fw-semibold mb-2 text-fixed-white">Nuestros Metodos de Pago</h3>
+              <h3 class="fw-semibold mb-2">Nuestros Metodos de Pago</h3>
               <span class="fs-15 fw-normal d-block op-8">Realize su pago y envienos el baucher a nuestro WhatsApp</span>
             </div>
           </div>

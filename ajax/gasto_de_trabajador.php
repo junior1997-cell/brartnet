@@ -157,7 +157,7 @@ if (!isset($_SESSION["user_nombre"])) {
           $retorno = array(
             'status' => true, 
             'message' => 'Salió todo ok', 
-            'data' => '<option  value="1" >NINGUNO</option>'.$data, 
+            'data' => '<option  value="2" >PROVEEDOR VARIOS</option>'.$data, 
           );
           echo json_encode($retorno, true);
 
