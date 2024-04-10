@@ -281,15 +281,12 @@
                   <span class="side-menu__label me-2">Más</span>
                   <i class="fe fe-chevron-right side-menu__angle op-8"></i>
                 </a>
-                <ul class="slide-menu child1">
+                <ul class="slide-menu child1">                  
                   <li class="slide">
-                    <a href="#statistics" class="side-menu__item">Ver Pagos</a>
+                    <a href="#our-mission" class="side-menu__item">Cobertura</a>
                   </li>
                   <li class="slide">
-                    <a href="#our-mission" class="side-menu__item">Cotizar Precios</a>
-                  </li>
-                  <li class="slide">
-                    <a href="#features" class="side-menu__item">Cobertura</a>
+                    <a href="#features" class="side-menu__item">Caracteristicas</a>
                   </li>
                   <li class="slide">
                     <a href="#testimonials" class="side-menu__item">Testimonios</a>
@@ -358,13 +355,13 @@
       <section class="section section-bg " id="statistics">
         <div class="container text-center position-relative">
           <p class="fs-12 fw-semibold text-success mb-1"><span class="landing-section-heading">OFERTAS</span></p>
-          <h3 class="fw-semibold mb-2">Más de 500+ usuarios conectados.</h3>
+          <h3 class="fw-semibold mb-2">Más de 300+ usuarios conectados.</h3>
           <div class="row justify-content-center">
             <div class="col-xl-7">
               <p class="text-muted fs-15 mb-5 fw-normal">Estamos orgullosos de tener clientes y clientes de primera clase, lo que nos motiva a trabajar más.</p>
             </div>
           </div>
-          <div class="row  g-2 justify-content-center d-flex align-items-stretch">
+          <!-- <div class="row  g-2 justify-content-center d-flex align-items-stretch">
             <div class="col-xl-12">
               <div class="row d-flex justify-content-evenly">
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-3 ">
@@ -405,7 +402,7 @@
               </div>
 
             </div>
-          </div>
+          </div> -->
         </div>
       </section>
       <!-- End:: Section-2 -->
@@ -505,7 +502,7 @@
       <section class="section section-bg " id="our-mission">
         <div class="container text-center">
           <p class="fs-12 fw-semibold text-success mb-1"><span class="landing-section-heading">COBERTURA</span></p>
-          <h2 class="fw-semibold mb-2">Cobertura en más de 8 ciudades del Perú</h2>
+          <h2 class="fw-semibold mb-2">Cobertura en más de 20 comunidades de TOCACHE</h2>
           <br/>
           <div class="row">
 
@@ -515,7 +512,7 @@
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center" >
                   <div class="card-body">
                     <div class="card-text">
-                      <h1 class="text-white"><b>TOCACHE</b></h1>
+                      <h1 class="text-white"><b>Tocache</b></h1>
                       <p class="text-white"><b>Este - Suroeste</b></p>
                     </div>
                   </div>
@@ -528,7 +525,7 @@
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
-                      <h1 class="text-white"><b>TARAPOTO</b></h1>
+                      <h1 class="text-white"><b>Shunté</b></h1>
                       <p class="text-white"><b>De centro a Sur</b></p>
                     </div>
                   </div>
@@ -541,7 +538,7 @@
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
-                      <h1 class="text-white"><b>LAMAS</b></h1>
+                      <h1 class="text-white"><b>Pólvora</b></h1>
                       <p class="text-white"><b>De centro a Sur</b></p>
                     </div>
                   </div>
@@ -554,7 +551,7 @@
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
-                      <h1 class="text-white"><b>MOYOBAMBA</b></h1>
+                      <h1 class="text-white"><b>Uchiza</b></h1>
                       <p class="text-white"><b>De centro a Sur</b></p>
                     </div>
                   </div>
@@ -1643,6 +1640,8 @@
   <script src="assets/libs/toastr/toastr.min.js"></script>
 
   <script src="assets/js/funcion_crud.js"></script>
+
+  <script src="vistas/scripts/home.js"></script>
 
 </body>
 
