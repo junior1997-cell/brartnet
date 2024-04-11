@@ -521,7 +521,7 @@
             </div>
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
-                <img src="assets/images/media/demo-tarapoto.jpg" class="card-img" alt="...">
+                <img src="assets/images/media/demo-shunte.jpg" class="card-img" alt="...">
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
@@ -534,7 +534,7 @@
             </div>
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
-                <img src="assets/images/media/demo-lamas.jpg" class="card-img" alt="..." style="height: 100;">
+                <img src="assets/images/media/demo-polvora2.jpg" class="card-img" alt="..." style="height: 100;">
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
@@ -547,7 +547,7 @@
             </div>
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
-                <img src="assets/images/media/demo-moyo.jpg" class="card-img" alt="..." style="height: 100;">
+                <img src="assets/images/media/demo-uchiza.jpg" class="card-img" alt="..." style="height: 100;">
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
@@ -840,67 +840,8 @@
               <p class="text-muted fs-15 mb-5 fw-normal">Nuestro equipo está compuesto por empleados altamente calificados que trabajan arduamente para ofrecer un servicio de calidad y excelencia.</p>
             </div>
           </div>
-          <div class="row">
-            <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12">
-              <div class="card custom-card text-center team-card ">
-                <div class="card-body p-5">
-                  <span class="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
-                    <img src="assets/images/faces/15.jpg" alt="">
-                  </span>
-                  <p class="fw-semibold fs-17 mb-0 text-default">Peter Parker</p>
-                  <span class="text-muted fs-14 text-primary fw-semibold">Director</span>
-                  <p class="text-muted mt-2 fs-13"> Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <div class="mt-2">
-                    <a href="profile.html" class="btn btn-light" target="_blank">Ver Portafolio</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12">
-              <div class="card custom-card text-center team-card ">
-                <div class="card-body p-5">
-                  <span class="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
-                    <img src="assets/images/faces/12.jpg" alt="">
-                  </span>
-                  <p class="fw-semibold fs-17 mb-0 text-default">Andre garfield</p>
-                  <span class="text-muted fs-14 text-primary fw-semibold">Manager</span>
-                  <p class="text-muted mt-2 fs-13"> Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <div class="mt-2">
-                    <a href="profile.html" class="btn btn-light" target="_blank">Ver Portafolio</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12">
-              <div class="card custom-card text-center team-card ">
-                <div class="card-body p-5">
-                  <span class="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
-                    <img src="assets/images/faces/5.jpg" alt="">
-                  </span>
-                  <p class="fw-semibold fs-17 mb-0 text-default">Lisa Taylor</p>
-                  <span class="text-muted fs-14 text-primary fw-semibold">Recepcionista</span>
-                  <p class="text-muted mt-2 fs-13"> Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <div class="mt-2">
-                    <a href="profile.html" class="btn btn-light" target="_blank">Ver Portafolio</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12">
-              <div class="card custom-card text-center team-card ">
-                <div class="card-body p-5">
-                  <span class="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
-                    <img src="assets/images/faces/1.jpg" alt="">
-                  </span>
-                  <p class="fw-semibold fs-17 mb-0 text-default">Elizabeth Rose</p>
-                  <span class="text-muted fs-14 text-primary fw-semibold">Ing Redes</span>
-                  <p class="text-muted mt-2 fs-13"> Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <div class="mt-2">
-                    <a href="profile.html" class="btn btn-light" target="_blank">Ver Portafolio</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="row" id="tecnico_redes">
+            <!-- Lista de trabajadores :: tecnicos de redes -->
           </div>
         </div>
       </section>
@@ -922,7 +863,7 @@
                 <button class="nav-link active" id="pricing-monthly" data-bs-toggle="tab" data-bs-target="#pricing-monthly-pane" type="button" role="tab" aria-controls="pricing-monthly-pane" aria-selected="true">Pago Mensual</button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pricing-yearly" data-bs-toggle="tab" data-bs-target="#pago-anual" type="button" role="tab" aria-controls="pago-anual" aria-selected="true">Pago Mensual</button>
+                <button class="nav-link" id="pricing-yearly" data-bs-toggle="tab" data-bs-target="#pago-anual" type="button" role="tab" aria-controls="pago-anual" aria-selected="true">Pago Anual</button>
               </li>
             </ul>
           </div>
@@ -930,259 +871,8 @@
             <div class="card-body p-0">
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane show active p-0" id="pricing-monthly-pane" role="tabpanel" aria-labelledby="pricing-monthly" tabindex="0">
-                  <div class="row">
-                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
-                      <div class="p-4">
-                        <h6 class="fw-semibold text-center">BASICO</h6>
-                        <div class="py-3 d-flex align-items-center justify-content-center">
-                          <i class="ri-router-line la-4x text-primary"></i>
-
-                          <div class="text-end ms-5">
-                            <p class="fs-25 fw-semibold mb-0">s/ 50</p>
-                            <p class="text-muted fs-11 fw-semibold mb-0">Por mes</p>
-                          </div>
-                        </div>
-                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
-                          <li class="mb-3">
-                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">10 mbps</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte en línea</span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
-                          </li>
-                          <li class="mb-4">
-                            <span class="text-muted">Contrato por 8 meses</span>
-                          </li>
-                        </ul>
-                        <div class="d-grid">
-                          <button class="btn btn-primary-light btn-wave">Empezar</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
-                      <div class="p-4">
-                        <h6 class="fw-semibold text-center">BASICO+</h6>
-                        <div class="py-3 d-flex align-items-center justify-content-center">
-                          <i class="ri-router-line la-4x text-primary"></i>
-                          <div class="text-end ms-5">
-                            <p class="fs-25 fw-semibold mb-0">S/ 60</p>
-                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
-                          </div>
-                        </div>
-                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
-                          <li class="mb-3">
-                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte en línea</span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
-                          </li>
-                          <li class="mb-4">
-                            <span class="text-muted">Contrato por 8 meses</span>
-                          </li>
-                        </ul>
-                        <div class="d-grid">
-                          <button class="btn btn-primary-light btn-wave">Empezar</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
-                      <div class="p-4 pricing-offer overflow-hidden">
-                        <!-- <span class="pricing-offer-details shadow">
-                          <span class="fw-semibold">10%</span> <span class="fs-10 op-8 ms-1">desc</span>
-                        </span> -->
-                        <h6 class="fw-semibold text-center">ESTANDAR</h6>
-                        <div class="py-3 d-flex align-items-center justify-content-center">
-                          <i class="ri-router-line la-4x text-primary"></i>
-                          <div class="text-end ms-5">
-                            <p class="fs-25 fw-semibold mb-0">s/ 70</p>
-                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
-                          </div>
-                        </div>
-                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
-                          <li class="mb-3">
-                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte en línea</span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
-                          </li>
-                          <li class="mb-4">
-                            <span class="text-muted">Contrato por 8 meses</span>
-                          </li>
-                        </ul>
-                        <div class="d-grid">
-                          <button class="btn btn-primary-light btn-wave">Empezar</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
-                      <div class="p-4 pricing-offer overflow-hidden">
-                        <!-- <span class="pricing-offer-details shadow">
-                          <span class="fw-semibold">10%</span> <span class="fs-10 op-8 ms-1">desc</span>
-                        </span> -->
-                        <h6 class="fw-semibold text-center">ESTANDAR+</h6>
-                        <div class="py-3 d-flex align-items-center justify-content-center">
-                          <i class="ri-router-line la-4x text-primary"></i>
-                          <div class="text-end ms-5">
-                            <p class="fs-25 fw-semibold mb-0">s/ 80</p>
-                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
-                          </div>
-                        </div>
-                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
-                          <li class="mb-3">
-                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte en línea</span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
-                          </li>
-                          <li class="mb-4">
-                            <span class="text-muted">Contrato por 8 meses</span>
-                          </li>
-                        </ul>
-                        <div class="d-grid">
-                          <button class="btn btn-primary-light btn-wave">Empezar</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
-                      <div class="p-4">
-                        <h6 class="fw-semibold text-center">PREMIUM</h6>
-                        <div class="py-3 d-flex align-items-center justify-content-center">
-                          <i class="ri-router-line la-4x text-primary"></i>
-                          <div class="text-end ms-5">
-                            <p class="fs-25 fw-semibold mb-0">S/ 100</p>
-                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
-                          </div>
-                        </div>
-                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
-                          <li class="mb-3">
-                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte en línea</span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
-                          </li>
-                          <li class="mb-4">
-                            <span class="text-muted">Contrato por 8 meses</span>
-                          </li>
-                        </ul>
-                        <div class="d-grid">
-                          <button class="btn btn-primary-light btn-wave">Empezar</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
-                      <div class="p-4">
-                        <h6 class="fw-semibold text-center">PREMIUM ASPROC</h6>
-                        <div class="py-3 d-flex align-items-center justify-content-center">
-                          <i class="ri-router-line la-4x text-primary"></i>
-                          <div class="text-end ms-5">
-                            <p class="fs-25 fw-semibold mb-0">S/ 210</p>
-                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
-                          </div>
-                        </div>
-                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
-                          <li class="mb-3">
-                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte en línea</span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
-                          </li>
-                          <li class="mb-4">
-                            <span class="text-muted">Contrato por 8 meses</span>
-                          </li>
-                        </ul>
-                        <div class="d-grid">
-                          <button class="btn btn-primary-light btn-wave">Empezar</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
-                      <div class="p-4">
-                        <h6 class="fw-semibold text-center">PREMIUM OLPESA</h6>
-                        <div class="py-3 d-flex align-items-center justify-content-center">
-                          <i class="ri-router-line la-4x text-primary"></i>
-                          <div class="text-end ms-5">
-                            <p class="fs-25 fw-semibold mb-0">S/ 600</p>
-                            <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
-                          </div>
-                        </div>
-                        <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
-                          <li class="mb-3">
-                            <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte en línea</span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
-                          </li>
-                          <li class="mb-3">
-                            <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
-                          </li>
-                          <li class="mb-4">
-                            <span class="text-muted">Contrato por 8 meses</span>
-                          </li>
-                        </ul>
-                        <div class="d-grid">
-                          <button class="btn btn-primary-light btn-wave">Empezar</button>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="row" id="planes">
+                    
                   </div>
                 </div>
 
@@ -1633,8 +1323,17 @@
 
   <!-- Sticky JS -->
   <script src="assets/js/sticky.js"></script>
+
   <!-- Sweetalerts JS -->
-  <script src="../assets/libs/sweetalert2/sweetalert2.min.js"></script>
+  <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
+
+  <!-- jQuery 3.6.0 -->
+<script src="assets/libs/jquery/jquery.min.js"></script>
+
+  <!-- jquery-validation -->
+  <script src="assets/libs/jquery-validation/jquery.validate.min.js"></script>
+  <script src="assets/libs/jquery-validation/additional-methods.min.js"></script>
+  <script src="assets/libs/jquery-validation/localization/messages_es_PE.js"></script>
 
   <!-- Toastr -->
   <script src="assets/libs/toastr/toastr.min.js"></script>
