@@ -11,10 +11,11 @@
     }
 
     function mostrar_tecnico_redes(){
-      $sql = "SELECT p.nombre_razonsocial nombre, p.apellidos_nombrecomercial apellidos, ct.nombre cargo, p.foto_perfil
-              FROM persona p
-              JOIN cargo_trabajador ct ON p.idcargo_trabajador = ct.idcargo_trabajador
-              WHERE p.idcargo_trabajador = 5";
+      $sql = "SELECT p.nombre_razonsocial as nombre, p.apellidos_nombrecomercial as apellidos, ct.nombre as cargo, p.foto_perfil,
+      p.celular
+      FROM persona p
+      JOIN cargo_trabajador ct ON p.idcargo_trabajador = ct.idcargo_trabajador
+      WHERE p.idcargo_trabajador = 5";
       $mostrar = ejecutarConsultaArray($sql); if($mostrar['status'] == false){return $mostrar;}
       return $mostrar;
     }

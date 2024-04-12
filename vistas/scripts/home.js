@@ -11,7 +11,7 @@ function init(){
 
 function mostrar_tecnico_redes() {
   
-  $.post("ajax/home.php?op=mostrar_tecnico_redes", {}, function(e, status){
+  $.post("ajax/home.php?op=mostrar_tecnico_redes",  function(e, status){
     e = JSON.parse(e); console.log(e);
     if (e.status == true){
 
@@ -29,7 +29,7 @@ function mostrar_tecnico_redes() {
               <span class="text-muted fs-12 text-primary fw-semibold">${val.cargo}</span>
               <p class="text-muted mt-2 fs-13"> Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
               <div class="mt-2">
-                <a href="profile.html" class="btn btn-light" target="_blank">Ver Portafolio</a>
+                <a href="https://wa.me/+51${val.celular}?text=Deseo%20cotizar%20los%20planes%20de%20internet" class="btn btn-light text-success" target="_blank"><i class="bi bi-whatsapp"></i> Contacto</a>
               </div>
             </div>
           </div>
@@ -49,7 +49,7 @@ function mostrar_tecnico_redes() {
 //  :::::::::::::::: P L A N E S   :::::::::::::::: 
 function mostrar_planes() {
   
-  $.post("ajax/home.php?op=mostrar_planes", {}, function(e, status){
+  $.post("ajax/home.php?op=mostrar_planes",  function(e, status){
     e = JSON.parse(e); console.log(e);
     if (e.status == true){
 
