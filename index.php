@@ -536,7 +536,7 @@
 
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
-                <img src="assets/images/media/demo-tocache.jpg" class="card-img" alt="..." >
+                <img src="assets/modulo/home/cobertura/demo-tocache.jpg" class="card-img" alt="..." >
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center" >
                   <div class="card-body">
                     <div class="card-text">
@@ -549,7 +549,7 @@
             </div>
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
-                <img src="assets/images/media/demo-shunte.jpg" class="card-img" alt="...">
+                <img src="assets/modulo/home/cobertura/demo-shunte.jpg" class="card-img" alt="...">
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
@@ -562,7 +562,7 @@
             </div>
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
-                <img src="assets/images/media/demo-polvora2.jpg" class="card-img" alt="..." style="height: 100;">
+                <img src="assets/modulo/home/cobertura/demo-polvora.jpg" class="card-img" alt="..." style="height: 100;">
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
@@ -575,7 +575,7 @@
             </div>
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
-                <img src="assets/images/media/demo-uchiza.jpg" class="card-img" alt="..." style="height: 100;">
+                <img src="assets/modulo/home/cobertura/demo-uchiza.jpg" class="card-img" alt="..." style="height: 100;">
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
@@ -607,23 +607,23 @@
               <div class="">
                 <div class="feature-logos mt-sm-5 flex-wrap">
                   <div class="ms-sm-5 ms-2 text-center">
-                    <img src="assets/images/media/landing/web/calidad.png" alt="image" class="featur-icon">
+                    <img src="assets/modulo/home/caracteristica/calidad.png" alt="image" class="featur-icon">
                     <h5 class="mt-3 text-fixed-white ">Calidad</h5>
                   </div>
                   <div class="ms-sm-5 ms-2 text-center">
-                    <img src="assets/images/media/landing/web/velocidad.png" alt="image" class="featur-icon">
+                    <img src="assets/modulo/home/caracteristica/velocidad.png" alt="image" class="featur-icon">
                     <h5 class="mt-3 text-fixed-white ">Velocidad </h5>
                   </div>
                   <div class="ms-sm-5 ms-2 text-center">
-                    <img src="assets/images/media/landing/web/estabilidad.png" alt="image" class="featur-icon">
+                    <img src="assets/modulo/home/caracteristica/estabilidad.png" alt="image" class="featur-icon">
                     <h5 class="mt-3 text-fixed-white ">Estabilidad</h5>
                   </div>
                   <div class="ms-sm-5 ms-2 text-center">
-                    <img src="assets/images/media/landing/web/eficiencia.png" alt="image" class="featur-icon">
+                    <img src="assets/modulo/home/caracteristica/eficiencia.png" alt="image" class="featur-icon">
                     <h5 class="mt-3 text-fixed-white ">Eficiencia</h5>
                   </div>
                   <div class="ms-sm-5 ms-2 text-center">
-                    <img src="assets/images/media/landing/web/disponibilidad.png" alt="image" class="featur-icon">
+                    <img src="assets/modulo/home/caracteristica/disponibilidad.png" alt="image" class="featur-icon">
                     <h5 class="mt-3 text-fixed-white ">Disponibilidad</h5>
                   </div>
                 </div>
