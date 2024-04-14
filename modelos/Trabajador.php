@@ -20,7 +20,7 @@ class Trabajador
 
 		$sql_0 = "SELECT p.*, sdi.nombre as nombre_tipo_documento, pt.sueldo_mensual, c.nombre as cargo
 		FROM persona AS p
-		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
 		INNER JOIN persona_trabajador as pt ON pt.idpersona = p.idpersona
 		WHERE p.tipo_documento = '$tipo_documento' AND p.numero_documento = '$numero_documento';";
@@ -67,7 +67,7 @@ class Trabajador
 
 		$sql_0 = "SELECT p.*, sdi.nombre as nombre_tipo_documento, pt.sueldo_mensual, c.nombre as cargo
 		FROM persona AS p
-		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
 		INNER JOIN persona_trabajador as pt ON pt.idpersona = p.idpersona
 		WHERE p.tipo_documento = '$tipo_documento' AND p.numero_documento = '$numero_documento' AND p.idpersona <> '$idpersona';";
@@ -126,7 +126,7 @@ class Trabajador
 		inner join persona_trabajador as pt on pt.idpersona = p.idpersona
 		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
-		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
 		WHERE p.idpersona='$idpersona' AND p.estado = '1' AND p.estado_delete = '1';";
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -139,7 +139,7 @@ class Trabajador
 		inner join persona_trabajador as pt on pt.idpersona = p.idpersona
 		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
-		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
 		WHERE p.estado = '1' AND p.estado_delete = '1';";
 		return ejecutarConsulta($sql);
 	}
@@ -161,7 +161,7 @@ class Trabajador
 		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
 		INNER JOIN plan as pl on pc.idplan=pl.idplan
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
-		INNER JOIN sunat_doc_identidad as i on p.tipo_documento=i.code_sunat  
+		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
 		where pc.estado='1' and pc.estado_delete='1' AND  pc.idpersona_trabajador = '$id'  ORDER BY idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}

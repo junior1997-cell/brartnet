@@ -41,10 +41,10 @@
       END AS trabajador, t.foto_perfil as foto_perfil_trabajador, t.numero_documento as numero_documento_t, sdi.abreviatura as tipo_documento_nombre_t
       FROM gasto_de_trabajador as gdt
       INNER JOIN persona as p ON p.idpersona = gdt.idproveedor 
-      INNER JOIN sunat_doc_identidad as sdi_p ON sdi_p.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c06_doc_identidad as sdi_p ON sdi_p.code_sunat = p.tipo_documento
       INNER JOIN persona_trabajador as pt ON pt.idpersona_trabajador = gdt.idpersona_trabajador
       INNER JOIN persona as t ON t.idpersona = pt.idpersona
-      INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = t.tipo_documento
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = t.tipo_documento
       WHERE gdt.estado = '1' AND gdt.estado_delete = '1' AND gdt.idgasto_de_trabajador = '$id' ;";
       return ejecutarConsultaSimpleFila($sql_2); 
 
@@ -65,7 +65,7 @@
       INNER JOIN persona as p ON p.idpersona = gdt.idproveedor 
       INNER JOIN persona_trabajador as pt ON pt.idpersona_trabajador = gdt.idpersona_trabajador
       INNER JOIN persona as t ON t.idpersona = pt.idpersona
-      INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = t.tipo_documento
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = t.tipo_documento
       WHERE gdt.estado = '1' AND gdt.estado_delete = '1';";
       return ejecutarConsulta($sql);
     }
@@ -98,7 +98,7 @@
       $sql = "SELECT p.*, pt.idpersona_trabajador, sdi.nombre as nombre_tipo_documento, pt.sueldo_mensual, c.nombre as cargo
       FROM persona_trabajador as pt      
       INNER JOIN persona AS p ON pt.idpersona = p.idpersona
-      INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
       WHERE p.idtipo_persona = 2 AND p.estado = 1 AND p.estado_delete = 1;";
       return ejecutarConsultaArray($sql);

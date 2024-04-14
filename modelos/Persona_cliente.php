@@ -166,7 +166,7 @@ class Cliente
 		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
 		INNER JOIN plan as pl on pc.idplan=pl.idplan
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
-		INNER JOIN sunat_doc_identidad as i on p.tipo_documento=i.code_sunat  
+		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
 		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
 		where pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
 		ORDER BY pc.idpersona_cliente DESC";
@@ -193,7 +193,7 @@ class Cliente
 		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
 		INNER JOIN plan as pl on pc.idplan=pl.idplan
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
-		INNER JOIN sunat_doc_identidad as i on p.tipo_documento=i.code_sunat  
+		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
 		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
 		where pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
 		ORDER BY pc.idpersona_cliente DESC";
@@ -229,7 +229,7 @@ class Cliente
 		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
 		INNER JOIN plan as pl on pc.idplan=pl.idplan
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
-		INNER JOIN sunat_doc_identidad as i on p.tipo_documento=i.code_sunat  
+		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
 		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
 		where pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
 		ORDER BY pc.idpersona_cliente DESC";

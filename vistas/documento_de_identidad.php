@@ -1,7 +1,7 @@
 <?php
 //Activamos el almacenamiento en el buffer
 ob_start();
-require "../config/funcion_general.php";
+date_default_timezone_set('America/Lima'); require "../config/funcion_general.php";
 session_start();
 if (!isset($_SESSION["user_nombre"])) {
   header("Location: index.php?file=" . basename($_SERVER['PHP_SELF']));
@@ -106,7 +106,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <div class="modal-body">
               <form name="formulario-doc-identidad" id="formulario-doc-identidad" method="POST" class="row needs-validation" novalidate>
                 <div class="row gy-2" id="cargando-1-fomulario">
-                  <input type="hidden" name="idsunat_doc_identidad" id="idsunat_doc_identidad">
+                  <input type="hidden" name="idsunat_c06_doc_identidad" id="idsunat_c06_doc_identidad">
 
                   <div class="col-md-8">
                     <div class="form-label">

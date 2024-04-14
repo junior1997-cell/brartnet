@@ -17,15 +17,19 @@ $(function () {
 				e = JSON.parse(e); //console.log(e);				
 				setTimeout(validar_response(e), 1000);
 				
-			} catch (error) {
-				console.log(error);
-				btnIngresar.prop("disabled", false).html("Iniciar sesion");				
+			} catch (err) { 
+				console.log("Error: ", err.message); 
+				toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
+				
+				btnIngresar.prop("disabled", false).html("Iniciar sesion");		
+				ver_errores(error);		
 			}
 			
     }).fail( function(e) { 
 			btnIngresar.prop("disabled", false).html("Iniciar sesion"); 
-			const dangert = document.getElementById('error-servidor'); 
-			const toast = new bootstrap.Toast(dangert); toast.show();  
+			ver_errores(e);
+			// const dangert = document.getElementById('error-servidor'); 
+			// const toast = new bootstrap.Toast(dangert); toast.show();  
 		});    
   });
 });
@@ -33,16 +37,17 @@ $(function () {
 function validar_response(e) {
 	if (e.status == true) {
 		if (e.data == null) {
-			const dangert = document.getElementById('user-incorrecto'); 
-			const toast = new bootstrap.Toast(dangert); toast.show();
-			
+			// const dangert = document.getElementById('user-incorrecto'); 
+			// const toast = new bootstrap.Toast(dangert); toast.show();
+			toastr_error('Acceso denegado', 'Las credenciales proporcionadas son incorrectas. Por favor, verifica tu nombre de usuario y contraseña e intenta nuevamente');
 			$('.login-btn').html('Iniciar sesion').prop("disabled", false).removeClass('disabled btn-outline-dark').addClass('btn-primary');
 		} else if (e.data.usuario == null) {
-			const dangert = document.getElementById('user-incorrecto'); 
-			const toast = new bootstrap.Toast(dangert); toast.show();
+			// const dangert = document.getElementById('user-incorrecto'); 
+			// const toast = new bootstrap.Toast(dangert); toast.show();
+			toastr_error('Acceso denegado', 'Las credenciales proporcionadas son incorrectas. Por favor, verifica tu nombre de usuario y contraseña e intenta nuevamente');
 			$('.login-btn').html('Iniciar sesion').prop("disabled", false).removeClass('disabled btn-outline-dark').addClass('btn-primary');
 		} else {
-			
+			toastr_success('Bienvenido de vuelta.', 'Te damos la bienvenida de vuelta. ¡Esperamos que disfrutes tu experiencia!');
 			var redirecinando = varaibles_get();
 			$('.login-btn').html('Iniciar sesion').prop("disabled", false).removeClass('disabled btn-outline-dark').addClass('btn-primary');
 			localStorage.setItem('nube_id_usuario', e.data.usuario.idusuario);

@@ -215,12 +215,12 @@ class Numeracion
   }
 
   public function listarSeries()  {
-    $sql = "SELECT * from sunat_correlacion_comprobante where estado='1' and estado_delete ='1'";
+    $sql = "SELECT * from sunat_c01_tipo_comprobante where estado='1' and estado_delete ='1'";
     return ejecutarConsultaArray($sql);
   }
 
   public function listarSeriesNuevo()  {
-    $sql = "SELECT * from sunat_correlacion_comprobante where estado='1' and estado_delete ='1'";
+    $sql = "SELECT * from sunat_c01_tipo_comprobante where estado='1' and estado_delete ='1'";
     return ejecutarConsulta($sql);
   }
 }

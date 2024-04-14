@@ -4,6 +4,8 @@ function init(){
 	$("#guardar_registro_correlacion_compb").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-correlacion-compb").submit(); } });
 }
 
+
+
 function listar_tabla(){
   tabla_correlacion = $('#tabla-correlacion-compb').dataTable({
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
@@ -11,7 +13,7 @@ function listar_tabla(){
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla) { tabla.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_correlacion) { tabla_correlacion.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [1,2,3,4,5,6], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
       { extend: 'excel', exportOptions: { columns: [1,2,3,4,5,6], }, title: 'Lista de usuarios', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
       { extend: 'pdf', exportOptions: { columns: [1,2,3,4,5,6], }, title: 'Lista de usuarios', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
@@ -148,21 +150,13 @@ init();
 $(function () {
 
   $("#formulario-correlacion-compb").validate({
-    rules: {
-      codg: { required: true } , 
-      nombre: { required: true, minlength: 2, maxlength: 100 } , 
-      abrt: { required: true } , 
+    rules: {      
       serie: { required: true } , 
-      numero: { required: true } , 
-      un1001: { required: true } , 
+      numero: { required: true } ,      
     },
-    messages: {
-      codg: {  required: "Campo requerido.", },
-      nombre: {  required: "Campo requerido.", },
-      abrt: {  required: "Campo requerido.", },
+    messages: {      
       serie: {  required: "Campo requerido.", },
-      numero: {  required: "Campo requerido.", },
-      un1001: {  required: "Campo requerido.", },
+      numero: {  required: "Campo requerido.", },      
     },
         
     errorElement: "span",

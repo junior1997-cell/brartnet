@@ -8,7 +8,7 @@ date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
 $imagen_error = "this.src='../dist/svg/404-v2.svg'";
 $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-$idsunat_doc_identidad  = isset($_POST["idsunat_doc_identidad"]) ? limpiarCadena($_POST["idsunat_doc_identidad"]) : "";
+$idsunat_c06_doc_identidad  = isset($_POST["idsunat_c06_doc_identidad"]) ? limpiarCadena($_POST["idsunat_c06_doc_identidad"]) : "";
 
 $nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
 $abreviatura   = isset($_POST["abrt"]) ? limpiarCadena($_POST["abrt"]) : "";
@@ -25,8 +25,8 @@ switch ($_GET["op"]){
         $data[]=[
           "0" => $count++,
           "1" =>  '<div class="hstack gap-2 fs-15">' .
-                    '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_doc_didentidad('.($value['idsunat_doc_identidad']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                    '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_doc_didentidad('.$value['idsunat_doc_identidad'].'.,\''.$value['nombre'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
+                    '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_doc_didentidad('.($value['idsunat_c06_doc_identidad']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                    '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_doc_didentidad('.$value['idsunat_c06_doc_identidad'].'.,\''.$value['nombre'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
                   '</div>',
           "2" => ($value['nombre']),
           "3" => ($value['abreviatura']),
@@ -49,7 +49,7 @@ switch ($_GET["op"]){
   case 'guardar_editar':
     $validar = $doc_identidad->validar($nombre);
       
-    if (empty($idsunat_doc_identidad )) {
+    if (empty($idsunat_c06_doc_identidad )) {
 
       if(empty($validar["data"])){
 
@@ -77,14 +77,14 @@ switch ($_GET["op"]){
       }
 
     } else {
-      $rspta = $doc_identidad->editar($idsunat_doc_identidad, $nombre, $abreviatura,  $codigo);
+      $rspta = $doc_identidad->editar($idsunat_c06_doc_identidad, $nombre, $abreviatura,  $codigo);
       echo json_encode(['status' => 'modificado', 'data' => $rspta]);
     }
     
   break;
 
   case 'mostrar_doc_didentidad':
-    $rspta = $doc_identidad->mostrar($idsunat_doc_identidad );
+    $rspta = $doc_identidad->mostrar($idsunat_c06_doc_identidad );
     echo json_encode($rspta, true);
   break;
 

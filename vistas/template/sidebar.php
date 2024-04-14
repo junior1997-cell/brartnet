@@ -360,16 +360,10 @@
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"><a href="javascript:void(0)">SUNAT</a></li>
             <?php  if ($_SESSION['tipo_de_tributos'] == '1') { ?>
-            <li class="slide"><a href="tipo_de_tributos.php" class="side-menu__item">Tipo de tributos</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['documento_de_identidad'] == '1') { ?>
-            <li class="slide"><a href="documento_de_identidad.php" class="side-menu__item">Documento de Identidad</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['tipo_de_afeccion_IGV'] == '1') { ?>
-            <li class="slide"><a href="accordions_collpase.php" class="side-menu__item">Tipo afeccion IGV</a></li>  
-            <?php } ?>
+            <li class="slide"><a href="catalogos_y_codigos.php" class="side-menu__item">Catálago de Códigos</a></li>
+            <?php } ?>             
             <?php  if ($_SESSION['correlativo_numeracion'] == '1') { ?>          
-            <li class="slide"><a href="correlacion_comprobante.php" class="side-menu__item">Correlativo Numercion</a></li>
+            <li class="slide"><a href="correlacion_comprobante.php" class="side-menu__item">Tipos de Comprobantes</a></li>
             <?php } ?>
             <?php  if ($_SESSION['cargar_certificado'] == '1') { ?>
             <li class="slide"><a href="accordions_collpase.php" class="side-menu__item">Cargar Certificado</a></li>  

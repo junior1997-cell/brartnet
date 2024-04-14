@@ -163,7 +163,7 @@ class Usuario
 		inner join persona as p on u.idpersona = p.idpersona
 		INNER JOIN tipo_persona as t ON t.idtipo_persona = p.idtipo_persona
 		INNER JOIN cargo_trabajador as c ON c.idcargo_trabajador = p.idcargo_trabajador
-		INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
 		WHERE u.estado_delete = '1' ORDER BY  u.estado DESC, p.nombre_razonsocial ASC ";
 		return ejecutarConsulta($sql);
 	}

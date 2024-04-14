@@ -15,13 +15,13 @@
     }
 
     function listar_tabla(){
-      $sql = "SELECT * FROM sunat_doc_identidad WHERE estado = 1 AND estado_delete = 1";
+      $sql = "SELECT * FROM sunat_c06_doc_identidad WHERE estado = 1 AND estado_delete = 1";
       return ejecutarConsulta($sql);
     }
 
     //Implementamos un método para insertar registros
 	public function insertar($nombre, $abreviatura, $codigo) {
-		$sql="INSERT INTO sunat_doc_identidad(nombre, abreviatura, code_sunat)VALUES('$nombre', '$abreviatura', '$codigo')";
+		$sql="INSERT INTO sunat_c06_doc_identidad(nombre, abreviatura, code_sunat)VALUES('$nombre', '$abreviatura', '$codigo')";
 
 		$insertar =  ejecutarConsulta_retornarID($sql); 
 		if ($insertar['status'] == false) {  return $insertar; } 
@@ -35,12 +35,12 @@
 
 	//validar duplicado
 	public function validar($nombre)	{
-		$sql="SELECT * FROM sunat_doc_identidad where nombre='$nombre'";
+		$sql="SELECT * FROM sunat_c06_doc_identidad where nombre='$nombre'";
 		return ejecutarConsultaArray($sql);
 	}
 
-	public function editar($idsunat_doc_identidad, $nombre, $abreviatura, $codigo) {
-		$sql="UPDATE sunat_doc_identidad SET nombre='$nombre', abreviatura = '$abreviatura', code_sunat ='$codigo' WHERE idsunat_doc_identidad='$idsunat_doc_identidad'";
+	public function editar($idsunat_c06_doc_identidad, $nombre, $abreviatura, $codigo) {
+		$sql="UPDATE sunat_c06_doc_identidad SET nombre='$nombre', abreviatura = '$abreviatura', code_sunat ='$codigo' WHERE idsunat_c06_doc_identidad='$idsunat_c06_doc_identidad'";
 		$editar =  ejecutarConsulta($sql);
 		if ( $editar['status'] == false) {return $editar; } 
 	
@@ -53,13 +53,13 @@
 	}
 
   public function mostrar($id){
-    $sql = "SELECT * FROM sunat_doc_identidad Where idsunat_doc_identidad = '$id'";
+    $sql = "SELECT * FROM sunat_c06_doc_identidad Where idsunat_c06_doc_identidad = '$id'";
     return ejecutarConsultaSimpleFila($sql);
   }
 
   //Implementamos un método para desactivar color
 	public function desactivar($id) {
-		$sql="UPDATE sunat_doc_identidad SET estado='0', user_trash= '" . $_SESSION['idusuario'] . "' WHERE idsunat_doc_identidad='$id'";
+		$sql="UPDATE sunat_c06_doc_identidad SET estado='0', user_trash= '" . $_SESSION['idusuario'] . "' WHERE idsunat_c06_doc_identidad='$id'";
 		$desactivar= ejecutarConsulta($sql);
 
 		// if ($desactivar['status'] == false) {  return $desactivar; }
@@ -74,7 +74,7 @@
 	//Implementamos un método para eliminar plan
 	public function eliminar($id) {
 		
-		$sql="UPDATE sunat_doc_identidad SET estado_delete='0' WHERE idsunat_doc_identidad='$id'";
+		$sql="UPDATE sunat_c06_doc_identidad SET estado_delete='0' WHERE idsunat_c06_doc_identidad='$id'";
 		$eliminar =  ejecutarConsulta($sql);
 		if ( $eliminar['status'] == false) {return $eliminar; }  
 		

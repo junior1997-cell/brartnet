@@ -106,7 +106,7 @@ class Papelera{
 
     $sql_5 = "SELECT c.idcompra, c.serie_comprobante, c.descripcion, c.created_at, c.updated_at, tc.abreviatura as tp_comprobante
     FROM compra AS c 
-    INNER JOIN sunat_correlacion_comprobante AS tc ON tc.idtipo_comprobante = c.tipo_comprobante
+    INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = c.tipo_comprobante
     WHERE c.estado = 0 AND c.estado_delete = 1;";
     $compra = ejecutarConsultaArray($sql_5); 
     if ($compra['status'] == false) { return $compra; }
@@ -292,7 +292,7 @@ class Papelera{
 
     $sql_13 = "SELECT p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.numero_documento, sdi.abreviatura, p.created_at, p.updated_at
     FROM persona p
-    INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+    INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
     WHERE p.idtipo_persona = 4 
     AND p.estado = '0' AND p.estado_delete = '1';";
     $proveedor = ejecutarConsultaArray($sql_13);  
@@ -416,14 +416,14 @@ class Papelera{
     }
 
 
-    $sql_18 = "SELECT * FROM sunat_correlacion_comprobante WHERE estado = '0' AND estado_delete = '1';";
+    $sql_18 = "SELECT * FROM sunat_c01_tipo_comprobante WHERE estado = '0' AND estado_delete = '1';";
     $tipo_comprobante = ejecutarConsultaArray($sql_18);  
     if ($tipo_comprobante['status'] == false) { return $tipo_comprobante; }
 
     if (!empty($tipo_comprobante['data'])) {
       foreach ($tipo_comprobante['data'] as $value18) {
           $data[] = [
-            'nombre_tabla'    => 'sunat_correlacion_comprobante',
+            'nombre_tabla'    => 'sunat_c01_tipo_comprobante',
             'nombre_id_tabla' => 'idtipo_comprobante',
             'id_tabla'        => $value18['idtipo_comprobante'],
             'modulo'          => 'SUNAT',
@@ -437,16 +437,16 @@ class Papelera{
     }
 
 
-    $sql_19 = "SELECT * FROM sunat_doc_identidad WHERE estado = '0' AND estado_delete = '1';";
+    $sql_19 = "SELECT * FROM sunat_c06_doc_identidad WHERE estado = '0' AND estado_delete = '1';";
     $tipo_doc_identidad = ejecutarConsultaArray($sql_19);  
     if ($tipo_doc_identidad['status'] == false) { return $tipo_doc_identidad; }
 
     if (!empty($tipo_doc_identidad['data'])) {
       foreach ($tipo_doc_identidad['data'] as $value19) {
           $data[] = [
-            'nombre_tabla'    => 'sunat_doc_identidad',
-            'nombre_id_tabla' => 'idsunat_doc_identidad',
-            'id_tabla'        => $value19['idsunat_doc_identidad'],
+            'nombre_tabla'    => 'sunat_c06_doc_identidad',
+            'nombre_id_tabla' => 'idsunat_c06_doc_identidad',
+            'id_tabla'        => $value19['idsunat_c06_doc_identidad'],
             'modulo'          => 'SUNAT',
             'nombre_archivo'  => $value19['nombre'],
             'descripcion'     => '- - - - -',
@@ -482,7 +482,7 @@ class Papelera{
     FROM sunat_usuario_comprobante AS suc
     INNER JOIN usuario AS u ON u.idusuario = suc.idusuario
     INNER JOIN persona AS p ON p.idpersona = u.idpersona
-    INNER JOIN sunat_correlacion_comprobante AS scc ON scc.idtipo_comprobante = suc.idtipo_comprobante
+    INNER JOIN sunat_c01_tipo_comprobante AS scc ON scc.idtipo_comprobante = suc.idtipo_comprobante
     WHERE suc.estado = '0' AND suc.estado_delete = '1';";
     $user_comprob = ejecutarConsultaArray($sql_21);  
     if ($user_comprob['status'] == false) { return $user_comprob; }

@@ -18,7 +18,7 @@
       $sql = "SELECT p.*, b.idbancos, b.nombre as banco, sdi.abreviatura as tipo_documento
       FROM persona p
       INNER JOIN bancos b ON p.idbancos = b.idbancos
-      INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       WHERE p.idtipo_persona = 4
         AND p.estado = 1
         AND p.estado_delete = 1;";
@@ -31,7 +31,7 @@
       
       $sql_0 = "SELECT p.*, sdi.nombre as nombre_tipo_documento
       FROM persona AS p
-      INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       WHERE p.tipo_documento = '$tipo_documento' AND p.numero_documento = '$numero_documento';";
       $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
       
@@ -68,7 +68,7 @@
 
       $sql_0 = "SELECT p.*, sdi.nombre as nombre_tipo_documento
       FROM persona AS p
-      INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       WHERE p.tipo_documento = '$tipo_documento' AND p.numero_documento = '$numero_documento' AND p.idpersona <> '$idpersona';";
       $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
         
@@ -117,7 +117,7 @@
       $sql = "SELECT p.*, b.idbancos, b.nombre banco, sdi.code_sunat
       FROM persona p
       INNER JOIN bancos b ON p.idbancos = b.idbancos
-		  INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+		  INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       WHERE p.idpersona = '$id'
         AND p.idtipo_persona = 4
         AND p.estado = 1
