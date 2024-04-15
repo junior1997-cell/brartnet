@@ -151,12 +151,12 @@ $(function () {
 
   $("#formulario-correlacion-compb").validate({
     rules: {      
-      serie: { required: true } , 
-      numero: { required: true } ,      
+      serie: { required: true, minlength: 4 } , 
+      numero: { required: true, min: 0, step: 1 } ,      
     },
     messages: {      
       serie: {  required: "Campo requerido.", },
-      numero: {  required: "Campo requerido.", },      
+      numero: {  required: "Campo requerido.", step: 'Solo numeros enteros' },      
     },
         
     errorElement: "span",

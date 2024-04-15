@@ -33,18 +33,27 @@
 
     public function editar($id, $codigo, $nombre, $abreviatura, $serie, $numero, $un1001) {
 
-      $sql="UPDATE sunat_c01_tipo_comprobante SET  serie = '$serie', numero = '$numero'
-      WHERE idtipo_comprobante='$id'";
-      $editar =  ejecutarConsultaArray($sql);   if ( $editar['status'] == false) {return $editar; } 
+      $sql_0="SELECT * FROM venta WHERE serie_comprobante = '$serie' and numero_comprobante  = '$numero' ";
+      $buscando =  ejecutarConsultaArray($sql_0);   if ( $buscando['status'] == false) {return $buscando; } 
 
-      if ( empty($editar['data']) ) {
+      if ( empty($buscando['data']) ) {
         
         $sql="UPDATE sunat_c01_tipo_comprobante SET  serie = '$serie', numero = '$numero'
         WHERE idtipo_comprobante='$id'";
         return ejecutarConsulta($sql);   
 
       } else {
-        # code...
+        $info_repetida = "";
+        foreach ($buscando['data'] as $key => $value) {
+          $info_repetida .= '<li class="text-left font-size-13px">
+            <span class="font-size-15px text-danger"><b>Nombre: </b>'.$value['nombre'].'</span><br>
+            <b>Descripción: </b>'.$value['alias'].'<br>
+            <b>Papelera: </b>'.( $value['estado']== 0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+            <b>Eliminado: </b>'. ($value['estado_delete']== 0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+            <hr class="m-t-2px m-b-2px">
+          </li>'; 
+        }
+        return array( 'status' => 'error_personalizado', 'titulo' => 'Esta NUMERACIÓN no se puede usar!!', 'message' => 'encontramos estos datos: <ul>'.$info_repetida.'</ul>', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
       }       
     }
 

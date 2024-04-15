@@ -87,13 +87,13 @@
             <li class="slide"> <a href="unidad_medida.php" class="side-menu__item">Unidad Medida</a></li>  
             <?php } ?>
             <?php  if ($_SESSION['stok_precio'] == '1') { ?>          
-            <li class="slide"> <a href="index-4.php" class="side-menu__item">Stok / Precio</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Stok / Precio</a></li>
             <?php } ?>
             <?php  if ($_SESSION['tranferencia_de_stock'] == '1') { ?>
-            <li class="slide"> <a href="index-5.php" class="side-menu__item">Tranferencia de Stok</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Tranferencia de Stok</a></li>
             <?php } ?>
             <?php  if ($_SESSION['inventario'] == '1') { ?>
-            <li class="slide"> <a href="index-6.php" class="side-menu__item">Inventario</a></li>   
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Inventario</a></li>   
             <?php } ?>         
           </ul>
         </li>
@@ -115,10 +115,10 @@
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"> <a href="javascript:void(0)">Caja</a> </li>
             <?php  if ($_SESSION['caja_chica'] == '1') { ?>
-            <li class="slide"> <a href="about-us.php" class="side-menu__item">Caja chica</a></li> 
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Caja chica</a></li> 
             <?php } ?>         
             <?php  if ($_SESSION['ingreso_egreso'] == '1') { ?>  
-            <li class="slide"> <a href="chat.php" class="side-menu__item">Ingreso / Egreso</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Ingreso / Egreso</a></li>
             <?php } ?>                 
           </ul>
         </li>
@@ -146,28 +146,31 @@
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"> <a href="javascript:void(0)">Realizar venta</a> </li>
             <?php  if ($_SESSION['boleta'] == '1') { ?>
-            <li class="slide"> <a href="task-kanban-board.php" class="side-menu__item">Boleta</a></li>
+            <li class="slide"> <a href="facturacion.php" class="side-menu__item">Facturación</a></li>
             <?php } ?>
             <?php  if ($_SESSION['factura'] == '1') { ?>
-            <li class="slide"> <a href="task-list-view.php" class="side-menu__item">Factura</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Factura</a></li>
             <?php } ?>
             <?php  if ($_SESSION['nota_de_venta'] == '1') { ?>
-            <li class="slide"> <a href="task-details.php" class="side-menu__item">Nota de venta</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Nota de venta</a></li>
             <?php } ?>
             <?php  if ($_SESSION['Cotizacion'] == '1') { ?>
-            <li class="slide"> <a href="task-details.php" class="side-menu__item">Cotizacion</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Cotizacion</a></li>
             <?php } ?>
             <?php  if ($_SESSION['nota_de_credito'] == '1') { ?>
-            <li class="slide"> <a href="task-details.php" class="side-menu__item">Nota de credito</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Nota de credito</a></li>
             <?php } ?>
             <?php  if ($_SESSION['nota_de_debito'] == '1') { ?>
-            <li class="slide"> <a href="task-details.php" class="side-menu__item">Nota de debito</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Nota de debito</a></li>
             <?php } ?>
             <?php  if ($_SESSION['guia_de_remision'] == '1') { ?>
-            <li class="slide"> <a href="task-details.php" class="side-menu__item">Guia remision</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Guia remision</a></li>
             <?php } ?>
             <?php  if ($_SESSION['cliente'] == '1') { ?>
             <li class="slide"> <a href="clientes.php" class="side-menu__item">Clientes</a></li>
+            <?php } ?>
+            <?php  if ($_SESSION['cliente'] == '1') { ?>
+            <li class="slide"> <a href="anticipo_cliente.php" class="side-menu__item">Anticipos</a></li>
             <?php } ?>
           </ul>
         </li>
@@ -185,16 +188,16 @@
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"> <a href="javascript:void(0)">Comprobante</a> </li>
             <?php  if ($_SESSION['estado_de_envio'] == '1') { ?>
-            <li class="slide"> <a href="coming-soon.php" class="side-menu__item">Estado de envio</a> </li>   
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Estado de envio</a> </li>   
             <?php } ?>       
             <?php  if ($_SESSION['anulados'] == '1') { ?>  
-            <li class="slide"> <a href="coming-soon.php" class="side-menu__item">Anulados</a> </li>   
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Anulados</a> </li>   
             <?php } ?>       
             <?php  if ($_SESSION['validar_solo_factura'] == '1') { ?>           
-            <li class="slide"> <a href="coming-soon.php" class="side-menu__item">Validar solo factura</a> </li>   
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Validar solo factura</a> </li>   
             <?php } ?>       
             <?php  if ($_SESSION['validar_solo_boleta'] == '1') { ?>           
-            <li class="slide"> <a href="coming-soon.php" class="side-menu__item">Validar solo boleta</a> </li>     
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Validar solo boleta</a> </li>     
             <?php } ?>      
           </ul>
         </li>
@@ -212,13 +215,13 @@
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"><a href="javascript:void(0)">Resumen de baja</a></li>
             <?php  if ($_SESSION['resumen_de_baja'] == '1') { ?>
-            <li class="slide"><a href="401-error.php" class="side-menu__item">Anular boletas</a></li>
+            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Anular boletas</a></li>
             <?php } ?>
             <?php  if ($_SESSION['resumen_de_baja'] == '1') { ?>
-            <li class="slide"><a href="401-error.php" class="side-menu__item">Anular facturas</a></li>
+            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Anular facturas</a></li>
             <?php } ?>
             <?php  if ($_SESSION['resumen_de_baja'] == '1') { ?>
-            <li class="slide"><a href="401-error.php" class="side-menu__item">Anular nota de credito</a></li>     
+            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Anular nota de credito</a></li>     
             <?php } ?>      
           </ul>
         </li>
@@ -228,7 +231,7 @@
         <!-- Start::slide -->
         <?php  if ($_SESSION['creditos_Pendientes'] == '1') { ?>
         <li class="slide">
-          <a href="icons.php" class="side-menu__item">
+          <a href="no_disponible.php" class="side-menu__item">
             <i class="bx bx-home side-menu__icon"></i><span class="side-menu__label"> Creditos pendiente</span>
           </a>
         </li>
@@ -243,7 +246,7 @@
         <!-- Start::slide -->
         <?php  if ($_SESSION['kardex_por_articulos'] == '1') { ?>
         <li class="slide">
-          <a href="icons.php" class="side-menu__item">
+          <a href="no_disponible.php" class="side-menu__item">
             <i class="bx bx-home side-menu__icon"></i><span class="side-menu__label"> Kardex por articulo</span>
           </a>
         </li>
@@ -261,28 +264,28 @@
           <ul class="slide-menu child1 mega-menu">
             <li class="slide side-menu__label1"> <a href="javascript:void(0)">Reportes</a></li>
             <?php  if ($_SESSION['venta_dia_mes'] == '1') { ?>
-            <li class="slide"> <a href="alerts.php" class="side-menu__item">Venta Dia/mes</a></li>  
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta Dia/mes</a></li>  
             <?php } ?>         
             <?php  if ($_SESSION['venta_por_vendedor'] == '1') { ?>
-            <li class="slide"> <a href="alerts.php" class="side-menu__item">Venta por vendedor</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta por vendedor</a></li>
             <?php } ?>         
             <?php  if ($_SESSION['venta_agrupada'] == '1') { ?>
-            <li class="slide"> <a href="alerts.php" class="side-menu__item">Venta agrupada</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta agrupada</a></li>
             <?php } ?>         
             <?php  if ($_SESSION['venta_por_cliente'] == '1') { ?>
-            <li class="slide"> <a href="alerts.php" class="side-menu__item">Venta por cliente</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta por cliente</a></li>
             <?php } ?>         
             <?php  if ($_SESSION['PLE_ventas'] == '1') { ?>
-            <li class="slide"> <a href="alerts.php" class="side-menu__item">PLE ventas</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">PLE ventas</a></li>
             <?php } ?>         
             <?php  if ($_SESSION['reporte_compras'] == '1') { ?>
-            <li class="slide"> <a href="alerts.php" class="side-menu__item">Compras</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Compras</a></li>
             <?php } ?>         
             <?php  if ($_SESSION['margen_de_ganancia'] == '1') { ?>
-            <li class="slide"> <a href="alerts.php" class="side-menu__item">Margen de ganancia</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Margen de ganancia</a></li>
             <?php } ?>         
             <?php  if ($_SESSION['correo_enviado'] == '1') { ?>
-            <li class="slide"> <a href="alerts.php" class="side-menu__item">Correo enviados</a></li>
+            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Correo enviados</a></li>
             <?php } ?>     
           </ul>
         </li>
@@ -335,10 +338,10 @@
             <li class="slide"><a href="trabajador.php" class="side-menu__item">Trabajadores</a></li>
             <?php } ?>
             <?php  if ($_SESSION['tipo_de_seguro'] == '1') { ?>
-            <li class="slide"><a href="floating_labels.php" class="side-menu__item">Tipo de seguro</a></li>
+            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Tipo de seguro</a></li>
             <?php } ?>
             <?php  if ($_SESSION['boleta_de_pago'] == '1') { ?>
-            <li class="slide"><a href="floating_labels.php" class="side-menu__item">Boleta de pago</a></li>
+            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Boleta de pago</a></li>
             <?php } ?>
           </ul>
         </li>
@@ -366,7 +369,7 @@
             <li class="slide"><a href="correlacion_comprobante.php" class="side-menu__item">Tipos de Comprobantes</a></li>
             <?php } ?>
             <?php  if ($_SESSION['cargar_certificado'] == '1') { ?>
-            <li class="slide"><a href="accordions_collpase.php" class="side-menu__item">Cargar Certificado</a></li>  
+            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Cargar Certificado</a></li>  
             <?php } ?>          
           </ul>
         </li>
@@ -387,10 +390,10 @@
             <li class="slide"><a href="empresa.php" class="side-menu__item">Empresa</a></li>
             <?php } ?>
             <?php  if ($_SESSION['correo_SMTP'] == '1') { ?>
-            <li class="slide"><a href="accordions_collpase.php" class="side-menu__item">Correo/SMTP</a></li>
+            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Correo/SMTP</a></li>
             <?php } ?>
             <?php  if ($_SESSION['notificaciones'] == '1') { ?>
-            <li class="slide"><a href="accordions_collpase.php" class="side-menu__item">Notificaciones</a></li>
+            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Notificaciones</a></li>
             <?php } ?>
           </ul>
         </li>

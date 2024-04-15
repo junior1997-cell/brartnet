@@ -117,25 +117,25 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="col-md-6">
                     <div class="form-label">
                       <label for="codg" class="form-label">Código(*)</label>
-                      <input type="number" class="form-control bg-light input-valido" name="codg" id="codg" readonly />
+                      <input type="number" class="form-control bg-light input-valido" name="codg" id="codg" readonly data-bs-toggle="tooltip" title="No es editable" />
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="un1001" class="form-label">Código UN-1001(*)</label>
-                      <input type="number" class="form-control bg-light input-valido" name="un1001" id="un1001" readonly />
+                      <input type="number" class="form-control bg-light input-valido" name="un1001" id="un1001" readonly data-bs-toggle="tooltip" title="No es editable" />
                     </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
                       <label for="abrt" class="form-label">Abreviatura(*)</label>                      
-                      <textarea class="form-control bg-light input-valido" name="abrt" id="abrt" onkeyup="mayus(this);"  cols="30" rows="2" readonly></textarea>
+                      <textarea class="form-control bg-light input-valido" name="abrt" id="abrt" onkeyup="mayus(this);"  cols="30" rows="2" readonly data-bs-toggle="tooltip" title="No es editable"></textarea>
                     </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-label">
                       <label for="nombre" class="form-label">Nombre(*)</label>
-                      <textarea class="form-control bg-light input-valido" name="nombre" id="nombre" onkeyup="mayus(this);" cols="30" rows="3" readonly></textarea>                      
+                      <textarea class="form-control bg-light input-valido" name="nombre" id="nombre" onkeyup="mayus(this);" cols="30" rows="3" readonly data-bs-toggle="tooltip" title="No es editable"></textarea>                      
                     </div>
                   </div>
                   
@@ -148,7 +148,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="numero" class="form-label">Número(*)</label>
-                      <input type="number" class="form-control" name="numero" id="numero" />
+                      <input type="number" class="form-control" name="numero" id="numero"  />
                     </div>
                   </div>
                   
@@ -179,7 +179,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/custom_switcherjs.php"); ?>
 
     <script src="scripts/correlacion_comprobante.js"></script>
-    
+
     <script>
       $(function() {
         $('[data-toggle="tooltip"]').tooltip();
