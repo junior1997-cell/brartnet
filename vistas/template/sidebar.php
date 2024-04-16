@@ -147,13 +147,7 @@
             <li class="slide side-menu__label1"> <a href="javascript:void(0)">Realizar venta</a> </li>
             <?php  if ($_SESSION['boleta'] == '1') { ?>
             <li class="slide"> <a href="facturacion.php" class="side-menu__item">Facturación</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['factura'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Factura</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['nota_de_venta'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Nota de venta</a></li>
-            <?php } ?>
+            <?php } ?>            
             <?php  if ($_SESSION['Cotizacion'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Cotizacion</a></li>
             <?php } ?>

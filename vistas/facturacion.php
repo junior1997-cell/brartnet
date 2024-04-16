@@ -260,9 +260,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <!-- Submit -->
                         <button type="submit" style="display: none;" id="submit-form-compra">Submit</button>
                       </form>
-                    </div>
-
-                    
+                    </div>                    
 
                   </div>
                   <div class="card-footer border-top-0">

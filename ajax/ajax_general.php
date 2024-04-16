@@ -76,6 +76,29 @@ if (!isset($_SESSION["user_nombre"])) {
       }
     break;
 
+    case 'selectChoice_tipo_documento':
+      $rspta = $ajax_general->select2_tipo_documento();
+      
+      $data = [];
+
+      if ($rspta['status'] == true) {
+
+        foreach ($rspta['data'] as $key => $value) {
+          $data[] = ['value' => $value['code_sunat'], 'label' => $value['abreviatura'], 'disabled'  => false, 'selected'  => false,];
+        }
+
+        $retorno = array(
+          'status' => true,
+          'message' => 'Salió todo ok',
+          'data' => $data,
+        );
+
+        echo json_encode($retorno, true);
+      } else {
+        echo json_encode($rspta, true);
+      }
+    break;
+
     // ══════════════════════════════════════ U B I G E O - S E L E C T 2    D E P A R T A M E N T O ══════════════════════════════════════
     case 'select2_departamento':
       $rspta = $_ubigeo->select2_departamento();
@@ -122,6 +145,31 @@ if (!isset($_SESSION["user_nombre"])) {
           'message' => 'Salió todo ok',
           'data' => $data,
         );
+        echo json_encode($retorno, true);
+      } else {
+        echo json_encode($rspta, true);
+      }
+    break;
+
+    case 'selectChoice_distrito':
+      $rspta = $_ubigeo->select2_distrito();
+      
+      $data = [];
+
+      if ($rspta['status'] == true) {
+
+        foreach ($rspta['data'] as $key => $value) {
+          $data[] = [
+            'value' => $value['nombre'], 'label' => $value['nombre'], 'disabled'  => false, 'selected'  => false, 
+          ];
+        }
+
+        $retorno = array(
+          'status' => true,
+          'message' => 'Salió todo ok',
+          'data' => $data,
+        );
+
         echo json_encode($retorno, true);
       } else {
         echo json_encode($rspta, true);
@@ -223,7 +271,7 @@ if (!isset($_SESSION["user_nombre"])) {
       if ($rspta['status'] == true) {
 
         foreach ($rspta['data'] as $key => $value) {
-          $data[] = ['value' => $value['idbancos'], 'label' => $value['nombre'], 'disabled'  => false,];
+          $data[] = ['value' => $value['idbancos'], 'label' => $value['nombre'], 'disabled'  => false, 'selected'  => false,];
         }
 
         $retorno = array(

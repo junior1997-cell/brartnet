@@ -2,6 +2,12 @@ var tabla_compras;
 var tabla_productos;
 var array_data_compra = [];
 
+// ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T C H O I C E ══════════════════════════════════════
+
+const choice_distrito       = new Choices('#distrito',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+const choice_tipo_documento = new Choices('#tipo_documento',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+
 function init(){
 
   listar_tabla_compra();
@@ -20,10 +26,10 @@ function init(){
   lista_select2("../ajax/compras.php?op=select_u_medida", '#u_medida', null);
   lista_select2("../ajax/compras.php?op=select_marca", '#marca', null);
 
-  lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);  
-  lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);  
-  lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);  
-  
+  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_distrito", choice_distrito, null);
+  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_tipo_documento", choice_tipo_documento, null);  
+  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", choice_idbanco, null);
+
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -656,7 +662,7 @@ function llenar_dep_prov_ubig(input) {
   $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
 
   // if ($(input).select2("val") == null || $(input).select2("val") == '') { 
-  if ($(input).val() == null || $(input).val() == '') { 
+  if ($('#distrito').val() == null || $('#distrito').val() == '') { 
     $("#departamento").val(""); 
     $("#provincia").val(""); 
     $("#ubigeo").val(""); 
@@ -664,15 +670,19 @@ function llenar_dep_prov_ubig(input) {
     $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
   } else {
     // var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
-    var iddistrito = $(input).find(':selected').data('iddistrito');
+    var iddistrito = $('#distrito').val();
     $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
       e = JSON.parse(e); console.log(e);
-      $("#departamento").val(e.data.departamento); 
-      $("#provincia").val(e.data.provincia); 
-      $("#ubigeo").val(e.data.ubigeo_inei); 
-
+      if (e.status == true) {
+        $("#departamento").val(e.data.departamento); 
+        $("#provincia").val(e.data.provincia); 
+        $("#ubigeo").val(e.data.ubigeo_inei);       
+      } else {
+        ver_errores(e);
+      }
       $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
       $("#form-agregar-proveedor").valid();
+      
     });
   }  
 }
