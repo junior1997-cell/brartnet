@@ -295,6 +295,10 @@
           <a href="gasto_de_trabajador.php" class="side-menu__item">
             <i class='bx bx-dollar-circle side-menu__icon' ></i><span class="side-menu__label"> Gastos Trabajador</span>
           </a>
+          <a href="incidencias.php" class="side-menu__item">
+            <i class='bx bx-task side-menu__icon' ></i><span class="side-menu__label">Incidencias</span>
+            <!-- <i class="bx bx-task side-menu__icon"></i> -->
+          </a>
         </li>
         <?php } ?>
         <!-- End::slide -->        
