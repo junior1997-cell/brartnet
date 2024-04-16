@@ -20,8 +20,8 @@
       $sql = "SELECT c.*, p.*, tc.abreviatura as tp_comprobante, sdi.abreviatura as tipo_documento, c.estado
       FROM compra AS c
       INNER JOIN persona AS p ON c.idproveedor = p.idpersona
-      INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
-      INNER JOIN sunat_correlacion_comprobante AS tc ON tc.idtipo_comprobante = c.tipo_comprobante
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.codigo = c.tipo_comprobante
       WHERE c.estado = 1 AND c.estado_delete = 1";
       $compra = ejecutarConsulta($sql); if ($compra['status'] == false) {return $compra; }
 
@@ -85,8 +85,8 @@
       $sql_1 = "SELECT c.*, p.*, tc.abreviatura as tp_comprobante, sdi.abreviatura as tipo_documento, c.estado
       FROM compra AS c
       INNER JOIN persona AS p ON c.idproveedor = p.idpersona
-      INNER JOIN sunat_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
-      INNER JOIN sunat_correlacion_comprobante AS tc ON tc.idtipo_comprobante = c.tipo_comprobante
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = c.tipo_comprobante
       WHERE c.idcompra = '$idcompra'
       AND c.estado = 1 AND c.estado_delete = 1";
       $compra = ejecutarConsultaSimpleFila($sql_1); if ($compra['status'] == false) {return $compra; }

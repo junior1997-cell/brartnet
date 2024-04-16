@@ -98,7 +98,7 @@ Class Ajax_general
 
   public function select2_tipo_documento()	{
     // $data = [];
-		$sql="SELECT * FROM sunat_doc_identidad";
+		$sql="SELECT * FROM sunat_c06_doc_identidad";
 		return ejecutarConsultaArray($sql);   
 	}
 

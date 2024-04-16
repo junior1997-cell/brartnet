@@ -140,16 +140,21 @@ class Cliente
 	}
 
 	//Implementar un método para listar los registros
-	public function tabla_principal_cliente()	{
-		$filtro_id_trabajador  = '';
-		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
-			$filtro_id_trabajador = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";
-		} 
+	public function tabla_principal_cliente($filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
+
+		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
+
+		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND pt.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(pc.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
 		
 		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
 		pc.fecha_cancelacion,	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
 		CASE 
-			WHEN p.tipo_persona_sunat = 'NATURAL' 		THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
 			ELSE '-'
 		END AS cliente_nombre_completo, 
@@ -161,27 +166,152 @@ class Cliente
 		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
 		INNER JOIN plan as pl on pc.idplan=pl.idplan
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
-		INNER JOIN sunat_doc_identidad as i on p.tipo_documento=i.code_sunat  
+		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
 		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
-		where pc.estado_delete='1' $filtro_id_trabajador ORDER BY pc.idpersona_cliente DESC";
+		where pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		ORDER BY pc.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementar un método para listar los registros y mostrar en el select
-	public function select2_plan()
-	{
+	// ══════════════════════════════════════  PAGOS POR CLIENTES ══════════════════════════════════════
+
+	public function ver_pagos_x_cliente($idcliente)	{		
+		
+		$sql = "SELECT pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
+		pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, 	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,
+		cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
+		CASE 
+			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+			ELSE '-'
+		END AS cliente_nombre_completo, 
+		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, 
+		pl.nombre as nombre_plan,pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc
+		FROM persona_cliente as pc
+		INNER JOIN persona AS p on pc.idpersona=p.idpersona
+		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador
+		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
+		INNER JOIN plan as pl on pc.idplan=pl.idplan
+		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
+		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
+		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
+		where pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
+		ORDER BY pc.idpersona_cliente DESC";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	// ══════════════════════════════════════  PAGOS ALL CLIENTES ══════════════════════════════════════
+
+	public function ver_pagos_all_cliente($filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
+
+		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
+
+		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND pt.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(pc.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
+		
+		$sql = "SELECT pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
+		pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, 	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,
+		cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
+		CASE 
+			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+			ELSE '-'
+		END AS cliente_nombre_completo, 
+		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, 
+		pl.nombre as nombre_plan,pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc
+		FROM persona_cliente as pc
+		INNER JOIN persona AS p on pc.idpersona=p.idpersona
+		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador
+		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
+		INNER JOIN plan as pl on pc.idplan=pl.idplan
+		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
+		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
+		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
+		where pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		ORDER BY pc.idpersona_cliente DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	// ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════
+	public function select2_filtro_trabajador()	{
+		$filtro_id_trabajador  = '';
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+			$filtro_id_trabajador = "WHERE pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+		} 
+		$sql = "SELECT LPAD(pt.idpersona_trabajador, 5, '0') as idtrabajador, pt.idpersona_trabajador, pt.idpersona,  per_t.nombre_razonsocial
+		FROM persona_cliente as pc
+		INNER JOIN persona_trabajador as pt ON pt.idpersona_trabajador = pc.idpersona_trabajador
+		INNER JOIN persona as per_t ON per_t.idpersona = pt.idpersona
+		$filtro_id_trabajador
+		GROUP BY pc.idpersona_trabajador
+		ORDER BY per_t.nombre_razonsocial;";
+		return ejecutarConsulta($sql);
+	}
+
+	
+	public function select2_filtro_dia_pago()	{
+		$filtro_id_trabajador  = '';
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+		} 
+		$sql = "SELECT DISTINCT DAY(pc.fecha_cancelacion) as dia_cancelacion
+		FROM persona_cliente as pc $filtro_id_trabajador
+		ORDER BY DAY(pc.fecha_cancelacion) ASC;";
+		return ejecutarConsulta($sql);
+	}
+
+	public function select2_filtro_anio_pago()	{
+		$filtro_id_trabajador  = '';
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+		} 
+		$sql = "SELECT DISTINCT YEAR(pc.fecha_cancelacion) as anio_cancelacion
+		FROM persona_cliente as pc $filtro_id_trabajador
+		ORDER BY YEAR(pc.fecha_cancelacion) DESC;";
+		return ejecutarConsulta($sql);
+	}
+
+	public function select2_filtro_plan()	{
+		$filtro_id_trabajador  = '';
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+		} 
+		$sql = "SELECT pl.idplan, pl.nombre, pl.costo
+		FROM persona_cliente as pc
+		INNER JOIN plan as pl ON pl.idplan = pc.idplan
+		WHERE pl.estado = '1' and pl.estado_delete = '1' $filtro_id_trabajador
+		GROUP BY pc.idplan ORDER BY pl.nombre;";
+		return ejecutarConsulta($sql);
+	}
+
+	public function select2_filtro_zona_antena()	{
+		$filtro_id_trabajador  = '';
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+		} 
+		$sql = "SELECT za.idzona_antena, za.nombre, za.ip_antena
+		FROM persona_cliente as pc
+		INNER JOIN zona_antena as za ON za.idzona_antena = pc.idzona_antena
+		WHERE za.estado = '1' and za.estado_delete = '1' $filtro_id_trabajador
+		GROUP BY pc.idzona_antena ORDER BY za.nombre;";
+		return ejecutarConsulta($sql);
+	}
+	
+	public function select2_plan()	{
 		$sql = "SELECT idplan, nombre, costo FROM plan WHERE estado='1' and estado_delete='1';";
 		return ejecutarConsulta($sql);
 	}
 
-	public function select2_zona_antena()
-	{
+	public function select2_zona_antena()	{
 		$sql = "SELECT idzona_antena, nombre, ip_antena FROM zona_antena WHERE estado='1' and estado_delete='1';";
 		return ejecutarConsulta($sql);
 	}
 
-	public function select2_trabajador()
-	{
+	public function select2_trabajador(){
 		$sql = "SELECT pt.idpersona_trabajador, p.idpersona, 
 		CASE 
 		WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
@@ -196,8 +326,7 @@ class Cliente
 	}
 
 	//Implementar un método para listar los registros
-	public function perfil_trabajador($id)
-	{
+	public function perfil_trabajador($id)	{
 		$sql = "SELECT p.foto_perfil	FROM persona as p WHERE p.idpersona = '$id' ;";
 		return ejecutarConsultaSimpleFila($sql);
 	}

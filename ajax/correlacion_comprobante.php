@@ -28,16 +28,19 @@ switch ($_GET["op"]){
         $data[]=[
           "0" => $count++,
           "1" =>  '<div class="hstack gap-2 fs-15">' .
-                    '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_correlacion_compb('.($value['idtipo_comprobante']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                    '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_correlacion_compb('.$value['idtipo_comprobante'].'.,\''.$value['nombre'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
-                  '</div>',
-          "2" => ($value['codigo']),
-          "3" => ($value['nombre']),
-          "4" => ($value['abreviatura']),
-          "5" => ($value['serie']),
-          "6" => ($value['numero']),
-          "7" => ($value['un1001']),
-          "8" => ($value['estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
+            '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_correlacion_compb('.($value['idtipo_comprobante']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+            ($value['estado'] == '1' ? 
+            '<button class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_correlacion_compb('.$value['idtipo_comprobante'].'.,\''.$value['nombre'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>' :
+            ''
+            ).
+          '</div>',
+          "2" => $value['codigo'],
+          "3" => $value['nombre'],
+          "4" => $value['abreviatura'],
+          "5" => $value['serie'],
+          "6" => $value['numero'],
+          "7" => $value['un1001'],
+          "8" => $value['estado'] == '1' ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
         ];
       }
       $results =[
@@ -58,30 +61,7 @@ switch ($_GET["op"]){
 
     if (empty($id)) {
 
-      if(empty($validar["data"])){
-
-      $rspta = $correlacion_compb->insertar($codigo, $nombre, $abreviatura, $serie, $numero, $un1001);
-      echo json_encode(['status' => 'registrado', 'data' => $rspta]);
-
-      }else{
-        $info_repetida = '';
-
-        foreach ($validar["data"] as $key => $value) {
-          $info_repetida .= '
-          <div class="row">
-            <div class="col-md-12 text-left">
-              <span class="font-size-15px text-danger"><b>Tipo Tributo: </b>' . $value['nombre'] .  '</span>
-              ' . ($value['estado'] == 1 ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Inhabilitado').'</span><br>
-            </div>
-            <div class="col-md-12 text-left">
-              <b>Papelera: </b>' . ($value['estado'] == 0 ? '<i class="fas fa-check text-success"></i> SI' : '<i class="fas fa-times text-danger"></i> NO') . ' <b>|</b>
-              <b>Eliminado: </b>' . ($value['estado_delete'] == 0 ? '<i class="fas fa-check text-success"></i> SI' : '<i class="fas fa-times text-danger"></i> NO') . '<br>
-              
-            </div>
-          </div>';
-        }
-        echo json_encode(['status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>' . $info_repetida . '</ul>', 'id_tabla' => '']);
-      }
+      echo json_encode(['status' => 'error_personalizado',  'titulo' =>'No tienes permiso de crear', 'message' => 'Los permisso de creacion estan bloqueados, para no tener problemas con la facuracion electronica.', 'data' => [], 'id_tabla' => '']);      
 
     } else {
       $rspta = $correlacion_compb->editar($id, $codigo, $nombre, $abreviatura, $serie, $numero, $un1001);
@@ -106,7 +86,7 @@ switch ($_GET["op"]){
   break;
 
   case 'listar_crl_comprobante':
-    $rspta = $correlacion_compb->listar_crl_comprobante(); $cont = 1; $data = "";
+    $rspta = $correlacion_compb->listar_crl_comprobante($_GET["codigo_sunat"]); $cont = 1; $data = "";
     if($rspta['status'] == true){
       foreach ($rspta['data'] as $key => $value) {
         $data .= '<option  value=' . $value['idtipo_comprobante']  . '>' . $value['tipo_comprobante'] . '</option>';

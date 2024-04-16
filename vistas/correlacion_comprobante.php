@@ -1,7 +1,7 @@
 <?php
 //Activamos el almacenamiento en el buffer
 ob_start();
-require "../config/funcion_general.php";
+date_default_timezone_set('America/Lima'); require "../config/funcion_general.php";
 session_start();
 if (!isset($_SESSION["user_nombre"])) {
   header("Location: index.php?file=" . basename($_SERVER['PHP_SELF']));
@@ -26,13 +26,13 @@ if (!isset($_SESSION["user_nombre"])) {
 
       <!-- Start::app-content -->
       <div class="main-content app-content">
-        <div class="container-fluid">
+        <div class="container-fluid"> 
 
           <!-- Start::page-header -->
-          <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+          <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb"> 
             <div>
               <div class="d-md-flex d-block align-items-center ">
-                <button type="button" class="btn-modal-effect btn btn-primary label-btn m-r-10px" data-bs-toggle="modal" data-bs-target="#modal-corrlacion-compb" onclick="limpiar_form();"><i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                <button type="button" class="btn-modal-effect btn btn-primary label-btn m-r-10px"  onclick="toastr_info('ERROR DE PERMISO', 'Usted <b>no está autorizado</b> para crear nuevos tipos de comprobantes. Por favor, consulte con el <b>administrador del sistema</b> para obtener más información.');"><i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                 <div>
                   <p class="fw-semibold fs-18 mb-0">Correlación de Numeración</p>
                   <span class="fs-semibold text-muted">Administra la correlación de numeración</span>
@@ -68,7 +68,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th>Abreviatura</th>
                             <th>Serie</th>
                             <th>Número</th>
-                            <th>Código UN-1001</th>
+                            <th>UN1001</th>
                             <th>Estado</th>
                           </tr>
                         </thead>
@@ -82,7 +82,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th>Abreviatura</th>
                             <th>Serie</th>
                             <th>Número</th>
-                            <th>Código UN-1001</th>
+                            <th>UN1001</th>
                             <th>Estado</th>
                           </tr>
                         </tfoot>
@@ -106,51 +106,52 @@ if (!isset($_SESSION["user_nombre"])) {
         <div class="modal-dialog modal-md modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h6 class="modal-title" id="modal-corrlacion-compbLabel1"></h6>
+              <h6 class="modal-title" id="modal-corrlacion-compbLabel1">Actulizar Correlacion</h6>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form name="formulario-correlacion-compb" id="formulario-correlacion-compb" method="POST" class="row needs-validation" novalidate>
+              <form name="formulario-correlacion-compb" id="formulario-correlacion-compb" method="POST" class="needs-validation" novalidate>
                 <div class="row gy-2" id="cargando-1-fomulario">
                   <input type="hidden" name="idtipo_comprobante" id="idtipo_comprobante">
 
-                  <div class="col-md-3">
+                  <div class="col-md-6">
                     <div class="form-label">
                       <label for="codg" class="form-label">Código(*)</label>
-                      <input type="number" class="form-control" name="codg" id="codg" />
+                      <input type="number" class="form-control bg-light input-valido" name="codg" id="codg" readonly data-bs-toggle="tooltip" title="No es editable" />
                     </div>
                   </div>
-
-                  <div class="col-md-4">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="un1001" class="form-label">Código UN-1001(*)</label>
+                      <input type="number" class="form-control bg-light input-valido" name="un1001" id="un1001" readonly data-bs-toggle="tooltip" title="No es editable" />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="abrt" class="form-label">Abreviatura(*)</label>                      
+                      <textarea class="form-control bg-light input-valido" name="abrt" id="abrt" onkeyup="mayus(this);"  cols="30" rows="2" readonly data-bs-toggle="tooltip" title="No es editable"></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
                     <div class="form-label">
                       <label for="nombre" class="form-label">Nombre(*)</label>
-                      <input type="text" class="form-control" name="nombre" id="nombre" onkeyup="mayus(this);" />
+                      <textarea class="form-control bg-light input-valido" name="nombre" id="nombre" onkeyup="mayus(this);" cols="30" rows="3" readonly data-bs-toggle="tooltip" title="No es editable"></textarea>                      
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  
+                  <div class="col-md-6">
                     <div class="form-group">
-                      <label for="abrt" class="form-label">Abreviatura(*)</label>
-                      <input type="text" class="form-control" name="abrt" id="abrt" onkeyup="mayus(this);" />
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="serie" class="form-label">serie(*)</label>
+                      <label for="serie" class="form-label">Serie(*)</label>
                       <input type="text" class="form-control" name="serie" id="serie" onkeyup="mayus(this);" />
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="numero" class="form-label">Número(*)</label>
-                      <input type="number" class="form-control" name="numero" id="numero" />
+                      <input type="number" class="form-control" name="numero" id="numero"  />
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="un1001" class="form-label">Código UN-1001(*)</label>
-                      <input type="number" class="form-control" name="un1001" id="un1001" />
-                    </div>
-                  </div>
+                  
                 </div>
                 <div class="row" id="cargando-2-fomulario" style="display: none;">
                   <div class="col-lg-12 text-center">
@@ -177,10 +178,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>
 
-    <!-- Select2 Cdn -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
     <script src="scripts/correlacion_comprobante.js"></script>
+
     <script>
       $(function() {
         $('[data-toggle="tooltip"]').tooltip();

@@ -162,7 +162,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'tabla_principal_cliente':
-        $rspta = $persona_cliente->tabla_principal_cliente();
+        $rspta = $persona_cliente->tabla_principal_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
         //Vamos a declarar un array
         $data = [];
         $cont = 1;
@@ -205,14 +205,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = array(
               "0" => $cont++,
-              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>' .
-                ( $value['estado'] ? ' <button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Dar de baja o Eliminar"><i class="ri-delete-bin-line"></i></button>' : 
-                ' <button  class="btn btn-icon btn-sm btn-success-light product-btn" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Reactivar"><i class="ri-check-line"></i></button>').
+              "1" => '<button class="btn btn-icon btn-sm border-warning btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>' .
+                ( $value['estado'] ? ' <button  class="btn btn-icon btn-sm border-danger btn-danger-light product-btn" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Dar de baja o Eliminar"><i class="ri-delete-bin-line"></i></button>' : 
+                ' <button  class="btn btn-icon btn-sm border-success btn-success-light product-btn" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')" data-bs-toggle="tooltip" title="Reactivar"><i class="ri-check-line"></i></button>').
               ' <div class="btn-group ">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-coin"></i> Realizar Pago</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-checkup-list"></i> Listar pagos</a></li>                  
+                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li>                  
                 </ul>
               </div>',
               "2" => '<div class="d-flex flex-fill align-items-center">
@@ -260,6 +260,231 @@ if (!isset($_SESSION["user_nombre"])) {
           echo json_encode($results, true);
         } else {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
+        }
+
+      break;
+
+      // ══════════════════════════════════════   PAGOS ALL CLIENTES   ══════════════════════════════════════ 
+      case 'ver_pagos_x_cliente':
+        $rspta = $persona_cliente->ver_pagos_x_cliente($_GET["idcliente"]);
+
+        $imagen_perfil = empty($rspta['data']['foto_perfil']) ? 'no-perfil.jpg' :   $rspta['data']['foto_perfil'];
+        $bg_light = $rspta['data']['estado'] == 1 ? '' : 'bg-danger-transparent';
+
+        echo '<table class="table table-striped table-bordered table-condensed">
+          <thead>
+            <th >N°</th> <th >APELLIDOS Y NOMBRES</th> <th >CANCELACIÓN</th> <th >IMPORTE</th> <th >AÑO</th> <th >ENE</th> <th >FEB</th> <th >MAR</th> <th >ABR</th>
+            <th >MAY</th> <th >JUN</th> <th >JUL</th> <th >AGO</th> <th >SEP</th> <th >OCT</th> <th >SEP</th> <th >NOV</th> <th >DIC</th> <th >OBSERVACIONES</th>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="py-2  text-center">1</th>
+              <td class="py-2  text-nowrap" rowspan="3" ><div class="d-flex flex-fill align-items-center">
+                  <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
+                    <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($rspta['data']['cliente_nombre_completo']) . '\')" alt="" > </span>
+                  </div>
+                  <div>
+                    <span class="d-block fw-semibold text-primary">' . $rspta['data']['cliente_nombre_completo'] . '</span>
+                    <span class="text-muted fs-10 text-nowrap">' . $rspta['data']['tipo_doc'] . ' : ' . $rspta['data']['numero_documento'] . '</span> |
+                    <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $rspta['data']['idcliente'] . '</span>
+                  </div>
+                </div></td>
+              <td class="py-2  text-center" rowspan="3">'.$rspta['data']['fecha_cancelacion_format'].'</td>                            
+              <td class="py-2  text-center" rowspan="3" >'.$rspta['data']['costo'].'</td>
+              <td class="py-2  text-nowrap" >2022</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2 " rowspan="3"><textarea cols="30" rows="2" class="textarea_datatable  bg-light" readonly="">' . $rspta['data']['nota'] . '</textarea></td>
+            </tr>      
+            
+            <tr>
+              <th class="py-2  text-center">2</th>
+              <td class="py-2  text-nowrap" >2021</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+            </tr>      
+            <tr>
+              <th class="py-2  text-center">3</th>
+              <td class="py-2  text-nowrap" >2020</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" >50</td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+              <td class="py-2  text-center" ></td>
+            </tr>      
+
+          </tbody>
+        </table>';        
+        
+      break;
+
+      // ══════════════════════════════════════   PAGOS ALL CLIENTES   ══════════════════════════════════════ 
+      case 'ver_pagos_all_cliente':
+        $rspta = $persona_cliente->ver_pagos_all_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        
+        echo '<table class="table  table-hover table-bordered table-condensed">
+        <thead>
+          <tr id="id_buscando_tabla_pago_all"> 
+            <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+          </tr>
+          <tr > 
+            <th >N°</th> <th >APELLIDOS Y NOMBRES</th> <th >CANCELACIÓN</th> <th >IMPORTE</th> <th >AÑO</th> <th >ENE</th> <th >FEB</th> <th >MAR</th> <th >ABR</th>
+            <th >MAY</th> <th >JUN</th> <th >JUL</th> <th >AGO</th> <th >SEP</th> <th >OCT</th> <th >SEP</th> <th >NOV</th> <th >DIC</th> <th >OBSERVACIONES</th>
+          </tr>
+        </thead>
+        <tbody>';
+
+        foreach ($rspta['data'] as $key => $val) {
+          $imagen_perfil = empty($val['foto_perfil']) ? 'no-perfil.jpg' :   $val['foto_perfil'];
+          $bg_light = $val['estado'] == 1 ? '' : 'bg-danger-transparent';
+          echo '<tr>
+            <th class="py-0 '.$bg_light.' text-center">'.($key + 1).'</th>
+            <td class="py-0 '.$bg_light.' text-nowrap"><div class="d-flex flex-fill align-items-center">
+                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
+                  <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($val['cliente_nombre_completo']) . '\')"> </span>
+                </div>
+                <div>
+                  <span class="d-block fw-semibold text-primary">' . $val['cliente_nombre_completo'] . '</span>
+                  <span class="text-muted fs-10 text-nowrap">' . $val['tipo_doc'] . ' : ' . $val['numero_documento'] . '</span> |
+                  <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $val['idcliente'] . '</span>
+                </div>
+              </div></td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['fecha_cancelacion_format'].'</td>
+            <td class="py-0 '.$bg_light.' text-nowrap" ><a href="tel:+51'.$val['celular'].'" data-bs-toggle="tooltip" title="Clic para hacer llamada">'.$val['celular'].'</a></td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['costo'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >50</td>
+            <td class="py-0 '.$bg_light.' text-center" >50</td>
+            <td class="py-0 '.$bg_light.' text-center" >50</td>
+            <td class="py-0 '.$bg_light.' text-center" >50</td>
+            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.'" ><textarea cols="30" rows="2" class="textarea_datatable '.$bg_light.' bg-light " readonly="">' . $val['nota'] . '</textarea></td>
+          </tr>';
+        }
+
+        echo '</tbody>
+        </table>';
+      break;
+
+      // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 
+
+      case 'select2_filtro_trabajador':
+
+        $rspta = $persona_cliente->select2_filtro_trabajador();        
+        $data = "";
+        if ($rspta['status'] == true) {
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value="' . $value['idpersona_trabajador']  . '">' . $value['idtrabajador']. ' '.  $value['nombre_razonsocial']  . '</option>';
+          }
+
+          $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+
+      break;  
+      
+      case 'select2_filtro_dia_pago':
+
+        $rspta = $persona_cliente->select2_filtro_dia_pago();        
+        $data = "";
+        if ($rspta['status'] == true) {
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value="' . $value['dia_cancelacion']  . '">Día ' . $value['dia_cancelacion'] . '</option>';
+          }
+
+          $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+
+      break;
+
+      case 'select2_filtro_anio_pago':
+
+        $rspta = $persona_cliente->select2_filtro_anio_pago();        
+        $data = "";
+        if ($rspta['status'] == true) {
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value="' . $value['anio_cancelacion']  . '">' . $value['anio_cancelacion'] . '</option>';
+          }
+
+          $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+
+      break;
+      case 'select2_filtro_plan':
+
+        $rspta = $persona_cliente->select2_filtro_plan();        
+        $data = "";
+        if ($rspta['status'] == true) {
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value="' . $value['idplan']  . '">' . $value['nombre'] . ' ' . $value['costo'] . '</option>';
+          }
+
+          $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+
+      break;
+
+      case 'select2_filtro_zona_antena':
+
+        $rspta = $persona_cliente->select2_filtro_zona_antena();        
+        $data = "";
+        if ($rspta['status'] == true) {
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value="' . $value['idzona_antena']  . '">' . $value['nombre'] . ' - IP: ' . $value['ip_antena'] . '</option>';
+          }
+
+          $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
         }
 
       break;

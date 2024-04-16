@@ -2,6 +2,12 @@ var tabla_compras;
 var tabla_productos;
 var array_data_compra = [];
 
+// ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T C H O I C E ══════════════════════════════════════
+
+const choice_distrito       = new Choices('#distrito',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+const choice_tipo_documento = new Choices('#tipo_documento',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+
 function init(){
 
   listar_tabla_compra();
@@ -20,10 +26,10 @@ function init(){
   lista_select2("../ajax/compras.php?op=select_u_medida", '#u_medida', null);
   lista_select2("../ajax/compras.php?op=select_marca", '#marca', null);
 
-  lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);  
-  lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);  
-  lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);  
-  
+  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_distrito", choice_distrito, null);
+  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_tipo_documento", choice_tipo_documento, null);  
+  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", choice_idbanco, null);
+
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -113,7 +119,7 @@ function listar_tabla_compra(){
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
     buttons: [  
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla) { tabla.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_compras) { tabla_compras.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
       { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de Compras', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
       { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de Compras', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
@@ -393,7 +399,7 @@ function listar_producto_x_codigo() {
 
             <td class="py-1 form-group">
               <input type="number" class="w-100px form-control valid_descuento" name="valid_descuento_${cont}" value="0" min="0.00" required onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
-              <input type="hidden" class="descuento_${cont}" name="descuento[]" value="0" min="0.00" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+              <input type="hidden" class="descuento_${cont}" name="descuento[]" value="0" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
             </td>
 
             <td class="py-1 text-right"><span class="text-right subtotal_producto_${cont}" id="subtotal_producto">${subtotal}</span> <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="0" > </td>
@@ -656,7 +662,7 @@ function llenar_dep_prov_ubig(input) {
   $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
 
   // if ($(input).select2("val") == null || $(input).select2("val") == '') { 
-  if ($(input).val() == null || $(input).val() == '') { 
+  if ($('#distrito').val() == null || $('#distrito').val() == '') { 
     $("#departamento").val(""); 
     $("#provincia").val(""); 
     $("#ubigeo").val(""); 
@@ -664,15 +670,19 @@ function llenar_dep_prov_ubig(input) {
     $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
   } else {
     // var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
-    var iddistrito = $(input).find(':selected').data('iddistrito');
+    var iddistrito = $('#distrito').val();
     $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
       e = JSON.parse(e); console.log(e);
-      $("#departamento").val(e.data.departamento); 
-      $("#provincia").val(e.data.provincia); 
-      $("#ubigeo").val(e.data.ubigeo_inei); 
-
+      if (e.status == true) {
+        $("#departamento").val(e.data.departamento); 
+        $("#provincia").val(e.data.provincia); 
+        $("#ubigeo").val(e.data.ubigeo_inei);       
+      } else {
+        ver_errores(e);
+      }
       $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
       $("#form-agregar-proveedor").valid();
+      
     });
   }  
 }

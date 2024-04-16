@@ -79,14 +79,10 @@ function lista_selectChoice(url, nombre_input, id_tabla, span_charge = null, cal
       // console.log(url, nombre_input, id_tabla);
       if (e.status==true) {
         
-        nombre_input.setChoiceByValue([
-          { value: 'One', label: 'Label One' },
-          { value: 'Two', label: 'Label Two' },
-          { value: 'Three', label: 'Label Three' },
-        ]);
+        nombre_input.setChoices(e.data);
         
         if ( !id_tabla || id_tabla == "NaN" || id_tabla == "" || id_tabla == null || id_tabla == "Infinity" || id_tabla === undefined) {
-          $(nombre_input).val(null).trigger("change");   } else {  $(nombre_input).val(id_tabla).trigger("change");  
+          /*nombre_input.setChoiceByValue(null);*/   } else {  nombre_input.setChoiceByValue(id_tabla);
         }
         if (span_charge == null || span_charge == '' || span_charge == false ) { } else {  $(span_charge).html(callback_true); }
       } else {

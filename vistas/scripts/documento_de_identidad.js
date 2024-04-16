@@ -82,7 +82,7 @@ function guardar_editar(e){
 function limpiar_form() {
   $("#guardar_registro_doc_identidad").html('Guardar Cambios').removeClass('disabled');
   //Mostramos los Materiales
-  $("#idsunat_doc_identidad").val("");
+  $("#idsunat_c06_doc_identidad").val("");
   $("#nombre").val("");
   $("#abrt").val("");
   $("#codg").val("");
@@ -92,7 +92,7 @@ function limpiar_form() {
   $(".error.invalid-feedback").remove();
 }
 
-function mostrar_doc_didentidad(idsunat_doc_identidad){
+function mostrar_doc_didentidad(idsunat_c06_doc_identidad){
   $(".tooltip").remove();
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
@@ -101,10 +101,10 @@ function mostrar_doc_didentidad(idsunat_doc_identidad){
 
   $("#modal-doc-identidad").modal("show");
 
-  $.post("../ajax/documento_de_identidad.php?op=mostrar_doc_didentidad", { idsunat_doc_identidad: idsunat_doc_identidad }, function (e, status) {
+  $.post("../ajax/documento_de_identidad.php?op=mostrar_doc_didentidad", { idsunat_c06_doc_identidad: idsunat_c06_doc_identidad }, function (e, status) {
     e = JSON.parse(e); 
     if (e.status) {
-      $("#idsunat_doc_identidad").val(e.data.idsunat_doc_identidad);
+      $("#idsunat_c06_doc_identidad").val(e.data.idsunat_c06_doc_identidad);
       $("#nombre").val(e.data.nombre);        
       $("#abrt").val(e.data.abreviatura);    
       $("#codg").val(e.data.code_sunat);    
@@ -116,11 +116,11 @@ function mostrar_doc_didentidad(idsunat_doc_identidad){
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function eliminar_papelera_doc_didentidad(idsunat_doc_identidad, nombre){
+function eliminar_papelera_doc_didentidad(idsunat_c06_doc_identidad, nombre){
   crud_eliminar_papelera(
     "../ajax/documento_de_identidad.php?op=desactivar",
     "../ajax/documento_de_identidad.php?op=eliminar", 
-    idsunat_doc_identidad, 
+    idsunat_c06_doc_identidad, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
