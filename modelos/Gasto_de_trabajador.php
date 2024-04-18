@@ -106,7 +106,7 @@
 
     function listar_proveedor(){
       $sql = "SELECT idpersona, nombre_razonsocial AS nombre, apellidos_nombrecomercial AS apellido, numero_documento
-      FROM persona WHERE idtipo_persona = 4 AND estado = 1 AND estado_delete = 1 AND idpersona > 2;";
+      FROM persona WHERE idtipo_persona = 3  AND estado_delete = 1 AND idpersona > 2;";
       return ejecutarConsultaArray($sql);
     }
 

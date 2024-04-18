@@ -214,7 +214,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       <script>
         $(document).ready(function () {
-          $('[data-toggle="tooltip"]').tooltip();
+          $('[data-bs-toggle="tooltip"]').tooltip();
         });        
       </script>
 

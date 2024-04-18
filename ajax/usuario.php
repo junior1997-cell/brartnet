@@ -8,7 +8,7 @@ $usuario = new Usuario();
 
 date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
 $imagen_error = "this.src='../dist/svg/404-v2.svg'";
-$toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+$toltip = '<script> $(function () { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
 
 # ══════════════════════════════════════ D A T O S   U S U A R I O ══════════════════════════════════════ 
 $idusuario  = isset($_POST["idusuario"]) ? limpiarCadena($_POST["idusuario"]) : "";

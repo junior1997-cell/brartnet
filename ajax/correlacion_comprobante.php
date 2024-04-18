@@ -6,7 +6,7 @@ $correlacion_compb = new Correlacion_comprobante();
 
 date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
 $imagen_error = "this.src='../dist/svg/404-v2.svg'";
-$toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+$toltip = '<script> $(function () { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
 
 $id = isset($_POST["idtipo_comprobante"]) ? limpiarCadena($_POST["idtipo_comprobante"]) : "";
 

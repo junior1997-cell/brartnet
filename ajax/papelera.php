@@ -14,7 +14,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     date_default_timezone_set('America/Lima'); $date_now = date("d_m_Y__h_i_s_A");
     $imagen_error = "this.src='../dist/svg/user_default.svg'";
-    $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+    $toltip = '<script> $(function () { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
     $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/fun_route/admin/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/admin/');
 
 
@@ -32,7 +32,7 @@ if (!isset($_SESSION["user_nombre"])) {
         $data = [];
         $cont = 1; 
 
-        $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+        $toltip = '<script> $(function() { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
     
           if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $value) {            

@@ -1368,7 +1368,7 @@ function extrae_ruc(select = null, input = null) {
     }
   }
   
-  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-bs-toggle="tooltip"]').tooltip();
 }
 
 function replicar_value_input( input_entrada, input_salida) {

@@ -277,7 +277,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="scripts/marca.js"></script>
     <script>
       $(function() {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip();
       });
     </script>
 

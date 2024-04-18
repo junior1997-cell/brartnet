@@ -36,16 +36,16 @@ if (!isset($_SESSION["user_nombre"])) {
                 <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                 <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                 <div>
-                  <p class="fw-semibold fs-18 mb-0">Compras</p>
-                  <span class="fs-semibold text-muted">Administra las Compras.</span>
+                  <p class="fw-semibold fs-18 mb-0">Facturación</p>
+                  <span class="fs-semibold text-muted">Administra tus comprobantes de pago.</span>
                 </div>
               </div>
             </div>
             <div class="btn-list mt-md-0 mt-2">
               <nav>
                 <ol class="breadcrumb mb-0">
-                  <li class="breadcrumb-item"><a href="javascript:void(0);">Lista de Compras</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Compras</li>
+                  <li class="breadcrumb-item"><a href="javascript:void(0);">Lista de comprobantes</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Facturación</li>
                 </ol>
               </nav>
             </div>
@@ -53,164 +53,307 @@ if (!isset($_SESSION["user_nombre"])) {
           <!-- End::page-header -->
 
           <!-- Start::row-1 -->
-          <div class="row">
-            <div class="col-xxl-12 col-xl-12">
-              <div>
-                <div class="card custom-card">
-                  <div class="card-body">
-                    <!-- ------------ Tabla de Compras ------------- -->
-                    <div class="table-responsive" id="div-tabla">
-                      <table class="table table-bordered w-100" style="width: 100%;" id="tabla-compras">
-                        <thead>
-                          <tr>
-                            <th class="text-center">#</th>
-                            <th class="text-center">Acciones</th>
-                            <th>Fecha</th>
-                            <th>Proveedor</th>
-                            <th>Tipo y Serie Comprob</th>
-                            <th>Total</th> 
-                            <th>Descripción</th>
-                            <th>CFDI</th>
-                          </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                          <tr>
-                          <th class="text-center">#</th>
-                            <th class="text-center">Acciones</th>
-                            <th>Fecha</th>
-                            <th>Proveedor</th>
-                            <th>Tipo y Serie Comprob</th>
-                            <th>Total</th>
-                            <th>Descripción</th>
-                            <th>CFDI</th>
-                          </tr>
-                        </tfoot>
-                      </table>
-                    </div>
-                    <!-- FORM - COMPROBANTE -->
-                    <div class="div-formulario"  style="display: none;">
-                      <form name="form-agregar-compra" id="form-agregar-compra" method="POST" class="needs-validation" novalidate>
-                        <div class="row gy-2" id="cargando-1-formulario">
-                          <input type="hidden" name="idcompra" id="idcompra" />
+          <div class="row">     
 
-                          <!-- ----------------- PROVEEDOR --------------- -->
-                          <div class="col-md-6 col-lg-4 col-xl-6 col-xxl-6">
+            <!-- TABLA - FACTURA -->
+            <div class="col-xl-9" id="div-tabla">
+              <div class="card custom-card">
+                <div class="card-header justify-content-between">
+                  <div class="card-title">
+                    Manage Invoices
+                  </div>
+                  <div class="d-flex">
+                    <button class="btn btn-sm btn-primary btn-wave waves-light"><i class="ri-add-line fw-semibold align-middle me-1"></i> Create Invoice</button>
+                    <div class="dropdown ms-2">
+                      <button class="btn btn-icon btn-secondary-light btn-sm btn-wave waves-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="ti ti-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="javascript:void(0);">All Invoices</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">Paid Invoices</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">Pending Invoices</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">Overdue Invoices</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered w-100" style="width: 100%;" id="tabla-compras">
+                      <thead>
+                        <tr>
+                          <th class="text-center">#</th>
+                          <th class="text-center">OP</th>
+                          <th>Fecha</th>
+                          <th>Proveedor</th>
+                          <th>Tipo y Serie Comprob</th>
+                          <th>Total</th> 
+                          <th>Descripción</th>
+                          <th>CFDI</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                      <tfoot>
+                        <tr>
+                        <th class="text-center">#</th>
+                          <th class="text-center">OP</th>
+                          <th>Fecha</th>
+                          <th>Proveedor</th>
+                          <th>Tipo y Serie Comprob</th>
+                          <th>Total</th>
+                          <th>Descripción</th>
+                          <th>CFDI</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>                
+              </div>
+            </div>
+
+            <!-- REPORTE- MINI -->
+            <div class="col-xl-3" id="div-mini-reporte">
+              <div class="card custom-card">
+                <div class="card-body p-0">
+                  <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-top">
+                    <div class="svg-icon-background bg-primary-transparent me-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24" class="svg-primary">
+                        <path d="M13,16H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2ZM9,10h2a1,1,0,0,0,0-2H9a1,1,0,0,0,0,2Zm12,2H18V3a1,1,0,0,0-.5-.87,1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0A1,1,0,0,0,2,3V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V13A1,1,0,0,0,21,12ZM5,20a1,1,0,0,1-1-1V4.73L6,5.87a1.08,1.08,0,0,0,1,0l3-1.72,3,1.72a1.08,1.08,0,0,0,1,0l2-1.14V19a3,3,0,0,0,.18,1Zm15-1a1,1,0,0,1-2,0V14h2Zm-7-7H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2Z" />
+                      </svg>
+                    </div>
+                    <div class="flex-fill">
+                      <h6 class="mb-2 fs-12">Total Invoices Amount
+                        <span class="badge bg-primary fw-semibold float-end">
+                          12,345
+                        </span>
+                      </h6>
+                      <div class="pb-0 mt-0">
+                        <div>
+                          <h4 class="fs-18 fw-semibold mb-2">$<span class="count-up" data-count="192">192</span>.87K</h4>
+                          <p class="text-muted fs-11 mb-0 lh-1">
+                            <span class="text-success me-1 fw-semibold">
+                              <i class="ri-arrow-up-s-line me-1 align-middle"></i>3.25%
+                            </span>
+                            <span>this month</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-top">
+                    <div class="svg-icon-background bg-success-transparent me-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-success">
+                        <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v5a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h6a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Zm13.71,6.29a1,1,0,0,0-1.42,0l-3.29,3.3-1.29-1.3a1,1,0,0,0-1.42,1.42l2,2a1,1,0,0,0,1.42,0l4-4A1,1,0,0,0,21.21,16.29Z" />
+                      </svg>
+                    </div>
+                    <div class="flex-fill">
+                      <h6 class="mb-2 fs-12">Total Paid Invoices
+                        <span class="badge bg-success fw-semibold float-end">
+                          4,176
+                        </span>
+                      </h6>
+                      <div>
+                        <h4 class="fs-18 fw-semibold mb-2">$<span class="count-up" data-count="68.83">68.83</span>K</h4>
+                        <p class="text-muted fs-11 mb-0 lh-1">
+                          <span class="text-danger me-1 fw-semibold">
+                            <i class="ri-arrow-down-s-line me-1 align-middle"></i>1.16%
+                          </span>
+                          <span>this month</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-top p-4 border-bottom border-block-end-dashed">
+                    <div class="svg-icon-background bg-warning-transparent me-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" class="svg-warning">
+                        <path d="M19,12h-7V5c0-0.6-0.4-1-1-1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9C20,12.4,19.6,12,19,12z M12,19.9c-3.8,0.6-7.4-2.1-7.9-5.9C3.5,10.2,6.2,6.6,10,6.1V13c0,0.6,0.4,1,1,1h6.9C17.5,17.1,15.1,19.5,12,19.9z M15,2c-0.6,0-1,0.4-1,1v6c0,0.6,0.4,1,1,1h6c0.6,0,1-0.4,1-1C22,5.1,18.9,2,15,2z M16,8V4.1C18,4.5,19.5,6,19.9,8H16z" />
+                      </svg>
+                    </div>
+                    <div class="flex-fill">
+                      <h6 class="mb-2 fs-12">Pending Invoices
+                        <span class="badge bg-warning fw-semibold float-end">
+                          7,064
+                        </span>
+                      </h6>
+                      <div>
+                        <h4 class="fs-18 fw-semibold mb-2">$<span class="count-up" data-count="81.57">81.57</span>K</h4>
+                        <p class="text-muted fs-11 mb-0 lh-1">
+                          <span class="text-success me-1 fw-semibold">
+                            <i class="ri-arrow-up-s-line me-1 align-middle"></i>0.25%
+                          </span>
+                          <span>this month</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-top p-4 border-bottom border-block-end-dashed">
+                    <div class="svg-icon-background bg-light me-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" class="svg-dark">
+                        <path d="M19,12h-7V5c0-0.6-0.4-1-1-1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9C20,12.4,19.6,12,19,12z M12,19.9c-3.8,0.6-7.4-2.1-7.9-5.9C3.5,10.2,6.2,6.6,10,6.1V13c0,0.6,0.4,1,1,1h6.9C17.5,17.1,15.1,19.5,12,19.9z M15,2c-0.6,0-1,0.4-1,1v6c0,0.6,0.4,1,1,1h6c0.6,0,1-0.4,1-1C22,5.1,18.9,2,15,2z M16,8V4.1C18,4.5,19.5,6,19.9,8H16z" />
+                      </svg>
+                    </div>
+                    <div class="flex-fill">
+                      <h6 class="mb-2 fs-12">Overdue Invoices
+                        <span class="badge bg-light text-default fw-semibold float-end">
+                          1,105
+                        </span>
+                      </h6>
+                      <div>
+                        <h4 class="fs-18 fw-semibold mb-2">$<span class="count-up" data-count="32.47">32.47</span>K</h4>
+                        <p class="text-muted fs-11 mb-0 lh-1">
+                          <span class="text-success me-1 fw-semibFold">
+                            <i class="ri-arrow-down-s-line me-1 align-middle"></i>0.46%
+                          </span>
+                          <span>this month</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-4">
+                    <p class="fs-15 fw-semibold">Invoice Status <span class="text-muted fw-normal">(Last 6 months) :</span></p>
+                    <div id="invoice-list-stats"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FORMULARIO -->
+            <div class="col-xxl-12 col-xl-12" id="div-formulario"  style="display: none;">              
+              <div class="card custom-card">
+                <div class="card-body">                    
+                  
+                  <!-- FORM - COMPROBANTE -->                    
+                  <form name="form-agregar-compra" id="form-agregar-compra" method="POST" class="needs-validation" novalidate>
+                    <div class="row" id="cargando-1-formulario">
+
+                      <!-- IMPUESTO -->
+                      <input type="hidden" name="idcompra" id="idcompra" />
+                      <!-- IMPUESTO -->
+                      <input type="hidden" class="form-control" name="impuesto" id="impuesto" value="">                      
+
+                      <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+                        <div class="row gy-3">
+                          <!--  TIPO COMPROBANTE  -->
+                          <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-8">
+                            <div class="mb-sm-0 mb-2">
+                              <p class="fs-14 mb-2 fw-semibold">Tipo de comprobante</p>
+                              <div class="mb-0 authentication-btn-group">
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante1" checked="" onchange="modificarSubtotales();">
+                                  <label class="btn btn-outline-primary" for="tipo_comprobante1"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante2" onchange="modificarSubtotales();">
+                                  <label class="btn btn-outline-primary" for="tipo_comprobante2"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante3" onchange="modificarSubtotales();">
+                                  <label class="btn btn-outline-primary" for="tipo_comprobante3"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
+                                </div>
+                              </div>
+                            </div>                            
+                          </div>    
+                          
+                          <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+                            <div class="form-group">
+                              <label for="fecha_compra" class="form-label">Serie comprobante</label>
+                              <select class="form-control" name="serie_comprobante" id="serie_comprobante"></select>
+                            </div>
+                          </div>
+
+                          <!--  PROVEEDOR  -->
+                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="form-group">
                               <label for="idproveedor" class="form-label">
-                                <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span>
+                                <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
                                 <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idproveedor();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                Proveedor
+                                Cliente
                                 <span class="charge_idproveedor"></span>
                               </label>
                               <select class="form-control" name="idproveedor" id="idproveedor"></select>
                             </div>
-                          </div>
-
-                          <!-- ----------------- TIPO COMPROBANTE --------------- -->
-                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3">
+                          </div>     
+                          
+                          <!-- FECHA EMISION -->
+                          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                             <div class="form-group">
-                              <label for="tipo_comprobante" class="form-label">Tipo Comprobante</label>
-                              <select class="form-control" name="tipo_comprobante" id="tipo_comprobante" onchange="default_val_igv(); modificarSubtotales();"></select>
+                              <label for="fecha_compra" class="form-label">Es cobro?</label>
+                              <div class="toggle toggle-secondary on mb-3">  <span></span>   </div>
+                            </div>
+                          </div>  
+
+                          <!-- FECHA EMISION -->
+                          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                            <div class="form-group">
+                              <label for="fecha_compra" class="form-label">Periodo Pago</label>
+                              <input type="month" class="form-control" name="fecha_compra" id="fecha_compra"  max="<?php echo date('Y-m-d'); ?>">
+                            </div>
+                          </div>                          
+
+                          <!-- DESCRIPCION -->
+                          <div class="col-md-6 col-lg-12 col-xl-12 col-xxl-12">
+                            <div class="form-group">
+                              <label for="descripcion" class="form-label">Observacion</label>
+                              <textarea name="descripcion" id="descripcion" class="form-control" rows="2" placeholder="ejemp: Cobro de servicio de internet."></textarea>
                             </div>
                           </div>
 
-                          <!-- ----------------- SERIE --------------- -->
-                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3">
-                            <div class="form-group">
-                              <label for="serie" class="form-label">Serie</label>
-                              <input class="form-control" name="serie" id="serie" onkeyup="mayus(this);" />
-                            </div>
-                          </div>
+                        </div>
+                      </div>
 
-                          <!-- -------------- DESCRIPCION ------------- -->
-                          <div class="col-md-6 col-lg-4 col-xl-6 col-xxl-6">
-                            <div class="form-group">
-                              <label for="descripcion" class="form-label">Descripcion</label>
-                              <textarea name="descripcion" id="descripcion" class="form-control" rows="1" placeholder="ejemp: Compra de Router, cable UTP."></textarea>
-                            </div>
-                          </div>
-
-                          <!-- ----------- FECHA EMISION ------- -->
-                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3">
-                            <div class="form-group">
-                              <label for="fecha_compra" class="form-label">Fecha</label>
-                              <input type="date" class="form-control" name="fecha_compra" id="fecha_compra"  max="<?php echo date('Y-m-d'); ?>">
-                            </div>
-                          </div>
-
-                          <!-- ----------- FECHA EMISION ------- -->
-                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3">
-                            <div class="form-group">
-                              <label for="impuesto" class="form-label">Impuesto (%)</label>
-                              <input type="number" class="form-control" name="impuesto" id="impuesto" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">
-                            </div>
-                          </div>
-
-                          <div class="col-md-12 col-lg-12 col-xl-12 mt-3">
-
-                          </div>
-                          <!-- ------------ BOTON SELECCIONAR PRODUCTOS ----------- -->                        
-
+                      <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-8">
+                        <div class="row">
                           <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-2">
-                            <button class="btn btn-info label-btn m-r-10px" type="button" data-bs-toggle="modal" data-bs-target="#modal-producto"  >
-                              <i class="ri-add-circle-line label-btn-icon me-2"></i> 
-                              Agregar Productos 
+                            <button class="btn btn-info label-btn m-r-10px" type="button" onclick="listar_tabla_producto('PR');"  >
+                              <i class="ri-add-circle-line label-btn-icon me-2"></i> Productos 
                             </button>
                           </div>
+                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-2">
+                            <button class="btn btn-primary label-btn m-r-10px" type="button"  onclick="listar_tabla_producto('SR');"  >
+                            <i class="ri-add-fill label-btn-icon me-2"></i> 
+                              Servicio
+                            </button>
+                          </div>  
 
                           <div class="col-lg-5 col-xl-5 col-xxl-5">
                             <div class="input-group">                              
                               <button type="button" class="input-group-text buscar_x_code" onclick="listar_producto_x_codigo();"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Buscar por codigo de producto."><i class='bx bx-search-alt'></i></button>
                               <input type="text" name="codigob" id="codigob" class="form-control" onkeyup="mayus(this);" placeholder="Digite el código de producto." >
                             </div>
-                          </div>
-
-                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-2">
-                            <button class="btn btn-primary label-btn m-r-10px" type="button" data-bs-toggle="modal" data-bs-target="#modal-agregar-producto" onclick="limpiar_form_producto();"  >
-                            <i class="ri-add-fill label-btn-icon me-2"></i> 
-                              Crear Producto 
-                            </button>
-                          </div>
-
-                          
+                          </div>                                              
 
                           <!-- ------- TABLA PRODUCTOS SELECCIONADOS ------ --> 
                           <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive pt-3">
                             <table id="tabla-productos-seleccionados" class="table table-striped table-bordered table-condensed table-hover">
                               <thead class="bg-color-dark text-white">
-                                <th class="py-1" data-toggle="tooltip" data-original-title="Opciones">Op.</th>
-                                <th class="py-1">Cod</th>
-                                <th class="py-1">Producto</th>
-                                <th class="py-1">Unidad</th>
-                                <th class="py-1">Cantidad</th>                                        
-                                <th class="py-1" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
-                                <th class="py-1">Descuento</th>
-                                <th class="py-1">Subtotal</th>
-                                <th class="py-1 text-center" ><i class='bx bx-cog fs-4'></i></th>
+                                <th class="fs-11 py-1" data-toggle="tooltip" data-original-title="Opciones">Op.</th>
+                                <th class="fs-11 py-1">Cod</th> 
+                                <th class="fs-11 py-1">Producto</th>
+                                <th class="fs-11 py-1">Unidad</th>
+                                <th class="fs-11 py-1">Cantidad</th>                                        
+                                <th class="fs-11 py-1" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
+                                <th class="fs-11 py-1">Descuento</th>
+                                <th class="fs-11 py-1">Subtotal</th>
+                                <th class="fs-11 py-1 text-center" ><i class='bx bx-cog fs-4'></i></th>
                               </thead>
-                              <tbody></tbody>
+                              <tbody ></tbody>
                               <tfoot>
                                 <td colspan="6"></td>
 
                                 <th class="text-right">
-                                  <h6 class="tipo_gravada">SUBTOTAL</h6>
-                                  <h6 >DESCUENTO</h6>
-                                  <h6 class="val_igv">IGV (18%)</h6>
-                                  <h5 class="font-weight-bold">TOTAL</h5>
+                                  <h6 class="fs-11 tipo_gravada">SUBTOTAL</h6>
+                                  <h6 class="fs-11 ">DESCUENTO</h6>
+                                  <h6 class="fs-11 val_igv">IGV (18%)</h6>
+                                  <h5 class="fs-13 font-weight-bold">TOTAL</h5>
                                 </th>
                                 <th class="text-right"> 
-                                  <h6 class="font-weight-bold d-flex justify-content-between subtotal_compra"> <span>S/</span>  0.00</h6>
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between subtotal_compra"> <span>S/</span>  0.00</h6>
                                   <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
                                   <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
 
-                                  <h6 class="font-weight-bold d-flex justify-content-between descuento_compra"><span>S/</span> 0.00</h6>
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between descuento_compra"><span>S/</span> 0.00</h6>
                                   <input type="hidden" name="descuento_compra" id="descuento_compra" />
 
-                                  <h6 class="font-weight-bold d-flex justify-content-between igv_compra"><span>S/</span> 0.00</h6>
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between igv_compra"><span>S/</span> 0.00</h6>
                                   <input type="hidden" name="igv_compra" id="igv_compra" />
                                   
-                                  <h5 class="font-weight-bold d-flex justify-content-between total_compra"><span>S/</span> 0.00</h5>
+                                  <h5 class="fs-13 font-weight-bold d-flex justify-content-between total_compra"><span>S/</span> 0.00</h5>
                                   <input type="hidden" name="total_compra" id="total_compra" />
                                   
                                 </th>
@@ -218,58 +361,37 @@ if (!isset($_SESSION["user_nombre"])) {
                               </tfoot>
                             </table>
                           </div>
-
-                          <!-- Imgen -->
-                          <div class="col-md-4 col-lg-4 mt-5">
-                            <h6 class="card-title text-center">Comprobante</h6>
-                            <div class="col-md-12 border-top p-2">
-
-                              <div class="my-2 text-center">
-                                <div class="btn-group edit_img">
-                                  <button type="button" class="btn btn-primary py-1" id="doc1_i"><i class='bx bx-cloud-upload bx-tada fs-5'></i> Subir</button>
-                                  <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                  <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
-                                  <button type="button" class="btn btn-info py-1" onclick="re_visualizacion(1, 'assets/modulo/gasto_de_trabajador', '100%', '300px'); reload_zoom();"><i class='bx bx-refresh bx-spin fs-5'></i>Refrescar</button>
-                                </div>
-                              </div>
-
-                              <!-- imagen -->
-                              <div id="doc1_ver" class="text-center ">
-                                <img id="img_defect" src="../assets/images/default/img_defecto2.png" alt="" width="70%" />
-                              </div>
-                              <div  id="doc1_nombre" ><!-- aqui va el nombre del pdf --></div>
-                            </div>
-                          </div>
-
-                        </div>  
-                        
-                        <!-- ::::::::::: CARGANDO ... :::::::: -->
-                        <div class="row" id="cargando-2-fomulario" style="display: none;" >
-                          <div class="col-lg-12 mt-5 text-center">                         
-                            <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
-                            <h4 class="bx-flashing">Cargando...</h4>
-                          </div>
                         </div>
+                      </div>
 
-                        <!-- Chargue -->
-                        <div class="p-l-25px col-lg-12" id="barra_progress_compra_div" style="display: none;" >
-                          <div  class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 
-                            <div id="barra_progress_compra" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
-                          </div>
-                        </div>
-                        <!-- Submit -->
-                        <button type="submit" style="display: none;" id="submit-form-compra">Submit</button>
-                      </form>
-                    </div>                    
+                    </div>  
+                    
+                    <!-- ::::::::::: CARGANDO ... :::::::: -->
+                    <div class="row" id="cargando-2-fomulario" style="display: none;" >
+                      <div class="col-lg-12 mt-5 text-center">                         
+                        <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
+                        <h4 class="bx-flashing">Cargando...</h4>
+                      </div>
+                    </div>
 
-                  </div>
-                  <div class="card-footer border-top-0">
-                    <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1); limpiar_form_compra();" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
-                    <button type="button" class="btn btn-success btn-guardar" id="guardar_registro_compra" style="display: none;"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
-                  </div>
+                    <!-- Chargue -->
+                    <div class="p-l-25px col-lg-12" id="barra_progress_compra_div" style="display: none;" >
+                      <div  class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 
+                        <div id="barra_progress_compra" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
+                      </div>
+                    </div>
+                    <!-- Submit -->
+                    <button type="submit" style="display: none;" id="submit-form-compra">Submit</button>
+                  </form>                                  
+
                 </div>
-              </div>
+                <div class="card-footer border-top-0">
+                  <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1); limpiar_form_compra();" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
+                  <button type="button" class="btn btn-success btn-guardar" id="guardar_registro_compra" style="display: none;"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                </div>
+              </div>              
             </div>
+
           </div>
           <!-- End::row-1 -->
 
@@ -316,11 +438,11 @@ if (!isset($_SESSION["user_nombre"])) {
           <!-- End::Modal - Ver foto proveedor -->
 
           <!-- MODAL - SELECIONAR PRODUCTO -->
-          <div class="modal fade modal-effect" id="modal-producto" tabindex="-1" aria-labelledby="modal-productoLabel" aria-hidden="true">
+          <div class="modal fade modal-effect" id="modal-producto" tabindex="-1" aria-labelledby="title-modal-producto-label" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="modal-productoLabel1">Seleccionar Producto</h5>
+                  <h5 class="modal-title" id="title-modal-producto-label">Seleccionar Producto</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body table-responsive">
@@ -781,11 +903,14 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>   
 
-    <script src="scripts/js_compras.js"></script>
-    <script src="scripts/compras.js"></script>
+    <!-- Apex Charts JS -->
+    <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+    
+    <script src="scripts/facturacion.js"></script>
+    <script src="scripts/js_facturacion.js"></script>
     <script>
       $(function() {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip();
       });
     </script>
 

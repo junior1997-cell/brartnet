@@ -177,7 +177,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/custom_switcherjs.php"); ?>   
     <script>
       $(function() {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip();
       });
     </script>
 

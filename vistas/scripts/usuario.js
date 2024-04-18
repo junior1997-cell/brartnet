@@ -282,7 +282,7 @@ function ver_password(click) {
     $(click).attr('data-original-title', 'Ver contraseña');
   }
 
-  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-bs-toggle="tooltip"]').tooltip();
 }
 
 function historial_sesion(id) {

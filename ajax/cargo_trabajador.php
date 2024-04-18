@@ -24,7 +24,7 @@ if (!isset($_SESSION["user_nombre"])) {
         $data = [];
         $cont = 1;
 
-        $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+        $toltip = '<script> $(function() { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
 
         if ($rspta['status'] == true) {
 

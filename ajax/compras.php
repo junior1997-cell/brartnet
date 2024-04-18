@@ -21,7 +21,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
-    $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+    $toltip = '<script> $(function () { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
 
     $idcompra         = isset($_POST["idcompra"]) ? limpiarCadena($_POST["idcompra"]) : "";    
     $idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";    
@@ -50,20 +50,17 @@ if (!isset($_SESSION["user_nombre"])) {
 
           foreach($rspta['data'] as $key => $value){
 
-            $img_proveedor = empty($value['foto_perfil']) ? 'no-proveedor.png' : $value['foto_perfil'];
+            $img_proveedor = empty($value['foto_perfil']) ? 'no-perfil.jpg' : $value['foto_perfil'];
 
             $data[] = [
               "0" => $count,
-              "1" => '<div class="hstack gap-2 fs-15">' .
-                        '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_editar_detalles_compra('.($value['idcompra']).');" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                        '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_compra('.$value['idcompra'].'.,\''.$value['serie_comprobante'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
+              "1" => '<div class="hstack gap-2 fs-15">' .                        
                         '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalle_compra('.($value['idcompra']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
                       '</div>',
               "2" =>  $value['fecha_compra'],
               "3" => '<div class="d-flex flex-fill align-items-center">
                         <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                          <span class="avatar"> <img src="../assets/modulo/proveedor/' . $img_proveedor . '" alt="" onclick="ver_img_proveedor(\'' . $img_proveedor . '\', \'' . encodeCadenaHtml(($value['nombre_razonsocial']) .' '. ($value['apellidos_nombrecomercial'])) . '\')">
-                          </span>
+                          <span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $img_proveedor . '" alt="" onclick="ver_img_proveedor(\'' . $img_proveedor . '\', \'' . encodeCadenaHtml(($value['nombre_razonsocial']) .' '. ($value['apellidos_nombrecomercial'])) . '\')"> </span>
                         </div>
                         <div>
                           <span class="d-block fw-semibold text-primary">'.$value['nombre_razonsocial'] .' '. $value['apellidos_nombrecomercial'].'</span>

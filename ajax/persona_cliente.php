@@ -16,7 +16,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $persona_cliente = new Cliente();
     date_default_timezone_set('America/Lima');
     $date_now = date("d_m_Y__h_i_s_A");
-    $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+    $toltip = '<script> $(function() { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
 
     $idpersona                  = isset($_POST["idpersona"]) ? limpiarCadena($_POST["idpersona"]) : "";
     $idtipo_persona             = isset($_POST["idtipo_persona"]) ? limpiarCadena($_POST["idtipo_persona"]) : "";
