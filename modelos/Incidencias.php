@@ -13,7 +13,7 @@
       $this->id_usr_sesion =  isset($_SESSION['idusuario']) ? $_SESSION["idusuario"] : 0;
       // $this->id_empresa_sesion = isset($_SESSION['idempresa']) ? $_SESSION["idempresa"] : 0;
     }
-
+    // $actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"]
     function insertar($idtrabajador, $descr_gastos, $tp_comprobante, $serie_comprobante, $fecha, $idproveedor, $sub_total, $igv, $val_igv, $total_gasto, $descr_comprobante, $img_comprob){
       $sql = "INSERT INTO gasto_de_trabajador (idpersona_trabajador, descripcion_gasto, tipo_comprobante, serie_comprobante, fecha_ingreso, idproveedor, precio_sin_igv, precio_igv, val_igv, precio_con_igv, descripcion_comprobante, comprobante)
       VALUES ('$idtrabajador', '$descr_gastos', '$tp_comprobante', '$serie_comprobante', '$fecha', '$idproveedor', '$sub_total', '$igv', '$val_igv', '$total_gasto', '$descr_comprobante', '$img_comprob')";
@@ -105,5 +105,13 @@
       $sql = "SELECT * FROM gasto_de_trabajador WHERE idgasto_de_trabajador = '$id'";
       return ejecutarConsultaSimpleFila($sql);
     }
+
+    function select2_cat_inc(){
+
+      $sql = "SELECT idincidencia_categoria,nombre FROM incidencia_categoria WHERE estado='1' and estado_delete= '1';";
+      return ejecutarConsultaArray($sql);
+      
+    }
+
   }
 ?>

@@ -50,20 +50,24 @@ if (!isset($_SESSION["user_nombre"])) {
                             </div>
                             <div class="modal-body px-4">
                               <form name="form-agregar-incidencia" id="form-agregar-incidencia" method="POST">
-                                <input type="hidden" id="idincidencia" name="idincidencia" >
+                                <input type="hidden" id="idincidencia" name="idincidencia">
                                 <div class="row gy-2">
                                   <div class="col-xl-12">
-                                    <label for="actividad" class="form-label">Asunto</label>
-                                    <input type="text" class="form-control"  name="actividad" id="actividad" placeholder=" Descripción Asunto">
+                                    <div class="form-group">
+                                      <label for="actividad" class="form-label">Asunto</label>
+                                      <input type="text" class="form-control" name="actividad" id="actividad" placeholder=" Descripción Asunto">
+                                    </div>
                                   </div>
                                   <div class="col-xl-12">
-                                    <label class="form-label">Asignado a</label>
-                                    <select class="form-control" name="id_trabajador[]" id="id_trabajador" multiple>
-                                    </select>
+                                    <div class="form-group">
+                                      <label class="form-label">Asignado a</label>
+                                      <select class="form-control" name="id_trabajador[]" id="id_trabajador" multiple>
+                                      </select>
+                                    </div>
                                   </div>
                                   <div class="col-xl-6">
-                                    <label class="form-label">Fecha</label>
                                     <div class="form-group">
+                                      <label class="form-label">Fecha</label>
                                       <div class="input-group">
                                         <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
                                         <input type="date" class="form-control" id="adDate" name="creacionfecha" placeholder="Elige fecha">
@@ -71,17 +75,27 @@ if (!isset($_SESSION["user_nombre"])) {
                                     </div>
                                   </div>
                                   <div class="col-xl-6">
-                                    <label class="form-label">Prioridad</label>
-                                    <select class="form-control" id="prioridad"  name="prioridad" data-trigger>
-                                      <option value="CRÍTICO">1 CRÍTICO</option>
-                                      <option value="ALTO">2 ALTO</option>
-                                      <option value="MEDIO">3 MEDIO</option>
-                                      <option value="BAJO">4 BAJO</option>
-                                    </select>
+                                    <div class="form-group">
+                                      <label class="form-label">Prioridad</label>
+                                      <select class="form-control" id="prioridad" name="prioridad" data-trigger>
+                                        <option value="CRÍTICO">1 CRÍTICO</option>
+                                        <option value="ALTO">2 ALTO</option>
+                                        <option value="MEDIO">3 MEDIO</option>
+                                        <option value="BAJO">4 BAJO</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-xl-6">
+                                    <div class="form-group">
+                                      <label class="form-label">Categoría</label>
+                                      <select class="form-control" id="categoria" name="categoria"></select>
+                                    </div>
                                   </div>
                                   <div class="col-xl-12">
-                                    <label for="actividad_detalle" class="form-label">Detalle</label>
-                                    <textarea class="form-control" id="actividad_detalle"  name="actividad_detalle" cols="30" rows="3"></textarea>
+                                    <div class="form-group">
+                                      <label for="actividad_detalle" class="form-label">Detalle</label>
+                                      <textarea class="form-control" id="actividad_detalle" name="actividad_detalle" cols="30" rows="3"></textarea>
+                                    </div>
                                   </div>
                                 </div>
                                 <!-- Submit -->
@@ -89,7 +103,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               </form>
                             </div>
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="limpiar_form();" >Cancelar</button>
+                              <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="limpiar_form();">Cancelar</button>
                               <button type="button" class="btn btn-primary btn-guardar">Crear</button>
                             </div>
                           </div>

@@ -1,6 +1,7 @@
 var tabla;
 
 // var select_idbanco = new Choices('#idbanco', { allowHTML: true,  removeItemButton: true, });
+const choice_categoria = new Choices('#categoria',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
 
 function init() {
 
@@ -11,7 +12,8 @@ function init() {
   //$("#guardar_registro_proveedor").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-proveedor").submit(); } });
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  //  lista_select2("../ajax/incidencias.php?op=listar_trabajadores", '#id_trabajador', null);
+  // lista_select2("../ajax/incidencias.php?op=select2_cat_inc", '#categoria', null);
+  lista_selectChoice("../ajax/incidencias.php?op=select2_cat_inc", choice_categoria, null);  
   // lista_select2("../ajax/incidencias.php?op=listar_proveedor", '#idproveedor', null);  
 
   // lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);  
@@ -19,7 +21,7 @@ function init() {
   // lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);  
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
-  // $("#idtrabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  // $("#categoria").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   // $("#prioridad").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
    select_trabajador();
@@ -81,7 +83,8 @@ function limpiar_form() {
   $("#actividad").val("");
   $("#id_trabajador").val(null).trigger("change"); 
   $("#prioridad").val(null).trigger("change"); 
-
+  $("#categoria").val(null).trigger("change"); 
+  
   $("#creacionfecha").val("");
   // $("#tipo_comprobante").val("NINGUNO").trigger("change");  
   $("#actividad_detalle").val("");
@@ -676,23 +679,27 @@ $(function () {
 
   $('#id_trabajador').on('change', function () { $(this).trigger('blur'); });
   $('#prioridad').on('change', function () { $(this).trigger('blur'); });
+  // $('#categoria').on('change', function () { $(this).trigger('blur'); });
 
   $("#form-agregar-incidencia").validate({
     rules: {
-      actividad:         { required: true },
-      id_trabajador:     { required: true },
-      creacionfecha:     { required: true },
-      prioridad:         { required: true },
-      actividad_detalle: { required: true },
-    },
 
+      actividad         : { required: true },
+      id_trabajador     : { required: true },
+      creacionfecha     : { required: true },
+      prioridad         : { required: true },
+      actividad_detalle : { required: true },
+      categoria         : { required: true },
+    },
+    
     messages: {
-      actividad:         { required: "Campo requerido" },
-      id_trabajador:     { required: "Campo requerido" },
-      serie_comprobante: { required: "Campo requerido" },
-      creacionfecha:     { required: "Campo requerido" },
-      prioridad:         { required: "Campo requerido" },
-      actividad_detalle: { required: "Campo requerido" },
+      actividad         : { required: "Campo requerido" },
+      id_trabajador     : { required: "Campo requerido" },
+      serie_comprobante : { required: "Campo requerido" },
+      creacionfecha     : { required: "Campo requerido" },
+      prioridad         : { required: "Campo requerido" },
+      actividad_detalle : { required: "Campo requerido" },
+      categoria         : { required: "Campo requerido" },
     },
 
 
@@ -719,6 +726,7 @@ $(function () {
   
   $('#id_trabajador').rules('add', { required: true, messages: { required: "Campo requerido" } });
   $('#prioridad').rules('add', { required: true, messages: { required: "Campo requerido" } });
+  // $('#categoria').rules('add', { required: true, messages: { required: "Campo requerido" } });
 });
 
 $(document).ready(function () {

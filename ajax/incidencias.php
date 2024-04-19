@@ -16,46 +16,32 @@ if (!isset($_SESSION["user_nombre"])) {
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
     $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-    $idgasto_de_trabajador  = isset($_POST["idgasto_de_trabajador"]) ? limpiarCadena($_POST["idgasto_de_trabajador"]) : "";
 
-    $idtrabajador      = isset($_POST["idtrabajador"]) ? limpiarCadena($_POST["idtrabajador"]) : "";
-    $descr_gastos      = isset($_POST["descr_gastos"]) ? limpiarCadena($_POST["descr_gastos"]) : "";
-    $tipo_comprobante  = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
-    $serie_comprobante = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";
-    $fecha             = isset($_POST["fecha"]) ? limpiarCadena($_POST["fecha"]) : "";
-    $idproveedor       = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
-    $precio_sin_igv    = isset($_POST["precio_sin_igv"]) ? limpiarCadena($_POST["precio_sin_igv"]) : "";
-    $igv               = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
-    $val_igv           = isset($_POST["val_igv"]) ? limpiarCadena($_POST["val_igv"]) : "";
-    $precio_con_igv    = isset($_POST["precio_con_igv"]) ? limpiarCadena($_POST["precio_con_igv"]) : "";
-    $descr_comprobante = isset($_POST["descr_comprobante"]) ? limpiarCadena($_POST["descr_comprobante"]) : "";
-    $img_comprob       = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : "";
+    $idincidencia   = isset($_POST["idincidencia"]) ? limpiarCadena($_POST["idincidencia"]) : "";
+    $actividad      = isset($_POST["actividad"]) ? limpiarCadena($_POST["actividad"]) : "";
+    $creacionfecha  = isset($_POST["creacionfecha"]) ? limpiarCadena($_POST["creacionfecha"]) : "";
+    $prioridad      = isset($_POST["prioridad"]) ? limpiarCadena($_POST["prioridad"]) : "";
+    $categoria      = isset($_POST["categoria"]) ? limpiarCadena($_POST["categoria"]) : "";
+    
 
+    // idincidencia: 
+    // actividad: 
+    // id_trabajador[]:
+    // creacionfecha: 
+    // prioridad: 
 
     switch ($_GET["op"]){
 
       case 'guardar_editar':
-        //guardar img_comprob fondo
-        if ( !file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name']) ) {
-          $img_comprob = $_POST["doc_old_1"];
-          $flat_img = false; 
-        } else {          
-          $ext = explode(".", $_FILES["doc1"]["name"]);
-          $flat_img = true;
-          $img_comprob = $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);
-          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../assets/modulo/gasto_de_trabajador/" . $img_comprob);          
-        }
 
-        if ( empty($idgasto_de_trabajador) ) { #Creamos el registro
+        if ( empty($idincidencia) ) { #Creamos el registro
 
-          $rspta = $incidencias->insertar($idtrabajador, $descr_gastos, $tipo_comprobante, $serie_comprobante, 
-          $fecha, $idproveedor, $precio_sin_igv, $igv, $val_igv, $precio_con_igv, $descr_comprobante, $img_comprob);
+          $rspta = $incidencias->insertar($actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria);
           echo json_encode($rspta, true);
 
         } else { # Editamos el registro
 
-          $rspta = $incidencias->editar($idgasto_de_trabajador, $idtrabajador, $descr_gastos, $tipo_comprobante, $serie_comprobante, 
-          $fecha, $idproveedor, $precio_sin_igv, $igv, $val_igv, $precio_con_igv, $descr_comprobante, $img_comprob);
+          $rspta = $incidencias->editar($idincidencia,$actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria);
           echo json_encode($rspta, true);
         }
 
@@ -76,9 +62,9 @@ if (!isset($_SESSION["user_nombre"])) {
       //       $data[] = [
       //         "0" => $count++,
       //         "1" =>  '<div class="hstack gap-2 fs-15">' .
-      //           '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_editar_gdt('.($reg->idgasto_de_trabajador).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-      //           '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_gasto('.$reg->idgasto_de_trabajador.', \''.$reg->trabajador.'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
-      //           '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalles_gasto('.($reg->idgasto_de_trabajador).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
+      //           '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_editar_gdt('.($reg->idincidencia).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+      //           '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_gasto('.$reg->idincidencia.', \''.$reg->trabajador.'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
+      //           '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalles_gasto('.($reg->idincidencia).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
       //         '</div>',
       //         "2" => ($reg->fecha_ingreso),
       //         "3" => '<div class="d-flex flex-fill align-items-center">
@@ -90,10 +76,10 @@ if (!isset($_SESSION["user_nombre"])) {
       //             <span class="text-muted">'.$reg->tipo_documento_nombre .' '. $reg->numero_documento.'</span>
       //           </div>
       //         </div>',
-      //         "4" => $reg->tipo_comprobante .': '. $reg->serie_comprobante,
+      //         "4" => $reg->prioridad .': '. $reg->serie_comprobante,
       //         "5" => $reg->precio_con_igv,
       //         "6" => '<textarea class="textarea_datatable bg-light"  readonly>' .($reg->descripcion_comprobante). '</textarea>',
-      //         "7" => !empty($reg->comprobante) ? '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_comprobante('.($reg->idgasto_de_trabajador).');" data-bs-toggle="tooltip" title="Ver"><i class="ti ti-file-dollar fs-lg"></i></button></div>' : 
+      //         "7" => !empty($reg->comprobante) ? '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_comprobante('.($reg->idincidencia).');" data-bs-toggle="tooltip" title="Ver"><i class="ti ti-file-dollar fs-lg"></i></button></div>' : 
       //           '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-danger-light" data-bs-toggle="tooltip" title="no encontrado"><i class="ti ti-file-alert fs-lg"></i></button></div>',
               
       //         "8" => $reg->trabajador,
@@ -170,15 +156,15 @@ if (!isset($_SESSION["user_nombre"])) {
       // break; 
 
       case 'mostrar_editar_gdt':
-        $rspta = $incidencias->mostrar_editar_gdt($idgasto_de_trabajador);
+        $rspta = $incidencias->mostrar_editar_gdt($idincidencia);
         echo json_encode($rspta, true);
       break;
 
       case 'mostrar_detalle_gasto':
-        $rspta = $incidencias->mostrar_detalle_gasto($idgasto_de_trabajador);
+        $rspta = $incidencias->mostrar_detalle_gasto($idincidencia);
         $img_t = empty($rspta['data']['foto_perfil_trabajador']) ? 'no-perfil.jpg'  : $rspta['data']['foto_perfil_trabajador'];
         $img_p = empty($rspta['data']['foto_perfil_proveedor']) ? 'no-perfil.jpg'  : $rspta['data']['foto_perfil_proveedor'];
-        $nombre_doc = $rspta['data']['tipo_comprobante'] .' ' .$rspta['data']['serie_comprobante'];
+        $nombre_doc = $rspta['data']['prioridad'] .' ' .$rspta['data']['serie_comprobante'];
         $html_table = '
         <div class="my-3" ><span class="h6"> Datos del Trabajador </span></div>
         <table class="table text-nowrap table-bordered">        
@@ -219,7 +205,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <th scope="row">'.$rspta['data']['numero_documento_p'].'</th>
             </tr> 
             <tr>
-              <th scope="col">'.$rspta['data']['tipo_comprobante'].'</th>
+              <th scope="col">'.$rspta['data']['prioridad'].'</th>
               <th scope="row">'.$rspta['data']['serie_comprobante'].'</th>
             </tr>  
             <tr>
@@ -254,30 +240,31 @@ if (!isset($_SESSION["user_nombre"])) {
         echo json_encode($rspta, true);
       break;
 
-      // case "select2TipoTrabajador":
+      case "select2_cat_inc":
 
-      //   $rspta = $ajax_general->select2_tipo_trabajador(); $cont = 1; $data = "";
+        $rspta = $incidencias->select2_cat_inc(); $cont = 1; $data = [];
 
-      //   if ($rspta['status'] == true) {
+        if ($rspta['status'] == true) {
 
-      //     foreach ($rspta['data'] as $key => $value) {
+          foreach ($rspta['data'] as $key => $value) {
 
-      //       $data .= '<option  value=' . $value['idtipo_trabajador']  . '>' . $value['nombre'] . '</option>';
-      //     }
+            $data[] = ['value' => $value['idincidencia_categoria'], 'label' => $value['nombre'], 'disabled'  => false, 'selected'  => false,];
 
-      //     $retorno = array(
-      //       'status' => true, 
-      //       'message' => 'Salió todo ok', 
-      //       'data' => '<option  value="1" >NINGUNO</option>'.$data, 
-      //     );
+          }
 
-      //     echo json_encode($retorno, true);
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
 
-      //   } else {
+          echo json_encode($retorno, true);
 
-      //     echo json_encode($rspta, true); 
-      //   }        
-      // break;
+        } else {
+
+          echo json_encode($rspta, true); 
+        }        
+      break;
 
     }
 
