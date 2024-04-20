@@ -1,6 +1,7 @@
-var tabla_compras;
+var tabla_principal_facturacion;
 var tabla_productos;
-var array_data_compra = [];
+var form_validate_facturacion;
+var array_data_venta = [];
 
 // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T C H O I C E ══════════════════════════════════════
 
@@ -10,10 +11,11 @@ const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true
 
 function init(){
 
-  listar_tabla_compra();
+  listar_tabla_facturacion();
+  $(".btn-boleta").click();
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
-  $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-compra").submit(); }  });
+  $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-venta").submit(); }  });
   $("#guardar_registro_proveedor").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-proveedor").submit(); } });
   $("#guardar_registro_producto").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-producto").submit(); } });
 
@@ -32,6 +34,7 @@ function init(){
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#metodo_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   
 }
 
@@ -56,7 +59,7 @@ function show_hide_form(flag) {
 	}
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   C O M P R A S :::::::::::::::::::::::::::::::::::::::::::::
+// ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   F A C T U R A C I O N :::::::::::::::::::::::::::::::::::::::::::::
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function () { $('#doc1').trigger('click'); });
@@ -68,34 +71,34 @@ function doc1_eliminar() {
   $("#doc1_nombre").html("");
 }
 
-function limpiar_form_compra(){
+function limpiar_form_venta(){
 
-  array_data_compra = [];
-  $("#idcompra").val('');
+  array_data_venta = [];
+  $("#idventa").val('');
 
   $("#idproveedor").val('').trigger('change');
   $("#tipo_comprobante").val('').trigger('change');
   $("#serie").val('');
   $("#descripcion").val('');
-  $("#fecha_compra").val('');
+  $("#fecha_venta").val('');
   $("#idproveedor").val('');
   $("#idproveedor").val('');
   doc1_eliminar();
 
-  $("#total_compra").val("");     
-  $(".total_compra").html("0");
+  $("#total_venta").val("");     
+  $(".total_venta").html("0");
 
-  $(".subtotal_compra").html("<span>S/</span> 0.00");
-  $("#subtotal_compra").val("");
+  $(".subtotal_venta").html("<span>S/</span> 0.00");
+  $("#subtotal_venta").val("");
 
-  $(".descuento_compra").html("<span>S/</span> 0.00");
-  $("#descuento_compra").val("");
+  $(".descuento_venta").html("<span>S/</span> 0.00");
+  $("#descuento_venta").val("");
 
-  $(".igv_compra").html("<span>S/</span> 0.00");
-  $("#igv_compra").val("");
+  $(".igv_venta").html("<span>S/</span> 0.00");
+  $("#igv_venta").val("");
 
-  $(".total_compra").html("<span>S/</span> 0.00");
-  $("#total_compra").val("");
+  $(".total_venta").html("<span>S/</span> 0.00");
+  $("#total_venta").val("");
 
   $("#estado_detraccion").val("0");
   $('#my-switch_detracc').prop('checked', false); 
@@ -112,22 +115,22 @@ function limpiar_form_compra(){
 
 }
 
-function listar_tabla_compra(){
-  tabla_compras = $("#tabla-compras").dataTable({
+function listar_tabla_facturacion(){
+  tabla_principal_facturacion = $("#tabla-ventas").dataTable({
     responsive: true, 
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
     buttons: [  
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_compras) { tabla_compras.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_principal_facturacion) { tabla_principal_facturacion.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de Compras', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de Compras', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de ventas', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
+      { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de ventas', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/facturacion.php?op=listar_tabla_compra`,
+      url: `../ajax/facturacion.php?op=listar_tabla_facturacion`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -159,11 +162,11 @@ function listar_tabla_compra(){
   }).DataTable();
 }
 
-function guardar_editar_compra(e) {
-  var formData = new FormData($("#form-agregar-compra")[0]);  
+function guardar_editar_facturacion(e) {
+  var formData = new FormData($("#form-facturacion")[0]);  
 
   Swal.fire({
-    title: "¿Está seguro que deseas guardar esta compra?",
+    title: "¿Está seguro que deseas guardar esta Venta?",
     html: "Verifica que todos lo <b>campos</b>  esten <b>conformes</b>!!",
     icon: "warning",
     showCancelButton: true,
@@ -171,7 +174,7 @@ function guardar_editar_compra(e) {
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, Guardar!",
     preConfirm: (input) => {
-      return fetch("../ajax/facturacion.php?op=guardar_editar_compra", {
+      return fetch("../ajax/facturacion.php?op=guardar_editar_facturacion", {
         method: 'POST', // or 'PUT'
         body: formData, // data can be `string` or {object}!        
       }).then(response => {
@@ -184,11 +187,11 @@ function guardar_editar_compra(e) {
   }).then((result) => {
     if (result.isConfirmed) {
       if (result.value.status == true){        
-        Swal.fire("Correcto!", "Compra guardada correctamente", "success");
+        Swal.fire("Correcto!", "Venta guardada correctamente", "success");
 
-        tabla_compras.ajax.reload(null, false);
+        tabla_principal_facturacion.ajax.reload(null, false);
 
-        limpiar_form_compra(); show_hide_form(1);
+        limpiar_form_venta(); show_hide_form(1);
              
       } else {
         ver_errores(result.value);
@@ -197,32 +200,32 @@ function guardar_editar_compra(e) {
   });  
 }
 
-function mostrar_detalle_compra(idcompra){
-  $("#modal-detalle-compra").modal("show");
+function mostrar_detalle_venta(idventa){
+  $("#modal-detalle-venta").modal("show");
 
-  $.post("../ajax/facturacion.php?op=mostrar_detalle_compra", { idcompra: idcompra }, function (e, status) {          
+  $.post("../ajax/facturacion.php?op=mostrar_detalle_venta", { idventa: idventa }, function (e, status) {          
       
     $('#custom-tabContent').html(e);      
     $('#custom-datos1_html-tab').click(); // click para ver el primer - Tab Panel
     $(".jq_image_zoom").zoom({ on: "grab" });      
-    $("#excel_compra").attr("href",`../reportes/export_xlsx_venta_tours.php?id=${idcompra}`);      
-    $("#print_pdf_compra").attr("href",`../reportes/comprobante_venta_tours.php?id=${idcompra}`);    
+    $("#excel_venta").attr("href",`../reportes/export_xlsx_venta_tours.php?id=${idventa}`);      
+    $("#print_pdf_venta").attr("href",`../reportes/comprobante_venta_tours.php?id=${idventa}`);    
     
   }).fail( function(e) { ver_errores(e); } );
 
 }
 
-function eliminar_papelera_compra(idcompra, nombre){
+function eliminar_papelera_venta(idventa, nombre){
   $('.tooltip').remove();
 	crud_eliminar_papelera(
     "../ajax/facturacion.php?op=papelera",
     "../ajax/facturacion.php?op=eliminar", 
-    idcompra, 
+    idventa, 
     "!Elija una opción¡", 
-    `<b class="text-danger"><del>Compra: ${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    `<b class="text-danger"><del>venta: ${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla_compras.ajax.reload(null, false); },
+    function(){ tabla_principal_facturacion.ajax.reload(null, false); },
     false, 
     false, 
     false,
@@ -230,25 +233,66 @@ function eliminar_papelera_compra(idcompra, nombre){
   );
 }
 
-function ver_img_comprobante(idcompra) {
+function ver_img_comprobante(idventa) {
   $('#modal-ver-comprobante1').modal('show');
   $("#comprobante-container1").html(`<div class="row" > <div class="col-lg-12 text-center"> <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div> </div>`);
 
-  $.post("../ajax/facturacion.php?op=mostrar_compra", { idcompra: idcompra },  function (e, status) {
+  $.post("../ajax/facturacion.php?op=mostrar_venta", { idventa: idventa },  function (e, status) {
     e = JSON.parse(e);
     if (e.status == true) {
       if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
         var nombre_comprobante = `${e.data.tipo_comprobante} ${e.data.serie_comprobante}`;
         $('.title-modal-comprobante1').html(nombre_comprobante);
-        $("#comprobante-container1").html(doc_view_download_expand(e.data.comprobante, 'assets/modulo/comprobante_compra',nombre_comprobante , '100%', '400px'));
+        $("#comprobante-container1").html(doc_view_download_expand(e.data.comprobante, 'assets/modulo/comprobante_venta',nombre_comprobante , '100%', '400px'));
         $('.jq_image_zoom').zoom({ on: 'grab' });
       }
     } else { ver_errores(e); }
   }).fail( function(e) { ver_errores(e); } );
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   AGREGAR PRODUCTO :::::::::::::::::::::::::::::::::::::::::::::
+// ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR SERIES :::::::::::::::::::::::::::::::::::::::::::::
 
+function ver_series_comprobante(input) {
+  $("#serie_comprobante").html('');
+  $(".charge_serie_comprobante").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
+
+  var tipo_comprobante = $(input).val() == ''  || $(input).val() == null ? '' : $(input).val();
+  
+  $.getJSON("../ajax/facturacion.php?op=select2_series_comprobante", { tipo_comprobante: tipo_comprobante },  function (e, status) {    
+    if (e.status == true) {      
+      $("#serie_comprobante").html(e.data);
+      $(".charge_serie_comprobante").html('');
+      $("#form-facturacion").validate();
+    } else { ver_errores(e); }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+// ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR COBROS :::::::::::::::::::::::::::::::::::::::::::::
+function es_cobro_valid() { console.log($(".es_cobro").hasClass("on"));
+  if ($(".es_cobro").hasClass("on") == true) {
+    $("#es_cobro").val("SI");
+    $(".datos-de-cobro-mensual").show("slow");
+  } else {
+    $("#es_cobro").val("NO");
+    $(".datos-de-cobro-mensual").hide("slow");
+  }
+}
+
+// ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR ANTICIPOS :::::::::::::::::::::::::::::::::::::::::::::
+function usar_saldo_valid() { console.log($(".usar_saldo").hasClass("on"));
+  if ($(".usar_saldo").hasClass("on") == true) {
+    $("#usar_saldo").val("SI");
+    $(".datos-de-saldo").show("slow");
+
+    $.getJSON(`../ajax/facturacion.php?op=mostrar_anticipos`, {data}, function (e, textStatus, jqXHR) {
+        
+    });
+
+  } else {
+    $("#usar_saldo").val("NO");
+    $(".datos-de-saldo").hide("slow");
+  }
+}
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O D U C T O S :::::::::::::::::::::::::::::::::::::::::::::
 function limpiar_form_producto(){
@@ -332,8 +376,6 @@ function listar_tabla_producto(tipo = 'PR'){
     ],
   }).DataTable();
 }
-
-
 
 function guardar_editar_producto(e){
   var formData = new FormData($("#form-agregar-producto")[0]);
@@ -420,28 +462,25 @@ function mayus(e) {
 }
 
 
-
-
-
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function(){
 
-  $("#form-agregar-compra").validate({
+  form_validate_facturacion = $("#form-facturacion").validate({
     ignore: '',
     rules: {
       idproveedor:        { required: true },
       tipo_comprobante:   { required: true },
-      serie:              { required: true, minlength: 4 },
+      serie_comprobante:  { required: true, },
       descripcion:        { minlength: 4 },
-      fecha_compra:       { required: true},
+      fecha_venta:       { required: true},
       impuesto:           { min: 0, max:100}
     },
     messages: {
       idproveedor:        { required: "Campo requerido", },
       tipo_comprobante:   { required: "Campo requerido", },
-      fecha_compra:       { required: "Campo requerido", },
-      serie:              { minlength: "Minimo {0} caracteres", },
+      fecha_venta:       { required: "Campo requerido", },
+      serie_comprobante:  { required: "Campo requerido", },
       descripcion:        { minlength: "Minimo {0} caracteres", },
     },
 
@@ -461,7 +500,7 @@ $(function(){
     },
 
     submitHandler: function (form) {
-      guardar_editar_compra(form);
+      guardar_editar_facturacion(form);
     },
   }); 
 
@@ -670,13 +709,24 @@ function reload_idproveedor(){ lista_select2("../ajax/facturacion.php?op=listar_
   var chart = new ApexCharts(document.querySelector("#invoice-list-stats"), options);
   chart.render();
 
-  //delete Btn
-  let invoicebtn = document.querySelectorAll(".invoice-btn");
-  invoicebtn.forEach((eleBtn) => {
-    eleBtn.onclick = () => {
-      let invoice = eleBtn.closest(".invoice-list")
-      invoice.remove();
-    }
-  })
+  // UPLOADS ===================================
+
+  /* filepond */
+  FilePond.registerPlugin(
+    FilePondPluginImagePreview,
+    FilePondPluginImageExifOrientation,
+    FilePondPluginFileValidateSize,
+    FilePondPluginFileEncode,
+    FilePondPluginImageEdit,
+    FilePondPluginFileValidateType,
+    FilePondPluginImageCrop,
+    FilePondPluginImageResize,
+    FilePondPluginImageTransform,
+      
+  );
+
+  /* multiple upload */
+  const MultipleElement = document.querySelector('.multiple-filepond');
+  FilePond.create(MultipleElement, {labelIdle: `Arrastra y suelta tu BAUCHER o <span class="filepond--label-action">Explora</span>`,} );
 
 })();

@@ -321,7 +321,8 @@ switch ($_GET["op"]) {
       foreach ($marcados['data'] as $key => $val) { array_push($valores, $val['idpermiso']);  } # Almacenamos los permisos marcados en el array      
       
       foreach ($grupo['data'] as $key => $val) { array_push($valores_agrupado, $val['modulo']);  }  # Almacenamos los permisos marcados en el array
-        
+      
+      // PERMISOS GRUPALES
       in_array('Compras', $valores_agrupado)           ? $_SESSION['compra'] = 1             : $_SESSION['compra']           = 0;        
       in_array('Articulo', $valores_agrupado)          ? $_SESSION['articulo'] = 1           : $_SESSION['articulo']         = 0;         
       in_array('Caja', $valores_agrupado)              ? $_SESSION['caja'] = 1               : $_SESSION['caja']             = 0;       
@@ -334,74 +335,60 @@ switch ($_GET["op"]) {
       in_array('SUNAT', $valores_agrupado)             ? $_SESSION['SUNAT'] = 1              : $_SESSION['SUNAT']            = 0;        
       in_array('Empresa', $valores_agrupado)           ? $_SESSION['empresa'] = 1            : $_SESSION['empresa']          = 0;           
 
-      // Inicio
-      in_array(1, $valores) ? $_SESSION['dashboard']              = 1 : $_SESSION['dashboard'] = 0;
-      // Compras
-      in_array(2, $valores) ? $_SESSION['proveedores']            = 1 : $_SESSION['proveedores'] = 0;
-      in_array(3, $valores) ? $_SESSION['lista_de_compras']       = 1 : $_SESSION['lista_de_compras'] = 0;
-      // Articulo
-      in_array(4, $valores) ? $_SESSION['producto']               = 1 : $_SESSION['producto'] = 0;
-      in_array(5, $valores) ? $_SESSION['servicio']               = 1 : $_SESSION['servicio'] = 0;
-      in_array(6, $valores) ? $_SESSION['categoria_y_marca']      = 1 : $_SESSION['categoria_y_marca'] = 0;
-      in_array(7, $valores) ? $_SESSION['unidad_de_medida']       = 1 : $_SESSION['unidad_de_medida'] = 0;
-      in_array(8, $valores) ? $_SESSION['stok_precio']            = 1 : $_SESSION['stok_precio'] = 0;
-      in_array(9, $valores) ? $_SESSION['tranferencia_de_stock']  = 1 : $_SESSION['tranferencia_de_stock'] = 0;
-      in_array(10, $valores) ? $_SESSION['inventario']            = 1 : $_SESSION['inventario'] = 0;
-      // Caja
-      in_array(11, $valores) ? $_SESSION['caja_chica']            = 1 : $_SESSION['caja_chica'] = 0;
-      in_array(12, $valores) ? $_SESSION['ingreso_egreso']        = 1 : $_SESSION['ingreso_egreso'] = 0;
-      // POS
-      in_array(13, $valores) ? $_SESSION['POS']                   = 1 : $_SESSION['POS'] = 0;
-      // Realizar Venta
-      in_array(14, $valores) ? $_SESSION['boleta']                = 1 : $_SESSION['boleta'] = 0;
-      in_array(15, $valores) ? $_SESSION['factura']               = 1 : $_SESSION['factura'] = 0;
-      in_array(16, $valores) ? $_SESSION['nota_de_venta']         = 1 : $_SESSION['nota_de_venta'] = 0;
-      in_array(17, $valores) ? $_SESSION['Cotizacion']            = 1 : $_SESSION['Cotizacion'] = 0;
-      in_array(18, $valores) ? $_SESSION['nota_de_credito']       = 1 : $_SESSION['nota_de_credito'] = 0;
-      in_array(19, $valores) ? $_SESSION['nota_de_debito']        = 1 : $_SESSION['nota_de_debito'] = 0;
-      in_array(20, $valores) ? $_SESSION['guia_de_remision']      = 1 : $_SESSION['guia_de_remision'] = 0;
-      in_array(21, $valores) ? $_SESSION['cliente']               = 1 : $_SESSION['cliente'] = 0;
-      // Comprobante
-      in_array(22, $valores) ? $_SESSION['estado_de_envio']       = 1 : $_SESSION['estado_de_envio'] = 0;
-      in_array(23, $valores) ? $_SESSION['anulados']              = 1 : $_SESSION['anulados'] = 0;
-      in_array(24, $valores) ? $_SESSION['validar_solo_factura']  = 1 : $_SESSION['validar_solo_factura'] = 0;
-      in_array(25, $valores) ? $_SESSION['validar_solo_boleta']   = 1 : $_SESSION['validar_solo_boleta'] = 0;
-      // Resumen de baja
-      in_array(26, $valores) ? $_SESSION['anular_boleta']         = 1 : $_SESSION['anular_boleta'] = 0;
-      in_array(27, $valores) ? $_SESSION['anular_factura']        = 1 : $_SESSION['anular_factura'] = 0;
-      in_array(28, $valores) ? $_SESSION['anular_nota_de_credito']= 1 : $_SESSION['anular_nota_de_credito'] = 0;
-      // Creditos
-      in_array(29, $valores) ? $_SESSION['creditos_Pendientes']   = 1 : $_SESSION['creditos_Pendientes'] = 0;
-      // Kardex
-      in_array(30, $valores) ? $_SESSION['kardex_por_articulos']  = 1 : $_SESSION['kardex_por_articulos'] = 0;
-      in_array(31, $valores) ? $_SESSION['gastos_trabajador']     = 1 : $_SESSION['gastos_trabajador'] = 0;
-      // Reporte
-      in_array(32, $valores) ? $_SESSION['venta_dia_mes']         = 1 : $_SESSION['venta_dia_mes'] = 0;
-      in_array(33, $valores) ? $_SESSION['venta_por_vendedor']    = 1 : $_SESSION['venta_por_vendedor'] = 0;
-      in_array(34, $valores) ? $_SESSION['venta_agrupada']        = 1 : $_SESSION['venta_agrupada'] = 0;
-      in_array(35, $valores) ? $_SESSION['venta_por_cliente']     = 1 : $_SESSION['venta_por_cliente'] = 0;
-      in_array(36, $valores) ? $_SESSION['PLE_ventas']            = 1 : $_SESSION['PLE_ventas'] = 0;
-      in_array(37, $valores) ? $_SESSION['reporte_compras']       = 1 : $_SESSION['reporte_compras'] = 0;
-      in_array(38, $valores) ? $_SESSION['margen_de_ganancia']    = 1 : $_SESSION['margen_de_ganancia'] = 0;
-      in_array(39, $valores) ? $_SESSION['correo_enviado']        = 1 : $_SESSION['correo_enviado'] = 0;      
-      // Administracion
-      in_array(40, $valores) ? $_SESSION['usuario']               = 1 : $_SESSION['usuario'] = 0;
-      // Planilla Personal
-      in_array(41, $valores) ? $_SESSION['registrar_trabajador']  = 1 : $_SESSION['registrar_trabajador'] = 0;
-      in_array(42, $valores) ? $_SESSION['tipo_de_seguro']        = 1 : $_SESSION['tipo_de_seguro'] = 0;
-      in_array(43, $valores) ? $_SESSION['boleta_de_pago']        = 1 : $_SESSION['boleta_de_pago'] = 0;
-      // SUNAT
-      in_array(44, $valores) ? $_SESSION['tipo_de_tributos']      = 1 : $_SESSION['tipo_de_tributos'] = 0;
-      in_array(45, $valores) ? $_SESSION['documento_de_identidad']= 1 : $_SESSION['documento_de_identidad'] = 0;
-      in_array(46, $valores) ? $_SESSION['tipo_de_afeccion_IGV']  = 1 : $_SESSION['tipo_de_afeccion_IGV'] = 0;
-      in_array(47, $valores) ? $_SESSION['correlativo_numeracion']= 1 : $_SESSION['correlativo_numeracion'] = 0;
-      in_array(48, $valores) ? $_SESSION['cargar_certificado']    = 1 : $_SESSION['cargar_certificado'] = 0;
-      // Empresa
-      in_array(49, $valores) ? $_SESSION['empresa_configuracion'] = 1 : $_SESSION['empresa_configuracion'] = 0;
-      in_array(50, $valores) ? $_SESSION['correo_SMTP']           = 1 : $_SESSION['correo_SMTP'] = 0;
-      in_array(51, $valores) ? $_SESSION['notificaciones']        = 1 : $_SESSION['notificaciones'] = 0;
-      in_array(52, $valores) ? $_SESSION['configuracion']        = 1 : $_SESSION['configuracion'] = 0;
-      
+      // PERMISOS INDIVIDUALES
+      in_array(1, $valores) ? $_SESSION['dashboard']                 = 1 : $_SESSION['dashboard']                 = 0;
+      in_array(2, $valores) ? $_SESSION['proveedores']               = 1 : $_SESSION['proveedores']               = 0;
+      in_array(3, $valores) ? $_SESSION['lista_de_compras']          = 1 : $_SESSION['lista_de_compras']          = 0;
+      in_array(4, $valores) ? $_SESSION['producto']                  = 1 : $_SESSION['producto']                  = 0;
+      in_array(5, $valores) ? $_SESSION['servicio']                  = 1 : $_SESSION['servicio']                  = 0;
+      in_array(6, $valores) ? $_SESSION['categoria_y_marca']         = 1 : $_SESSION['categoria_y_marca']         = 0;
+      in_array(7, $valores) ? $_SESSION['unidad_de_medida']          = 1 : $_SESSION['unidad_de_medida']          = 0;
+      in_array(8, $valores) ? $_SESSION['stok_precio']               = 1 : $_SESSION['stok_precio']               = 0;
+      in_array(9, $valores) ? $_SESSION['transferencia_de_stock']    = 1 : $_SESSION['transferencia_de_stock']    = 0;
+      in_array(10, $valores) ? $_SESSION['inventario']                = 1 : $_SESSION['inventario']                = 0;
+      in_array(11, $valores) ? $_SESSION['caja_chica']                = 1 : $_SESSION['caja_chica']                = 0;
+      in_array(12, $valores) ? $_SESSION['ingreso_egreso']            = 1 : $_SESSION['ingreso_egreso']            = 0;
+      in_array(13, $valores) ? $_SESSION['POS']                       = 1 : $_SESSION['POS']                       = 0;
+      in_array(14, $valores) ? $_SESSION['facturacion']               = 1 : $_SESSION['facturacion']               = 0;
+      in_array(15, $valores) ? $_SESSION['cotizacion']                = 1 : $_SESSION['cotizacion']                = 0;
+      in_array(16, $valores) ? $_SESSION['nota_de_credito']           = 1 : $_SESSION['nota_de_credito']           = 0;
+      in_array(17, $valores) ? $_SESSION['nota_de_debito']            = 1 : $_SESSION['nota_de_debito']            = 0;
+      in_array(18, $valores) ? $_SESSION['guia_de_remision']          = 1 : $_SESSION['guia_de_remision']          = 0;
+      in_array(19, $valores) ? $_SESSION['cliente']                   = 1 : $_SESSION['cliente']                   = 0;
+      in_array(20, $valores) ? $_SESSION['anticipos']                 = 1 : $_SESSION['anticipos']                 = 0;
+      in_array(21, $valores) ? $_SESSION['estado de envio']           = 1 : $_SESSION['estado de envio']           = 0;
+      in_array(22, $valores) ? $_SESSION['anulados']                  = 1 : $_SESSION['anulados']                  = 0;
+      in_array(23, $valores) ? $_SESSION['validar_solo_factura']      = 1 : $_SESSION['validar_solo_factura']      = 0;
+      in_array(24, $valores) ? $_SESSION['validar_solo_boleta']       = 1 : $_SESSION['validar_solo_boleta']       = 0;
+      in_array(25, $valores) ? $_SESSION['anular_boleta']             = 1 : $_SESSION['anular_boleta']             = 0;
+      in_array(26, $valores) ? $_SESSION['anular_factura']            = 1 : $_SESSION['anular_factura']            = 0;
+      in_array(27, $valores) ? $_SESSION['anular_nota_de_credito']    = 1 : $_SESSION['anular_nota_de_credito']    = 0;
+      in_array(28, $valores) ? $_SESSION['creditos_pendientes']       = 1 : $_SESSION['creditos_pendientes']       = 0;
+      in_array(29, $valores) ? $_SESSION['kardex_por_articulos']      = 1 : $_SESSION['kardex_por_articulos']      = 0;
+      in_array(30, $valores) ? $_SESSION['gastos_trabajador']         = 1 : $_SESSION['gastos_trabajador']         = 0;
+      in_array(31, $valores) ? $_SESSION['incidencias_trabajador']    = 1 : $_SESSION['incidencias_trabajador']    = 0;
+      in_array(32, $valores) ? $_SESSION['venta_dia_mes']             = 1 : $_SESSION['venta_dia_mes']             = 0;
+      in_array(33, $valores) ? $_SESSION['venta_por_vendedor']        = 1 : $_SESSION['venta_por_vendedor']        = 0;
+      in_array(34, $valores) ? $_SESSION['venta_agrupada']            = 1 : $_SESSION['venta_agrupada']            = 0;
+      in_array(35, $valores) ? $_SESSION['venta_por_cliente']         = 1 : $_SESSION['venta_por_cliente']         = 0;
+      in_array(36, $valores) ? $_SESSION['PLE_ventas']                = 1 : $_SESSION['PLE_ventas']                = 0;
+      in_array(37, $valores) ? $_SESSION['reporte_compras']           = 1 : $_SESSION['reporte_compras']           = 0;
+      in_array(38, $valores) ? $_SESSION['margen_de_ganancia']        = 1 : $_SESSION['margen_de_ganancia']        = 0;
+      in_array(39, $valores) ? $_SESSION['correo_enviado']            = 1 : $_SESSION['correo_enviado']            = 0;
+      in_array(40, $valores) ? $_SESSION['usuario']                   = 1 : $_SESSION['usuario']                   = 0;
+      in_array(41, $valores) ? $_SESSION['registrar_trabajador']      = 1 : $_SESSION['registrar_trabajador']      = 0;
+      in_array(42, $valores) ? $_SESSION['tipo_de_seguro']            = 1 : $_SESSION['tipo_de_seguro']            = 0;
+      in_array(43, $valores) ? $_SESSION['boleta_de_pago']            = 1 : $_SESSION['boleta_de_pago']            = 0;
+      in_array(44, $valores) ? $_SESSION['tipo_de_tributos']          = 1 : $_SESSION['tipo_de_tributos']          = 0;
+      in_array(45, $valores) ? $_SESSION['documento_de_identidad']    = 1 : $_SESSION['documento_de_identidad']    = 0;
+      in_array(46, $valores) ? $_SESSION['tipo_de_afeccion_IGV']      = 1 : $_SESSION['tipo_de_afeccion_IGV']      = 0;
+      in_array(47, $valores) ? $_SESSION['correlativo_numeracion']    = 1 : $_SESSION['correlativo_numeracion']    = 0;
+      in_array(48, $valores) ? $_SESSION['cargar_certificado']        = 1 : $_SESSION['cargar_certificado']        = 0;
+      in_array(49, $valores) ? $_SESSION['empresa_configuracion']     = 1 : $_SESSION['empresa_configuracion']     = 0;
+      in_array(50, $valores) ? $_SESSION['correo_SMTP']               = 1 : $_SESSION['correo_SMTP']               = 0;
+      in_array(51, $valores) ? $_SESSION['notificaciones']            = 1 : $_SESSION['notificaciones']            = 0;
+      in_array(52, $valores) ? $_SESSION['configuracion']             = 1 : $_SESSION['configuracion']             = 0;
+          
 
       $data = [ 'status'=>true, 'message'=>'todo okey','data'=> $rspta['data']  ];
       echo json_encode($data, true);

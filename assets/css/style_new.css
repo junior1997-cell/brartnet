@@ -941,7 +941,7 @@ select[readonly].select2-hidden-accessible + .select2-container .select2-selecti
 }
 
 /* min-width = como minimo ─|──────── */
-@media (min-width: 992px) {
+@media (min-width:992px) {
 
   .borde-arriba-naranja{ border-top: 3px solid #fd4604; }
 
@@ -949,52 +949,56 @@ select[readonly].select2-hidden-accessible + .select2-container .select2-selecti
 }
 
 /* min-width = como minimo ─|──────── */
-@media (min-width: 1080px) {
-  
+@media (min-width:1200px) {
+  .show-min-width-1200px{ display: inline-block !important; }
 }
 
-/* min-width = como minimo ─|──────── */
-@media (min-width: 1200px) {
 
-  .show-min-width-1200px{ display: inline-block !important; }
+/* min-width = como minimo ─|──────── */
+@media (min-width:1400px) {
+
+  
 }
 
 /*  ══════════════════════════════════════════ - @ M E D I A  - M A X - ══════════════════════════════════════════ */
 
-/* max-width = como maximo ────────|─ */
-@media (max-width: 575.98px) {
-
-  
-}
-
 /* max-width = como maximo  ────────| */
-@media (max-width: 576px) {
+@media (max-width:575.98px) {
+  .mt-xs-0 { margin-top: 0!important }
+  .mt-xs-1 { margin-top: .25rem!important }
+  .mt-xs-2 { margin-top: .5rem!important }
+  .mt-xs-3 { margin-top: 1rem!important }
+  .mt-xs-4 { margin-top: 1.5rem!important }
+  .mt-xs-5 { margin-top: 3rem!important }
+  .mt-xs-auto { margin-top: auto!important}
  
   .show-max-width-576px{ display: inline-block !important; }
 }
+
 /* max-width = como maximo  ────────| */
-@media (max-width: 767.98px) {
+@media (max-width:767.98px) {
   
 }
 
 /* max-width = como maximo ────────| */
-@media (max-width: 991.98px) {
-  .borde-arriba-verde{ border-top: 3px solid #109e38; }
-  
-}
-
-/* max-width = como maximo ────────| */
-@media (max-width: 1080px) {
+@media (max-width:991.98px) {
   .hide-max-width-1080px{ display: none !important; }
+  .borde-arriba-verde{ border-top: 3px solid #109e38; }
 }
 
 /* max-width = como maximo  ────────| */
-@media (max-width: 1199.98px) {
+@media (max-width:1199.98px) {
   
 }
 
 /* max-width = como maximo  ────────| */
-@media (max-width: 1200px) {
+@media (max-width:1399.98px) {
   
 }
+
+
+
+
+
+
 

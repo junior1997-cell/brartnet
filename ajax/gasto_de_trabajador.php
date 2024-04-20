@@ -100,8 +100,8 @@ if (!isset($_SESSION["user_nombre"])) {
               "9" => $reg->tipo_documento_nombre,
               "10" => $reg->numero_documento,
               "11" => $reg->proveedor,
-              "12" => $reg->day_name,
-              "13" => $reg->month_name,
+              "12" => $reg->name_day,
+              "13" => $reg->name_month,
               "14" => $reg->precio_sin_igv,
               "15" => $reg->precio_igv,
               "16" => $reg->descripcion_gasto,
@@ -219,7 +219,7 @@ if (!isset($_SESSION["user_nombre"])) {
             </tr>  
             <tr>
               <th scope="col">Fecha</th>
-              <th scope="row">'.$rspta['data']['fecha_ingreso_f'].' | '.$rspta['data']['day_name'].' | '.$rspta['data']['month_name'].'</th>
+              <th scope="row">'.$rspta['data']['fecha_ingreso_f'].' | '.$rspta['data']['name_day'].' | '.$rspta['data']['name_month'].'</th>
             </tr>    
             <tr>
               <th scope="col">Subtotal</th>

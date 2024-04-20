@@ -12,18 +12,22 @@ if (!isset($_SESSION["user_nombre"])) {
   <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
 
   <head>
-    <?php $title_page = "Compras";
-    include("template/head.php"); ?>
+    <?php $title_page = "Emitir Comprobante";  include("template/head.php"); ?>
+
+    <link rel="stylesheet" href="../assets/libs/filepond/filepond.min.css">
+    <link rel="stylesheet" href="../assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css">
+    <link rel="stylesheet" href="../assets/libs/filepond-plugin-image-edit/filepond-plugin-image-edit.min.css">
+    <link rel="stylesheet" href="../assets/libs/dropzone/dropzone.css">
   </head>
 
-  <body id="body-compras">
+  <body id="body-ventas">
     <?php include("template/switcher.php"); ?>
     <?php include("template/loader.php"); ?>
 
     <div class="page">
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
-      <?php if($_SESSION['lista_de_compras']==1) { ?>
+      <?php if($_SESSION['facturacion']==1) { ?>
       <!-- Start::app-content -->
       <div class="main-content app-content">
         <div class="container-fluid">
@@ -32,7 +36,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
             <div>
               <div class="d-md-flex d-block align-items-center ">
-                <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);  limpiar_form_compra(); "  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);  limpiar_form_venta(); "  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                 <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                 <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                 <div>
@@ -79,7 +83,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-bordered w-100" style="width: 100%;" id="tabla-compras">
+                    <table class="table table-bordered w-100" style="width: 100%;" id="tabla-ventas">
                       <thead>
                         <tr>
                           <th class="text-center">#</th>
@@ -223,11 +227,11 @@ if (!isset($_SESSION["user_nombre"])) {
                 <div class="card-body">                    
                   
                   <!-- FORM - COMPROBANTE -->                    
-                  <form name="form-agregar-compra" id="form-agregar-compra" method="POST" class="needs-validation" novalidate>
+                  <form name="form-facturacion" id="form-facturacion" method="POST" class="needs-validation" novalidate>
                     <div class="row" id="cargando-1-formulario">
 
                       <!-- IMPUESTO -->
-                      <input type="hidden" name="idcompra" id="idcompra" />
+                      <input type="hidden" name="idventa" id="idventa" />
                       <!-- IMPUESTO -->
                       <input type="hidden" class="form-control" name="impuesto" id="impuesto" value="">                      
 
@@ -239,11 +243,11 @@ if (!isset($_SESSION["user_nombre"])) {
                               <p class="fs-14 mb-2 fw-semibold">Tipo de comprobante</p>
                               <div class="mb-0 authentication-btn-group">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante1" checked="" onchange="modificarSubtotales();">
-                                  <label class="btn btn-outline-primary" for="tipo_comprobante1"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante2" onchange="modificarSubtotales();">
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante1" value="03"  onchange="modificarSubtotales(); ver_series_comprobante(this);">
+                                  <label class="btn btn-outline-primary btn-boleta" for="tipo_comprobante1"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante2" value="01" onchange="modificarSubtotales(); ver_series_comprobante(this);">
                                   <label class="btn btn-outline-primary" for="tipo_comprobante2"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante3" onchange="modificarSubtotales();">
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante3" value="12" onchange="modificarSubtotales(); ver_series_comprobante(this);">
                                   <label class="btn btn-outline-primary" for="tipo_comprobante3"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
                                 </div>
                               </div>
@@ -252,7 +256,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           
                           <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                             <div class="form-group">
-                              <label for="fecha_compra" class="form-label">Serie comprobante</label>
+                              <label for="fecha_venta" class="form-label">Serie <span class="charge_serie_comprobante"></span></label>
                               <select class="form-control" name="serie_comprobante" id="serie_comprobante"></select>
                             </div>
                           </div>
@@ -268,24 +272,8 @@ if (!isset($_SESSION["user_nombre"])) {
                               </label>
                               <select class="form-control" name="idproveedor" id="idproveedor"></select>
                             </div>
-                          </div>     
+                          </div>   
                           
-                          <!-- FECHA EMISION -->
-                          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-                            <div class="form-group">
-                              <label for="fecha_compra" class="form-label">Es cobro?</label>
-                              <div class="toggle toggle-secondary on mb-3">  <span></span>   </div>
-                            </div>
-                          </div>  
-
-                          <!-- FECHA EMISION -->
-                          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-                            <div class="form-group">
-                              <label for="fecha_compra" class="form-label">Periodo Pago</label>
-                              <input type="month" class="form-control" name="fecha_compra" id="fecha_compra"  max="<?php echo date('Y-m-d'); ?>">
-                            </div>
-                          </div>                          
-
                           <!-- DESCRIPCION -->
                           <div class="col-md-6 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="form-group">
@@ -293,25 +281,43 @@ if (!isset($_SESSION["user_nombre"])) {
                               <textarea name="descripcion" id="descripcion" class="form-control" rows="2" placeholder="ejemp: Cobro de servicio de internet."></textarea>
                             </div>
                           </div>
+                          
+                          <!-- FECHA EMISION -->
+                          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                            <div class="form-group">
+                              <label for="es_cobro" class="form-label">Es cobro?</label>
+                              <div class="toggle toggle-secondary on es_cobro" onclick="delay(function(){es_cobro_valid()}, 100 );" >  <span></span>   </div>
+                              <input type="hidden" class="form-control" name="es_cobro" id="es_cobro"  >
+                            </div>
+                          </div>  
+
+                          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 datos-de-cobro-mensual">
+                            <div class="form-group">
+                              <label for="periodo_pago" class="form-label">Periodo Pago</label>
+                              <input type="month" class="form-control" name="periodo_pago" id="periodo_pago" >
+                            </div>
+                          </div>    
+
+                                                                  
 
                         </div>
                       </div>
 
                       <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-8">
                         <div class="row">
-                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-2">
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mt-xs-3">
                             <button class="btn btn-info label-btn m-r-10px" type="button" onclick="listar_tabla_producto('PR');"  >
                               <i class="ri-add-circle-line label-btn-icon me-2"></i> Productos 
                             </button>
                           </div>
-                          <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-2">
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mt-xs-3">
                             <button class="btn btn-primary label-btn m-r-10px" type="button"  onclick="listar_tabla_producto('SR');"  >
                             <i class="ri-add-fill label-btn-icon me-2"></i> 
                               Servicio
                             </button>
                           </div>  
 
-                          <div class="col-lg-5 col-xl-5 col-xxl-5">
+                          <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mt-xs-3">
                             <div class="input-group">                              
                               <button type="button" class="input-group-text buscar_x_code" onclick="listar_producto_x_codigo();"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Buscar por codigo de producto."><i class='bx bx-search-alt'></i></button>
                               <input type="text" name="codigob" id="codigob" class="form-control" onkeyup="mayus(this);" placeholder="Digite el código de producto." >
@@ -343,24 +349,136 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <h5 class="fs-13 font-weight-bold">TOTAL</h5>
                                 </th>
                                 <th class="text-right"> 
-                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between subtotal_compra"> <span>S/</span>  0.00</h6>
-                                  <input type="hidden" name="subtotal_compra" id="subtotal_compra" />
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between subtotal_venta"> <span>S/</span>  0.00</h6>
+                                  <input type="hidden" name="subtotal_venta" id="subtotal_venta" />
                                   <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
 
-                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between descuento_compra"><span>S/</span> 0.00</h6>
-                                  <input type="hidden" name="descuento_compra" id="descuento_compra" />
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between descuento_venta"><span>S/</span> 0.00</h6>
+                                  <input type="hidden" name="descuento_venta" id="descuento_venta" />
 
-                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between igv_compra"><span>S/</span> 0.00</h6>
-                                  <input type="hidden" name="igv_compra" id="igv_compra" />
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between igv_venta"><span>S/</span> 0.00</h6>
+                                  <input type="hidden" name="igv_venta" id="igv_venta" />
                                   
-                                  <h5 class="fs-13 font-weight-bold d-flex justify-content-between total_compra"><span>S/</span> 0.00</h5>
-                                  <input type="hidden" name="total_compra" id="total_compra" />
+                                  <h5 class="fs-13 font-weight-bold d-flex justify-content-between total_venta"><span>S/</span> 0.00</h5>
+                                  <input type="hidden" name="total_venta" id="total_venta" />
                                   
                                 </th>
                                 <th></th>
                               </tfoot>
                             </table>
                           </div>
+
+                          <div class="col-12 pt-3">
+                            <button type="button" class="btn btn-primary btn-sm pago_rapido" onclick="pago_rapido(this)" >0</button>
+                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >10</button>
+                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >20</button>
+                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >50</button>
+                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >100</button>
+                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >200</button>
+                          </div>
+
+                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                            <div class="row">
+
+                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+                                <div class="form-group">
+                                  <label for="metodo_pago" class="form-label">Método de pago</label>
+                                  <select class="form-control" name="metodo_pago" id="metodo_pago" onchange="capturar_pago_venta();">
+                                    <option value="EFECTIVO" selected >EFECTIVO</option>
+                                    <option value="MIXTO">MIXTO</option>
+                                    <option value="TARJETA">TARJETA</option>
+                                    <option value="YAPE">YAPE</option>
+                                    <option value="PLIN">PLIN</option>
+                                    <option value="CULQI">CULQI</option>                                                      
+                                    <option value="LUKITA">LUKITA</option>                                                      
+                                    <option value="TUNKI">TUNKI</option>                                
+                                  </select>                              
+                                </div>
+                              </div> 
+                              
+                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+                                <div class="form-group">
+                                  <label for="total_recibido" class="form-label">Monto a pagar</label>
+                                  <input type="number" name="total_recibido" id="total_recibido" class="form-control"  onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();"  placeholder="Ingrese monto a pagar." >                           
+                                </div>
+                              </div> 
+
+                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3" id="content-mp-monto" style="display: none;">
+                                <div class="form-group">
+                                  <label for="mp_monto" class="form-label">Monto: <span class="span-tipo-pago"></span></label>
+                                  <input type="text" name="mp_monto" id="mp_monto" class="form-control" onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();" placeholder="Pagar con" />
+                                </div>
+                              </div>
+
+                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+                                <div class="form-group">
+                                  <label for="total_vuelto" class="form-label">Vuelto <small class="falta_o_completo"></small></label>
+                                  <input type="number" name="total_vuelto" id="total_vuelto" class="form-control-plaintext px-2 total_vuelto" readonly placeholder="Ingrese monto a pagar." >                           
+                                </div>
+                              </div> 
+
+                            </div>
+                          </div>                          
+
+                          <!-- USAR SALDO -->
+                          <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3 pt-3">
+                            <div class="form-group">
+                              <label for="usar_saldo" class="form-label">Usar anticipos?</label>
+                              <div class="toggle toggle-secondary usar_saldo" onclick="delay(function(){usar_saldo_valid()}, 100 );" >  <span></span>   </div>
+                              <input type="hidden" class="form-control" name="usar_saldo" id="usar_saldo"  >
+                            </div>
+                          </div>                           
+
+                          <div class="col-md-12 col-lg-9 col-xl-9 col-xxl-9 pt-3 datos-de-saldo" style="display: none !important;">
+
+                            <div class="row">    
+                              <div class="col-12 pl-0">
+                                <div class="text-primary p-l-10px" style="position: relative; top: 7px;"><label class="bg-white" for=""><b>DATOS DE ANTICIPOS</b></label></div>
+                              </div>
+                            </div>
+
+                            <div class="card-body" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 5px 4px rgb(255 255 255 / 60%);">
+                              <div class="row ">
+                                <!-- FECHA EMISION -->
+                                
+                                
+                                <!-- SALDO -->
+                                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                                  <div class="form-group">
+                                    <label for="saldo_disponible" class="form-label">Saldo Disponible</label>
+                                    <input type="number" class="form-control" name="saldo_disponible" id="saldo_disponible">
+                                  </div>
+                                </div> 
+
+                                <!-- Saldo Usar -->
+                                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                                  <div class="form-group">
+                                    <label for="saldo_usar" class="form-label">Saldo Usar</label>
+                                    <input type="number" class="form-control" name="saldo_usar" id="saldo_usar" >
+                                  </div>
+                                </div>       
+
+                              </div>
+                            </div>
+                          </div>  
+
+                          <div class="col-12" id="content-metodo-pago">
+                            <div class="row">
+                              <!-- Código de Baucher -->
+                              <div class="col-sm-6 col-lg-6 col-xl-6 pt-3" >
+                                <div class="form-group">
+                                  <label for="mp_serie_comprobante">Código de Baucher <span class="span-code-baucher-pago"></span> </label>
+                                  <input type="text" name="mp_serie_comprobante" id="mp_serie_comprobante" class="form-control" onClick="this.select();" placeholder="Codigo de baucher" />
+                                </div>
+                              </div>  
+                              <!-- Baucher -->
+                              <div class="col-sm-6 col-lg-6 col-xl-6 pt-3" >
+                                <div class="form-group">                              
+                                  <input type="file" class="multiple-filepond" name="mp_comprobante" id="mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" accept="image/*, application/.pdf">                             
+                                </div>
+                              </div>
+                            </div>
+                          </div>                          
                         </div>
                       </div>
 
@@ -375,19 +493,19 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
 
                     <!-- Chargue -->
-                    <div class="p-l-25px col-lg-12" id="barra_progress_compra_div" style="display: none;" >
+                    <div class="p-l-25px col-lg-12" id="barra_progress_venta_div" style="display: none;" >
                       <div  class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 
-                        <div id="barra_progress_compra" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
+                        <div id="barra_progress_venta" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
                       </div>
                     </div>
                     <!-- Submit -->
-                    <button type="submit" style="display: none;" id="submit-form-compra">Submit</button>
+                    <button type="submit" style="display: none;" id="submit-form-venta">Submit</button>
                   </form>                                  
 
                 </div>
                 <div class="card-footer border-top-0">
-                  <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1); limpiar_form_compra();" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
-                  <button type="button" class="btn btn-success btn-guardar" id="guardar_registro_compra" style="display: none;"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                  <button type="button" class="btn btn-danger btn-cancelar" onclick="show_hide_form(1); limpiar_form_venta();" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
+                  <button type="button" class="btn btn-success btn-guardar" id="guardar_registro_venta" style="display: none;"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
                 </div>
               </div>              
             </div>
@@ -395,7 +513,7 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::row-1 -->
 
-          <!-- MODAL - VER COMPROBANTE COMPRA -->
+          <!-- MODAL - VER COMPROBANTE venta -->
           <div class="modal fade modal-effect" id="modal-ver-comprobante1" tabindex="-1" aria-labelledby="modal-ver-comprobante1Label" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
               <div class="modal-content">
@@ -416,7 +534,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
           </div> 
-          <!-- End::Modal-Ver-Comprobante compra -->
+          <!-- End::Modal-Ver-Comprobante venta -->
 
           <!-- MODAL - VER FOTO PROVEEDOR -->
           <div class="modal fade modal-effect" id="modal-ver-foto-proveedor" tabindex="-1" aria-labelledby="modal-ver-foto-proveedor" aria-hidden="true">
@@ -466,12 +584,12 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::Modal-Producto -->
 
-          <!-- MODAL - DETALLE COMPRA -->
-          <div class="modal fade modal-effect" id="modal-detalle-compra" tabindex="-1" aria-labelledby="modal-detalle-compraLabel" aria-hidden="true">
+          <!-- MODAL - DETALLE venta -->
+          <div class="modal fade modal-effect" id="modal-detalle-venta" tabindex="-1" aria-labelledby="modal-detalle-ventaLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h6 class="modal-title" id="modal-detalle-compraLabel1">Detalle - Compra</h6>
+                  <h6 class="modal-title" id="modal-detalle-ventaLabel1">Detalle - venta</h6>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -479,7 +597,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       <ul class="nav nav-tabs" id="custom-tab" role="tablist">
                         <!-- DATOS VENTA -->
                         <li class="nav-item" role="presentation">
-                          <button class="nav-link active" id="rol-compra" data-bs-toggle="tab" data-bs-target="#rol-compra-pane" type="button" role="tab" aria-selected="true">COMPRA</button>
+                          <button class="nav-link active" id="rol-venta" data-bs-toggle="tab" data-bs-target="#rol-venta-pane" type="button" role="tab" aria-selected="true">venta</button>
                         </li>
                         <!-- DATOS TOURS -->
                         <li class="nav-item" role="presentation">
@@ -507,7 +625,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
           </div> 
-          <!-- End::Modal-Detalle-Compra -->
+          <!-- End::Modal-Detalle-venta -->
 
           <!-- MODAL - AGREGAR PROVEEDOR - charge 3,4 -->
           <div class="modal fade modal-effect" id="modal-agregar-proveedor" tabindex="-1" aria-labelledby="Modal-agregar-proveedorLabel" aria-hidden="true">
@@ -819,10 +937,10 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
 
-                      <!-- ----------------- PRECIO COMPRA --------------- -->
+                      <!-- ----------------- PRECIO venta --------------- -->
                       <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3 mt-3">
                         <div class="form-group">
-                          <label for="precio_c" class="form-label">Precio Compra(*)</label>
+                          <label for="precio_c" class="form-label">Precio venta(*)</label>
                           <input type="number" class="form-control" name="precio_c" id="precio_c" />
                         </div>
                       </div>
@@ -894,7 +1012,7 @@ if (!isset($_SESSION["user_nombre"])) {
         </div>
       </div>
       <!-- End::app-content -->
-      <?php } else { $title_submodulo ='Compra'; $descripcion ='Lista de Compras del sistema!'; $title_modulo = 'Compras'; include("403_error.php"); }?>   
+      <?php } else { $title_submodulo ='venta'; $descripcion ='Lista de ventas del sistema!'; $title_modulo = 'ventas'; include("403_error.php"); }?>   
 
       <?php include("template/search_modal.php"); ?>
       <?php include("template/footer.php"); ?>
@@ -905,6 +1023,23 @@ if (!isset($_SESSION["user_nombre"])) {
 
     <!-- Apex Charts JS -->
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+
+    <!-- Filepond JS -->
+    <script src="../assets/libs/filepond/filepond.min.js"></script>
+    <script src="../assets/libs/filepond/locale/es-es.js"></script>
+    <script src="../assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
+    <script src="../assets/libs/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js"></script>
+    <script src="../assets/libs/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js"></script>
+    <script src="../assets/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js"></script>
+    <script src="../assets/libs/filepond-plugin-image-edit/filepond-plugin-image-edit.min.js"></script>
+    <script src="../assets/libs/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.min.js"></script>
+    <script src="../assets/libs/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.min.js"></script>
+    <script src="../assets/libs/filepond-plugin-image-crop/filepond-plugin-image-crop.min.js"></script>
+    <script src="../assets/libs/filepond-plugin-image-resize/filepond-plugin-image-resize.min.js"></script>
+    <script src="../assets/libs/filepond-plugin-image-transform/filepond-plugin-image-transform.min.js"></script>
+
+    <!-- Dropzone JS -->
+    <script src="../assets/libs/dropzone/dropzone-min.js"></script>
     
     <script src="scripts/facturacion.js"></script>
     <script src="scripts/js_facturacion.js"></script>

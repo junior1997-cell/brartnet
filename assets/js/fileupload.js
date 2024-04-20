@@ -16,7 +16,8 @@
         FilePondPluginFileValidateType,
         FilePondPluginImageCrop,
         FilePondPluginImageResize,
-        FilePondPluginImageTransform
+        FilePondPluginImageTransform,
+        
     );
 
     /* multiple upload */

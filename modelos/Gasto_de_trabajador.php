@@ -30,7 +30,7 @@
     function mostrar_detalle_gasto($id){
 
       $sql_2 = "SELECT gdt.idgasto_de_trabajador, gdt.idproveedor, gdt.tipo_comprobante, gdt.serie_comprobante, gdt.fecha_ingreso,  DATE_FORMAT(gdt.fecha_ingreso, '%d/%m/%Y') as fecha_ingreso_f, 
-      gdt.day_name, gdt.month_name, gdt.year_name, gdt.precio_sin_igv, gdt.precio_igv, gdt.val_igv, gdt.precio_con_igv, gdt.descripcion_comprobante, gdt.descripcion_gasto, gdt.comprobante,  gdt.estado,
+      gdt.name_day, gdt.name_month, gdt.name_year, gdt.precio_sin_igv, gdt.precio_igv, gdt.val_igv, gdt.precio_con_igv, gdt.descripcion_comprobante, gdt.descripcion_gasto, gdt.comprobante,  gdt.estado,
       CASE p.tipo_persona_sunat 
         WHEN 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial )
         WHEN 'JURIDICA' THEN p.nombre_razonsocial
@@ -51,8 +51,8 @@
     }
 
     function listar_tabla(){
-      $sql = "SELECT gdt.idgasto_de_trabajador, gdt.idproveedor, gdt.tipo_comprobante, gdt.serie_comprobante, gdt.fecha_ingreso, gdt.day_name, gdt.month_name, 
-      gdt.year_name, gdt.precio_sin_igv, gdt.precio_igv, gdt.val_igv, gdt.precio_con_igv, gdt.descripcion_comprobante, gdt.descripcion_gasto, gdt.comprobante,  gdt.estado,
+      $sql = "SELECT gdt.idgasto_de_trabajador, gdt.idproveedor, gdt.tipo_comprobante, gdt.serie_comprobante, gdt.fecha_ingreso, gdt.name_day, gdt.name_month, 
+      gdt.name_year, gdt.precio_sin_igv, gdt.precio_igv, gdt.val_igv, gdt.precio_con_igv, gdt.descripcion_comprobante, gdt.descripcion_gasto, gdt.comprobante,  gdt.estado,
       CASE p.tipo_persona_sunat 
         WHEN 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial )
         WHEN 'JURIDICA' THEN p.nombre_razonsocial

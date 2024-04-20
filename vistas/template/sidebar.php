@@ -145,10 +145,10 @@
           </a>
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"> <a href="javascript:void(0)">Realizar venta</a> </li>
-            <?php  if ($_SESSION['boleta'] == '1') { ?>
+            <?php  if ($_SESSION['facturacion'] == '1') { ?>
             <li class="slide"> <a href="facturacion.php" class="side-menu__item">Facturación</a></li>
             <?php } ?>            
-            <?php  if ($_SESSION['Cotizacion'] == '1') { ?>
+            <?php  if ($_SESSION['cotizacion'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Cotizacion</a></li>
             <?php } ?>
             <?php  if ($_SESSION['nota_de_credito'] == '1') { ?>
@@ -163,7 +163,7 @@
             <?php  if ($_SESSION['cliente'] == '1') { ?>
             <li class="slide"> <a href="clientes.php" class="side-menu__item">Clientes</a></li>
             <?php } ?>
-            <?php  if ($_SESSION['cliente'] == '1') { ?>
+            <?php  if ($_SESSION['anticipos'] == '1') { ?>
             <li class="slide"> <a href="anticipo_cliente.php" class="side-menu__item">Anticipos</a></li>
             <?php } ?>
           </ul>
@@ -223,7 +223,7 @@
         <!-- End::slide -->
 
         <!-- Start::slide -->
-        <?php  if ($_SESSION['creditos_Pendientes'] == '1') { ?>
+        <?php  if ($_SESSION['creditos_pendientes'] == '1') { ?>
         <li class="slide">
           <a href="no_disponible.php" class="side-menu__item">
             <i class="bx bx-home side-menu__icon"></i><span class="side-menu__label"> Creditos pendiente</span>
