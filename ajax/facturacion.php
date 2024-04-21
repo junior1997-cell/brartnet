@@ -24,7 +24,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $toltip = '<script> $(function () { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
 
     $idventa          = isset($_POST["idventa"]) ? limpiarCadena($_POST["idventa"]) : "";    
-    $idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";    
+    $idpersona_cliente      = isset($_POST["idpersona_cliente"]) ? limpiarCadena($_POST["idpersona_cliente"]) : "";    
     $tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
     $serie            = isset($_POST["serie"]) ? limpiarCadena($_POST["serie"]) : "";    
     $descripcion      = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";    
@@ -104,7 +104,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
         if (empty($idventa)) {
           
-          $rspta = $facturacion->insertar( $idproveedor,  $tipo_comprobante, $serie, $impuesto, $descripcion,
+          $rspta = $facturacion->insertar( $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion,
           $subtotal_venta, $tipo_gravada, $igv_venta, $total_venta, $fecha_venta, $img_comprob,
           $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
           $_POST["descuento"], $_POST["subtotal_producto"]);
@@ -112,7 +112,7 @@ if (!isset($_SESSION["user_nombre"])) {
           echo json_encode($rspta, true);
         } else {
 
-          $rspta = $facturacion->editar( $idventa, $idproveedor,  $tipo_comprobante, $serie, $impuesto, $descripcion,
+          $rspta = $facturacion->editar( $idventa, $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion,
           $subtotal_venta, $tipo_gravada, $igv_venta, $total_venta, $fecha_venta, $img_comprob,
           $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
           $_POST["descuento"], $_POST["subtotal_producto"]);
@@ -244,13 +244,13 @@ if (!isset($_SESSION["user_nombre"])) {
 
       // ══════════════════════════════════════ U S A R   A N T I C I P O S ══════════════════════════════════════
       case 'mostrar_anticipos':
-        $rspta=$facturacion->mostrar_anticipos($_POST["idcliente"]);
+        $rspta=$facturacion->mostrar_anticipos($_GET["id_cliente"]);
         echo json_encode($rspta, true);
       break; 
 
       // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-      case 'listar_proveedor':
-        $rspta = $gasto_trab->listar_proveedor(); $cont = 1; $data = "";
+      case 'select2_cliente':
+        $rspta = $facturacion->select2_cliente(); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
             $data .= '<option  value=' . $value['idpersona']  . '>' . $value['nombre'] . ' '. $value['apellido'] . ' - '. $value['numero_documento'] . '</option>';

@@ -264,13 +264,13 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!--  PROVEEDOR  -->
                           <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="form-group">
-                              <label for="idproveedor" class="form-label">
+                              <label for="idpersona_cliente" class="form-label">
                                 <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
-                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idproveedor();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idpersona_cliente();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
                                 Cliente
-                                <span class="charge_idproveedor"></span>
+                                <span class="charge_idpersona_cliente"></span>
                               </label>
-                              <select class="form-control" name="idproveedor" id="idproveedor"></select>
+                              <select class="form-control" name="idpersona_cliente" id="idpersona_cliente" onchange="usar_anticipo_valid();"></select>
                             </div>
                           </div>   
                           
@@ -296,9 +296,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <label for="periodo_pago" class="form-label">Periodo Pago</label>
                               <input type="month" class="form-control" name="periodo_pago" id="periodo_pago" >
                             </div>
-                          </div>    
-
-                                                                  
+                          </div>                                                                  
 
                         </div>
                       </div>
@@ -424,7 +422,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3 pt-3">
                             <div class="form-group">
                               <label for="usar_saldo" class="form-label">Usar anticipos?</label>
-                              <div class="toggle toggle-secondary usar_saldo" onclick="delay(function(){usar_saldo_valid()}, 100 );" >  <span></span>   </div>
+                              <div class="toggle toggle-secondary usar_saldo" onclick="delay(function(){usar_anticipo_valid()}, 100 );" >  <span></span>   </div>
                               <input type="hidden" class="form-control" name="usar_saldo" id="usar_saldo"  >
                             </div>
                           </div>                           

@@ -252,7 +252,7 @@ function mostrar_editar_detalles_venta(idventa) {
     if (e.status == true) {    
 
       $("#idventa").val(e.data.venta.idventa);
-      $("#idproveedor").val(e.data.venta.idproveedor).trigger('change');
+      $("#idpersona_cliente").val(e.data.venta.idpersona_cliente).trigger('change');
       $("#tipo_comprobante").val(e.data.venta.tipo_comprobante).trigger('change');
       $("#serie").val(e.data.venta.serie_comprobante);
       $("#descripcion").val(e.data.venta.descripcion);

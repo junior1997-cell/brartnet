@@ -11,8 +11,8 @@ const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true
 
 function init(){
 
-  listar_tabla_facturacion();
-  $(".btn-boleta").click();
+  listar_tabla_facturacion(); // Listamos la tabla principal
+  $(".btn-boleta").click();   // Selecionamos la BOLETA
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-venta").submit(); }  });
@@ -20,7 +20,7 @@ function init(){
   $("#guardar_registro_producto").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-producto").submit(); } });
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/facturacion.php?op=listar_proveedor", '#idproveedor', null);
+  lista_select2("../ajax/facturacion.php?op=select2_cliente", '#idpersona_cliente', null);
   lista_select2("../ajax/facturacion.php?op=listar_crl_comprobante&tipos='00','01','03','12'", '#tipo_comprobante', null);
 
   lista_select2("../ajax/facturacion.php?op=select_categoria", '#categoria', null);
@@ -32,7 +32,7 @@ function init(){
   lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", choice_idbanco, null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
-  $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#idpersona_cliente").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#metodo_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   
@@ -76,13 +76,13 @@ function limpiar_form_venta(){
   array_data_venta = [];
   $("#idventa").val('');
 
-  $("#idproveedor").val('').trigger('change');
+  $("#idpersona_cliente").val('').trigger('change');
   $("#tipo_comprobante").val('').trigger('change');
   $("#serie").val('');
   $("#descripcion").val('');
   $("#fecha_venta").val('');
-  $("#idproveedor").val('');
-  $("#idproveedor").val('');
+  $("#idpersona_cliente").val('');
+  $("#idpersona_cliente").val('');
   doc1_eliminar();
 
   $("#total_venta").val("");     
@@ -279,13 +279,13 @@ function es_cobro_valid() { console.log($(".es_cobro").hasClass("on"));
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR ANTICIPOS :::::::::::::::::::::::::::::::::::::::::::::
-function usar_saldo_valid() { console.log($(".usar_saldo").hasClass("on"));
+function usar_anticipo_valid() { console.log($(".usar_saldo").hasClass("on"));
   if ($(".usar_saldo").hasClass("on") == true) {
     $("#usar_saldo").val("SI");
     $(".datos-de-saldo").show("slow");
-
-    $.getJSON(`../ajax/facturacion.php?op=mostrar_anticipos`, {data}, function (e, textStatus, jqXHR) {
-        
+    var id_cliente = $('#idpersona_cliente').val() == ''  || $('#idpersona_cliente').val() == null ? '' : $('#idpersona_cliente').val();
+    $.getJSON(`../ajax/facturacion.php?op=mostrar_anticipos`, {id_cliente:id_cliente}, function (e, textStatus, jqXHR) {
+      $("#saldo_disponible").val(e.data.total_anticipo);
     });
 
   } else {
@@ -469,19 +469,21 @@ $(function(){
   form_validate_facturacion = $("#form-facturacion").validate({
     ignore: '',
     rules: {
-      idproveedor:        { required: true },
+      idpersona_cliente:        { required: true },
       tipo_comprobante:   { required: true },
       serie_comprobante:  { required: true, },
       descripcion:        { minlength: 4 },
       fecha_venta:       { required: true},
-      impuesto:           { min: 0, max:100}
+      impuesto:           { min: 0, max:100},
+      mp_comprobante:         { extension: "png|jpg|jpeg|webp|svg|pdf",  }, 
     },
     messages: {
-      idproveedor:        { required: "Campo requerido", },
+      idpersona_cliente:        { required: "Campo requerido", },
       tipo_comprobante:   { required: "Campo requerido", },
       fecha_venta:       { required: "Campo requerido", },
       serie_comprobante:  { required: "Campo requerido", },
       descripcion:        { minlength: "Minimo {0} caracteres", },
+      mp_comprobante:         { extension: "Ingrese imagenes validas ( {0} )", },
     },
 
     errorElement: "span",
@@ -622,7 +624,7 @@ $(function(){
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-function reload_idproveedor(){ lista_select2("../ajax/facturacion.php?op=listar_proveedor", '#idproveedor', null, '.charge_idproveedor'); }
+function reload_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=listar_proveedor", '#idpersona_cliente', null, '.charge_idpersona_cliente'); }
 
 
 
@@ -727,6 +729,6 @@ function reload_idproveedor(){ lista_select2("../ajax/facturacion.php?op=listar_
 
   /* multiple upload */
   const MultipleElement = document.querySelector('.multiple-filepond');
-  FilePond.create(MultipleElement, {labelIdle: `Arrastra y suelta tu BAUCHER o <span class="filepond--label-action">Explora</span>`,} );
+  FilePond.create(MultipleElement, FilePond_Facturacion_LabelsES );
 
 })();
