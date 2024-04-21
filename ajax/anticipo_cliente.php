@@ -77,12 +77,13 @@ if (!isset($_SESSION["user_nombre"])) {
               "1" =>  ' <div class="dropdown-center"> 
                         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownCenterBtn" data-bs-toggle="dropdown" aria-expanded="false"> <i class="nav-icon fa-solid fa-gears"></i> </button> 
                         <ul class="dropdown-menu" aria-labelledby="dropdownCenterBtn" style=""> 
-                          <li><a class="dropdown-item" href="../reportes/compraReporte.php?idanticipo_cliente=' . ($value['idanticipo_cliente']) . '" target="_blanck">Imprimir Ticket</a></li> 
+                          <li><a class="dropdown-item" onclick="editar(' . ($value['idanticipo_cliente']) . ')">Editar</a></li>  
+                          <li><a class="dropdown-item" onclick="exAnticipo_cienteTickcet('.($value['idanticipo_cliente']).')" target="_blanck">Imprimir Ticket</a></li> 
                           <li><a class="dropdown-item" onclick="imprimirA4(' . ($value['idanticipo_cliente']) . ')">A4</a></li>  
                         </ul>
                       </div> ',
               "2" =>  $value['tipo'] == 'INGRESO' ? '<span class="badge bg-success-transparent">'.$value['tipo'] .'</span>' : '<span class="badge bg-danger-transparent">'.$value['tipo'] .'</span>',
-              "3" =>  ($value['fecha_anticipo']),
+              "3" =>  (new DateTime($value['fecha_anticipo']))->format('d/m/Y'),
               "4" => '<p><b>'.$value['sc_anticipo'].'-'.$value['nc_anticipo'].'</b></p>',
               "5" => '<textarea class="textarea_datatable bg-light"  readonly>' .($value['descripcion']). '</textarea>',
               "6" => '<p><b>'.$value['sc_venta'].'-'.$value['nc_venta'].'</b></p>',

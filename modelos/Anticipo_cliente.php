@@ -19,22 +19,15 @@
     public function tabla_clientes() {
 
       $sql= "SELECT 
-              ac.idpersona_cliente,  
-              p.nombre_razonsocial AS nombres, 
+              ac.idpersona_cliente,
+              p.nombre_razonsocial AS nombres,
               p.apellidos_nombrecomercial AS apellidos,
-              (SELECT SUM(CASE WHEN ac2.tipo = 'EGRESO' THEN ac2.total * -1 ELSE ac2.total END)
-                FROM anticipo_cliente ac2
-                WHERE ac2.idpersona_cliente = ac.idpersona_cliente
-              ) AS total_anticipo
+              SUM(CASE WHEN ac.tipo = 'EGRESO' THEN ac.total * -1 ELSE ac.total END) AS total_anticipo
             FROM anticipo_cliente ac
             INNER JOIN persona_cliente pc ON ac.idpersona_cliente = pc.idpersona_cliente
             INNER JOIN persona p ON pc.idpersona = p.idpersona
-            GROUP BY 
-              ac.idpersona_cliente,  
-              p.nombre_razonsocial,
-              p.apellidos_nombrecomercial;";
+            GROUP BY ac.idpersona_cliente";
       return ejecutarConsulta($sql);
-
     } 
 
 
@@ -53,6 +46,7 @@
                 stp_v.abreviatura AS tc_venta, 
                 v.serie_comprobante AS sc_venta, 
                 v.numero_comprobante AS nc_venta,
+                ac.total,
                 CASE 
                   WHEN ac.tipo = 'EGRESO' THEN ac.total * -1
                   ELSE ac.total 
@@ -70,17 +64,8 @@
             GROUP BY
               ac.idanticipo_cliente,
               ac.idpersona_cliente,
-              ac.tipo, 
               p.nombre_razonsocial,
-              p.apellidos_nombrecomercial,
-              ac.fecha_anticipo,
-              ac.descripcion, 
-              stp_a.abreviatura,  
-              ac.serie_comprobante, 
-              ac.numero_comprobante,
-              stp_v.abreviatura, 
-              v.serie_comprobante, 
-              v.numero_comprobante;";
+              p.apellidos_nombrecomercial";
       return ejecutarConsulta($sql);
 
     }
@@ -89,6 +74,27 @@
       $sql = "INSERT INTO anticipo_cliente(idpersona_cliente,fecha_anticipo,descripcion,tipo,total,tipo_comprobante,serie_comprobante,numero_comprobante) VALUES ('$idpersona_cliente','$fecha','$descripcion','$tipo','$total', '$tipo_comprobante', '$serie', '$numero')";
       $insertar = ejecutarConsulta_retornarID($sql, 'C'); if ($insertar['status'] == false) {  return $insertar; } 
       return $insertar;
+    }
+
+    public function ticket_anticipo($idanticipo_cliente){
+      $sql = "SELECT  
+                ac.idanticipo_cliente,
+                ac.idpersona_cliente, 
+                p.nombre_razonsocial, 
+                p.apellidos_nombrecomercial, 
+                sdi.abreviatura,
+                p.numero_documento,
+                p.direccion,
+                ac.fecha_anticipo,
+                ac.serie_comprobante,
+                ac.numero_comprobante,
+                ac.total
+              FROM anticipo_cliente ac
+              INNER JOIN persona_cliente pc ON ac.idpersona_cliente = pc.idpersona_cliente
+              INNER JOIN persona p ON pc.idpersona = p.idpersona
+              INNER JOIN sunat_c06_doc_identidad sdi ON p.tipo_documento = sdi.idsunat_c06_doc_identidad
+              WHERE ac.idanticipo_cliente = '$idanticipo_cliente'";
+      return ejecutarConsultaSimpleFila($sql);
     }
 
     public function numeracion($ser){
@@ -109,6 +115,12 @@
             FROM persona_cliente pc
             INNER JOIN persona p ON pc.idpersona = p.idpersona;";
       return ejecutarConsultaArray($sql);   
+    }
+
+
+    public function empresa(){
+      $sql = "SELECT * FROM empresa WHERE numero_documento = '20610630431'";
+      return ejecutarConsultaSimpleFila($sql);
     }
 
 

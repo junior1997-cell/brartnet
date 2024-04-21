@@ -18,7 +18,8 @@ function limpiar_form_anticipo(){
   
   $("#idanticipo_cliente").val("");
   $("#cliente").text(null);
-  $("#fecha").val("");
+  // $("#fecha").val("");
+  document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
   $("#descrip").val("");
   $("#monto").val("");
   // Limpiamos las validaciones
@@ -29,17 +30,16 @@ function limpiar_form_anticipo(){
 }
 
 function tbla_pral_cliente(){
+
   tbla_cliente = $('#tabla-clientes').dataTable({
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
+    dom:"<'row'<'col-md-3'B><'col-md-2 float-left'l><'col-md-7'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tbla_cliente) { tbla_cliente.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0,1,2], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,1,2], }, title: 'Lista de Clientes - Anticipo', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [0,1,2], }, title: 'Lista de Clientes - Anticipo', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
-      { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-2 btn btn-sm btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_plan) { tabla_plan.ajax.reload(null, false); } } },
+      { extend: 'copy', exportOptions: { columns: [0,1,2], }, text: `<i class="fas fa-copy" ></i>`, className: "px-2 btn btn-sm btn-outline-dark btn-wave ", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,1,2], }, title: 'Lista de Clientes - Anticipo', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-2 btn btn-sm btn-outline-success btn-wave ", footer: true,  }, 
     ],
     "ajax":	{
 			url: '../ajax/anticipo_cliente.php?op=tbla_pral_clientes',
@@ -62,7 +62,7 @@ function tbla_pral_cliente(){
       },
 		},
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
@@ -83,13 +83,11 @@ function mostrar_tbla_anticipos(idpersona_cliente, nombres, apellidos){
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
+    dom:"<'row'<'col-md-4'B><'col-md-2 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tbla_anticipo) { tbla_anticipo.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0,8,2,3,4,5,6,7], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,8,2,3,4,5,6,7], }, title: 'Lista de Anticipo Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [0,8,2,3,4,5,6,7], }, title: 'Lista de Anticipo Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
-      { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-2 btn btn-sm btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tbla_anticipo) { tbla_anticipo.ajax.reload(null, false); } } },
+      { extend: 'copy', exportOptions: { columns: [0,8,2,3,4,5,6,7], }, text: `<i class="fas fa-copy" ></i>`, className: "px-2 btn btn-sm btn-outline-dark btn-wave ", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,8,2,3,4,5,6,7], }, title: 'Lista de Anticipo Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-2 btn btn-sm btn-outline-success btn-wave ", footer: true,  }, 
     ],
     "ajax":	{
 			url: '../ajax/anticipo_cliente.php?op=mostrar_tbla_anticipos&idpersona_cliente=' + idpersona_cliente,
@@ -107,8 +105,17 @@ function mostrar_tbla_anticipos(idpersona_cliente, nombres, apellidos){
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
 		},
+    "drawCallback": function (settings) {
+      var api = this.api();
+      var suma = api.column(7, {page: 'current'}).data().reduce(function (a, b) {
+          // Eliminar etiquetas HTML y luego convertir a número
+          var cleanNumber = parseFloat(b.replace(/<[^>]*>/g, '').replace(/[^0-9.-]/g, ''));
+          return a + (isNaN(cleanNumber) ? 0 : cleanNumber);
+      }, 0);
+      $('#total').html("S/ " + suma.toFixed(1));
+  },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_ ",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
@@ -116,7 +123,7 @@ function mostrar_tbla_anticipos(idpersona_cliente, nombres, apellidos){
     "iDisplayLength": 10,
     "order": [[0, "asc"]],
     columnDefs: [
-      { targets: [8], visible: false, searchable: false, },    
+      { targets: [8], visible: false, searchable: false, },   
     ]
   }).DataTable();
 }
@@ -159,18 +166,14 @@ function guardar_editar_anticipo(e) {
   });  
 }
 
-// Numeración
-function actualizar_numeracion() {
-  var serie = $("#serie_ac option:selected").val();
-  $.post("../ajax/anticipo_cliente.php?op=actualizar_numeracion&ser=" + serie, function (r) {
-    var n2 = pad(r, 0);
-    $("#numero_ac").val(n2);
-
-    var SerieReal = $("#serie_ac option:selected").text();
-    $("#SerieReal").val(SerieReal);
-  });
+// Imprimir Ticket
+function exAnticipo_cienteTickcet(idanticipo_cliente){
+  var rutacarpeta = "../reportes/ticketAnticipo_clitente.php?id=" + idanticipo_cliente;
+  $("#modalAntcticket").attr("src", rutacarpeta);
+  $("#modalPreviewticket").modal("show");
 }
 
+// Actualizar Serie Anticipo Cliente
 function selectSerie(){
   $.post("../ajax/anticipo_cliente.php?op=selectSerie", function (r) {
     if (r == '' || r == null) {
@@ -188,6 +191,18 @@ function selectSerie(){
       });
     }      
     $(".charge-serie").html(``);
+  });
+}
+
+// Actualizar Numeración Anticipo Cliente
+function actualizar_numeracion() {
+  var serie = $("#serie_ac option:selected").val();
+  $.post("../ajax/anticipo_cliente.php?op=actualizar_numeracion&ser=" + serie, function (r) {
+    var n2 = pad(r, 0);
+    $("#numero_ac").val(n2);
+
+    var SerieReal = $("#serie_ac option:selected").text();
+    $("#SerieReal").val(SerieReal);
   });
 }
 

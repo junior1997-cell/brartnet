@@ -117,14 +117,14 @@ if (!isset($_SESSION["user_nombre"])) {
                         <tbody></tbody>
                         <tfoot>
                           <tr>
-                          <th class="text-center">#</th>
+                            <th class="text-center">#</th>
                             <th>Acciones</th>
                             <th>Tipo</th>
                             <th>Fecha</th>
                             <th>Serie Anticipo</th>
                             <th>Descripción</th>
                             <th>Venta</th>
-                            <th>Monto</th>
+                            <th class="bg-light" id="total">Monto</th>
                             <th>Cliente</th>
                           </tr>
                         </tfoot>
@@ -160,11 +160,11 @@ if (!isset($_SESSION["user_nombre"])) {
                               <label for="cliente" class="form-label">Cliente</label>
                               <select name="cliente" id="cliente" class="form-select" required></select>
                             </div>
-                            
-                            <!-- --------------FECHA--------------- -->
+
+                            <!-- --------------MONTO---------------- -->
                             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
-                              <label for="fecha" class="form-label">Fecha</label>
-                              <input type="date" name="fecha" id="fecha" class="form-control"/>
+                              <label for="monto" class="form-label">Monto</label>
+                              <input type="number" name="monto" id="monto" class="form-control"/>
                             </div>
 
                             <!-- --------------DESCRIPCION--------- -->
@@ -192,11 +192,11 @@ if (!isset($_SESSION["user_nombre"])) {
                               <label for="tipo_ac" class="form-label">Tipo Anticipo</label>
                               <input type="text" name="tipo_ac" id="tipo_ac" class="form-control" value="INGRESO" readonly/>
                             </div>
-
-                            <!-- --------------MONTO---------------- -->
+                            
+                            <!-- --------------FECHA--------------- -->
                             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mt-3">
-                              <label for="monto" class="form-label">Monto</label>
-                              <input type="number" name="monto" id="monto" class="form-control"/>
+                              <label for="fecha" class="form-label">Fecha</label>
+                              <input type="date" name="fecha" id="fecha" class="form-control"/>
                             </div>
                           </div>
                           <div class="row" id="cargando-2-fomulario" style="display: none;" >
@@ -223,6 +223,30 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
           </div>
           <!-- End::modal-agregar_anticipo -->
+
+          <!-- Start::modal-imprimir_ticket -->
+          <div class="modal fade" id="modalPreviewticket" tabindex="-1" aria-labelledby="modalPreviewticketLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md" style="max-width: 24% !important;">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalPreviewticketLabel">Ticket de venta</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="imp1">
+                  <div>
+                    <iframe name="modalAntcticket" id="modalAntcticket" frameborder="0" width="100%"
+                      style="height: 800px;" marginwidth="1" src="">
+                    </iframe>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End::modal-imprimir_ticket -->
+          
 
 
 
