@@ -23,19 +23,34 @@ if (!isset($_SESSION["user_nombre"])) {
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
     $toltip = '<script> $(function () { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
 
-    $idventa          = isset($_POST["idventa"]) ? limpiarCadena($_POST["idventa"]) : "";    
-    $idpersona_cliente      = isset($_POST["idpersona_cliente"]) ? limpiarCadena($_POST["idpersona_cliente"]) : "";    
-    $tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
-    $serie            = isset($_POST["serie"]) ? limpiarCadena($_POST["serie"]) : "";    
-    $descripcion      = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";    
-    $subtotal_venta   = isset($_POST["subtotal_venta"]) ? limpiarCadena($_POST["subtotal_venta"]) : "";    
-    $tipo_gravada     = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";    
-    $igv_venta        = isset($_POST["igv_venta"]) ? limpiarCadena($_POST["igv_venta"]) : "";    
-    $total_venta      = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";   
-    $impuesto         = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : ""; 
-    $img_comprob      = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : ""; 
-    $fecha_venta      = isset($_POST["fecha_venta"]) ? limpiarCadena($_POST["fecha_venta"]) : "";   
+    $idventa                = isset($_POST["idventa"]) ? limpiarCadena($_POST["idventa"]) : "";   
+    $impuesto               = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : ""; 
 
+    $tipo_comprobante       = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
+    $idpersona_cliente      = isset($_POST["idpersona_cliente"]) ? limpiarCadena($_POST["idpersona_cliente"]) : "";         
+    $observacion_documento  = isset($_POST["observacion_documento"]) ? limpiarCadena($_POST["observacion_documento"]) : "";    
+    $es_cobro               = isset($_POST["es_cobro"]) ? limpiarCadena($_POST["es_cobro"]) : "";    
+    $periodo_pago           = isset($_POST["periodo_pago"]) ? limpiarCadena($_POST["periodo_pago"]) : "";    
+    
+    $metodo_pago            = isset($_POST["metodo_pago"]) ? limpiarCadena($_POST["metodo_pago"]) : "";  
+    $total_recibido         = isset($_POST["total_recibido"]) ? limpiarCadena($_POST["total_recibido"]) : "";  
+    $mp_monto               = isset($_POST["mp_monto"]) ? limpiarCadena($_POST["mp_monto"]) : "";  
+    $total_vuelto           = isset($_POST["total_vuelto"]) ? limpiarCadena($_POST["total_vuelto"]) : "";  
+
+    $usar_anticipo          = isset($_POST["usar_anticipo"]) ? limpiarCadena($_POST["usar_anticipo"]) : "";  
+    $disponible_anticipo    = isset($_POST["disponible_anticipo"]) ? limpiarCadena($_POST["disponible_anticipo"]) : "";  
+    $monto_anticipo         = isset($_POST["monto_anticipo"]) ? limpiarCadena($_POST["monto_anticipo"]) : "";  
+
+    $mp_serie_comprobante   = isset($_POST["mp_serie_comprobante"]) ? limpiarCadena($_POST["mp_serie_comprobante"]) : "";  
+    $mp_comprobante         = isset($_POST["mp_comprobante"]) ? limpiarCadena($_POST["mp_comprobante"]) : "";  
+
+    $subtotal_venta         = isset($_POST["subtotal_venta"]) ? limpiarCadena($_POST["subtotal_venta"]) : "";    
+    $tipo_gravada           = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";    
+    $igv_venta              = isset($_POST["igv_venta"]) ? limpiarCadena($_POST["igv_venta"]) : "";    
+    $total_venta            = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";   
+    
+     
+    $img_comprob      = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : ""; 
 
     switch ($_GET["op"]){
 
@@ -253,13 +268,13 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta = $facturacion->select2_cliente(); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value=' . $value['idpersona']  . '>' . $value['nombre'] . ' '. $value['apellido'] . ' - '. $value['numero_documento'] . '</option>';
+            $data .= '<option  value=' . $value['idpersona_cliente']  . '>' . $value['nombre_razonsocial'] . ' '. $value['apellidos_nombrecomercial'] . ' - '. $value['numero_documento'] . '</option>';
           }
 
           $retorno = array(
             'status' => true, 
             'message' => 'Salió todo ok', 
-            'data' => '<option  value="2" >PROVEEDOR VARIOS</option>'.$data, 
+            'data' => '<option  value="1" >CLIENTES VARIOS - 0000000</option>'.$data, 
           );
           echo json_encode($retorno, true);
 

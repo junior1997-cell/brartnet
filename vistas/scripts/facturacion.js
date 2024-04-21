@@ -271,26 +271,30 @@ function ver_series_comprobante(input) {
 function es_cobro_valid() { console.log($(".es_cobro").hasClass("on"));
   if ($(".es_cobro").hasClass("on") == true) {
     $("#es_cobro").val("SI");
-    $(".datos-de-cobro-mensual").show("slow");
+    $(".datos-de-cobro-mensual").show("slow");    
+    if (form_validate_facturacion) { $("#periodo_pago").rules('add', { required: true, messages: {  required: "Campo requerido" } }); }
   } else {
     $("#es_cobro").val("NO");
     $(".datos-de-cobro-mensual").hide("slow");
+    if (form_validate_facturacion) { $("#periodo_pago").rules('remove', 'required'); }
   }
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR ANTICIPOS :::::::::::::::::::::::::::::::::::::::::::::
-function usar_anticipo_valid() { console.log($(".usar_saldo").hasClass("on"));
-  if ($(".usar_saldo").hasClass("on") == true) {
-    $("#usar_saldo").val("SI");
+function usar_anticipo_valid() { console.log($(".usar_anticipo").hasClass("on"));
+  if ($(".usar_anticipo").hasClass("on") == true) {
+    $("#monto_anticipo").val("SI");
     $(".datos-de-saldo").show("slow");
     var id_cliente = $('#idpersona_cliente').val() == ''  || $('#idpersona_cliente').val() == null ? '' : $('#idpersona_cliente').val();
     $.getJSON(`../ajax/facturacion.php?op=mostrar_anticipos`, {id_cliente:id_cliente}, function (e, textStatus, jqXHR) {
-      $("#saldo_disponible").val(e.data.total_anticipo);
+      $("#disponible_anticipo").val(e.data.total_anticipo);
+      if (form_validate_facturacion) { $("#monto_anticipo").rules('add', { required: true, max: e.data.total_anticipo, messages: {  required: "Campo requerido", max: "Saldo disponible: {0}" } }); }
     });
-
+    
   } else {
-    $("#usar_saldo").val("NO");
+    $("#monto_anticipo").val("NO");
     $(".datos-de-saldo").hide("slow");
+    if (form_validate_facturacion) { $("#monto_anticipo").rules('remove', 'required'); }
   }
 }
 
@@ -469,21 +473,30 @@ $(function(){
   form_validate_facturacion = $("#form-facturacion").validate({
     ignore: '',
     rules: {
-      idpersona_cliente:        { required: true },
-      tipo_comprobante:   { required: true },
-      serie_comprobante:  { required: true, },
-      descripcion:        { minlength: 4 },
-      fecha_venta:       { required: true},
-      impuesto:           { min: 0, max:100},
+      idpersona_cliente:      { required: true },
+      tipo_comprobante:       { required: true },
+      serie_comprobante:      { required: true, },
+      observacion_documento:  { minlength: 4 },
+      periodo_pago:           { required: true},
+      metodo_pago:            { required: true},
+      total_recibido:         { required: true, min: 0, step: 0.01},      
+      mp_monto:               { required: true, min: 0, step: 0.01},
+      total_vuelto:           { required: true, step: 0.01},
+      monto_anticipo:         { required: true, min: 1, step: 0.01},
+      mp_serie_comprobante:   { minlength: 4},
       mp_comprobante:         { extension: "png|jpg|jpeg|webp|svg|pdf",  }, 
     },
     messages: {
-      idpersona_cliente:        { required: "Campo requerido", },
-      tipo_comprobante:   { required: "Campo requerido", },
-      fecha_venta:       { required: "Campo requerido", },
-      serie_comprobante:  { required: "Campo requerido", },
-      descripcion:        { minlength: "Minimo {0} caracteres", },
+      idpersona_cliente:      { required: "Campo requerido", },
+      tipo_comprobante:       { required: "Campo requerido", },
+      periodo_pago:           { required: "Campo requerido", },
+      serie_comprobante:      { required: "Campo requerido", },
+      observacion_documento:  { minlength: "Minimo {0} caracteres", },
       mp_comprobante:         { extension: "Ingrese imagenes validas ( {0} )", },
+      total_recibido:         { step: "Solo 2 decimales."},      
+      mp_monto:               { step: "Solo 2 decimales."},
+      total_vuelto:           { step: "Solo 2 decimales."},
+      monto_anticipo:         { step: "Solo 2 decimales."},
     },
 
     errorElement: "span",
@@ -624,7 +637,7 @@ $(function(){
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-function reload_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=listar_proveedor", '#idpersona_cliente', null, '.charge_idpersona_cliente'); }
+function reload_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_cliente", '#idpersona_cliente', null, '.charge_idpersona_cliente'); }
 
 
 

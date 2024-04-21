@@ -38,7 +38,7 @@
       $idproducto, $unidad_medida, $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, 
       $descuento, $subtotal_producto    
     ){
-      $sql_1 = "INSERT INTO venta(idpersona_cliente, fecha_venta, tipo_comprobante, serie_comprobante, val_igv, descripcion, subtotal, igv, total, comprobante) 
+      $sql_1 = "INSERT INTO venta() 
       VALUES ('$idpersona_cliente', '$fecha_venta', '$tipo_comprobante', '$serie', '$impuesto', '$descripcion', '$subtotal_venta', '$igv_venta', '$total_venta', '$img_comprob')";
       $newdata = ejecutarConsulta_retornarID($sql_1, 'C'); if ($newdata['status'] == false) { return  $newdata;}
       $id = $newdata['data'];
@@ -49,7 +49,7 @@
       if ( !empty($newdata['data']) ) {      
         while ($i < count($idproducto)) {
 
-          $sql_2 = "INSERT INTO venta_detalle(idproducto, idventa, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal)
+          $sql_2 = "INSERT INTO venta_detalle()
           VALUES ('$idproducto[$i]', '$id', '$cantidad[$i]', '$precio_sin_igv[$i]', '$precio_igv[$i]', '$precio_con_igv[$i]', '$descuento[$i]', '$subtotal_producto[$i]');";
           $detalle_new =  ejecutarConsulta_retornarID($sql_2, 'C'); if ($detalle_new['status'] == false) { return  $detalle_new;}          
           $id_d = $detalle_new['data'];
@@ -193,15 +193,14 @@
     public function select2_cliente(){
       $filtro_id_trabajador  = '';
       if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
-        $filtro_id_trabajador = "WHERE pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+        $filtro_id_trabajador = "pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
       } 
-      $sql = "SELECT LPAD(pt.idpersona_trabajador, 5, '0') as idtrabajador, pt.idpersona_trabajador, pt.idpersona,  p.nombre_razonsocial
-      FROM persona_cliente as pc
-      INNER JOIN persona_trabajador as pt ON pt.idpersona_trabajador = pc.idpersona_trabajador
-      INNER JOIN persona as p ON p.idpersona = pt.idpersona
-      $filtro_id_trabajador
-      GROUP BY pc.idpersona_trabajador
-      ORDER BY p.nombre_razonsocial;"; 
+      $sql = "SELECT LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_cliente, p.idpersona,  p.nombre_razonsocial, p.apellidos_nombrecomercial, 
+      p.numero_documento
+      FROM persona_cliente as pc      
+      INNER JOIN persona as p ON p.idpersona = pc.idpersona
+      WHERE p.idpersona > 2 $filtro_id_trabajador ;"; 
+      return ejecutarConsultaArray($sql);
     }
 
     public function select2_series_comprobante($codigo){

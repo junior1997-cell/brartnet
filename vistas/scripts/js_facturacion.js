@@ -107,6 +107,10 @@ function agregarDetalleComprobante(idproducto, individual) {
             $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
             $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
           });
+          $('.valid_descuento').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
+          });
 
           cont++;   
           evaluar();

@@ -237,6 +237,13 @@ if (!isset($_SESSION["user_nombre"])) {
 
                       <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                         <div class="row gy-3">
+                          <!-- ENVIO AUTOMATICO -->
+                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 px-0">
+                            <div class="custom-toggle-switch d-flex align-items-center mb-4">
+                              <input id="crear_y_emitir" name="crear_y_emitir" type="checkbox" checked="">
+                              <label for="crear_y_emitir" class="label-warning"></label><span class="ms-3">Crear y emitir SUNAT</span>
+                            </div>
+                          </div>
                           <!--  TIPO COMPROBANTE  -->
                           <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-8">
                             <div class="mb-sm-0 mb-2">
@@ -277,8 +284,8 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!-- DESCRIPCION -->
                           <div class="col-md-6 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="form-group">
-                              <label for="descripcion" class="form-label">Observacion</label>
-                              <textarea name="descripcion" id="descripcion" class="form-control" rows="2" placeholder="ejemp: Cobro de servicio de internet."></textarea>
+                              <label for="observacion_documento" class="form-label">Observacion</label>
+                              <textarea name="observacion_documento" id="observacion_documento" class="form-control" rows="2" placeholder="ejemp: Cobro de servicio de internet."></textarea>
                             </div>
                           </div>
                           
@@ -305,7 +312,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <div class="row">
                           <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mt-xs-3">
                             <button class="btn btn-info label-btn m-r-10px" type="button" onclick="listar_tabla_producto('PR');"  >
-                              <i class="ri-add-circle-line label-btn-icon me-2"></i> Productos 
+                              <i class="ri-add-circle-line label-btn-icon me-2"></i> Producto
                             </button>
                           </div>
                           <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mt-xs-3">
@@ -404,7 +411,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3" id="content-mp-monto" style="display: none;">
                                 <div class="form-group">
                                   <label for="mp_monto" class="form-label">Monto: <span class="span-tipo-pago"></span></label>
-                                  <input type="text" name="mp_monto" id="mp_monto" class="form-control" onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();" placeholder="Pagar con" />
+                                  <input type="number" name="mp_monto" id="mp_monto" class="form-control" onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();" placeholder="Pagar con" />
                                 </div>
                               </div>
 
@@ -421,9 +428,9 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!-- USAR SALDO -->
                           <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3 pt-3">
                             <div class="form-group">
-                              <label for="usar_saldo" class="form-label">Usar anticipos?</label>
-                              <div class="toggle toggle-secondary usar_saldo" onclick="delay(function(){usar_anticipo_valid()}, 100 );" >  <span></span>   </div>
-                              <input type="hidden" class="form-control" name="usar_saldo" id="usar_saldo"  >
+                              <label for="usar_anticipo" class="form-label">Usar anticipos?</label>
+                              <div class="toggle toggle-secondary usar_anticipo" onclick="delay(function(){usar_anticipo_valid()}, 100 );" >  <span></span>   </div>
+                              <input type="hidden" class="form-control" name="usar_anticipo" id="usar_anticipo"  >
                             </div>
                           </div>                           
 
@@ -436,23 +443,21 @@ if (!isset($_SESSION["user_nombre"])) {
                             </div>
 
                             <div class="card-body" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 5px 4px rgb(255 255 255 / 60%);">
-                              <div class="row ">
-                                <!-- FECHA EMISION -->
-                                
+                              <div class="row ">                                                                
                                 
                                 <!-- SALDO -->
                                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                                   <div class="form-group">
-                                    <label for="saldo_disponible" class="form-label">Saldo Disponible</label>
-                                    <input type="number" class="form-control" name="saldo_disponible" id="saldo_disponible">
+                                    <label for="disponible_anticipo" class="form-label">Saldo Disponible</label>
+                                    <input type="number" class="form-control-plaintext" name="disponible_anticipo" id="disponible_anticipo" readonly>
                                   </div>
                                 </div> 
 
                                 <!-- Saldo Usar -->
                                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                                   <div class="form-group">
-                                    <label for="saldo_usar" class="form-label">Saldo Usar</label>
-                                    <input type="number" class="form-control" name="saldo_usar" id="saldo_usar" >
+                                    <label for="monto_anticipo" class="form-label">Saldo Usar</label>
+                                    <input type="number" class="form-control" name="monto_anticipo" id="monto_anticipo" >
                                   </div>
                                 </div>       
 
