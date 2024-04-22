@@ -53,6 +53,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
           <!-- Start::row-1 -->
           <div class="row">
+            <!-- Div - TABLA CLIENTES -->
             <div class="col-xxl-5 col-xl-5">
               <div>
                 <div class="card custom-card">
@@ -73,7 +74,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <tr>
                           <th class="text-center">#</th>
                             <th>Cliente</th>
-                            <th>Saldo Disponible</th>
+                            <th class="bg-light" id="Saldo">Saldo Disponible</th>
                             <th>Anticipos</th>
                           </tr>
                         </tfoot>
@@ -86,6 +87,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
 
+            <!-- DIV - TABLA ANTICIPOS -->
             <div class="col-xxl-7 col-xl-7">
               <div id="select-user">
                 <div class="alert alert-solid-warning alert-dismissible fade show">
@@ -98,7 +100,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="card custom-card">
                   <div class="card-body">
-                    <!-- ------------ Tabla de Servicios ------------- -->
+                    <!-- ------------ Tabla de Anticipos ------------- -->
                     <div class="table-responsive" id="div-tabla">
                       <table class="table table-bordered w-100" style="width: 100%;" id="tabla-anticipos">
                         <thead>
@@ -153,10 +155,9 @@ if (!isset($_SESSION["user_nombre"])) {
 
                             <!-- --------------ID------------------ -->
                             <input type="hidden" name="idanticipo_cliente" id="idanticipo_cliente" /> 
-                            <input type="hidden" name="tipo_comprobante" id="tipo_comprobante" value="102" />
 
                             <!-- --------------CLIENTE------------- -->
-                            <div class="col-xl-8 col-lg-8 col-md-6 col-sm-12">
+                            <div class="col-xl-8 col-lg-8 col-md-6 col-sm-12" id="seleccionar_cliente">
                               <label for="cliente" class="form-label">Cliente</label>
                               <select name="cliente" id="cliente" class="form-select" required></select>
                             </div>
@@ -177,6 +178,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mt-3">
                               <label for="serie_ac" class="form-label">Serie <span class="charge-serie text-danger"><i class="fas fa-spinner fa-pulse"></i></span></label>
                               <select class="form-control" name="serie_ac" id="serie_ac" onchange="actualizar_numeracion()"></select>
+                              <input type="text" class="form-control" id="serie_ac_edit" name="serie_ac_edit" style="display: none;">
                               <input type="hidden" name="idnumeracion" id="idnumeracion">
                               <input type="hidden" name="SerieReal" id="SerieReal">
                             </div>
@@ -229,7 +231,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <div class="modal-dialog modal-md" style="max-width: 24% !important;">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="modalPreviewticketLabel">Ticket de venta</h5>
+                  <h5 class="modal-title" id="modalPreviewticketLabel">Ticket de Anticipo</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="imp1">
@@ -240,6 +242,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   </div>
                 </div>
                 <div class="modal-footer">
+                  <button type="button" class="btn btn-icon btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('modalAntcticket')"><i class="ri-printer-fill"></i></button>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
               </div>
@@ -271,7 +274,7 @@ if (!isset($_SESSION["user_nombre"])) {
       $(function() {
         $('[data-toggle="tooltip"]').tooltip();
       });
-    </script>
+    </script> 
 
 
   </body>

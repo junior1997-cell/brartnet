@@ -59,6 +59,12 @@ function show_hide_form(flag) {
 	}
 }
 
+function mini_reporte() {
+  $.getJSON(``, function (e, textStatus, jqXHR) {
+      
+  });
+}
+
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   F A C T U R A C I O N :::::::::::::::::::::::::::::::::::::::::::::
 
 // abrimos el navegador de archivos
@@ -85,20 +91,20 @@ function limpiar_form_venta(){
   $("#idpersona_cliente").val('');
   doc1_eliminar();
 
-  $("#total_venta").val("");     
-  $(".total_venta").html("0");
+  $("#venta_total").val("");     
+  $(".venta_total").html("0");
 
-  $(".subtotal_venta").html("<span>S/</span> 0.00");
-  $("#subtotal_venta").val("");
+  $(".venta_subtotal").html("<span>S/</span> 0.00");
+  $("#venta_subtotal").val("");
 
-  $(".descuento_venta").html("<span>S/</span> 0.00");
-  $("#descuento_venta").val("");
+  $(".venta_descuento").html("<span>S/</span> 0.00");
+  $("#venta_descuento").val("");
 
-  $(".igv_venta").html("<span>S/</span> 0.00");
-  $("#igv_venta").val("");
+  $(".venta_igv").html("<span>S/</span> 0.00");
+  $("#venta_igv").val("");
 
-  $(".total_venta").html("<span>S/</span> 0.00");
-  $("#total_venta").val("");
+  $(".venta_total").html("<span>S/</span> 0.00");
+  $("#venta_total").val("");
 
   $("#estado_detraccion").val("0");
   $('#my-switch_detracc').prop('checked', false); 
@@ -281,20 +287,21 @@ function es_cobro_valid() { console.log($(".es_cobro").hasClass("on"));
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR ANTICIPOS :::::::::::::::::::::::::::::::::::::::::::::
-function usar_anticipo_valid() { console.log($(".usar_anticipo").hasClass("on"));
+function usar_anticipo_valid() { 
   if ($(".usar_anticipo").hasClass("on") == true) {
-    $("#monto_anticipo").val("SI");
+    $("#usar_anticipo").val("SI");
     $(".datos-de-saldo").show("slow");
     var id_cliente = $('#idpersona_cliente').val() == ''  || $('#idpersona_cliente').val() == null ? '' : $('#idpersona_cliente').val();
-    $.getJSON(`../ajax/facturacion.php?op=mostrar_anticipos`, {id_cliente:id_cliente}, function (e, textStatus, jqXHR) {
-      $("#disponible_anticipo").val(e.data.total_anticipo);
-      if (form_validate_facturacion) { $("#monto_anticipo").rules('add', { required: true, max: e.data.total_anticipo, messages: {  required: "Campo requerido", max: "Saldo disponible: {0}" } }); }
-    });
-    
+    if (id_cliente != null && id_cliente != '') {
+      $.getJSON(`../ajax/facturacion.php?op=mostrar_anticipos`, {id_cliente:id_cliente}, function (e, textStatus, jqXHR) {
+        $("#ua_monto_disponible").val(e.data.total_anticipo);
+        if (form_validate_facturacion) { $("#ua_monto_usado").rules('add', { required: true, max: e.data.total_anticipo, messages: {  required: "Campo requerido", max: "Saldo disponible: {0}" } }); }
+      });
+    }    
   } else {
-    $("#monto_anticipo").val("NO");
+    $("#usar_anticipo").val("NO");
     $(".datos-de-saldo").hide("slow");
-    if (form_validate_facturacion) { $("#monto_anticipo").rules('remove', 'required'); }
+    if (form_validate_facturacion) { $("#ua_monto_usado").rules('remove', 'required'); }
   }
 }
 
@@ -482,9 +489,9 @@ $(function(){
       total_recibido:         { required: true, min: 0, step: 0.01},      
       mp_monto:               { required: true, min: 0, step: 0.01},
       total_vuelto:           { required: true, step: 0.01},
-      monto_anticipo:         { required: true, min: 1, step: 0.01},
+      ua_monto_usado:         { required: true, min: 1, step: 0.01},
       mp_serie_comprobante:   { minlength: 4},
-      mp_comprobante:         { extension: "png|jpg|jpeg|webp|svg|pdf",  }, 
+      // mp_comprobante:         { extension: "png|jpg|jpeg|webp|svg|pdf",  }, 
     },
     messages: {
       idpersona_cliente:      { required: "Campo requerido", },
@@ -492,11 +499,11 @@ $(function(){
       periodo_pago:           { required: "Campo requerido", },
       serie_comprobante:      { required: "Campo requerido", },
       observacion_documento:  { minlength: "Minimo {0} caracteres", },
-      mp_comprobante:         { extension: "Ingrese imagenes validas ( {0} )", },
+      // mp_comprobante:         { extension: "Ingrese imagenes validas ( {0} )", },
       total_recibido:         { step: "Solo 2 decimales."},      
       mp_monto:               { step: "Solo 2 decimales."},
       total_vuelto:           { step: "Solo 2 decimales."},
-      monto_anticipo:         { step: "Solo 2 decimales."},
+      ua_monto_usado:         { step: "Solo 2 decimales."},
     },
 
     errorElement: "span",

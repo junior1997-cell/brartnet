@@ -14,7 +14,7 @@ if (!isset($_SESSION["user_nombre"])) {
     require_once "../modelos/Correlacion_comprobante.php";
     require_once "../modelos/Producto.php";
 
-    $facturacion            = new Facturacion();    
+    $facturacion        = new Facturacion();    
     $gasto_trab         = new Gasto_de_trabajador();    
     $correlacion_compb  = new Correlacion_comprobante();    
     $productos          = new Producto();
@@ -23,10 +23,14 @@ if (!isset($_SESSION["user_nombre"])) {
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
     $toltip = '<script> $(function () { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
 
+    // ══════════════════════════════════════  DATOS DE FACTURACION ══════════════════════════════════════
+
     $idventa                = isset($_POST["idventa"]) ? limpiarCadena($_POST["idventa"]) : "";   
-    $impuesto               = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : ""; 
+    $impuesto               = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";   
+    $crear_y_emitir         = isset($_POST["crear_y_emitir"]) ? ( empty($_POST["crear_y_emitir"]) ? 'NO' : 'SI' ) : ""; 
 
     $tipo_comprobante       = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
+    $serie_comprobante      = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";    
     $idpersona_cliente      = isset($_POST["idpersona_cliente"]) ? limpiarCadena($_POST["idpersona_cliente"]) : "";         
     $observacion_documento  = isset($_POST["observacion_documento"]) ? limpiarCadena($_POST["observacion_documento"]) : "";    
     $es_cobro               = isset($_POST["es_cobro"]) ? limpiarCadena($_POST["es_cobro"]) : "";    
@@ -38,19 +42,18 @@ if (!isset($_SESSION["user_nombre"])) {
     $total_vuelto           = isset($_POST["total_vuelto"]) ? limpiarCadena($_POST["total_vuelto"]) : "";  
 
     $usar_anticipo          = isset($_POST["usar_anticipo"]) ? limpiarCadena($_POST["usar_anticipo"]) : "";  
-    $disponible_anticipo    = isset($_POST["disponible_anticipo"]) ? limpiarCadena($_POST["disponible_anticipo"]) : "";  
-    $monto_anticipo         = isset($_POST["monto_anticipo"]) ? limpiarCadena($_POST["monto_anticipo"]) : "";  
+    $ua_monto_disponible    = isset($_POST["ua_monto_disponible"]) ? limpiarCadena($_POST["ua_monto_disponible"]) : "";  
+    $ua_monto_usado         = isset($_POST["ua_monto_usado"]) ? limpiarCadena($_POST["ua_monto_usado"]) : "";  
 
-    $mp_serie_comprobante   = isset($_POST["mp_serie_comprobante"]) ? limpiarCadena($_POST["mp_serie_comprobante"]) : "";  
-    $mp_comprobante         = isset($_POST["mp_comprobante"]) ? limpiarCadena($_POST["mp_comprobante"]) : "";  
+    $mp_serie_comprobante   = isset($_POST["mp_serie_comprobante"]) ? limpiarCadena($_POST["mp_serie_comprobante"]) : "";       
 
-    $subtotal_venta         = isset($_POST["subtotal_venta"]) ? limpiarCadena($_POST["subtotal_venta"]) : "";    
-    $tipo_gravada           = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";    
-    $igv_venta              = isset($_POST["igv_venta"]) ? limpiarCadena($_POST["igv_venta"]) : "";    
-    $total_venta            = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";   
-    
+    $venta_subtotal         = isset($_POST["venta_subtotal"]) ? limpiarCadena($_POST["venta_subtotal"]) : "";    
+    $tipo_gravada           = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";
+    $venta_descuento        = isset($_POST["venta_descuento"]) ? limpiarCadena($_POST["venta_descuento"]) : "";    
+    $venta_igv              = isset($_POST["venta_igv"]) ? limpiarCadena($_POST["venta_igv"]) : "";            
+    $venta_total            = isset($_POST["venta_total"]) ? limpiarCadena($_POST["venta_total"]) : "";    
      
-    $img_comprob      = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : ""; 
+    $mp_comprobante_old     = isset($_POST["mp_comprobante_old"]) ? limpiarCadena($_POST["mp_comprobante_old"]) : ""; 
 
     switch ($_GET["op"]){
 
@@ -72,7 +75,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "1" => '<div class="hstack gap-2 fs-15">' .                        
                 '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalle_venta('.($value['idventa']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
               '</div>',
-              "2" =>  $value['fecha_venta'],
+              "2" =>  $value['fecha_emision_format'],
               "3" => '<div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
                   <span class="avatar"> <img class="w-35px h-auto" src="../assets/modulo/persona/perfil/' . $img_proveedor . '" alt="" onclick="ver_img_proveedor(\'' . $img_proveedor . '\', \'' . encodeCadenaHtml(($value['nombre_razonsocial']) .' '. ($value['apellidos_nombrecomercial'])) . '\')"> </span>
@@ -82,15 +85,10 @@ if (!isset($_SESSION["user_nombre"])) {
                   <span class="text-muted"><b>'.$value['tipo_documento'] .'</b>: '. $value['numero_documento'].'</span>
                 </div>
               </div>',
-              "4" =>  '<b>'.$value['tp_comprobante'].'</b>' . ' ' . $value['serie_comprobante'],
-              "5" =>  $value['total'] , 
-              "6" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px;">' . $value['descripcion'] . '</div>',
+              "4" =>  '<b>'.$value['tp_comprobante'].'</b>' . ' ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'],
+              "5" =>  $value['venta_total'] , 
+              "6" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px;">' . $value['observacion_documento'] . '</div>',              
               
-              "7" => !empty($value['comprobante']) ? '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-info-light" onclick="ver_img_comprobante('.($value['idventa']).');" data-bs-toggle="tooltip" title="Ver"><i class="ti ti-file-dollar fs-lg"></i></button></div>' : 
-              '<div class="d-flex justify-content-center"><button class="btn btn-icon btn-sm btn-danger-light" data-bs-toggle="tooltip" title="no encontrado"><i class="ti ti-file-alert fs-lg"></i></button></div>',
-                    
-                    
-                    
             ];
           }
           $results =[
@@ -106,29 +104,46 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'guardar_editar_facturacion':
-
-        if ( !file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name']) ) {
-          $img_comprob = $_POST["doc_old_1"];
-          $flat_img = false; 
+        $mp_comprobante = json_decode($_POST["mp_comprobante"], true);
+        if ( empty($_POST["mp_comprobante"]) ) {
+          # code...
         } else {          
-          $ext = explode(".", $_FILES["doc1"]["name"]);
-          $flat_img = true;
-          $img_comprob = $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);
-          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../assets/modulo/comprobante_venta/" . $img_comprob);          
-        } 
+          $decoded_data = base64_decode($mp_comprobante['data']);  // Decodificar el archivo base64
+          $ext = explode(".", $mp_comprobante["name"]);          
+          $mp_comprobante = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);          
+          $ruta_destino = '../assets/modulo/facturacion/'.$mp_comprobante; // Ruta donde deseas guardar el archivo en el servidor
+          
+          if (file_put_contents($ruta_destino, $decoded_data) !== false) { // Guardar el archivo decodificado en el servidor
+            # El archivo se ha guardado correctamente en el servidor
+          } else {
+            $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Archivo no aceptado!!', 'message' => 'El archivo de baucher de pago esta corroido, porfavor cambie de archivo', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+            echo json_encode($retorno, true); die();
+          }
+        }      
+        
+
+        // if ( !file_exists($_FILES['mp_comprobante']['tmp_name']) || !is_uploaded_file($_FILES['mp_comprobante']['tmp_name']) ) {
+        //   $img_comprob = $_POST["mp_comprobante_old"];
+        //   $flat_img = false; 
+        // } else {          
+        //   $ext = explode(".", $_FILES["mp_comprobante"]["name"]);
+        //   $flat_img = true;
+        //   $img_comprob = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);
+        //   move_uploaded_file($_FILES["mp_comprobante"]["tmp_name"], "../assets/modulo/facturacion/" . $img_comprob);          
+        // } 
 
         if (empty($idventa)) {
           
-          $rspta = $facturacion->insertar( $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion,
-          $subtotal_venta, $tipo_gravada, $igv_venta, $total_venta, $fecha_venta, $img_comprob,
-          $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
+          $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento, $es_cobro, $periodo_pago,
+          $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,  $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
+          $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
           $_POST["descuento"], $_POST["subtotal_producto"]);
 
           echo json_encode($rspta, true);
         } else {
 
           $rspta = $facturacion->editar( $idventa, $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion,
-          $subtotal_venta, $tipo_gravada, $igv_venta, $total_venta, $fecha_venta, $img_comprob,
+          $venta_subtotal, $tipo_gravada, $venta_igv, $venta_total, $fecha_venta, $img_comprob,
           $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
           $_POST["descuento"], $_POST["subtotal_producto"]);
     
@@ -177,9 +192,9 @@ if (!isset($_SESSION["user_nombre"])) {
                 <h5 class="font-weight-bold">TOTAL</h5>
               </th>
               <th class="text-right text-nowrap"> 
-                <h6 class="font-weight-bold subtotal_venta">S/ '.$rspta['data']['venta']['subtotal'].'</h6> 
-                <h6 class="font-weight-bold igv_venta">S/ '.$rspta['data']['venta']['igv'].'</h6>                 
-                <h5 class="font-weight-bold total_venta">S/ '.$rspta['data']['venta']['total'].'</h5>                 
+                <h6 class="font-weight-bold venta_subtotal">S/ '.$rspta['data']['venta']['subtotal'].'</h6> 
+                <h6 class="font-weight-bold venta_igv">S/ '.$rspta['data']['venta']['igv'].'</h6>                 
+                <h5 class="font-weight-bold venta_total">S/ '.$rspta['data']['venta']['total'].'</h5>                 
               </th>              
             </tfoot>
           </table>

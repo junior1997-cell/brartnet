@@ -80,6 +80,7 @@ function agregarDetalleComprobante(idproducto, individual) {
               <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${e.data.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
               <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
               <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
+              <input type="hidden" class="precio_compra_${cont}" name="precio_compra[]" id="precio_compra[]" value="${e.data.precio_compra}"  >
             </td> 
 
             <td class="py-1 form-group">
@@ -199,6 +200,7 @@ function listar_producto_x_codigo() {
               <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${e.data.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
               <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
               <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
+              <input type="hidden" class="precio_compra_${cont}" name="precio_compra[]" id="precio_compra[]" value="${e.data.precio_compra}"  >
             </td> 
 
             <td class="py-1 form-group">
@@ -315,6 +317,7 @@ function mostrar_editar_detalles_venta(idventa) {
               <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${val1.precio_con_igv}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
               <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
               <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
+              <input type="hidden" class="precio_compra_${cont}" name="precio_compra[]" id="precio_compra[]" value="${val1.precio_compra}"  >
             </td> 
 
             <td class="py-1 form-group">
@@ -367,17 +370,17 @@ function evaluar() {
   } else {
     $(".btn-guardar").hide();
     cont = 0;
-    $(".subtotal_venta").html("<span>S/</span> 0.00");
-    $("#subtotal_venta").val(0);
+    $(".venta_subtotal").html("<span>S/</span> 0.00");
+    $("#venta_subtotal").val(0);
 
-    $(".descuento_venta").html("<span>S/</span> 0.00");
-    $("#descuento_venta").val(0);
+    $(".venta_descuento").html("<span>S/</span> 0.00");
+    $("#venta_descuento").val(0);
 
-    $(".igv_venta").html("<span>S/</span> 0.00");
-    $("#igv_venta").val(0);
+    $(".venta_igv").html("<span>S/</span> 0.00");
+    $("#venta_igv").val(0);
 
-    $(".total_venta").html("<span>S/</span> 0.00");
-    $("#total_venta").val(0);
+    $(".venta_total").html("<span>S/</span> 0.00");
+    $("#venta_total").val(0);
     $(".pago_rapido").html(0);
 
   }
@@ -550,18 +553,18 @@ function calcularTotalesSinIgv() {
       descuento += parseFloat( $(`.descuento_${element.id_cont}`).val() );
     });
 
-    $(".subtotal_venta").html("<span>S/</span> " + formato_miles(total));
-    $("#subtotal_venta").val(redondearExp(total, 2));
+    $(".venta_subtotal").html("<span>S/</span> " + formato_miles(total));
+    $("#venta_subtotal").val(redondearExp(total, 2));
 
-    $(".descuento_venta").html("<span>S/</span> " + formato_miles(descuento));
-    $("#descuento_venta").val(redondearExp(descuento, 2));
+    $(".venta_descuento").html("<span>S/</span> " + formato_miles(descuento));
+    $("#venta_descuento").val(redondearExp(descuento, 2));
 
-    $(".igv_venta").html("<span>S/</span> 0.00");
-    $("#igv_venta").val(0.0);
+    $(".venta_igv").html("<span>S/</span> 0.00");
+    $("#venta_igv").val(0.0);
     $(".val_igv").html('IGV (0%)');
 
-    $(".total_venta").html("<span>S/</span> " + formato_miles(total));
-    $("#total_venta").val(redondearExp(total, 2));
+    $(".venta_total").html("<span>S/</span> " + formato_miles(total));
+    $("#venta_total").val(redondearExp(total, 2));
     $(".pago_rapido").html(redondearExp(total, 2));
     $(".pago_rapido").html(redondearExp(total, 2));
   }
@@ -585,17 +588,17 @@ function calcularTotalesConIgv() {
   subotal_sin_igv = redondearExp(quitar_igv_del_precio(total, val_igv, 'entero') , 2);
   igv = (parseFloat(total) - parseFloat(subotal_sin_igv)).toFixed(2);
 
-  $(".subtotal_venta").html(`<span>S/</span> ${formato_miles(subotal_sin_igv)}`);
-  $("#subtotal_venta").val(redondearExp(subotal_sin_igv, 2));
+  $(".venta_subtotal").html(`<span>S/</span> ${formato_miles(subotal_sin_igv)}`);
+  $("#venta_subtotal").val(redondearExp(subotal_sin_igv, 2));
 
-  $(".descuento_venta").html("<span>S/</span> " + formato_miles(descuento));
-  $("#descuento_venta").val(redondearExp(descuento, 2));
+  $(".venta_descuento").html("<span>S/</span> " + formato_miles(descuento));
+  $("#venta_descuento").val(redondearExp(descuento, 2));
 
-  $(".igv_venta").html("<span>S/</span> " + formato_miles(igv));
-  $("#igv_venta").val(igv);
+  $(".venta_igv").html("<span>S/</span> " + formato_miles(igv));
+  $("#venta_igv").val(igv);
 
-  $(".total_venta").html("<span>S/</span> " + formato_miles(total));
-  $("#total_venta").val(redondearExp(total, 2));
+  $(".venta_total").html("<span>S/</span> " + formato_miles(total));
+  $("#venta_total").val(redondearExp(total, 2));
   $(".pago_rapido").html(redondearExp(total, 2));
   $(".pago_rapido").html(redondearExp(total, 2));
   total = 0.0;
@@ -692,17 +695,17 @@ function capturar_pago_venta() {
 function calcular_vuelto() {
   var contado     = $('#total_recibido').val()  == null || $('#total_recibido').val() == '' ? 0 : parseFloat($('#total_recibido').val());  
   var mixto       = $('#mp_monto').val()        == null || $('#mp_monto').val()       == '' ? 0 : parseFloat($('#mp_monto').val());
-  var total_venta = $('#total_venta').val()     == null || $('#total_venta').val()    == '' ? 0 : parseFloat($('#total_venta').val());
+  var venta_total = $('#venta_total').val()     == null || $('#venta_total').val()    == '' ? 0 : parseFloat($('#venta_total').val());
   
   if ($('#total_recibido').val() != '' || $('#mp_monto').val() != '' ) { 
     if ($("#metodo_pago").val() == "MIXTO") {    
-      var vuelto_1 = redondearExp(( ( contado + mixto ) - total_venta ), 2); console.log(vuelto_1);
+      var vuelto_1 = redondearExp(( ( contado + mixto ) - venta_total ), 2); 
       
       $('#total_vuelto').val(vuelto_1);
       vuelto_1 < 0 ? $('.total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
       vuelto_1 < 0 ? $('.falta_o_completo').html('(falta)').addClass('text-danger').removeClass('text-success') : $('.falta_o_completo').html('(completo)').addClass('text-success').removeClass('text-danger') ;
     } else {    
-      var vuelto_2 = redondearExp((contado - total_venta), 2) ; console.log(vuelto_2);
+      var vuelto_2 = redondearExp((contado - venta_total), 2) ; 
       
       $('#total_vuelto').val(vuelto_2);
       vuelto_2 < 0 ? $('.total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
