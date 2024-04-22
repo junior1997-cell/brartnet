@@ -17,11 +17,13 @@ if (!isset($_SESSION["user_nombre"])) {
     $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
 
-    $idincidencia   = isset($_POST["idincidencia"]) ? limpiarCadena($_POST["idincidencia"]) : "";
-    $actividad      = isset($_POST["actividad"]) ? limpiarCadena($_POST["actividad"]) : "";
-    $creacionfecha  = isset($_POST["creacionfecha"]) ? limpiarCadena($_POST["creacionfecha"]) : "";
-    $prioridad      = isset($_POST["prioridad"]) ? limpiarCadena($_POST["prioridad"]) : "";
-    $categoria      = isset($_POST["categoria"]) ? limpiarCadena($_POST["categoria"]) : "";
+    $idincidencia       = isset($_POST["idincidencia"]) ? limpiarCadena($_POST["idincidencia"]) : "";
+    $actividad          = isset($_POST["actividad"]) ? limpiarCadena($_POST["actividad"]) : "";
+    $creacionfecha      = isset($_POST["creacionfecha"]) ? limpiarCadena($_POST["creacionfecha"]) : "";
+    $prioridad          = isset($_POST["prioridad"]) ? limpiarCadena($_POST["prioridad"]) : "";
+    $categoria          = isset($_POST["categoria"]) ? limpiarCadena($_POST["categoria"]) : "";
+    $actividad_detalle  = isset($_POST["actividad_detalle"]) ? limpiarCadena($_POST["actividad_detalle"]) : "";
+    
     
 
     // idincidencia: 
@@ -36,12 +38,12 @@ if (!isset($_SESSION["user_nombre"])) {
 
         if ( empty($idincidencia) ) { #Creamos el registro
 
-          $rspta = $incidencias->insertar($actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria);
+          $rspta = $incidencias->insertar($actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria,$actividad_detalle);
           echo json_encode($rspta, true);
 
         } else { # Editamos el registro
 
-          $rspta = $incidencias->editar($idincidencia,$actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria);
+          $rspta = $incidencias->editar($idincidencia,$actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria,$actividad_detalle);
           echo json_encode($rspta, true);
         }
 
@@ -117,25 +119,9 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'listar_trabajador':
-        $rspta = $incidencias->listar_trabajador();
+        $rspta = $incidencias->listar_trabajador(); 
         echo json_encode($rspta, true);
-      break;
-
-      case 'listar_trabajadores':
-        $rspta = $incidencias->listar_trabajador(); $cont = 1; $data = "";
-        if($rspta['status'] == true){
-          foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value='. $value['idpersona_trabajador']  . '>' . $value['nombre_razonsocial'] . '</option>';
-          }
-
-          $retorno = array(
-            'status' => true, 
-            'message' => 'Salió todo ok', 
-            'data' => $data, 
-          );
-          echo json_encode($retorno, true);
-
-        } else { echo json_encode($rspta, true); }      
+ 
       break;
 
       // case 'listar_proveedor':
@@ -160,89 +146,20 @@ if (!isset($_SESSION["user_nombre"])) {
         echo json_encode($rspta, true);
       break;
 
-      case 'mostrar_detalle_gasto':
-        $rspta = $incidencias->mostrar_detalle_gasto($idincidencia);
-        $img_t = empty($rspta['data']['foto_perfil_trabajador']) ? 'no-perfil.jpg'  : $rspta['data']['foto_perfil_trabajador'];
-        $img_p = empty($rspta['data']['foto_perfil_proveedor']) ? 'no-perfil.jpg'  : $rspta['data']['foto_perfil_proveedor'];
-        $nombre_doc = $rspta['data']['prioridad'] .' ' .$rspta['data']['serie_comprobante'];
-        $html_table = '
-        <div class="my-3" ><span class="h6"> Datos del Trabajador </span></div>
-        <table class="table text-nowrap table-bordered">        
-          <tbody>
-            <tr>
-              <th scope="col">Trabajador</th>
-              <th scope="row">
-                <div class="d-flex align-items-center">
-                  <span class="avatar avatar-xs me-2 online avatar-rounded"> <img src="../assets/modulo/persona/perfil/'.$img_t.'" alt="img"> </span>
-                  '.$rspta['data']['trabajador'].'
-                </div>
-              </th>            
-            </tr>              
-            <tr>
-              <th scope="col">'.$rspta['data']['tipo_documento_nombre_t'].'</th>
-              <th scope="row">'.$rspta['data']['numero_documento_t'].'</th>
-            </tr> 
-            <tr>
-              <th scope="col">Descripción</th>
-              <th scope="row">'.$rspta['data']['descripcion_gasto'].'</th>
-            </tr>                  
-          </tbody>
-        </table>
-        <div class="my-3" ><span class="h6"> Datos del comprobante </span></div>
-        <table class="table text-nowrap table-bordered">        
-          <tbody>
-            <tr>
-              <th scope="col">Proveedor</th>
-              <th scope="row">
-                <div class="d-flex align-items-center">
-                  <span class="avatar avatar-xs me-2 online avatar-rounded"> <img src="../assets/modulo/persona/perfil/'.$img_p.'" alt="img"> </span>
-                  '.$rspta['data']['proveedor'].'
-                </div>
-              </th>            
-            </tr>    
-            <tr>
-              <th scope="col">'.$rspta['data']['tipo_documento_nombre_p'].'</th>
-              <th scope="row">'.$rspta['data']['numero_documento_p'].'</th>
-            </tr> 
-            <tr>
-              <th scope="col">'.$rspta['data']['prioridad'].'</th>
-              <th scope="row">'.$rspta['data']['serie_comprobante'].'</th>
-            </tr>  
-            <tr>
-              <th scope="col">Fecha</th>
-              <th scope="row">'.$rspta['data']['fecha_ingreso_f'].' | '.$rspta['data']['day_name'].' | '.$rspta['data']['month_name'].'</th>
-            </tr>    
-            <tr>
-              <th scope="col">Subtotal</th>
-              <th scope="row">'. number_format($rspta['data']['precio_sin_igv'], 2, '.', ',') .'</th>
-            </tr> 
-            <tr>
-              <th scope="col">IGV</th>
-              <th scope="row">'.number_format($rspta['data']['precio_igv'], 2, '.', ',') .'</th>
-            </tr>  
-            <tr>
-              <th scope="col">Total</th>
-              <th scope="row">'.number_format($rspta['data']['precio_con_igv'], 2, '.', ',') .'</th>
-            </tr>
-            <tr>
-              <th scope="col">Descripción</th>
-              <th scope="row">'.$rspta['data']['descripcion_comprobante'].'</th>
-            </tr>                 
-          </tbody>
-        </table> 
-        <div class="my-3" ><span class="h6"> Comprobante </span></div>';
-        $rspta = ['status' => true, 'message' => 'Todo bien', 'data' => $html_table, 'comprobante' => $rspta['data']['comprobante'], 'nombre_doc'=> $nombre_doc];
+      case 'view_incidencias': 
+        // todos_cat,todos_prio
+        $rspta = $incidencias->view_incidencias($_POST['id_categoria'],$_POST['prioridad']);
         echo json_encode($rspta, true);
       break;
 
-      default:
-        $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
+      case 'categorias_incidencias':
+        $rspta = $incidencias->categorias_incidencias();
         echo json_encode($rspta, true);
       break;
 
       case "select2_cat_inc":
 
-        $rspta = $incidencias->select2_cat_inc(); $cont = 1; $data = [];
+        $rspta = $incidencias->categorias_incidencias(); $cont = 1; $data = [];
 
         if ($rspta['status'] == true) {
 
@@ -264,6 +181,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
           echo json_encode($rspta, true); 
         }        
+      break;
+
+      default:
+        $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
+        echo json_encode($rspta, true);
       break;
 
     }

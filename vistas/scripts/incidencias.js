@@ -1,76 +1,181 @@
-var tabla;
+var valor_id_categoria="";
+var valor_prioridad="";
 
-// var select_idbanco = new Choices('#idbanco', { allowHTML: true,  removeItemButton: true, });
 const choice_categoria = new Choices('#categoria',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
 
 function init() {
-
-  listar_tabla();
+  lista_de_items();
   
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $(".btn-guardar").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-incidencia").submit();  } });
-  //$("#guardar_registro_proveedor").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-proveedor").submit(); } });
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  // lista_select2("../ajax/incidencias.php?op=select2_cat_inc", '#categoria', null);
   lista_selectChoice("../ajax/incidencias.php?op=select2_cat_inc", choice_categoria, null);  
-  // lista_select2("../ajax/incidencias.php?op=listar_proveedor", '#idproveedor', null);  
-
-  // lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);  
-  // lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);  
-  // lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);  
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
-  // $("#categoria").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  // $("#prioridad").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
    select_trabajador();
+   view_principal();
 }
 
-// abrimos el navegador de archivos
-$("#doc1_i").click(function () { $('#doc1').trigger('click'); });
-$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id"), null, '100%', '300px', true) });
-
-
 function select_trabajador() {
-      /* multi select with remove button */
-      const multipleCancelButton = new Choices(
-        '#id_trabajador', {
-          allowHTML: true,
-          removeItemButton: true,
-          noChoicesText:'No más hay opciones',
-          placeholder: true,
-          searchPlaceholderValue: 'Sin resultados',
-          renderSelectedChoices: 'auto',
-          loadingText: 'Cargando...',
-          noResultsText: 'No hay resultados',
-          itemSelectText: 'Presione para seleccionar',
-        }
-      );
 
-      // multipleCancelButton.init();
+  const multipleCancelButton = new Choices(
+    '#id_trabajador', {
+      allowHTML: true,
+      removeItemButton: true,
+      noChoicesText:'No más hay opciones',
+      placeholder: true,
+      searchPlaceholderValue: 'Sin resultados',
+      renderSelectedChoices: 'auto',
+      loadingText: 'Cargando...',
+      noResultsText: 'No hay resultados',
+      itemSelectText: 'Presione para seleccionar',
+    }
+  );
+
   $.getJSON("../ajax/incidencias.php?op=listar_trabajador", function (e, textStatus, jqXHR) {
-      console.log(e);
 
     e.data.forEach((val,key) => {
       multipleCancelButton.setChoices([{
         value: val.idpersona_trabajador,
         label: val.nombre_razonsocial,
       }]);
-      // multipleCancelButton.init();
     });
       
   });
 }
 
+//LISTAR  ALAMANCENES GENERALES
+function lista_de_items() {
 
+  $(".lista-items").html(`
+  <li class="px-0 pt-0">
+    <span class="fs-11 text-muted op-7 fw-semibold">Categorías</span>
+  </li>
+  <li class="active cursor-pointer">
+  <a href="javascript:void(0);">
+    <div class="d-flex align-items-center">
+      <span class="me-2 lh-1">
+        <i class="ri-task-line align-middle fs-14"></i>
+      </span>
+      <span class="flex-fill text-nowrap">
+        Todos
+      </span>
+      <span class="badge bg-success-transparent rounded-pill">167</span>
+    </div>
+  </a>
+</li>`);
 
+  $.post("../ajax/incidencias.php?op=categorias_incidencias", function (e, status) {
 
+    e = JSON.parse(e); console.log(e);
+    // e.data.idtipo_tierra
+    if (e.status == true) {
+      var data_html = '';
 
-function doc1_eliminar() {
-  $("#doc1").val("");
-  $("#doc1_ver").html('<img src="../assets/images/default/img_defecto2.png" alt="" width="78%" >');
-  $("#doc1_nombre").html("");
+      e.data.forEach((val, index) => {
+        data_html = data_html.concat(`
+        <li class="cursor-pointer">
+        <a onclick="delay(function(){categoria('${val.idincidencia_categoria}','Todos')}, 50 );">
+          <div class="d-flex align-items-center">
+            <span class="me-2 lh-1">
+              <i class="ri-star-line align-middle fs-14"></i>
+            </span>
+            <span class="flex-fill text-nowrap">
+            ${val.nombre}
+            </span>
+          </div>
+        </a>
+      </li>
+        
+        `);
+      });
+
+      $(".lista-items").html(`
+      <li class="px-0 pt-0">
+        <span class="fs-11 text-muted op-7 fw-semibold">Categorías</span>
+      </li>
+      <li class="active cursor-pointer">
+          <a>
+            <div class="d-flex align-items-center">
+              <span class="me-2 lh-1">
+                <i class="ri-task-line align-middle fs-14"></i>
+              </span>
+              <span class="flex-fill text-nowrap">
+                Todos
+              </span>
+              <span class="badge bg-success-transparent rounded-pill">167</span>
+            </div>
+          </a>
+        </li> ${data_html}
+      `);
+    } else {
+      ver_errores(e);
+    }
+  }).fail(function (e) { ver_errores(e); });
+}
+
+function categoria(idcategoria) {valor_id_categoria=idcategoria; view_principal();}
+function prioridad(prioridad) { valor_prioridad=prioridad; view_principal(); }
+
+function view_principal() { 
+
+  if (valor_id_categoria === null || valor_id_categoria === "") { valor_id_categoria='TODOS'; }
+
+  if (valor_prioridad === null || valor_prioridad === "") { valor_prioridad='TODOS'; }
+
+  $.post("../ajax/incidencias.php?op=view_incidencias",{ id_categoria: valor_id_categoria ,prioridad:valor_prioridad}, function (e, status) {
+
+    e = JSON.parse(e); console.log('---------------'); console.log(e);
+
+    if (e.status == true) {
+      var data_html = '';
+
+      e.data.forEach((val, index) => {
+
+        data_html = data_html.concat(`
+
+        <div class="col-xl-4 task-card">
+
+        <div class="card custom-card task-pending-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+              <div>
+                <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>${val.actividad}</p>
+                
+                <p class="mb-3">Asignado el : <span class="fs-12 mb-1 text-muted">${val.fecha_creacion}</span></p>
+                <p class="mb-3">Fecha prevista : <span class="fs-12 mb-1 text-muted">${val.fecha_fin}</span></p>
+                <p class="mb-0">Asignado a :
+                  <span class="avatar-list-stacked ms-1">
+                  ${val.trabajadoreshtml}
+                  </span>
+                </p>
+                <p class="mb-0 mt-3">Detalle</p>
+                <textarea class="form-control text-muted  mb-3" cols="30" rows="2" style=" border: none; outline: none;" >${val.actividad_detalle}</textarea>
+
+              </div>
+              <div>
+                <div class="btn-list">
+                  <button class="btn btn-sm btn-icon btn-wave btn-primary-light" onclick="mostrar_editar(${val.idincidencias});"><i class="ri-edit-line"></i></button>
+                  <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0" onclick="eliminar(${val.idincidencias},'${val.actividad}');"><i class="ri-delete-bin-line"></i></button>
+                </div>
+                <span class="badge bg-success-gradient d-block cursor-pointer" style=" font-size: 13px; ">Abierto</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+        
+        `);
+      });
+
+      $(".list_incidencias").html(`${data_html} `);
+    } else {
+      ver_errores(e);
+    }
+  }).fail(function (e) { ver_errores(e); });
 }
 
 function limpiar_form() {
@@ -83,7 +188,7 @@ function limpiar_form() {
   $("#actividad").val("");
   $("#id_trabajador").val(null).trigger("change"); 
   $("#prioridad").val(null).trigger("change"); 
-  $("#categoria").val(null).trigger("change"); 
+  $("#categoria").val("").trigger("change"); 
   
   $("#creacionfecha").val("");
   // $("#tipo_comprobante").val("NINGUNO").trigger("change");  
@@ -96,25 +201,6 @@ function limpiar_form() {
   $(".form-select").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
 
-}
-
-function show_hide_form(flag) {
-  if (flag == 1) {
-    $("#div-tabla").show();
-    $("#div-formulario").hide();
-
-    $(".btn-agregar").show();
-    $(".btn-guardar").hide();
-    $(".btn-cancelar").hide();
-
-  } else if (flag == 2) {
-    $("#div-tabla").hide();
-    $("#div-formulario").show();
-
-    $(".btn-agregar").hide();
-    $(".btn-guardar").show();
-    $(".btn-cancelar").show();
-  }
 }
 
 function guardar_editar(e) {
@@ -154,524 +240,32 @@ function guardar_editar(e) {
   });
 }
 
-function listar_tabla() {
-  tabla = $('#tabla-incidencias').dataTable({
-    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
-    buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla) { tabla.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0,8,9,10,11,2,12,13,4,14,15,5,16,17], }, title:'', text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
-      { extend: 'excel', exportOptions: { columns: [0,8,9,10,11,2,12,13,4,14,15,5,16,17], }, title: 'Lista de gasto', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
-      { extend: 'pdf', exportOptions: { columns: [0,8,9,10,11,2,12,13,4,14,15,5,16,17], }, title: 'Lista de gasto', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
-      { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
-    ],
-    "ajax": {
-      url: '../ajax/incidencias.php?op=listar_tabla',
-      type: "get",
-      dataType: "json",
-      error: function (e) {
-        console.log(e.responseText);
-      },
-      complete: function () {
-        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');
-        $(".buttons-copy").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Copiar');
-        $(".buttons-excel").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Excel');
-        $(".buttons-pdf").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'PDF');
-        $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
-        $('[data-bs-toggle="tooltip"]').tooltip();
-      },
-      dataSrc: function (e) {
-				if (e.status != true) {  ver_errores(e); }  return e.aaData;
-			},
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    footerCallback: function( tfoot, data, start, end, display ) {
-      var api1 = this.api(); var total1 = api1.column( 5 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
-      $( api1.column( 5 ).footer() ).html( `S/ ${formato_miles(total1)}` );       
-    },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[0, "asc"]],//Ordenar (columna,orden)
-    columnDefs: [
-      { targets: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17], visible: false, searchable: false, }, 
-      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
+function eliminar(idincidencias,actividad) {
+  console.log(idincidencias);
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar el registro?",
+    html:`<b class="text-danger"><del>${actividad} </del></b>`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/incidencias.php?op=eliminar", { id_tabla: idincidencias }, function (e) {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
+          Swal.fire("Eliminado!", "El registro ha sido Eliminado.", "success");
 
-    ],
-  }).DataTable();
-}
-
-function eliminar_gasto(idgasto_de_trabajador, nombre_razonsocial) {
-
-  crud_eliminar_papelera(
-    "../ajax/incidencias.php?op=desactivar",
-    "../ajax/incidencias.php?op=eliminar",
-    idgasto_de_trabajador,
-    "!Elija una opción¡",
-    `<b class="text-danger"><del> ${nombre_razonsocial} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
-    function () { sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado.") },
-    function () { sw_success('Eliminado!', 'Tu registro ha sido Eliminado.') },
-    function () { tabla.ajax.reload(null, false); },
-    false,
-    false,
-    false,
-    false
-  );
-}
-
-//liStamos datos para EDITAR
-function mostrar_editar_gdt(idgasto_de_trabajador) {
-  show_hide_form(2);
-  $('#cargando-1-fomulario').hide();	
-  $('#cargando-2-fomulario').show();
-  limpiar_form();
-  $.post("../ajax/incidencias.php?op=mostrar_editar_gdt", { idgasto_de_trabajador: idgasto_de_trabajador }, function (e, status) {
-    e = JSON.parse(e);
-    if (e.status == true) {
-      $("#idgasto_de_trabajador").val(e.data.idgasto_de_trabajador);
-      $("#idtrabajador").val(e.data.idpersona_trabajador).trigger("change");
-      $("#idproveedor").val(e.data.idproveedor).trigger("change");
-
-      $("#descr_gastos").val(e.data.descripcion_gasto);
-      $("#tipo_comprobante").val(e.data.tipo_comprobante);
-      $("#serie_comprobante").val(e.data.serie_comprobante);
-      $("#fecha").val(e.data.fecha_ingreso);
-      
-      $("#precio_sin_igv").val(e.data.precio_sin_igv);
-      $("#igv").val(e.data.precio_igv);
-      $("#val_igv").val(e.data.val_igv);
-      $("#precio_con_igv").val(e.data.precio_con_igv);
-      $("#descr_comprobante").val(e.data.descripcion_comprobante);      
-
-      // ------------ IMAGEN -----------
-      if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
-        $("#doc_old_1").val(e.data.comprobante);
-        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>imagen.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
-        // cargamos la imagen adecuada par el archivo
-        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/gasto_de_trabajador', '50%', '110'));   //ruta imagen          
-      }
-      $('#cargando-1-fomulario').show();	
-      $('#cargando-2-fomulario').hide();
-      
-    }else{
-      ver_errores(e);
+          // tabla_epp_x_tpp.ajax.reload(null, false);
+          view_principal();
+        } else {
+          Swal.fire("Error!", e, "error");
+        }
+      });
     }
-  }).fail( function(e) { ver_errores(e); } );
-}
-
-//listamos los datos para MOSTRAR TODO
-function mostrar_detalles_gasto(idgasto_de_trabajador) {
-  $("#modal-ver-detalle").modal('show');
-  $("#html-detalle-comprobante").html('');
-  $.post("../ajax/incidencias.php?op=mostrar_detalle_gasto", { idgasto_de_trabajador: idgasto_de_trabajador }, function (e, status) {
-    e = JSON.parse(e);
-    if (e.status == true) {
-     
-      $("#html-detalle-compra").html(e.data);
-      $("#html-detalle-comprobante").html(doc_view_download_expand(e.comprobante, 'assets/modulo/gasto_de_trabajador/', e.nombre_doc, '100%', '400px'));
-      
-    }else{
-      ver_errores(e);
-    }
-  }).fail( function(e) { ver_errores(e); } );
-}
-
-function mostrar_comprobante(idgasto_de_trabajador) {
-  $('#modal-ver-comprobante').modal('show');
-  $("#comprobante-container").html(`<div class="row" > <div class="col-lg-12 text-center"> <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div> </div>`);
-
-  $.post("../ajax/incidencias.php?op=mostrar_editar_gdt", { idgasto_de_trabajador: idgasto_de_trabajador },  function (e, status) {
-
-    e = JSON.parse(e);
-    if (e.status == true) {
-      if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
-        // $("#comprobante-container").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/gasto_de_trabajador', '100%', '100%'));
-        var nombre_comprobante = `${e.data.tipo_comprobante} ${e.data.serie_comprobante}`;
-        $('.title-modal-comprobante').html(nombre_comprobante);
-        $("#comprobante-container").html(doc_view_download_expand(e.data.comprobante, 'assets/modulo/gasto_de_trabajador',nombre_comprobante , '100%', '400px'));
-        $('.jq_image_zoom').zoom({ on: 'grab' });
-      }
-    } else { ver_errores(e); }
-  }).fail( function(e) { ver_errores(e); } );
-}
-
-// MOSTRAR LISTA
-$('#tipo_comprobante').change(function () {
-  $('.proveedor').toggle($('#tipo_comprobante').val() === 'FACTURA' || $('#tipo_comprobante').val() === 'NOTA_DE_VENTA');
-  $('#form-agregar-incidencia').valid();  
-  comprob_factura();
-  validando_igv();
-});
-
-//segun tipo de comprobante
-function comprob_factura() {
-
-  var precio_con_igv = $("#precio_con_igv").val(); 
-  
-  if ($("#tipo_comprobante").select2('val') == "" || $("#tipo_comprobante").select2('val') == null) {
-
-    $(".nro_comprobante").html("Núm. Comprobante");
-
-    $("#val_igv").val(""); $("#tipo_gravada").val(""); 
-
-    if (precio_con_igv == null || precio_con_igv == "") {
-      $("#precio_sin_igv").val(0);
-      $("#igv").val(0);    
-    } else {
-      $("#precio_sin_igv").val(parseFloat(precio_con_igv).toFixed(2));
-      $("#igv").val(0);    
-    }   
-
-  } else if ($("#tipo_comprobante").select2('val') == "NINGUNO") {     
-
-    $(".nro_comprobante").html("Núm. de Operación");
-    $("#val_igv").prop("readonly",true);
-
-    if (precio_con_igv == null || precio_con_igv == "") {
-      $("#precio_sin_igv").val(0);
-      $("#igv").val(0);
-      
-      $("#val_igv").val("0"); 
-      $("#tipo_gravada").val("NO GRAVADA");  
-
-    } else {
-      $("#precio_sin_igv").val(parseFloat(precio_con_igv).toFixed(2));
-      $("#igv").val(0); 
-
-      $("#val_igv").val("0"); 
-      $("#tipo_gravada").val("NO GRAVADA"); 
-
-    }   
-
-  } else if ($("#tipo_comprobante").select2("val") == "FACTURA") {          
-
-    $(".nro_comprobante").html("Núm. Comprobante");
-    $(".div_ruc").show(); $(".div_razon_social").show();      
-    calculandototales_fact();     
-  
-  } else if ($("#tipo_comprobante").select2("val") == "BOLETA") {       
-
-    
-    $("#val_igv").prop("readonly",true);
-    $(".nro_comprobante").html("Núm. Comprobante");
-
-    $(".div_ruc").show(); $(".div_razon_social").show();
-    
-    if (precio_con_igv == null || precio_con_igv == "") {
-      $("#precio_sin_igv").val(0);
-      $("#igv").val(0); 
-      $("#val_igv").val("0");   
-    } else {
-              
-      $("#precio_sin_igv").val("");
-      $("#igv").val("");
-
-      $("#precio_sin_igv").val(parseFloat(precio_con_igv).toFixed(2));
-      $("#igv").val(0); 
-      
-      $("#val_igv").val("0"); 
-      $("#tipo_gravada").val("NO GRAVADA"); 
-    } 
-      
-  } else {
-    $("#val_igv").prop("readonly",true);    
-    $(".nro_comprobante").html("Núm. Comprobante");
-    $(".div_ruc").hide(); $(".div_razon_social").hide();
-    $("#ruc").val(""); $("#razon_social").val("");
-
-    if (precio_con_igv == null || precio_con_igv == "") {
-      
-      $("#precio_sin_igv").val(0);
-      $("#igv").val(0);
-
-      $("#val_igv").val("0"); 
-      $("#tipo_gravada").val("NO GRAVADA");  
-
-    } else {
-
-      $("#precio_sin_igv").val(parseFloat(precio_con_igv).toFixed(2));
-      $("#igv").val(0); 
-
-      $("#val_igv").val("0"); 
-      $("#tipo_gravada").val("NO GRAVADA");  
-
-    } 
-    
-  }   
-}
-
-function validando_igv() {
-  if ($("#tipo_comprobante").select2("val") == "FACTURA") {
-    $("#val_igv").prop("readonly",false);
-    $("#val_igv").val(18); 
-  }else {
-    $("#val_igv").val(0); 
-  }  
-}
-
-function calculandototales_fact() {
-  //----------------
-  $("#tipo_gravada").val("GRAVADA");         
-  $(".nro_comprobante").html("Núm. Comprobante");
-  var precio_con_igv = $("#precio_con_igv").val();
-  var val_igv = $('#val_igv').val();
-
-  if (precio_con_igv == null || precio_con_igv == "") {
-
-    $("#precio_sin_igv").val(0);
-    $("#igv").val(0); 
-
-  } else {
- 
-    var precio_sin_igv = 0;
-    var igv = 0;
-
-    if (val_igv == null || val_igv == "") {
-
-      $("#precio_sin_igv").val(parseFloat(precio_con_igv));
-      $("#igv").val(0);
-
-    }else{
-
-      $("precio_sin_igv").val("");
-      $("#igv").val("");
-
-      precio_sin_igv = quitar_igv_del_precio(precio_con_igv, val_igv, 'entero');
-      igv = precio_con_igv - precio_sin_igv;
-
-      $("#precio_sin_igv").val(parseFloat(precio_sin_igv).toFixed(2));
-      $("#igv").val(parseFloat(igv).toFixed(2));
-
-    }
-  }  
-}
-
-function quitar_igv_del_precio(precio , igv, tipo ) {
-  console.log(precio , igv, tipo);
-  var precio_sin_igv = 0;
-
-  switch (tipo) {
-    case 'decimal':
-
-      if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
-        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
-      }else{
-        precio_sin_igv = precio;
-      }
-    break;
-
-    case 'entero':
-
-      if (parseFloat(precio) != NaN && igv > 0 && igv <= 100 ) {
-        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
-      }else{
-        precio_sin_igv = precio;
-      }
-    break;
-  
-    default:
-      $(".val_igv").html('IGV (0%)');
-      toastr.success('No has difinido un tipo de calculo de IGV.')
-    break;
-  } 
-  
-  return precio_sin_igv; 
-}
-
-// .....:::::::::::::::::::::::::::::::::::::::::: P R O V E E D O R :::::::::::::::::::::::::::::::::::::::::::..
-function modal_add_trabajador() {
-  $("#modal-agregar-proveedor").modal('show');
-}
-
-function limpiar_proveedor() {
-
-	$('#idpersona').val('');
-  $('#tipo_persona_sunat').val('NATURAL');
-  $('#idtipo_persona').val('4');
-
-  $('#tipo_documento').val(null).trigger("change");
-  $('#numero_documento').val('');
-  $('#nombre_razonsocial').val('');
-  $('#apellidos_nombrecomercial').val('');
-  $('#correo').val('');
-  $('#celular').val('');
-  
-  $('#direccion').val('');
-  $('#distrito').val('').trigger("change");
-  $('#departamento').val('');
-  $('#provincia').val('');
-  $('#ubigeo').val('');
-  $('#idbanco').val(null).trigger("change")
-  $('#cuenta_bancaria').val('');
-  $('#cci').val(''); 
-
-  // Limpiamos las validaciones
-  $(".form-control").removeClass('is-valid');
-  $(".form-control").removeClass('is-invalid');
-  $(".error.invalid-feedback").remove();
-}
-
-function guardar_proveedor(e) {
-
-	var formData = new FormData($("#form-agregar-proveedor")[0]);
-
-	$.ajax({
-		url: "../ajax/proveedores.php?op=guardar_editar",
-		type: "POST",
-		data: formData,
-		contentType: false,
-		processData: false,
-		success: function (e) {
-			try {
-				e = JSON.parse(e);  //console.log(e); 
-        if (e.status == true) {	
-					sw_success('Exito', 'proveedor guardado correctamente.');
-          $("#modal-agregar-proveedor").modal('hide'); limpiar_proveedor();
-				} else {
-					ver_errores(e);
-				}				
-			} catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
-      $("#guardar_registro_trabajador").html('<i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar').removeClass('disabled send-data');
-		},
-		xhr: function () {
-			var xhr = new window.XMLHttpRequest();
-			xhr.upload.addEventListener("progress", function (evt) {
-				if (evt.lengthComputable) {
-					var percentComplete = (evt.loaded / evt.total) * 100;
-					/*console.log(percentComplete + '%');*/
-					$("#barra_progress_proveedor").css({ "width": percentComplete + '%' });
-					$("#barra_progress_proveedor div").text(percentComplete.toFixed(2) + " %");
-				}
-			}, false);
-			return xhr;
-		},
-		beforeSend: function () {
-			$("#guardar_registro_trabajador").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled send-data');
-			$("#barra_progress_proveedor").css({ width: "0%", });
-			$("#barra_progress_proveedor div").text("0%");
-      $("#barra_progress_proveedor_div").show();
-		},
-		complete: function () {
-			$("#barra_progress_proveedor").css({ width: "0%", });
-			$("#barra_progress_proveedor div").text("0%");
-      $("#barra_progress_proveedor_div").hide();
-		},
-		error: function (jqXhr, ajaxOptions, thrownError) {
-			ver_errores(jqXhr);
-		}
-	});
-}
-
-$('#tipo_documento').change(function() {
-  var tipo = $(this).val();
-
-  if (tipo !== null && tipo !== '' && tipo == '6') {
-    $('.label-nom-raz').html('Razón Social <sup class="text-danger">*</sup>');
-    $('.label-ape-come').html('Nombre comercial <sup class="text-danger">*</sup>');
-  }else{
-    $('.label-nom-raz').html('Nombres <sup class="text-danger">*</sup>');
-    $('.label-ape-come').html('Apellidos <sup class="text-danger">*</sup>');
-  }
-
-});
-
-function cambiarImagen() {
-	var imagenInput = document.getElementById('imagen');
-	imagenInput.click();
-}
-
-function removerImagen() {
-	$("#imagenmuestra").attr("src", "../assets/proveedor/no-proveedor.png");
-	$("#imagen").val("");
-  $("#imagenactual").val("");
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-	var imagenMuestra = document.getElementById('imagenmuestra');
-	var imagenInput = document.getElementById('imagen');
-
-	imagenInput.addEventListener('change', function () {
-		if (imagenInput.files && imagenInput.files[0]) {
-			var reader = new FileReader();
-			reader.onload = function (e) { imagenMuestra.src = e.target.result;	}
-			reader.readAsDataURL(imagenInput.files[0]);
-		}
-	});
-});
-
-$(function () {
-  $('#distrito').on('change', function() { $(this).trigger('blur'); });
-  $("#form-agregar-proveedor").validate({
-    ignore: "",
-    rules: {           
-      tipo_documento:           { required: true, minlength: 1, maxlength: 2, },       
-      numero_documento:    			{ required: true, minlength: 8, maxlength: 20, },       
-      nombre_razonsocial:    		{ required: true, minlength: 4, maxlength: 200, },       
-      apellidos_nombrecomercial:{ required: true, minlength: 4, maxlength: 200, },       
-      correo:    			          { minlength: 4, maxlength: 100, },       
-      celular:    			        { minlength: 8, maxlength: 9, },       
-
-      direccion:    			      { minlength: 4, maxlength: 200, },       
-      distrito:    			        { required: true, },       
-      departamento:    			    { required: true, },       
-      provincia:    			      { required: true, },  
-      ubigeo:    			          { required: true, },
-
-      idbanco:    			        { required: true, },
-      cuenta_bancaria:    			{ minlength: 4, maxlength: 45, },
-      cci:    			            { minlength: 4, maxlength: 45, },
-			
-    },
-    messages: {     
-      tipo_documento:    			  { required: "Campo requerido", },
-      numero_documento:    			{ required: "Campo requerido", }, 
-      nombre_razonsocial:    		{ required: "Campo requerido", }, 
-      apellidos_nombrecomercial:{ required: "Campo requerido", }, 
-      correo:    			          { minlength: "Mínimo {0} caracteres.", }, 
-      celular:    			        { minlength: "Mínimo {0} caracteres.", }, 
-
-      direccion:    			      { minlength: "Mínimo {0} caracteres.", },
-      distrito:    			        { required: "Campo requerido", }, 
-      departamento:    			    { required: "Campo requerido", }, 
-      provincia:    			      { required: "Campo requerido", }, 
-      ubigeo:    			          { required: "Campo requerido", },
-
-      idbanco:    			        { required: "Campo requerido", }, 
-      cuenta_bancaria:    			{ minlength: "Mínimo {0} caracteres.", }, 
-      cci:    			            { minlength: "Mínimo {0} caracteres.", }, 
-      titular_cuenta:    			  { minlength: "Mínimo {0} caracteres.", },  
-
-    },
-        
-    errorElement: "span",
-
-    errorPlacement: function (error, element) {
-      error.addClass("invalid-feedback");
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-      $(element).addClass("is-invalid").removeClass("is-valid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-      $(element).removeClass("is-invalid").addClass("is-valid");   
-    },
-    submitHandler: function (e) {
-      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardar_proveedor(e);      
-    },
   });
-  $('#distrito').rules('add', { required: true, messages: {  required: "Campo requerido" } });
-});
-
-
+}
 
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  T R A B A J A D O R    :::::::::::::::::::::::::::::::::::::::..
@@ -679,9 +273,10 @@ $(function () {
 
   $('#id_trabajador').on('change', function () { $(this).trigger('blur'); });
   $('#prioridad').on('change', function () { $(this).trigger('blur'); });
-  // $('#categoria').on('change', function () { $(this).trigger('blur'); });
+   $('#categoria').on('change', function () { $(this).trigger('blur'); });
 
   $("#form-agregar-incidencia").validate({
+    ignore: "",
     rules: {
 
       actividad         : { required: true },
@@ -726,18 +321,9 @@ $(function () {
   
   $('#id_trabajador').rules('add', { required: true, messages: { required: "Campo requerido" } });
   $('#prioridad').rules('add', { required: true, messages: { required: "Campo requerido" } });
-  // $('#categoria').rules('add', { required: true, messages: { required: "Campo requerido" } });
+  $('#categoria').rules('add', { required: true, messages: { required: "Campo requerido" } });
 });
 
 $(document).ready(function () {
   init();
 });
-
-// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
-
-function mayus(e) {
-  e.value = e.value.toUpperCase();
-}
-
-function reload_idtrabajador(){ lista_select2("../ajax/incidencias.php?op=listar_trabajador", '#idtrabajador', null, '.charge_idtrabajador'); }
-function reload_idproveedor(){ lista_select2("../ajax/incidencias.php?op=listar_proveedor", '#idproveedor', null, '.charge_idproveedor'); }
