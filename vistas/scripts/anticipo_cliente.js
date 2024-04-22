@@ -60,6 +60,15 @@ function tbla_pral_cliente(){
         $('[data-bs-toggle="tooltip"]').tooltip();
       },
 		},
+    "drawCallback": function (settings) {
+      var api1 = this.api();
+      var suma = api1.column(2, {page: 'current'}).data().reduce(function (a, b) {
+          // Eliminar etiquetas HTML y luego convertir a número
+          var cleanNumber1 = parseFloat(b.replace(/<[^>]*>/g, '').replace(/[^0-9.-]/g, ''));
+          return a + (isNaN(cleanNumber1) ? 0 : cleanNumber1);
+      }, 0);
+      $('#Saldo').html("S/ " + suma.toFixed(1));
+    },
     language: {
       lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
@@ -112,7 +121,7 @@ function mostrar_tbla_anticipos(idpersona_cliente, nombres, apellidos){
           return a + (isNaN(cleanNumber) ? 0 : cleanNumber);
       }, 0);
       $('#total').html("S/ " + suma.toFixed(1));
-  },
+    },
     language: {
       lengthMenu: "Mostrar: _MENU_ ",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
@@ -279,7 +288,7 @@ $(function(){
     rules: {
       cliente:  { required: true, minlength: 1 },
       fecha:    { required: true },
-      monto:    { required: true, minlength: 2 }
+      monto:    { required: true, min: 2 }
     },
     messages: {
       cliente:  { required: "Seleccione un cliente" },

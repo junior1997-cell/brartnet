@@ -88,6 +88,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <tr><td><strong>Dirección:</strong></td><td><?php echo $rspta['data']['direccion']; ?></td></tr>
               <tr><td><strong>F. de emisión:</strong></td><td><?php echo $rspta['data']['fecha_anticipo'] ?></td></tr>
               <tr><td><strong>Moneda:</strong></td><td>SOLES</td></tr>
+              <tr><td colspan="2">=====================================</td></tr>
             </tbody>
           </table>
 
@@ -96,7 +97,6 @@ if (!isset($_SESSION["user_nombre"])) {
 
       <!-- Mostramos los detalles de la venta en el documento HTML -->
       <table border="0" align="center" width="280px" style="font-size: 12px;">
-        <tr><td align="center">----------------------------------------------------------------</td></tr>
         <tr><td align="center"><h2><b>MONTO ANTICIPO </br>s/ <?php echo $rspta['data']['total']?></b></h2></td></tr>
         <tr><td align="center">----------------------------------------------------------------</td></tr>
       </table>
@@ -114,14 +114,14 @@ if (!isset($_SESSION["user_nombre"])) {
         <tr><td align='right'><strong>TOTAL: <?php echo $rspta['data']['total'] ?></strong></td></tr>
         <tr><td colspan="5">&nbsp;</td></tr>
         
-        <tr><td align="center"><img src=<?php echo $dataUri; ?> width="90" height="auto"></td></tr>
+        <tr><td align="center"><img src=<?php echo $dataUri; ?> width="150" height="auto"></td></tr>
         <tr><td colspan="5">&nbsp;</td></tr>
         <?php if ($datos['status']) { ?> <tr><td colspan="5" align="center"><?php echo utf8_decode($datos['data']['nombre_razon_social']) ?></td></tr> <?php } ?>
-        <tr><td colspan="5" align="center">::.GRACIAS POR SU COMPRA.::</td></tr>
+        <tr><td colspan="5" align="center">::.GRACIAS POR SU APORTE.::</td></tr>
       </table>
       <br>
       <table border='0' width='250px' style='font-size: 12px; margin-top: 10px;' align="center">
-        <tr><td colspan="5" align="center"><span class="text-muted">Ticket emitido. No valido para SUNAT</span></td></tr>
+        <tr><td colspan="5" align="center"><small class="text-muted">Ticket emitido. No valido para SUNAT</small></td></tr>
         
       </table>
       

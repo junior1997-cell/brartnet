@@ -74,7 +74,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <tr>
                           <th class="text-center">#</th>
                             <th>Cliente</th>
-                            <th>Saldo Disponible</th>
+                            <th class="bg-light" id="Saldo">Saldo Disponible</th>
                             <th>Anticipos</th>
                           </tr>
                         </tfoot>
@@ -231,7 +231,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <div class="modal-dialog modal-md" style="max-width: 24% !important;">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="modalPreviewticketLabel">Ticket de venta</h5>
+                  <h5 class="modal-title" id="modalPreviewticketLabel">Ticket de Anticipo</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="imp1">

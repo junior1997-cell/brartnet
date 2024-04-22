@@ -274,7 +274,7 @@
           </div>
           <div class="tm_bottom_invoice tm_accent_border_20">
             <div class="tm_bottom_invoice_left">
-              <p class="tm_m0 tm_f18 tm_accent_color tm_mb5">::.GRACIAS POR SU COMPRA.::</p>
+              <p class="tm_m0 tm_f18 tm_accent_color tm_mb5">::.GRACIAS POR SU APORTE.::</p>
               <p class="tm_primary_color tm_f12 tm_m0 tm_bold">El comprobante <?php echo $rspta['data']['serie_comprobante'] .'-'. $rspta['data']['numero_comprobante']; ?> a sido Emitido. No valido para SUNAT</p>
             </div>
             <div class="tm_bottom_invoice_right tm_mobile_hide">
