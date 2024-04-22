@@ -90,10 +90,9 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th class="text-center">OP</th>
                           <th>Fecha</th>
                           <th>Proveedor</th>
-                          <th>Tipo y Serie Comprob</th>
+                          <th>Correlativo</th>
                           <th>Total</th> 
-                          <th>Descripción</th>
-                          <th>CFDI</th>
+                          <th>Observacion</th>                          
                         </tr>
                       </thead>
                       <tbody></tbody>
@@ -103,10 +102,9 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th class="text-center">OP</th>
                           <th>Fecha</th>
                           <th>Proveedor</th>
-                          <th>Tipo y Serie Comprob</th>
+                          <th>Correlativo</th>
                           <th>Total</th>
-                          <th>Descripción</th>
-                          <th>CFDI</th>
+                          <th>Observacion</th>
                         </tr>
                       </tfoot>
                     </table>
@@ -240,7 +238,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!-- ENVIO AUTOMATICO -->
                           <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 px-0">
                             <div class="custom-toggle-switch d-flex align-items-center mb-4">
-                              <input id="crear_y_emitir" name="crear_y_emitir" type="checkbox" checked="">
+                              <input id="crear_y_emitir" name="crear_y_emitir" type="checkbox" checked="" value="SI">
                               <label for="crear_y_emitir" class="label-warning"></label><span class="ms-3">Crear y emitir SUNAT</span>
                             </div>
                           </div>
@@ -290,7 +288,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>
                           
                           <!-- FECHA EMISION -->
-                          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                             <div class="form-group">
                               <label for="es_cobro" class="form-label">Es cobro?</label>
                               <div class="toggle toggle-secondary on es_cobro" onclick="delay(function(){es_cobro_valid()}, 100 );" >  <span></span>   </div>
@@ -298,7 +296,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             </div>
                           </div>  
 
-                          <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6 datos-de-cobro-mensual">
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 datos-de-cobro-mensual">
                             <div class="form-group">
                               <label for="periodo_pago" class="form-label">Periodo Pago</label>
                               <input type="month" class="form-control" name="periodo_pago" id="periodo_pago" >
@@ -354,18 +352,18 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <h5 class="fs-13 font-weight-bold">TOTAL</h5>
                                 </th>
                                 <th class="text-right"> 
-                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between subtotal_venta"> <span>S/</span>  0.00</h6>
-                                  <input type="hidden" name="subtotal_venta" id="subtotal_venta" />
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between venta_subtotal"> <span>S/</span>  0.00</h6>
+                                  <input type="hidden" name="venta_subtotal" id="venta_subtotal" />
                                   <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
 
-                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between descuento_venta"><span>S/</span> 0.00</h6>
-                                  <input type="hidden" name="descuento_venta" id="descuento_venta" />
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between venta_descuento"><span>S/</span> 0.00</h6>
+                                  <input type="hidden" name="venta_descuento" id="venta_descuento" />
 
-                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between igv_venta"><span>S/</span> 0.00</h6>
-                                  <input type="hidden" name="igv_venta" id="igv_venta" />
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between venta_igv"><span>S/</span> 0.00</h6>
+                                  <input type="hidden" name="venta_igv" id="venta_igv" />
                                   
-                                  <h5 class="fs-13 font-weight-bold d-flex justify-content-between total_venta"><span>S/</span> 0.00</h5>
-                                  <input type="hidden" name="total_venta" id="total_venta" />
+                                  <h5 class="fs-13 font-weight-bold d-flex justify-content-between venta_total"><span>S/</span> 0.00</h5>
+                                  <input type="hidden" name="venta_total" id="venta_total" />
                                   
                                 </th>
                                 <th></th>
@@ -448,16 +446,16 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <!-- SALDO -->
                                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                                   <div class="form-group">
-                                    <label for="disponible_anticipo" class="form-label">Saldo Disponible</label>
-                                    <input type="number" class="form-control-plaintext" name="disponible_anticipo" id="disponible_anticipo" readonly>
+                                    <label for="ua_monto_disponible" class="form-label">Saldo Disponible</label>
+                                    <input type="number" class="form-control-plaintext" name="ua_monto_disponible" id="ua_monto_disponible" readonly>
                                   </div>
                                 </div> 
 
                                 <!-- Saldo Usar -->
                                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                                   <div class="form-group">
-                                    <label for="monto_anticipo" class="form-label">Saldo Usar</label>
-                                    <input type="number" class="form-control" name="monto_anticipo" id="monto_anticipo" >
+                                    <label for="ua_monto_usado" class="form-label">Saldo Usar</label>
+                                    <input type="number" class="form-control" name="ua_monto_usado" id="ua_monto_usado" >
                                   </div>
                                 </div>       
 
@@ -477,7 +475,8 @@ if (!isset($_SESSION["user_nombre"])) {
                               <!-- Baucher -->
                               <div class="col-sm-6 col-lg-6 col-xl-6 pt-3" >
                                 <div class="form-group">                              
-                                  <input type="file" class="multiple-filepond" name="mp_comprobante" id="mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" accept="image/*, application/.pdf">                             
+                                  <input type="file" class="multiple-filepond" name="mp_comprobante" id="mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" >                             
+                                  <input type="hidden" name="mp_comprobante_old" id="mp_comprobante_old">
                                 </div>
                               </div>
                             </div>

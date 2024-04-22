@@ -10,21 +10,22 @@
     // public $id_empresa_sesion;   
     public function __construct( )
     {
-      $this->id_usr_sesion =  isset($_SESSION['idusuario']) ? $_SESSION["idusuario"] : 0;
-      $this->id_persona_sesion = isset($_SESSION['idpersona']) ? $_SESSION["idpersona"] : 0;
+      $this->id_usr_sesion        =  isset($_SESSION['idusuario']) ? $_SESSION["idusuario"] : 0;
+      $this->id_persona_sesion    = isset($_SESSION['idpersona']) ? $_SESSION["idpersona"] : 0;
       $this->id_trabajador_sesion = isset($_SESSION['idpersona_trabajador']) ? $_SESSION["idpersona_trabajador"] : 0;
       // $this->id_empresa_sesion = isset($_SESSION['idempresa']) ? $_SESSION["idempresa"] : 0;
     }
 
     public function listar_tabla_facturacion() {
 
-      $sql = "SELECT c.*, p.*, tc.abreviatura as tp_comprobante, sdi.abreviatura as tipo_documento, c.estado
-      FROM venta AS c
-      INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = c.idpersona_cliente
+      $sql = "SELECT v.*, DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') as fecha_emision_format, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, 
+      p.numero_documento, p.foto_perfil, tc.abreviatura as tp_comprobante, sdi.abreviatura as tipo_documento, v.estado
+      FROM venta AS v
+      INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN persona AS p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
-      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.codigo = c.tipo_comprobante
-      WHERE c.estado = 1 AND c.estado_delete = 1;";
+      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.codigo = v.tipo_comprobante
+      WHERE v.estado = 1 AND v.estado_delete = 1;";
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
 
       return $venta;
@@ -32,14 +33,18 @@
 
     public function insertar(
       // DATOS TABLA venta
-      $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion,
-      $subtotal_venta, $tipo_gravada, $igv_venta, $total_venta, $fecha_venta, $img_comprob,
+      $impuesto, $crear_y_emitir, $tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento, $es_cobro, $periodo_pago,
+      $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,
+      $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
       //DATOS TABLA venta DETALLE
-      $idproducto, $unidad_medida, $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, 
-      $descuento, $subtotal_producto    
+      $idproducto, $unidad_medida, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $subtotal_producto    
     ){
-      $sql_1 = "INSERT INTO venta() 
-      VALUES ('$idpersona_cliente', '$fecha_venta', '$tipo_comprobante', '$serie', '$impuesto', '$descripcion', '$subtotal_venta', '$igv_venta', '$total_venta', '$img_comprob')";
+      $sql_1 = "INSERT INTO venta(idpersona_cliente, iddocumento_relacionado, crear_enviar_sunat, es_cobro, tipo_comprobante, serie_comprobante,  periodo_pago,  impuesto, 
+      venta_subtotal, venta_descuento, venta_igv, venta_total, metodo_pago, mp_serie_comprobante, mp_comprobante, mp_monto, venta_credito, vc_numero_operacion, 
+      vc_fecha_proximo_pago, total_recibido, total_vuelto, usar_anticipo, ua_monto_disponible, ua_monto_usado, observacion_documento) 
+      VALUES ('$idpersona_cliente', '', '$crear_y_emitir', '$es_cobro', '$tipo_comprobante', '$serie_comprobante', '$periodo_pago', '$impuesto', '$venta_subtotal', '$venta_descuento',
+      '$venta_igv','$venta_total','$metodo_pago','$mp_serie_comprobante','$mp_comprobante','$mp_monto','','',CURRENT_TIMESTAMP, '$total_recibido', '$total_vuelto',
+      '$usar_anticipo','$ua_monto_disponible','$ua_monto_usado','$observacion_documento')";
       $newdata = ejecutarConsulta_retornarID($sql_1, 'C'); if ($newdata['status'] == false) { return  $newdata;}
       $id = $newdata['data'];
 
@@ -49,8 +54,8 @@
       if ( !empty($newdata['data']) ) {      
         while ($i < count($idproducto)) {
 
-          $sql_2 = "INSERT INTO venta_detalle()
-          VALUES ('$idproducto[$i]', '$id', '$cantidad[$i]', '$precio_sin_igv[$i]', '$precio_igv[$i]', '$precio_con_igv[$i]', '$descuento[$i]', '$subtotal_producto[$i]');";
+          $sql_2 = "INSERT INTO venta_detalle( idventa, idproducto, tipo, cantidad, precio_compra, precio_venta, descuento, subtotal)
+          VALUES ('$id', '$idproducto[$i]', 'VENTA', '$cantidad[$i]', '$precio_compra[$i]', '$precio_con_igv[$i]', '$descuento[$i]', '$subtotal_producto[$i]');";
           $detalle_new =  ejecutarConsulta_retornarID($sql_2, 'C'); if ($detalle_new['status'] == false) { return  $detalle_new;}          
           $id_d = $detalle_new['data'];
           $i = $i + 1;
@@ -59,11 +64,11 @@
       return $detalle_new;
     }
 
-    public function editar( $idventa, $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion, $subtotal_venta, $tipo_gravada, $igv_venta, $total_venta, $fecha_venta, $img_comprob,        
+    public function editar( $idventa, $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion, $venta_subtotal, $tipo_gravada, $venta_igv, $venta_total, $fecha_venta, $img_comprob,        
     $idproducto, $unidad_medida, $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $subtotal_producto) {
 
       $sql_1 = "UPDATE venta SET idpersona_cliente = '$idpersona_cliente', fecha_venta = '$fecha_venta', tipo_comprobante = '$tipo_comprobante', serie_comprobante = '$serie', 
-      val_igv = '$impuesto', descripcion = '$descripcion', subtotal = '$subtotal_venta', igv = '$igv_venta', total = '$total_venta', comprobante = '$img_comprob'
+      val_igv = '$impuesto', descripcion = '$descripcion', subtotal = '$venta_subtotal', igv = '$venta_igv', total = '$venta_total', comprobante = '$img_comprob'
       WHERE idventa = '$idventa'";
       $result_sql_1 = ejecutarConsulta($sql_1, 'U');if ($result_sql_1['status'] == false) { return $result_sql_1; }
 
@@ -199,7 +204,7 @@
       p.numero_documento
       FROM persona_cliente as pc      
       INNER JOIN persona as p ON p.idpersona = pc.idpersona
-      WHERE p.idpersona > 2 $filtro_id_trabajador ;"; 
+      WHERE p.idpersona > 2 $filtro_id_trabajador ORDER BY p.nombre_razonsocial ASC;"; 
       return ejecutarConsultaArray($sql);
     }
 
