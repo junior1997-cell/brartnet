@@ -8,7 +8,7 @@ if (!isset($_SESSION["user_nombre"])) {
 } else {
 
   if ($_SESSION['cliente'] == 1) {
-   
+
     require_once "../modelos/Anticipo_cliente.php";
     $anticipo = new Anticipo_cliente();
 
@@ -16,15 +16,15 @@ if (!isset($_SESSION["user_nombre"])) {
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
     $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-    $idanticipo_cliente   = isset($_POST["idanticipo_cleinte"]) ? limpiarCadena($_POST["idanticipo_cleinte"]) : "";
+    $idanticipo_cliente   = isset($_POST["idanticipo_cliente"]) ? limpiarCadena($_POST["idanticipo_cliente"]) : "";
 
     $idpersona_cliente    = isset($_POST["cliente"]) ? limpiarCadena($_POST["cliente"]) : "";
     $fecha                = isset($_POST["fecha"]) ? limpiarCadena($_POST["fecha"]) : "";
     $descripcion          = isset($_POST["descrip"]) ? limpiarCadena($_POST["descrip"]) : "";
     $tipo                 = isset($_POST["tipo_ac"]) ? limpiarCadena($_POST["tipo_ac"]) : "";
     $total                = isset($_POST["monto"]) ? limpiarCadena($_POST["monto"]) : "";
-    $tipo_comprobante     = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
-    $serie                = isset($_POST["serie_ac"]) ? limpiarCadena($_POST["serie_ac"]) : "";
+    $serie                = isset($_POST["SerieReal"]) ? limpiarCadena($_POST["SerieReal"]) : "";
+    $serie_edit           = isset($_POST["serie_ac_edit"]) ? limpiarCadena($_POST["serie_ac_edit"]) : "";
     $numero               = isset($_POST["numero_ac"]) ? limpiarCadena($_POST["numero_ac"]) : "";
 
 
@@ -45,7 +45,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <p class="d-block fw-semibold text-primary">'.$value['nombres'] .' '.$value['apellidos'] .'</p>
                         </div>
                       </div>',
-             
+
               "2" =>  '<p class="d-block fw-semibold text-primary">'.$value['total_anticipo'] .'</p>',
               "3" =>  '<div class="hstack gap-2 fs-15 text-center">' .
                         '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_tbla_anticipos(' . $value['idpersona_cliente'] . ', \'' . $value['nombres'] . '\', \'' . $value['apellidos'] . '\')" data-bs-toggle="tooltip" title="Mostrar Anticipos"><i class="ri-arrow-left-right-line"></i></button>'.
@@ -74,12 +74,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[]=[
               "0" => $count++,
-              "1" =>  ' <div class="dropdown-center"> 
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownCenterBtn" data-bs-toggle="dropdown" aria-expanded="false"> <i class="nav-icon fa-solid fa-gears"></i> </button> 
-                        <ul class="dropdown-menu" aria-labelledby="dropdownCenterBtn" style=""> 
-                          <li><a class="dropdown-item" onclick="editar(' . ($value['idanticipo_cliente']) . ')">Editar</a></li>  
-                          <li><a class="dropdown-item" onclick="exAnticipo_cienteTickcet('.($value['idanticipo_cliente']).')" target="_blanck">Imprimir Ticket</a></li> 
-                          <li><a class="dropdown-item" onclick="imprimirA4(' . ($value['idanticipo_cliente']) . ')">A4</a></li>  
+              "1" =>  ' <div class="dropdown-center">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownCenterBtn" data-bs-toggle="dropdown" aria-expanded="false"> <i class="nav-icon fa-solid fa-gears"></i> </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownCenterBtn" style="">
+                          <li><a class="dropdown-item" onclick="mostrar_anticipo('.($value['idanticipo_cliente']).')">Editar</a></li>
+                          <li><a class="dropdown-item" onclick="eliminar_papelera_anticipo(' . $value['idanticipo_cliente'] . ', \'' . addslashes($value['sc_anticipo']) . '\', \'' . addslashes($value['nc_anticipo']) . '\')">Eliminar</a></li>
+                          <li><a class="dropdown-item" onclick="TickcetAnticipo_ciente('.($value['idanticipo_cliente']).')" target="_blanck">Imprimir Ticket</a></li>
+                          <li><a class="dropdown-item" target="_blank" href="../reportes/A4ComprimidoAnticipo_cliente.php?id='.$value['idanticipo_cliente'].'&idanticipo_cliente='.($value['idanticipo_cliente']).'"  >A4 Comprimido</a></li>
+                          <li><a class="dropdown-item" target="_blank" href="../reportes/A4CompletoAnticipo_cliente.php?id='.$value['idanticipo_cliente'].'&idanticipo_cliente='.($value['idanticipo_cliente']).'"  >A4 Completo</a></li>
                         </ul>
                       </div> ',
               "2" =>  $value['tipo'] == 'INGRESO' ? '<span class="badge bg-success-transparent">'.$value['tipo'] .'</span>' : '<span class="badge bg-danger-transparent">'.$value['tipo'] .'</span>',
@@ -105,12 +107,27 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'guardar_editar_anticipo':
         if (empty($idanticipo_cliente)) {
-          $rspta = $anticipo->insertar($idpersona_cliente, $fecha, $descripcion, $tipo, $total, $tipo_comprobante, $serie, $numero);
+          $rspta = $anticipo->insertar($idpersona_cliente, $fecha, $descripcion, $tipo, $total, $serie);
           echo json_encode($rspta, true);
         } else {
-          // $rspta = $anticipo->editar($idanticipo_cliente, $idpersona_cliente, $fecha, $descripcion, $tipo, $total, $tipo_comprobante, $serie, $numero);
-          // echo json_encode($rspta, true);
+          $rspta = $anticipo->editar($idanticipo_cliente, $idpersona_cliente, $fecha, $descripcion, $tipo, $total, $serie_edit, $numero);
+          echo json_encode($rspta, true);
         }
+      break;
+
+      case 'mostrar_anticipo':
+        $rspta = $anticipo->mostrar($idanticipo_cliente);
+        echo json_encode($rspta, true);
+      break;
+
+      case 'desactivar':
+        $rspta = $anticipo->desactivar($_GET["id_tabla"]);
+        echo json_encode($rspta, true);
+      break;
+
+      case 'eliminar':
+        $rspta = $anticipo->eliminar($_GET["id_tabla"]);
+        echo json_encode($rspta, true);
       break;
 
       case 'actualizar_numeracion':
@@ -118,7 +135,7 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta = $anticipo->numeracion($ser);
         if ($rspta['status']) {
             foreach ($rspta['data'] as $row) {
-                echo $row['NnumSerieActual'];
+                echo $row['numeracion_anticipo'];
             }
         } else {
             echo "Error en la consulta: " . $rspta['message'];
@@ -139,25 +156,25 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'selectChoice_cliente':
         $rspta = $anticipo->select_cliente();
-        
+
         $data = [];
-  
+
         if ($rspta['status'] == true) {
-  
+
           foreach ($rspta['data'] as $key => $value) {
             $data[] = [
-              'value' => $value['idpersona_cliente'], 
-              'label' => $value['nombres'] . ' ' . $value['apellidos'], 
-              'disabled'  => false, 
+              'value' => $value['idpersona_cliente'],
+              'label' => $value['nombres'] . ' ' . $value['apellidos'],
+              'disabled'  => false,
               'selected'  => false,];
           }
-  
+
           $retorno = array(
             'status' => true,
             'message' => 'Salió todo ok',
             'data' => $data,
           );
-  
+
           echo json_encode($retorno, true);
         } else {
           echo json_encode($rspta, true);
