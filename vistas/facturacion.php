@@ -62,7 +62,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <!-- TABLA - FACTURA -->
             <div class="col-xl-9" id="div-tabla">
               <div class="card custom-card">
-                <div class="card-header justify-content-between">
+                <!-- <div class="card-header justify-content-between">
                   <div class="card-title">
                     Manage Invoices
                   </div>
@@ -80,7 +80,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       </ul>
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-ventas">
@@ -118,23 +118,21 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="card custom-card">
                 <div class="card-body p-0">
                   <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-top">
-                    <div class="svg-icon-background bg-primary-transparent me-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24" class="svg-primary">
-                        <path d="M13,16H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2ZM9,10h2a1,1,0,0,0,0-2H9a1,1,0,0,0,0,2Zm12,2H18V3a1,1,0,0,0-.5-.87,1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0A1,1,0,0,0,2,3V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V13A1,1,0,0,0,21,12ZM5,20a1,1,0,0,1-1-1V4.73L6,5.87a1.08,1.08,0,0,0,1,0l3-1.72,3,1.72a1.08,1.08,0,0,0,1,0l2-1.14V19a3,3,0,0,0,.18,1Zm15-1a1,1,0,0,1-2,0V14h2Zm-7-7H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2Z" />
+                    <div class="svg-icon-background bg-primary-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-success">
+                        <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v5a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h6a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Zm13.71,6.29a1,1,0,0,0-1.42,0l-3.29,3.3-1.29-1.3a1,1,0,0,0-1.42,1.42l2,2a1,1,0,0,0,1.42,0l4-4A1,1,0,0,0,21.21,16.29Z" />
                       </svg>
                     </div>
                     <div class="flex-fill">
-                      <h6 class="mb-2 fs-12">Total Invoices Amount
-                        <span class="badge bg-primary fw-semibold float-end">
-                          12,345
-                        </span>
+                      <h6 class="mb-2 fs-12">Total Factura
+                        <span class="badge bg-primary fw-semibold float-end"> 0 </span>
                       </h6>
                       <div class="pb-0 mt-0">
                         <div>
-                          <h4 class="fs-18 fw-semibold mb-2">$<span class="count-up" data-count="192">192</span>.87K</h4>
+                          <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_factura" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
                           <p class="text-muted fs-11 mb-0 lh-1">
-                            <span class="text-success me-1 fw-semibold">
-                              <i class="ri-arrow-up-s-line me-1 align-middle"></i>3.25%
+                            <span class="text-success me-1 fw-semibold vw_total_factura_p">
+                              <i class="ri-arrow-up-s-line me-1 align-middle"></i>0%
                             </span>
                             <span>this month</span>
                           </p>
@@ -143,22 +141,20 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
                   </div>
                   <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-top">
-                    <div class="svg-icon-background bg-success-transparent me-4">
+                    <div class="svg-icon-background bg-success-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">                      
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-success">
                         <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v5a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h6a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Zm13.71,6.29a1,1,0,0,0-1.42,0l-3.29,3.3-1.29-1.3a1,1,0,0,0-1.42,1.42l2,2a1,1,0,0,0,1.42,0l4-4A1,1,0,0,0,21.21,16.29Z" />
                       </svg>
                     </div>
                     <div class="flex-fill">
-                      <h6 class="mb-2 fs-12">Total Paid Invoices
-                        <span class="badge bg-success fw-semibold float-end">
-                          4,176
-                        </span>
+                      <h6 class="mb-2 fs-12">Total Boleta
+                        <span class="badge bg-success fw-semibold float-end">0  </span>
                       </h6>
                       <div>
-                        <h4 class="fs-18 fw-semibold mb-2">$<span class="count-up" data-count="68.83">68.83</span>K</h4>
+                        <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_boleta" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
                         <p class="text-muted fs-11 mb-0 lh-1">
-                          <span class="text-danger me-1 fw-semibold">
-                            <i class="ri-arrow-down-s-line me-1 align-middle"></i>1.16%
+                          <span class="text-success me-1 fw-semibold vw_total_boleta_p">
+                            <i class="ri-arrow-down-s-line me-1 align-middle"></i>0%
                           </span>
                           <span>this month</span>
                         </p>
@@ -166,29 +162,27 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
                   </div>
                   <div class="d-flex align-items-top p-4 border-bottom border-block-end-dashed">
-                    <div class="svg-icon-background bg-warning-transparent me-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" class="svg-warning">
-                        <path d="M19,12h-7V5c0-0.6-0.4-1-1-1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9C20,12.4,19.6,12,19,12z M12,19.9c-3.8,0.6-7.4-2.1-7.9-5.9C3.5,10.2,6.2,6.6,10,6.1V13c0,0.6,0.4,1,1,1h6.9C17.5,17.1,15.1,19.5,12,19.9z M15,2c-0.6,0-1,0.4-1,1v6c0,0.6,0.4,1,1,1h6c0.6,0,1-0.4,1-1C22,5.1,18.9,2,15,2z M16,8V4.1C18,4.5,19.5,6,19.9,8H16z" />
+                    <div class="svg-icon-background bg-warning-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">
+                      <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24" class="svg-primary">
+                        <path d="M13,16H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2ZM9,10h2a1,1,0,0,0,0-2H9a1,1,0,0,0,0,2Zm12,2H18V3a1,1,0,0,0-.5-.87,1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0A1,1,0,0,0,2,3V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V13A1,1,0,0,0,21,12ZM5,20a1,1,0,0,1-1-1V4.73L6,5.87a1.08,1.08,0,0,0,1,0l3-1.72,3,1.72a1.08,1.08,0,0,0,1,0l2-1.14V19a3,3,0,0,0,.18,1Zm15-1a1,1,0,0,1-2,0V14h2Zm-7-7H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2Z" />
                       </svg>
                     </div>
                     <div class="flex-fill">
-                      <h6 class="mb-2 fs-12">Pending Invoices
-                        <span class="badge bg-warning fw-semibold float-end">
-                          7,064
-                        </span>
+                      <h6 class="mb-2 fs-12">Total Ticket
+                        <span class="badge bg-warning fw-semibold float-end">0 </span>
                       </h6>
                       <div>
-                        <h4 class="fs-18 fw-semibold mb-2">$<span class="count-up" data-count="81.57">81.57</span>K</h4>
+                        <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_ticket" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
                         <p class="text-muted fs-11 mb-0 lh-1">
-                          <span class="text-success me-1 fw-semibold">
-                            <i class="ri-arrow-up-s-line me-1 align-middle"></i>0.25%
+                          <span class="text-success me-1 fw-semibold vw_total_ticket_p">
+                            <i class="ri-arrow-up-s-line me-1 align-middle"></i>0%
                           </span>
                           <span>this month</span>
                         </p>
                       </div>
                     </div>
                   </div>
-                  <div class="d-flex align-items-top p-4 border-bottom border-block-end-dashed">
+                  <!-- <div class="d-flex align-items-top p-4 border-bottom border-block-end-dashed">
                     <div class="svg-icon-background bg-light me-4">
                       <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" class="svg-dark">
                         <path d="M19,12h-7V5c0-0.6-0.4-1-1-1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9C20,12.4,19.6,12,19,12z M12,19.9c-3.8,0.6-7.4-2.1-7.9-5.9C3.5,10.2,6.2,6.6,10,6.1V13c0,0.6,0.4,1,1,1h6.9C17.5,17.1,15.1,19.5,12,19.9z M15,2c-0.6,0-1,0.4-1,1v6c0,0.6,0.4,1,1,1h6c0.6,0,1-0.4,1-1C22,5.1,18.9,2,15,2z M16,8V4.1C18,4.5,19.5,6,19.9,8H16z" />
@@ -210,9 +204,9 @@ if (!isset($_SESSION["user_nombre"])) {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="p-4">
-                    <p class="fs-15 fw-semibold">Invoice Status <span class="text-muted fw-normal">(Last 6 months) :</span></p>
+                    <p class="fs-15 fw-semibold">Mini reporte <span class="text-muted fw-normal">(Últimos 6 meses) :</span></p>
                     <div id="invoice-list-stats"></div>
                   </div>
                 </div>
@@ -225,13 +219,13 @@ if (!isset($_SESSION["user_nombre"])) {
                 <div class="card-body">                    
                   
                   <!-- FORM - COMPROBANTE -->                    
-                  <form name="form-facturacion" id="form-facturacion" method="POST" class="needs-validation" novalidate>
+                  <form name="form-facturacion" id="form-facturacion" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
                     <div class="row" id="cargando-1-formulario">
 
                       <!-- IMPUESTO -->
                       <input type="hidden" name="idventa" id="idventa" />
                       <!-- IMPUESTO -->
-                      <input type="hidden" class="form-control" name="impuesto" id="impuesto" value="">                      
+                      <input type="hidden" class="form-control" name="impuesto" id="impuesto" value="0">                      
 
                       <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                         <div class="row gy-3">
@@ -292,7 +286,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="form-group">
                               <label for="es_cobro" class="form-label">Es cobro?</label>
                               <div class="toggle toggle-secondary on es_cobro" onclick="delay(function(){es_cobro_valid()}, 100 );" >  <span></span>   </div>
-                              <input type="hidden" class="form-control" name="es_cobro" id="es_cobro"  >
+                              <input type="hidden" class="form-control" name="es_cobro_inp" id="es_cobro_inp" value="SI" >
                             </div>
                           </div>  
 
@@ -428,7 +422,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="form-group">
                               <label for="usar_anticipo" class="form-label">Usar anticipos?</label>
                               <div class="toggle toggle-secondary usar_anticipo" onclick="delay(function(){usar_anticipo_valid()}, 100 );" >  <span></span>   </div>
-                              <input type="hidden" class="form-control" name="usar_anticipo" id="usar_anticipo"  >
+                              <input type="hidden" class="form-control" name="usar_anticipo" id="usar_anticipo" value="NO" >
                             </div>
                           </div>                           
 
@@ -475,7 +469,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <!-- Baucher -->
                               <div class="col-sm-6 col-lg-6 col-xl-6 pt-3" >
                                 <div class="form-group">                              
-                                  <input type="file" class="multiple-filepond" name="mp_comprobante" id="mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" >                             
+                                  <input type="file" class="multiple-filepond" name="mp_comprobante" id="mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" accept="image/*, application/pdf" >                             
                                   <input type="hidden" name="mp_comprobante_old" id="mp_comprobante_old">
                                 </div>
                               </div>

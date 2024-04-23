@@ -118,7 +118,7 @@
 
     public function mostrar_editar_detalles_venta($id){
       $sql = "SELECT * FROM venta WHERE idventa = '$id'";
-      $venta = ejecutarConsultaSimpleFila($sql);
+      $venta = ejecutarConsultaSimpleFila($sql); if ($venta['status'] == false) {return $venta; }
 
       $sql = "SELECT dc.*, p.nombre, p.codigo, p.codigo_alterno, p.imagen, sum.nombre AS unidad_medida, cat.nombre AS categoria, mc.nombre AS marca
       FROM venta_detalle AS dc
@@ -129,23 +129,21 @@
       WHERE dc.idventa = '$id'
         AND p.estado = 1
         AND p.estado_delete = 1;";
-      $venta_detalle = ejecutarConsultaArray($sql);
+      $venta_detalle = ejecutarConsultaArray($sql); if ($venta_detalle['status'] == false) {return $venta_detalle; }
       return ['status' => true, 'message' =>'todo okey', 'data'=>['venta' => $venta['data'], 'venta_detalle' => $venta_detalle['data'],]];
     }
 
     public function eliminar($id){
       $sql = "UPDATE venta SET estado_delete = 0
       WHERE idventa = '$id'";
-      return ejecutarConsulta($sql, 'U');
+      return ejecutarConsulta($sql, 'D');
     }
 
     public function desactivar($id){
       $sql = "UPDATE venta SET estado = 0
       WHERE idventa = '$id'";
-      return ejecutarConsulta($sql, 'U');
-    }
-
-    
+      return ejecutarConsulta($sql, 'T');
+    }    
 
     public function listar_tabla_producto($tipo_producto){
       $sql = "SELECT p.*, sum.nombre AS unidad_medida, cat.nombre AS categoria, mc.nombre AS marca
@@ -167,6 +165,38 @@
       return ejecutarConsultaSimpleFila($sql);
     }
 
+    Public function mini_reporte(){
+      $sql_01 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
+      FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '01' ) AS ventas_mes_actual,
+      ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '01' ) AS ventas_mes_anterior;";
+      $factura_p = ejecutarConsultaSimpleFila($sql_01); if ($factura_p['status'] == false) {return $factura_p; }
+      $sql_01 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM `venta` WHERE tipo_comprobante = '01' AND estado = '1' AND estado_delete = '1';";
+      $factura = ejecutarConsultaSimpleFila($sql_01); if ($factura['status'] == false) {return $factura; }
+
+      $sql_03 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
+      FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '03' ) AS ventas_mes_actual,
+      ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '03' ) AS ventas_mes_anterior;";
+      $boleta_p = ejecutarConsultaSimpleFila($sql_03); if ($boleta_p['status'] == false) {return $boleta_p; }
+      $sql_03 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM `venta` WHERE tipo_comprobante = '03' AND estado = '1' AND estado_delete = '1';";
+      $boleta = ejecutarConsultaSimpleFila($sql_03); if ($boleta['status'] == false) {return $boleta; }
+
+      $sql_12 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
+      FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '12' ) AS ventas_mes_actual,
+      ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '12' ) AS ventas_mes_anterior;";
+      $ticket_p = ejecutarConsultaSimpleFila($sql_12); if ($ticket_p['status'] == false) {return $ticket_p; }
+      $sql_12 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM `venta` WHERE tipo_comprobante = '12' AND estado = '1' AND estado_delete = '1';";
+      $ticket = ejecutarConsultaSimpleFila($sql_12); if ($ticket['status'] == false) {return $ticket; }
+
+      return ['status' => true, 'message' =>'todo okey', 
+        'data'=>[
+          'factura'=> floatval($factura['data']['venta_total']), 'factura_p' => floatval($factura_p['data']['porcentaje']) , 
+          'boleta' => floatval($boleta['data']['venta_total']), 'boleta_p' => floatval($boleta_p['data']['porcentaje']) , 
+          'ticket' => floatval($ticket['data']['venta_total']), 'ticket_p' => floatval($ticket_p['data']['porcentaje']) , 
+        ]
+      ];
+
+    }
+
     public function listar_producto_x_codigo($codigo){
       $sql = "SELECT p.*, sum.nombre AS unidad_medida, cat.nombre AS categoria, mc.nombre AS marca
       FROM producto AS p
@@ -176,6 +206,13 @@
       WHERE (p.codigo = '$codigo' OR p.codigo_alterno = '$codigo' ) AND p.estado = 1 AND p.estado_delete = 1;";
         return ejecutarConsultaSimpleFila($sql);
       
+    }
+
+    // ══════════════════════════════════════ C O M P R O B A N T E ══════════════════════════════════════
+
+    public function datos_empresa(){
+      $sql = "SELECT * FROM empresa;";
+      return ejecutarConsultaSimpleFila($sql);      
     }
 
     // ══════════════════════════════════════ U S A R   A N T I C I P O ══════════════════════════════════════

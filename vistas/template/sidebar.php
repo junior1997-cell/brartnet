@@ -89,7 +89,7 @@
             <?php  if ($_SESSION['stok_precio'] == '1') { ?>          
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Stok / Precio</a></li>
             <?php } ?>
-            <?php  if ($_SESSION['tranferencia_de_stock'] == '1') { ?>
+            <?php  if ($_SESSION['transferencia_de_stock'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Tranferencia de Stok</a></li>
             <?php } ?>
             <?php  if ($_SESSION['inventario'] == '1') { ?>
