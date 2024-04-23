@@ -350,7 +350,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       // ══════════════════════════════════════   PAGOS ALL CLIENTES   ══════════════════════════════════════ 
       case 'ver_pagos_all_cliente':
-        $rspta = $persona_cliente->ver_pagos_all_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        $rspta = $persona_cliente->ver_pagos_all_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_anio_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
         
         echo '<table class="table  table-hover table-bordered table-condensed">
         <thead>
@@ -359,7 +359,7 @@ if (!isset($_SESSION["user_nombre"])) {
           </tr>
           <tr > 
             <th >N°</th> <th >APELLIDOS Y NOMBRES</th> <th >CANCELACIÓN</th> <th >IMPORTE</th> <th >AÑO</th> <th >ENE</th> <th >FEB</th> <th >MAR</th> <th >ABR</th>
-            <th >MAY</th> <th >JUN</th> <th >JUL</th> <th >AGO</th> <th >SEP</th> <th >OCT</th> <th >SEP</th> <th >NOV</th> <th >DIC</th> <th >OBSERVACIONES</th>
+            <th >MAY</th> <th >JUN</th> <th >JUL</th> <th >AGO</th> <th >SEP</th> <th >OCT</th> <th >NOV</th> <th >DIC</th> <th >OBSERVACIONES</th>
           </tr>
         </thead>
         <tbody>';
@@ -380,21 +380,20 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
               </div></td>
             <td class="py-0 '.$bg_light.' text-center" >'.$val['fecha_cancelacion_format'].'</td>
-            <td class="py-0 '.$bg_light.' text-nowrap" ><a href="tel:+51'.$val['celular'].'" data-bs-toggle="tooltip" title="Clic para hacer llamada">'.$val['celular'].'</a></td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['costo'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >50</td>
-            <td class="py-0 '.$bg_light.' text-center" >50</td>
-            <td class="py-0 '.$bg_light.' text-center" >50</td>
-            <td class="py-0 '.$bg_light.' text-center" >50</td>
-            <td class="py-0 '.$bg_light.' text-center" ></td>
-            <td class="py-0 '.$bg_light.' text-center" ></td>
-            <td class="py-0 '.$bg_light.' text-center" ></td>
-            <td class="py-0 '.$bg_light.' text-center" ></td>
-            <td class="py-0 '.$bg_light.' text-center" ></td>
-            <td class="py-0 '.$bg_light.' text-center" ></td>
-            <td class="py-0 '.$bg_light.' text-center" ></td>
-            <td class="py-0 '.$bg_light.' text-center" ></td>
-            <td class="py-0 '.$bg_light.' text-center" ></td>
+            <td class="py-0 '.$bg_light.' text-nowrap" >S/ '.$val['costo'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['anio_cancelacion'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_enero'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_febrero'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_marzo'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_abril'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_mayo'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_junio'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_julio'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_agosto'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_septiembre'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_octubre'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_noviembre'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_diciembre'].'</td>
             <td class="py-0 '.$bg_light.'" ><textarea cols="30" rows="2" class="textarea_datatable '.$bg_light.' bg-light " readonly="">' . $val['nota'] . '</textarea></td>
           </tr>';
         }
