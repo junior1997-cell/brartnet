@@ -86,7 +86,7 @@
       FROM compra AS c
       INNER JOIN persona AS p ON c.idproveedor = p.idpersona
       INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
-      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = c.tipo_comprobante
+      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.codigo = c.tipo_comprobante
       WHERE c.idcompra = '$idcompra'
       AND c.estado = 1 AND c.estado_delete = 1";
       $compra = ejecutarConsultaSimpleFila($sql_1); if ($compra['status'] == false) {return $compra; }

@@ -26,6 +26,10 @@ if (!isset($_SESSION["user_nombre"])) {
     <head>
       <meta http-equiv="content-type" content="text/html; charset=utf-8" />
       <link href="../assets/css/ticket.css" rel="stylesheet" type="text/css">
+      <!-- Bootstrap Css -->
+      <link id="style" href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Style Css -->
+      <link href="../assets/css/styles.min.css" rel="stylesheet">
     </head>
 
     <body onload="window.print();">

@@ -25,7 +25,7 @@
       INNER JOIN persona AS p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.codigo = v.tipo_comprobante
-      WHERE v.estado = 1 AND v.estado_delete = 1;";
+      WHERE v.estado = 1 AND v.estado_delete = 1 ORDER BY v.fecha_emision DESC;";
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
 
       return $venta;
@@ -84,31 +84,7 @@
       }  
       
       return array('status' => true, 'message' => 'Datos actualizados correctamente.');
-    }
-  
-
-    public function mostrar_detalle_venta($idventa){
-
-      $sql_1 = "SELECT c.*, p.*, tc.abreviatura as tp_comprobante, sdi.abreviatura as tipo_documento, c.estado
-      FROM venta AS c
-      INNER JOIN persona AS p ON c.idpersona_cliente = p.idpersona
-      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
-      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = c.tipo_comprobante
-      WHERE c.idventa = '$idventa'
-      AND c.estado = 1 AND c.estado_delete = 1";
-      $venta = ejecutarConsultaSimpleFila($sql_1); if ($venta['status'] == false) {return $venta; }
-
-
-      $sql_2 = "SELECT cd.*, pd.*
-      FROM venta_detalle AS cd
-      INNER JOIN producto AS pd ON cd.idproducto = pd.idproducto
-      WHERE  cd.idventa = '$idventa'
-      AND cd.estado = 1 AND cd.estado_delete = 1";
-      $detalle = ejecutarConsultaArray($sql_2); if ($detalle['status'] == false) {return $detalle; }
-
-      return $datos = ['status' => true, 'message' => 'Todo ok', 'data' => ['venta' => $venta['data'], 'detalle' => $detalle['data']]];
-
-    }
+    }   
 
 
     public function mostrar_venta($id){
@@ -116,21 +92,41 @@
       return ejecutarConsultaSimpleFila($sql);
     }
 
-    public function mostrar_editar_detalles_venta($id){
-      $sql = "SELECT * FROM venta WHERE idventa = '$id'";
-      $venta = ejecutarConsultaSimpleFila($sql); if ($venta['status'] == false) {return $venta; }
+    public function mostrar_detalle_venta($idventa){
 
-      $sql = "SELECT dc.*, p.nombre, p.codigo, p.codigo_alterno, p.imagen, sum.nombre AS unidad_medida, cat.nombre AS categoria, mc.nombre AS marca
-      FROM venta_detalle AS dc
-        INNER JOIN producto AS p ON p.idproducto = dc.idproducto
-        INNER JOIN sunat_unidad_medida AS sum ON p.idsunat_unidad_medida = sum.idsunat_unidad_medida
-        INNER JOIN categoria AS cat ON p.idcategoria = cat.idcategoria
-        INNER JOIN marca AS mc ON p.idmarca = mc.idmarca
-      WHERE dc.idventa = '$id'
-        AND p.estado = 1
-        AND p.estado_delete = 1;";
-      $venta_detalle = ejecutarConsultaArray($sql); if ($venta_detalle['status'] == false) {return $venta_detalle; }
-      return ['status' => true, 'message' =>'todo okey', 'data'=>['venta' => $venta['data'], 'venta_detalle' => $venta_detalle['data'],]];
+      $sql_1 = "SELECT v.*, CONCAT(v.serie_comprobante, '-', v.numero_comprobante) as serie_y_numero_comprobante, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y %h:%i:%s %p') AS fecha_emision_format, 
+      v.estado, p.idpersona, pc.idpersona_cliente, p.nombre_razonsocial, p.apellidos_nombrecomercial, 
+      CASE 
+        WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+        WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+        ELSE '-'
+      END AS cliente_nombre_completo, 
+      p.tipo_documento, p.numero_documento, p.direccion, 
+      tc.abreviatura as nombre_comprobante, sdi.abreviatura as nombre_tipo_documento,
+      pu.nombre_razonsocial as user_en_atencion
+      FROM venta AS v
+      INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
+      INNER JOIN persona AS p ON p.idpersona = pc.idpersona
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.codigo = v.tipo_comprobante
+      LEFT JOIN usuario as u ON u.idusuario = v.user_created
+      LEFT JOIN persona as pu ON pu.idpersona = u.idpersona
+      WHERE v.idventa = '$idventa'";
+      $venta = ejecutarConsultaSimpleFila($sql_1); if ($venta['status'] == false) {return $venta; }
+
+
+      $sql_2 = "SELECT vc.*, p.idproducto, p.idsunat_unidad_medida, p.idcategoria, p.idmarca, p.nombre as nombre_producto, p.codigo, p.codigo_alterno, p.imagen, 
+      um.nombre AS unidad_medida, um.abreviatura as um_abreviatura, cat.nombre AS categoria, mc.nombre AS marca
+      FROM venta_detalle AS vc
+      INNER JOIN producto AS p ON p.idproducto = vc.idproducto
+      INNER JOIN sunat_unidad_medida AS um ON p.idsunat_unidad_medida = um.idsunat_unidad_medida
+      INNER JOIN categoria AS cat ON p.idcategoria = cat.idcategoria
+      INNER JOIN marca AS mc ON p.idmarca = mc.idmarca
+      WHERE vc.idventa = '$idventa';";
+      $detalle = ejecutarConsultaArray($sql_2); if ($detalle['status'] == false) {return $detalle; }
+
+      return $datos = ['status' => true, 'message' => 'Todo ok', 'data' => ['venta' => $venta['data'], 'detalle' => $detalle['data']]];
+
     }
 
     public function eliminar($id){

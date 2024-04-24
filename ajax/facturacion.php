@@ -225,7 +225,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break; 
 
       case 'mostrar_editar_detalles_venta':
-        $rspta=$facturacion->mostrar_editar_detalles_venta($_POST["idventa"]);
+        $rspta=$facturacion->mostrar_venta($_POST["idventa"]);
         echo json_encode($rspta, true);
       break;      
 

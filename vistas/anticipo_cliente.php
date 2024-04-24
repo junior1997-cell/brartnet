@@ -228,23 +228,16 @@ if (!isset($_SESSION["user_nombre"])) {
 
           <!-- Start::modal-imprimir_ticket -->
           <div class="modal fade" id="modalPreviewticket" tabindex="-1" aria-labelledby="modalPreviewticketLabel" aria-hidden="true">
-            <div class="modal-dialog modal-md" style="max-width: 24% !important;">
+            <div class="modal-dialog modal-md" >
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="modalPreviewticketLabel">Ticket de Anticipo</h5>
+                  <h5 class="modal-title" id="modalPreviewticketLabel"> <button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('modalAntcticket')"><i class="ri-printer-fill"></i></button> Ticket de Anticipo</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div id="imp1">
-                  <div>
-                    <iframe name="modalAntcticket" id="modalAntcticket" frameborder="0" width="100%"
-                      style="height: 800px;" marginwidth="1" src="">
-                    </iframe>
-                  </div>
+                <div class="modal-body">
+                  <div id="html-imprimir-comprobante" class="text-center" > </div>                   
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-icon btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('modalAntcticket')"><i class="ri-printer-fill"></i></button>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
+                
               </div>
             </div>
           </div>

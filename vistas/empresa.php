@@ -23,7 +23,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <div class="page">
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
-      <?php if($_SESSION['registrar_trabajador']==1) { ?>
+      <?php if($_SESSION['empresa_configuracion']==1) { ?>
 
       <!-- Start::app-content -->
       <div class="main-content app-content">

@@ -509,6 +509,22 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::row-1 -->
 
+          <!-- MODAL - IMPRIMIR -->
+          <div class="modal fade modal-effect" id="modal-imprimir-comprobante" tabindex="-1" aria-labelledby="modal-imprimir-comprobante-label" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-imprimir-comprobante-label">COMPROBANTE</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" >                  
+                  <div id="html-imprimir-comprobante" class="text-center" > </div>
+                </div>                
+              </div>
+            </div>
+          </div> 
+          <!-- End::Modal-Ver-Comprobante venta -->
+
           <!-- MODAL - VER COMPROBANTE venta -->
           <div class="modal fade modal-effect" id="modal-ver-comprobante1" tabindex="-1" aria-labelledby="modal-ver-comprobante1Label" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">

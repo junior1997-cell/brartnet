@@ -344,7 +344,21 @@ function usar_anticipo_valid() {
 // ::::::::::::::::::::::::::::::::::::::::::::: FORMATOS DE IMPRESION :::::::::::::::::::::::::::::::::::::::::::::
 
 function ver_formato_ticket(idventa, tipo_comprobante) {
-  toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+  
+  if (tipo_comprobante == '01') {
+    toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+  } else if (tipo_comprobante == '03') {
+    toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+  } else if (tipo_comprobante == '12') {
+    var rutacarpeta = "../reportes/TicketNotaVenta.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+
+  } else  {
+    // toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+    toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
+  }
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O D U C T O S :::::::::::::::::::::::::::::::::::::::::::::
@@ -689,6 +703,11 @@ $(function(){
 function reload_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_cliente", '#idpersona_cliente', null, '.charge_idpersona_cliente'); }
 
 
+function printIframe(id) {
+  var iframe = document.getElementById(id);
+  iframe.focus(); // Para asegurarse de que el iframe está en foco
+  iframe.contentWindow.print(); // Llama a la función de imprimir del documento dentro del iframe
+}
 
 (function () {
   "use strict"
