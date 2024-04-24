@@ -15,6 +15,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
     <?php $title_page = "Gastos";
     include("template/head.php"); ?>
+    <style>
+      .choices {
+        margin-bottom: 0px !important;
+      }
+    </style>
 
   </head>
 
@@ -49,15 +54,17 @@ if (!isset($_SESSION["user_nombre"])) {
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body px-4">
-                              <form name="form-agregar-incidencia" id="form-agregar-incidencia" method="POST">
+                              <form name="form-agregar-incidencia" id="form-agregar-incidencia" method="POST" class="needs-validation" novalidate>
                                 <input type="hidden" id="idincidencia" name="idincidencia">
                                 <div class="row gy-2">
+                                  <!-- Asunto -->
                                   <div class="col-xl-12">
                                     <div class="form-group">
                                       <label for="actividad" class="form-label">Asunto</label>
                                       <input type="text" class="form-control" name="actividad" id="actividad" placeholder=" Descripción Asunto">
                                     </div>
                                   </div>
+                                  <!-- Trabajadores -->
                                   <div class="col-xl-12">
                                     <div class="form-group">
                                       <label class="form-label">Asignado a</label>
@@ -65,6 +72,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                       </select>
                                     </div>
                                   </div>
+                                  <!-- Fecha -->
                                   <div class="col-xl-6">
                                     <div class="form-group">
                                       <label class="form-label">Fecha</label>
@@ -74,10 +82,12 @@ if (!isset($_SESSION["user_nombre"])) {
                                       </div>
                                     </div>
                                   </div>
+                                  <!-- Prioridad -->
                                   <div class="col-xl-6">
                                     <div class="form-group">
                                       <label class="form-label">Prioridad</label>
-                                      <select class="form-control" id="prioridad" name="prioridad" data-trigger>
+                                      <select class="form-select" id="prioridad" name="prioridad" data-trigger>
+                                        <option value="">This is a placeholder </option>
                                         <option value="CRÍTICO">1 CRÍTICO</option>
                                         <option value="ALTO">2 ALTO</option>
                                         <option value="MEDIO">3 MEDIO</option>
@@ -85,10 +95,12 @@ if (!isset($_SESSION["user_nombre"])) {
                                       </select>
                                     </div>
                                   </div>
-                                  <div class="col-xl-6">
+                                  <!-- Categoría -->
+                                  <div class="mb-1 col-md-3 col-lg-3 col-xl-3 col-xxl-6">
                                     <div class="form-group">
-                                      <label class="form-label">Categoría</label>
-                                      <select class="form-control" id="categoria" name="categoria"></select>
+                                      <label for="categoria" class="form-label">Tipo documento: </label>
+                                      <select name="categoria" id="categoria" class="form-select" required>
+                                      </select>
                                     </div>
                                   </div>
                                   <div class="col-xl-12">
@@ -110,125 +122,24 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                     </div>
-                    <div class="p-3 border-bottom border-block-end-dashed">
-                      <div class="input-group">
-                        <input type="text" class="form-control bg-light border-0" placeholder="Search Task Here" aria-describedby="button-addon2">
-                        <button class="btn btn-light" type="button" id="button-addon2"><i class="ri-search-line text-muted"></i></button>
-                      </div>
-                    </div>
+                    <!-- LISTA DE CATEOGRIAS -->
                     <div class="p-3 task-navigation border-bottom border-block-end-dashed">
-                      <ul class="list-unstyled task-main-nav mb-0">
+                      <ul class="list-unstyled task-main-nav lista-items mb-0">
                         <li class="px-0 pt-0">
-                          <span class="fs-11 text-muted op-7 fw-semibold">TASKS</span>
-                        </li>
-                        <li class="active">
-                          <a href="javascript:void(0);">
-                            <div class="d-flex align-items-center">
-                              <span class="me-2 lh-1">
-                                <i class="ri-task-line align-middle fs-14"></i>
-                              </span>
-                              <span class="flex-fill text-nowrap">
-                                All Tasks
-                              </span>
-                              <span class="badge bg-success-transparent rounded-pill">167</span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);">
-                            <div class="d-flex align-items-center">
-                              <span class="me-2 lh-1">
-                                <i class="ri-star-line align-middle fs-14"></i>
-                              </span>
-                              <span class="flex-fill text-nowrap">
-                                Starred
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);">
-                            <div class="d-flex align-items-center">
-                              <span class="me-2 lh-1">
-                                <i class="ri-delete-bin-5-line align-middle fs-14"></i>
-                              </span>
-                              <span class="flex-fill text-nowrap">
-                                Trash
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li class="px-0 pt-2">
-                          <span class="fs-11 text-muted op-7 fw-semibold">CATEGORIES</span>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);">
-                            <div class="d-flex align-items-center">
-                              <span class="me-2 lh-1">
-                                <i class="ri-price-tag-line align-middle fs-14 fw-semibold text-primary"></i>
-                              </span>
-                              <span class="flex-fill text-nowrap">
-                                Personal
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);">
-                            <div class="d-flex align-items-center">
-                              <span class="me-2 lh-1">
-                                <i class="ri-price-tag-line align-middle fs-14 fw-semibold text-secondary"></i>
-                              </span>
-                              <span class="flex-fill text-nowrap">
-                                Work
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);">
-                            <div class="d-flex align-items-center">
-                              <span class="me-2 lh-1">
-                                <i class="ri-price-tag-line align-middle fs-14 fw-semibold text-warning"></i>
-                              </span>
-                              <span class="flex-fill text-nowrap">
-                                Health & Fitness
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);">
-                            <div class="d-flex align-items-center">
-                              <span class="me-2 lh-1">
-                                <i class="ri-price-tag-line align-middle fs-14 fw-semibold text-success"></i>
-                              </span>
-                              <span class="flex-fill text-nowrap">
-                                Daily Goals
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);">
-                            <div class="d-flex align-items-center">
-                              <span class="me-2 lh-1">
-                                <i class="ri-price-tag-line align-middle fs-14 fw-semibold text-danger"></i>
-                              </span>
-                              <span class="flex-fill text-nowrap">
-                                Financial Management
-                              </span>
-                            </div>
-                          </a>
+                          <span class="fs-11 text-muted op-7 fw-semibold">Categorías</span>
                         </li>
                       </ul>
                     </div>
                     <div class="p-3 text-center">
                       <img src="../assets/images/media/media-66.png" alt="">
                     </div>
+                    <!-- FIN LISTA DE CATEOGRIAS -->
+
                   </div>
                 </div>
               </div>
+              <!-- LISTA DE INCIDENCIAS POR PRIORIDAD  -->
+
               <div class="col-xl-9">
                 <div class="row">
                   <div class="col-xl-12">
@@ -236,24 +147,30 @@ if (!isset($_SESSION["user_nombre"])) {
                       <div class="card-body p-0">
                         <div class="d-flex p-3 align-items-center justify-content-between">
                           <div>
-                            <h6 class="fw-semibold mb-0">Tasks</h6>
+                            <h6 class="fw-semibold mb-0">Prioridad</h6>
                           </div>
+                          <!-- PRIORIDAD -->
                           <div>
                             <ul class="nav nav-tabs nav-tabs-header mb-0 d-sm-flex d-block" role="tablist">
                               <li class="nav-item m-1">
-                                <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-current="page" href="#all-tasks" aria-selected="true">All Tasks</a>
+                                <a class="nav-link active cursor-pointer" data-bs-toggle="tab" role="tab" aria-current="page" aria-selected="true" onclick="prioridad('TODOS')">TODOS</a>
                               </li>
                               <li class="nav-item m-1">
-                                <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page" href="#pending" aria-selected="true">Pending</a>
+                                <a class="nav-link cursor-pointer" data-bs-toggle="tab" role="tab" aria-current="page" aria-selected="true" onclick="prioridad('CRÍTICO')">CRÍTICO</a>
                               </li>
                               <li class="nav-item m-1">
-                                <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page" href="#in-progress" aria-selected="true">In Progress</a>
+                                <a class="nav-link cursor-pointer" data-bs-toggle="tab" role="tab" aria-current="page" aria-selected="true" onclick="prioridad('ALTO')">ALTO</a>
                               </li>
                               <li class="nav-item m-1">
-                                <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page" href="#completed" aria-selected="true">Completed</a>
+                                <a class="nav-link cursor-pointer" data-bs-toggle="tab" role="tab" aria-current="page" aria-selected="true"  onclick="prioridad('MEDIO')">MEDIO</a>
+                              </li>
+                              <li class="nav-item m-1 ">
+                                <a class="nav-link cursor-pointer" data-bs-toggle="tab" role="tab" aria-current="page" aria-selected="true" onclick="prioridad('BAJO')">BAJO</a>
                               </li>
                             </ul>
                           </div>
+                          <!-- FIN PRIORIDAD -->
+
                           <div>
                             <div class="dropdown">
                               <button class="btn btn-icon btn-sm btn-light btn-wave waves-light waves-effect" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -266,620 +183,19 @@ if (!isset($_SESSION["user_nombre"])) {
                               </ul>
                             </div>
                           </div>
+
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="tab-content task-tabs-container">
                     <div class="tab-pane show active p-0" id="all-tasks" role="tabpanel">
-                      <div class="row" id="tasks-container">
-                        <div class="col-xl-4 task-card">
-                          <div class="card custom-card task-pending-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>New Project Blueprint</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">13,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">20,Nov 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/2.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/8.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/2.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/10.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-warning-transparent d-block">High</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card custom-card task-inprogress-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 me-1 text-warning"></i></a>Designing New Authentication Pages</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">26,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">12,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/6.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/15.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-success-transparent d-block">Low</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card custom-card task-completed-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center">
-                                    <a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>Developing New Events in Plugin
-                                  </p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">5,Dec 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">10,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/5.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/8.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/11.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-primary-transparent d-block">Medium</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4 task-card">
-                          <div class="card custom-card task-inprogress-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 me-1 text-warning"></i></a>Design New Landing Pages </p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">21,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">28,Nov 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/1.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/5.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/12.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-primary-transparent d-block">Medium</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card custom-card task-completed-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>New Plugin Development</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">28,Oct 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">28,Nov 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/3.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/8.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/9.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-success-transparent d-block">Low</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card custom-card task-completed-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>Documentation For New Template</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">25,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">10,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/8.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/10.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/11.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-danger-transparent d-block">Critical</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4 task-card">
-                          <div class="card custom-card task-pending-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center">
-                                    <a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 me-1 text-warning"></i></a>Updating Old Ui
-                                  </p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">30,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">05,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/14.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/13.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/21.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/16.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-warning-transparent d-block">High</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card custom-card task-completed-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>Designing Of New Ecommerce Pages</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">1,Dec 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">15,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/1.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/3.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/6.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-success-transparent d-block">Low</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card custom-card task-inprogress-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 me-1 text-warning"></i></a>Improving Ui Of Updated Templates</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">4,Dec 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">20,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/9.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/13.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-primary-transparent d-block">Medium</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="tab-pane p-0" id="pending" role="tabpanel">
-                      <div class="row">
-                        <div class="col-xl-4">
-                          <div class="card custom-card task-pending-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>New Project Blueprint</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">13,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">20,Nov 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/2.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/8.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/2.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/10.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-warning-transparent d-block">High</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4">
-                          <div class="card custom-card task-pending-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center">
-                                    <a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 me-1 text-warning"></i></a>Updating Old Ui
-                                  </p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">30,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">05,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/14.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/13.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/21.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/16.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-warning-transparent d-block">High</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="tab-pane p-0" id="in-progress" role="tabpanel">
-                      <div class="row">
-                        <div class="col-xl-4">
-                          <div class="card custom-card task-inprogress-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 me-1 text-warning"></i></a>Design New Landing Pages </p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">21,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">28,Nov 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/1.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/5.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/12.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-primary-transparent d-block">Medium</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4">
-                          <div class="card custom-card task-inprogress-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 me-1 text-warning"></i></a>Designing New Authentication Pages</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">26,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">12,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/6.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/15.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-success-transparent d-block">Low</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4">
-                          <div class="card custom-card task-inprogress-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 me-1 text-warning"></i></a>Improving Ui Of Updated Templates</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">4,Dec 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">20,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/9.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/13.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-primary-transparent d-block">Medium</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="tab-pane p-0" id="completed" role="tabpanel">
-                      <div class="row">
-                        <div class="col-xl-4">
-                          <div class="card custom-card task-completed-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>New Plugin Development</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">28,Oct 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">28,Nov 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/3.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/8.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/9.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-success-transparent d-block">Low</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4">
-                          <div class="card custom-card task-completed-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>Documentation For New Template</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">25,Nov 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">10,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/8.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/10.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/11.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-danger-transparent d-block">Critical</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4">
-                          <div class="card custom-card task-completed-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center">
-                                    <a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>Developing New Events in Plugin
-                                  </p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">5,Dec 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">10,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/5.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/8.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/11.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-primary-transparent d-block">Medium</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4">
-                          <div class="card custom-card task-completed-card">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between flex-wrap gap-2">
-                                <div>
-                                  <p class="fw-semibold mb-3 d-flex align-items-center"><a href="javascript:void(0);"><i class="ri-star-s-fill fs-16 op-5 me-1 text-muted"></i></a>Designing Of New Ecommerce Pages</p>
-                                  <p class="mb-3">Assigned On : <span class="fs-12 mb-1 text-muted">1,Dec 2022</span></p>
-                                  <p class="mb-3">Target Date : <span class="fs-12 mb-1 text-muted">15,Dec 2022</span></p>
-                                  <p class="mb-0">Assigned To :
-                                    <span class="avatar-list-stacked ms-1">
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/1.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/3.jpg" alt="img">
-                                      </span>
-                                      <span class="avatar avatar-sm avatar-rounded">
-                                        <img src="../assets/images/faces/6.jpg" alt="img">
-                                      </span>
-                                    </span>
-                                  </p>
-                                </div>
-                                <div>
-                                  <div class="btn-list">
-                                    <button class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-edit-line"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                  </div>
-                                  <span class="badge bg-success-transparent d-block">Low</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                      <div class="row list_incidencias" id="tasks-container">
                       </div>
                     </div>
                   </div>
                 </div>
-                <ul class="pagination justify-content-end">
+                <!-- <ul class="pagination justify-content-end">
                   <li class="page-item disabled">
                     <a class="page-link">Previous</a>
                   </li>
@@ -889,8 +205,10 @@ if (!isset($_SESSION["user_nombre"])) {
                   <li class="page-item">
                     <a class="page-link" href="javascript:void(0);">Next</a>
                   </li>
-                </ul>
+                </ul> -->
               </div>
+              <!-- LISTA DE INCIDENCIAS POR PRIORIDAD  -->
+
             </div>
             <!--End::row-1 -->
 

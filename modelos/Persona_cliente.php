@@ -202,7 +202,7 @@ class Cliente
 
 	// ══════════════════════════════════════  PAGOS ALL CLIENTES ══════════════════════════════════════
 
-	public function ver_pagos_all_cliente($filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
+	public function ver_pagos_all_cliente($filtro_trabajador, $filtro_dia_pago, $filtro_anio_pago, $filtro_plan, $filtro_zona_antena)	{
 
 		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
 
@@ -210,29 +210,42 @@ class Cliente
 
 		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND pt.idpersona_trabajador = '$filtro_trabajador'";	}
 		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(pc.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_anio_pago) 	|| $filtro_anio_pago    == 'TODOS' ) { } else{ 	$filtro_sql_ap 		= "AND YEAR(pc.fecha_cancelacion)  = '$filtro_anio_pago'";	}
 		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
 		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
 		
-		$sql = "SELECT pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
-		pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, 	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,
-		cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
-		CASE 
-			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
-			ELSE '-'
-		END AS cliente_nombre_completo, 
-		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, 
-		pl.nombre as nombre_plan,pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc
-		FROM persona_cliente as pc
+		$sql = "SELECT 
+				pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, YEAR(pc.fecha_cancelacion) anio_cancelacion,	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento, cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
+				CASE 
+					WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+					WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+					ELSE '-'
+				END AS cliente_nombre_completo, 
+				p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc,
+			CASE WHEN v.name_month = 'January'  AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_enero,
+			CASE WHEN v.name_month = 'February' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_febrero,
+			CASE WHEN v.name_month = 'March' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_marzo,
+			CASE WHEN v.name_month = 'April' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_abril,
+			CASE WHEN v.name_month = 'May' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_mayo,
+			CASE WHEN v.name_month = 'June' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_junio,
+			CASE WHEN v.name_month = 'July' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_julio,
+			CASE WHEN v.name_month = 'August' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_agosto,
+			CASE WHEN v.name_month = 'September' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_septiembre,
+			CASE WHEN v.name_month = 'October' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_octubre,
+			CASE WHEN v.name_month = 'November' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_noviembre,
+			CASE WHEN v.name_month = 'December' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_diciembre
+			
+		FROM persona_cliente AS pc
 		INNER JOIN persona AS p on pc.idpersona=p.idpersona
 		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador
 		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
 		INNER JOIN plan as pl on pc.idplan=pl.idplan
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
 		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
-		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
-		where pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
-		ORDER BY pc.idpersona_cliente DESC";
+		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado        
+		LEFT JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente
+		WHERE pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za
+		GROUP BY pc.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
