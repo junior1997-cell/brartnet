@@ -245,7 +245,8 @@ class Cliente
 		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado        
 		LEFT JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente
 		WHERE pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za
-		GROUP BY pc.idpersona_cliente DESC";
+		GROUP BY pc.idpersona_cliente
+		ORDER BY pc.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
