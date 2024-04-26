@@ -196,7 +196,7 @@ class Cliente
 
 	public function ver_pagos_all_cliente($filtro_trabajador, $filtro_dia_pago, $filtro_anio_pago, $filtro_plan, $filtro_zona_antena)	{
 
-		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_ap = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
 
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
 
