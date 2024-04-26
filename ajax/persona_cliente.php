@@ -381,7 +381,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div></td>
             <td class="py-0 '.$bg_light.' text-center" >'.$val['fecha_cancelacion_format'].'</td>
             <td class="py-0 '.$bg_light.' text-nowrap" >S/ '.$val['costo'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['anio_cancelacion'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['periodo_pago_year'].'</td>
             <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_enero'].'</td>
             <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_febrero'].'</td>
             <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_marzo'].'</td>

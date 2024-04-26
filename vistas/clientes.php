@@ -80,7 +80,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       <div class="form-group">
                         <label for="filtro_dia_pago" class="form-label">                         
                           <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_dia');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                          Día de pago
+                          Día de Afiliación
                           <span class="charge_filtro_dia_pago"></span>
                         </label>
                         <select class="form-control" name="filtro_dia_pago" id="filtro_dia_pago" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
@@ -527,7 +527,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <div class="form-group">
                           <label for="filtro_p_all_dia_pago" class="form-label">                         
                             <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_dia_pago');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                            Día
+                            Día Afiliación
                             <span class="charge_filtro_p_all_dia_pago"></span>
                           </label>
                           <select class="form-control" name="filtro_p_all_dia_pago" id="filtro_p_all_dia_pago" onchange="cargando_search_pago_all(); delay(function(){filtros_pago_all()}, 50 );" > <!-- lista de categorias --> </select>
@@ -538,7 +538,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <div class="form-group">
                           <label for="filtro_p_all_anio_pago" class="form-label">                         
                             <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_anio_pago');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                            Año
+                            Año de Pago
                             <span class="charge_filtro_p_all_anio_pago"></span>
                           </label>
                           <select class="form-control" name="filtro_p_all_anio_pago" id="filtro_p_all_anio_pago" onchange="cargando_search_pago_all(); delay(function(){filtros_pago_all()}, 50 );" > <!-- lista de categorias --> </select>
