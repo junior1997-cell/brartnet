@@ -14,14 +14,14 @@ use Luecano\NumeroALetras\NumeroALetras;
 date_default_timezone_set('America/Lima');
 
 require "../config/Conexion_v2.php";
-$numero_a_letra = new NumeroALetras(); 
+$numero_a_letra = new NumeroALetras();
 
-$empresa_f  = $facturacion->datos_empresa();    
+$empresa_f  = $facturacion->datos_empresa();
 $venta_f    = $facturacion->mostrar_detalle_venta($rspta['id_tabla']); ##echo $rspta['id_tabla']; echo  json_encode($venta_f , true);  die();
 
-if ( empty($venta_f['data']['venta']) ) {
+if (empty($venta_f['data']['venta'])) {
   # code...
-} else { 
+} else {
 
   // Emrpesa emisora =============
   $e_razon_social       = mb_convert_encoding($empresa_f['data']['nombre_razon_social'], 'ISO-8859-1', 'UTF-8');
@@ -29,7 +29,7 @@ if ( empty($venta_f['data']['venta']) ) {
   $e_domicilio_fiscal   = $empresa_f['data']['domicilio_fiscal'];
   $e_tipo_documento     = $empresa_f['data']['tipo_documento'];
   $e_numero_documento   = $empresa_f['data']['numero_documento'];
-  
+
   $e_distrito           = $empresa_f['data']['distrito'];
   $e_provincia          = $empresa_f['data']['provincia'];
   $e_departamento       = $empresa_f['data']['departamento'];
@@ -44,11 +44,10 @@ if ( empty($venta_f['data']['venta']) ) {
   $fecha_emision        = $venta_f['data']['venta']['fecha_emision'];
   $serie_comprobante    = $venta_f['data']['venta']['serie_comprobante'];
   $numero_comprobante   = $venta_f['data']['venta']['numero_comprobante'];
-  $venta_total          = floatval($venta_f['data']['venta']['venta_total']) ;
+  $venta_total          = floatval($venta_f['data']['venta']['venta_total']);
 
-  //NUMERO A LETRA =============
-  $venta_total    = $venta_f['data']['venta']['venta_total'];
-  $total_en_letra = $numero_a_letra->toInvoice( $venta_total , 2, " SOLES" );   
+  //NUMERO A LETRA ============= 
+  $total_en_letra = $numero_a_letra->toInvoice($venta_total, 2, " SOLES");
 
 
   /* 
@@ -65,7 +64,7 @@ if ( empty($venta_f['data']['venta']) ) {
 
   // Emisor
   $address = (new Address())
-    ->setUbigueo($e_codubigueo )
+    ->setUbigueo($e_codubigueo)
     ->setDepartamento($e_departamento)
     ->setProvincia($e_provincia)
     ->setDistrito($e_distrito)
@@ -75,7 +74,7 @@ if ( empty($venta_f['data']['venta']) ) {
 
   // Emisor
   $company = (new Company())
-    ->setRuc($e_numero_documento )
+    ->setRuc($e_numero_documento)
     ->setRazonSocial($e_razon_social)
     ->setNombreComercial($e_comercial)
     ->setAddress($address);
@@ -100,33 +99,38 @@ if ( empty($venta_f['data']['venta']) ) {
     ->setSubTotal($venta_total)
     ->setMtoImpVenta($venta_total);
 
+  $i = 0;
+
   foreach ($venta_f['data']['detalle'] as $key => $val) {
 
-    $nombre_producto  = mb_convert_encoding( $val['nombre_producto'], 'ISO-8859-1', 'UTF-8');
+    $nombre_producto  = mb_convert_encoding($val['nombre_producto'], 'ISO-8859-1', 'UTF-8');
     $cantidad         = floatval($val['cantidad']);
     $precio_venta     = floatval($val['precio_venta']);
-    $subtotal         = floatval($val['subtotal']);  
+    $subtotal         = floatval($val['subtotal']);
 
     $detail = new SaleDetail();
-    $detail->setCodProducto($val['codigo']) 
+    $detail->setCodProducto($val['codigo'])
       ->setUnidad('NIU')                        // Unidad - Catalog. 03
-      ->setDescripcion( $nombre_producto )      // Nombre de producto
-      ->setCantidad( $cantidad )
-      ->setMtoValorUnitario( $precio_venta )
+      ->setDescripcion($nombre_producto)      // Nombre de producto
+      ->setCantidad($cantidad)
+      ->setMtoValorUnitario($precio_venta)
       ->setMtoValorVenta($subtotal)
       ->setMtoBaseIgv($subtotal)
-      ->setPorcentajeIgv(18)                    // 18%
+      ->setPorcentajeIgv(0)                    // 18%
       ->setIgv(0)
       ->setTipAfeIgv('20')                      // Exonerado Op. Onerosa - Catalog. 07
       ->setTotalImpuestos(0)                    // Suma de impuestos en el detalle
       ->setMtoPrecioUnitario($precio_venta);
+
+    $arrayItem[$i] = $detail;
+    $i++;
   }
 
-  $invoice->setDetails([$detail])
+  $invoice->setDetails($arrayItem)
     ->setLegends([
       (new Legend())
         ->setCode('1000') // Monto en letras - Catalog. 52
-        ->setValue($total_en_letra )
+        ->setValue($total_en_letra)
     ]);
 
   /* 
@@ -144,10 +148,10 @@ if ( empty($venta_f['data']['venta']) ) {
   // Verificamos que la conexión con SUNAT fue exitosa.
   if (!$result->isSuccess()) {
     // Mostrar error al conectarse a SUNAT.
-    $sunat_error = limpiarCadena("Codigo Error: " . $result->getError()->getCode() ." \n Mensaje Error: " . $result->getError()->getMessage());
+    $sunat_error = limpiarCadena("Codigo Error: " . $result->getError()->getCode() . " \n Mensaje Error: " . $result->getError()->getMessage());
     $code = (int)$result->getError()->getCode();
-     if ($code === 0) {
-      $sunat_estado = 'ACEPTADA' . PHP_EOL;      
+    if ($code === 0) {
+      $sunat_estado = 'ACEPTADA' . PHP_EOL;
     } else if ($code >= 2000 && $code <= 3999) {
       $sunat_estado = 'RECHAZADA' . PHP_EOL;
     } else {
@@ -177,8 +181,11 @@ if ( empty($venta_f['data']['venta']) ) {
     if ($code === 0) {
       $sunat_estado = 'ACEPTADA' . PHP_EOL;
       if (count($cdr->getNotes()) > 0) {
-        $sunat_estado = 'OBSERVACIONES' . PHP_EOL;    
-        $sunat_observacion = $cdr->getNotes(); # Corregir estas observaciones en siguientes emisiones. var_dump()
+        $sunat_estado = 'OBSERVACIONES' . PHP_EOL;
+        // $sunat_observacion = $cdr->getNotes(); # Corregir estas observaciones en siguientes emisiones. var_dump()
+        foreach ($cdr->getNotes() as $key => $val) {
+          $sunat_observacion .= $val . "<br>";
+        }
       }
     } else if ($code >= 2000 && $code <= 3999) {
       $sunat_estado = 'RECHAZADA' . PHP_EOL;
@@ -194,12 +201,11 @@ if ( empty($venta_f['data']['venta']) ) {
     * ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     * Lectura del codgo Hash 
     + ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    */ 
+    */
 
     $parser = new XmlReader();
     $archivoXml = file_get_contents($nombre_xml);
     $documento = $parser->getDocument($archivoXml);
-    $sunat_hash = $documento->getElementsByTagName('DigestValue')->item(0)->nodeValue; 
-
+    $sunat_hash = $documento->getElementsByTagName('DigestValue')->item(0)->nodeValue;
   }
 }

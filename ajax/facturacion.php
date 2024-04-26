@@ -16,8 +16,8 @@ if (!isset($_SESSION["user_nombre"])) {
     require_once "../modelos/Correlacion_comprobante.php";
     require_once "../modelos/Producto.php";
 
-    require '../vendor/autoload.php';
-    $see = require '../modelos/SunatCertificado.php';
+    require '../vendor/autoload.php';                   // CONEXION A COMPOSER
+    $see = require '../modelos/SunatCertificado.php';   // EMISION DE COMPROBANTES
 
     $facturacion        = new Facturacion();    
     $gasto_trab         = new Gasto_de_trabajador();    
@@ -80,7 +80,9 @@ if (!isset($_SESSION["user_nombre"])) {
               "1" => '<div class="btn-group ">
               <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
               <ul class="dropdown-menu">                
-                <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_ticket(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato Ticket</a></li>                  
+                <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_ticket(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato Ticket</a></li>  
+                <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_a4_comprimido(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato A4 comprimido</a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_a4_completo(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato A4 completo</a></li>                
               </ul>
             </div>',
               "2" =>  $value['fecha_emision_format'],
@@ -117,10 +119,17 @@ if (!isset($_SESSION["user_nombre"])) {
         } else { echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data']; }
       break;
 
-      case 'guardar_editar_facturacion':        
+      case 'guardar_editar_facturacion':
 
         $rspta = ""; $mp_comprobante = ""; 
         $sunat_estado = ""; $sunat_observacion= ""; $sunat_code= ""; $sunat_hash= ""; $sunat_mensaje= ""; $sunat_error= ""; 
+
+        if ( floatval($venta_total) > 699 ) {
+          # code...
+        } else {
+          # code...
+        }
+        
 
         if ($metodo_pago == 'EFECTIVO' ) {
           # code...
@@ -158,32 +167,33 @@ if (!isset($_SESSION["user_nombre"])) {
           echo json_encode($retorno, true);
         }
         
-        if ($tipo_comprobante == '12') {         
-
-        } else if ($tipo_comprobante == '01') {    
+        if ($tipo_comprobante == '12') {          // SUNAT TICKET     
+          echo json_encode($rspta, true);
+        } else if ($tipo_comprobante == '01') {   // SUNAT FACTURA
 
           if ($rspta['status'] == true) {
 
             include( '../modelos/SunatFactura.php');
-            $facturacion->actualizar_respuesta_sunat( $rspta['id_tabla'], $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            $update_sunat = $facturacion->actualizar_respuesta_sunat( $rspta['id_tabla'], $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            
             if ( empty($sunat_error) ) {
-              echo json_encode($rspta, true);
+              echo json_encode($rspta, true); 
             } else {              
               $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
-              echo json_encode($retorno, true);
+              echo json_encode($retorno, true); 
             }            
           } else {            
             echo json_encode($rspta, true);
           }         
           
-        } else if ($tipo_comprobante == '03') {   
+        } else if ($tipo_comprobante == '03') {   // SUNAT BOLETA 
 
           if ($rspta['status'] == true) {
 
             include( '../modelos/SunatBoleta.php');
-            $facturacion->actualizar_respuesta_sunat( $rspta['id_tabla'], $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            $update_sunat = $facturacion->actualizar_respuesta_sunat( $rspta['id_tabla'], $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
             if ( empty($sunat_error) ) {
-              echo json_encode($rspta, true);
+              echo json_encode($rspta, true); 
             } else {              
               $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
               echo json_encode($retorno, true);
@@ -192,8 +202,7 @@ if (!isset($_SESSION["user_nombre"])) {
             echo json_encode($rspta, true);
           }   
 
-        } else {        
-
+        } else {
           $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'SUNAT en mantenimiento!!', 'message' => 'El sistema de sunat esta mantenimiento, esperamos su comprención, sea paciente', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
           echo json_encode($retorno, true);
         }
@@ -342,7 +351,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $tipo_documento   = $value['tipo_documento'];
             $numero_documento = $value['numero_documento'];
             $direccion        = $value['direccion'];
-            $data .= '<option tipo_documento="'.$tipo_documento.'" numero_documento="'.$numero_documento.'" direccion="'.$direccion.'" value="' . $value['idpersona_cliente']  . '">' . $value['nombre_razonsocial'] . ' '. $value['apellidos_nombrecomercial'] . ' - '. $value['nombre_tipo_documento'].': '. $value['numero_documento'] . '</option>';
+            $data .= '<option tipo_documento="'.$tipo_documento.'" numero_documento="'.$numero_documento.'" direccion="'.$direccion.'" value="' . $value['idpersona_cliente']  . '">' . $value['cliente_nombre_completo']  . ' - '. $value['nombre_tipo_documento'].': '. $value['numero_documento'] . ' - '. $value['plan_pago'].': '. $value['plan_costo'] . '</option>';
           }
 
           $retorno = array(

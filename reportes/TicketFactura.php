@@ -112,7 +112,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     <head>
       <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
+      <title><?php echo $venta['data']['venta']['nombre_comprobante'] .' - '. $venta['data']['venta']['serie_y_numero_comprobante'] ; ?></title>
       <!-- Bootstrap Css -->
       <link id="style" href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
       <!-- Style Css -->

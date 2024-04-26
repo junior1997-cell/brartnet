@@ -359,21 +359,21 @@ function es_valido_cliente() {
     var es_valido = true; 
     
 
-    if (tipo_comprobante == '01') {
+    if (tipo_comprobante == '01') {       // FACTURA
       
       if ( tipo_documento == '6'  ) { }else{ campos_requeridos = campos_requeridos.concat(`<li>Tipo de Documento: RUC</li>`);  }
       if ( numero_documento != '' ) { }else{ campos_requeridos = campos_requeridos.concat(`<li>Numero de Documento</li>`);  }
       if ( direccion != '' ) {    }else{  campos_requeridos = campos_requeridos.concat(`<li>Direccion</li>`);  }
       if (tipo_documento == '6' && numero_documento != '' && direccion != '' ) {  es_valido = true;  } else {   es_valido = false; }
 
-    } else if (tipo_comprobante == '03' || id_cliente == '1') {
+    } else if (tipo_comprobante == '03' || id_cliente == '1') {  // BOLETA
       
-      if ( tipo_documento == '1' ) {  }else{  campos_requeridos = campos_requeridos.concat(`<li>Tipo de Documento: DNI</li>`);  }
+      if ( tipo_documento == '1' || tipo_documento == '6' ) {  }else{  campos_requeridos = campos_requeridos.concat(`<li>Tipo de Documento: DNI o RUC</li>`);  }
       if ( numero_documento != '' ) {  }else{  campos_requeridos = campos_requeridos.concat(`<li>Numero de Documento</li>`);  }
       if ( direccion == '' || direccion == null ) {  campos_requeridos = campos_requeridos.concat(`<li>Direccion</li>`);  }else{    }
-      if ( (tipo_documento == '1' || tipo_documento == '0' ) && numero_documento != ''  ) { es_valido = true; } else {  es_valido = false; }
+      if ( (tipo_documento == '1' || tipo_documento == '6' || tipo_documento == '0' ) && numero_documento != ''  ) { es_valido = true; } else {  es_valido = false; }
 
-    } else if (tipo_comprobante == '12' ) {
+    } else if (tipo_comprobante == '12' ) { // TICKET
       es_valido = true;
     }
 
@@ -391,20 +391,20 @@ function es_valido_cliente() {
 // ::::::::::::::::::::::::::::::::::::::::::::: FORMATOS DE IMPRESION :::::::::::::::::::::::::::::::::::::::::::::
 
 function ver_formato_ticket(idventa, tipo_comprobante) {
-  
+  $("#modal-imprimir-comprobante .modal-dialog").removeClass("modal-sm modal-lg modal-xl modal-xxl").addClass("modal-md");
   if (tipo_comprobante == '01') {
     var rutacarpeta = "../reportes/TicketFactura.php?id=" + idventa;
-    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET`);
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - FACTURA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '03') {
     var rutacarpeta = "../reportes/TicketBoleta.php?id=" + idventa;
-    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET`);
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - BOLETA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '12') {
     var rutacarpeta = "../reportes/TicketNotaVenta.php?id=" + idventa;
-    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET`);
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - NOTA DE VENTA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
 
@@ -413,6 +413,39 @@ function ver_formato_ticket(idventa, tipo_comprobante) {
     toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
   }
 }
+
+function ver_formato_a4_comprimido(idventa, tipo_comprobante) {
+  $("#modal-imprimir-comprobante .modal-dialog").removeClass("modal-sm modal-md modal-lg modal-xxl").addClass("modal-xl");
+  if (tipo_comprobante == '01') {
+    var rutacarpeta = "../reportes/A4FacturaComprimido.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir A4" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO A4 - FACTURA`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+  } else if (tipo_comprobante == '03') {
+    var rutacarpeta = "../reportes/A4BoletaComprimido.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir A4" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO A4 - BOLETA`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+  } else if (tipo_comprobante == '12') {
+    var rutacarpeta = "../reportes/A4NotaVentaComprimido.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir A4" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO A4 - NOTA DE VENTA`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+
+  } else  {
+    // toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+    toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
+  }
+}
+
+function ver_formato_a4_completo(idventa, tipo_comprobante) {
+  
+  
+    toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+    // toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
+  
+}
+
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O D U C T O S :::::::::::::::::::::::::::::::::::::::::::::
 function limpiar_form_producto(){

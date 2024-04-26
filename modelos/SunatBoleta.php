@@ -37,7 +37,7 @@ if (empty($venta_f['data']['venta'])) {
 
   // Cliente receptor =============
   $c_nombre_completo    = $venta_f['data']['venta']['cliente_nombre_completo'];
-  $c_tipo_documento     = $venta_f['data']['venta']['nombre_tipo_documento'];
+  $c_tipo_documento     = $venta_f['data']['venta']['tipo_documento'];
   $c_numero_documento   = $venta_f['data']['venta']['numero_documento'];
   $c_direccion          = $venta_f['data']['venta']['direccion'];
 
@@ -66,7 +66,7 @@ if (empty($venta_f['data']['venta'])) {
 
   // Cliente
   $client = new Client();
-  $client->setTipoDoc('1')
+  $client->setTipoDoc($c_tipo_documento)
     ->setNumDoc($c_numero_documento)
     ->setRznSocial($c_nombre_completo);
 
@@ -106,6 +106,8 @@ if (empty($venta_f['data']['venta'])) {
     ->setMtoImpVenta($venta_total)
     ->setCompany($company);
 
+  $i = 0;
+
   foreach ($venta_f['data']['detalle'] as $key => $val) {
     $nombre_producto  = mb_convert_encoding($val['nombre_producto'], 'ISO-8859-1', 'UTF-8');
     $cantidad         = floatval($val['cantidad']);
@@ -118,20 +120,23 @@ if (empty($venta_f['data']['venta'])) {
       ->setCantidad($cantidad )
       ->setDescripcion($nombre_producto)
       ->setMtoBaseIgv($subtotal)
-      ->setPorcentajeIgv(18.00) // 18%
+      ->setPorcentajeIgv(0) // 18%
       ->setIgv(0)
       ->setTipAfeIgv('20')
       ->setTotalImpuestos(0)
       ->setMtoValorVenta($subtotal)
       ->setMtoValorUnitario($precio_venta)
       ->setMtoPrecioUnitario($precio_venta);
+
+    $arrayItem[$i] = $item;
+    $i++;
   }
 
   $legend = (new Legend())
     ->setCode('1000')
     ->setValue($total_en_letra);
 
-  $invoice->setDetails([$item])
+  $invoice->setDetails($arrayItem)
     ->setLegends([$legend]);
 
   /* 
@@ -183,7 +188,10 @@ if (empty($venta_f['data']['venta'])) {
       $sunat_estado = 'ACEPTADA' . PHP_EOL;
       if (count($cdr->getNotes()) > 0) {
         $sunat_estado = 'OBSERVACIONES' . PHP_EOL;
-        $sunat_observacion = $cdr->getNotes(); # Corregir estas observaciones en siguientes emisiones. var_dump()
+        // $sunat_observacion = $cdr->getNotes(); # Corregir estas observaciones en siguientes emisiones. var_dump()
+        foreach ($cdr->getNotes() as $key => $val) {
+          $sunat_observacion .= $val . "<br>";
+        }
       }
     } else if ($code >= 2000 && $code <= 3999) {
       $sunat_estado = 'RECHAZADA' . PHP_EOL;

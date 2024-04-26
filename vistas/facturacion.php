@@ -92,7 +92,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th>Proveedor</th>
                           <th>Correlativo</th>
                           <th>Total</th> 
-                          <th>SUNAT</th>                          
+                          <th>SUNAT</th>                       
                         </tr>
                       </thead>
                       <tbody></tbody>
