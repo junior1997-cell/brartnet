@@ -1,4 +1,6 @@
 <?php
+
+
 ob_start();
 if (strlen(session_id()) < 1) { session_start(); }
 
@@ -13,6 +15,9 @@ if (!isset($_SESSION["user_nombre"])) {
     require_once "../modelos/Gasto_de_trabajador.php";
     require_once "../modelos/Correlacion_comprobante.php";
     require_once "../modelos/Producto.php";
+
+    require '../vendor/autoload.php';
+    $see = require '../modelos/SunatCertificado.php';
 
     $facturacion        = new Facturacion();    
     $gasto_trab         = new Gasto_de_trabajador();    
@@ -90,7 +95,13 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>',
               "4" =>  '<b>'.$value['tp_comprobante'].'</b>' . ' ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'],
               "5" =>  $value['venta_total'] , 
-              "6" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px;">' . $value['observacion_documento'] . '</div>',              
+              "6" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px;"><b>Estado:</b> ' . 
+                $value['sunat_estado'] .
+                '<br> <b>Mensaje:</b> '.  $value['sunat_mensaje'] . 
+                '<br> <b>Observacion:</b> '.  $value['sunat_observacion'] .
+                '<br> <b>Codigo:</b> '.  $value['sunat_code'] .
+                '<br> <b>Error:</b> '.  $value['sunat_error'] .
+              '</div>',              
               
             ];
           }
@@ -106,63 +117,83 @@ if (!isset($_SESSION["user_nombre"])) {
         } else { echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data']; }
       break;
 
-      case 'guardar_editar_facturacion':
+      case 'guardar_editar_facturacion':        
 
+        $rspta = ""; $mp_comprobante = ""; 
+        $sunat_estado = ""; $sunat_observacion= ""; $sunat_code= ""; $sunat_hash= ""; $sunat_mensaje= ""; $sunat_error= ""; 
+
+        if ($metodo_pago == 'EFECTIVO' ) {
+          # code...
+        } else {
+          
+          if ( empty($_POST["mp_comprobante"]) || isset($_FILES['mp_comprobante']) && $_FILES['mp_comprobante']['name'] ) {
+            # code...
+          } else {          
+            $mp_comprobante = json_decode($_POST["mp_comprobante"], true);
+            $decoded_data = base64_decode($mp_comprobante['data']);  // Decodificar el archivo base64
+            $ext = explode(".", $mp_comprobante["name"]);          
+            $mp_comprobante = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);          
+            $ruta_destino = '../assets/modulo/facturacion/ticket/'.$mp_comprobante; // Ruta donde deseas guardar el archivo en el servidor
+            
+            if (file_put_contents($ruta_destino, $decoded_data) !== false) { // Guardar el archivo decodificado en el servidor
+              # El archivo se ha guardado correctamente en el servidor
+            } else {
+              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Archivo no aceptado!!', 'message' => 'El archivo de baucher de pago esta corroido, porfavor cambie de archivo', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+              echo json_encode($retorno, true); die();
+            }
+          }      
+        }          
+
+        if (empty($idventa)) {
+          
+          $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento, $es_cobro, $periodo_pago,
+          $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,  $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
+          $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
+          $_POST["descuento"], $_POST["subtotal_producto"]);
+
+          if ($rspta['status'] != true) { echo json_encode($rspta, true); die(); } 
+        } else {
+
+          $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Datos incompletos', 'message' => 'No se enviaron los datos completos: idventa', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+          echo json_encode($retorno, true);
+        }
+        
         if ($tipo_comprobante == '12') {         
 
-          $mp_comprobante = "";
+        } else if ($tipo_comprobante == '01') {    
 
-          if ($metodo_pago == 'EFECTIVO' ) {
-            # code...
-          } else {
-            
-            if ( empty($_POST["mp_comprobante"]) || isset($_FILES['mp_comprobante']) && $_FILES['mp_comprobante']['name'] ) {
-              # code...
-            } else {          
-              $mp_comprobante = json_decode($_POST["mp_comprobante"], true);
-              $decoded_data = base64_decode($mp_comprobante['data']);  // Decodificar el archivo base64
-              $ext = explode(".", $mp_comprobante["name"]);          
-              $mp_comprobante = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);          
-              $ruta_destino = '../assets/modulo/facturacion/'.$mp_comprobante; // Ruta donde deseas guardar el archivo en el servidor
-              
-              if (file_put_contents($ruta_destino, $decoded_data) !== false) { // Guardar el archivo decodificado en el servidor
-                # El archivo se ha guardado correctamente en el servidor
-              } else {
-                $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Archivo no aceptado!!', 'message' => 'El archivo de baucher de pago esta corroido, porfavor cambie de archivo', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
-                echo json_encode($retorno, true); die();
-              }
-            }      
-          }        
+          if ($rspta['status'] == true) {
 
-          // if ( !file_exists($_FILES['mp_comprobante']['tmp_name']) || !is_uploaded_file($_FILES['mp_comprobante']['tmp_name']) ) {
-          //   $img_comprob = $_POST["mp_comprobante_old"];
-          //   $flat_img = false; 
-          // } else {          
-          //   $ext = explode(".", $_FILES["mp_comprobante"]["name"]);
-          //   $flat_img = true;
-          //   $img_comprob = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);
-          //   move_uploaded_file($_FILES["mp_comprobante"]["tmp_name"], "../assets/modulo/facturacion/" . $img_comprob);          
-          // } 
-
-          if (empty($idventa)) {
-            
-            $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento, $es_cobro, $periodo_pago,
-            $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,  $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
-            $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
-            $_POST["descuento"], $_POST["subtotal_producto"]);
-
+            include( '../modelos/SunatFactura.php');
+            $facturacion->actualizar_respuesta_sunat( $rspta['id_tabla'], $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            if ( empty($sunat_error) ) {
+              echo json_encode($rspta, true);
+            } else {              
+              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+              echo json_encode($retorno, true);
+            }            
+          } else {            
             echo json_encode($rspta, true);
-          } else {
+          }         
+          
+        } else if ($tipo_comprobante == '03') {   
 
-            $rspta = $facturacion->editar( $idventa, $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion,
-            $venta_subtotal, $tipo_gravada, $venta_igv, $venta_total, $fecha_venta, $img_comprob,
-            $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
-            $_POST["descuento"], $_POST["subtotal_producto"]);
-      
+          if ($rspta['status'] == true) {
+
+            include( '../modelos/SunatBoleta.php');
+            $facturacion->actualizar_respuesta_sunat( $rspta['id_tabla'], $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            if ( empty($sunat_error) ) {
+              echo json_encode($rspta, true);
+            } else {              
+              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+              echo json_encode($retorno, true);
+            }            
+          } else {            
             echo json_encode($rspta, true);
-          }
+          }   
 
-        } else {
+        } else {        
+
           $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'SUNAT en mantenimiento!!', 'message' => 'El sistema de sunat esta mantenimiento, esperamos su comprención, sea paciente', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
           echo json_encode($retorno, true);
         }
@@ -308,13 +339,16 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta = $facturacion->select2_cliente(); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value=' . $value['idpersona_cliente']  . '>' . $value['nombre_razonsocial'] . ' '. $value['apellidos_nombrecomercial'] . ' - '. $value['numero_documento'] . '</option>';
+            $tipo_documento   = $value['tipo_documento'];
+            $numero_documento = $value['numero_documento'];
+            $direccion        = $value['direccion'];
+            $data .= '<option tipo_documento="'.$tipo_documento.'" numero_documento="'.$numero_documento.'" direccion="'.$direccion.'" value="' . $value['idpersona_cliente']  . '">' . $value['nombre_razonsocial'] . ' '. $value['apellidos_nombrecomercial'] . ' - '. $value['nombre_tipo_documento'].': '. $value['numero_documento'] . '</option>';
           }
 
           $retorno = array(
             'status' => true, 
             'message' => 'Salió todo ok', 
-            'data' => '<option  value="1" >CLIENTES VARIOS - 0000000</option>'.$data, 
+            'data' => '<option tipo_documento="0" numero_documento="00000000" direccion="" value="1" >CLIENTES VARIOS - 0000000</option>'.$data, 
           );
           echo json_encode($retorno, true);
 

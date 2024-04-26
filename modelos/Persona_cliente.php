@@ -29,21 +29,13 @@ class Cliente
 		VALUES ( '$idtipo_persona', '$idbancos', '$idcargo_trabajador', '$tipo_persona_sunat', '$nombre_razonsocial', 
 		'$apellidos_nombrecomercial', '$tipo_documento', '$numero_documento', '$fecha_nacimiento', '$celular', '$direccion', '$departamento', '$provincia', 
 		'$distrito', '$ubigeo', '$correo','$img_perfil')";
-		$inst_persona = ejecutarConsulta_retornarID($sql1, 'C');
+		$inst_persona = ejecutarConsulta_retornarID($sql1, 'C');if ($inst_persona['status'] == false) {return $inst_persona;}
 
-		if ($inst_persona['status'] == false) {
-			return $inst_persona;
-		}
 		$id = $inst_persona['data'];
-
 
 		$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador,idcentro_poblado, ip_personal, fecha_afiliacion, fecha_cancelacion,usuario_microtick,nota, descuento, estado_descuento) 
 		VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador','$idselec_centroProbl','$ip_personal', '$fecha_afiliacion', '$fecha_cancelacion', '$usuario_microtick','$nota', '$descuento', '$estado_descuento')";
-
-		$insertar =  ejecutarConsulta($sql2, 'C');
-		if ($inst_persona['status'] == false) {
-			return $inst_persona;
-		}
+		$insertar =  ejecutarConsulta($sql2, 'C');	if ($inst_persona['status'] == false) {	return $inst_persona;	}
 
 		return $insertar;
 	}

@@ -92,7 +92,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th>Proveedor</th>
                           <th>Correlativo</th>
                           <th>Total</th> 
-                          <th>Observacion</th>                          
+                          <th>SUNAT</th>                          
                         </tr>
                       </thead>
                       <tbody></tbody>
@@ -104,7 +104,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th>Proveedor</th>
                           <th>Correlativo</th>
                           <th>Total</th>
-                          <th>Observacion</th>
+                          <th>SUNAT</th>
                         </tr>
                       </tfoot>
                     </table>
@@ -225,7 +225,11 @@ if (!isset($_SESSION["user_nombre"])) {
                       <!-- IMPUESTO -->
                       <input type="hidden" name="idventa" id="idventa" />
                       <!-- IMPUESTO -->
-                      <input type="hidden" class="form-control" name="impuesto" id="impuesto" value="0">                      
+                      <input type="hidden" class="form-control" name="impuesto" id="impuesto" value="0">   
+                      <!-- TIPO DOC -->
+                      <input type="hidden" class="form-control" name="tipo_documento" id="tipo_documento" value="0">  
+                      <!-- NUMERO DOC -->
+                      <input type="hidden" class="form-control" name="numero_documento" id="numero_documento" value="0">                     
 
                       <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                         <div class="row gy-3">
@@ -241,12 +245,13 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="mb-sm-0 mb-2">
                               <p class="fs-14 mb-2 fw-semibold">Tipo de comprobante</p>
                               <div class="mb-0 authentication-btn-group">
+                                <input type="hidden" id="tipo_comprobante_hidden" >
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante1" value="03"  onchange="modificarSubtotales(); ver_series_comprobante(this);">
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante1" value="03"  onchange="modificarSubtotales(); ver_series_comprobante(this); es_valido_cliente();">
                                   <label class="btn btn-outline-primary btn-boleta" for="tipo_comprobante1"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante2" value="01" onchange="modificarSubtotales(); ver_series_comprobante(this);">
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante2" value="01" onchange="modificarSubtotales(); ver_series_comprobante(this); es_valido_cliente();">
                                   <label class="btn btn-outline-primary" for="tipo_comprobante2"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante3" value="12" onchange="modificarSubtotales(); ver_series_comprobante(this);">
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante3" value="12" onchange="modificarSubtotales(); ver_series_comprobante(this); es_valido_cliente();">
                                   <label class="btn btn-outline-primary" for="tipo_comprobante3"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
                                 </div>
                               </div>
@@ -269,7 +274,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 Cliente
                                 <span class="charge_idpersona_cliente"></span>
                               </label>
-                              <select class="form-control" name="idpersona_cliente" id="idpersona_cliente" onchange="usar_anticipo_valid();"></select>
+                              <select class="form-control" name="idpersona_cliente" id="idpersona_cliente" onchange="es_valido_cliente(); usar_anticipo_valid();"></select>
                             </div>
                           </div>   
                           
@@ -637,234 +642,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
           </div> 
-          <!-- End::Modal-Detalle-venta -->
-
-          <!-- MODAL - AGREGAR PROVEEDOR - charge 3,4 -->
-          <div class="modal fade modal-effect" id="modal-agregar-proveedor" tabindex="-1" aria-labelledby="Modal-agregar-proveedorLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h6 class="modal-title title-modal-img" id="Modal-agregar-proveedorLabel1">Agregar Proveedor</h6>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body px-4">
-                                      
-                    <form name="form-agregar-proveedor" id="form-agregar-proveedor" method="POST" class="needs-validation" novalidate>
-                            
-                      <div class="row" id="cargando-3-fomulario">
-                        <!-- idpersona -->
-                        <input type="hidden" name="idpersona" id="idpersona" />   
-                        <input type="hidden" name="tipo_persona_sunat" id="tipo_persona_sunat" value="NATURAL" />   
-                        <input type="hidden" name="idtipo_persona" id="idtipo_persona" value="4" />   
-
-                        <div class="col-lg-12 col-xl-12 col-xxl-6">
-                          <div class="row">
-                            <!-- Grupo -->
-                            <div class="col-12 pl-0">
-                              <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b class="mx-2" >DATOS GENERALES</b></label></div>
-                            </div>
-                          </div> <!-- /.row -->
-                          <div class="card-body p-3" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 5px 4px rgb(255 255 255 / 60%);">
-                            <div class="row">
-
-                              <!-- Tipo documento -->
-                              <div class="mb-1 col-md-3 col-lg-3 col-xl-3 col-xxl-6">
-                                <div class="form-group">
-                                  <label for="tipo_documento" class="form-label">Tipo documento:  </label>
-                                  <select name="tipo_documento" id="tipo_documento" class="form-select" required>                                      
-                                  </select>
-                                </div>                                         
-                              </div>
-                              
-                              <!--  Numero Documento -->
-                              <div class="mb-1 col-md-3 col-lg-3 col-xl-3 col-xxl-6">
-                                <div class="form-group">
-                                  <label for="numero_documento" class="form-label">Numero Documento:</label>
-                                  <div class="input-group">                            
-                                    <input type="number" class="form-control" name="numero_documento" id="numero_documento" placeholder="" aria-describedby="icon-view-password">
-                                    <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito', '#titular_cuenta' );" >
-                                      <i class='bx bx-search-alt' id="search_t"></i>
-                                      <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
-                                    </button>
-                                  </div>
-                                </div>                        
-                              </div>         
-                            
-                              <!-- Nombres -->
-                              <div class="mb-1 col-md-6 col-lg-6 col-xl-4 col-xxl-6">
-                                <div class="form-group">
-                                  <label for="nombre_razonsocial" class="form-label label-nom-raz">Nombres:  </label></label>
-                                  <input type="text" class="form-control" name="nombre_razonsocial" id="nombre_razonsocial" >
-                                </div>                                         
-                              </div>
-
-                              <!-- Apellidos -->
-                              <div class="mb-1 col-md-6 col-lg-6 col-xl-4 col-xxl-6 ">
-                                <div class="form-group">
-                                  <label for="apellidos_nombrecomercial" class="form-label label-ape-come">Apellidos:  </label></label>
-                                  <input type="text" class="form-control" name="apellidos_nombrecomercial" id="apellidos_nombrecomercial" >
-                                </div>                                         
-                              </div>
-
-                              <!-- Correo -->
-                              <div class="mb-1 col-md-6 col-lg-4 col-xl-4 col-xxl-6">
-                                <div class="form-group">
-                                  <label for="correo" class="form-label">Correo:</label>
-                                  <input type="email" class="form-control" name="correo" id="correo">
-                                </div>                                         
-                              </div>
-
-                              <!-- Celular -->
-                              <div class="col-md-6 col-lg-3 col-xl-4 col-xxl-6">
-                                <div class="form-group">
-                                  <label for="celular" class="form-label">Celular:</label>
-                                  <input type="tel" class="form-control" name="celular" id="celular" >
-                                </div>                                         
-                              </div>                                   
-
-                            </div> <!-- /.row -->
-                          </div> <!-- /.card-body -->
-                        </div> <!-- /.col-lg-12 -->
-
-                        <div class="col-lg-12 col-xl-12 col-xxl-6">
-                          <div class="row">
-                            <!-- Grupo -->
-                            <div class="col-12 pl-0">
-                              <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b class="mx-2" >UBICACIÓN</b></label></div>
-                            </div>
-                          </div> <!-- /.row -->
-                          <div class="card-body p-3" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 5px 4px rgb(255 255 255 / 60%);">
-                            <div class="row">
-
-                              <!-- Direccion -->
-                              <div class="mb-1 col-md-6 col-lg-6 col-xl-6 col-xxl-6 mt-3">
-                                <div class="form-group">
-                                  <label for="direccion" class="form-label">Direccion:</label>
-                                  <input type="text" class="form-control" name="direccion" id="direccion">
-                                </div>                                         
-                              </div>
-                              <!-- Distrito -->
-                              <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-6 mt-3">
-                                <div class="form-group">
-                                  <label for="distrito" class="form-label">Distrito: </label>
-                                  <select name="distrito" id="distrito" class="form-select" onchange="llenar_dep_prov_ubig(this);" >
-                                    
-                                  </select>
-                                </div>                                         
-                              </div>
-                              <!-- Departamento -->
-                              <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
-                                <div class="form-group">
-                                  <label for="departamento" class="form-label">Departamento: <span class="chargue-pro"></span></label>
-                                  <input type="text" class="form-control" name="departamento" id="departamento">
-                                </div>                                         
-                              </div>
-                              <!-- Provincia -->
-                              <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
-                                <div class="form-group">
-                                  <label for="provincia" class="form-label">Provincia: <span class="chargue-dep"></span></label>
-                                  <input type="text" class="form-control" name="provincia" id="provincia">
-                                </div>                                         
-                              </div>
-                              <!-- Ubigeo -->
-                              <div class="mb-1 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
-                                <div class="form-group">
-                                  <label for="ubigeo" class="form-label">Ubigeo: <span class="chargue-ubi"></span></label>
-                                  <input type="text" class="form-control" name="ubigeo" id="ubigeo">
-                                </div>                                         
-                              </div>
-                            </div> <!-- /.row -->
-                          </div> <!-- /.card-body -->
-                        </div> <!-- /.col-lg-12 -->
-
-                        <div class="mt-3 col-lg-12 col-xl-12 col-xxl-12">
-                          <div class="row">
-                            <!-- Grupo -->
-                            <div class="col-12 pl-0">
-                              <div class="text-primary p-l-10px" style="position: relative; top: 10px;"><label class="bg-white" for=""><b class="mx-2" >BANCO</b></label></div>
-                            </div>
-                          </div> <!-- /.row -->
-                          <div class="card-body p-3" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 5px 4px rgb(255 255 255 / 60%);">
-                            <div class="row">
-
-                              <!-- Banco -->
-                              <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-4 mt-3">
-                                <div class="form-group">
-                                  <label for="idbanco" class="form-label">Entidad Financiera:  </label>
-                                  <select name="idbanco" id="idbanco" class="form-select" required>                                       
-                                  </select>
-                                </div>                                         
-                              </div>
-
-                              <!-- Cuenta Bancaria -->
-                              <div class="mb-1 col-md-6 col-lg-4 col-xl-4 col-xxl-4 mt-3">
-                                <div class="form-group">
-                                  <label for="cuenta_bancaria" class="form-label">Cuenta Bancaria:</label>
-                                  <input type="text" class="form-control" name="cuenta_bancaria" id="cuenta_bancaria" >
-                                </div>                                         
-                              </div>
-
-                              <!-- CCI -->
-                              <div class="mb-1 col-md-6 col-lg-3 col-xl-4 col-xxl-4 mt-3">
-                                <div class="form-group">
-                                  <label for="cci" class="form-label">CCI:</label>
-                                  <input type="text" class="form-control" name="cci" id="cci" >
-                                </div>                                         
-                              </div>
-
-                            </div> <!-- /.row -->
-                          </div> <!-- /.card-body -->
-                        </div> <!-- /.col-lg-12 -->
-
-                        <!-- Imgen -->
-                        <div class="col-md-4 col-lg-4 mt-4">
-                          <span class="" > <b>Logo Proveedor</b> </span>
-                          <div class="mb-4 mt-2 d-sm-flex align-items-center">
-                            <div class="mb-0 me-5">
-                              <span class="avatar avatar-xxl avatar-rounded">
-                                <img src="../assets/images/default/default_proveedor.png" alt="" id="imagenmuestra" onerror="this.src='../assets/images/default/default_proveedor.png';">
-                                <a href="javascript:void(0);" class="badge rounded-pill bg-primary avatar-badge cursor-pointer">
-                                  <input type="file" class="position-absolute w-100 h-100 op-0" name="imagen" id="imagen" accept="image/*">
-                                  <input type="hidden" name="imagenactual" id="imagenactual">
-                                  <i class="fe fe-camera  "></i>
-                                </a>
-                              </span>
-                            </div>
-                            <div class="btn-group">
-                              <a class="btn btn-primary" onclick="cambiarImagenProveedor()"><i class='bx bx-cloud-upload bx-tada fs-5'></i> Subir</a>
-                              <a class="btn btn-light" onclick="removerImagenProveedor()"><i class="bi bi-trash fs-6"></i> Remover</a>
-                            </div>
-                          </div>
-                        </div> 
-
-                      </div> <!-- /.row -->
-
-                      <div class="row" id="cargando-4-fomulario" style="display: none;" >
-                        <div class="col-lg-12 text-center">                         
-                          <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
-                          <h4 class="bx-flashing">Cargando...</h4>
-                        </div>
-                      </div>  <!-- /.row -->                                   
-                      
-                      <!-- Chargue -->
-                      <div class="p-l-25px col-lg-12" id="barra_progress_proveedor_div" style="display: none;" >
-                        <div  class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 
-                          <div id="barra_progress_proveedor" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
-                        </div>
-                      </div>
-                      <!-- Submit -->
-                      <button type="submit" style="display: none;" id="submit-form-proveedor">Submit</button>
-                    </form>
-                  
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-danger"  data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
-                  <button type="button" class="btn btn-sm btn-success label-btn" id="guardar_registro_proveedor"><i class="bx bx-save bx-tada"></i> Guardar</button>
-                </div>
-              </div>
-            </div>
-          </div> 
-          <!-- End::Modal-Agregar-Proveedor -->
+          <!-- End::Modal-Detalle-venta -->          
           
           <!-- MODAL - AGREGAR PRODUCTO - charge p1 -->
           <div class="modal fade modal-effect" id="modal-agregar-producto" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-productoLabel">

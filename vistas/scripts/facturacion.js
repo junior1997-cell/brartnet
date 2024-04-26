@@ -6,9 +6,9 @@ var file_pond_mp_comprobante;
 
 // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T C H O I C E ══════════════════════════════════════
 
-const choice_distrito       = new Choices('#distrito',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
-const choice_tipo_documento = new Choices('#tipo_documento',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
-const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+// const choice_distrito       = new Choices('#distrito',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+// const choice_tipo_documento = new Choices('#tipo_documento',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+// const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
 
 function init(){
 
@@ -29,9 +29,9 @@ function init(){
   lista_select2("../ajax/facturacion.php?op=select_u_medida", '#u_medida', null);
   lista_select2("../ajax/facturacion.php?op=select_marca", '#marca', null);
 
-  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_distrito", choice_distrito, null);
-  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_tipo_documento", choice_tipo_documento, null);  
-  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", choice_idbanco, null);
+  // lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_distrito", choice_distrito, null);
+  // lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_tipo_documento", choice_tipo_documento, null);  
+  // lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", choice_idbanco, null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idpersona_cliente").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -295,7 +295,8 @@ function ver_series_comprobante(input) {
   $(".charge_serie_comprobante").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
 
   var tipo_comprobante = $(input).val() == ''  || $(input).val() == null ? '' : $(input).val();
-  
+  $('#tipo_comprobante_hidden').val(tipo_comprobante);
+
   $.getJSON("../ajax/facturacion.php?op=select2_series_comprobante", { tipo_comprobante: tipo_comprobante },  function (e, status) {    
     if (e.status == true) {      
       $("#serie_comprobante").html(e.data);
@@ -322,17 +323,20 @@ function es_cobro_valid() { console.log($(".es_cobro").hasClass("on"));
 // ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR ANTICIPOS :::::::::::::::::::::::::::::::::::::::::::::
 function usar_anticipo_valid() { 
   $("#ua_monto_usado").val('');
+
+  var id_cliente = $('#idpersona_cliente').val() == ''  || $('#idpersona_cliente').val() == null ? '' : $('#idpersona_cliente').val(); 
+
   if ($(".usar_anticipo").hasClass("on") == true) {
+
     $("#usar_anticipo").val("SI");
     $(".datos-de-saldo").show("slow");
-    var id_cliente = $('#idpersona_cliente').val() == ''  || $('#idpersona_cliente').val() == null ? '' : $('#idpersona_cliente').val();
-    if (id_cliente != null && id_cliente != '') {
+    if (id_cliente != '') {
       $.getJSON(`../ajax/facturacion.php?op=mostrar_anticipos`, {id_cliente:id_cliente}, function (e, textStatus, jqXHR) {
         $("#ua_monto_disponible").val(e.data.total_anticipo);
         if (form_validate_facturacion) { $("#ua_monto_usado").rules('add', { required: true, max: parseFloat(e.data.total_anticipo) , messages: {  required: "Campo requerido", max: "Saldo disponible: {0}" } }); }
         $("#form-facturacion").valid();
       });
-    }    
+    }
   } else {
     $("#usar_anticipo").val("NO");
     $(".datos-de-saldo").hide("slow");
@@ -341,14 +345,63 @@ function usar_anticipo_valid() {
   }
 }
 
+// ::::::::::::::::::::::::::::::::::::::::::::: CLIENTE VALIDO :::::::::::::::::::::::::::::::::::::::::::::
+function es_valido_cliente() {
+  var id_cliente = $('#idpersona_cliente').val() == ''  || $('#idpersona_cliente').val() == null ? '' : $('#idpersona_cliente').val();
+
+  if (id_cliente != null && id_cliente != '') {
+
+    var tipo_comprobante = $('#tipo_comprobante_hidden').val() == ''  || $('#tipo_comprobante_hidden').val() == null ? '' : $('#tipo_comprobante_hidden').val();
+    var tipo_documento    = $('#idpersona_cliente').select2('data')[0].element.attributes.tipo_documento.value;
+    var numero_documento  = $('#idpersona_cliente').select2('data')[0].element.attributes.numero_documento.value;
+    var direccion         = $('#idpersona_cliente').select2('data')[0].element.attributes.direccion.value;  
+    var campos_requeridos = ""; 
+    var es_valido = true; 
+    
+
+    if (tipo_comprobante == '01') {
+      
+      if ( tipo_documento == '6'  ) { }else{ campos_requeridos = campos_requeridos.concat(`<li>Tipo de Documento: RUC</li>`);  }
+      if ( numero_documento != '' ) { }else{ campos_requeridos = campos_requeridos.concat(`<li>Numero de Documento</li>`);  }
+      if ( direccion != '' ) {    }else{  campos_requeridos = campos_requeridos.concat(`<li>Direccion</li>`);  }
+      if (tipo_documento == '6' && numero_documento != '' && direccion != '' ) {  es_valido = true;  } else {   es_valido = false; }
+
+    } else if (tipo_comprobante == '03' || id_cliente == '1') {
+      
+      if ( tipo_documento == '1' ) {  }else{  campos_requeridos = campos_requeridos.concat(`<li>Tipo de Documento: DNI</li>`);  }
+      if ( numero_documento != '' ) {  }else{  campos_requeridos = campos_requeridos.concat(`<li>Numero de Documento</li>`);  }
+      if ( direccion == '' || direccion == null ) {  campos_requeridos = campos_requeridos.concat(`<li>Direccion</li>`);  }else{    }
+      if ( (tipo_documento == '1' || tipo_documento == '0' ) && numero_documento != ''  ) { es_valido = true; } else {  es_valido = false; }
+
+    } else if (tipo_comprobante == '12' ) {
+      es_valido = true;
+    }
+
+    if (es_valido == true) {
+     
+    } else {
+      sw_cancelar('Cliente no permitido', `El cliente no cumple con los siguientes requsitos:  <ul class="pt-3 text-left font-size-13px"> ${campos_requeridos} </ul>`, 10000);
+      $("#idpersona_cliente").val('').trigger('change'); 
+    }   
+    
+    console.log(tipo_comprobante, tipo_documento, numero_documento, direccion, es_valido);
+  }    
+}
+
 // ::::::::::::::::::::::::::::::::::::::::::::: FORMATOS DE IMPRESION :::::::::::::::::::::::::::::::::::::::::::::
 
 function ver_formato_ticket(idventa, tipo_comprobante) {
   
   if (tipo_comprobante == '01') {
-    toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+    var rutacarpeta = "../reportes/TicketFactura.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '03') {
-    toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+    var rutacarpeta = "../reportes/TicketBoleta.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '12') {
     var rutacarpeta = "../reportes/TicketNotaVenta.php?id=" + idventa;
     $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET`);
