@@ -218,22 +218,23 @@ class Cliente
 				pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, YEAR(pc.fecha_cancelacion) anio_cancelacion,	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento, cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
 				CASE 
 					WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+					WHEN p.tipo_persona_sunat = 'NINGUNO' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 					WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
 					ELSE '-'
 				END AS cliente_nombre_completo, 
 				p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc,
-			CASE WHEN v.name_month = 'January'  AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_enero,
-			CASE WHEN v.name_month = 'February' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_febrero,
-			CASE WHEN v.name_month = 'March' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_marzo,
-			CASE WHEN v.name_month = 'April' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_abril,
-			CASE WHEN v.name_month = 'May' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_mayo,
-			CASE WHEN v.name_month = 'June' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_junio,
-			CASE WHEN v.name_month = 'July' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_julio,
-			CASE WHEN v.name_month = 'August' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_agosto,
-			CASE WHEN v.name_month = 'September' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_septiembre,
-			CASE WHEN v.name_month = 'October' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_octubre,
-			CASE WHEN v.name_month = 'November' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_noviembre,
-			CASE WHEN v.name_month = 'December' AND v.es_cobro = 'SI' THEN v.venta_total ELSE ' ' END AS venta_diciembre
+				SUM(CASE WHEN v.periodo_pago_month = 'Enero'  AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_enero,
+			SUM(CASE WHEN v.periodo_pago_month = 'Febrero' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_febrero,
+			SUM(CASE WHEN v.periodo_pago_month = 'Marzo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_marzo,
+			SUM(CASE WHEN v.periodo_pago_month = 'Abril' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_abril,
+			SUM(CASE WHEN v.periodo_pago_month = 'Mayo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_mayo,
+			SUM(CASE WHEN v.periodo_pago_month = 'Junio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_junio,
+			SUM(CASE WHEN v.periodo_pago_month = 'Julio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_julio,
+			SUM(CASE WHEN v.periodo_pago_month = 'Agosto' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_agosto,
+			SUM(CASE WHEN v.periodo_pago_month = 'Septiembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_septiembre,
+			SUM(CASE WHEN v.periodo_pago_month = 'Octubre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_octubre,
+			SUM(CASE WHEN v.periodo_pago_month = 'Noviembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_noviembre,
+			SUM(CASE WHEN v.periodo_pago_month = 'Diciembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_diciembre
 			
 		FROM persona_cliente AS pc
 		INNER JOIN persona AS p on pc.idpersona=p.idpersona
