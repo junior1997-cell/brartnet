@@ -27,7 +27,7 @@
       web, web_consulta_cp, correo, logo_c_r, logo, banco1,   cuenta1,  cci1, banco2,   cuenta2,  cci2, banco3,   
       cuenta3,  cci3, banco4,   cuenta4,  cci4, codigo_pais, domicilio_fiscal, distrito, departamento, provincia, ubigueo, 
       codubigueo, texto_libre)
-      VALUES ('RUC', '$documento', '$razon_social', '$nomb_comercial', '$telefono1', '$telefono2', 
+      VALUES ('6', '$documento', '$razon_social', '$nomb_comercial', '$telefono1', '$telefono2', 
       '$web', '$web_consulta', '$correo', '$logo_c_r', '$img_logo', '$banco1',   '$cuenta1',  '$cci1', '$banco2',   '$cuenta2',  '$cci2', '$banco3',   
       '$cuenta3',  '$cci3', '$banco4',   '$cuenta4',  '$cci4', '$codg_pais', '$domicilio_fiscal', '$distrito', '$departamento', '$provincia', '$ubigeo', 
       '$codg_ubigeo', '$referencia')";
@@ -38,7 +38,7 @@
     $web, $web_consulta, $correo, $logo_c_r, $img_logo, $banco1,   $cuenta1,  $cci1, $banco2,   $cuenta2,  $cci2, $banco3,   
     $cuenta3,  $cci3, $banco4,   $cuenta4,  $cci4, $codg_pais, $domicilio_fiscal, $distrito, $departamento, $provincia, $ubigeo, 
     $codg_ubigeo, $referencia){
-      $sql = "UPDATE empresa  SET tipo_documento = 'RUC', numero_documento = '$documento', nombre_razon_social = '$razon_social', 
+      $sql = "UPDATE empresa  SET tipo_documento = '6', numero_documento = '$documento', nombre_razon_social = '$razon_social', 
       nombre_comercial = '$nomb_comercial', telefono1 = '$telefono1', telefono2 = '$telefono2', web = '$web', web_consulta_cp = '$web_consulta', 
       correo = '$correo', logo_c_r = '$logo_c_r', logo = '$img_logo', banco1 = '$banco1',   cuenta1 = '$cuenta1',  cci1 = '$cci1', banco2 = '$banco2',  
       cuenta2 = '$cuenta2',  cci2 = '$cci2', banco3 = '$banco3', cuenta3 = '$cuenta3',  cci3 = '$cci3', banco4 = '$banco4',   cuenta4 = '$cuenta4',  

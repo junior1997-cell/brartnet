@@ -830,6 +830,9 @@ if (!isset($_SESSION["user_nombre"])) {
 
     <!-- Dropzone JS -->
     <script src="../assets/libs/dropzone/dropzone-min.js"></script>
+
+    <!-- HTML Imagen -->
+    <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
     <script src="scripts/facturacion.js"></script>
     <script src="scripts/js_facturacion.js"></script>

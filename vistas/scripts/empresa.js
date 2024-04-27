@@ -337,7 +337,9 @@ function mayus(e) {
 }
 
 
-init();
+$(document).ready(function () {
+  init(); 
+});
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 $(function () {
