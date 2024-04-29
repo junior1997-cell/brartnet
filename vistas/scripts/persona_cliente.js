@@ -536,6 +536,64 @@ function ver_pagos_all_cliente(filtro_trabajador ='', filtro_dia_pago ='', filtr
   });
 }
 
+// .....::::::::::::::::::::::::::::::::::::: V E R   P A G O S  C L I E N T E  P O R   M E S :::::::::::::::::::::::::::::::::::::::..
+
+function pagos_cliente_x_mes(idpersona_cliente, mes, anio){
+
+  console.log("Cliente ID: " + idpersona_cliente + ", Mes: " + mes);
+  var filtroTrabajador = $('#filtro_p_all_trabajador').select2('val');
+  var filtroDiaPago    = $('#filtro_p_all_dia_pago').select2('val');
+  var filtroAnioPago   = anio || $('#filtro_p_all_anio_pago').select2('val');
+  var filtroPlan       = $('#filtro_p_all_plan').select2('val');
+  var filtroZonaAntena = $('#filtro_p_all_zona_antena').select2('val');
+
+  if (filtroTrabajador  == '' || filtroTrabajador == 0 || filtroTrabajador  == null) { filtroTrabajador = ""; nombre_trabajador  = ""; }
+  if (filtroDiaPago     == '' || filtroDiaPago    == 0 || filtroDiaPago     == null) { filtroDiaPago    = ""; nombre_dia_pago    = ""; }
+  if (filtroAnioPago    == '' || filtroAnioPago   == 0 || filtroAnioPago    == null) { filtroAnioPago   = ""; nombre_anio_pago   = ""; }
+  if (filtroPlan        == '' || filtroPlan       == 0 || filtroPlan        == null) { filtroPlan       = ""; nombre_plan        = ""; }
+  if (filtroZonaAntena  == '' || filtroZonaAntena == 0 || filtroZonaAntena  == null) { filtroZonaAntena = ""; nombre_zona_antena = ""; }
+
+  $("#pago-cliente-mes").modal("show");
+  $('#div_tabla_pagos_Cx_mes').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
+
+  $.get(`../ajax/persona_cliente.php?op=pagos_cliente_x_mes&id=${idpersona_cliente}&mes=${mes}&filtroA=${filtroTrabajador}&filtroB=${filtroDiaPago}&filtroC=${filtroAnioPago}&filtroD=${filtroPlan}&filtroE=${filtroZonaAntena}`,  function (e, textStatus, jqXHR) {
+    $('#div_tabla_pagos_Cx_mes').html(e);
+    $('#id_buscando_tabla_pago_xmes').hide();
+    $('[data-bs-toggle="tooltip"]').tooltip();
+  });
+  
+}
+
+
+// .....::::::::::::::::::::::::::::::::::::: I M P R I M I R   T I C K E T :::::::::::::::::::::::::::::::::::::::..
+
+function TickcetPagoCliente(idventa, tipo_comprobante){
+
+  $("#pago-cliente-mes").modal('hide');
+  // console.log(idventa);
+  if (tipo_comprobante == '01') {
+    var rutacarpeta = "../reportes/TicketFactura.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-Label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - FACTURA`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+  } else if (tipo_comprobante == '03') {
+    var rutacarpeta = "../reportes/TicketBoleta.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-Label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - BOLETA`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+  } else if (tipo_comprobante == '12') {
+    var rutacarpeta = "../reportes/TicketNotaVenta.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-Label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - NOTA DE VENTA`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+
+  } else  {
+    // toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+    toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
+  }
+  
+}
+
 
 $(document).ready(function () {
   init();
@@ -800,3 +858,8 @@ function crear_anio_pagos(input) {
   $(input).html(html);
 }
 
+function printIframe(id) {
+  var iframe = document.getElementById(id);
+  iframe.focus(); // Para asegurarse de que el iframe está en foco
+  iframe.contentWindow.print(); // Llama a la función de imprimir del documento dentro del iframe
+}

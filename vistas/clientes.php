@@ -586,7 +586,50 @@ if (!isset($_SESSION["user_nombre"])) {
               
             </div>
           </div>          
-          <!-- End::row-1 -->          
+          <!-- End::row-1 --> 
+          
+          <!-- Start::Modal-pago-cliente-x-mes -->
+          <div class="modal fade" id="pago-cliente-mes" tabindex="-1" aria-labelledby="pago-cliente-mesLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="pago-cliente-mesLabel1">Pagos por Mes</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="table-responsive" id="div_tabla_pagos_Cx_mes">
+                    <div class="row" >
+                      <div class="col-lg-12 text-center">
+                        <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                        <h4 class="bx-flashing">Cargando...</h4>
+                      </div>
+                    </div>                      
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End::Modal-pago-cliente-x-mes -->
+
+          <!-- Start::modal-imprimir_ticket -->
+          <div class="modal fade" id="modal-imprimir-comprobante" tabindex="-1" aria-labelledby="modal-imprimir-comprobante-Label" aria-hidden="true">
+            <div class="modal-dialog modal-md" >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modal-imprimir-comprobante-Label"> <button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('modalAntcticket')"><i class="ri-printer-fill"></i></button> Ticket Pago Cliente</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div id="html-imprimir-comprobante" class="text-center" > </div>                   
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          <!-- End::modal-imprimir_ticket -->
 
         </div>
       </div>
