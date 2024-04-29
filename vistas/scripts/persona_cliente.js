@@ -751,7 +751,7 @@ function reload_select(r_text) {
       lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena",'#filtro_zona_antena',    null, '.charge_filtro_zona_antena');
     break;   
 
-    case 'filtro_trabajador':
+    case 'filtro_p_all_trabajador':
       lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_p_all_trabajador', null, '.charge_filtro_p_all_trabajador');
     break;
     case 'filtro_dia_pago':
@@ -760,10 +760,10 @@ function reload_select(r_text) {
     case 'filtro_anio_pago':
       lista_select2("../ajax/persona_cliente.php?op=select2_filtro_anio_pago",  '#filtro_p_all_anio_pago',  moment().format('YYYY'), '.charge_filtro_p_all_anio_pago');
     break;    
-    case 'filtro_plan':
+    case 'filtro_p_all_plan':
       lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan",       '#filtro_p_all_plan',       null, '.charge_filtro_p_all_plan');
     break;
-    case 'filtro_zona_antena':
+    case 'filtro_p_all_zona_antena':
       lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena",'#filtro_p_all_zona_antena',null, '.charge_filtro_p_all_zona_antena');
     break;   
 

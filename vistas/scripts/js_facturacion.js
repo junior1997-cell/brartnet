@@ -539,6 +539,7 @@ function modificarSubtotales() {
 
   capturar_pago_venta();
   calcular_vuelto();
+  if (form_validate_facturacion) { $("#form-facturacion").valid();}
 }
 
 function calcularTotalesSinIgv() {
@@ -676,7 +677,7 @@ function capturar_pago_venta() {
   $(".span-code-baucher-pago").html(`(${metodo_pago == null ? 'Seleccione metodo pago' : metodo_pago })`);
   $(".span-tipo-pago").html(`(${metodo_pago == null ? 'Seleccione' : metodo_pago })`);
   $("#mp_monto").val(0);
-  if (metodo_pago == null || metodo_pago == "EFECTIVO" || metodo_pago == "CREDITO") {
+  if (metodo_pago == null || metodo_pago == '' || metodo_pago == "EFECTIVO" || metodo_pago == "CREDITO") {
     $("#content-metodo-pago").hide();
     $("#content-mp-monto").hide();  
     if (form_validate_facturacion) { $("#mp_monto").rules('remove', 'required'); }    
@@ -690,6 +691,7 @@ function capturar_pago_venta() {
     if (form_validate_facturacion) { $("#mp_monto").rules('remove', 'required'); }
   }  
   calcular_vuelto();
+  if (form_validate_facturacion) { $("#form-facturacion").valid();}
 }
 
 function calcular_vuelto() {
@@ -712,6 +714,7 @@ function calcular_vuelto() {
       vuelto_2 < 0 ? $('.falta_o_completo').html('(falta)').addClass('text-danger').removeClass('text-success') : $('.falta_o_completo').html('(completo)').addClass('text-success').removeClass('text-danger') ;
     } 
   }  
+  if (form_validate_facturacion) { $("#form-facturacion").valid();}
 }
 
 function pago_rapido(val) {

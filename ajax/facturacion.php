@@ -1,4 +1,6 @@
 <?php
+
+
 ob_start();
 if (strlen(session_id()) < 1) { session_start(); }
 
@@ -13,6 +15,9 @@ if (!isset($_SESSION["user_nombre"])) {
     require_once "../modelos/Gasto_de_trabajador.php";
     require_once "../modelos/Correlacion_comprobante.php";
     require_once "../modelos/Producto.php";
+
+    require '../vendor/autoload.php';                   // CONEXION A COMPOSER
+    $see = require '../modelos/SunatCertificado.php';   // EMISION DE COMPROBANTES
 
     $facturacion        = new Facturacion();    
     $gasto_trab         = new Gasto_de_trabajador();    
@@ -33,7 +38,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $serie_comprobante      = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";    
     $idpersona_cliente      = isset($_POST["idpersona_cliente"]) ? limpiarCadena($_POST["idpersona_cliente"]) : "";         
     $observacion_documento  = isset($_POST["observacion_documento"]) ? limpiarCadena($_POST["observacion_documento"]) : "";    
-    $es_cobro               = isset($_POST["es_cobro"]) ? limpiarCadena($_POST["es_cobro"]) : "";    
+    $es_cobro               = isset($_POST["es_cobro_inp"]) ? limpiarCadena($_POST["es_cobro_inp"]) : "";    
     $periodo_pago           = isset($_POST["periodo_pago"]) ? limpiarCadena($_POST["periodo_pago"]) : "";    
     
     $metodo_pago            = isset($_POST["metodo_pago"]) ? limpiarCadena($_POST["metodo_pago"]) : "";  
@@ -57,7 +62,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     switch ($_GET["op"]){
 
-      // :::::::::::: S E C C I O N   C O M P R A S ::::::::::::
+      // :::::::::::: S E C C I O N   V E N T A S ::::::::::::
 
       case 'listar_tabla_facturacion':
 
@@ -72,9 +77,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = [
               "0" => $count,
-              "1" => '<div class="hstack gap-2 fs-15">' .                        
-                '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalle_venta('.($value['idventa']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
-              '</div>',
+              "1" => '<div class="btn-group ">
+              <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
+              <ul class="dropdown-menu">                
+                <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_ticket(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato Ticket</a></li>  
+                <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_a4_comprimido(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato A4 comprimido</a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_a4_completo(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato A4 completo</a></li>                
+              </ul>
+            </div>',
               "2" =>  $value['fecha_emision_format'],
               "3" => '<div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
@@ -87,7 +97,13 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>',
               "4" =>  '<b>'.$value['tp_comprobante'].'</b>' . ' ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'],
               "5" =>  $value['venta_total'] , 
-              "6" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px;">' . $value['observacion_documento'] . '</div>',              
+              "6" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px;"><b>Estado:</b> ' . 
+                $value['sunat_estado'] .
+                '<br> <b>Mensaje:</b> '.  $value['sunat_mensaje'] . 
+                '<br> <b>Observacion:</b> '.  $value['sunat_observacion'] .
+                '<br> <b>Codigo:</b> '.  $value['sunat_code'] .
+                '<br> <b>Error:</b> '.  $value['sunat_error'] .
+              '</div>',              
               
             ];
           }
@@ -104,33 +120,38 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'guardar_editar_facturacion':
-        $mp_comprobante = json_decode($_POST["mp_comprobante"], true);
-        if ( empty($_POST["mp_comprobante"]) ) {
+
+        $rspta = ""; $mp_comprobante = ""; 
+        $sunat_estado = ""; $sunat_observacion= ""; $sunat_code= ""; $sunat_hash= ""; $sunat_mensaje= ""; $sunat_error= ""; 
+
+        if ( floatval($venta_total) > 699 ) {
           # code...
-        } else {          
-          $decoded_data = base64_decode($mp_comprobante['data']);  // Decodificar el archivo base64
-          $ext = explode(".", $mp_comprobante["name"]);          
-          $mp_comprobante = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);          
-          $ruta_destino = '../assets/modulo/facturacion/'.$mp_comprobante; // Ruta donde deseas guardar el archivo en el servidor
-          
-          if (file_put_contents($ruta_destino, $decoded_data) !== false) { // Guardar el archivo decodificado en el servidor
-            # El archivo se ha guardado correctamente en el servidor
-          } else {
-            $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Archivo no aceptado!!', 'message' => 'El archivo de baucher de pago esta corroido, porfavor cambie de archivo', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
-            echo json_encode($retorno, true); die();
-          }
-        }      
+        } else {
+          # code...
+        }
         
 
-        // if ( !file_exists($_FILES['mp_comprobante']['tmp_name']) || !is_uploaded_file($_FILES['mp_comprobante']['tmp_name']) ) {
-        //   $img_comprob = $_POST["mp_comprobante_old"];
-        //   $flat_img = false; 
-        // } else {          
-        //   $ext = explode(".", $_FILES["mp_comprobante"]["name"]);
-        //   $flat_img = true;
-        //   $img_comprob = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);
-        //   move_uploaded_file($_FILES["mp_comprobante"]["tmp_name"], "../assets/modulo/facturacion/" . $img_comprob);          
-        // } 
+        if ($metodo_pago == 'EFECTIVO' ) {
+          # code...
+        } else {
+          
+          if ( empty($_POST["mp_comprobante"]) || isset($_FILES['mp_comprobante']) && $_FILES['mp_comprobante']['name'] ) {
+            # code...
+          } else {          
+            $mp_comprobante = json_decode($_POST["mp_comprobante"], true);
+            $decoded_data = base64_decode($mp_comprobante['data']);  // Decodificar el archivo base64
+            $ext = explode(".", $mp_comprobante["name"]);          
+            $mp_comprobante = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);          
+            $ruta_destino = '../assets/modulo/facturacion/ticket/'.$mp_comprobante; // Ruta donde deseas guardar el archivo en el servidor
+            
+            if (file_put_contents($ruta_destino, $decoded_data) !== false) { // Guardar el archivo decodificado en el servidor
+              # El archivo se ha guardado correctamente en el servidor
+            } else {
+              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Archivo no aceptado!!', 'message' => 'El archivo de baucher de pago esta corroido, porfavor cambie de archivo', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+              echo json_encode($retorno, true); die();
+            }
+          }      
+        }          
 
         if (empty($idventa)) {
           
@@ -139,15 +160,51 @@ if (!isset($_SESSION["user_nombre"])) {
           $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
           $_POST["descuento"], $_POST["subtotal_producto"]);
 
-          echo json_encode($rspta, true);
+          if ($rspta['status'] != true) { echo json_encode($rspta, true); die(); } 
         } else {
 
-          $rspta = $facturacion->editar( $idventa, $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion,
-          $venta_subtotal, $tipo_gravada, $venta_igv, $venta_total, $fecha_venta, $img_comprob,
-          $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
-          $_POST["descuento"], $_POST["subtotal_producto"]);
-    
+          $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Datos incompletos', 'message' => 'No se enviaron los datos completos: idventa', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+          echo json_encode($retorno, true);
+        }
+        
+        if ($tipo_comprobante == '12') {          // SUNAT TICKET     
           echo json_encode($rspta, true);
+        } else if ($tipo_comprobante == '01') {   // SUNAT FACTURA
+
+          if ($rspta['status'] == true) {
+
+            include( '../modelos/SunatFactura.php');
+            $update_sunat = $facturacion->actualizar_respuesta_sunat( $rspta['id_tabla'], $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            
+            if ( empty($sunat_error) ) {
+              echo json_encode($rspta, true); 
+            } else {              
+              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+              echo json_encode($retorno, true); 
+            }            
+          } else {            
+            echo json_encode($rspta, true);
+          }         
+          
+        } else if ($tipo_comprobante == '03') {   // SUNAT BOLETA 
+
+          if ($rspta['status'] == true) {
+
+            include( '../modelos/SunatBoleta.php');
+            $update_sunat = $facturacion->actualizar_respuesta_sunat( $rspta['id_tabla'], $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            if ( empty($sunat_error) ) {
+              echo json_encode($rspta, true); 
+            } else {              
+              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+              echo json_encode($retorno, true);
+            }            
+          } else {            
+            echo json_encode($rspta, true);
+          }   
+
+        } else {
+          $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'SUNAT en mantenimiento!!', 'message' => 'El sistema de sunat esta mantenimiento, esperamos su comprención, sea paciente', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+          echo json_encode($retorno, true);
         }
     
       break; 
@@ -208,14 +265,9 @@ if (!isset($_SESSION["user_nombre"])) {
       break; 
 
       case 'mostrar_editar_detalles_venta':
-        $rspta=$facturacion->mostrar_editar_detalles_venta($_POST["idventa"]);
+        $rspta=$facturacion->mostrar_venta($_POST["idventa"]);
         echo json_encode($rspta, true);
-      break;
-
-      case 'listar_producto_x_codigo':
-        $rspta=$facturacion->listar_producto_x_codigo($_POST["codigo"]);
-        echo json_encode($rspta, true);
-      break;
+      break;      
 
       case 'eliminar':
         $rspta = $facturacion->eliminar($_GET["id_tabla"]);
@@ -231,6 +283,16 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta=$facturacion->mostrar_producto($_POST["idproducto"]);
         echo json_encode($rspta, true);
       break; 
+
+      case 'mini_reporte':
+        $rspta=$facturacion->mini_reporte();
+        echo json_encode($rspta, true);
+      break; 
+
+      case 'listar_producto_x_codigo':
+        $rspta=$facturacion->listar_producto_x_codigo($_POST["codigo"]);
+        echo json_encode($rspta, true);
+      break;
 
       case 'listar_tabla_producto':
           
@@ -272,6 +334,9 @@ if (!isset($_SESSION["user_nombre"])) {
     
       break;
 
+      // ══════════════════════════════════════ COMPROBANTE ══════════════════════════════════════
+      
+
       // ══════════════════════════════════════ U S A R   A N T I C I P O S ══════════════════════════════════════
       case 'mostrar_anticipos':
         $rspta=$facturacion->mostrar_anticipos($_GET["id_cliente"]);
@@ -283,13 +348,16 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta = $facturacion->select2_cliente(); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value=' . $value['idpersona_cliente']  . '>' . $value['nombre_razonsocial'] . ' '. $value['apellidos_nombrecomercial'] . ' - '. $value['numero_documento'] . '</option>';
+            $tipo_documento   = $value['tipo_documento'];
+            $numero_documento = $value['numero_documento'];
+            $direccion        = $value['direccion'];
+            $data .= '<option tipo_documento="'.$tipo_documento.'" numero_documento="'.$numero_documento.'" direccion="'.$direccion.'" value="' . $value['idpersona_cliente']  . '">' . $value['cliente_nombre_completo']  . ' - '. $value['nombre_tipo_documento'].': '. $value['numero_documento'] . ' - '. $value['plan_pago'].': '. $value['plan_costo'] . '</option>';
           }
 
           $retorno = array(
             'status' => true, 
             'message' => 'Salió todo ok', 
-            'data' => '<option  value="1" >CLIENTES VARIOS - 0000000</option>'.$data, 
+            'data' => '<option tipo_documento="0" numero_documento="00000000" direccion="" value="1" >CLIENTES VARIOS - 0000000</option>'.$data, 
           );
           echo json_encode($retorno, true);
 

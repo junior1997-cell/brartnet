@@ -230,7 +230,8 @@ function eliminar_papelera_anticipo(idanticipo_cliente, serie, numero){
 function TickcetAnticipo_ciente(idanticipo_cliente){
   console.log(idanticipo_cliente);
   var rutacarpeta = "../reportes/ticketAnticipo_cliente.php?id=" + idanticipo_cliente;
-  $("#modalAntcticket").attr("src", rutacarpeta);
+  // $("#modalAntcticket").attr("src", rutacarpeta);
+  $("#html-imprimir-comprobante").html(`<iframe name="modalAntcticket" id="modalAntcticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
   $("#modalPreviewticket").modal("show");
 }
 

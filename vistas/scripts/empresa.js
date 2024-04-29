@@ -181,7 +181,7 @@ function mostrar_editar_empresa(idempresa){
     if (e.status == true) {
       $("#idempresa").val(e.data.idempresa);
 
-      $("#tipo_doc").val(e.data.tipo_documento);
+      $("#tipo_doc").val(e.data.tipo_documento).trigger('change');
       $("#documento").val(e.data.numero_documento);
       $("#razon_social").val(e.data.nombre_razon_social);
       $("#nomb_comercial").val(e.data.nombre_comercial);
@@ -190,24 +190,24 @@ function mostrar_editar_empresa(idempresa){
       $("#web").val(e.data.web);
       $("#werb_cosulta").val(e.data.web_consulta_cp);	
       $("#correo").val(e.data.correo); 
-      $("#logo_c_r").val(e.data.logo_c_r); 
+      $("#logo_c_r").val(e.data.logo_c_r).trigger('change'); 
     
-      $("#banco1").val(e.data.banco1); 
+      $("#banco1").val(e.data.banco1).trigger('change'); 
       $("#cuenta1").val(e.data.cuenta1); 
       $("#cci1").val(e.data.cci1); 
-      $("#banco2").val(e.data.banco2); 
+      $("#banco2").val(e.data.banco2).trigger('change'); 
       $("#cuenta2").val(e.data.cuenta2); 
       $("#cci2").val(e.data.cci2); 
-      $("#banco3").val(e.data.banco3); 
+      $("#banco3").val(e.data.banco3).trigger('change'); 
       $("#cuenta3").val(e.data.cuenta3); 
       $("#cci3").val(e.data.cci3);
-      $("#banco4").val(e.data.banco4); 
+      $("#banco4").val(e.data.banco4).trigger('change'); 
       $("#cuenta4").val(e.data.cuenta4); 
       $("#cci4").val(e.data.cci4);  
     
       $("#codg_pais").val(e.data.codigo_pais); 
       $("#domicilio_fiscal").val(e.data.domicilio_fiscal); 
-      $("#distrito").val(e.data.distrito); 
+      $("#distrito").val(e.data.distrito).trigger('change'); 
       $("#departamento").val(e.data.departamento); 
       $("#provincia").val(e.data.provincia); 
       $("#ubigeo").val(e.data.ubigueo); 
@@ -337,7 +337,9 @@ function mayus(e) {
 }
 
 
-init();
+$(document).ready(function () {
+  init(); 
+});
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 $(function () {

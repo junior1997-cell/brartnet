@@ -65,7 +65,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_detalles_empresa('.($value['idempresa']).')" data-bs-toggle="tooltip" title="Ver"><i class="ri-eye-line"></i></button>'.
                       '</div>',
               "2" =>  '<div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                        <span class="avatar"> <img src="../assets/modulo/empresa/logo/' . ($value['logo']) . '" alt="" onclick="ver_img(\'' . ($value['logo']) . '\', \'' . encodeCadenaHtml(($value['nombre_razon_social'])) . '\')"> </span>
+                        <span class="text-center"> <img class="w-50px" src="../assets/modulo/empresa/logo/' . ($value['logo']) . '" alt="" onclick="ver_img(\'' . ($value['logo']) . '\', \'' . encodeCadenaHtml(($value['nombre_razon_social'])) . '\')"> </span>
                       </div>',
               "3" => '<div class="d-flex flex-fill align-items-center">
                         <div>
