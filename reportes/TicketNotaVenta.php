@@ -170,7 +170,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <tr align="left"><td><strong>Emisión:</strong> <?php echo $venta['data']['venta']['fecha_emision_format'] ; ?> </td></tr>          
             <tr align="left"><td><strong>Moneda:</strong> SOLES</td> </tr>
             <tr align="left"><td><strong>Atención:</strong> <?php echo $venta['data']['venta']['user_en_atencion']; ?> </td></tr>
-            <tr><td><strong>Tipo de pago:</strong> <?php echo $venta['data']['venta']['metodo_pago'] ; ?> </td></tr>
+            <tr><td><strong>Método de pago:</strong> <?php echo $venta['data']['venta']['metodo_pago'] ; ?> </td></tr>
             <tr><td><strong>Nro referencia:</strong> <?php echo $venta['data']['venta']['mp_serie_comprobante'] == null || $venta['data']['venta']['mp_serie_comprobante'] == '' ? '-': $venta['data']['venta']['mp_serie_comprobante']; ?> </td></tr>
             <tr><td><strong>Observación:</strong> <?php echo $venta['data']['venta']['observacion_documento'] ; ?> </td></tr>
           </tbody>

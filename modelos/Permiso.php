@@ -19,7 +19,8 @@ Class Permiso
 
 		$data_permiso = [];
 		$sql = "SELECT * from permiso ";	$todos = ejecutarConsultaArray($sql); 
-		$sql = "SELECT idpermiso, estado, modulo, count(modulo) from permiso GROUP BY modulo ORDER BY count(modulo) DESC";	$agrupado = ejecutarConsultaArray($sql);
+		$sql = "SELECT MIN(idpermiso) AS idpermiso, estado, modulo, count(modulo) from permiso GROUP BY estado, modulo ORDER BY  count(modulo) DESC";	
+		$agrupado = ejecutarConsultaArray($sql);
 
 		foreach ($agrupado['data'] as $key => $val) {
 

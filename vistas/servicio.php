@@ -98,8 +98,10 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!-- ID -->
                           <input type="hidden" name="idproducto" id="idproducto"/>
                           <input type="hidden" name="tipo" id="tipo" value="SR" />
-                          <input type="hidden" name="idmarca" id="idmarca" value="1"/>           <!--  idmarca = 1 | nombre = NINGUNO -->
-                          <input type="hidden" name="idsunat_unidad_medida" id="idsunat_unidad_medida" value="58"/> <!--  idsunat_unidad_medida = 1 | nombre = NINGUNO -->
+                          <!--  idmarca = 1 | nombre = NINGUNO -->
+                          <input type="hidden" name="idmarca" id="idmarca" value="1"/>    
+                          <!--  idsunat_unidad_medida = 59 | nombre = SERVICIO -->       
+                          <input type="hidden" name="idsunat_unidad_medida" id="idsunat_unidad_medida" value="59"/> 
                           <input type="hidden" name="precio_c" id="precio_c" value="0" />
 
                           <!-- ----------------- CODIGO --------------- -->

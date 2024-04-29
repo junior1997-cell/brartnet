@@ -3,6 +3,7 @@ var tabla_productos;
 var form_validate_facturacion;
 var array_data_venta = [];
 var file_pond_mp_comprobante;
+var cambio_de_tipo_comprobante ;
 
 // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T C H O I C E ══════════════════════════════════════
 
@@ -10,7 +11,7 @@ var file_pond_mp_comprobante;
 // const choice_tipo_documento = new Choices('#tipo_documento',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
 // const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
 
-function init(){
+async function init(){
 
   listar_tabla_facturacion(); // Listamos la tabla principal
   $(".btn-boleta").click();   // Selecionamos la BOLETA
@@ -23,7 +24,8 @@ function init(){
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/facturacion.php?op=select2_cliente", '#idpersona_cliente', null);
-  lista_select2("../ajax/facturacion.php?op=listar_crl_comprobante&tipos='00','01','03','12'", '#tipo_comprobante', null);
+  lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#nc_motivo_anulacion', '01');
+  // lista_select2("../ajax/facturacion.php?op=listar_crl_comprobante&tipos='00','01','03','12'", '#tipo_comprobante', null);
 
   lista_select2("../ajax/facturacion.php?op=select_categoria", '#categoria', null);
   lista_select2("../ajax/facturacion.php?op=select_u_medida", '#u_medida', null);
@@ -35,11 +37,19 @@ function init(){
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idpersona_cliente").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#nc_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#nc_serie_y_numero").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#nc_motivo_anulacion").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#metodo_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  
+
+  $("#nc_tipo_comprobante").val(null).trigger('change'); // Limpiamos aqui para no generar un bucle infinito
+
+  await activar_btn_agregar(); // Esperamos a al carga total de los datos para poder: CREAR
 }
 
+async function activar_btn_agregar() {
+  $(".btn-agregar").show();
+}
 
 function show_hide_form(flag) {
 	if (flag == 1) {        // TABLA PRINCIPAL
@@ -80,7 +90,7 @@ function mini_reporte() {
     $(".vw_total_ticket_p").html( `${e.data.ticket_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.ticket_p)}%` );
     e.data.ticket_p >= 0? $(".vw_total_ticket_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_ticket_p").addClass('text-danger').removeClass('text-success') ;
 
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   F A C T U R A C I O N :::::::::::::::::::::::::::::::::::::::::::::
@@ -104,7 +114,7 @@ function limpiar_form_venta(){
   $("#metodo_pago").val('').trigger('change'); 
   $("#observacion_documento").val(''); 
   $("#periodo_pago").val('');
-  $("#codigob").val('');
+  $("#codigob").val('');  
   
   $("#total_recibido").val(0);
   $("#mp_monto").val(0);
@@ -143,7 +153,7 @@ function limpiar_form_venta(){
 
 function listar_tabla_facturacion(){
   tabla_principal_facturacion = $("#tabla-ventas").dataTable({
-    responsive: true, 
+    // responsive: true, 
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
@@ -174,9 +184,11 @@ function listar_tabla_facturacion(){
     createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
-      // columna: #
+      // columna: Opciones
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center"); }
-      // columna: #
+      // columna: Cliente
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+      // columna: Monto
       if (data[5] != '') { $("td", row).eq(5).addClass("text-nowrap"); }
     },
     language: {
@@ -291,27 +303,92 @@ function ver_img_comprobante(idventa) {
 // ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR SERIES :::::::::::::::::::::::::::::::::::::::::::::
 
 function ver_series_comprobante(input) {
+  if (cambio_de_tipo_comprobante == '07') { limpiar_form_venta(); } // Limpiamos si el comprobante anterior era: Nota de Credito
+
   $("#serie_comprobante").html('');
   $(".charge_serie_comprobante").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
 
   var tipo_comprobante = $(input).val() == ''  || $(input).val() == null ? '' : $(input).val();
+  var nc_tp = ""; // En caso de ser Nota de Credito
   $('#tipo_comprobante_hidden').val(tipo_comprobante);
 
-  $.getJSON("../ajax/facturacion.php?op=select2_series_comprobante", { tipo_comprobante: tipo_comprobante },  function (e, status) {    
+  $(".div_idpersona_cliente").show();
+  $(".div_nc_tipo_comprobante").hide();
+  $(".div_nc_serie_y_numero").hide();
+  $(".div_nc_motivo_anulacion").hide();
+  $(".div_es_cobro").show();
+  $(".datos-de-cobro-mensual").show();
+  $(".div_agregar_producto").show();
+  $(".div_pago_rapido").show();
+  $(".div_m_pagos").show();
+  $(".div_usar_anticipo").show();
+  $(".datos-de-saldo").hide();
+
+  // VALIDANDO SEGUN: TIPO DE COMPROBANTE
+  if (form_validate_facturacion) { // FORM-VALIDATE
+  
+    if ( tipo_comprobante == '01') {   
+      $("#idsunat_c01").val(2); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+      $("#periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } });       
+    } else if ( tipo_comprobante == '03') {
+      $("#idsunat_c01").val(3); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+      $("#periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+    } else if ( tipo_comprobante == '07') {
+      var nc_tipo_comprobante = $('#nc_tipo_comprobante').val() == '' || $('#nc_tipo_comprobante').val() == null ? '' : $('#nc_tipo_comprobante').val();
+      if (nc_tipo_comprobante == '01') {
+        $("#idsunat_c01").val(7); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+      } else if (nc_tipo_comprobante == '03') {
+        $("#idsunat_c01").val(8); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+      }
+      
+      var nc_tp = $('#nc_tipo_comprobante').val() == ''  || $('#nc_tipo_comprobante').val() == null ? '' : $('#nc_tipo_comprobante').val();
+      $("#periodo_pago").rules('remove', 'required');
+      $("#metodo_pago").rules('remove', 'required');
+      $('#es_cobro_inp').val('NO'); $('#usar_anticipo').val('NO');
+
+      $(".div_idpersona_cliente").hide();
+      $(".div_nc_tipo_comprobante").show();
+      $(".div_nc_serie_y_numero").show();
+      $(".div_nc_motivo_anulacion").show();
+      $(".div_es_cobro").hide();
+      $(".datos-de-cobro-mensual").hide();
+      $(".div_agregar_producto").hide();
+      $(".div_pago_rapido").hide();
+      $(".div_m_pagos").hide();
+      $(".div_usar_anticipo").hide();
+      $(".datos-de-saldo").hide();
+    } else if ( tipo_comprobante == '12') {
+      $("#idsunat_c01").val(12); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+      $("#idsunat_c01").val(2); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+      $("#periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+    }
+  }
+
+  $.getJSON("../ajax/facturacion.php?op=select2_series_comprobante", { tipo_comprobante: tipo_comprobante, nc_tp:nc_tp },  function (e, status) {    
     if (e.status == true) {      
       $("#serie_comprobante").html(e.data);
       $(".charge_serie_comprobante").html('');
       $("#form-facturacion").valid();
     } else { ver_errores(e); }
   }).fail( function(e) { ver_errores(e); } );
+
+  cambio_de_tipo_comprobante = tipo_comprobante;
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR COBROS :::::::::::::::::::::::::::::::::::::::::::::
 function es_cobro_valid() { console.log($(".es_cobro").hasClass("on"));
+  var tipo_comprobante = $('#tipo_comprobante_hidden').val() == ''  || $('#tipo_comprobante_hidden').val() == null ? '' : $('#tipo_comprobante_hidden').val();
   if ($(".es_cobro").hasClass("on") == true) {
     $("#es_cobro_inp").val("SI");
-    $(".datos-de-cobro-mensual").show("slow");    
-    if (form_validate_facturacion) { $("#periodo_pago").rules('add', { required: true, messages: {  required: "Campo requerido" } }); }
+    $(".datos-de-cobro-mensual").show("slow");   
+    if (form_validate_facturacion) { 
+      if ( tipo_comprobante == '07') { } else{
+        $("#periodo_pago").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+      }
+    }
   } else {
     $("#es_cobro_inp").val("NO");
     $(".datos-de-cobro-mensual").hide("slow");
@@ -335,7 +412,7 @@ function usar_anticipo_valid() {
         $("#ua_monto_disponible").val(e.data.total_anticipo);
         if (form_validate_facturacion) { $("#ua_monto_usado").rules('add', { required: true, max: parseFloat(e.data.total_anticipo) , messages: {  required: "Campo requerido", max: "Saldo disponible: {0}" } }); }
         $("#form-facturacion").valid();
-      });
+      }).fail( function(e) { ver_errores(e); } );
     }
   } else {
     $("#usar_anticipo").val("NO");
@@ -402,6 +479,11 @@ function ver_formato_ticket(idventa, tipo_comprobante) {
     $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - BOLETA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
+  } else if (tipo_comprobante == '07') {
+    var rutacarpeta = "../reportes/TicketNotaCredito.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - NOTA CREDITO`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '12') {
     var rutacarpeta = "../reportes/TicketNotaVenta.php?id=" + idventa;
     $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - NOTA DE VENTA`);
@@ -426,6 +508,8 @@ function ver_formato_a4_comprimido(idventa, tipo_comprobante) {
     $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir A4" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO A4 - BOLETA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
+  } else if (tipo_comprobante == '07') {
+    toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
   } else if (tipo_comprobante == '12') {
     var rutacarpeta = "../reportes/A4NotaVentaComprimido.php?id=" + idventa;
     $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir A4" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO A4 - NOTA DE VENTA`);
@@ -444,6 +528,31 @@ function ver_formato_a4_completo(idventa, tipo_comprobante) {
     toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
     // toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
   
+}
+
+
+// ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   N O T A   D E   C R E D I T O :::::::::::::::::::::::::::::::::::::::::::::
+
+
+function buscar_comprobante_anular() { 
+  $('.charge_nc_serie_y_numero').html('<div class="spinner-border spinner-border-sm" role="status"></div>');
+  var tipo_comprobante = $('#nc_tipo_comprobante').val() == '' || $('#nc_tipo_comprobante').val() == null ? '' : $('#nc_tipo_comprobante').val();
+  var tipo_comprobante_hidden = $('#tipo_comprobante_hidden').val() == '' || $('#tipo_comprobante_hidden').val() == null ? '' : $('#tipo_comprobante_hidden').val();
+
+  if (tipo_comprobante_hidden == '07') {   
+    ver_series_comprobante('#tipo_comprobante4');
+  }  
+
+  $.getJSON(`../ajax/facturacion.php?op=select2_comprobantes_anular`, {tipo_comprobante: tipo_comprobante}, function (e, textStatus, jqXHR) {
+    if (e.status == true) {
+      $("#nc_serie_y_numero").html(e.data);
+      $("#nc_serie_y_numero").val(null).trigger('change');
+      $('.charge_nc_serie_y_numero').html('');
+    } else {
+      ver_errores(e);
+    }
+    
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 
@@ -787,6 +896,8 @@ $(function(){
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 function reload_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_cliente", '#idpersona_cliente', null, '.charge_idpersona_cliente'); }
+function reload_nc_serie_y_numero(){ buscar_comprobante_anular() }
+function reload_nc_motivo_anulacion(){ lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#nc_motivo_anulacion', '01', '.charge_nc_motivo_anulacion'); }
 
 
 function printIframe(id) {

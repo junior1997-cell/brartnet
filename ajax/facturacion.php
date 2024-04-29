@@ -34,6 +34,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $impuesto               = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";   
     $crear_y_emitir         = isset($_POST["crear_y_emitir"]) ? ( empty($_POST["crear_y_emitir"]) ? 'NO' : 'SI' ) : ""; 
 
+    $idsunat_c01            = isset($_POST["idsunat_c01"]) ? limpiarCadena($_POST["idsunat_c01"]) : "";    
     $tipo_comprobante       = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
     $serie_comprobante      = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";    
     $idpersona_cliente      = isset($_POST["idpersona_cliente"]) ? limpiarCadena($_POST["idpersona_cliente"]) : "";         
@@ -56,9 +57,14 @@ if (!isset($_SESSION["user_nombre"])) {
     $tipo_gravada           = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";
     $venta_descuento        = isset($_POST["venta_descuento"]) ? limpiarCadena($_POST["venta_descuento"]) : "";    
     $venta_igv              = isset($_POST["venta_igv"]) ? limpiarCadena($_POST["venta_igv"]) : "";            
-    $venta_total            = isset($_POST["venta_total"]) ? limpiarCadena($_POST["venta_total"]) : "";    
+    $venta_total            = isset($_POST["venta_total"]) ? limpiarCadena($_POST["venta_total"]) : "";   
+
+    $nc_idventa             = isset($_POST["nc_idventa"]) ? limpiarCadena($_POST["nc_idventa"]) : "";    
+    $nc_tipo_comprobante    = isset($_POST["nc_tipo_comprobante"]) ? limpiarCadena($_POST["nc_tipo_comprobante"]) : "";    
+    $nc_serie_y_numero      = isset($_POST["nc_serie_y_numero"]) ? limpiarCadena($_POST["nc_serie_y_numero"]) : "";    
+    $nc_motivo_anulacion    = isset($_POST["nc_motivo_anulacion"]) ? limpiarCadena($_POST["nc_motivo_anulacion"]) : "";    
      
-    $mp_comprobante_old     = isset($_POST["mp_comprobante_old"]) ? limpiarCadena($_POST["mp_comprobante_old"]) : ""; 
+    $mp_comprobante_old     = isset($_POST["mp_comprobante_old"]) ? limpiarCadena($_POST["mp_comprobante_old"]) : "";     
 
     switch ($_GET["op"]){
 
@@ -76,7 +82,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $img_proveedor = empty($value['foto_perfil']) ? 'no-perfil.jpg' : $value['foto_perfil'];
 
             $data[] = [
-              "0" => $count,
+              "0" => $count++,
               "1" => '<div class="btn-group ">
               <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
               <ul class="dropdown-menu">                
@@ -91,13 +97,13 @@ if (!isset($_SESSION["user_nombre"])) {
                   <span class="avatar"> <img class="w-35px h-auto" src="../assets/modulo/persona/perfil/' . $img_proveedor . '" alt="" onclick="ver_img_proveedor(\'' . $img_proveedor . '\', \'' . encodeCadenaHtml(($value['nombre_razonsocial']) .' '. ($value['apellidos_nombrecomercial'])) . '\')"> </span>
                 </div>
                 <div>
-                  <span class="d-block fw-semibold text-primary">'.$value['nombre_razonsocial'] .' '. $value['apellidos_nombrecomercial'].'</span>
+                  <span class="d-block fw-semibold text-primary" data-bs-toggle="tooltip" title="'.$value['cliente_nombre_completo'] .'">'.$value['cliente_nombre_recortado'] .'</span>
                   <span class="text-muted"><b>'.$value['tipo_documento'] .'</b>: '. $value['numero_documento'].'</span>
                 </div>
               </div>',
-              "4" =>  '<b>'.$value['tp_comprobante'].'</b>' . ' ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'],
+              "4" =>  '<b>'.$value['tp_comprobante_v2'].'</b>' . ' <br> ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'],
               "5" =>  $value['venta_total'] , 
-              "6" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px;"><b>Estado:</b> ' . 
+              "6" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px; "><b>Estado:</b> ' . 
                 $value['sunat_estado'] .
                 '<br> <b>Mensaje:</b> '.  $value['sunat_mensaje'] . 
                 '<br> <b>Observacion:</b> '.  $value['sunat_observacion'] .
@@ -128,8 +134,7 @@ if (!isset($_SESSION["user_nombre"])) {
           # code...
         } else {
           # code...
-        }
-        
+        }        
 
         if ($metodo_pago == 'EFECTIVO' ) {
           # code...
@@ -155,10 +160,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
         if (empty($idventa)) {
           
-          $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento, $es_cobro, $periodo_pago,
+          $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$idsunat_c01  ,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento, $es_cobro, $periodo_pago,
           $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,  $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
-          $_POST["idproducto"], $_POST["unidad_medida"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
-          $_POST["descuento"], $_POST["subtotal_producto"]);
+          $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion,
+          $_POST["idproducto"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"], 
+          $_POST["descuento"], $_POST["subtotal_producto"]); 
 
           if ($rspta['status'] != true) { echo json_encode($rspta, true); die(); } 
         } else {
@@ -201,7 +207,15 @@ if (!isset($_SESSION["user_nombre"])) {
           } else {            
             echo json_encode($rspta, true);
           }   
-
+        } else if ($tipo_comprobante == '07') {   // SUNAT NOTA DE CREDITO 
+          include( '../modelos/SunatNotaCredito.php');
+          $update_sunat = $facturacion->actualizar_respuesta_sunat( $rspta['id_tabla'], $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+          if ( empty($sunat_error) ) {
+            echo json_encode($rspta, true); 
+          } else {              
+            $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+            echo json_encode($retorno, true);
+          }
         } else {
           $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'SUNAT en mantenimiento!!', 'message' => 'El sistema de sunat esta mantenimiento, esperamos su comprención, sea paciente', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
           echo json_encode($retorno, true);
@@ -265,7 +279,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break; 
 
       case 'mostrar_editar_detalles_venta':
-        $rspta=$facturacion->mostrar_venta($_POST["idventa"]);
+        $rspta=$facturacion->mostrar_detalle_venta($_POST["idventa"]);
         echo json_encode($rspta, true);
       break;      
 
@@ -362,13 +376,52 @@ if (!isset($_SESSION["user_nombre"])) {
           echo json_encode($retorno, true);
 
         } else { echo json_encode($rspta, true); }      
-      break; 
+      break;
+      
+      case 'select2_comprobantes_anular':
+        $rspta = $facturacion->select2_comprobantes_anular($_GET["tipo_comprobante"]); $cont = 1; $data = ""; #echo $rspta; die();
+        if($rspta['status'] == true){
+          foreach ($rspta['data'] as $key => $value) {
+            $idventa            = $value['idventa'];
+            $tipo_comprobante   = $value['tipo_comprobante'];
+            $serie_comprobante  = $value['serie_comprobante'];
+            $numero_comprobante = $value['numero_comprobante'];
+            $tp_comprobante_v2  = $value['tp_comprobante_v2'];
+            $data .= '<option idventa="'.$idventa.'" tipo_comprobante="'.$tipo_comprobante.'"  value="' . $serie_comprobante.'-'. $numero_comprobante  . '">'  . $serie_comprobante.'-'. $numero_comprobante . '</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+          echo json_encode($retorno, true);
+
+        } else { echo json_encode($rspta, true); }      
+      break;
 
       case 'select2_series_comprobante':
-        $rspta = $facturacion->select2_series_comprobante($_GET["tipo_comprobante"]); $cont = 1; $data = "";
+        $rspta = $facturacion->select2_series_comprobante($_GET["tipo_comprobante"], $_GET["nc_tp"]); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
             $data .= '<option title="' . $value['abreviatura'] . '" value="' . $value['serie']  . '">' . $value['serie']  . '</option>';
+          }
+
+          $retorno = array(
+            'status'  => true, 
+            'message' => 'Salió todo ok', 
+            'data'    => $data, 
+          );
+          echo json_encode($retorno, true);
+
+        } else { echo json_encode($rspta, true); }      
+      break; 
+
+      case 'select2_codigo_x_anulacion_comprobante':
+        $rspta = $facturacion->select2_codigo_x_anulacion_comprobante(); $cont = 1; $data = "";
+        if($rspta['status'] == true){
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value="' . $value['codigo']  . '">' . $value['codigo'].' - '. $value['nombre']  . '</option>';
           }
 
           $retorno = array(
