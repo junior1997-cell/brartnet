@@ -23,7 +23,10 @@ if (!isset($_SESSION["user_nombre"])) {
     $prioridad          = isset($_POST["prioridad"]) ? limpiarCadena($_POST["prioridad"]) : "";
     $categoria          = isset($_POST["categoria"]) ? limpiarCadena($_POST["categoria"]) : "";
     $actividad_detalle  = isset($_POST["actividad_detalle"]) ? limpiarCadena($_POST["actividad_detalle"]) : "";
-    
+    //---------------------------
+    $id_incidenciaupdate  = isset($_POST["id_incidenciaupdate"]) ? limpiarCadena($_POST["id_incidenciaupdate"]) : "";
+    $fecha_fin            = isset($_POST["fecha_fin"]) ? limpiarCadena($_POST["fecha_fin"]) : "";
+
     
 
     // idincidencia: 
@@ -39,6 +42,21 @@ if (!isset($_SESSION["user_nombre"])) {
         if ( empty($idincidencia) ) { #Creamos el registro
 
           $rspta = $incidencias->insertar($actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria,$actividad_detalle);
+          echo json_encode($rspta, true);
+
+        } else { # Editamos el registro
+
+          $rspta = $incidencias->editar($idincidencia,$actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria,$actividad_detalle);
+          echo json_encode($rspta, true);
+        }
+
+
+      break;
+      case 'guardar_fecha_fin':
+
+        if ( !empty($id_incidenciaupdate) ) {
+
+          $rspta = $incidencias->insertarfecha_fin($id_incidenciaupdate, $fecha_fin);
           echo json_encode($rspta, true);
 
         } else { # Editamos el registro
@@ -114,41 +132,41 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'eliminar':
-        $rspta = $incidencias->eliminar($_GET["id_tabla"]);
+        $rspta = $incidencias->eliminar($_POST["id_tabla"]);
         echo json_encode($rspta, true);
       break;
+
+      // case 'listar_trabajador':
+      //   $rspta = $incidencias->listar_trabajador(); 
+      //   echo json_encode($rspta, true);
+ 
+      // break;
 
       case 'listar_trabajador':
-        $rspta = $incidencias->listar_trabajador(); 
-        echo json_encode($rspta, true);
- 
-      break;
+        $rspta = $incidencias->listar_trabajador(); $cont = 1; $data = "";
+        if($rspta['status'] == true){
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value=' . $value['idpersona_trabajador']  . '>' . $value['nombre_razonsocial'] .'</option>';
+          }
 
-      // case 'listar_proveedor':
-      //   $rspta = $incidencias->listar_proveedor(); $cont = 1; $data = "";
-      //   if($rspta['status'] == true){
-      //     foreach ($rspta['data'] as $key => $value) {
-      //       $data .= '<option  value=' . $value['idpersona']  . '>' . $value['nombre'] . ' '. $value['apellido'] . ' - '. $value['numero_documento'] . '</option>';
-      //     }
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+          echo json_encode($retorno, true);
 
-      //     $retorno = array(
-      //       'status' => true, 
-      //       'message' => 'Salió todo ok', 
-      //       'data' => '<option  value="1" >NINGUNO</option>'.$data, 
-      //     );
-      //     echo json_encode($retorno, true);
+        } else { echo json_encode($rspta, true); }      
+      break; 
 
-      //   } else { echo json_encode($rspta, true); }      
-      // break; 
-
-      case 'mostrar_editar_gdt':
-        $rspta = $incidencias->mostrar_editar_gdt($idincidencia);
+      case 'mostrar':
+        $rspta = $incidencias->mostrar( $_POST['idincidencia']);
         echo json_encode($rspta, true);
       break;
 
       case 'view_incidencias': 
         // todos_cat,todos_prio
-        $rspta = $incidencias->view_incidencias($_POST['id_categoria'],$_POST['prioridad']);
+        $rspta = $incidencias->view_incidencias($_POST['id_categoria'],$_POST['prioridad'],$_POST['estado_inc']); 
         echo json_encode($rspta, true);
       break;
 
@@ -158,15 +176,11 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case "select2_cat_inc":
+        $rspta = $incidencias->categorias_incidencias();  $cont = 1; $data = "";
 
-        $rspta = $incidencias->categorias_incidencias(); $cont = 1; $data = [];
-
-        if ($rspta['status'] == true) {
-
+        if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
-
-            $data[] = ['value' => $value['idincidencia_categoria'], 'label' => $value['nombre'], 'disabled'  => false, 'selected'  => false,];
-
+            $data .= '<option  value=' . $value['idincidencia_categoria']  . '>' . $value['nombre'] .'</option>';
           }
 
           $retorno = array(
@@ -174,13 +188,9 @@ if (!isset($_SESSION["user_nombre"])) {
             'message' => 'Salió todo ok', 
             'data' => $data, 
           );
-
           echo json_encode($retorno, true);
 
-        } else {
-
-          echo json_encode($rspta, true); 
-        }        
+        } else { echo json_encode($rspta, true); }   
       break;
 
       default:
