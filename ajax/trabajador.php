@@ -90,7 +90,22 @@ if (!isset($_SESSION["user_nombre"])) {
       case 'mostrar_trabajador':
         $rspta = $trabajador->mostrar_trabajdor($_POST["idpersona"]);
         echo json_encode($rspta);
-      break;      
+      break;    
+      
+      case 'eliminar':
+        $rspta = $trabajador->eliminar($_GET["id_tabla"], $_GET["idpersona"]);
+        echo json_encode($rspta, true);
+      break;
+
+      case 'papelera':
+        $rspta = $trabajador->papelera($_GET["id_tabla"], $_GET["idpersona"]);
+        echo json_encode($rspta, true);
+      break;
+
+      case 'activar':
+        $rspta = $trabajador->activar($_GET["id_tabla"], $_GET["idpersona"]);
+        echo json_encode($rspta, true);
+      break;
 
       case 'listar_tabla_principal':
         $rspta = $trabajador->listar_tabla_principal();
@@ -107,8 +122,8 @@ if (!isset($_SESSION["user_nombre"])) {
             "0" => $count++,
             "1" => '<div class="hstack gap-2 fs-15">' .
               '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar(' . $reg->idpersona . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-              ($reg->estado ? '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="desactivar(' . $reg->idpersona . ', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>':
-              '<button class="btn btn-icon btn-sm btn-success-light product-btn" onclick="activar(' . $reg->idpersona . ')" data-bs-toggle="tooltip" title="Activar"><i class="fa fa-check"></i></button>'
+              ($reg->estado ? '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="desactivar(' . $reg->idpersona_trabajador. ', '. $reg->idpersona . ', \'' . encodeCadenaHtml($reg->nombre_razonsocial .' '. $reg->apellidos_nombrecomercial) . '\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>':
+              '<button class="btn btn-icon btn-sm btn-success-light product-btn" onclick="activar(' . $reg->idpersona_trabajador. ', '. $reg->idpersona . ')" data-bs-toggle="tooltip" title="Activar"><i class="fa fa-check"></i></button>'
               ).
             '</div>',        
             "2" =>'<div class="d-flex flex-fill align-items-center">

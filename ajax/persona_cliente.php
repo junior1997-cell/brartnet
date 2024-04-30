@@ -267,85 +267,75 @@ if (!isset($_SESSION["user_nombre"])) {
       // ══════════════════════════════════════   PAGOS ALL CLIENTES   ══════════════════════════════════════ 
       case 'ver_pagos_x_cliente':
         $rspta = $persona_cliente->ver_pagos_x_cliente($_GET["idcliente"]);
-
-        $imagen_perfil = empty($rspta['data']['foto_perfil']) ? 'no-perfil.jpg' :   $rspta['data']['foto_perfil'];
-        $bg_light = $rspta['data']['estado'] == 1 ? '' : 'bg-danger-transparent';
-
+        $imagen_perfil = empty($rspta['data']['cliente']['foto_perfil']) ? 'no-perfil.jpg' : $rspta['data']['cliente']['foto_perfil'];
+        $bg_light = $rspta['data']['cliente']['estado'] == 1 ? '' : 'bg-danger-transparent';
+        $num_anios = $rspta['data']['cliente']['total_anios_pago']; // Asegúrate de que esto refleje el número correcto de años
+        $primero = true; $tercero = true;
         echo '<table class="table table-striped table-bordered table-condensed">
           <thead>
-            <th >N°</th> <th >APELLIDOS Y NOMBRES</th> <th >CANCELACIÓN</th> <th >IMPORTE</th> <th >AÑO</th> <th >ENE</th> <th >FEB</th> <th >MAR</th> <th >ABR</th>
-            <th >MAY</th> <th >JUN</th> <th >JUL</th> <th >AGO</th> <th >SEP</th> <th >OCT</th> <th >SEP</th> <th >NOV</th> <th >DIC</th> <th >OBSERVACIONES</th>
+            <th>N°</th> <th>APELLIDOS Y NOMBRES</th> <th>CANCELACIÓN</th> <th>IMPORTE</th> <th>AÑO</th> <th>ENE</th> <th>FEB</th> <th>MAR</th> <th>ABR</th>
+            <th>MAY</th> <th>JUN</th> <th>JUL</th> <th>AGO</th> <th>SEP</th> <th>OCT</th> <th>NOV</th> <th>DIC</th> <th>OBSERVACIONES</th>
           </thead>
-          <tbody>
-            <tr>
-              <th class="py-2  text-center">1</th>
-              <td class="py-2  text-nowrap" rowspan="3" ><div class="d-flex flex-fill align-items-center">
-                  <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                    <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($rspta['data']['cliente_nombre_completo']) . '\')" alt="" > </span>
-                  </div>
-                  <div>
-                    <span class="d-block fw-semibold text-primary">' . $rspta['data']['cliente_nombre_completo'] . '</span>
-                    <span class="text-muted fs-10 text-nowrap">' . $rspta['data']['tipo_doc'] . ' : ' . $rspta['data']['numero_documento'] . '</span> |
-                    <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $rspta['data']['idcliente'] . '</span>
-                  </div>
-                </div></td>
-              <td class="py-2  text-center" rowspan="3">'.$rspta['data']['fecha_cancelacion_format'].'</td>                            
-              <td class="py-2  text-center" rowspan="3" >'.$rspta['data']['costo'].'</td>
-              <td class="py-2  text-nowrap" >2022</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2 " rowspan="3"><textarea cols="30" rows="2" class="textarea_datatable  bg-light" readonly="">' . $rspta['data']['nota'] . '</textarea></td>
-            </tr>      
-            
-            <tr>
-              <th class="py-2  text-center">2</th>
-              <td class="py-2  text-nowrap" >2021</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-            </tr>      
-            <tr>
-              <th class="py-2  text-center">3</th>
-              <td class="py-2  text-nowrap" >2020</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" >50</td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-              <td class="py-2  text-center" ></td>
-            </tr>      
-
-          </tbody>
+          <tbody>';
+    
+        if ($num_anios > 0) {
+          foreach ($rspta['data']['pagos'] as $key => $val) {
+              echo '<tr>';
+              if ($primero) {
+                  echo '<th class="py-0 '.$bg_light.' text-center" rowspan="'.$num_anios.'">1</th>
+                    <td class="py-0 '.$bg_light.' text-nowrap" rowspan="'.$num_anios.'"><div class="d-flex flex-fill align-items-center">
+                        <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
+                          <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($rspta['data']['cliente']['cliente_nombre_completo']) . '\')" alt="" > </span>
+                        </div>
+                        <div>
+                          <span class="d-block fw-semibold text-primary">' . $rspta['data']['cliente']['cliente_nombre_completo'] . '</span>
+                          <span class="text-muted fs-10 text-nowrap">' . $rspta['data']['cliente']['tipo_doc'] . ' : ' . $rspta['data']['cliente']['numero_documento'] . '</span> |
+                          <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $rspta['data']['cliente']['idcliente'] . '</span>
+                        </div>
+                      </div></td>
+                    <td class="py-0 '.$bg_light.' text-center" rowspan="'.$num_anios.'">'.$rspta['data']['cliente']['fecha_cancelacion_format'].'</td>                            
+                    <td class="py-0 '.$bg_light.' text-center" rowspan="'.$num_anios.'">'.$rspta['data']['cliente']['costo'].'</td>';
+                  $primero = false;
+              }
+              echo '<td class="py-0 '.$bg_light.' text-nowrap">'.$val['periodo_pago_year'].'</td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Enero") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_enero'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Febrero") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_febrero'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Marzo") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_marzo'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Abril") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_abril'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Mayo") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_mayo'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Junio") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_junio'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Julio") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_julio'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Agosto") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_agosto'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Septiembre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_septiembre'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Octubre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_octubre'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Noviembre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_noviembre'] . '</a></td>
+                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Diciembre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_diciembre'] . '</a></td>';
+                  
+                  if ($tercero) {
+                    echo '<td class="py-0 '.$bg_light.'" rowspan="'.$num_anios.'"><textarea cols="30" rows="2" class="textarea_datatable '.$bg_light.' bg-light " readonly="">' . $rspta['data']['cliente']['nota'] . '</textarea></td>';
+                    $tercero = false; }
+              echo '</tr>';
+          }
+        } else {
+          echo '<th class="py-0 '.$bg_light.' text-center">1</th>
+          <td class="py-0 '.$bg_light.' text-nowrap"><div class="d-flex flex-fill align-items-center">
+              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
+                <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($rspta['data']['cliente']['cliente_nombre_completo']) . '\')" alt="" > </span>
+              </div>
+              <div>
+                <span class="d-block fw-semibold text-primary">' . $rspta['data']['cliente']['cliente_nombre_completo'] . '</span>
+                <span class="text-muted fs-10 text-nowrap">' . $rspta['data']['cliente']['tipo_doc'] . ' : ' . $rspta['data']['cliente']['numero_documento'] . '</span> |
+                <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $rspta['data']['cliente']['idcliente'] . '</span>
+              </div>
+            </div></td>
+          <td class="py-0 '.$bg_light.' text-center">'.$rspta['data']['cliente']['fecha_cancelacion_format'].'</td>                            
+          <td class="py-0 '.$bg_light.' text-center">'.$rspta['data']['cliente']['costo'].'</td>
+          <td colspan="14" class="text-center">No se registró ningún pago</td>';
+        }
+    
+        echo '</tbody>
         </table>';        
-        
+            
       break;
 
       // ══════════════════════════════════════   PAGOS ALL CLIENTES   ══════════════════════════════════════ 
@@ -381,19 +371,19 @@ if (!isset($_SESSION["user_nombre"])) {
               </div></td>
             <td class="py-0 '.$bg_light.' text-center" >'.$val['fecha_cancelacion_format'].'</td>
             <td class="py-0 '.$bg_light.' text-nowrap" >S/ '.$val['costo'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['periodo_pago_year'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_enero'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_febrero'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_marzo'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_abril'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_mayo'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_junio'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_julio'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_agosto'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_septiembre'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_octubre'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_noviembre'].'</td>
-            <td class="py-0 '.$bg_light.' text-center" >'.$val['venta_diciembre'].'</td>
+            <td class="py-0 '.$bg_light.' text-center" >'.$val['periodo_pago_year'].'</td>  
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Enero") . '\')" type="button">' . $val['venta_enero'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Febrero") . '\')" type="button">' . $val['venta_febrero'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Marzo") . '\')" type="button">' . $val['venta_marzo'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Abril") . '\')" type="button">' . $val['venta_abril'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Mayo") . '\')" type="button">' . $val['venta_mayo'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Junio") . '\')" type="button">' . $val['venta_junio'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Julio") . '\')" type="button">' . $val['venta_julio'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Agosto") . '\')" type="button">' . $val['venta_agosto'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Septiembre") . '\')" type="button">' . $val['venta_septiembre'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Octubre") . '\')" type="button">' . $val['venta_octubre'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Noviembre") . '\')" type="button">' . $val['venta_noviembre'] . '</a></td>
+            <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Diciembre") . '\')" type="button">' . $val['venta_diciembre'] . '</a></td>
             <td class="py-0 '.$bg_light.'" ><textarea cols="30" rows="2" class="textarea_datatable '.$bg_light.' bg-light " readonly="">' . $val['nota'] . '</textarea></td>
           </tr>';
         }
@@ -401,6 +391,47 @@ if (!isset($_SESSION["user_nombre"])) {
         echo '</tbody>
         </table>';
       break;
+
+
+      // ══════════════════════════════════════ P A G O   C L I E N T E   P O R   M E S ══════════════════════════════════════ 
+      case 'pagos_cliente_x_mes':
+        $rspta = $persona_cliente->pago_cliente_x_mes($_GET["id"],$_GET["mes"],$_GET["filtroA"],$_GET["filtroB"],$_GET["filtroC"],$_GET["filtroD"],$_GET["filtroE"]);
+        
+        $data = [];
+        $cont = 1;
+
+        echo '<table class="table  table-hover table-bordered table-condensed">
+        <thead >
+          <tr id="id_buscando_tabla_pago_xmes"> 
+            <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+          </tr>
+          <tr > 
+            <th >N°</th> <th >F. Emisión</th> <th >Periodo Pago</th> <th >Num. Comprobante</th> <th >Monto</th> <th >Imprimir</th>
+          </tr>
+        </thead>
+        <tbody>';
+
+        foreach ($rspta['data'] as $key => $value) {
+          echo '<tr>
+          <th class="py-0 text-center">'.($key + 1).'</th>
+          <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.$value['fecha_emision'].'</td>
+          <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.$value['periodo_pago'].'</td>
+          <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.$value['SNCompb'].'</td>
+          <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.$value['venta_total'].'</td>
+          <td class="py-2 text-center" >
+            <button class="btn btn-icon btn-secondary-transparent rounded-pill btn-wave" onclick="TickcetPagoCliente('.($value['idventa']).', \'' . encodeCadenaHtml($value['tipo_comprobante']) . '\')" target="_blanck" data-bs-toggle="tooltip" title="Ticket">
+             <i class="ri-ticket-line"></i> 
+            </button>
+          </td>
+        </tr>';
+          
+        }
+
+        echo '</tbody>
+        </table>';
+      break;
+
+
 
       // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 
 

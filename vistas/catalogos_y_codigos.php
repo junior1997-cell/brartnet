@@ -67,7 +67,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="col-xl-6">
                 <div class="card custom-card">
                   <div class="card-header">
-                    <div class="card-title"> Código de tipos de tributos y otros conceptos </div>
+                    <div class="card-title"> Código 05: Tipos de tributos y otros conceptos </div>
                   </div>
                   <div class="card-body">
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-tipo-tributo">
@@ -90,7 +90,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="col-xl-6">
                 <div class="card custom-card">
                   <div class="card-header">
-                    <div class="card-title"> Código de tipo de documento de identidad </div>
+                    <div class="card-title"> Código 06: tipo de documento de identidad </div>
                   </div>
                   <div class="card-body">
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-doc-identidad">
@@ -112,7 +112,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="col-xl-6">
                 <div class="card custom-card">
                   <div class="card-header">
-                    <div class="card-title"> Código de tipo de afectación del IGV </div>
+                    <div class="card-title"> Código 07: Tipo de afectación del IGV </div>
                   </div>
                   <div class="card-body">
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-afeccion-igv">
@@ -134,7 +134,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="col-xl-6">
                 <div class="card custom-card">
                   <div class="card-header">
-                    <div class="card-title"> Códigos de tipo de nota de crédito electrónica </div>
+                    <div class="card-title"> Códigos 09: Tipo de nota de crédito electrónica </div>
                   </div>
                   <div class="card-body">
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-codigo-nota-credito">
@@ -155,7 +155,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="col-xl-6">
                 <div class="card custom-card">
                   <div class="card-header">
-                    <div class="card-title"> Códigos de tipo de nota de débito electrónica </div>
+                    <div class="card-title"> Códigos 10: Tipo de nota de débito electrónica </div>
                   </div>
                   <div class="card-body">
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-codigo-nota-debito">
@@ -176,7 +176,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="col-xl-6">
                 <div class="card custom-card">
                   <div class="card-header">
-                    <div class="card-title"> Códigos de tipo de valor de venta (Resumen diario de boletas y notas) </div>
+                    <div class="card-title"> Códigos 11: Tipo de valor de venta (Resumen diario de boletas y notas) </div>
                   </div>
                   <div class="card-body">
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-codigo-valor-venta">

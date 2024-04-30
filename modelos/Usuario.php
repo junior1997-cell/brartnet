@@ -184,7 +184,7 @@ class Usuario
 		from usuario_permiso AS up 
 		INNER JOIN permiso as p ON up.idpermiso = p.idpermiso 
 		where idusuario='$idusuario'
-		GROUP BY p.modulo ORDER BY count(p.modulo) DESC; ";
+		GROUP BY up.idusuario, p.idpermiso, p.estado, p.modulo ORDER BY count(p.modulo) DESC; ";
 		return ejecutarConsultaArray($sql); 		
 			
 	}

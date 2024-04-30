@@ -36,7 +36,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
             <div>
               <div class="d-md-flex d-block align-items-center ">
-                <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);  limpiar_form_venta(); "  > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="show_hide_form(2);  limpiar_form_venta(); " style="display: none;" > <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                 <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                 <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                 <div>
@@ -89,7 +89,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th class="text-center">#</th>
                           <th class="text-center">OP</th>
                           <th>Fecha</th>
-                          <th>Proveedor</th>
+                          <th>Cliente</th>
                           <th>Correlativo</th>
                           <th>Total</th> 
                           <th>SUNAT</th>                       
@@ -101,7 +101,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <th class="text-center">#</th>
                           <th class="text-center">OP</th>
                           <th>Fecha</th>
-                          <th>Proveedor</th>
+                          <th>Cliente</th>
                           <th>Correlativo</th>
                           <th>Total</th>
                           <th>SUNAT</th>
@@ -229,30 +229,35 @@ if (!isset($_SESSION["user_nombre"])) {
                       <!-- TIPO DOC -->
                       <input type="hidden" class="form-control" name="tipo_documento" id="tipo_documento" value="0">  
                       <!-- NUMERO DOC -->
-                      <input type="hidden" class="form-control" name="numero_documento" id="numero_documento" value="0">                     
+                      <input type="hidden" class="form-control" name="numero_documento" id="numero_documento" value="0">  
+                      <!-- ID VENTA PARA: NOTA DE CREDITO -->                   
+                      <input type="hidden" class="form-control" name="nc_idventa" id="nc_idventa" value="0">                     
 
                       <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                         <div class="row gy-3">
                           <!-- ENVIO AUTOMATICO -->
                           <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 px-0">
-                            <div class="custom-toggle-switch d-flex align-items-center mb-4">
+                            <div class="custom-toggle-switch d-flex align-items-center mb-1">
                               <input id="crear_y_emitir" name="crear_y_emitir" type="checkbox" checked="" value="SI">
                               <label for="crear_y_emitir" class="label-warning"></label><span class="ms-3">Crear y emitir SUNAT</span>
                             </div>
                           </div>
                           <!--  TIPO COMPROBANTE  -->
-                          <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-8">
+                          <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-8"> 
                             <div class="mb-sm-0 mb-2">
                               <p class="fs-14 mb-2 fw-semibold">Tipo de comprobante</p>
                               <div class="mb-0 authentication-btn-group">
-                                <input type="hidden" id="tipo_comprobante_hidden" >
+                                <input type="hidden" id="tipo_comprobante_hidden" value="03">
+                                <input type="hidden" name="idsunat_c01" id="idsunat_c01" value="3">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante1" value="03"  onchange="modificarSubtotales(); ver_series_comprobante(this); es_valido_cliente();">
-                                  <label class="btn btn-outline-primary btn-boleta" for="tipo_comprobante1"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante2" value="01" onchange="modificarSubtotales(); ver_series_comprobante(this); es_valido_cliente();">
-                                  <label class="btn btn-outline-primary" for="tipo_comprobante2"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante3" value="12" onchange="modificarSubtotales(); ver_series_comprobante(this); es_valido_cliente();">
-                                  <label class="btn btn-outline-primary" for="tipo_comprobante3"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante1" value="03"  onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante1'); es_valido_cliente();">
+                                  <label class="btn btn-sm btn-outline-primary btn-boleta" for="tipo_comprobante1"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante2" value="01" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante2'); es_valido_cliente();">
+                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante2"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante3" value="12" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante3'); es_valido_cliente();">
+                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante3"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante4" value="07" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante4'); ">
+                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante4" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Nota de Crédito."><i class="bi bi-file-earmark-x-fill me-1 align-middle d-inline-block"></i> NC</label>
                                 </div>
                               </div>
                             </div>                            
@@ -266,7 +271,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>
 
                           <!--  PROVEEDOR  -->
-                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 div_idpersona_cliente">
                             <div class="form-group">
                               <label for="idpersona_cliente" class="form-label">
                                 <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
@@ -276,7 +281,46 @@ if (!isset($_SESSION["user_nombre"])) {
                               </label>
                               <select class="form-control" name="idpersona_cliente" id="idpersona_cliente" onchange="es_valido_cliente(); usar_anticipo_valid();"></select>
                             </div>
-                          </div>   
+                          </div>
+
+                          <!--  NC - TIPO DE COMPROBANTE  -->
+                          <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6 div_nc_tipo_comprobante">
+                            <div class="form-group">
+                              <label for="nc_tipo_comprobante" class="form-label">                                
+                                Comprobante a anular
+                              </label>
+                              <select class="form-control" name="nc_tipo_comprobante" id="nc_tipo_comprobante" onchange="buscar_comprobante_anular();">
+                                <option value="01">FACTURA</option>
+                                <option value="03">BOLETA DE VENTA</option>
+                              </select>
+                            </div>
+                          </div>
+                          
+                          <!--  NC - SERIE Y NUMERO COMPROBANTE  -->
+                          <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6 div_nc_serie_y_numero">
+                            <div class="form-group">
+                              <label for="nc_serie_y_numero" class="form-label">
+                                <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_nc_serie_y_numero();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                Series y número
+                                <span class="charge_nc_serie_y_numero"></span>
+                              </label>
+                              <select class="form-control" name="nc_serie_y_numero" id="nc_serie_y_numero" onchange="mostrar_para_nota_credito(this);"></select>
+                            </div>
+                          </div>
+
+                          <!--  NC - SERIE Y NUMERO COMPROBANTE  -->
+                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 div_nc_motivo_anulacion">
+                            <div class="form-group">
+                              <label for="nc_motivo_anulacion" class="form-label">
+                                <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_nc_motivo_anulacion();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                Motivo
+                                <span class="charge_nc_motivo_anulacion"></span>
+                              </label>
+                              <select class="form-control" name="nc_motivo_anulacion" id="nc_motivo_anulacion" ></select>
+                            </div>
+                          </div>
                           
                           <!-- DESCRIPCION -->
                           <div class="col-md-6 col-lg-12 col-xl-12 col-xxl-12">
@@ -287,7 +331,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>
                           
                           <!-- FECHA EMISION -->
-                          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 div_es_cobro">
                             <div class="form-group">
                               <label for="es_cobro" class="form-label">Es cobro?</label>
                               <div class="toggle toggle-secondary on es_cobro" onclick="delay(function(){es_cobro_valid()}, 100 );" >  <span></span>   </div>
@@ -306,20 +350,21 @@ if (!isset($_SESSION["user_nombre"])) {
                       </div>
 
                       <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-8">
-                        <div class="row">
-                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mt-xs-3">
+                        <div class="row" id="cargando-3-formulario">
+
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mt-xs-3 div_agregar_producto">
                             <button class="btn btn-info label-btn m-r-10px" type="button" onclick="listar_tabla_producto('PR');"  >
                               <i class="ri-add-circle-line label-btn-icon me-2"></i> Producto
                             </button>
                           </div>
-                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mt-xs-3">
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mt-xs-3 div_agregar_producto">
                             <button class="btn btn-primary label-btn m-r-10px" type="button"  onclick="listar_tabla_producto('SR');"  >
                             <i class="ri-add-fill label-btn-icon me-2"></i> 
                               Servicio
                             </button>
                           </div>  
 
-                          <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mt-xs-3">
+                          <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mt-xs-3 div_agregar_producto">
                             <div class="input-group">                              
                               <button type="button" class="input-group-text buscar_x_code" onclick="listar_producto_x_codigo();"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Buscar por codigo de producto."><i class='bx bx-search-alt'></i></button>
                               <input type="text" name="codigob" id="codigob" class="form-control" onkeyup="mayus(this);" placeholder="Digite el código de producto." >
@@ -370,7 +415,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             </table>
                           </div>
 
-                          <div class="col-12 pt-3">
+                          <div class="col-12 pt-3 div_pago_rapido">
                             <button type="button" class="btn btn-primary btn-sm pago_rapido" onclick="pago_rapido(this)" >0</button>
                             <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >10</button>
                             <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >20</button>
@@ -379,7 +424,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >200</button>
                           </div>
 
-                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 div_m_pagos">
                             <div class="row">
 
                               <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
@@ -423,7 +468,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>                          
 
                           <!-- USAR SALDO -->
-                          <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3 pt-3">
+                          <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3 pt-3 div_usar_anticipo">
                             <div class="form-group">
                               <label for="usar_anticipo" class="form-label">Usar anticipos?</label>
                               <div class="toggle toggle-secondary usar_anticipo" onclick="delay(function(){usar_anticipo_valid()}, 100 );" >  <span></span>   </div>
@@ -480,6 +525,13 @@ if (!isset($_SESSION["user_nombre"])) {
                               </div>
                             </div>
                           </div>                          
+                        </div>
+                        <!-- ::::::::::: CARGANDO ... :::::::: -->
+                        <div class="row" id="cargando-4-fomulario" style="display: none;" >
+                          <div class="col-lg-12 mt-5 text-center">                         
+                            <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
+                            <h4 class="bx-flashing">Cargando...</h4>
+                          </div>
                         </div>
                       </div>
 
@@ -611,29 +663,20 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="modal-body">
 
-                      <ul class="nav nav-tabs" id="custom-tab" role="tablist">
-                        <!-- DATOS VENTA -->
-                        <li class="nav-item" role="presentation">
-                          <button class="nav-link active" id="rol-venta" data-bs-toggle="tab" data-bs-target="#rol-venta-pane" type="button" role="tab" aria-selected="true">venta</button>
-                        </li>
-                        <!-- DATOS TOURS -->
-                        <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="rol-detalle" data-bs-toggle="tab" data-bs-target="#rol-detalle-pane" type="button" role="tab" aria-selected="true">PRODUCTOS</button>
-                        </li>
-                        
-                      </ul>
-                      <div class="tab-content" id="custom-tabContent">                                
-                        <!-- /.tab-panel --> 
-                      </div> 
-
-                    <div class="row" id="cargando-4-fomulario" style="display: none;">
-                      <div class="col-lg-12 text-center">
-                        <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                        <br />
-                        <h4>Cargando...</h4>
-                      </div>
-                    </div>
+                  <ul class="nav nav-tabs" id="custom-tab" role="tablist">
+                    <!-- DATOS VENTA -->
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="rol-venta" data-bs-toggle="tab" data-bs-target="#rol-venta-pane" type="button" role="tab" aria-selected="true">venta</button>
+                    </li>
+                    <!-- DATOS TOURS -->
+                    <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="rol-detalle" data-bs-toggle="tab" data-bs-target="#rol-detalle-pane" type="button" role="tab" aria-selected="true">PRODUCTOS</button>
+                    </li>
                     
+                  </ul>
+                  <div class="tab-content" id="custom-tabContent">                                
+                    <!-- /.tab-panel --> 
+                  </div>                   
                   
                 </div>
                 <div class="modal-footer">
@@ -839,6 +882,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();
+        console.log('Pagina termino de cargar');
       });
     </script>
 

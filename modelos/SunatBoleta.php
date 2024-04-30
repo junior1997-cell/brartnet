@@ -107,16 +107,19 @@ if (empty($venta_f['data']['venta'])) {
     ->setCompany($company);
 
   $i = 0;
+  $arrayItem = [];
 
   foreach ($venta_f['data']['detalle'] as $key => $val) {
     $nombre_producto  = mb_convert_encoding($val['nombre_producto'], 'ISO-8859-1', 'UTF-8');
-    $cantidad         = floatval($val['cantidad']);
-    $precio_venta     = floatval($val['precio_venta']);
     $subtotal         = floatval($val['subtotal']);
+    $cantidad         = floatval($val['cantidad']);
+    $precio_venta     = floatval($val['precio_venta']);  
+    $um_nombre        = $val['um_nombre'];
+    $um_abreviatura    = $val['um_abreviatura'];
 
     $item = (new SaleDetail())
       ->setCodProducto($val['codigo'])
-      ->setUnidad('NIU')
+      ->setUnidad($um_abreviatura)
       ->setCantidad($cantidad )
       ->setDescripcion($nombre_producto)
       ->setMtoBaseIgv($subtotal)
@@ -157,9 +160,9 @@ if (empty($venta_f['data']['venta'])) {
     $sunat_error = limpiarCadena("Codigo Error: " . $result->getError()->getCode() . " \n Mensaje Error: " . $result->getError()->getMessage());
     $code = (int)$result->getError()->getCode();
      if ($code === 0) {
-      $sunat_estado = 'ACEPTADA' . PHP_EOL;      
+      $sunat_estado = 'ACEPTADA' ;      
     } else if ($code >= 2000 && $code <= 3999) {
-      $sunat_estado = 'RECHAZADA' . PHP_EOL;
+      $sunat_estado = 'RECHAZADA' ;
     } else {
       /* Esto no debería darse, pero si ocurre, es un CDR inválido que debería tratarse como un error-excepción. */
       /*code: 0100 a 1999 */
@@ -185,7 +188,7 @@ if (empty($venta_f['data']['venta'])) {
     $code = (int)$cdr->getCode();
 
     if ($code === 0) {
-      $sunat_estado = 'ACEPTADA' . PHP_EOL;
+      $sunat_estado = 'ACEPTADA' ;
       if (count($cdr->getNotes()) > 0) {
         $sunat_estado = 'OBSERVACIONES' . PHP_EOL;
         // $sunat_observacion = $cdr->getNotes(); # Corregir estas observaciones en siguientes emisiones. var_dump()
@@ -194,7 +197,7 @@ if (empty($venta_f['data']['venta'])) {
         }
       }
     } else if ($code >= 2000 && $code <= 3999) {
-      $sunat_estado = 'RECHAZADA' . PHP_EOL;
+      $sunat_estado = 'RECHAZADA' ;
     } else {
       /* Esto no debería darse, pero si ocurre, es un CDR inválido que debería tratarse como un error-excepción. */
       /*code: 0100 a 1999 */

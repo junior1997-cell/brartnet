@@ -168,10 +168,10 @@ class Cliente
 	// ══════════════════════════════════════  PAGOS POR CLIENTES ══════════════════════════════════════
 
 	public function ver_pagos_x_cliente($idcliente)	{		
-		
-		$sql = "SELECT pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
+		$sql_0 = "SELECT 
+		pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
 		pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, 	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,
-		cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
+		cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick, COUNT(DISTINCT v.periodo_pago_year) AS total_anios_pago,
 		CASE 
 			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
@@ -187,9 +187,34 @@ class Cliente
 		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
 		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
 		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
+		LEFT JOIN venta as v on pc.idpersona_cliente = v.idpersona_cliente
 		where pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
 		ORDER BY pc.idpersona_cliente DESC";
-		return ejecutarConsultaSimpleFila($sql);
+		$cliente = ejecutarConsultaSimpleFila($sql_0);
+
+		$sql_1 = "SELECT pc.idpersona_cliente, v.periodo_pago_year,
+		SUM(CASE WHEN v.periodo_pago_month = 'Enero'  AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_enero,
+		SUM(CASE WHEN v.periodo_pago_month = 'Febrero' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_febrero,
+		SUM(CASE WHEN v.periodo_pago_month = 'Marzo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_marzo,
+		SUM(CASE WHEN v.periodo_pago_month = 'Abril' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_abril,
+		SUM(CASE WHEN v.periodo_pago_month = 'Mayo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_mayo,
+		SUM(CASE WHEN v.periodo_pago_month = 'Junio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_junio,
+		SUM(CASE WHEN v.periodo_pago_month = 'Julio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_julio,
+		SUM(CASE WHEN v.periodo_pago_month = 'Agosto' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_agosto,
+		SUM(CASE WHEN v.periodo_pago_month = 'Septiembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_septiembre,
+		SUM(CASE WHEN v.periodo_pago_month = 'Octubre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_octubre,
+		SUM(CASE WHEN v.periodo_pago_month = 'Noviembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_noviembre,
+		SUM(CASE WHEN v.periodo_pago_month = 'Diciembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_diciembre
+
+		FROM persona_cliente as pc
+		INNER JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente 
+		where pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
+		GROUP BY v.periodo_pago_year
+		ORDER BY v.periodo_pago_year DESC";
+		$pagos = ejecutarConsulta($sql_1);
+
+
+		return ['status' => true, 'message' => 'Todo ok', 'data' => ['cliente' => $cliente['data'], 'pagos' => $pagos['data']]];
 	}
 
 	// ══════════════════════════════════════  PAGOS ALL CLIENTES ══════════════════════════════════════
@@ -216,17 +241,17 @@ class Cliente
 				END AS cliente_nombre_completo, 
 				p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc,
 				SUM(CASE WHEN v.periodo_pago_month = 'Enero'  AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_enero,
-			SUM(CASE WHEN v.periodo_pago_month = 'Febrero' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_febrero,
-			SUM(CASE WHEN v.periodo_pago_month = 'Marzo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_marzo,
-			SUM(CASE WHEN v.periodo_pago_month = 'Abril' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_abril,
-			SUM(CASE WHEN v.periodo_pago_month = 'Mayo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_mayo,
-			SUM(CASE WHEN v.periodo_pago_month = 'Junio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_junio,
-			SUM(CASE WHEN v.periodo_pago_month = 'Julio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_julio,
-			SUM(CASE WHEN v.periodo_pago_month = 'Agosto' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_agosto,
-			SUM(CASE WHEN v.periodo_pago_month = 'Septiembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_septiembre,
-			SUM(CASE WHEN v.periodo_pago_month = 'Octubre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_octubre,
-			SUM(CASE WHEN v.periodo_pago_month = 'Noviembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_noviembre,
-			SUM(CASE WHEN v.periodo_pago_month = 'Diciembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_diciembre
+				SUM(CASE WHEN v.periodo_pago_month = 'Febrero' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_febrero,
+				SUM(CASE WHEN v.periodo_pago_month = 'Marzo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_marzo,
+				SUM(CASE WHEN v.periodo_pago_month = 'Abril' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_abril,
+				SUM(CASE WHEN v.periodo_pago_month = 'Mayo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_mayo,
+				SUM(CASE WHEN v.periodo_pago_month = 'Junio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_junio,
+				SUM(CASE WHEN v.periodo_pago_month = 'Julio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_julio,
+				SUM(CASE WHEN v.periodo_pago_month = 'Agosto' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_agosto,
+				SUM(CASE WHEN v.periodo_pago_month = 'Septiembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_septiembre,
+				SUM(CASE WHEN v.periodo_pago_month = 'Octubre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_octubre,
+				SUM(CASE WHEN v.periodo_pago_month = 'Noviembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_noviembre,
+				SUM(CASE WHEN v.periodo_pago_month = 'Diciembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_diciembre
 			
 		FROM persona_cliente AS pc
 		INNER JOIN persona AS p on pc.idpersona=p.idpersona
@@ -242,6 +267,81 @@ class Cliente
 		ORDER BY pc.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
+
+	// ══════════════════════════════════════  PAGOS POR MES  ══════════════════════════════════════
+	public function pago_cliente_x_mes($id, $mes, $filtroA, $filtroB, $filtroC, $filtroD, $filtroE){
+
+		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_ap = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
+		if ( empty($filtroA)	|| $filtroA	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND pt.idpersona_trabajador = '$filtroA'";	}
+		if ( empty($filtroB) 	|| $filtroB == 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(pc.fecha_cancelacion) = '$filtroB'";	}
+		if ( empty($filtroC) 	|| $filtroC == 'TODOS' ) { } else{ 	$filtro_sql_ap 		= "AND YEAR(v.periodo_pago_format) = '$filtroC'";	}
+		if ( empty($filtroD) 	|| $filtroD == 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtroD'";	}
+		if ( empty($filtroE)  || $filtroE == 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtroE'";	}
+
+		$sql = "SELECT v.idventa, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y') AS fecha_emision, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion, 
+							CONCAT(v.serie_comprobante, '-', v.numero_comprobante) AS SNCompb, v.venta_total,
+							CONCAT(v.periodo_pago_month, '-', v.periodo_pago_year) AS periodo_pago,
+							v.tipo_comprobante
+						FROM venta v
+							INNER JOIN persona_cliente as pc ON v.idpersona_cliente = pc.idpersona_cliente
+							INNER JOIN persona_trabajador AS pt ON pc.idpersona_trabajador = pt.idpersona_trabajador
+							INNER JOIN persona AS p1 ON pc.idpersona = p1.idpersona
+							INNER JOIN persona AS p2 ON pt.idpersona = p2.idpersona
+						WHERE v.idpersona_cliente = '$id'
+						AND v.periodo_pago_month = '$mes' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za";
+		return ejecutarConsulta($sql);
+
+	}
+
+	// ══════════════════════════════════════  IMPRIMIR PAGOS  ══════════════════════════════════════
+
+	public function imprimirTicket_pagoCliente($id){
+		$sql_1 = "SELECT v.*, CONCAT(v.serie_comprobante, '-', v.numero_comprobante) as serie_y_numero_comprobante, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y %h:%i:%s %p') AS fecha_emision_format, 
+      v.estado, p.idpersona, pc.idpersona_cliente, p.nombre_razonsocial, p.apellidos_nombrecomercial, 
+      CASE 
+        WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+        WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+        ELSE '-'
+      END AS cliente_nombre_completo, 
+      p.tipo_documento, p.numero_documento, p.direccion, 
+      tc.abreviatura as nombre_comprobante, sdi.abreviatura as nombre_tipo_documento,
+      pu.nombre_razonsocial as user_en_atencion
+      FROM venta AS v
+      INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
+      INNER JOIN persona AS p ON p.idpersona = pc.idpersona
+      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.codigo = v.tipo_comprobante
+      LEFT JOIN usuario as u ON u.idusuario = v.user_created
+      LEFT JOIN persona as pu ON pu.idpersona = u.idpersona
+      WHERE v.idventa = '$id'";
+      $venta = ejecutarConsultaSimpleFila($sql_1); if ($venta['status'] == false) {return $venta; }
+
+
+      $sql_2 = "SELECT vc.*, p.idproducto, p.idsunat_unidad_medida, p.idcategoria, p.idmarca, p.nombre as nombre_producto, p.codigo, p.codigo_alterno, p.imagen, 
+      um.nombre AS unidad_medida, um.abreviatura as um_abreviatura, cat.nombre AS categoria, mc.nombre AS marca
+      FROM venta_detalle AS vc
+      INNER JOIN producto AS p ON p.idproducto = vc.idproducto
+      INNER JOIN sunat_unidad_medida AS um ON p.idsunat_unidad_medida = um.idsunat_unidad_medida
+      INNER JOIN categoria AS cat ON p.idcategoria = cat.idcategoria
+      INNER JOIN marca AS mc ON p.idmarca = mc.idmarca
+      WHERE vc.idventa = '$id';";
+      $detalle = ejecutarConsultaArray($sql_2); if ($detalle['status'] == false) {return $detalle; }
+
+      return $datos = ['status' => true, 'message' => 'Todo ok', 'data' => ['venta' => $venta['data'], 'detalle' => $detalle['data']]];
+
+	}
+
+	public function empresa(){
+		$sql = "SELECT * FROM empresa WHERE numero_documento = '20610630431'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+
+
+
+
 
 	// ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════
 	public function select2_filtro_trabajador()	{

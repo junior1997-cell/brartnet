@@ -146,7 +146,7 @@ if (!isset($_SESSION["user_nombre"])) {
         
         <br>
         <!-- Detalle de empresa -->
-        <table border="0" align="center" width="230px">
+        <table class="mx-3" border="0" align="center" width="230px">
           <tbody>
             <tr><td align="center"><img src="<?php echo $logo_empresa; ?>" width="<?php echo ($empresa['data']['logo_c_r'] == 0 ? 150 : 100);?>"></td></tr>
             <tr align="center"><td style="font-size: 14px">.::<strong> <?php echo mb_convert_encoding($empresa['data']['nombre_comercial'], 'ISO-8859-1', 'UTF-8'); ?> </strong>::.</td></tr>
@@ -156,7 +156,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <tr align="center"><td style="font-size: 10px"> <?php echo mb_convert_encoding($empresa['data']['correo'], 'ISO-8859-1', 'UTF-8'); ?> </td></tr>
             <tr align="center"><td style="font-size: 10px"> <?php echo mb_convert_encoding($empresa['data']['web'], 'ISO-8859-1', 'UTF-8'); ?> </td></tr>
             <tr><td style="text-align: center;"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
-            <tr><td align="center"> <strong style="font-size: 14px"> BOLETA DE VENTA ELECTRÓNICA </strong> <br> <b style="font-size: 14px"><?php echo $venta['data']['venta']['serie_y_numero_comprobante'] ; ?> </b></td></tr>
+            <tr><td align="center"> <strong style="font-size: 14px"> NOTA DE CRÉDITO ELECTRÓNICA </strong> <br> <b style="font-size: 14px"><?php echo $venta['data']['venta']['serie_y_numero_comprobante'] ; ?> </b></td></tr>
             <tr><td style="text-align: center;"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
           </tbody>
         </table>
@@ -169,9 +169,8 @@ if (!isset($_SESSION["user_nombre"])) {
             <tr align="left"><td><strong>Dir.:</strong> <?php echo $venta['data']['venta']['direccion'] ; ?></td></tr>
             <tr align="left"><td><strong>Emisión:</strong> <?php echo $venta['data']['venta']['fecha_emision_format'] ; ?> </td></tr>          
             <tr align="left"><td><strong>Moneda:</strong> SOLES</td> </tr>
-            <tr align="left"><td><strong>Atención:</strong> <?php echo $venta['data']['venta']['user_en_atencion']; ?> </td></tr>
-            <tr><td><strong>Método de pago:</strong> <?php echo $venta['data']['venta']['metodo_pago'] ; ?> </td></tr>
-            <tr><td><strong>Nro referencia:</strong> <?php echo $venta['data']['venta']['mp_serie_comprobante'] == null || $venta['data']['venta']['mp_serie_comprobante'] == '' ? '-': $venta['data']['venta']['mp_serie_comprobante']; ?> </td></tr>
+            <tr align="left"><td><strong>Atención:</strong> <?php echo $venta['data']['venta']['user_en_atencion']; ?> </td></tr>            
+            <tr><td><strong>Doc. Baja:</strong> <?php echo $venta['data']['venta']['nc_serie_y_numero'] == null || $venta['data']['venta']['nc_serie_y_numero'] == '' ? '-': $venta['data']['venta']['nc_serie_y_numero']; ?> </td></tr>
             <tr><td><strong>Observación:</strong> <?php echo $venta['data']['venta']['observacion_documento'] ; ?> </td></tr>
           </tbody>
         </table>         
@@ -202,10 +201,8 @@ if (!isset($_SESSION["user_nombre"])) {
           <tr><td colspan="5" style="text-align: right;"><strong>Op. Inafecto </strong></td> <td>:</td> <td style="text-align: right;">0.00</td></tr>
           <tr><td colspan="5" style="text-align: right;"><strong>ICBPER</strong></td>        <td>:</td> <td style="text-align: right;"> <?php echo '0.00'; ?> </td></tr>
           <tr><td colspan="5" style="text-align: right;"><strong>I.G.V.</strong></td>        <td>:</td> <td style="text-align: right;"> <?php echo $venta['data']['venta']['impuesto']; ?> </td></tr>
-          <tr><td colspan="5" style="text-align: right;"><strong>Imp. Pagado</strong></td>   <td>:</td> <td style="text-align: right;"> <?php echo $venta['data']['venta']['total_recibido']; ?> </td></tr>
-          <tr><td colspan="5" style="text-align: right;"><strong>Vuelto</strong></td>        <td>:</td> <td style="text-align: right;"> <?php echo $venta['data']['venta']['total_vuelto']; ?> </td></tr>
-          <!--<tr><td colspan='5'><strong>I.G.V. 18.00 </strong></td><td >:</td><td><?php echo $reg->sumatoria_igv_18_1; ?></td></tr>-->
-          <tr><td colspan="5" style="text-align: right;"><strong>Importe a pagar </strong></td>         <td>:</td> <td style="text-align: right;"><strong> <?php echo $venta_total ?> </strong></td></tr>
+          
+          <tr><td colspan="5" style="text-align: right;"><strong>Importe Total </strong></td>         <td>:</td> <td style="text-align: right;"><strong> <?php echo $venta_total ?> </strong></td></tr>
         </table>      
 
         <!-- Mostramos los totales de la venta en el documento HTML -->
@@ -217,17 +214,20 @@ if (!isset($_SESSION["user_nombre"])) {
 
         <br>
 
-        <div style="text-align: center;">
+        <div style="text-align: center;" width='230px'>
           <img src=<?php echo $logoQr; ?> width="150" height="150"><br>
           <label>  <?php echo mb_convert_encoding($venta['data']['venta']['sunat_hash'], 'ISO-8859-1', 'UTF-8'); ?>  </label>
           <br>
           <br>
-          <label>Representación impresa de la Boleta de<br>Venta Electrónica puede ser consultada<br>en
+          
+          <label width='210px'>Representación impresa de la Nota <br> de Crédito Electrónica puede ser <br> consultada en: <br>
             <?php echo mb_convert_encoding($empresa['data']['web'], 'ISO-8859-1', 'UTF-8'); ?>
           </label>
           <br>
           <br>
           <label><strong>.:: GRACIAS POR SU COMPRA ::.</strong></label>
+          
+          
         </div>
         <p>&nbsp;</p>
       </div>
