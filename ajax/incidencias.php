@@ -27,8 +27,12 @@ if (!isset($_SESSION["user_nombre"])) {
     $id_incidenciaupdate  = isset($_POST["id_incidenciaupdate"]) ? limpiarCadena($_POST["id_incidenciaupdate"]) : "";
     $fecha_fin            = isset($_POST["fecha_fin"]) ? limpiarCadena($_POST["fecha_fin"]) : "";
 
-    
 
+    $fecha_fin_inc         = isset($_POST["fecha_fin_inc"]) ? limpiarCadena($_POST["fecha_fin_inc"]) : "";
+    $estado_inc            = isset($_POST["estado_inc"]) ? limpiarCadena($_POST["estado_inc"]) : "";
+
+    
+     //fecha_fin_inc,     //estado_inc
     // idincidencia: 
     // actividad: 
     // id_trabajador[]:
@@ -46,7 +50,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
         } else { # Editamos el registro
 
-          $rspta = $incidencias->editar($idincidencia,$actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria,$actividad_detalle);
+          $rspta = $incidencias->editar($idincidencia,$actividad, $creacionfecha, $prioridad,$_POST["id_trabajador"],$categoria,$actividad_detalle,$fecha_fin_inc,$estado_inc);
           echo json_encode($rspta, true);
         }
 

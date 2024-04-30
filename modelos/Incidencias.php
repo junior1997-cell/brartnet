@@ -47,15 +47,42 @@
       
     }
 
-    function editar($idincidencia,$actividad, $creacionfecha, $prioridad,$id_trabajador,$categoria,$actividad_detalle){
-      $sql = "UPDATE gasto_de_trabajador  SET idpersona_trabajador = '$idtrabajador', descripcion_gasto = '$descr_gastos', tipo_comprobante = '$tp_comprobante', serie_comprobante = '$serie_comprobante', fecha_ingreso = '$fecha', 
-      idproveedor = '$idproveedor', precio_sin_igv = '$sub_total', precio_igv = '$igv', val_igv = '$val_igv', precio_con_igv = '$total_gasto', descripcion_comprobante = '$descr_comprobante', comprobante = '$img_comprob'
-      WHERE idgasto_de_trabajador = '$id' ";
-      return ejecutarConsulta($sql, 'U');
+    function editar($idincidencia,$actividad, $creacionfecha, $prioridad,$id_trabajador,$categoria,$actividad_detalle,$fecha_fin_inc,$estado_inc){
+      
+      $fecha= new DateTime($creacionfecha); $fecha_str = $fecha->format('Y-m-d');
+      $fecha_fin= new DateTime($fecha_fin_inc); $fecha_fin_str = $fecha_fin->format('Y-m-d');
+
+      $sql = "UPDATE `incidencias` SET 
+      `idincidencia_categoria`='$categoria',`actividad`='$actividad',`actividad_detalle`='$actividad_detalle',
+      `fecha_creacion`='$fecha_str',`fecha_fin`='$fecha_fin_str',`estado_revicion`='$prioridad',`estado_incidencia`='$estado_inc'
+       WHERE `idincidencias`='$idincidencia'";  
+      $upddata= ejecutarConsulta($sql, 'U'); if ( $upddata['status'] == false) {return $upddata; }
+
+      //eliminamos los trabajadores para asignar los nuevos
+      $_sql1="DELETE FROM `incidencia_trabajador` WHERE `idincidencias`='$idincidencia'";
+      $deletedata= ejecutarConsulta($_sql1, 'U'); if ( $deletedata['status'] == false) {return $deletedata; }
+
+
+      $i = 0;
+      $detalle_new = "";
+
+
+
+        while ($i < count($id_trabajador)) {
+
+          $sql_2 = "INSERT INTO incidencia_trabajador(idpersona_trabajador, idincidencias) VALUES ('$id_trabajador[$i]','$idincidencia');";
+          $detalle_new =  ejecutarConsulta($sql_2, 'C'); if ($detalle_new['status'] == false) { return  $detalle_new;}          
+
+          $i = $i + 1;
+
+        }
+
+      return $detalle_new;
+
     }
 
     function mostrar($id){
-      $data = Array();
+      $data = Array(); $array_trabadores = [];
 
         $sql = "SELECT  idincidencias,idincidencia_categoria,actividad,actividad_detalle,fecha_creacion,fecha_fin,estado_revicion,estado_incidencia,estado 
         FROM incidencias where idincidencias='$id';";
@@ -76,7 +103,7 @@
           foreach ($trabadores['data'] as $key => $valor) {
             $trabajardorhtml .='<span class="avatar avatar-sm avatar-rounded"> <img src="../assets/modulo/persona/perfil/'.$valor['foto_perfil'].'" alt="img" data-toggle="tooltip" data-placement="top" title="'.$valor['nombre_razonsocial'].'"> </span>';
           };
-
+          foreach ($trabadores['data'] as $key => $value) { array_push($array_trabadores, $value['idpersona_trabajador'] ); }
           $data = [
 
             'idincidencias'           =>  $incidencias['data']['idincidencias'],
@@ -88,7 +115,7 @@
             'estado_revicion'         =>  $incidencias['data']['estado_revicion'],
             'estado_incidencia'       =>  $incidencias['data']['estado_incidencia'],
             'estado'                  =>  $incidencias['data']['estado'],
-            'trabadores'              => $trabadores['data'],
+            'trabadores'              => $array_trabadores,
             'trabajadoreshtml'        => $trabajardorhtml
           ];
         

@@ -378,8 +378,12 @@ function eliminar(idincidencias,actividad) {
 
 function mostrar_editar(idincidencias) {
 
-  $("#addtask").modal('show');
-
+  // $("#addtask").modal('show');
+  view_form(2);
+  
+  
+  $(".class_fecha_fin").show();
+  $(".class_estado_inc").show();
   $.post("../ajax/incidencias.php?op=mostrar",{ idincidencia: idincidencias}, function (e, status) {
 
     e = JSON.parse(e);  console.log(e);
@@ -388,8 +392,11 @@ function mostrar_editar(idincidencias) {
       $("#idincidencia").val(e.data.idincidencias);
       $("#actividad").val(e.data.actividad);
       $("#adDate").val(e.data.fecha_creacion); 
-      $("#prioridad").val(e.data.estado_revicion).trigger("change");; 
-      $("#categoria").val(e.data.idincidencia_categoria).trigger("change");; 
+      $("#adDatefin").val(e.data.fecha_fin); 
+      $("#prioridad").val(e.data.estado_revicion).trigger("change");
+      $("#estado_inc").val(e.data.estado_incidencia).trigger("change"); 
+      $("#categoria").val(e.data.idincidencia_categoria).trigger("change"); 
+      $("#id_trabajador").val(e.data.trabadores).trigger("change");
       $("#actividad_detalle").val(e.data.actividad_detalle);
 
     } else {
