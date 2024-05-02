@@ -525,13 +525,39 @@
           <div class="row">
 
             
+          <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="card custom-card overlay-card">
+                <img src="assets/modulo/home/cobertura/demo-tocache.jpg" class="card-img" alt="..." >
+                <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center" >
+                  <div class="card-body">
+                    <div class="card-text">
+                      <h1 class="text-white"><b>Tocache</b></h1>
+                      <p class="text-white"><b>Este - Suroeste</b></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
-                <img src="assets/modulo/home/cobertura/demo-uchiza.jpg" class="card-img" alt="..." style="height: 100;">
+                <img src="assets/modulo/home/cobertura/demo-shunte.jpg" class="card-img" alt="...">
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
                   <div class="card-body">
                     <div class="card-text">
-                      <h1 class="text-white"><b>Uchiza</b></h1>
+                      <h1 class="text-white"><b>Shunté</b></h1>
+                      <p class="text-white"><b>De centro a Sur</b></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="card custom-card overlay-card">
+                <img src="assets/modulo/home/cobertura/demo-polvora.jpg" class="card-img" alt="..." style="height: 100;">
+                <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
+                  <div class="card-body">
+                    <div class="card-text">
+                      <h1 class="text-white"><b>Pólvora</b></h1>
                       <p class="text-white"><b>De centro a Sur</b></p>
                     </div>
                   </div>
