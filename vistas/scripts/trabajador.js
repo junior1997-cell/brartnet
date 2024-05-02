@@ -1,4 +1,4 @@
-var tabla_usuario;
+var tabla_trabajador;
 var tabla_historial;
 var modoDemo = false;
 //Función que se ejecuta al inicio
@@ -90,13 +90,13 @@ function show_hide_form(flag) {
 
 //Función Listar
 function listar() {
-	tabla_usuario = $('#tabla-usuario').dataTable({
+	tabla_trabajador = $('#tabla-usuario').dataTable({
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_usuario) { tabla_usuario.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_trabajador) { tabla_trabajador.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [0,8,9,10,4,5,11,12,6,7], }, title: '', text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
       { extend: 'excel', exportOptions: { columns: [0,8,9,10,4,5,11,12,6,7], }, title: 'Lista de Trabajadores', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
       { extend: 'pdf', exportOptions: { columns: [0,8,9,10,4,5,11,12,6,7], }, title: 'Lista de Trabajadores', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
@@ -162,7 +162,7 @@ function guardar_y_editar_trabajador(e) {
 			try {
 				e = JSON.parse(e);  //console.log(e); 
         if (e.status == true) {	
-					tabla_usuario.ajax.reload(null, false);          
+					tabla_trabajador.ajax.reload(null, false);          
 					show_hide_form(1)
 					sw_success('Exito', 'Trabajador guardado correctamente.');
 				} else {
@@ -251,17 +251,17 @@ function mostrar(idpersona) {
 }
 
 //Función para desactivar registros
-function desactivar(idusuario, nombre) {
+function desactivar(idtrabajador, idpersona, nombre) {
 	$('.tooltip').remove();
 	crud_eliminar_papelera(
-    "../ajax/trabajador.php?op=papelera",
-    "../ajax/trabajador.php?op=eliminar", 
-    idusuario, 
+    `../ajax/trabajador.php?op=papelera&idpersona=${idpersona}`,
+    `../ajax/trabajador.php?op=eliminar&idpersona=${idpersona}`, 
+    idtrabajador,  
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla_bancos.ajax.reload(null, false); },
+    function(){ tabla_trabajador.ajax.reload(null, false);     },
     false, 
     false, 
     false,
@@ -270,15 +270,15 @@ function desactivar(idusuario, nombre) {
 }
 
 //Función para activar registros
-function activar(idusuario, nombre) {
+function activar(idtrabajador, idpersona, nombre) {
 	crud_simple_alerta(
-		"../ajax/bancos.php?op=desactivar_bancos",
-    idusuario, 
+		`../ajax/trabajador.php?op=activar&idpersona=${idpersona}`,
+    idtrabajador,  
     "!Elija una opción¡", 
-    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    `<b class="text-success">${nombre}</b> <br> Este trabajador sera visible en el sistema.`, 
 		`Aceptar`,
     function(){ sw_success('Recuperado', "Tu registro ha sido restaurado." ) }, 
-    function(){ tabla_bancos.ajax.reload(null, false); },
+    function(){ tabla_trabajador.ajax.reload(null, false);     },
     false, 
     false, 
     false,

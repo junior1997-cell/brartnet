@@ -106,15 +106,21 @@ class Trabajador
 		}			
 	}
 
-	//Implementamos un método para desactivar usuario
-	public function desactivar($idusuario) {
-		$sql = "UPDATE usuario set condicion='0' where idusuario='$idusuario'";
+	public function eliminar($idtrabajador, $idpersona) {
+		$sql = "UPDATE persona set estado_delete='0' where idpersona='$idpersona'";	ejecutarConsulta($sql);
+		$sql = "UPDATE persona_trabajador set estado_delete='0' where idpersona_trabajador='$idtrabajador'";
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para activar usuario
-	public function activar($idusuario)	{
-		$sql = "UPDATE usuario set condicion='1' where idusuario='$idusuario'";
+	public function papelera($idtrabajador, $idpersona) {
+		$sql = "UPDATE persona set estado='0' where idpersona='$idpersona'";	ejecutarConsulta($sql);
+		$sql = "UPDATE persona_trabajador set estado='0' where idpersona_trabajador='$idtrabajador'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function activar($idtrabajador, $idpersona)	{
+		$sql = "UPDATE persona set estado='0' where idpersona='$idpersona'";	ejecutarConsulta($sql);
+		$sql = "UPDATE persona_trabajador set estado='1' where idpersona_trabajador='$idtrabajador'";
 		return ejecutarConsulta($sql);
 	}
 

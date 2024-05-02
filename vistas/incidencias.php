@@ -86,17 +86,17 @@ if (!isset($_SESSION["user_nombre"])) {
                               </div>
                             </div>
                             <!-- Fecha -->
-                            <div class="col-12" style="display: none;">
+                            <div class="col-12 class_fecha_fin" style="display: none;">
                               <div class="form-group">
                                 <label class="form-label">Fecha Fin</label>
                                 <div class="input-group">
                                   <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
-                                  <input type="date" class="form-control" id="adDatefin" name="fecha_fin" placeholder="Elige fecha">
+                                  <input type="date" class="form-control" id="adDatefin" name="fecha_fin_inc" placeholder="Elige fecha">
                                 </div>
                               </div>
                             </div>
                             <!-- estado incidencia -->
-                            <div class="col-xl-12" style="display: none;" >
+                            <div class="col-xl-12 class_estado_inc" style="display: none;" >
                               <div class="form-group">
                                 <label for="actividad" class="form-label">Estado Incidencia</label>
                                 <select class="form-select" id="estado_inc" name="estado_inc">
@@ -120,7 +120,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <!-- Categoría -->
                             <div class="mb-1 col-12">
                               <div class="form-group">
-                                <label for="categoria" class="form-label">Tipo documento: </label>
+                                <label for="categoria" class="form-label">Categoría: </label>
                                 <select name="categoria" id="categoria" class="form-select" required>
                                 </select>
                               </div>

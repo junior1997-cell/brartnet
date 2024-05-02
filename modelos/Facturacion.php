@@ -20,7 +20,7 @@
 
       $filtro_id_trabajador  = '';
       if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
-        $filtro_id_trabajador = "pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+        $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
       } 
 
       $sql = "SELECT v.*, CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS tp_comprobante_v2,
@@ -305,7 +305,7 @@
     public function select2_cliente(){
       $filtro_id_trabajador  = '';
       if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
-        $filtro_id_trabajador = "pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+        $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
       } 
       $sql = "SELECT LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_cliente, p.idpersona,  p.nombre_razonsocial, p.apellidos_nombrecomercial,
       CASE 

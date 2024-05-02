@@ -360,8 +360,7 @@ function ver_series_comprobante(input) {
       $(".div_usar_anticipo").hide();
       $(".datos-de-saldo").hide();
     } else if ( tipo_comprobante == '12') {
-      $("#idsunat_c01").val(12); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
-      $("#idsunat_c01").val(2); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+      $("#idsunat_c01").val(12); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante      
       $("#periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
       $("#metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
     }
