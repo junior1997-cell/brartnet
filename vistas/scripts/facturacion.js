@@ -78,17 +78,56 @@ function mini_reporte() {
   $(".vw_total_ticket").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
 
   $.getJSON(`../ajax/facturacion.php?op=mini_reporte`, function (e, textStatus, jqXHR) {
-    $(".vw_total_factura").html( `${formato_miles(e.data.factura)}` ).addClass('count-up');
-    $(".vw_total_factura_p").html( `${e.data.factura_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.factura_p)}%` );
-    e.data.factura_p >= 0? $(".vw_total_factura_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_factura_p").addClass('text-danger').removeClass('text-success') ;
 
-    $(".vw_total_boleta").html( `${formato_miles(e.data.boleta)}` ).addClass('count-up');
-    $(".vw_total_boleta_p").html( `${e.data.boleta_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.boleta_p)}%` );
-    e.data.boleta_p >= 0? $(".vw_total_boleta_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_boleta_p").addClass('text-danger').removeClass('text-success') ;
+    if (e.status == true) {      
+    
+      $(".vw_total_factura").html( `${formato_miles(e.data.factura)}` ).addClass('count-up');
+      $(".vw_total_factura_p").html( `${e.data.factura_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.factura_p)}%` );
+      e.data.factura_p >= 0? $(".vw_total_factura_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_factura_p").addClass('text-danger').removeClass('text-success') ;
 
-    $(".vw_total_ticket").html( `${formato_miles(e.data.ticket)}` ).addClass('count-up');
-    $(".vw_total_ticket_p").html( `${e.data.ticket_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.ticket_p)}%` );
-    e.data.ticket_p >= 0? $(".vw_total_ticket_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_ticket_p").addClass('text-danger').removeClass('text-success') ;
+      $(".vw_total_boleta").html( `${formato_miles(e.data.boleta)}` ).addClass('count-up');
+      $(".vw_total_boleta_p").html( `${e.data.boleta_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.boleta_p)}%` );
+      e.data.boleta_p >= 0? $(".vw_total_boleta_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_boleta_p").addClass('text-danger').removeClass('text-success') ;
+
+      $(".vw_total_ticket").html( `${formato_miles(e.data.ticket)}` ).addClass('count-up');
+      $(".vw_total_ticket_p").html( `${e.data.ticket_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.ticket_p)}%` );
+      e.data.ticket_p >= 0? $(".vw_total_ticket_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_ticket_p").addClass('text-danger').removeClass('text-success') ;
+
+      // MINI CHART
+      var options = {
+        series: [
+          { name: 'Factura', data: e.data.factura_line }, 
+          { name: 'Boleta', data: e.data.boleta_line }, 
+          { name: 'Ticket', data: e.data.ticket_line }
+        ],
+        chart: { type: 'bar', height: 210, stacked: true },
+        plotOptions: { bar: { horizontal: false, columnWidth: '25%', endingShape: 'rounded', }, },
+        grid: { borderColor: '#f2f5f7', },
+        dataLabels: { enabled: false },
+        colors: ["#4b9bfa", "#28d193", "#ffbe14", "#f3f6f8"],
+        stroke: { show: true, colors: ['transparent'] },
+        xaxis: {
+          categories: e.data.mes_nombre,
+          labels: {
+            show: true,
+            style: { colors: "#8c9097", fontSize: '11px', fontWeight: 600, cssClass: 'apexcharts-xaxis-label', },
+          }
+        },
+        yaxis: {
+          title: { style: { color: "#8c9097", } },
+          labels: {
+            show: true,
+            style: { colors: "#8c9097", fontSize: '11px', fontWeight: 600, cssClass: 'apexcharts-xaxis-label', },
+          }
+        },
+        fill: { opacity: 1 },
+        tooltip: { y: {  formatter: function (val) { return "S/ " + val ; } } }
+      };
+      var chart = new ApexCharts(document.querySelector("#invoice-list-stats"), options);
+      chart.render();
+    } else {
+      ver_errores(e);
+    }
 
   }).fail( function(e) { ver_errores(e); } );
 }
@@ -190,6 +229,8 @@ function listar_tabla_facturacion(){
       if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
       // columna: Monto
       if (data[5] != '') { $("td", row).eq(5).addClass("text-nowrap"); }
+      // columna: Monto
+      if (data[6] != '') { $("td", row).eq(6).addClass("text-nowrap text-center"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -236,13 +277,13 @@ function guardar_editar_facturacion(e) {
     showLoaderOnConfirm: true,
   }).then((result) => {
     if (result.isConfirmed) {
-      if (result.value.status == true){        
+      if (result.value.status == true){
         Swal.fire("Correcto!", "Venta guardada correctamente", "success");
-
         tabla_principal_facturacion.ajax.reload(null, false);
-
-        limpiar_form_venta(); show_hide_form(1);
-             
+        limpiar_form_venta(); show_hide_form(1);             
+      } else if ( result.value.status == 'error_personalizado'){        
+        tabla_principal_facturacion.ajax.reload(null, false);
+        limpiar_form_venta(); show_hide_form(1); ver_errores(result.value);
       } else {
         ver_errores(result.value);
       }      
@@ -521,17 +562,15 @@ function ver_formato_a4_comprimido(idventa, tipo_comprobante) {
   }
 }
 
-function ver_formato_a4_completo(idventa, tipo_comprobante) {
+function ver_formato_a4_completo(idventa, tipo_comprobante) {  
   
-  
-    toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
-    // toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
+  toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+  // toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
   
 }
 
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   N O T A   D E   C R E D I T O :::::::::::::::::::::::::::::::::::::::::::::
-
 
 function buscar_comprobante_anular() { 
   $('.charge_nc_serie_y_numero').html('<div class="spinner-border spinner-border-sm" role="status"></div>');
@@ -554,6 +593,71 @@ function buscar_comprobante_anular() {
   }).fail( function(e) { ver_errores(e); } );
 }
 
+// ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   V E R   E S T A D O   S U N A T  :::::::::::::::::::::::::::::::::::::::::::::
+
+function ver_estado_documento(idventa, tipo_comprobante) {
+  if (tipo_comprobante == '01'  || tipo_comprobante == '03' || tipo_comprobante == '07' ) {
+   
+    $("#html-ver-estado").html(`<div class="row" >
+      <div class="col-lg-12 text-center">
+        <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+        <h4 class="bx-flashing">Cargando...</h4>
+      </div>
+    </div>`);
+    $("#modal-ver-estado").modal('show');
+    $.getJSON(`../ajax/facturacion.php?op=ver_estado_documento`, {idventa: idventa}, function (e, textStatus, jqXHR) {
+      if (e.status == true) {
+        $("#modal-ver-estado-label").html(`─ VER ESTADO: ${e.data.serie_comprobante}-${e.data.numero_comprobante}`);
+        $("#html-ver-estado").html(`
+          <b>Estado:</b> ${e.data.sunat_estado} <br>
+          <b>Mensaje:</b> ${e.data.sunat_mensaje} <br>
+          <b>Observacion:</b> ${e.data.sunat_observacion} <br>
+          <b>Codigo:</b> ${e.data.sunat_code} <br>
+          <b>Error:</b> ${e.data.sunat_error} <br>
+        `);
+      } else {
+        ver_errores(e);
+      }      
+    }).fail( function(e) { ver_errores(e); } );
+  } else {  
+    toastr_warning('Sin estado SUNAT', 'Este documento no tiene una respuesta de sunat, teniendo en cuenta que es un documento interno de control de la empresa.');
+  }
+}
+
+function reenviar_doc_a_sunat(idventa, tipo_comprobante) {
+  if (tipo_comprobante == '01'  || tipo_comprobante == '03' || tipo_comprobante == '07' ) {
+    
+    Swal.fire({
+      title: "¿Está seguro de reenviar a SUNAT?",
+      html: "Verifica que todos lo <b>campos</b> hayan sido actualizados o esten <b>conformes</b>!!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#28a745",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Enviar!",
+      preConfirm: (input) => {
+        return fetch(`../ajax/facturacion.php?op=reenviar_sunat&idventa=${idventa}&tipo_comprobante=${tipo_comprobante}`).then(response => {
+          //console.log(response);
+          if (!response.ok) { throw new Error(response.statusText) }
+          return response.json();
+        }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })        
+      },
+      showLoaderOnConfirm: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (result.value.status == true){        
+          Swal.fire("Correcto!", "Documento actualizado correctamente.", "success");
+          tabla_principal_facturacion.ajax.reload(null, false);               
+        } else {
+          ver_errores(result.value);
+        }      
+      }
+    }); 
+    
+  } else {  
+    toastr_warning('Sin respuesta!!', 'Este documento no tiene una respuesta de sunat, teniendo en cuenta que es un documento interno de control de la empresa.');
+  }
+}
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O D U C T O S :::::::::::::::::::::::::::::::::::::::::::::
 function limpiar_form_producto(){
@@ -889,9 +993,6 @@ $(function(){
 
 });
 
-
-
-
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 function reload_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_cliente", '#idpersona_cliente', null, '.charge_idpersona_cliente'); }
@@ -908,38 +1009,7 @@ function printIframe(id) {
 (function () {
   "use strict"
 
-  // for invoice stats
-  var options = {
-    series: [
-      { name: 'Factura', data: [76, 85, 101, 98, 87, 105] }, 
-      { name: 'Boleta', data: [35, 41, 36, 26, 45, 48] }, 
-      { name: 'Ticket', data: [44, 55, 57, 56, 61, 58] }
-    ],
-    chart: { type: 'bar', height: 210, stacked: true },
-    plotOptions: { bar: { horizontal: false, columnWidth: '25%', endingShape: 'rounded', }, },
-    grid: { borderColor: '#f2f5f7', },
-    dataLabels: { enabled: false },
-    colors: ["#4b9bfa", "#28d193", "#ffbe14", "#f3f6f8"],
-    stroke: { show: true, colors: ['transparent'] },
-    xaxis: {
-      categories: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
-      labels: {
-        show: true,
-        style: { colors: "#8c9097", fontSize: '11px', fontWeight: 600, cssClass: 'apexcharts-xaxis-label', },
-      }
-    },
-    yaxis: {
-      title: { style: { color: "#8c9097", } },
-      labels: {
-        show: true,
-        style: { colors: "#8c9097", fontSize: '11px', fontWeight: 600, cssClass: 'apexcharts-xaxis-label', },
-      }
-    },
-    fill: { opacity: 1 },
-    tooltip: { y: {  formatter: function (val) { return "S/ " + val ; } } }
-  };
-  var chart = new ApexCharts(document.querySelector("#invoice-list-stats"), options);
-  chart.render();
+  
 
   // UPLOADS ===================================
 

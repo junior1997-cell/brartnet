@@ -13,7 +13,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
   <head>
 
-    <?php $title_page = "Gastos";
+    <?php $title_page = "Clientes";
     include("template/head.php"); ?>
 
   </head>

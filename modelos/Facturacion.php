@@ -23,7 +23,8 @@
         $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
       } 
 
-      $sql = "SELECT v.*, CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS tp_comprobante_v2,
+      $sql = "SELECT v.*, CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END AS venta_total_v2, 
+      CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS tp_comprobante_v2,
       DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') as fecha_emision_format, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, 
       p.numero_documento, p.foto_perfil, tc.abreviatura as tp_comprobante_v1, sdi.abreviatura as tipo_documento, v.estado,
       CASE 
@@ -62,7 +63,8 @@
       $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
       $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion,
       //DATOS TABLA venta DETALLE
-      $idproducto, $um_nombre, $um_abreviatura, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $subtotal_producto    
+      $idproducto, $um_nombre, $um_abreviatura, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $descuento_porcentaje, 
+      $subtotal_producto, $subtotal_no_descuento    
     ){
       $tipo_v = "";
       if ($tipo_comprobante == '07') {
@@ -96,8 +98,8 @@
         if ( !empty($newdata['data']) ) {      
           while ($i < count($idproducto)) {
 
-            $sql_2 = "INSERT INTO venta_detalle( idventa, idproducto, tipo, cantidad, precio_compra, precio_venta, descuento, subtotal, um_nombre, um_abreviatura)
-            VALUES ('$id', '$idproducto[$i]', '$tipo_v', '$cantidad[$i]', '$precio_compra[$i]', '$precio_con_igv[$i]', '$descuento[$i]', '$subtotal_producto[$i]', '$um_nombre[$i]', '$um_abreviatura[$i]');";
+            $sql_2 = "INSERT INTO venta_detalle( idventa, idproducto, tipo, cantidad, precio_compra, precio_venta, descuento, descuento_porcentaje, subtotal, subtotal_no_descuento, um_nombre, um_abreviatura)
+            VALUES ('$id', '$idproducto[$i]', '$tipo_v', '$cantidad[$i]', '$precio_compra[$i]', '$precio_con_igv[$i]', '$descuento[$i]', '$descuento_porcentaje[$i]', '$subtotal_producto[$i]', '$subtotal_no_descuento[$i]', '$um_nombre[$i]', '$um_abreviatura[$i]');";
             $detalle_new =  ejecutarConsulta_retornarID($sql_2, 'C'); if ($detalle_new['status'] == false) { return  $detalle_new;}          
             $id_d = $detalle_new['data'];
             $i = $i + 1;
@@ -118,7 +120,7 @@
           </li>'; 
         }
 
-        $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Errores anteriores!!', 'message' => 'No se podran generar comprobantes hasta corregir los errores anteriores a este: '. $info_repetida, 'user' =>  $_SESSION['user_nombre'], 'data' => $buscando_error['data'], 'id_tabla' => '' );
+        $retorno = array( 'status' => 'error_usuario', 'titulo' => 'Errores anteriores!!', 'message' => 'No se podran generar comprobantes hasta corregir los errores anteriores a este: '. $info_repetida, 'user' =>  $_SESSION['user_nombre'], 'data' => $buscando_error['data'], 'id_tabla' => '' );
         return $retorno;
       }      
     }
@@ -149,6 +151,13 @@
       
       $sql_1 = "UPDATE venta SET sunat_estado='$sunat_estado',sunat_observacion='$sunat_observacion',sunat_code='$sunat_code',
       sunat_hash='$sunat_hash',sunat_mensaje='$sunat_mensaje', sunat_error = '$sunat_error' WHERE idventa = '$idventa';";
+      return ejecutarConsulta($sql_1);     
+
+    } 
+
+    public function actualizar_doc_anulado_x_nota_credito( $idventa) {
+      
+      $sql_1 = "UPDATE venta SET sunat_estado='ANULADO' WHERE idventa = '$idventa';";
       return ejecutarConsulta($sql_1);     
 
     } 
@@ -198,14 +207,12 @@
     }
 
     public function eliminar($id){
-      $sql = "UPDATE venta SET estado_delete = 0
-      WHERE idventa = '$id'";
+      $sql = "UPDATE venta SET estado_delete = '0' WHERE idventa = '$id'";
       return ejecutarConsulta($sql, 'D');
     }
 
-    public function desactivar($id){
-      $sql = "UPDATE venta SET estado = 0
-      WHERE idventa = '$id'";
+    public function papelera($id){
+      $sql = "UPDATE venta SET estado = '0'  WHERE idventa = '$id'";
       return ejecutarConsulta($sql, 'T');
     }    
 
@@ -231,6 +238,8 @@
 
     Public function mini_reporte(){
 
+      $meses_espanol = array( 1 => "Ene", 2 => "Feb", 3 => "Mar", 4 => "Abr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Ago", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dic" );
+
       $filtro_id_trabajador  = '';
       if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
         $filtro_id_trabajador = "pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
@@ -240,14 +249,14 @@
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '01' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '01' ) AS ventas_mes_anterior;";
       $factura_p = ejecutarConsultaSimpleFila($sql_01); if ($factura_p['status'] == false) {return $factura_p; }
-      $sql_01 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE tipo_comprobante = '01' AND estado = '1' AND estado_delete = '1';";
+      $sql_01 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE sunat_estado = 'ACEPTADA' AND tipo_comprobante = '01' AND estado = '1' AND estado_delete = '1';";
       $factura = ejecutarConsultaSimpleFila($sql_01); if ($factura['status'] == false) {return $factura; }
 
       $sql_03 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '03' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '03' ) AS ventas_mes_anterior;";
       $boleta_p = ejecutarConsultaSimpleFila($sql_03); if ($boleta_p['status'] == false) {return $boleta_p; }
-      $sql_03 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE tipo_comprobante = '03' AND estado = '1' AND estado_delete = '1';";
+      $sql_03 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE sunat_estado = 'ACEPTADA' AND tipo_comprobante = '03' AND estado = '1' AND estado_delete = '1';";
       $boleta = ejecutarConsultaSimpleFila($sql_03); if ($boleta['status'] == false) {return $boleta; }
 
       $sql_12 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
@@ -257,11 +266,37 @@
       $sql_12 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE tipo_comprobante = '12' AND estado = '1' AND estado_delete = '1';";
       $ticket = ejecutarConsultaSimpleFila($sql_12); if ($ticket['status'] == false) {return $ticket; }
 
+      $mes_factura = []; $mes_nombre = []; $date_now = date("Y-m-d");  $fecha_actual = date("Y-m-d", strtotime("-5 months", strtotime($date_now)));
+      for ($i=1; $i <=6 ; $i++) { 
+        $nro_mes = floatval( date("m", strtotime($fecha_actual)) );
+        $sql_mes = "SELECT MONTHNAME(fecha_emision) AS fecha_emision , COALESCE(SUM(venta_total), 0) AS venta_total FROM venta WHERE MONTH(fecha_emision) = '$nro_mes' AND sunat_estado = 'ACEPTADA' AND tipo_comprobante = '01' AND estado = '1' AND estado_delete = '1';";
+        $mes_f = ejecutarConsultaSimpleFila($sql_mes); if ($mes_f['status'] == false) {return $mes_f; }
+        array_push($mes_factura, floatval($mes_f['data']['venta_total']) ); array_push($mes_nombre, $meses_espanol[$nro_mes] );
+        $fecha_actual= date("Y-m-d", strtotime("1 months", strtotime($fecha_actual)));
+      }
+
+      $mes_boleta = [];  $date_now = date("Y-m-d");  $fecha_actual = date("Y-m-d", strtotime("-5 months", strtotime($date_now)));
+      for ($i=1; $i <=6 ; $i++) { 
+        $sql_mes = "SELECT MONTHNAME(fecha_emision) AS fecha_emision , COALESCE(SUM(venta_total), 0) AS venta_total FROM venta WHERE MONTH(fecha_emision) = '".date("m", strtotime($fecha_actual))."' AND sunat_estado = 'ACEPTADA' AND tipo_comprobante = '03' AND estado = '1' AND estado_delete = '1';";
+        $mes_b = ejecutarConsultaSimpleFila($sql_mes); if ($mes_b['status'] == false) {return $mes_b; }
+        array_push($mes_boleta, floatval($mes_b['data']['venta_total']) ); 
+        $fecha_actual= date("Y-m-d", strtotime("1 months", strtotime($fecha_actual)));
+      }
+
+      $mes_ticket = [];  $date_now = date("Y-m-d");  $fecha_actual = date("Y-m-d", strtotime("-5 months", strtotime($date_now)));
+      for ($i=1; $i <=6 ; $i++) { 
+        $sql_mes = "SELECT MONTHNAME(fecha_emision) AS fecha_emision , COALESCE(SUM(venta_total), 0) AS venta_total FROM venta WHERE MONTH(fecha_emision) = '".date("m", strtotime($fecha_actual))."' AND sunat_estado = 'ACEPTADA' AND tipo_comprobante = '12' AND estado = '1' AND estado_delete = '1';";
+        $mes_t = ejecutarConsultaSimpleFila($sql_mes); if ($mes_t['status'] == false) {return $mes_t; }
+        array_push($mes_ticket, floatval($mes_t['data']['venta_total']) );
+        $fecha_actual= date("Y-m-d", strtotime("1 months", strtotime($fecha_actual)));
+      }
+
       return ['status' => true, 'message' =>'todo okey', 
         'data'=>[
-          'factura'=> floatval($factura['data']['venta_total']), 'factura_p' => floatval($factura_p['data']['porcentaje']) , 
-          'boleta' => floatval($boleta['data']['venta_total']), 'boleta_p' => floatval($boleta_p['data']['porcentaje']) , 
-          'ticket' => floatval($ticket['data']['venta_total']), 'ticket_p' => floatval($ticket_p['data']['porcentaje']) , 
+          'mes_nombre' => $mes_nombre,
+          'factura'=> floatval($factura['data']['venta_total']), 'factura_p' => floatval($factura_p['data']['porcentaje']) , 'factura_line' => $mes_factura ,
+          'boleta' => floatval($boleta['data']['venta_total']), 'boleta_p' => floatval($boleta_p['data']['porcentaje']) , 'boleta_line' => $mes_boleta ,
+          'ticket' => floatval($ticket['data']['venta_total']), 'ticket_p' => floatval($ticket_p['data']['porcentaje']) , 'ticket_line' => $mes_ticket ,
         ]
       ];
 
@@ -333,7 +368,8 @@
       FROM venta as v
       INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.codigo = v.tipo_comprobante
-      WHERE v.tipo_comprobante = '$tipo_comprobante' AND v.sunat_estado ='ACEPTADA'  $filtro_id_trabajador ORDER BY v.numero_comprobante DESC;";  #return $sql;
+      WHERE v.tipo_comprobante = '$tipo_comprobante' AND v.sunat_estado ='ACEPTADA' AND  v.fecha_emision >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)  $filtro_id_trabajador 
+      ORDER BY v.numero_comprobante DESC;";  #return $sql;
       return ejecutarConsultaArray($sql); 
     }
 

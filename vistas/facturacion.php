@@ -86,25 +86,27 @@ if (!isset($_SESSION["user_nombre"])) {
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-ventas">
                       <thead>
                         <tr>
-                          <th class="text-center">#</th>
-                          <th class="text-center">OP</th>
+                          <th class="text-center"><center>#</center></th>
+                          <th class="text-center"><center>OP</center></th>
                           <th>Fecha</th>
                           <th>Cliente</th>
                           <th>Correlativo</th>
                           <th>Total</th> 
-                          <th>SUNAT</th>                       
+                          <th><center>SUNAT</center></th>        
+                          <th><center>Estado</center></th>               
                         </tr>
                       </thead>
                       <tbody></tbody>
                       <tfoot>
                         <tr>
-                        <th class="text-center">#</th>
-                          <th class="text-center">OP</th>
+                        <th class="text-center"><center>#</center></th>
+                          <th class="text-center"><center>OP</center></th>
                           <th>Fecha</th>
                           <th>Cliente</th>
                           <th>Correlativo</th>
                           <th>Total</th>
-                          <th>SUNAT</th>
+                          <th class="text-center" ><center>SUNAT</center></th>
+                          <th><center>Estado</center></th>
                         </tr>
                       </tfoot>
                     </table>
@@ -581,6 +583,23 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
           </div> 
           <!-- End::Modal-Ver-Comprobante venta -->
+
+          <!-- MODAL - VER ESTADO -->
+          <div class="modal fade modal-effect" id="modal-ver-estado" tabindex="-1" aria-labelledby="modal-ver-estado-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-ver-estado-label">VER ESTADO</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" >                  
+                  <div id="html-ver-estado" class="text-left" >
+                    
+                  </div>
+                </div>                
+              </div>
+            </div>
+          </div>          
 
           <!-- MODAL - VER COMPROBANTE venta -->
           <div class="modal fade modal-effect" id="modal-ver-comprobante1" tabindex="-1" aria-labelledby="modal-ver-comprobante1Label" aria-hidden="true">

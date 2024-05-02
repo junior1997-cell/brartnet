@@ -3,6 +3,7 @@
 use Greenter\Model\Client\Client;
 use Greenter\Model\Company\Company;
 use Greenter\Model\Company\Address;
+use Greenter\Model\Sale\Charge;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\Invoice;
 use Greenter\Model\Sale\SaleDetail;
@@ -17,7 +18,7 @@ require "../config/Conexion_v2.php";
 $numero_a_letra = new NumeroALetras();
 
 $empresa_f  = $facturacion->datos_empresa();
-$venta_f    = $facturacion->mostrar_detalle_venta($rspta['id_tabla']); ##echo $rspta['id_tabla']; echo  json_encode($venta_f , true);  die();
+$venta_f    = $facturacion->mostrar_detalle_venta($idventa); ##echo $rspta['id_tabla']; echo  json_encode($venta_f , true);  die();
 
 if (empty($venta_f['data']['venta'])) {
   # code...

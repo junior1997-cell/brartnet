@@ -240,8 +240,10 @@ function tabla_principal_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan
 			},
     },
     createdRow: function (row, data, ixdex) {
-      // columna: #
+      // columna: Acciones
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      // columna: Cliente
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",

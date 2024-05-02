@@ -81,7 +81,7 @@ if (!isset($_SESSION["user_nombre"])) {
     
       $html_venta .= '<tr >'.       
        '<td>' . floatval($val['cantidad'])  . '</td>' .
-       '<td >' . strtolower($val['nombre_producto']) . '</td>' .
+       '<td >' . ($val['nombre_producto']) . '</td>' .
        '<td style="text-align: right;">' . number_format( floatval($val['precio_venta']) , 2, '.', ',') . '</td>' .
        '<td style="text-align: right;">' . number_format( floatval($val['subtotal']) , 2, '.', ',') . '</td>' .
        '</tr>';

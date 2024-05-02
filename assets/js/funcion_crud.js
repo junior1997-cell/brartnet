@@ -571,9 +571,14 @@ function ver_errores(e) {
   }else if (e.status == 'error_code') {
     sw_error('Error de escritura de <b>codigo</b>!', `${e.message} <br> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, 5000);
   }else if (e.status == 'error_usuario') {
-    sw_error(`Upss!! Estimado <br> ${e.user}!`, `${e.message} <br> <small>─ o contacte al <a href="https://wa.link/1dpx0i" target="_blank" class="cursor-pointer text-primary" >Ing. de Sistemas</a> ─</small>`,  6000);
+    sw_error(`Upss!! Estimado <br> ${e.user}!`, `${e.message} <br> <small>─ o contacte al <a href="https://wa.link/1dpx0i" target="_blank" class="cursor-pointer text-primary" >Ing. de Sistemas</a> ─</small>`,  15000);
   }else if (e.status == 'error_personalizado') {
-    sw_error(`${e.titulo}`, `Estimado ${e.user}! ${e.message} <br> <small>─ o contacte al <a href="https://wa.link/1dpx0i" target="_blank" class="cursor-pointer text-primary" >Ing. de Sistemas</a> ─</small>`,  15000);
+    // sw_error(`${e.titulo}`, `Estimado ${e.user}! ${e.message} <br> <small>─ o contacte al <a href="https://wa.link/1dpx0i" target="_blank" class="cursor-pointer text-primary" >Ing. de Sistemas</a> ─</small>`,  15000);
+    Swal.fire({
+      title: `${e.titulo}`,
+      icon: (typeof e.icon === 'undefined' ?  'error' : e.icon) ,
+      html: `Estimado ${e.user}! ${e.message} <br> <small>─ o contacte al <a href="https://wa.link/1dpx0i" target="_blank" class="cursor-pointer text-primary" >Ing. de Sistemas</a> ─</small>`,      
+    });
   } else {
     console.group("Error"); console.warn('Error Grave -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, "error");

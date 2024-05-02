@@ -3,6 +3,7 @@
 use Greenter\Model\Client\Client;
 use Greenter\Model\Company\Company;
 use Greenter\Model\Company\Address;
+use Greenter\Model\Sale\Charge;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\Invoice;
 use Greenter\Model\Sale\SaleDetail;
@@ -17,7 +18,7 @@ require "../config/Conexion_v2.php";
 $numero_a_letra = new NumeroALetras();
 
 $empresa_f  = $facturacion->datos_empresa();
-$venta_f    = $facturacion->mostrar_detalle_venta($rspta['id_tabla']); ##echo $rspta['id_tabla']; echo  json_encode($venta_f , true);  die();
+$venta_f    = $facturacion->mostrar_detalle_venta($idventa); ##echo $rspta['id_tabla']; echo  json_encode($venta_f , true);  die();
 
 if (empty($venta_f['data']['venta'])) {
   # code...
@@ -103,26 +104,38 @@ if (empty($venta_f['data']['venta'])) {
 
   foreach ($venta_f['data']['detalle'] as $key => $val) {
 
-    $nombre_producto  = mb_convert_encoding($val['nombre_producto'], 'ISO-8859-1', 'UTF-8');
-    $subtotal         = floatval($val['subtotal']);
-    $cantidad         = floatval($val['cantidad']);
-    $precio_venta     = floatval($val['precio_venta']);  
-    $um_nombre        = $val['um_nombre'];
-    $um_abreviatura    = $val['um_abreviatura'];
+    $nombre_producto      = mb_convert_encoding($val['nombre_producto'], 'ISO-8859-1', 'UTF-8');    
+    $cantidad             = floatval($val['cantidad']);
+    $precio_venta         = floatval($val['precio_venta']);  
+    $descuento            = floatval($val['descuento']);  
+    $descuento_porcentaje = floatval($val['descuento_porcentaje']);  
+    $subtotal             = floatval($val['subtotal']);
+    $subtotal_no_descuento= floatval($val['subtotal_no_descuento']);
+
+    $um_nombre            = $val['um_nombre'];
+    $um_abreviatura       = $val['um_abreviatura'];
 
     $detail = new SaleDetail();
     $detail->setCodProducto($val['codigo'])
-      ->setUnidad($um_abreviatura)                        // Unidad - Catalog. 03
-      ->setDescripcion($nombre_producto)      // Nombre de producto
-      ->setCantidad($cantidad)
-      ->setMtoValorUnitario($precio_venta)
-      ->setMtoValorVenta($subtotal)
+      ->setUnidad($um_abreviatura)              # Unidad - Catalog. 03
+      ->setDescripcion($nombre_producto)        # Nombre de producto
+      ->setCantidad($cantidad);
+      if ($descuento > 0) {                     # Aplicamos descuento
+        $detail->setDescuentos([(new Charge())
+          ->setCodTipo('00')                    # Catalog. 53 (00: Descuento que afecta la Base Imponible)
+          ->setMontoBase($subtotal_no_descuento)# S/ 100 (cantidad * valor unitario)
+          ->setFactor($descuento_porcentaje)    # 20% (descuento porcentaje)
+          ->setMonto($descuento)                # S/ 20 (descuento numerico)
+        ]);
+      }
+      $detail->setMtoValorUnitario($precio_venta)
+      ->setMtoValorVenta($subtotal)             # cantidad * valor unitario - descuento (que afecta la base)
       ->setMtoBaseIgv($subtotal)
-      ->setPorcentajeIgv(0)                    // 18%
+      ->setPorcentajeIgv(0)                     # 18% o 0%
       ->setIgv(0)
-      ->setTipAfeIgv('20')                      // Exonerado Op. Onerosa - Catalog. 07
-      ->setTotalImpuestos(0)                    // Suma de impuestos en el detalle
-      ->setMtoPrecioUnitario($precio_venta);
+      ->setTipAfeIgv('20')                      # Exonerado Op. Onerosa - Catalog. 07
+      ->setTotalImpuestos(0)                    # Suma de impuestos en el detalle
+      ->setMtoPrecioUnitario($precio_venta);    # (Valor venta + Total Impuestos) / Cantidad
 
     $arrayItem[$i] = $detail;
     $i++;

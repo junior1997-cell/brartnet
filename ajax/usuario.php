@@ -4,7 +4,14 @@ ob_start();
 if (strlen(session_id()) < 1) { session_start(); } //Validamos si existe o no la sesión
 
 require_once "../modelos/Usuario.php";
-$usuario = new Usuario();
+require_once "../modelos/Permiso.php";
+require_once "../modelos/Numeracion.php";
+require_once "../modelos/Facturacion.php";
+
+$usuario      = new Usuario();
+$permiso      = new Permiso();
+$numeracion   = new Numeracion();
+$facturacion  = new Facturacion();   
 
 date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
 $imagen_error = "this.src='../dist/svg/404-v2.svg'";
@@ -47,7 +54,6 @@ switch ($_GET["op"]) {
     $rspta = $usuario->eliminar($_GET["id_tabla"]);
     echo json_encode($rspta, true);
   break;
-
 
   case 'activar':
     $rspta = $usuario->activar($_GET["id_tabla"]);
@@ -138,9 +144,7 @@ switch ($_GET["op"]) {
   break;
 
   case 'permisos':
-    //Obtenemos todos los permisos de la tabla permisos
-    require_once "../modelos/Permiso.php";
-    $permiso = new Permiso();
+    
     $rspta = $permiso->listar_todos_permisos();
 
     $id = $_GET['id'];
@@ -168,11 +172,8 @@ switch ($_GET["op"]) {
   break;
 
   case 'permisosEmpresa':
-    //Obtenemos todos los permisos de la tabla permisos
-    require_once "../modelos/Permiso.php";
-    $permiso = new Permiso();
+    
     $rspta = $permiso->listarEmpresa();
-
     
     $id = $_GET['id'];
     $marcados = $usuario->listarmarcadosEmpresa($id); # Obtener los permisos asignados al usuario
@@ -199,9 +200,7 @@ switch ($_GET["op"]) {
   break;
 
   case 'permisosEmpresaTodos':
-    //Obtenemos todos los permisos de la tabla permisos
-    require_once "../modelos/Permiso.php";
-    $permiso = new Permiso();
+    
     $rspta = $permiso->listarEmpresa();
     $marcados = $usuario->listarmarcadosEmpresaTodos();
     //Declaramos el array para almacenar todos los permisos marcados
@@ -226,9 +225,7 @@ switch ($_GET["op"]) {
   break;
 
   case 'series':
-    //Obtenemos todos los permisos de la tabla permisos
-    require_once "../modelos/Numeracion.php";
-    $numeracion = new Numeracion();
+    
     $rspta = $numeracion->listarSeries();
 
     //Obtener los permisos asignados al usuario
@@ -260,9 +257,7 @@ switch ($_GET["op"]) {
   break;
 
   case 'seriesnuevo':
-    //Obtenemos todos los permisos de la tabla permisos
-    require_once "../modelos/Numeracion.php";
-    $numeracion = new Numeracion();
+    
     $rspta = $numeracion->listarSeriesNuevo();
     
     while ($reg = $rspta['data']->fetch_object()) { 
@@ -288,26 +283,45 @@ switch ($_GET["op"]) {
 
       
       $rspta2 = $usuario->last_sesion($rspta['data']['usuario']['idusuario']); # Ultima sesion
+
+      $empresa_f  = $facturacion->datos_empresa(); # Datos de empresa: para uso global del sistema
+      
+      $e_razon_social       = mb_convert_encoding($empresa_f['data']['nombre_razon_social'], 'UTF-8', mb_detect_encoding($empresa_f['data']['nombre_razon_social'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+      $e_nombre_comercial   = mb_convert_encoding($empresa_f['data']['nombre_comercial'], 'UTF-8', mb_detect_encoding($empresa_f['data']['nombre_comercial'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+      $e_domicilio_fiscal   = mb_convert_encoding($empresa_f['data']['domicilio_fiscal'], 'UTF-8', mb_detect_encoding($empresa_f['data']['domicilio_fiscal'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+      $e_tipo_documento     = $empresa_f['data']['tipo_documento'];
+      $e_numero_documento   = $empresa_f['data']['numero_documento'];
+    
+      $e_distrito           = mb_convert_encoding($empresa_f['data']['distrito'], 'UTF-8', mb_detect_encoding($empresa_f['data']['distrito'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+      $e_provincia          = mb_convert_encoding($empresa_f['data']['provincia'], 'UTF-8', mb_detect_encoding($empresa_f['data']['provincia'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+      $e_departamento       = mb_convert_encoding($empresa_f['data']['departamento'], 'UTF-8', mb_detect_encoding($empresa_f['data']['departamento'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+      $e_codubigueo         = mb_convert_encoding($empresa_f['data']['codubigueo'], 'UTF-8', mb_detect_encoding($empresa_f['data']['codubigueo'], "UTF-8, ISO-8859-1, ISO-8859-15", true));    
       
       //Declaramos las variables de sesión
-      $_SESSION['idusuario']      = $rspta['data']['usuario']['idusuario'];
-      $_SESSION['idpersona']      = $rspta['data']['usuario']['idpersona'];
+      $_SESSION['idusuario']            = $rspta['data']['usuario']['idusuario'];
+      $_SESSION['idpersona']            = $rspta['data']['usuario']['idpersona'];
       $_SESSION['idpersona_trabajador'] = $rspta['data']['usuario']['idpersona_trabajador'];
-      $_SESSION['user_nombre']    = $rspta['data']['usuario']['nombre_razonsocial'];
-      $_SESSION['user_apellido']  = $rspta['data']['usuario']['apellidos_nombrecomercial'];
-      $_SESSION['user_tipo_doc']  = $rspta['data']['usuario']['tipo_documento'];
-      $_SESSION['user_num_doc']   = $rspta['data']['usuario']['numero_documento'];
-      $_SESSION['user_cargo']     = $rspta['data']['usuario']['cargo'];
-      $_SESSION['user_imagen']    = $rspta['data']['usuario']['foto_perfil'];
-      $_SESSION['user_login']     = $rspta['data']['usuario']['login'];
+      $_SESSION['user_nombre']          = $rspta['data']['usuario']['nombre_razonsocial'];
+      $_SESSION['user_apellido']        = $rspta['data']['usuario']['apellidos_nombrecomercial'];
+      $_SESSION['user_tipo_doc']        = $rspta['data']['usuario']['tipo_documento'];
+      $_SESSION['user_num_doc']         = $rspta['data']['usuario']['numero_documento'];
+      $_SESSION['user_cargo']           = $rspta['data']['usuario']['cargo'];
+      $_SESSION['user_imagen']          = $rspta['data']['usuario']['foto_perfil'];
+      $_SESSION['user_login']           = $rspta['data']['usuario']['login'];
 
-      // $_SESSION['idusuario_empresa']  = $rspta['data']['sucursal']['idusuario_empresa'];
-      // $_SESSION['idempresa']          = $rspta['data']['sucursal']['idempresa'];
-      // $_SESSION['empresa_nrs']        = $rspta['data']['sucursal']['nombre_razon_social'];    
-      // $_SESSION['empresa_nc']         = $rspta['data']['sucursal']['nombre_comercial'];
-      // $_SESSION['empresa_ruc']        = $rspta['data']['sucursal']['numero_ruc'];     
-      // $_SESSION['empresa_domicilio']  = $rspta['data']['sucursal']['domicilio_fiscal'];        
-      // $_SESSION['empresa_iva']        = $rspta['data']['sucursal']['igv'];
+      // $_SESSION['idusuario_empresa'] = $rspta['data']['sucursal']['idusuario_empresa'];
+      // $_SESSION['idempresa']         = $rspta['data']['sucursal']['idempresa'];
+      $_SESSION['empresa_nrs']          = $e_razon_social;        # Razon Social
+      $_SESSION['empresa_nc']           = $e_nombre_comercial;    # Nombre Comercial
+      $_SESSION['empresa_td']           = $e_tipo_documento;      # Tipo Documento: codigo sunat
+      $_SESSION['empresa_nd']           = $e_numero_documento;    # Numero de documento
+      $_SESSION['empresa_df']           = $e_domicilio_fiscal;    # Domicilio Fiscal
+      $_SESSION['empresa_impuesto']     = 0;
+
+      $_SESSION['empresa_distrito']     = $e_distrito;
+      $_SESSION['empresa_provincia']    = $e_provincia;
+      $_SESSION['empresa_departamento'] = $e_departamento;
+      $_SESSION['empresa_codubigueo']   = $e_codubigueo;
 
       // $_SESSION['estadotempo']        = $rspta3['data']['estado'];      
       
