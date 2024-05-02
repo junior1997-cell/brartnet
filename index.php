@@ -364,7 +364,7 @@
                   <p class="landing-banner-heading mb-3">Conexión rápida, navegación sin límites. <span class="text-secondary">Brartnet !</span></p>
                   <div class="fs-16 mb-5 text-fixed-white op-7">Brartnet - Conéctate con el mundo sin límites, con nuestra velocidad y fiabilidad. ¡Descubre un nuevo nivel de navegación con nosotros!</div>
                   <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="m-1 btn btn-primary">
-                    Contactanos <i class="ti ti-brand-whatsapp ms-2 align-middle"></i>
+                    Contáctanos <i class="ti ti-brand-whatsapp ms-2 align-middle"></i>
                   </a>
                 </div>
               </div>
@@ -486,17 +486,7 @@
               <h5 class="text-lg-start fw-semibold mb-0">Descubre los Beneficios de Nuestro Servicio de Internet</h5>
               <br/>
               <div class="row">
-                <div class="col-12 col-md-12">
-                  <div class="d-flex">
-                    <span>
-                      <i class='bx bxs-badge-check text-primary fs-18'></i>
-                    </span>
-                    <div class="ms-2">
-                      <h6 class="fw-semibold mb-0">Velocidades de descarga y carga ultrarrápidas</h6>
-                      <p class=" text-muted">Nuestro servicio ofrece velocidades de internet ultrarrápidas que te permitirán descargar y cargar archivos grandes en cuestión de segundos.</p>
-                    </div>
-                  </div>
-                </div>
+                
                 <div class="col-12 col-md-12">
                   <div class="d-flex">
                     <span>
@@ -534,45 +524,7 @@
           <br/>
           <div class="row">
 
-            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-              <div class="card custom-card overlay-card">
-                <img src="assets/modulo/home/cobertura/demo-tocache.jpg" class="card-img" alt="..." >
-                <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center" >
-                  <div class="card-body">
-                    <div class="card-text">
-                      <h1 class="text-white"><b>Tocache</b></h1>
-                      <p class="text-white"><b>Este - Suroeste</b></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-              <div class="card custom-card overlay-card">
-                <img src="assets/modulo/home/cobertura/demo-shunte.jpg" class="card-img" alt="...">
-                <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
-                  <div class="card-body">
-                    <div class="card-text">
-                      <h1 class="text-white"><b>Shunté</b></h1>
-                      <p class="text-white"><b>De centro a Sur</b></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-              <div class="card custom-card overlay-card">
-                <img src="assets/modulo/home/cobertura/demo-polvora.jpg" class="card-img" alt="..." style="height: 100;">
-                <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
-                  <div class="card-body">
-                    <div class="card-text">
-                      <h1 class="text-white"><b>Pólvora</b></h1>
-                      <p class="text-white"><b>De centro a Sur</b></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
                 <img src="assets/modulo/home/cobertura/demo-uchiza.jpg" class="card-img" alt="..." style="height: 100;">
@@ -610,10 +562,10 @@
                     <img src="assets/modulo/home/caracteristica/calidad.png" alt="image" class="featur-icon">
                     <h5 class="mt-3 text-fixed-white ">Calidad</h5>
                   </div>
-                  <div class="ms-sm-5 ms-2 text-center">
+                  <!-- <div class="ms-sm-5 ms-2 text-center">
                     <img src="assets/modulo/home/caracteristica/velocidad.png" alt="image" class="featur-icon">
                     <h5 class="mt-3 text-fixed-white ">Velocidad </h5>
-                  </div>
+                  </div> -->
                   <div class="ms-sm-5 ms-2 text-center">
                     <img src="assets/modulo/home/caracteristica/estabilidad.png" alt="image" class="featur-icon">
                     <h5 class="mt-3 text-fixed-white ">Estabilidad</h5>
@@ -762,7 +714,7 @@
                       </div>
                     </div>
                     <div class="mb-3">
-                      <span class="text-muted">Me cambié a BrartNet hace unos meses y no podría estar más feliz con mi decisión. La velocidad de carga y descarga es impresionante.</span>
+                      <span class="text-muted">Me cambié a BrartNet hace unos meses y no podría estar más feliz con mi decisión. La disponibilidad es impresionante.</span>
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                       <div class="d-flex align-items-center">
@@ -830,7 +782,7 @@
                       </div>
                     </div>
                     <div class="mb-3">
-                      <span class="text-muted">BrartNet es simplemente fenomenal. La velocidad, la confiabilidad y el servicio al cliente son incomparables. </span>
+                      <span class="text-muted">BrartNet es simplemente fenomenal. El servicio al cliente es incomparables. </span>
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                       <div class="d-flex align-items-center">
@@ -1106,7 +1058,7 @@
                           <input type="text" class="form-control " id="contact-address-phone" placeholder="ingrese su teléfono">
                         </div>
                         <div class="col-xl-12">
-                          <label for="contact-address-address" class="form-label ">direccion :</label>
+                          <label for="contact-address-address" class="form-label ">dirección :</label>
                           <textarea class="form-control " id="contact-address-address" rows="1"></textarea>
                         </div>
                       </div>
@@ -1152,7 +1104,7 @@
               <div class="px-4">
                 <p class="fw-semibold mb-3"><a href="index.html"><img src="assets/images/brand-logos/desktop-dark.png" alt=""></a></p>
                 <p class="mb-2 op-6 fw-normal">
-                  Experimenta la velocidad y confiabilidad incomparables con BrartNet, tu proveedor de Internet de confianza en Perú! Con nuestra conexión de fibra óptica de alta velocidad, te ofrecemos una experiencia de navegación fluida y sin interrupciones.
+                Somos una empresa proveedora de servicios de internet. Con experiencia en soporte técnico de redes, laptops, Pc's e instalación de camaras.
                 </p>
                 <p class="mb-0 op-6 fw-normal">Conéctate al futuro, hoy mismo.</p>
               </div>
@@ -1174,7 +1126,7 @@
                     <a href="javascript:void(0);" class="text-fixed-white">Proyectos</a>
                   </li>
                   <li>
-                    <a href="javascript:void(0);" class="text-fixed-white">Contactanos</a>
+                    <a href="javascript:void(0);" class="text-fixed-white">Contáctanos</a>
                   </li>
                 </ul>
               </div>
@@ -1250,7 +1202,7 @@
 
       <div class="text-center landing-main-footer py-3">
         <span class="text-muted fs-15"> Copyright © <span id="year"></span> 
-          <a href="javascript:void(0);" class="text-primary fw-semibold"><u>Corporacion Brarnet SAC</u></a>.
+          <a href="javascript:void(0);" class="text-primary fw-semibold"><u>Corporació  n Brarnet SAC</u></a>.
            Diseñado por <span class="fa fa-heart text-danger"></span>  <a href="javascript:void(0);" class="text-primary fw-semibold">
             <u> JDL Tecnology</u>
           </a> Todos los derechos reservados.

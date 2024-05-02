@@ -15,13 +15,13 @@
       p.celular
       FROM persona p
       JOIN cargo_trabajador ct ON p.idcargo_trabajador = ct.idcargo_trabajador
-      WHERE p.idcargo_trabajador = 5";
+      WHERE p.idpersona = '9'";
       $mostrar = ejecutarConsultaArray($sql); if($mostrar['status'] == false){return $mostrar;}
       return $mostrar;
     }
 
     function mostrar_planes(){
-      $sql = "SELECT nombre AS plan, costo FROM plan WHERE estado = 1 AND estado_delete = 1";
+      $sql = "SELECT nombre AS plan, costo FROM plan WHERE idplan IN (1, 2, 3) AND estado = 1 AND estado_delete = 1";
       $plan = ejecutarConsultaArray($sql); if($plan['status'] == false){return $plan;}
       return $plan;
     }
