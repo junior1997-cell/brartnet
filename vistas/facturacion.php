@@ -435,7 +435,11 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <select class="form-control" name="metodo_pago" id="metodo_pago" onchange="capturar_pago_venta();">
                                     <option value="EFECTIVO" selected >EFECTIVO</option>
                                     <option value="MIXTO">MIXTO</option>
-                                    <option value="TARJETA">TARJETA</option>
+                                    <option value="CAJA HUANCAYO">CAJA HUANCAYO</option>
+                                    <option value="CAJA PIURA">CAJA PIURA</option>
+                                    <option value="BANCO DE LA NACIÓN">BANCO DE LA NACIÓN</option>
+                                    <option value="COOPACT">COOPACT</option>
+                                    <option value="BBVA CONTINENTAL">BBVA CONTINENTAL</option>
                                     <option value="YAPE">YAPE</option>
                                     <option value="PLIN">PLIN</option>
                                     <option value="CULQI">CULQI</option>                                                      

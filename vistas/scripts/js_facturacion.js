@@ -82,6 +82,7 @@ function agregarDetalleComprobante(idproducto, individual) {
               <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
               <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
               <input type="hidden" class="precio_compra_${cont}" name="precio_compra[]" id="precio_compra[]" value="${e.data.precio_compra}"  >
+              <input type="hidden" class="precio_venta_descuento_${cont}" name="precio_venta_descuento[]" value="${e.data.precio_venta}"  >
             </td> 
 
             <td class="py-1 form-group">
@@ -208,6 +209,7 @@ function listar_producto_x_codigo() {
               <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
               <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
               <input type="hidden" class="precio_compra_${cont}" name="precio_compra[]" id="precio_compra[]" value="${e.data.precio_compra}"  >
+              <input type="hidden" class="precio_venta_descuento_${cont}" name="precio_venta_descuento[]" value="${e.data.precio_venta}"  >
             </td> 
 
             <td class="py-1 form-group">
@@ -324,11 +326,12 @@ function mostrar_para_nota_credito(input) {
                 <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${val1.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
                 <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
                 <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
-                <input type="hidden" class="precio_compra_${cont}" name="precio_compra[]" id="precio_compra[]" value="${val1.precio_compra}"  >
+                <input type="hidden" class="precio_compra_${cont}" name="precio_compra[]" value="${val1.precio_compra}"  >
+                <input type="hidden" class="precio_venta_descuento_${cont}" name="precio_venta_descuento[]" value="${val1.precio_venta_descuento}"  >
               </td> 
 
               <td class="py-1 form-group">
-                <input type="number" class="w-100px form-control form-control-sm valid_descuento" name="valid_descuento_${cont}" value="${val1.descuento}" min="0.00" required onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
+                <input type="number" class="w-100px form-control form-control-sm valid_descuento" name="valid_descuento_${cont}" value="${val1.descuento}" min="0.00" required readonly onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
                 <input type="hidden" class="descuento_${cont}" name="descuento[]" value="${val1.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
                 <input type="hidden" class="descuento_porcentaje_${cont}" name="descuento_porcentaje[]" value="${val1.descuento_porcentaje}" >
               </td>
@@ -414,32 +417,36 @@ function modificarSubtotales() {
 
     if (array_data_venta.length == 0) {
     } else {
-      array_data_venta.forEach((element, index) => {
-        var cantidad          = parseFloat($(`.cantidad_${element.id_cont}`).val());
-        var precio_con_igv    = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-        var descuento         = parseFloat($(`.descuento_${element.id_cont}`).val());
+      array_data_venta.forEach((key, index) => {
+        var cantidad        = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
+        var precio_con_igv  = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
+        var descuento       = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());
         var subtotal_producto = 0;
         var subtotal_producto_no_dcto = 0;
 
         // Calculamos: IGV
         var precio_sin_igv = precio_con_igv;
-        $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
+        $(`.precio_sin_igv_${key.id_cont}`).val(precio_sin_igv);
 
         // Calculamos: precio + IGV
         var igv = 0;
-        $(`.precio_igv_${element.id_cont}`).val(igv);
+        $(`.precio_igv_${key.id_cont}`).val(igv);
 
         // Calculamos: Subtotal de cada producto
         subtotal_producto_no_dcto = cantidad * parseFloat(precio_con_igv);
         subtotal_producto = cantidad * parseFloat(precio_con_igv) - descuento;
 
+        // Calculamos: precio unitario descontado
+        var precio_unitario_dscto = subtotal_producto / cantidad;
+        $(`.precio_venta_descuento_${key.id_cont}`).val(redondearExp(precio_unitario_dscto, 2 ));
+
         // Calculamos: porcentaje descuento
         var porcentaje_monto = descuento / subtotal_producto_no_dcto;
-        $(`.descuento_porcentaje_${element.id_cont}`).val(redondearExp(porcentaje_monto, 2 ));
+        $(`.descuento_porcentaje_${key.id_cont}`).val(redondearExp(porcentaje_monto, 2 ));
         
-        $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto));
-        $(`#subtotal_producto_${element.id_cont}`).val(redondearExp(subtotal_producto, 2 ));
-        $(`#subtotal_no_descuento_producto_${element.id_cont}`).val(redondearExp(subtotal_producto_no_dcto, 2 ));
+        $(`.subtotal_producto_${key.id_cont}`).html(formato_miles(subtotal_producto));
+        $(`#subtotal_producto_${key.id_cont}`).val(redondearExp(subtotal_producto, 2 ));
+        $(`#subtotal_no_descuento_producto_${key.id_cont}`).val(redondearExp(subtotal_producto_no_dcto, 2 ));
       });
       calcularTotalesSinIgv();
     }
@@ -459,32 +466,36 @@ function modificarSubtotales() {
     } else {
       // validamos el valor del igv ingresado        
 
-      array_data_venta.forEach((element, index) => {
-        var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
-        var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-        var descuento = parseFloat($(`.descuento_${element.id_cont}`).val());
+      array_data_venta.forEach((key, index) => {
+        var cantidad        = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
+        var precio_con_igv  = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
+        var descuento       = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());
         var subtotal_producto = 0;
         var subtotal_producto_no_dcto = 0;
 
         // Calculamos: Precio sin IGV
         var precio_sin_igv = redondearExp( quitar_igv_del_precio(precio_con_igv, val_igv, 'decimal'), 2);
-        $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
+        $(`.precio_sin_igv_${key.id_cont}`).val(precio_sin_igv);
 
         // Calculamos: IGV
         var igv = (parseFloat(precio_con_igv) - parseFloat(precio_sin_igv)).toFixed(2);
-        $(`.precio_igv_${element.id_cont}`).val(igv);
+        $(`.precio_igv_${key.id_cont}`).val(igv);
 
         // Calculamos: Subtotal de cada producto
         subtotal_producto = cantidad * parseFloat(precio_con_igv) - descuento;
         subtotal_producto_no_dcto = cantidad * parseFloat(precio_con_igv);
 
+        // Calculamos: precio unitario descontado
+        var precio_unitario_dscto = subtotal_producto / cantidad;
+        $(`.precio_venta_descuento_${key.id_cont}`).val(redondearExp(precio_unitario_dscto, 2 ));
+
         // Calculamos: porcentaje descuento
         var porcentaje_monto = descuento / subtotal_producto_no_dcto;
-        $(`.descuento_porcentaje_${element.id_cont}`).val(redondearExp(porcentaje_monto, 2 ));
+        $(`.descuento_porcentaje_${key.id_cont}`).val(redondearExp(porcentaje_monto, 2 ));
 
-        $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto));
-        $(`#subtotal_producto_${element.id_cont}`).val(redondearExp(subtotal_producto, 2 ));
-        $(`#subtotal_no_descuento_producto_${element.id_cont}`).val(redondearExp(subtotal_producto_no_dcto, 2 ));
+        $(`.subtotal_producto_${key.id_cont}`).html(formato_miles(subtotal_producto));
+        $(`#subtotal_producto_${key.id_cont}`).val(redondearExp(subtotal_producto, 2 ));
+        $(`#subtotal_no_descuento_producto_${key.id_cont}`).val(redondearExp(subtotal_producto_no_dcto, 2 ));
       });
 
       calcularTotalesConIgv();
@@ -510,9 +521,9 @@ function modificarSubtotales() {
       // validamos el valor del igv ingresado        
 
       array_data_venta.forEach((key, index) => {
-        var cantidad = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
-        var precio_con_igv = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
-        var descuento = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());
+        var cantidad        = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
+        var precio_con_igv  = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
+        var descuento       = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());
         var subtotal_producto = 0;
         var subtotal_producto_no_dcto = 0;
 
@@ -528,13 +539,17 @@ function modificarSubtotales() {
         subtotal_producto_no_dcto = cantidad * parseFloat(precio_con_igv);
         subtotal_producto = cantidad * parseFloat(precio_con_igv) - descuento;
 
+        // Calculamos: precio unitario descontado
+        var precio_unitario_dscto = subtotal_producto / cantidad;
+        $(`.precio_venta_descuento_${key.id_cont}`).val(redondearExp(precio_unitario_dscto, 2 ));
+
         // Calculamos: porcentaje descuento
         var porcentaje_monto = descuento / subtotal_producto_no_dcto;
-        $(`.descuento_porcentaje_${element.id_cont}`).val(redondearExp(porcentaje_monto, 2 ));
+        $(`.descuento_porcentaje_${key.id_cont}`).val(redondearExp(porcentaje_monto, 2 ));
 
         $(`.subtotal_producto_${key.id_cont}`).html(formato_miles(subtotal_producto.toFixed(2)));
         $(`#subtotal_producto_${key.id_cont}`).val(redondearExp(subtotal_producto, 2 ));
-        $(`#subtotal_no_descuento_producto_${element.id_cont}`).val(redondearExp(subtotal_producto_no_dcto, 2 ));
+        $(`#subtotal_no_descuento_producto_${key.id_cont}`).val(redondearExp(subtotal_producto_no_dcto, 2 ));
       });
 
       calcularTotalesConIgv();
@@ -549,32 +564,36 @@ function modificarSubtotales() {
 
     if (array_data_venta.length === 0) {
     } else {
-      array_data_venta.forEach((element, index) => {
-        var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
-        var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-        var descuento = parseFloat($(`.descuento_${element.id_cont}`).val());
+      array_data_venta.forEach((key, index) => {
+        var cantidad        = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
+        var precio_con_igv  = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
+        var descuento       = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());
         var subtotal_producto = 0;
         var subtotal_producto_no_dcto = 0;
 
         // Calculamos: IGV
         var precio_sin_igv = precio_con_igv;
-        $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
+        $(`.precio_sin_igv_${key.id_cont}`).val(precio_sin_igv);
 
         // Calculamos: precio + IGV
         var igv = 0;
-        $(`.precio_igv_${element.id_cont}`).val(igv);
+        $(`.precio_igv_${key.id_cont}`).val(igv);
 
         // Calculamos: Subtotal de cada producto
         subtotal_producto_no_dcto = cantidad * parseFloat(precio_con_igv);
         subtotal_producto = cantidad * parseFloat(precio_con_igv) - descuento;
 
+        // Calculamos: precio unitario descontado
+        var precio_unitario_dscto = subtotal_producto / cantidad;
+        $(`.precio_venta_descuento_${key.id_cont}`).val(redondearExp(precio_unitario_dscto, 2 ));
+
         // Calculamos: porcentaje descuento
         var porcentaje_monto = descuento / subtotal_producto_no_dcto;
-        $(`.descuento_porcentaje_${element.id_cont}`).val(redondearExp(porcentaje_monto, 2 ));
+        $(`.descuento_porcentaje_${key.id_cont}`).val(redondearExp(porcentaje_monto, 2 ));
 
-        $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto));
-        $(`#subtotal_producto_${element.id_cont}`).val(redondearExp(subtotal_producto, 2 ));
-        $(`#subtotal_no_descuento_producto_${element.id_cont}`).val(redondearExp(subtotal_producto_no_dcto, 2 ));
+        $(`.subtotal_producto_${key.id_cont}`).html(formato_miles(subtotal_producto));
+        $(`#subtotal_producto_${key.id_cont}`).val(redondearExp(subtotal_producto, 2 ));
+        $(`#subtotal_no_descuento_producto_${key.id_cont}`).val(redondearExp(subtotal_producto_no_dcto, 2 ));
       });
 
       calcularTotalesSinIgv();

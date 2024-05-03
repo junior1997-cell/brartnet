@@ -202,7 +202,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <tr><td colspan="5" style="text-align: right;"><strong>Op. Inafecto </strong></td> <td>:</td> <td style="text-align: right;">0.00</td></tr>
           <tr><td colspan="5" style="text-align: right;"><strong>ICBPER</strong></td>        <td>:</td> <td style="text-align: right;"> <?php echo '0.00'; ?> </td></tr>
           <tr><td colspan="5" style="text-align: right;"><strong>I.G.V.</strong></td>        <td>:</td> <td style="text-align: right;"> <?php echo $venta['data']['venta']['impuesto']; ?> </td></tr>
-          <tr><td colspan="5" style="text-align: right;"><strong>Imp. Pagado</strong></td>   <td>:</td> <td style="text-align: right;"> <?php echo $venta['data']['venta']['total_recibido']; ?> </td></tr>
+          <tr><td colspan="5" style="text-align: right;"><strong>Importe Pagado</strong></td>   <td>:</td> <td style="text-align: right;"> <?php echo $venta['data']['venta']['total_recibido']; ?> </td></tr>
           <tr><td colspan="5" style="text-align: right;"><strong>Vuelto</strong></td>        <td>:</td> <td style="text-align: right;"> <?php echo $venta['data']['venta']['total_vuelto']; ?> </td></tr>
           <!--<tr><td colspan='5'><strong>I.G.V. 18.00 </strong></td><td >:</td><td><?php echo $reg->sumatoria_igv_18_1; ?></td></tr>-->
           <tr><td colspan="5" style="text-align: right;"><strong>Importe a pagar </strong></td>         <td>:</td> <td style="text-align: right;"><strong> <?php echo $venta_total ?> </strong></td></tr>

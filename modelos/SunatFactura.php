@@ -104,38 +104,40 @@ if (empty($venta_f['data']['venta'])) {
 
   foreach ($venta_f['data']['detalle'] as $key => $val) {
 
-    $nombre_producto      = mb_convert_encoding($val['nombre_producto'], 'ISO-8859-1', 'UTF-8');    
+    $nombre_producto      = mb_convert_encoding($val['nombre_producto'], 'UTF-8', mb_detect_encoding($val['nombre_producto'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     $cantidad             = floatval($val['cantidad']);
     $precio_venta         = floatval($val['precio_venta']);  
+    $precio_venta_dcto    = floatval($val['precio_venta_descuento']);  
     $descuento            = floatval($val['descuento']);  
-    $descuento_porcentaje = floatval($val['descuento_porcentaje']);  
+    $descuento_pct        = floatval($val['descuento_porcentaje']);  
     $subtotal             = floatval($val['subtotal']);
-    $subtotal_no_descuento= floatval($val['subtotal_no_descuento']);
+    $subtotal_no_dcto     = floatval($val['subtotal_no_descuento']);
 
-    $um_nombre            = $val['um_nombre'];
-    $um_abreviatura       = $val['um_abreviatura'];
+    $um_nombre        = mb_convert_encoding($val['um_nombre'], 'UTF-8', mb_detect_encoding($val['um_nombre'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $um_abreviatura   = mb_convert_encoding($val['um_abreviatura'], 'UTF-8', mb_detect_encoding($val['um_abreviatura'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+
 
     $detail = new SaleDetail();
     $detail->setCodProducto($val['codigo'])
-      ->setUnidad($um_abreviatura)              # Unidad - Catalog. 03
-      ->setDescripcion($nombre_producto)        # Nombre de producto
-      ->setCantidad($cantidad);
-      if ($descuento > 0) {                     # Aplicamos descuento
+      ->setUnidad($um_abreviatura)                # Unidad - Catalog. 03
+      ->setDescripcion($nombre_producto)          # Nombre de producto
+      ->setCantidad($cantidad);                   # Cantidad Real
+      if ($descuento > 0) {                       # Aplicamos descuento
         $detail->setDescuentos([(new Charge())
-          ->setCodTipo('00')                    # Catalog. 53 (00: Descuento que afecta la Base Imponible)
-          ->setMontoBase($subtotal_no_descuento)# S/ 100 (cantidad * valor unitario)
-          ->setFactor($descuento_porcentaje)    # 20% (descuento porcentaje)
-          ->setMonto($descuento)                # S/ 20 (descuento numerico)
+          ->setCodTipo('00')                      # Catalog. 53 (00: Descuento que afecta la Base Imponible)
+          ->setMontoBase($subtotal_no_dcto)       # S/ 100 (cantidad * valor unitario)
+          ->setFactor($descuento_pct)             # 20% (descuento porcentaje)
+          ->setMonto($descuento)                  # S/ 20 (descuento numerico)
         ]);
       }
       $detail->setMtoValorUnitario($precio_venta)
-      ->setMtoValorVenta($subtotal)             # cantidad * valor unitario - descuento (que afecta la base)
+      ->setMtoValorVenta($subtotal)               # cantidad * valor unitario - descuento (que afecta la base)
       ->setMtoBaseIgv($subtotal)
-      ->setPorcentajeIgv(0)                     # 18% o 0%
+      ->setPorcentajeIgv(0)                       # 18% o 0%
       ->setIgv(0)
-      ->setTipAfeIgv('20')                      # Exonerado Op. Onerosa - Catalog. 07
-      ->setTotalImpuestos(0)                    # Suma de impuestos en el detalle
-      ->setMtoPrecioUnitario($precio_venta);    # (Valor venta + Total Impuestos) / Cantidad
+      ->setTipAfeIgv('20')                        # Exonerado Op. Onerosa - Catalog. 07
+      ->setTotalImpuestos(0)                      # Suma de impuestos en el detalle
+      ->setMtoPrecioUnitario($precio_venta_dcto); # (Valor venta + Total Impuestos) / Cantidad
 
     $arrayItem[$i] = $detail;
     $i++;
@@ -144,8 +146,8 @@ if (empty($venta_f['data']['venta'])) {
   $invoice->setDetails($arrayItem)
     ->setLegends([
       (new Legend())
-        ->setCode('1000') // Monto en letras - Catalog. 52
-        ->setValue($total_en_letra)
+        ->setCode('1000')                       # Monto en letras - Catalog. 52
+        ->setValue($total_en_letra)             # VEINTE CON 00/100 SOLES
     ]);
 
   /* 

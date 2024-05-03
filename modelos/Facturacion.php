@@ -63,23 +63,27 @@
       $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
       $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion,
       //DATOS TABLA venta DETALLE
-      $idproducto, $um_nombre, $um_abreviatura, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $descuento_porcentaje, 
+      $idproducto, $um_nombre, $um_abreviatura, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $precio_venta_descuento, $descuento, $descuento_porcentaje, 
       $subtotal_producto, $subtotal_no_descuento    
     ){
       $tipo_v = "";
-      if ($tipo_comprobante == '07') {
+      if ($tipo_comprobante == '12') {
+        $tipo_v = "TICKET";
+      }else if ($tipo_comprobante == '07') {
         $tipo_v = "NOTA DE CRÉDITO";        
         $periodo_pago = ""; 
         $metodo_pago= ""; $total_recibido= ""; $mp_monto= ""; $total_vuelto= ""; $mp_serie_comprobante = "";$mp_comprobante = "";
         $usar_anticipo= "NO"; $ua_monto_disponible= ""; $ua_monto_usado= "";        
-      }else{
-        $tipo_v = "VENTA";
+      }else if ($tipo_comprobante == '03') {
+        $tipo_v = "BOLETA";
+      }else if ($tipo_comprobante == '01') {
+        $tipo_v = "FACTURA";
       }
 
       $sql = "SELECT v.*, CONCAT(v.serie_comprobante, '-', v.numero_comprobante) as serie_y_numero_comprobante, 
       DATE_FORMAT(v.fecha_emision, '%d/%m/%Y %h:%i:%s %p') AS fecha_emision_format 
       FROM venta AS v 
-      WHERE v.tipo_comprobante = '$tipo_comprobante' and (v.sunat_error <> '' AND  v.sunat_error is not null  );";
+      WHERE v.tipo_comprobante = '$tipo_comprobante' and ((v.sunat_error <> '' AND  v.sunat_error is not null  ) or (v.sunat_observacion <> '' AND  v.sunat_observacion is not null  ));";
       $buscando_error = ejecutarConsultaArray($sql); if ($buscando_error['status'] == false) {return $buscando_error; }
 
       if ( empty( $buscando_error['data'] ) ) {
@@ -98,8 +102,8 @@
         if ( !empty($newdata['data']) ) {      
           while ($i < count($idproducto)) {
 
-            $sql_2 = "INSERT INTO venta_detalle( idventa, idproducto, tipo, cantidad, precio_compra, precio_venta, descuento, descuento_porcentaje, subtotal, subtotal_no_descuento, um_nombre, um_abreviatura)
-            VALUES ('$id', '$idproducto[$i]', '$tipo_v', '$cantidad[$i]', '$precio_compra[$i]', '$precio_con_igv[$i]', '$descuento[$i]', '$descuento_porcentaje[$i]', '$subtotal_producto[$i]', '$subtotal_no_descuento[$i]', '$um_nombre[$i]', '$um_abreviatura[$i]');";
+            $sql_2 = "INSERT INTO venta_detalle( idventa, idproducto, tipo, cantidad, precio_compra, precio_venta, precio_venta_descuento, descuento, descuento_porcentaje, subtotal, subtotal_no_descuento, um_nombre, um_abreviatura)
+            VALUES ('$id', '$idproducto[$i]', '$tipo_v', '$cantidad[$i]', '$precio_compra[$i]',  '$precio_con_igv[$i]', '$precio_venta_descuento[$i]', '$descuento[$i]', '$descuento_porcentaje[$i]', '$subtotal_producto[$i]', '$subtotal_no_descuento[$i]', '$um_nombre[$i]', '$um_abreviatura[$i]');";
             $detalle_new =  ejecutarConsulta_retornarID($sql_2, 'C'); if ($detalle_new['status'] == false) { return  $detalle_new;}          
             $id_d = $detalle_new['data'];
             $i = $i + 1;
@@ -115,7 +119,8 @@
             <span class="font-size-13px text-danger"><b>Fecha: </b>'.$val['fecha_emision_format'].'</span><br>
             <span class="font-size-13px text-danger"><b>Comprobante: </b>'.$val['serie_y_numero_comprobante'].'</span><br>
             <span class="font-size-13px text-danger"><b>Total: </b>'.$val['venta_total'].'</span><br>
-            <span class="font-size-13px text-danger"><b>Error: </b>'.$val['sunat_error'].'</span><br>            
+            <span class="font-size-13px text-danger"><b>Error: </b>'.$val['sunat_error'].'</span><br>
+            <span class="font-size-13px text-danger"><b>Observación: </b>'.$val['sunat_observacion'].'</span><br>            
             <hr class="m-t-2px m-b-2px">
           </li>'; 
         }
@@ -126,7 +131,7 @@
     }
 
     public function editar( $idventa, $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion, $venta_subtotal, $tipo_gravada, $venta_igv, $venta_total, $fecha_venta, $img_comprob,        
-    $idproducto, $unidad_medida, $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $subtotal_producto) {
+    $idproducto, $unidad_medida, $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv,  $descuento, $subtotal_producto) {
 
       $sql_1 = "UPDATE venta SET idpersona_cliente = '$idpersona_cliente', fecha_venta = '$fecha_venta', tipo_comprobante = '$tipo_comprobante', serie_comprobante = '$serie', 
       val_igv = '$impuesto', descripcion = '$descripcion', subtotal = '$venta_subtotal', igv = '$venta_igv', total = '$venta_total', comprobante = '$img_comprob'

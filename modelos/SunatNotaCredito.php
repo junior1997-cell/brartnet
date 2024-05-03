@@ -102,18 +102,33 @@ if (empty($venta_f['data']['venta'])) {
   $i = 0;
 
   foreach ($venta_f['data']['detalle'] as $key => $val) {
-    $nombre_producto  = mb_convert_encoding($val['nombre_producto'], 'UTF-8', mb_detect_encoding($val['nombre_producto'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
-    $subtotal         = floatval($val['subtotal']);
-    $cantidad         = floatval($val['cantidad']);
-    $precio_venta     = floatval($val['precio_venta']);  
-    $um_nombre        = $val['um_nombre'];
-    $um_abreviatura   = mb_convert_encoding($val['um_abreviatura'], 'UTF-8', mb_detect_encoding($val['um_abreviatura'], "UTF-8, ISO-8859-1, ISO-8859-15", true));;   
+    $nombre_producto      = mb_convert_encoding($val['nombre_producto'], 'UTF-8', mb_detect_encoding($val['nombre_producto'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $cantidad             = floatval($val['cantidad']);
+    $precio_venta         = floatval($val['precio_venta']);  
+    $precio_venta_dcto    = floatval($val['precio_venta_descuento']);  
+    $descuento            = floatval($val['descuento']);  
+    $descuento_pct        = floatval($val['descuento_porcentaje']);  
+    $subtotal             = floatval($val['subtotal']);
+    $subtotal_no_dcto     = floatval($val['subtotal_no_descuento']);
+
+    $um_nombre            = mb_convert_encoding($val['um_nombre'], 'UTF-8', mb_detect_encoding($val['um_nombre'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $um_abreviatura       = mb_convert_encoding($val['um_abreviatura'], 'UTF-8', mb_detect_encoding($val['um_abreviatura'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
     $detail = new SaleDetail();
     $detail->setCodProducto($val['codigo'])
       ->setUnidad($um_abreviatura)
-      ->setCantidad($cantidad)
-      ->setDescripcion($nombre_producto)
+      ->setCantidad($cantidad);
+
+      if ($descuento > 0) {                       # Aplicamos descuento
+        $detail->setDescuentos([(new Charge())
+          ->setCodTipo('00')                      # Catalog. 53 (00: Descuento que afecta la Base Imponible)
+          ->setMontoBase($subtotal_no_dcto)       # S/ 100 (cantidad * valor unitario)
+          ->setFactor($descuento_pct)             # 20% (descuento porcentaje)
+          ->setMonto($descuento)                  # S/ 20 (descuento numerico)
+        ]);
+      }
+
+      $detail->setDescripcion($nombre_producto)
       ->setMtoBaseIgv($subtotal)
       ->setPorcentajeIgv(0)
       ->setIgv(0)
@@ -121,7 +136,7 @@ if (empty($venta_f['data']['venta'])) {
       ->setTotalImpuestos(0)
       ->setMtoValorVenta($subtotal)
       ->setMtoValorUnitario($precio_venta)
-      ->setMtoPrecioUnitario($precio_venta);
+      ->setMtoPrecioUnitario($precio_venta_dcto);
     $arrayItem[$i] = $detail;
     $i++;
   }
