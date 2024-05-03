@@ -4,6 +4,7 @@ function init(){
 
   mostrar_tecnico_redes();
   mostrar_planes();
+  banner_forma_pago();
 
 }
 
@@ -56,6 +57,7 @@ function mostrar_planes() {
       $('#planes').html(''); //limpiar el div
 
       e.data.forEach((val, key)=> {
+        var Instalacion = val.idplan == 1 ? "Instalación por zona de cobertura" : "Instalación";
 
         var codigoHTML = `<div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
         <div class="p-4">
@@ -68,11 +70,9 @@ function mostrar_planes() {
             </div>
           </div>
           <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
+            
             <li class="mb-3">
-              <span class="text-muted">Velocidad Minima<span class="badge bg-light text-default ms-1">100 mbps</span></span>
-            </li>
-            <li class="mb-3">
-              <span class="text-muted">Instalación<span class="badge bg-light text-default ms-1">Gratis</span></span>
+              <span class="text-muted">${Instalacion}</span>
             </li>
             <li class="mb-3">
               <span class="text-muted">Soporte en línea</span>
@@ -106,6 +106,15 @@ function mostrar_planes() {
 $(document).ready(function () {
   init();
 });
+
+//  :::::::::::::::: F O R M A  P A G O   :::::::::::::::: 
+function banner_forma_pago(){
+  $('#BannerFormaPago').modal('show');
+
+  setTimeout(function() {
+      $('#BannerFormaPago').modal('hide');
+  }, 10000); 
+}
 
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

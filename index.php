@@ -85,6 +85,18 @@
 
 <body class="landing-body">
 
+<!-- Start Modal Forma de Pago -->
+<div class="modal fade" id="BannerFormaPago" tabindex="-1" aria-labelledby="BannerFormaPagoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <img src="assets/modulo/bancos/forma-pago.jpeg" alt="Imagen Promocional" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal Forma de Pago -->
+
   <!-- Start Switcher -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="switcher-canvas" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header border-bottom">
@@ -212,8 +224,8 @@
           <div class="header-element align-items-center">
             <!-- Start::header-link|switcher-icon -->
             <div class="btn-list d-lg-none d-block">
-              <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-primary-light"> <i class="ti ti-brand-whatsapp"></i>Soy Cliente</a>
-              <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-primary-light"> <i class="ti ti-brand-whatsapp"></i></a>
+              <a href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-primary-light"> <i class="ti ti-brand-whatsapp"></i>Soy Cliente</a>
+              <a href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-primary-light"> <i class="ti ti-brand-whatsapp"></i></a>
               <button class="btn btn-icon btn-success switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                 <i class="ri-settings-3-line"></i>
               </button>
@@ -332,7 +344,7 @@
             <div class="d-lg-flex d-none">
               <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
                 <button type="button" class="btn btn-wave btn-primary" data-bs-toggle="modal" data-bs-target="#login-cliente"><i class="ti ti-user"></i> Soy cliente</button>
-                <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-wave btn-primary"><i class="ti ti-brand-whatsapp"></i></a>
+                <a href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-wave btn-primary"><i class="ti ti-brand-whatsapp"></i></a>
                 <button class="btn btn-wave btn-icon btn-light switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                   <i class="ri-settings-3-line"></i>
                 </button>
@@ -363,7 +375,7 @@
                   </div>
                   <p class="landing-banner-heading mb-3">Conexión rápida, navegación sin límites. <span class="text-secondary">Brartnet !</span></p>
                   <div class="fs-16 mb-5 text-fixed-white op-7">Brartnet - Conéctate con el mundo sin límites, con nuestra velocidad y fiabilidad. ¡Descubre un nuevo nivel de navegación con nosotros!</div>
-                  <a href="https://api.whatsapp.com/send?phone=+51918740074&text=*Hola buenos dias, vengo de tu pagina web!!*" class="m-1 btn btn-primary">
+                  <a href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*" class="m-1 btn btn-primary">
                     Contáctanos <i class="ti ti-brand-whatsapp ms-2 align-middle"></i>
                   </a>
                 </div>
@@ -857,7 +869,7 @@
       <section class="section  " id="pricing">
         <div class="container text-center">
           <p class="fs-12 fw-semibold text-success mb-1"><span class="landing-section-heading">PAGOS</span></p>
-          <h3 class="fw-semibold mb-2">Métodos de pagos</h3>
+          <h3 class="fw-semibold mb-2">Planes de Internet</h3>
           <div class="row justify-content-center">
             <div class="col-xl-9">
               <p class="text-muted fs-15 mb-5 fw-normal">Nuestro servicio de internet viene con el rango de precios más asequible.</p>
