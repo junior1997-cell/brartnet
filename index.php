@@ -13,7 +13,7 @@
 
   <meta name="description" content="Proveedor de servicios de internet de alta velocidad en Perú. Ofrecemos conexiones rápidas y confiables para hogares y empresas. ¡Contáctanos para obtener más información!">
   <meta name="keywords" content="brartnet, tocache, internet tocache, internet, proveedor de internet, servicios de internet, alta velocidad, conexiones de internet, internet en Perú">
-  <meta name="author" content="Corporación Brartnet">  
+  <meta name="author" content="Corporación Brartnet">
   <meta name="robots" content="index, follow">
   <!-- FACEBOOK -->
   <meta property="og:title" content="Corporación Brartnet - Proveedor de Servicios de Internet en Perú">
@@ -87,8 +87,12 @@
 
 <!-- Start Modal Forma de Pago -->
 <div class="modal fade" id="BannerFormaPago" tabindex="-1" aria-labelledby="BannerFormaPagoLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background-color: rgba(255, 255, 255, 0);  border: none; outline: none;">
+        <div class="modal-header">
+          <h6></h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
         <div class="modal-body">
           <img src="assets/modulo/bancos/forma-pago.jpeg" alt="Imagen Promocional" class="img-fluid">
         </div>
@@ -321,7 +325,7 @@
                   <span class="side-menu__label me-2">Más</span>
                   <i class="fe fe-chevron-right side-menu__angle op-8"></i>
                 </a>
-                <ul class="slide-menu child1">                  
+                <ul class="slide-menu child1">
                   <li class="slide">
                     <a href="#our-mission" class="side-menu__item">Cobertura</a>
                   </li>
@@ -498,7 +502,7 @@
               <h5 class="text-lg-start fw-semibold mb-0">Descubre los Beneficios de Nuestro Servicio de Internet</h5>
               <br/>
               <div class="row">
-                
+
                 <div class="col-12 col-md-12">
                   <div class="d-flex">
                     <span>
@@ -536,7 +540,7 @@
           <br/>
           <div class="row">
 
-            
+
           <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
               <div class="card custom-card overlay-card">
                 <img src="assets/modulo/home/cobertura/demo-tocache.jpg" class="card-img" alt="..." >
@@ -890,7 +894,7 @@
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane show active p-0" id="pricing-monthly-pane" role="tabpanel" aria-labelledby="pricing-monthly" tabindex="0">
                   <div class="row" id="planes">
-                    
+
                   </div>
                 </div>
 
@@ -1239,7 +1243,7 @@
       <!-- End:: Section-11 -->
 
       <div class="text-center landing-main-footer py-3">
-        <span class="text-muted fs-15"> Copyright © <span id="year"></span> 
+        <span class="text-muted fs-15"> Copyright © <span id="year"></span>
           <a href="javascript:void(0);" class="text-primary fw-semibold"><u>Corporació  n Brarnet SAC</u></a>.
            Diseñado por <span class="fa fa-heart text-danger"></span>  <a href="javascript:void(0);" class="text-primary fw-semibold">
             <u> JDL Tecnology</u>
@@ -1274,7 +1278,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form name="frmAcceso_c" id="frmAcceso_c" method="post"> 
+            <form name="frmAcceso_c" id="frmAcceso_c" method="post">
               <div class="mb-3">
               <label for="login-cliente" class="form-label text-default">Usuario</label>
                 <input type="text" class="form-control form-control-lg" id="login-cliente" placeholder="nombre de usuario" required >

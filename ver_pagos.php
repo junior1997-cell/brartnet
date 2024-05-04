@@ -461,7 +461,8 @@
                   <img src="assets/modulo/bancos/caja-huancayo.png" alt="">
                   </div>
                   <h5 class="mb-1 fw-semibold text-default">Caja Huancayo</h5>
-                  <p class="text-muted">107072211000007005</p>
+                  <p class="mb-1 text-muted">107072211000007005</p>
+                  <p class="text-muted">RONALD NIGEL ARTEAGA SEVILLANO</p>
                   <a class="text-primary fw-semibold" href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*">Contáctanos<i class="ti ti-brand-whatsapp ms-2 align-middle"></i></a>
                 </div>
               </div>
@@ -473,7 +474,8 @@
                   <img src="assets/modulo/bancos/icono-caja-piura.svg" alt="">
                   </div>
                   <h5 class="mb-1 fw-semibold text-default">Caja Piura</h5>
-                  <p class="text-muted">210-01-1585385</p>
+                  <p class="mb-1 text-muted">210-01-1585385</p>
+                  <p class="text-muted">RONALD NIGEL ARTEAGA SEVILLANO</p>
                   <a class="text-primary fw-semibold" href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*">Contáctanos<i class="ti ti-brand-whatsapp ms-2 align-middle"></i></a>
                 </div>
               </div>
@@ -485,7 +487,8 @@
                   <img src="assets/modulo/bancos/icono-banco-nacion.svg" alt="">
                   </div>
                   <h5 class="mb-1 fw-semibold text-default">Banco de la Nación</h5>
-                  <p class="text-muted">04-498-168057</p>
+                  <p class="mb-1 text-muted">04-498-168057</p>
+                  <p class="text-muted">RONALD NIGEL ARTEAGA SEVILLANO</p>
                   <a class="text-primary fw-semibold" href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*">Contáctanos<i class="ti ti-brand-whatsapp ms-2 align-middle"></i></a>
                 </div>
               </div>
@@ -498,6 +501,7 @@
                   </div>
                   <h5 class="mb-1 fw-semibold text-default">COOPACT</h5>
                   <p class="text-muted">DNI: 44685134</p>
+                  <p class="mb-1 text-muted">RONALD NIGEL ARTEAGA SEVILLANO</p>
                   <a class="text-primary fw-semibold" href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*">Contáctanos<i class="ti ti-brand-whatsapp ms-2 align-middle"></i></a>
                 </div>
               </div>
@@ -509,7 +513,8 @@
                   <img src="assets/modulo/bancos/logo-bbva.svg" alt="">
                   </div>
                   <h5 class="mb-1 fw-semibold text-default">BBVA Continental</h5>
-                  <p class="text-muted">0011-0318-0200748173</p>
+                  <p class=" mb-1 text-muted">0011-0318-0200748173</p>
+                  <p class="text-muted">RONALD NIGEL ARTEAGA SEVILLANO</p>
                   <a class="text-primary fw-semibold" href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*">Contáctanos<i class="ti ti-brand-whatsapp ms-2 align-middle"></i></a>
                 </div>
               </div>
@@ -521,7 +526,8 @@
                     <img src="assets/modulo/bancos/logo-yape2.png" alt="">
                   </div>
                   <h5 class="mb-1 fw-semibold text-default">Yape</h5>
-                  <p class="text-muted">976 097 096</p>
+                  <p class=" mb-1 text-muted">976 097 096</p>
+                  <p class="text-muted">RONALD NIGEL ARTEAGA SEVILLANO</p>
                   <a class="text-primary fw-semibold" href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*">Contáctanos<i class="ti ti-brand-whatsapp ms-2 align-middle"></i></a>
                 </div>
               </div>
