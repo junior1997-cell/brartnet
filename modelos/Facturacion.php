@@ -176,6 +176,7 @@
     public function mostrar_detalle_venta($idventa){
 
       $sql_1 = "SELECT v.*, CONCAT(v.serie_comprobante, '-', v.numero_comprobante) as serie_y_numero_comprobante, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y %h:%i:%s %p') AS fecha_emision_format, 
+      DATE_FORMAT(v.fecha_emision, '%h:%i:%s %p') AS fecha_emision_hora12, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y') AS fecha_emision_dmy,
       v.estado, p.idpersona, pc.idpersona_cliente, p.nombre_razonsocial, p.apellidos_nombrecomercial, 
       CASE 
         WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
@@ -212,12 +213,12 @@
     }
 
     public function eliminar($id){
-      $sql = "UPDATE venta SET estado_delete = '0' WHERE idventa = '$id'";
+      $sql = "UPDATE venta SET sunat_estado = 'ANULADO', estado_delete = '0' WHERE idventa = '$id'";
       return ejecutarConsulta($sql, 'D');
     }
 
     public function papelera($id){
-      $sql = "UPDATE venta SET estado = '0'  WHERE idventa = '$id'";
+      $sql = "UPDATE venta SET sunat_estado = 'ANULADO', estado = '0'  WHERE idventa = '$id'";
       return ejecutarConsulta($sql, 'T');
     }    
 

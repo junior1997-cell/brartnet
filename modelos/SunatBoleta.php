@@ -25,22 +25,23 @@ if (empty($venta_f['data']['venta'])) {
 } else {
 
   // Emrpesa emisora =============
-  $e_razon_social       = mb_convert_encoding($empresa_f['data']['nombre_razon_social'], 'ISO-8859-1', 'UTF-8');
-  $e_comercial          = $empresa_f['data']['nombre_comercial'];
-  $e_domicilio_fiscal   = $empresa_f['data']['domicilio_fiscal'];
+  $e_razon_social       = mb_convert_encoding($empresa_f['data']['nombre_razon_social'], 'UTF-8', mb_detect_encoding($empresa_f['data']['nombre_razon_social'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+  $e_comercial          = mb_convert_encoding($empresa_f['data']['nombre_comercial'], 'UTF-8', mb_detect_encoding($empresa_f['data']['nombre_comercial'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+  $e_domicilio_fiscal   = mb_convert_encoding($empresa_f['data']['domicilio_fiscal'], 'UTF-8', mb_detect_encoding($empresa_f['data']['domicilio_fiscal'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
   $e_tipo_documento     = $empresa_f['data']['tipo_documento'];
   $e_numero_documento   = $empresa_f['data']['numero_documento'];
-  
-  $e_distrito           = $empresa_f['data']['distrito'];
-  $e_provincia          = $empresa_f['data']['provincia'];
-  $e_departamento       = $empresa_f['data']['departamento'];
-  $e_codubigueo       = $empresa_f['data']['codubigueo'];
+
+  $e_distrito           = mb_convert_encoding($empresa_f['data']['distrito'], 'UTF-8', mb_detect_encoding($empresa_f['data']['distrito'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+  $e_provincia          = mb_convert_encoding($empresa_f['data']['provincia'], 'UTF-8', mb_detect_encoding($empresa_f['data']['provincia'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+  $e_departamento       = mb_convert_encoding($empresa_f['data']['departamento'], 'UTF-8', mb_detect_encoding($empresa_f['data']['departamento'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+  $e_codubigueo         = mb_convert_encoding($empresa_f['data']['codubigueo'], 'UTF-8', mb_detect_encoding($empresa_f['data']['codubigueo'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
   // Cliente receptor =============
-  $c_nombre_completo    = $venta_f['data']['venta']['cliente_nombre_completo'];
+  $c_nombre_completo    = mb_convert_encoding($venta_f['data']['venta']['cliente_nombre_completo'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['cliente_nombre_completo'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
   $c_tipo_documento     = $venta_f['data']['venta']['tipo_documento'];
+  $c_tipo_documento_name= $venta_f['data']['venta']['nombre_tipo_documento'];
   $c_numero_documento   = $venta_f['data']['venta']['numero_documento'];
-  $c_direccion          = $venta_f['data']['venta']['direccion'];
+  $c_direccion          = mb_convert_encoding($venta_f['data']['venta']['direccion'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['direccion'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
   $fecha_emision        = $venta_f['data']['venta']['fecha_emision'];
   $serie_comprobante    = $venta_f['data']['venta']['serie_comprobante'];
@@ -140,13 +141,13 @@ if (empty($venta_f['data']['venta'])) {
 
       $item->setDescripcion($nombre_producto)
       ->setMtoBaseIgv($subtotal)
-      ->setPorcentajeIgv(0) // 18%
+      ->setPorcentajeIgv(0)                       # 18% o 0%
       ->setIgv(0)
-      ->setTipAfeIgv('20')
+      ->setTipAfeIgv('20')                        # Exonerado Op. Onerosa - Catalog. 07
       ->setTotalImpuestos(0)
       ->setMtoValorVenta($subtotal)
       ->setMtoValorUnitario($precio_venta)
-      ->setMtoPrecioUnitario($precio_venta_dcto);
+      ->setMtoPrecioUnitario($precio_venta_dcto); # (Valor venta + Total Impuestos) / Cantidad
 
     $arrayItem[$i] = $item;
     $i++;

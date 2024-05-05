@@ -49,6 +49,8 @@ if (!function_exists('ejecutarConsulta')) {
         'warning_count' => $conexion->warning_count, 
       );
     }
+    $query->close(); // Cerrar la consulta   
+    $conexion->close();  // Cerrar la conexión
   }
 
   function ejecutarConsultaSimpleFila($sql) {
@@ -82,6 +84,8 @@ if (!function_exists('ejecutarConsulta')) {
         'warning_count' => $conexion->warning_count, 
       );
     }
+    $query->close(); // Cerrar la consulta   
+    $conexion->close();  // Cerrar la conexión
   }
 
   function ejecutarConsultaArray($sql) {
@@ -115,6 +119,8 @@ if (!function_exists('ejecutarConsulta')) {
         'warning_count' => $conexion->warning_count, 
       );
     }
+    $query->close(); // Cerrar la consulta   
+    $conexion->close();  // Cerrar la conexión
   }
 
   function ejecutarConsulta_retornarID($sql, $crud = 'R') {
@@ -145,6 +151,8 @@ if (!function_exists('ejecutarConsulta')) {
         'warning_count' => $conexion->warning_count, 
       );
     }
+    $query->close(); // Cerrar la consulta   
+    $conexion->close();  // Cerrar la conexión
   }
 
   function limpiarCadena($str) {

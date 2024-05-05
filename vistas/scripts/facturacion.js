@@ -280,10 +280,10 @@ function guardar_editar_facturacion(e) {
       if (result.value.status == true){
         Swal.fire("Correcto!", "Venta guardada correctamente", "success");
         tabla_principal_facturacion.ajax.reload(null, false);
-        limpiar_form_venta(); show_hide_form(1);             
+        limpiar_form_venta(); show_hide_form(1); reload_nc_serie_y_numero();
       } else if ( result.value.status == 'error_personalizado'){        
         tabla_principal_facturacion.ajax.reload(null, false);
-        limpiar_form_venta(); show_hide_form(1); ver_errores(result.value);
+        limpiar_form_venta(); show_hide_form(1); reload_nc_serie_y_numero(); ver_errores(result.value);
       } else {
         ver_errores(result.value);
       }      
@@ -510,12 +510,12 @@ function es_valido_cliente() {
 function ver_formato_ticket(idventa, tipo_comprobante) {
   $("#modal-imprimir-comprobante .modal-dialog").removeClass("modal-sm modal-lg modal-xl modal-xxl").addClass("modal-md");
   if (tipo_comprobante == '01') {
-    var rutacarpeta = "../reportes/TicketFactura.php?id=" + idventa;
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
     $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - FACTURA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '03') {
-    var rutacarpeta = "../reportes/TicketBoleta.php?id=" + idventa;
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
     $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - BOLETA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
@@ -525,7 +525,7 @@ function ver_formato_ticket(idventa, tipo_comprobante) {
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '12') {
-    var rutacarpeta = "../reportes/TicketNotaVenta.php?id=" + idventa;
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
     $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - NOTA DE VENTA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");

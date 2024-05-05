@@ -10,3 +10,17 @@ v.year_name=YEAR(vp.fecha_envio) WHERE  v.idlanding_correo = vp.idlanding_correo
 
 :::::::::::::::::::: ACTUALIZA CODIGO DE PRODUCTOS :::::::::::
 UPDATE producto AS p SET tipo = 'PR', codigo = CONCAT('PR', LPAD(idproducto, 5, '0')) WHERE `idcategoria` <> 2;
+
+:::::::::::::::::::: ACTUALIZA DESCUENTO NEW :::::::::::
+UPDATE `venta_detalle` SET `precio_venta_descuento`= precio_venta, `subtotal_no_descuento`= subtotal
+
+:::::::::::::::::::: ACTUALIZA TIPO EN: VENTA_DETALLE :::::::::::
+UPDATE venta_detalle AS vd1
+INNER JOIN venta_detalle AS vd2 ON vd1.idventa_detalle = vd2.idventa_detalle
+INNER JOIN venta AS v ON v.idventa = vd2.idventa
+SET vd1.tipo = CASE v.tipo_comprobante
+    WHEN '01' THEN 'FACTURA'
+    WHEN '03' THEN 'BOLETA'
+    WHEN '07' THEN 'NOTA DE CRÉDITO'
+    WHEN '12' THEN 'TICKET'
+END;

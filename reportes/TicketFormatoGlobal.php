@@ -35,7 +35,7 @@ if (!isset($_SESSION["user_nombre"])) {
     if (empty($_GET["id"])) {  echo "Datos incompletos (".$_GET["id"].")"; die(); }   // validamos el valor de la variable
     
     $empresa_f        = $facturacion->datos_empresa();    
-    $venta_f          = $facturacion->mostrar_detalle_venta($_GET["id"]);
+    $venta_f          = $facturacion->mostrar_detalle_venta($_GET["id"]);   
 
     if ( empty($venta_f['data']['venta']) ) { echo "Comprobante no existe"; die();  }
 
@@ -64,7 +64,6 @@ if (!isset($_SESSION["user_nombre"])) {
     $c_tipo_documento_name= $venta_f['data']['venta']['nombre_tipo_documento'];
     $c_numero_documento   = $venta_f['data']['venta']['numero_documento'];
     $c_direccion          = mb_convert_encoding($venta_f['data']['venta']['direccion'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['direccion'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
-    $c_nc_serie_y_numero  = mb_convert_encoding($venta_f['data']['venta']['nc_serie_y_numero'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['nc_serie_y_numero'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     
     // Data comprobante ================================================================================
     $metodo_pago          = mb_convert_encoding($venta_f['data']['venta']['metodo_pago'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['metodo_pago'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
@@ -79,7 +78,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $serie_comprobante    = $venta_f['data']['venta']['serie_comprobante'];
     $numero_comprobante   = $venta_f['data']['venta']['numero_comprobante'];
     $serie_y_numero_comprobante   = $venta_f['data']['venta']['serie_y_numero_comprobante'];
-    $nombre_comprobante   = $venta_f['data']['venta']['tipo_comprobante'] == '12' ? 'NOTA DE VENTA' : ( $venta_f['data']['venta']['tipo_comprobante'] == '07' ? 'NOTA DE CRÉDITO' : $venta_f['data']['venta']['nombre_comprobante']);
+    $nombre_comprobante   = $venta_f['data']['venta']['tipo_comprobante'] == '12' ? 'NOTA DE VENTA' : $venta_f['data']['venta']['nombre_comprobante'];
 
     $venta_subtotal       = number_format( floatval($venta_f['data']['venta']['venta_subtotal']), 2, '.', ',' );
     $venta_subtotal_no_dcto = number_format( (floatval($venta_f['data']['venta']['venta_subtotal']) + floatval($venta_f['data']['venta']['venta_descuento'])), 2, '.', ',' );
@@ -125,7 +124,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $logoQr = $result->getDataUri();// Generate a data URI
 
     //NUMERO A LETRA ================================================================================    
-    $total_en_letra = $numero_a_letra->toInvoice( floatval($venta_f['data']['venta']['venta_total']) , 2, " SOLES" );  
+    $total_en_letra = $numero_a_letra->toInvoice( floatval($venta_f['data']['venta']['venta_total']) , 2, " SOLES" );     
 
     ?>
     <html>
@@ -188,11 +187,12 @@ if (!isset($_SESSION["user_nombre"])) {
             <tr ><td colspan="2"><strong>Cliente:</strong> <?php echo $c_nombre_completo ; ?> </td> </tr>
             <tr ><td colspan="2"><strong>DNI/RUC:</strong> <?php echo $c_numero_documento ; ?></td> </tr>
             <tr ><td colspan="2"><strong>Dir.:</strong> <?php echo $c_direccion ; ?></td></tr>                                        
-            <tr ><td colspan="2"><strong>Doc. Baja:</strong> <?php echo $c_nc_serie_y_numero; ?> </td></tr>
+            <tr ><td >            <strong>Método de pago:</strong> <?php echo $metodo_pago ; ?> </td> <td><strong>Moneda:</strong> SOLES</td></tr>
+            <tr ><td colspan="2"><strong>Nro referencia:</strong> <?php echo $mp_serie_comprobante; ?> </td></tr>
             <tr ><td colspan="2"><strong>Atención:</strong> <?php echo $user_en_atencion; ?> </td> </tr>
             <tr ><td colspan="2"><strong>Observación:</strong> <?php echo $observacion_documento ; ?> </td></tr>
           </tbody>
-        </table>            
+        </table>         
 
         <!-- Mostramos los detalles de la venta en el documento HTML -->
         <table border="0" align="center" width="300px" style="font-size: 12px !important;">
@@ -228,18 +228,22 @@ if (!isset($_SESSION["user_nombre"])) {
         <table border='0' align="center" width='300px' style='font-size: 12px' >                
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
           <tr><td colspan="3"><strong>Son: </strong> <?php echo $total_en_letra; ?> </td></tr>
-          <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>            
-        </table>        
+          <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
+          <tr><td style="text-align: right;"><strong><?php echo $metodo_pago; ?></strong></td> <td>:</td> <td style="text-align: right;"> <?php echo $total_recibido; ?> </td></tr>
+          <tr><td style="text-align: right;"><strong>VUELTO</strong></td>         <td>:</td> <td style="text-align: right;"> <?php echo $total_vuelto; ?> </td></tr>  
+          <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>        
+        </table>       
 
         <table border='0' align="center" width='300px' style='font-size: 12px'>
           <tbody>
             <tr>
               <td>
-                <img src=<?php echo $logoQr; ?> width="100" height="100"><br>                
+                <img src=<?php echo $logoQr; ?> width="100" height="100"><br>
+                
               </td>
               <td style="font-size: 11px;">
                 <span>Autorizado mediante resolución Nro: 182-2016/SUNAT Representación impresa del comprobante de venta electrónico, puede ser consultada en:</span>
-                <span class="text-blue" ><b><?php echo $e_web; ?></b></span>
+                <span class="text-blue"><b><?php echo $e_web; ?></b></span>
                 <span style="font-size: 10px; margin-top: 5px;">Hash:  <?php echo $sunat_hash; ?>  </span>
               </td>
             </tr>

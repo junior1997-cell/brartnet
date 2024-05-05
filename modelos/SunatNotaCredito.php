@@ -117,26 +117,16 @@ if (empty($venta_f['data']['venta'])) {
     $detail = new SaleDetail();
     $detail->setCodProducto($val['codigo'])
       ->setUnidad($um_abreviatura)
-      ->setCantidad($cantidad);
-
-      if ($descuento > 0) {                       # Aplicamos descuento
-        $detail->setDescuentos([(new Charge())
-          ->setCodTipo('00')                      # Catalog. 53 (00: Descuento que afecta la Base Imponible)
-          ->setMontoBase($subtotal_no_dcto)       # S/ 100 (cantidad * valor unitario)
-          ->setFactor($descuento_pct)             # 20% (descuento porcentaje)
-          ->setMonto($descuento)                  # S/ 20 (descuento numerico)
-        ]);
-      }
-
-      $detail->setDescripcion($nombre_producto)
+      ->setCantidad($cantidad)
+      ->setDescripcion($nombre_producto)
       ->setMtoBaseIgv($subtotal)
-      ->setPorcentajeIgv(0)
+      ->setPorcentajeIgv(0)                       # 18% o 0%
       ->setIgv(0)
-      ->setTipAfeIgv('20')
-      ->setTotalImpuestos(0)
+      ->setTipAfeIgv('20')                        # Exonerado Op. Onerosa - Catalog. 07
+      ->setTotalImpuestos(0)                      # Suma de impuestos en el detalle
       ->setMtoValorVenta($subtotal)
-      ->setMtoValorUnitario($precio_venta)
-      ->setMtoPrecioUnitario($precio_venta_dcto);
+      ->setMtoValorUnitario($precio_venta_dcto)
+      ->setMtoPrecioUnitario($precio_venta_dcto); # (Valor venta + Total Impuestos) / Cantidad
     $arrayItem[$i] = $detail;
     $i++;
   }
