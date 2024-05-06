@@ -78,8 +78,8 @@ if (!isset($_SESSION["user_nombre"])) {
     $serie_comprobante    = $venta_f['data']['venta']['serie_comprobante'];
     $numero_comprobante   = $venta_f['data']['venta']['numero_comprobante'];
     $serie_y_numero_comprobante   = $venta_f['data']['venta']['serie_y_numero_comprobante'];
-    $nombre_comprobante   = $venta_f['data']['venta']['tipo_comprobante'] == '12' ? 'NOTA DE VENTA' : $venta_f['data']['venta']['nombre_comprobante'];
-
+    $nombre_comprobante   = $venta_f['data']['venta']['tipo_comprobante'] == '12' ? 'NOTA DE VENTA' : ( $venta_f['data']['venta']['tipo_comprobante'] == '07' ? 'NOTA DE CRÉDITO' : $venta_f['data']['venta']['nombre_comprobante']);
+    
     $venta_subtotal       = number_format( floatval($venta_f['data']['venta']['venta_subtotal']), 2, '.', ',' );
     $venta_subtotal_no_dcto = number_format( (floatval($venta_f['data']['venta']['venta_subtotal']) + floatval($venta_f['data']['venta']['venta_descuento'])), 2, '.', ',' );
     $venta_descuento      = number_format( floatval($venta_f['data']['venta']['venta_descuento']), 2, '.', ',' );
@@ -186,9 +186,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <tr ><td>             <strong>Emisión:</strong> <?php echo $fecha_emision_dmy ; ?> </td> <td><strong>Hora:</strong> <?php echo $fecha_emision_hora12 ; ?> </td></tr>
             <tr ><td colspan="2"><strong>Cliente:</strong> <?php echo $c_nombre_completo ; ?> </td> </tr>
             <tr ><td colspan="2"><strong>DNI/RUC:</strong> <?php echo $c_numero_documento ; ?></td> </tr>
-            <tr ><td colspan="2"><strong>Dir.:</strong> <?php echo $c_direccion ; ?></td></tr>                                        
-            <tr ><td >            <strong>Método de pago:</strong> <?php echo $metodo_pago ; ?> </td> <td><strong>Moneda:</strong> SOLES</td></tr>
-            <tr ><td colspan="2"><strong>Nro referencia:</strong> <?php echo $mp_serie_comprobante; ?> </td></tr>
+            <tr ><td colspan="2"><strong>Dir.:</strong> <?php echo $c_direccion ; ?></td></tr> 
             <tr ><td colspan="2"><strong>Atención:</strong> <?php echo $user_en_atencion; ?> </td> </tr>
             <tr ><td colspan="2"><strong>Observación:</strong> <?php echo $observacion_documento ; ?> </td></tr>
           </tbody>
@@ -227,10 +225,11 @@ if (!isset($_SESSION["user_nombre"])) {
         <!-- Mostramos los totales de la venta en el documento HTML -->
         <table border='0' align="center" width='300px' style='font-size: 12px' >                
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
-          <tr><td colspan="3"><strong>Son: </strong> <?php echo $total_en_letra; ?> </td></tr>
+          <tr><td colspan="3"><b>Son: </b> <?php echo $total_en_letra; ?> </td></tr>
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
-          <tr><td style="text-align: right;"><strong><?php echo $metodo_pago; ?></strong></td> <td>:</td> <td style="text-align: right;"> <?php echo $total_recibido; ?> </td></tr>
-          <tr><td style="text-align: right;"><strong>VUELTO</strong></td>         <td>:</td> <td style="text-align: right;"> <?php echo $total_vuelto; ?> </td></tr>  
+          <tr><td >           <b><?php echo $metodo_pago; ?></b></td>   <td>:</td> <td> <?php echo $total_recibido; ?> </td></tr>
+          <tr><td >           <b>VUELTO</b></td>                        <td>:</td> <td> <?php echo $total_vuelto; ?> </td></tr>  
+          <tr><td >           <b>Nro. Baucher</b>                      <td>:</td> <td> <?php echo $mp_serie_comprobante; ?></td> </td></tr>
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>        
         </table>       
 
