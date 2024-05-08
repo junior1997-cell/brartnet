@@ -283,13 +283,13 @@ class Cliente
 		$sql = "SELECT v.idventa, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y') AS fecha_emision, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion, 
 							CONCAT(v.serie_comprobante, '-', v.numero_comprobante) AS SNCompb, v.venta_total,
 							CONCAT(v.periodo_pago_month, '-', v.periodo_pago_year) AS periodo_pago,
-							v.tipo_comprobante
+							v.tipo_comprobante, v.sunat_estado, v.estado, v.estado_delete
 						FROM venta v
 							INNER JOIN persona_cliente as pc ON v.idpersona_cliente = pc.idpersona_cliente
 							INNER JOIN persona_trabajador AS pt ON pc.idpersona_trabajador = pt.idpersona_trabajador
 							INNER JOIN persona AS p1 ON pc.idpersona = p1.idpersona
 							INNER JOIN persona AS p2 ON pt.idpersona = p2.idpersona
-						WHERE v.idpersona_cliente = '$id'
+						WHERE v.estado_delete = '1' AND  v.idpersona_cliente = '$id'
 						AND v.periodo_pago_month = '$mes' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za";
 		return ejecutarConsulta($sql);
 

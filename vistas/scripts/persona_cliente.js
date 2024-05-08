@@ -574,21 +574,20 @@ function TickcetPagoCliente(idventa, tipo_comprobante){
   $("#pago-cliente-mes").modal('hide');
   // console.log(idventa);
   if (tipo_comprobante == '01') {
-    var rutacarpeta = "../reportes/TicketFactura.php?id=" + idventa;
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
     $("#modal-imprimir-comprobante-Label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - FACTURA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '03') {
-    var rutacarpeta = "../reportes/TicketBoleta.php?id=" + idventa;
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
     $("#modal-imprimir-comprobante-Label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - BOLETA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '12') {
-    var rutacarpeta = "../reportes/TicketNotaVenta.php?id=" + idventa;
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
     $("#modal-imprimir-comprobante-Label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - NOTA DE VENTA`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
-
   } else  {
     // toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
     toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');

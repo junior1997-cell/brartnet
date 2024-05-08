@@ -85,21 +85,7 @@
 
 <body class="landing-body">
 
-<!-- Start Modal Forma de Pago -->
-<div class="modal fade" id="BannerFormaPago" tabindex="-1" aria-labelledby="BannerFormaPagoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content" style="background-color: rgba(255, 255, 255, 0);  border: none; outline: none;">
-        <div class="modal-header">
-          <h6></h6>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <img src="assets/modulo/bancos/forma-pago.jpeg" alt="Imagen Promocional" class="img-fluid">
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- End Modal Forma de Pago -->
+  
 
   <!-- Start Switcher -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="switcher-canvas" aria-labelledby="offcanvasRightLabel">
@@ -1254,6 +1240,22 @@
     </div>
     <!-- End::app-content -->
 
+    <!-- Start Modal Forma de Pago -->
+    <div class="modal fade" id="BannerFormaPago" tabindex="-1" aria-labelledby="BannerFormaPagoLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" >
+          <div class="modal-header pb-1">
+            <h5 class="m-0" >Nota Importante!!</h5>
+            <button type="button" class="btn-close py-1" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" >
+            <img src="assets/modulo/bancos/forma-pago.jpeg" alt="Imagen Promocional" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Modal Forma de Pago -->
+
     <!-- :::::::::::::::::::::::::::: Toast :::::::::::::::::::::::::::: -->
     <div class="toast-container position-fixed top-0 end-0 p-3">
       <div id="pago-anual" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -1350,7 +1352,7 @@
   <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
   <!-- jQuery 3.6.0 -->
-<script src="assets/libs/jquery/jquery.min.js"></script>
+  <script src="assets/libs/jquery/jquery.min.js"></script>
 
   <!-- jquery-validation -->
   <script src="assets/libs/jquery-validation/jquery.validate.min.js"></script>
@@ -1363,6 +1365,13 @@
   <script src="assets/js/funcion_crud.js"></script>
 
   <script src="vistas/scripts/home.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#BannerFormaPago').modal('show');
+    });
+    
+  </script>
 
 </body>
 

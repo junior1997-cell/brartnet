@@ -418,7 +418,15 @@
         <!-- Start::slide -->
         <li class="slide">
           <a href="papelera.php" class="side-menu__item" target="_blank">
-            <i class='bx bx-trash side-menu__icon'></i><span class="side-menu__label"> Papelera</span>
+            <i class='bx bx-trash side-menu__icon'></i><span class="side-menu__label">Papelera</span>
+          </a>
+        </li>
+        <!-- End::slide -->
+
+        <!-- Start::slide -->
+        <li class="slide">
+          <a href="landing_page.php" class="side-menu__item" target="_blank">
+            <i class='bx bx-layer side-menu__icon'></i><span class="side-menu__label">Landing Page</span>
           </a>
         </li>
         <!-- End::slide -->

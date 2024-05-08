@@ -4,7 +4,7 @@ function init(){
 
   mostrar_tecnico_redes();
   mostrar_planes();
-  banner_forma_pago();
+  
 
 }
 
@@ -20,7 +20,7 @@ function mostrar_tecnico_redes() {
 
       e.data.forEach((val, key)=> {
 
-        var codigoHTML = `<div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12">
+        var codigoHTML = `<div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12 mx-auto">
           <div class="card custom-card text-center team-card ">
             <div class="card-body p-5">
               <span class="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
@@ -109,11 +109,9 @@ $(document).ready(function () {
 
 //  :::::::::::::::: F O R M A  P A G O   :::::::::::::::: 
 function banner_forma_pago(){
-  $('#BannerFormaPago').modal('show');
+  
 
-  setTimeout(function() {
-      $('#BannerFormaPago').modal('hide');
-  }, 10000); 
+  
 }
 
 

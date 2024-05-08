@@ -406,7 +406,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
           </tr>
           <tr > 
-            <th >N°</th> <th >F. Emisión</th> <th >Periodo Pago</th> <th >Num. Comprobante</th> <th >Monto</th> <th >Imprimir</th>
+            <th >N°</th> <th >F. Emisión</th> <th >Periodo Pago</th> <th >Comprobante</th> <th >Monto</th> <th >Imprimir</th> <th >Estado</th>
           </tr>
         </thead>
         <tbody>';
@@ -423,6 +423,9 @@ if (!isset($_SESSION["user_nombre"])) {
              <i class="ri-ticket-line"></i> 
             </button>
           </td>
+          <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.
+          ($value['estado'] == '1' ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>')
+          .'</td>
         </tr>';
           
         }

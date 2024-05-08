@@ -12,7 +12,7 @@ Class Zona
 
 	//Implementamos un método para insertar registros
 	public function insertar_zona($nombre_zona,$ip_antena) {
-		$sql_0 = "SELECT * FROM zona_antena  WHERE ip_antena = '$ip_antena';";
+		$sql_0 = "SELECT * FROM zona_antena  WHERE nombre = '$nombre_zona' and ip_antena = '$ip_antena';";
     $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
       
     if ( empty($existe['data']) ) {
