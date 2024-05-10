@@ -14,7 +14,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
   <head>
 
-    <?php $title_page = "Gastos";
+    <?php $title_page = "Landing pages";
     include("template/head.php"); ?>
 
     <!-- Quill Editor CSS -->
@@ -42,8 +42,11 @@ if (!isset($_SESSION["user_nombre"])) {
                 <div class="card card-primary card-outline card-tabs mb-0">
                   <div class="card-header p-0 pt-1 border-bottom-0">
                     <ul class="nav nav-tabs tab-style-2 mb-1" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="cliente" data-bs-toggle="tab" data-bs-target="#cliente-pane" type="button" role="tab" aria-selected="true"><i class="ri-user-line me-1 align-middle"></i>CLIENTE</button>
+                      </li>
                       <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="equipo" data-bs-toggle="tab" data-bs-target="#equipo-pane" type="button" role="tab" aria-selected="true"><i class="ri-user-line me-1 align-middle"></i>EQUIPO</button>
+                        <button class="nav-link active" id="equipo" data-bs-toggle="tab" data-bs-target="#equipo-pane" type="button" role="tab" aria-selected="true"><i class="fas fa-user-tie"></i>EQUIPO</button>
                       </li>
                       <li class="nav-item" role="presentation">
                         <button class="nav-link" id="precio" data-bs-toggle="tab" data-bs-target="#precio-pane" type="button" role="tab" aria-selected="false"><i class="ri-tools-line me-1 align-middle"></i>PRECIO</button>
@@ -61,92 +64,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="tab-pane fade show active" id="equipo-pane" role="tabpanel" tabindex="0">
                     <div class="row">
 
-                      <!-- :::::::::::::::: P L A N E S :::::::::::::::: -->
-                      <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
-                        <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
-                          <div>
-                            <div class="d-md-flex d-block align-items-center ">
-                              <!-- <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-plan"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button> -->
-                              <div>
-                                <p class="fw-semibold fs-18 mb-0">Planes</p>
-                                <span class="fs-semibold text-muted">Administra los planes de manera eficiente.</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div class="btn-list mt-md-0 mt-2">
-                            <nav>
-                              <ol class="breadcrumb mb-0">
-                                <li class="breadcrumb-item"><a href="javascript:void(0);">Planes</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Home</li>
-                              </ol>
-                            </nav>
-                          </div>
-                        </div>
-                        <div class="card custom-card">
-                          <div class="card-body ">
-                            <div class="table-responsive" id="div-tabla-plan">                            
-                              <table id="tabla-plan" class="table table-bordered w-100" style="width: 100%;">
-                                <thead>
-                                  <tr>
-                                    <th class="text-center">#</th>
-                                    <th class="text-center">Acciones</th>
-                                    <th>Descripción</th>
-                                    <th>Costo</th>
-                                    <th class="text-center">Estado</th>
-                                  </tr>
-                                </thead>
-                                <tbody></tbody>
-                                <tfoot>
-                                  <tr>
-                                    <th class="text-center">#</th>
-                                    <th class="text-center">Acciones</th>
-                                    <th>Descripción</th>
-                                    <th>Costo</th>
-                                    <th class="text-center">Estado</th>
-                                  </tr>
-                                </tfoot>
-                              </table>
-                            </div>
-                            <div id="div-form-plan" style="display: none;"> 
-                              <form name="form-agregar-plan" id="form-agregar-plan" method="POST" class="needs-validation" novalidate>
-                                <div class="row" id="cargando-1-fomulario">
-                                  <input type="hidden" name="idplan" id="idplan">
-
-                                  <div class="col-md-8">
-                                    <div class="form-label">
-                                      <label for="nombre_plan" class="form-label">Nombre del Plan(*)</label>
-                                      <input class="form-control" name="nombre_plan" id="nombre_plan" />
-                                    </div>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <div class="form-group">
-                                      <label for="costo_plan" class="form-label">Monto(*)</label>
-                                      <input type="number" class="form-control" name="costo_plan" id="costo_plan" />
-                                    </div>
-                                  </div>
-                                  <div class="col-md-12 mb-3">
-                                    <div id="editor">
-                                      <span>✔️ <b>Precio de locura</b> 50% de descuento</span> <br>
-                                      <span>✔️ <b>Precio de locura</b> 50% de descuento</span> <br>
-                                      <span>✔️ <b>Precio de locura</b> 50% de descuento</span> <br>
-                                      <span>✔️ <b>Precio de locura</b> 50% de descuento</span> <br>
-                                      <span>✔️ <b>Precio de locura</b> <span style="padding: 0.25rem 0.45rem; font-weight: 600; border-radius: 5px; background-color: lawngreen;">03 de capa mes</span></span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row" id="cargando-2-fomulario" style="display: none;">
-                                  <div class="col-lg-12 text-center">
-                                    <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
-                                    <h4 class="bx-flashing">Cargando...</h4>
-                                  </div>
-                                </div>
-                                <button type="submit" style="display: none;" id="submit-form-plan">Submit</button>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      
 
                       <!-- :::::::::::::::: Z O N A :::::::::::::::: -->
                       <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
@@ -249,36 +167,39 @@ if (!isset($_SESSION["user_nombre"])) {
                   </div>
                   <div class="tab-pane fade" id="precio-pane" role="tabpanel" tabindex="0">
                     <div class="row">
-                      <!-- :::::::::::::::: C A R G O    T R A B A J A D O R :::::::::::::::: -->
-                      <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
-                        <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
-                          <div>
-                            <div class="d-md-flex d-block align-items-center ">
-                              <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form_ct();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-c-t"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
-                              <div>
-                                <p class="fw-semibold fs-18 mb-0">Cargo Trabajador</p>
-                                <span class="fs-semibold text-muted">Administra de manera eficiente los cargos.</span>
-                              </div>
+
+                    <!-- :::::::::::::::: P L A N E S :::::::::::::::: -->
+                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
+                      <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
+                        <div>
+                          <div class="d-md-flex d-block align-items-center ">
+                          
+                            <div>
+                              <p class="fw-semibold fs-18 mb-0">Planes</p>
+                              <span class="fs-semibold text-muted">Administra los planes de manera eficiente.</span>
                             </div>
                           </div>
-
-                          <div class="btn-list mt-md-0 mt-2">
-                            <nav>
-                              <ol class="breadcrumb mb-0">
-                                <li class="breadcrumb-item"><a href="javascript:void(0);">Cargo Trabajador</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Home</li>
-                              </ol>
-                            </nav>
-                          </div>
                         </div>
-                        <div class="card custom-card">
-                          <div class="card-body table-responsive">
-                            <table id="tabla-cargo-trabajador" class="table table-bordered w-100" style="width: 100%;">
+
+                        <div class="btn-list mt-md-0 mt-2">
+                          <nav>
+                            <ol class="breadcrumb mb-0">
+                              <li class="breadcrumb-item"><a href="javascript:void(0);">Planes</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Home</li>
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
+                      <div class="card custom-card">
+                        <div class="card-body">
+                          <div class="table-responsive" id="div-tabla-plan">                            
+                            <table id="tabla-plan" class="table table-bordered w-100" style="width: 100%;">
                               <thead>
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
-                                  <th>Nombre</th>
+                                  <th>Descripción</th>
+                                  <th>Costo</th>
                                   <th class="text-center">Estado</th>
                                 </tr>
                               </thead>
@@ -287,28 +208,70 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
-                                  <th>Nombre</th>
+                                  <th>Descripción</th>
+                                  <th>Costo</th>
                                   <th class="text-center">Estado</th>
                                 </tr>
                               </tfoot>
                             </table>
                           </div>
+                          <div id="div-form-plan" style="display: none;"> 
+                            <form name="form-agregar-plan" id="form-agregar-plan" method="POST" class="needs-validation" novalidate>
+                              <div class="row" id="cargando-1-fomulario">
+                                <input type="hidden" name="idplan" id="idplan">
+
+                                <div class="col-md-8">
+                                  <div class="form-label">
+                                    <label for="nombre_plan" class="form-label">Nombre del Plan(*)</label>
+                                    <input class="form-control" name="nombre_plan" id="nombre_plan" readonly />
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <div class="form-group">
+                                    <label for="costo_plan" class="form-label">Monto(*)</label>
+                                    <input type="number" class="form-control" name="costo_plan" id="costo_plan" readonly />
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div id="editor">
+                                    
+                                  </div>
+                                  <textarea name="caracteristicas" id="caracteristicas" class="hidden"></textarea>
+                                </div>
+                                
+                              </div>
+                              <div class="row" id="cargando-2-fomulario" style="display: none;">
+                                <div class="col-lg-12 text-center">
+                                  <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                                  <h4 class="bx-flashing">Cargando...</h4>
+                                </div>
+                              </div>
+                              <button type="submit" style="display: none;" id="submit-form-plan">Submit</button>
+                            </form>
+                          </div>
+                        </div>
+                        <div id="footer-plan" name="footer-plan" class="card-footer d-flex justify-content-end d-none">
+                          <button id="cancelar_plan" name="cancelar_plan" class="btn-modal-effect btn btn-danger label-btn btn-cancelar m-r-10px" style="display: none;" onclick="show_hide_form_plan(1);"><i class="ri-close-line label-btn-icon me-2"> </i> Cancelar</button>
+                          <button id="guardar_plan" name="guardar_plan" class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"> <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                         </div>
                       </div>
+                    </div>
+                    
                     </div>
                   </div>
 
                   <div class="tab-pane fade" id="faqs-pane" role="tabpanel" tabindex="0">
                     <div class="row">
-                      <!-- :::::::::::::::: B A N C O S :::::::::::::::: -->
+
+                      <!-- :::::::::::::::: P R E G U N T A S   F R E C U E N T E S :::::::::::::::: -->
                       <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
                         <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
                           <div>
                             <div class="d-md-flex d-block align-items-center ">
-                              <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_banco();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-bancos"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                              <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form_preguntas();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-preguntas"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                               <div>
-                                <p class="fw-semibold fs-18 mb-0">Bancos</p>
-                                <span class="fs-semibold text-muted">Administra de manera eficiente tus bancos.</span>
+                                <p class="fw-semibold fs-18 mb-0">Preguntas Frecuentes</p>
+                                <span class="fs-semibold text-muted">Administra las preguntas y respuestas.</span>
                               </div>
                             </div>
                           </div>
@@ -316,7 +279,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="btn-list mt-md-0 mt-2">
                             <nav>
                               <ol class="breadcrumb mb-0">
-                                <li class="breadcrumb-item"><a href="javascript:void(0);">Bancos</a></li>
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Preguntas</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Home</li>
                               </ol>
                             </nav>
@@ -324,72 +287,13 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                         <div class="card custom-card">
                           <div class="card-body table-responsive">
-                            <table id="tabla-bancos" class="table table-bordered w-100" style="width: 100%;">
+                            <table id="tabla-preguntas-frecuentes" class="table table-bordered w-100" style="width: 100%;">
                               <thead>
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
-                                  <th>Nombre</th>
-                                  <th>Formato Cta/CCI</th>
-                                  <th class="text-center">Estado</th>
-
-                                  <th>Nombre</th>
-                                  <th>Alias</th>
-                                  <th>Formato Cta</th>
-                                  <th>Formato CCI</th>
-                                  <th>Formato Cta. Dtrac.</th>
-                                </tr>
-                              </thead>
-                              <tbody></tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="text-center">Acciones</th>
-                                  <th>Nombre</th>
-                                  <th>Formato Cta/CCI</th>
-                                  <th class="text-center">Estado</th>
-
-                                  <th>Nombre</th>
-                                  <th>Alias</th>
-                                  <th>Formato Cta</th>
-                                  <th>Formato CCI</th>
-                                  <th>Formato Cta. Dtrac.</th>
-                                </tr>
-                              </tfoot>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- :::::::::::::::: C A T INCIDENCIAS :::::::::::::::: -->
-                      <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
-                        <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
-                          <div>
-                            <div class="d-md-flex d-block align-items-center ">
-                              <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form_cat_inc();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-cat-inc"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
-                              <div>
-                                <p class="fw-semibold fs-18 mb-0">Categorías Incidencias</p>
-                                <span class="fs-semibold text-muted">Administra de manera eficiente tus Categorias de incidencias.</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div class="btn-list mt-md-0 mt-2">
-                            <nav>
-                              <ol class="breadcrumb mb-0">
-                                <li class="breadcrumb-item"><a href="javascript:void(0);">Categorías</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Home</li>
-                              </ol>
-                            </nav>
-                          </div>
-                        </div>
-                        <div class="card custom-card">
-                          <div class="card-body table-responsive">
-                            <table id="tabla-inc" class="table table-bordered w-100" style="width: 100%;">
-                              <thead>
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="text-center">Acciones</th>
-                                  <th>Nombre</th>
+                                  <th>Pregunta</th>
+                                  <th>Respuesta</th>
                                   <th class="text-center">Estado</th>
                                 </tr>
                               </thead>
@@ -398,7 +302,8 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
-                                  <th>Nombre</th>
+                                  <th>Pregunta</th>
+                                  <th>Respuesta</th>
                                   <th class="text-center">Estado</th>
                                 </tr>
                               </tfoot>
@@ -406,31 +311,13 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>
                         </div>
                       </div>
+
+
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <!-- MODAL:: REGISTRAR PLAN - charge 1 -->
-            <div class="modal fade modal-effect" id="modal-agregar-plan" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-pagoLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-scrollabel">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h6 class="modal-title" id="modal-agregar-pagoLabel1">Planes</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    
-                  </div>
-                  <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_form();"><i class="las la-times"></i> Close</button>
-                    <button type="button" class="btn btn-sm btn-primary" id="guardar_registro_plan"><i class="bx bx-save bx-tada"></i> Guardar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End::modal-registrar-plan -->
 
             <!-- MODAL:: REGISTRAR ZONA - charge 3 -->
             <div class="modal fade modal-effect" id="modal-agregar-zona" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-zonaLabel" aria-hidden="true">
@@ -520,85 +407,40 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
             <!-- End::modal-registrar-zona -->
 
-            <!-- MODAL :: BANCOS - charge 7 -->
-            <div class="modal fade modal-effect" id="modal-agregar-bancos" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-bancos" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-scrollable modal-md">
+            <!-- MODAL :: preguntas frecuentes - charge 7 -->
+            <div class="modal fade modal-effect" id="modal-agregar-preguntas" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-preguntas" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Agregar Banco</h4>
+                    <h4 class="modal-title">Pregunta Frecuente</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
 
                   <div class="modal-body">
                     <!-- form start -->
-                    <form id="form-agregar-bancos" name="form-agregar-bancos" method="POST" autocomplete="off">
+                    <form id="form-agregar-preguntas" name="form-agregar-preguntas" method="POST" autocomplete="off">
                       <div class="card-body">
-                        <div class="row" id="cargando-7-fomulario">
-                          <!-- id banco -->
-                          <input type="hidden" name="idbancos" id="idbancos" />
+                        <div class="row" id="cargando-9-fomulario">
+                          <!-- id	preguntas_frecuentes -->
+                          <input type="hidden" name="	idpreguntas_frecuentes" id="	idpreguntas_frecuentes" />
 
-                          <!-- Nombre -->
+                          <!-- Pregunta -->
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                              <label class="form-label" for="nombre_b">Nombre</label>
-                              <input type="text" name="nombre_b" id="nombre_b" class="form-control" placeholder="Nombre del banco." onkeyup="mayus(this);" />
+                              <label class="form-label" for="pregunta_pf">Pregunta</label>
+                              <input type="text" name="pregunta_pf" id="pregunta_pf" class="form-control" placeholder="preguntas." />
                             </div>
                           </div>
 
-                          <!-- alias -->
+                          <!-- Respuesta -->
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                              <label class="form-label" for="alias">Alias</label>
-                              <input type="text" name="alias" id="alias" class="form-control" placeholder="Alias del banco." onkeyup="mayus(this);" />
+                              <label class="form-label" for="respuesta_pf">Respuesta</label>
+                              <textarea name="respuesta_pf" id="respuesta_pf" class="form-control" placeholder="respuesta"></textarea>
                             </div>
                           </div>
 
-                          <!-- Formato cuenta bancaria -->
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                              <label class="form-label" for="formato_cta">Formato Cuenta Bancaria</label>
-                              <input type="text" name="formato_cta" id="formato_cta" class="form-control" placeholder="Formato." value="00000000" data-inputmask="'mask': ['99-99-99-99', '99 99 99 99']" data-mask />
-                            </div>
-                          </div>
-
-                          <!-- Formato CCI -->
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                              <label class="form-label" for="formato_cci">Formato CCI</label>
-                              <input type="text" name="formato_cci" id="formato_cci" class="form-control" placeholder="Formato." value="00000000" data-inputmask="'mask': ['99-99-99-99', '99 99 99 99']" data-mask />
-                            </div>
-                          </div>
-
-                          <!-- Formato CCI -->
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                              <label class="form-label" for="formato_detracciones">Formato Detracción</label>
-                              <input type="text" name="formato_detracciones" id="formato_detracciones" class="form-control" placeholder="Formato." value="00000000" data-inputmask="'mask': ['99-99-99-99', '99 99 99 99']" data-mask />
-                            </div>
-                          </div>
-
-                          <!--img-material-->
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                            <label class="form-label" for="imagen1">Imagen</label>
-                            <div style="text-align: center;">
-                              <img onerror="this.src='../assets/images/default/img_defecto_banco.png';" src="../assets/images/default/img_defecto_banco.png" class="img-thumbnail" id="imagen1_i" style="cursor: pointer !important; height: 100% !important;" width="auto" />
-                              <input style="display: none;" type="file" name="imagen1" id="imagen1" accept="image/*" />
-                              <input type="hidden" name="imagen1_actual" id="imagen1_actual" />
-                              <div class="text-center" id="imagen1_nombre"><!-- aqui va el nombre de la FOTO --></div>
-                            </div>
-                          </div>
-
-                          <!-- barprogress -->
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                            <div class="progress" id="div_barra_progress_banco">
-                              <div id="barra_progress_banco" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                0%
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row" id="cargando-8-fomulario" style="display: none;">
+                        <div class="row" id="cargando-10-fomulario" style="display: none;">
                           <div class="col-lg-12 text-center">
                             <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
                             <br />
@@ -607,35 +449,17 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                       <!-- /.card-body -->
-                      <button type="submit" style="display: none;" id="submit-form-bancos">Submit</button>
+                      <button type="submit" style="display: none;" id="submit-form-preguntas">Submit</button>
                     </form>
                   </div>
                   <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_banco();"><i class="las la-times"></i> Close</button>
-                    <button type="submit" class="btn btn-sm btn-success" id="guardar_registro_banco"><i class="bx bx-save bx-tada"></i> Guardar</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_preguntas();"><i class="las la-times"></i> Close</button>
+                    <button type="submit" class="btn btn-sm btn-success" id="guardar_registro_preguntas"><i class="bx bx-save bx-tada"></i> Guardar</button>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- End::modal-banco -->
-
-            <!-- MODAL - VER IMAGEN BANCO-->
-            <div class="modal fade" id="modal-ver-perfil-banco" role="dialog" tabindex="-1" aria-labelledby="modal-ver-perfil-banco" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-md">
-                <div class="modal-content bg-color-0202022e shadow-none border-0">
-                  <div class="modal-header">
-                    <h4 class="modal-title text-light foto-banco">Imagen</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <div id="perfil-banco" class="class-style">
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End::modal-ver-imagen-banco -->
+            <!-- End::modal-preguntas -->
 
             <!-- MODAL:: REGISTRAR CARGO TRABAJADOR- charge 1 -->
             <div class="modal fade modal-effect" id="modal-agregar-c-t" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-c-tLabel" aria-hidden="true">
@@ -743,9 +567,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- <script src="scripts/plan.js"></script> -->
     <script src="scripts/zona.js"></script>
     <script src="scripts/centro_poblado.js"></script>
-    <script src="scripts/bancos.js"></script>
     <script src="scripts/cargo_trabajador.js"></script>
-    <script src="scripts/categoria_incidencia.js"></script>
 
 
   </body>
