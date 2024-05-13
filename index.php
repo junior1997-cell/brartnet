@@ -626,211 +626,8 @@
             </div>
           </div>
           <div class="swiper pagination-dynamic text-start">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <div class="card custom-card testimonial-card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                      <span class="avatar avatar-md avatar-rounded me-3">
-                        <img src="assets/images/faces/15.jpg" alt="">
-                      </span>
-                      <div>
-                        <p class="mb-0 fw-semibold fs-14">Json Taylor</p>
-                        <p class="mb-0 fs-10 fw-semibold text-muted">Estudiante</p>
-                      </div>
-                    </div>
-                    <div class="mb-3">
-                      <span class="text-muted">¡Increíble! Desde que contraté el servicio de Internet de BrartNet, mi experiencia en línea ha sido impecable.</span>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center">
-                        <span class="text-muted">Puntuación : </span>
-                        <span class="text-warning d-block ms-1">
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-half-fill"></i>
-                        </span>
-                      </div>
-                      <div class="float-end fs-12 fw-semibold text-muted text-end">
-                        <span>hace 12 meses</span>
-                        <span class="d-block fw-normal fs-12 text-success"><i>Json Taylor</i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="card custom-card testimonial-card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                      <span class="avatar avatar-md avatar-rounded me-3">
-                        <img src="assets/images/faces/4.jpg" alt="">
-                      </span>
-                      <div>
-                        <p class="mb-0 fw-semibold fs-14">Melissa Blue</p>
-                        <p class="mb-0 fs-10 fw-semibold text-muted">Empresaria</p>
-                      </div>
-                    </div>
-                    <div class="mb-3">
-                      <span class="text-muted">Estoy impresionado con la calidad del servicio al cliente de BrartNet. Cada vez que he necesitado ayuda o asistencia técnica.</span>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center">
-                        <span class="text-muted">Puntuación : </span>
-                        <span class="text-warning d-block ms-1">
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-half-fill"></i>
-                        </span>
-                      </div>
-                      <div class="float-end fs-12 fw-semibold text-muted text-end">
-                        <span>hace 7 días</span>
-                        <span class="d-block fw-normal fs-12 text-success"><i>Melissa Blue</i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="card custom-card testimonial-card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                      <span class="avatar avatar-md avatar-rounded me-3">
-                        <img src="assets/images/faces/2.jpg" alt="">
-                      </span>
-                      <div>
-                        <p class="mb-0 fw-semibold fs-14">Kiara Advain</p>
-                        <p class="mb-0 fs-10 fw-semibold text-muted">Emprendedora</p>
-                      </div>
-                    </div>
-                    <div class="mb-3">
-                      <span class="text-muted">BrartNet ha superado mis expectativas en todos los aspectos. La instalación fue rápida y sencilla.</span>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center">
-                        <span class="text-muted">Puntuación : </span>
-                        <span class="text-warning d-block ms-1">
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-line"></i>
-                        </span>
-                      </div>
-                      <div class="float-end fs-12 fw-semibold text-muted text-end">
-                        <span>Hace 2 meses</span>
-                        <span class="d-block fw-normal fs-12 text-success"><i>Kiara Advain</i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="card custom-card testimonial-card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                      <span class="avatar avatar-md avatar-rounded me-3">
-                        <img src="assets/images/faces/10.jpg" alt="">
-                      </span>
-                      <div>
-                        <p class="mb-0 fw-semibold fs-14">Jhonson Smith</p>
-                        <p class="mb-0 fs-10 fw-semibold text-muted">Dueño de Restaurante</p>
-                      </div>
-                    </div>
-                    <div class="mb-3">
-                      <span class="text-muted">Me cambié a BrartNet hace unos meses y no podría estar más feliz con mi decisión. La disponibilidad es impresionante.</span>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center">
-                        <span class="text-muted">Puntuación : </span>
-                        <span class="text-warning d-block ms-1">
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-half-fill"></i>
-                        </span>
-                      </div>
-                      <div class="float-end fs-12 fw-semibold text-muted text-end">
-                        <span>Hace 12 horas</span>
-                        <span class="d-block fw-normal fs-12 text-success"><i>Jhonson Smith</i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="card custom-card testimonial-card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                      <span class="avatar avatar-md avatar-rounded me-3">
-                        <img src="assets/images/faces/12.jpg" alt="">
-                      </span>
-                      <div>
-                        <p class="mb-0 fw-semibold fs-14">Dwayne Stort</p>
-                        <p class="mb-0 fs-10 fw-semibold text-muted">Universitario</p>
-                      </div>
-                    </div>
-                    <div class="mb-3">
-                      <span class="text-muted">He sido cliente de BrartNet durante más de un año, y hasta el día de hoy, no he tenido ni un solo problema con mi conexión a Internet.</span>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center">
-                        <span class="text-muted">Puntuación : </span>
-                        <span class="text-warning d-block ms-1">
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-line"></i>
-                        </span>
-                      </div>
-                      <div class="float-end fs-12 fw-semibold text-muted text-end">
-                        <span>Hace 10 memanas</span>
-                        <span class="d-block fw-normal fs-12 text-success"><i>Dwayne Stort</i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="card custom-card testimonial-card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                      <span class="avatar avatar-md avatar-rounded me-3">
-                        <img src="assets/images/faces/3.jpg" alt="">
-                      </span>
-                      <div>
-                        <p class="mb-0 fw-semibold fs-14">Jasmine Kova</p>
-                        <p class="mb-0 fs-10 fw-semibold text-muted">Manager de ventas</p>
-                      </div>
-                    </div>
-                    <div class="mb-3">
-                      <span class="text-muted">BrartNet es simplemente fenomenal. El servicio al cliente es incomparables. </span>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center">
-                        <span class="text-muted">Puntuación : </span>
-                        <span class="text-warning d-block ms-1">
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-fill"></i>
-                          <i class="ri-star-half-fill"></i>
-                        </span>
-                      </div>
-                      <div class="float-end fs-12 fw-semibold text-muted text-end">
-                        <span>Hace 1 año</span>
-                        <span class="d-block fw-normal fs-12 text-success"><i>Jasmine Kova</i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="swiper-wrapper" id="comentarios_cliente">
+              
             </div>
             <div class="swiper-pagination mt-4"></div>
           </div>
@@ -918,131 +715,13 @@
               <div class="row gy-2">
                 <div class="col-xl-6">
                   <div class="accordion accordion-customicon1 accordion-primary accordions-items-seperate" id="accordionFAQ1">
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon1One">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon1One" aria-expanded="true" aria-controls="collapsecustomicon1One">
-                          ¿Qué tipos de conexiones de Internet están disponibles en San Martín?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon1One" class="accordion-collapse collapse show" aria-labelledby="headingcustomicon1One" data-bs-parent="#accordionFAQ1">
-                        <div class="accordion-body">
-                          En San Martín, puedes encontrar principalmente conexiones de Internet por fibra óptica, DSL (línea de abonado digital) y conexión inalámbrica (Wi-Fi) a través de proveedores locales.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon1Two">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon1Two" aria-expanded="false" aria-controls="collapsecustomicon1Two">
-                          ¿Cuál es la velocidad promedio de Internet en la región?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon1Two" class="accordion-collapse collapse" aria-labelledby="headingcustomicon1Two" data-bs-parent="#accordionFAQ1">
-                        <div class="accordion-body">
-                        La velocidad promedio puede variar según la ubicación exacta y el proveedor, pero muchas áreas tienen acceso a velocidades que van desde 10 Mbps hasta 100 Mbps, e incluso más en algunas zonas urbanas.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon1Three">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon1Three" aria-expanded="false" aria-controls="collapsecustomicon1Three">
-                          ¿Qué proveedores de Internet operan en San Martín y cuál es el mejor?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon1Three" class="accordion-collapse collapse" aria-labelledby="headingcustomicon1Three" data-bs-parent="#accordionFAQ1">
-                        <div class="accordion-body">
-                          Algunos de los proveedores de Internet más comunes en San Martín incluyen Movistar, Claro, y proveedores locales como Celerity Net. La elección del mejor proveedor depende de tus necesidades específicas de velocidad, confiabilidad y servicio al cliente.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon1Four">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon1Four" aria-expanded="false" aria-controls="collapsecustomicon1Four">
-                          ¿Cuál es el costo promedio del servicio de Internet en San Martín?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon1Four" class="accordion-collapse collapse" aria-labelledby="headingcustomicon1Four" data-bs-parent="#accordionFAQ1">
-                        <div class="accordion-body">
-                          Los costos pueden variar según el proveedor y el plan seleccionado, pero en promedio, los paquetes de Internet suelen oscilar entre S/ 60 y S/ 150 al mes, dependiendo de la velocidad y los servicios adicionales incluidos.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon1Five">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon1Five" aria-expanded="false" aria-controls="collapsecustomicon1Five">
-                          ¿Cómo puedo mejorar la velocidad de mi conexión a Internet?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon1Five" class="accordion-collapse collapse" aria-labelledby="headingcustomicon1Five" data-bs-parent="#accordionFAQ1">
-                        <div class="accordion-body">
-                        Algunas formas de mejorar la velocidad incluyen actualizar tu plan a uno con mayor velocidad, optimizar la configuración de tu red Wi-Fi, y asegurarte de que tu equipo esté libre de malware y programas no deseados que puedan afectar el rendimiento.
-                        </div>
-                      </div>
-                    </div>
+                    
 
                   </div>
                 </div>
                 <div class="col-xl-6">
                   <div class="accordion accordion-customicon1 accordion-primary accordions-items-seperate" id="accordionFAQ2">
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon2Five">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon2Five" aria-expanded="false" aria-controls="collapsecustomicon2Five">
-                          ¿Qué debo hacer si experimento interrupciones frecuentes en mi conexión a Internet?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon2Five" class="accordion-collapse collapse" aria-labelledby="headingcustomicon2Five" data-bs-parent="#accordionFAQ2">
-                        <div class="accordion-body">
-                          Si experimentas interrupciones frecuentes, lo mejor es comunicarte con tu proveedor de servicios de Internet para informarles sobre el problema. Pueden realizar diagnósticos remotos o enviar técnicos para solucionar cualquier problema de conectividad.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon2Six">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon2Six" aria-expanded="false" aria-controls="collapsecustomicon2Six">
-                          ¿Se ofrecen servicios de Internet para empresas en San Martín?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon2Six" class="accordion-collapse collapse" aria-labelledby="headingcustomicon2Six" data-bs-parent="#accordionFAQ2">
-                        <div class="accordion-body">
-                        Sí, varios proveedores ofrecen servicios de Internet específicamente diseñados para empresas en San Martín. Estos servicios suelen incluir velocidades más altas, opciones de seguridad avanzadas y soporte técnico especializado.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon2One">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon2One" aria-expanded="true" aria-controls="collapsecustomicon2One">
-                          ¿Cuál es la disponibilidad de cobertura de Internet en áreas rurales de San Martín?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon2One" class="accordion-collapse collapse " aria-labelledby="headingcustomicon2One" data-bs-parent="#accordionFAQ2">
-                        <div class="accordion-body">
-                          La disponibilidad de cobertura puede ser limitada en algunas áreas rurales de San Martín, pero muchos proveedores están expandiendo gradualmente su infraestructura para llegar a más comunidades. Se recomienda consultar con los proveedores locales para conocer la disponibilidad en áreas específicas.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon2Two">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon2Two" aria-expanded="false" aria-controls="collapsecustomicon2Two">
-                          ¿Se requiere un contrato a largo plazo para obtener servicio de Internet en San Martín?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon2Two" class="accordion-collapse collapse" aria-labelledby="headingcustomicon2Two" data-bs-parent="#accordionFAQ2">
-                        <div class="accordion-body">
-                          Algunos proveedores pueden requerir contratos a largo plazo, mientras que otros ofrecen opciones más flexibles, como planes mensuales o anuales. Es importante revisar los términos y condiciones del contrato antes de comprometerse con un proveedor específico.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingcustomicon2Three">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecustomicon2Three" aria-expanded="false" aria-controls="collapsecustomicon2Three">
-                          ¿Qué medidas de seguridad se ofrecen con el servicio de Internet en San Martín?
-                        </button>
-                      </h2>
-                      <div id="collapsecustomicon2Three" class="accordion-collapse collapse" aria-labelledby="headingcustomicon2Three" data-bs-parent="#accordionFAQ2">
-                        <div class="accordion-body">
-                        Muchos proveedores ofrecen medidas básicas de seguridad, como firewalls y antivirus, junto con la opción de agregar servicios de seguridad adicionales, como protección contra ataques DDoS y filtrado de contenido, según sea necesario.
-                        </div>
-                      </div>
-                    </div>
+                    
 
                   </div>
                 </div>
@@ -1282,13 +961,13 @@
           <div class="modal-body">
             <form name="frmAcceso_c" id="frmAcceso_c" method="post">
               <div class="mb-3">
-              <label for="login-cliente" class="form-label text-default">Usuario</label>
-                <input type="text" class="form-control form-control-lg" id="login-cliente" placeholder="nombre de usuario" required >
+              <label for="loginc" class="form-label text-default">Usuario</label>
+                <input type="text" class="form-control form-control-lg" id="loginc" placeholder="nombre de usuario" required >
               </div>
               <div class="mb-3">
-                <label for="clave-cliente" class="form-label text-default d-block">Contraseña<a href="https://wa.link/oetgkf" target="_blank" class="float-end text-danger">Olvidaste tu contraseña ?</a></label>
+                <label for="clavec" class="form-label text-default d-block">Contraseña<a href="https://wa.link/oetgkf" target="_blank" class="float-end text-danger">Olvidaste tu contraseña ?</a></label>
                 <div class="input-group">
-                  <input type="password" class="form-control form-control-lg" id="clave-cliente" placeholder="password" required >
+                  <input type="password" class="form-control form-control-lg" id="clavec" placeholder="password" required >
                   <button class="btn btn-light" type="button" onclick="createpassword('clavea',this)" id="button-addon2"><i class="ri-eye-off-line align-middle"></i></button>
                 </div>
                 <div class="mt-2">
@@ -1301,7 +980,7 @@
                 </div>
               </div>
               <div class="col-xl-12 d-grid mt-2">
-                <a type="submit" class="btn btn-lg btn-primary login-btn"  href="ver_pagos.php">Iniciar sesion</a>
+                <button type="submit" id="login-cliente-btn" class="btn btn-block btn-primary btn-wide login-btn">Iniciar Sesión</button>
               </div>
             </form>
             <div class="text-center">
@@ -1359,13 +1038,31 @@
   <script src="assets/libs/jquery-validation/additional-methods.min.js"></script>
   <script src="assets/libs/jquery-validation/localization/messages_es_PE.js"></script>
 
+  <!-- moment.js -->
+  <script src="assets/libs/moment/moment.js"></script>
+  <script src="assets/libs/moment/min/locales.min.js"></script>
+  <script src="assets/libs/moment/locale/es.js"></script>
+
   <!-- Toastr -->
   <script src="assets/libs/toastr/toastr.min.js"></script>
 
   <script src="assets/js/funcion_crud.js"></script>
 
   <script src="vistas/scripts/home.js"></script>
+  <script src="vistas/scripts/login_cliente.js"></script>
 
+  <script>
+    $(document).on('ready', function () {
+
+      // INITIALIZATION OF FORM VALIDATION
+      // =======================================================
+      $('.js-validate').each(function () {
+        var validation = $.HSCore.components.HSValidation.init($(this));
+      });
+
+    });
+  </script>
+  </script>
   <script>
     $(document).ready(function () {
       $('#BannerFormaPago').modal('show');

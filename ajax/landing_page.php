@@ -13,7 +13,10 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $landing_page = new landing_page();
 
-    $idplan                 = isset($_POST["idplan"]) ? limpiarCadena($_POST["idplan"]) : "";
+    $idpersona_trabajador = isset($_POST["idpersona_trabajador"]) ? limpiarCadena($_POST["idpersona_trabajador"]) : "";
+    $descripcion_trabj    = isset($_POST["descripcion_trabj"]) ? limpiarCadena($_POST["descripcion_trabj"]) : "";
+
+    $idplan          = isset($_POST["idplan"]) ? limpiarCadena($_POST["idplan"]) : "";
     $caracteristicas = isset($_POST["caracteristicas"]) ? limpiarCadena($_POST["caracteristicas"]) : "";
 
     $idpreguntas_frecuentes = isset($_POST["idpreguntas_frecuentes"]) ? limpiarCadena($_POST["idpreguntas_frecuentes"]) : "";
@@ -22,6 +25,141 @@ if (!isset($_SESSION["user_nombre"])) {
 
 
     switch ($_GET["op"]) {
+
+      // <<<<<<<<<<<<<<<<< C O M E N T A R I O   C L I E N T E >>>>>>>>>>>>>>>>>
+      case 'tabla_de_comentariosC':
+        $rspta = $landing_page->tabla_comentario_cliente();
+        //Vamos a declarar un array
+        $data = [];
+        $cont = 1;
+
+        $toltip = '<script> $(function() { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
+
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) {
+
+            $numeroEstrellas = $value['landing_puntuacion'];
+            // Genera las estrellas en base al número obtenido
+            $estrellasHTML = '';
+            for ($i = 0; $i < 5; $i++) {
+              if ($i < $numeroEstrellas) {
+                $estrellasHTML .= '<i class="ri-star-fill text-warning"></i>'; // Estrella llena
+              } else {
+                $estrellasHTML .= '<i class="ri-star-line text-warning"></i>'; // Estrella vacía
+              }
+            }  
+
+            $data[] = array(
+              "0" => $cont++,
+              "1" => '<button class="btn btn-icon btn-sm btn-info-light product-btn" onclick="editar_estado_landing_ccomentario(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['landing_estado']) . '\')" >'.
+                        (($value['landing_estado'] == '1') ? '</i> <i class="fe fe-eye" data-bs-toggle="tooltip" title="Visible"></i>' : '</i> <i class="fe fe-eye-off" data-bs-toggle="tooltip" title="Oculto"></i>') .
+                      '</button>',
+              "2" => $value['landing_fecha'],
+              
+              "3" =>'<div class="d-flex flex-fill align-items-center">
+                        <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Cliente">
+                          <span class="avatar"> <img src="../assets/modulo/persona/perfil/'.$value['foto_perfil'].'" alt=""> </span>
+                        </div>
+                        <div>
+                          <span class="d-block fw-semibold text-primary">'. $value['nombre_completo'] .'</span>
+                          <span class="text-muted">Centro Poblado: '. $value['centro_poblado'] .'</span>
+                        </div>
+                      </div>',
+              "4" => '<div style="overflow: auto; resize: vertical; height: 70px;">'. $value['landing_descripcion'] .'</div>',
+              "5" => '<span>'.$estrellasHTML.'</span>',
+              "6" => ($value['landing_estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Visible</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Oculto</span>'
+
+            );
+          }
+          $results = [
+            'status'=> true,
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode($results, true);
+        } else {
+          echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
+        }
+      break;
+
+      case 'editar_comentarioVisible':
+        $rspta = $landing_page->editar_comentarioVisible($_POST['idpersona_cliente'], $_POST['landing_estado']);
+        echo json_encode($rspta, true);
+      break;
+
+
+
+
+
+
+
+      // <<<<<<<<<<<<<<<<<<<<<<<< T R A B A J A D O R E S >>>>>>>>>>>>>>>>>>>>>>
+
+      case 'guardar_editar_trabj':
+        $rspta = $landing_page->guardar_editar_trabj($idpersona_trabajador,$descripcion_trabj);
+        echo json_encode($rspta, true);
+      break;
+      
+      case 'tabla_de_trabj':
+
+        $rspta = $landing_page->tabla_de_trabj();
+        //Vamos a declarar un array
+        $data = [];
+        $cont = 1;
+
+        $toltip = '<script> $(function() { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
+
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) {
+
+            $data[] = array(
+              "0" => $cont++,
+              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_trabajador(' . $value['idpersona_trabajador'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                     ' <button class="btn btn-icon btn-sm btn-info-light product-btn" onclick="editar_estado_landing_trabj(' . $value['idpersona_trabajador'] . ', \'' . encodeCadenaHtml($value['landing_estado']) . '\')" >'.
+                     (($value['landing_estado'] == '1') ? '</i> <i class="fe fe-eye" data-bs-toggle="tooltip" title="Visible"></i>' : '</i> <i class="fe fe-eye-off" data-bs-toggle="tooltip" title="Oculto"></i>') .
+                     '</button>',         
+              "2" => '<div class="d-flex flex-fill align-items-center">
+              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Brartnet">
+                <span class="avatar"> <img src="../assets/images/brand-logos/logo-short.png" alt=""> </span>
+              </div>
+              <div>
+                <span class="d-block fw-semibold text-primary">'. $value['nombre_completo'] .'</span>
+                <span class="text-muted">Cargo: '. $value['cargo'] .'</span>
+              </div>
+            </div>',
+              "3" => '<div style="overflow: auto; resize: vertical; height: 70px;">'. $value['landing_descripcion'] .'</div>',
+              "4" => ($value['landing_estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Visible</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Oculto</span>'
+            );
+          }
+          $results = [
+            'status'=> true,
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode($results, true);
+        } else {
+          echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
+        }
+
+      break;
+
+      case 'editar_trabjVisible':
+        $rspta = $landing_page->editar_trabjVisible($_POST['idpersona_trabajador'], $_POST['landing_estado']);
+        echo json_encode($rspta, true);
+      break;
+
+      case 'mostrar_trabj':
+        $rspta = $landing_page->mostrar_trabj($idpersona_trabajador);
+        echo json_encode($rspta, true);
+      break;
+
+
 
       // <<<<<<<<<<<<<<<<<<<<<<<< P L A N E S >>>>>>>>>>>>>>>>>>>>>>
 
@@ -44,7 +182,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[] = array(
               "0" => $cont++,
               "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_plan(' . $value['idplan'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                     ' <button class="btn btn-icon btn-sm btn-info-light product-btn" onclick="editar_estado_landing(' . $value['idplan'] . ', \'' . encodeCadenaHtml($value['landing_estado']) . '\')" >'.
+                     ' <button class="btn btn-icon btn-sm btn-info-light product-btn" onclick="editar_estado_landing_plan(' . $value['idplan'] . ', \'' . encodeCadenaHtml($value['landing_estado']) . '\')" >'.
                      (($value['landing_estado'] == '1') ? '</i> <i class="fe fe-eye" data-bs-toggle="tooltip" title="Visible"></i>' : '</i> <i class="fe fe-eye-off" data-bs-toggle="tooltip" title="Oculto"></i>') .
                      '</button>',         
               "2" => $value['nombre'],
@@ -66,13 +204,13 @@ if (!isset($_SESSION["user_nombre"])) {
 
       break;
 
-      case 'editar_estadoLanding':
-        $rspta = $landing_page->editar_estadoLanding($_POST['idplan'], $_POST['landing_estado']);
+      case 'editar_planVisible':
+        $rspta = $landing_page->editar_planVisible($_POST['idplan'], $_POST['landing_estado']);
         echo json_encode($rspta, true);
       break;
 
-      case 'editar_plan':
-        $rspta = $landing_page->editar_plan($idplan, $caracteristicas);
+      case 'guardar_editar_plan':
+        $rspta = $landing_page->guardar_editar_plan($idplan, $caracteristicas);
         echo json_encode($rspta, true);
       break;
 

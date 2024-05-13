@@ -55,6 +55,17 @@ if (!isset($_SESSION["user_nombre"])) {
     //`idpersona_cliente`, `idzona_antena`, `idplan`, `id_tecnico`, `ip_personal`, `ip_antena`, `fecha_afiliacion`, `nota`, `descuento`, `estado_descuento`
     //---id cliente no va 
     switch ($_GET["op"]) {
+      // ══════════════════════════════════════ VALIDAR SESION CLIENTE ══════════════════════════════════════
+      case 'verificarC':
+        $loginc   = $_POST['loginc'];
+        $clavec   = $_POST['clavec'];
+        $st       = $_POST['st'];
+
+        $clavehash = hash("SHA256", $loginc);
+
+        $rspta  = $persona_cliente->verificar($loginc, $clavehash); 
+      break;
+
       case 'guardar_y_editar_cliente':
 
         //guardar f_img_fondo fondo

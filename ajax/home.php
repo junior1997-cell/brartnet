@@ -5,6 +5,12 @@ ob_start();
   $home = new Home();
 
   switch ($_GET["op"]) {
+    
+    case 'mostrar_comentarioC':
+      $rspta = $home->mostrar_comentarioC();
+      echo json_encode($rspta, true);
+
+    break;
 
     case 'mostrar_tecnico_redes':
       $rspta = $home->mostrar_tecnico_redes();
@@ -14,6 +20,12 @@ ob_start();
 
     case 'mostrar_planes':
       $rspta = $home->mostrar_planes();
+      echo json_encode($rspta, true);
+
+    break;
+
+    case 'mostrar_preguntas_frecuentes':
+      $rspta = $home->mostrar_preguntas_frecuentes();
       echo json_encode($rspta, true);
 
     break;

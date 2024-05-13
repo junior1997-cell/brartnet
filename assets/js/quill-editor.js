@@ -31,9 +31,9 @@
     /* quill bubble editor */
     var quill = new Quill('#editor1', {
         modules: {
-            toolbar: undefined
+            toolbar: toolbarOptions
         },
-        theme: 'bubble'
+        theme: 'snow'
     });
 
 })();
