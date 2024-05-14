@@ -14,6 +14,7 @@ function init_landingPage() {
   tabla_preguntasFrecuentes();
   tabla_principal_trabj();
 
+  $("#guardar_comentarioC").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-comentarioC").submit(); }  });
   $("#guardar_trabj").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-trabj").submit(); }  });
   $("#guardar_plan").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-plan").submit(); }  });
   $("#guardar_registro_preguntas").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-preguntas").submit(); }  });
@@ -23,6 +24,37 @@ function init_landingPage() {
 /*==========================================================================================
 ----------------------------------- C L I E N T E S ---------------------------------------
 ==========================================================================================*/
+function show_hide_form_comentarioC(flag) {
+	if (flag == 1) {
+		$("#div-tabla-comentarioC").show();
+		$("#div-form-comentarioC").hide();
+		$("#guardar_comentarioC").hide();
+		$("#cancelar_comentarioC").hide();
+    $("#footer-comentarioC").addClass("d-none");
+		
+	} else if (flag == 2) {
+		$("#div-tabla-comentarioC").hide();
+		$("#div-form-comentarioC").show();
+		$("#guardar_comentarioC").show();
+		$("#cancelar_comentarioC").show();
+    $("#footer-comentarioC").removeClass("d-none");
+	}
+}
+
+function limpiar_form_comentarioC() {
+
+  $("#idpersona_cliente").val("");
+  $("#nombre_comentarioC").val("");
+  $("#centro_poblado").val("");
+  $(".ql-editor").html("");
+  $("#puntuacionc").val("");
+  $("#fecha_comentarioc").val("");
+
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+}
+
 function tabla_de_comentariosC(){
   tbla_comentarioC = $('#tabla-comentarioC').dataTable({
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
@@ -30,10 +62,10 @@ function tabla_de_comentariosC(){
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-4'B><'col-md-2 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-2 btn btn-sm btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabl_preguntas_frecuentes) { tabl_preguntas_frecuentes.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0,2,3], }, text: `<i class="fas fa-copy" ></i>`, className: "px-2 btn btn-sm btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,2,3], }, title: 'Lista de preguntas frecuentes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-2 btn btn-sm btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [0,2,3], }, title: 'Lista de preguntas frecuentes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-2 btn btn-sm btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-2 btn btn-sm btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tbla_comentarioC) { tbla_comentarioC.ajax.reload(null, false); } } },
+      { extend: 'copy', exportOptions: { columns: [0,2,7,8,9,10], }, text: `<i class="fas fa-copy" ></i>`, className: "px-2 btn btn-sm btn-outline-dark btn-wave ", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,2,7,8,9,10], }, title: 'Lista de comentarios cliente', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-2 btn btn-sm btn-outline-success btn-wave ", footer: true,  }, 
+      { extend: 'pdf', exportOptions: { columns: [0,2,7,8,9,10], }, title: 'Lista de comentarios cliente', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-2 btn btn-sm btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "px-2 btn btn-sm btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax:{
@@ -69,9 +101,58 @@ function tabla_de_comentariosC(){
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    "order": [[0, "asc"]]//Ordenar (columna,orden)
+    "order": [[0, "asc"]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [7, 8, 9, 10], visible: false, searchable: false, }, 
+    ],
   }).DataTable();
 
+}
+
+function guardar_y_editar_comentarioC(e) {
+
+  transferirContenido_comentario();
+  var formData = new FormData($("#form-agregar-comentarioC")[0]);
+ 
+  $.ajax({
+    url: "../ajax/landing_page.php?op=guardar_editar_comentarioC",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      e = JSON.parse(e);  console.log(e);  
+      if (e.status == true) {
+        Swal.fire("Correcto!", "Comentario del Cliente registrado correctamente.", "success");
+	      tbla_comentarioC.ajax.reload(null, false);         
+				limpiar_form_comentarioC();
+        show_hide_form_comentarioC(1);        
+			}else{
+				ver_errores(e);
+			}
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_comentarioC").css({"width": percentComplete+'%'});
+          $("#barra_progress_comentarioC").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress_comentarioC").css({ width: "0%",  });
+      $("#barra_progress_comentarioC").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress_comentarioC").css({ width: "0%", });
+      $("#barra_progress_comentarioC").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
 }
 
 function editar_estado_landing_ccomentario(idpersona_cliente, landing_estado) {
@@ -104,6 +185,76 @@ function editar_estado_landing_ccomentario(idpersona_cliente, landing_estado) {
     });
 }
 
+function mostrar_cliente(idpersona_cliente){
+
+  $(".tooltip").remove();
+  $("#guardar_comentarioC").hide();
+  $("#cargando-9-fomulario").hide();
+  $("#cargando-10-fomulario").show();
+  
+  limpiar_form_comentarioC();
+
+  show_hide_form_comentarioC(2);
+  estrellas();
+
+  $.post("../ajax/landing_page.php?op=mostrar_cliente", { idpersona_cliente: idpersona_cliente }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);
+    
+    var estrellas_seleccionadas = e.data.landing_puntuacion;  
+
+    if (e.status == true) {
+      $("#idpersona_cliente").val(e.data.idpersona_cliente);
+      $("#nombre_cliente").val(e.data.nombre_completo);        
+      $("#centro_poblado").val(e.data.centro_poblado); 
+      $("#editor2 .ql-editor").html(e.data.landing_descripcion);  
+      $("#puntuacionc").val(estrellas_seleccionadas);
+
+      // Mostrar fecha formato ISO
+      if (e.data.landing_fecha !== null) {
+        var fechaParts = e.data.landing_fecha.split('/');
+        var fechaISO = fechaParts[2] + '-' + fechaParts[1] + '-' + fechaParts[0];
+        $("#fecha_comentarioc").val(fechaISO);
+      } else {
+        $("#fecha_comentarioc").val("");
+      }
+
+      // Mostrar puntuación formato estrellas
+      $(".puntuacion-star").each(function() {
+        if ($(this).attr("data-value") <= estrellas_seleccionadas) {
+          $(this).removeClass("ri-star-line").addClass("ri-star-fill");
+        } else {
+          $(this).removeClass("ri-star-fill").addClass("ri-star-line");
+        }
+      });
+
+      $("#cargando-9-fomulario").show();
+      $("#cargando-10-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }
+    
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function transferirContenido_comentario(){
+  var comentario = document.querySelector('#editor2 .ql-editor').innerHTML;  // Obtiene el contenido HTML del div dentro de #editor1
+  document.getElementById('descripcion_comentario').value = comentario;  // Coloca el contenido en el textarea
+}
+
+function estrellas(){
+  $(".puntuacion-star").click(function() {
+    var value = $(this).attr("data-value");
+    $(".puntuacion-star").each(function() {
+        if ($(this).attr("data-value") <= value) {
+            $(this).removeClass("ri-star-line").addClass("ri-star-fill");
+        } else {
+            $(this).removeClass("ri-star-fill").addClass("ri-star-line");
+        }
+    });
+    $("#puntuacionc").val(value);
+});
+}
 
 
 
@@ -149,9 +300,9 @@ function tabla_principal_trabj() {
     dom:"<'row'<'col-md-4'B><'col-md-2 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-2 btn btn-sm btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_trabj) { tabla_trabj.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0,2,3], }, text: `<i class="fas fa-copy" ></i>`, className: "px-2 btn btn-sm btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,2,3], }, title: 'Lista de trabajadores', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-2 btn btn-sm btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [0,2,3], }, title: 'Lista de trabajadores', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-2 btn btn-sm btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { extend: 'copy', exportOptions: { columns: [0,5,6,7], }, text: `<i class="fas fa-copy" ></i>`, className: "px-2 btn btn-sm btn-outline-dark btn-wave ", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,5,6,7], }, title: 'Lista de trabajadores', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-2 btn btn-sm btn-outline-success btn-wave ", footer: true,  }, 
+      { extend: 'pdf', exportOptions: { columns: [0,5,6,7], }, title: 'Lista de trabajadores', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-2 btn btn-sm btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "px-2 btn btn-sm btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax:{
@@ -184,7 +335,10 @@ function tabla_principal_trabj() {
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
-    "order": [[0, "asc"]]//Ordenar (columna,orden)
+    "order": [[0, "asc"]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [5, 6, 7], visible: false, searchable: false, }, 
+    ],
   }).DataTable();
 }
 
@@ -666,6 +820,39 @@ $(document).ready(function () {
 
 $(function () {
 
+  $("#form-agregar-comentarioC").validate({
+    rules: {
+      nombre_cliente: { required: true,  maxlength: 60,  },
+      centro_poblado: { required: true },
+      fecha_comentarioc: { required: true }
+    },
+    messages: {
+      nombre_cliente: {  required: "Campo requerido.", },
+      centro_poblado: {  required: "Campo requerido.", },
+      fecha_comentarioc: {  required: "Campo requerido.", },
+    },
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");   
+    },
+    submitHandler: function (e) { 
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_comentarioC(e);      
+    },
+
+  });
+
   $("#form-agregar-trabj").validate({
     rules: {
       nombre_trabj: { required: true,  maxlength: 60,  },
@@ -762,3 +949,14 @@ $(function () {
   });
 });
 
+
+function fecha_actual(){
+  // Obtener la fecha actual
+  var fechaActual = new Date();
+
+  // Formatear la fecha como YYYY-MM-DD (compatible con input type="date")
+  var formattedDate = fechaActual.toISOString().split('T')[0];
+
+  // Asignar la fecha formateada al campo de entrada
+  $("#fecha_comentarioc").val(formattedDate);
+}

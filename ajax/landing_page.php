@@ -13,6 +13,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $landing_page = new landing_page();
 
+    $idpersona_cliente      = isset($_POST["idpersona_cliente"]) ? limpiarCadena($_POST["idpersona_cliente"]) : "";
+    $descripcion_comentario = isset($_POST["descripcion_comentario"]) ? limpiarCadena($_POST["descripcion_comentario"]) : "";
+    $puntuacion             = isset($_POST["puntuacionc"]) ? limpiarCadena($_POST["puntuacionc"]) : "";
+    $fecha                  = isset($_POST["fecha_comentarioc"]) ? limpiarCadena($_POST["fecha_comentarioc"]) : "";
+
     $idpersona_trabajador = isset($_POST["idpersona_trabajador"]) ? limpiarCadena($_POST["idpersona_trabajador"]) : "";
     $descripcion_trabj    = isset($_POST["descripcion_trabj"]) ? limpiarCadena($_POST["descripcion_trabj"]) : "";
 
@@ -27,6 +32,11 @@ if (!isset($_SESSION["user_nombre"])) {
     switch ($_GET["op"]) {
 
       // <<<<<<<<<<<<<<<<< C O M E N T A R I O   C L I E N T E >>>>>>>>>>>>>>>>>
+      case 'guardar_editar_comentarioC':
+        $rspta = $landing_page->guardar_editar_comentarioC($idpersona_cliente,$descripcion_comentario,$puntuacion, $fecha);
+        echo json_encode($rspta, true);
+      break;
+
       case 'tabla_de_comentariosC':
         $rspta = $landing_page->tabla_comentario_cliente();
         //Vamos a declarar un array
@@ -52,7 +62,8 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = array(
               "0" => $cont++,
-              "1" => '<button class="btn btn-icon btn-sm btn-info-light product-btn" onclick="editar_estado_landing_ccomentario(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['landing_estado']) . '\')" >'.
+              "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                      '<button class="btn btn-icon btn-sm btn-info-light product-btn" onclick="editar_estado_landing_ccomentario(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['landing_estado']) . '\')" >'.
                         (($value['landing_estado'] == '1') ? '</i> <i class="fe fe-eye" data-bs-toggle="tooltip" title="Visible"></i>' : '</i> <i class="fe fe-eye-off" data-bs-toggle="tooltip" title="Oculto"></i>') .
                       '</button>',
               "2" => $value['landing_fecha'],
@@ -66,9 +77,13 @@ if (!isset($_SESSION["user_nombre"])) {
                           <span class="text-muted">Centro Poblado: '. $value['centro_poblado'] .'</span>
                         </div>
                       </div>',
-              "4" => '<div style="overflow: auto; resize: vertical; height: 70px;">'. $value['landing_descripcion'] .'</div>',
+              "4" => ($value['landing_descripcion'] !== null && $value['landing_descripcion'] !== '') ? '<div style="overflow: auto; resize: vertical; height: 70px;">'. $value['landing_descripcion'] .'</div>' : '<span class="badge bg-danger-transparent">Sin comentarios</span>',
               "5" => '<span>'.$estrellasHTML.'</span>',
-              "6" => ($value['landing_estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Visible</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Oculto</span>'
+              "6" => ($value['landing_estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Visible</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Oculto</span>',
+              "7" => $value['nombre_completo'],
+              "8" => $value['centro_poblado'],
+              "9" => $value['landing_descripcion'],
+              "10" => $value['landing_puntuacion']
 
             );
           }
@@ -90,10 +105,10 @@ if (!isset($_SESSION["user_nombre"])) {
         echo json_encode($rspta, true);
       break;
 
-
-
-
-
+      case 'mostrar_cliente':
+        $rspta = $landing_page->mostrar_clienteC($idpersona_cliente);
+        echo json_encode($rspta, true);
+      break;
 
 
       // <<<<<<<<<<<<<<<<<<<<<<<< T R A B A J A D O R E S >>>>>>>>>>>>>>>>>>>>>>
@@ -132,7 +147,10 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>',
               "3" => '<div style="overflow: auto; resize: vertical; height: 70px;">'. $value['landing_descripcion'] .'</div>',
-              "4" => ($value['landing_estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Visible</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Oculto</span>'
+              "4" => ($value['landing_estado'] == '1') ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Visible</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Oculto</span>',
+              "5" => $value['nombre_completo'],
+              "6" => $value['cargo'],
+              "7" => $value['landing_descripcion']
             );
           }
           $results = [
@@ -165,10 +183,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'tabla_principal_plan':
 
-        require "../modelos/Plan.php";
-        $plan = new plan();
-
-        $rspta = $plan->tabla_principal_plan();
+        $rspta = $landing_page->tabla_planes();
         //Vamos a declarar un array
         $data = [];
         $cont = 1;

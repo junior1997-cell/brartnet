@@ -76,7 +76,6 @@ if (!isset($_SESSION["user_nombre"])) {
                               </div>
                             </div>
                           </div>
-
                           <div class="btn-list mt-md-0 mt-2">
                             <nav>
                               <ol class="breadcrumb mb-0">
@@ -87,32 +86,101 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>
                         </div>
                         <div class="card custom-card">
-                          <div class="card-body table-responsive">
-                            <table id="tabla-comentarioC" class="table table-bordered w-100" style="width: 100%;">
-                              <thead>
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="text-center">Acciones</th>
-                                  <th>Fecha</th>
-                                  <th>Cliente</th>
-                                  <th>Comentario</th>
-                                  <th>Puntuación</th>
-                                  <th class="text-center">Estado</th>
-                                </tr>
-                              </thead>
-                              <tbody></tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="text-center">Acciones</th>
-                                  <th>Fecha</th>
-                                  <th>Cliente</th>
-                                  <th>Comentario</th>
-                                  <th>Puntuación</th>
-                                  <th class="text-center">Estado</th>
-                                </tr>
-                              </tfoot>
-                            </table>
+                          <div class="card-body">
+                            <div class="table-responsive" id="div-tabla-comentarioC">
+                              <table id="tabla-comentarioC" class="table table-bordered w-100" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Acciones</th>
+                                    <th>Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Comentario</th>
+                                    <th>Puntuación</th>
+                                    <th class="text-center">Estado</th>
+
+                                    <th>Lista de Clientes</th>
+                                    <th>Centro Poblado</th>
+                                    <th>Comentario</th>
+                                    <th>Puntuación (Estrellas)</th>
+                                  </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                  <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Acciones</th>
+                                    <th>Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Comentario</th>
+                                    <th>Puntuación</th>
+                                    <th class="text-center">Estado</th>
+                                    
+                                    <th>Lista de Clientes</th>
+                                    <th>Centro Poblado</th>
+                                    <th>Comentario</th>
+                                    <th>Puntuación (Estrellas)</th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                            <div id="div-form-comentarioC" style="display: none;">
+                              <form name="form-agregar-comentarioC" id="form-agregar-comentarioC" method="POST" class="needs-validation" novalidate>
+                                <div class="row" id="cargando-9-fomulario">
+                                  <input type="hidden" name="idpersona_cliente" id="idpersona_cliente" />
+
+                                  <div class="col-md-5">
+                                    <div class="form-label">
+                                      <label for="nombre_cliente" class="form-label">Nombre Completo(*)</label>
+                                      <input class="form-control" name="nombre_cliente" id="nombre_cliente" readonly />
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <div class="form-group">
+                                      <label for="centro_poblado" class="form-label">Centro Poblado(*)</label>
+                                      <input type="text" class="form-control" name="centro_poblado" id="centro_poblado" readonly />
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <div class="form-group">
+                                      <label for="puntuacion" class="form-label">Puntuación:</label>
+                                      <!-- disenio de estrellas que se pueden seleccionar -->
+                                      <div class="puntuacion-container">
+                                        <i class="ri-star-line fs-24 text-warning puntuacion-star" data-value="1"></i>
+                                        <i class="ri-star-line fs-24 text-warning puntuacion-star" data-value="2"></i>
+                                        <i class="ri-star-line fs-24 text-warning puntuacion-star" data-value="3"></i>
+                                        <i class="ri-star-line fs-24 text-warning puntuacion-star" data-value="4"></i>
+                                        <i class="ri-star-line fs-24 text-warning puntuacion-star" data-value="5"></i>
+                                        </div>
+                                      <input type="hidden" class="form-control" name="puntuacionc" id="puntuacionc" /> <!-- Aquí se almacenan el número de estrallas seleccionadas -->
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <div class="form-group">
+                                      <label for="fecha_comentarioc" class="form-label">Fecha(*)</label>
+                                      <input type="date" class="form-control" name="fecha_comentarioc" id="fecha_comentarioc" />
+                                    </div>
+                                  </div>
+                                  <div class="col-md-12">
+                                    <div id="editor2">
+                                    </div>
+                                    <textarea name="descripcion_comentario" id="descripcion_comentario" class="hidden"></textarea>
+                                  </div>
+
+                                </div>
+                                <div class="row" id="cargando-10-fomulario" style="display: none;">
+                                  <div class="col-lg-12 text-center">
+                                    <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                                    <h4 class="bx-flashing">Cargando...</h4>
+                                  </div>
+                                </div>
+                                <button type="submit" style="display: none;" id="submit-form-comentarioC">Submit</button>
+                              </form>
+                            </div>
+                          </div>
+                          <div id="footer-comentarioC" name="footer-comentarioC" class="card-footer d-flex justify-content-end d-none">
+                            <button id="cancelar_comentarioC" name="cancelar_comentarioC" class="btn-modal-effect btn btn-danger label-btn btn-cancelar m-r-10px" style="display: none;" onclick="show_hide_form_comentarioC(1);"><i class="ri-close-line label-btn-icon me-2"> </i> Cancelar</button>
+                            <button id="guardar_comentarioC" name="guardar_comentarioC" class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"> <i class="ri-save-2-line label-btn-icon me-2"></i> Guardar </button>
                           </div>
                         </div>
                       </div>
@@ -156,6 +224,10 @@ if (!isset($_SESSION["user_nombre"])) {
                                     <th>Nombre</th>
                                     <th>Descripción</th>
                                     <th class="text-center">Estado</th>
+
+                                    <th>Lista de Trabajadores</th>
+                                    <th>Cargo</th>
+                                    <th>Descripción</th>
                                   </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -166,6 +238,10 @@ if (!isset($_SESSION["user_nombre"])) {
                                     <th>Nombre</th>
                                     <th>Descripción</th>
                                     <th class="text-center">Estado</th>
+
+                                    <th>Lista de Trabajadores</th>
+                                    <th>Cargo</th>
+                                    <th>Descripción</th>
                                   </tr>
                                 </tfoot>
                               </table>

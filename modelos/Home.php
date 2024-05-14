@@ -44,7 +44,7 @@
     }
 
     function mostrar_planes(){
-      $sql = "SELECT idplan, nombre AS plan, costo FROM plan WHERE idplan IN (1, 2, 3) AND estado = 1 AND estado_delete = 1";
+      $sql = "SELECT idplan, nombre AS plan, costo, landing_caracteristica FROM plan WHERE landing_estado = 1 AND estado = 1 AND estado_delete = 1";
       $plan = ejecutarConsultaArray($sql); if($plan['status'] == false){return $plan;}
       return $plan;
     }

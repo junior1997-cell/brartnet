@@ -132,24 +132,9 @@ function mostrar_planes() {
               <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
             </div>
           </div>
-          <ul class="list-unstyled text-center fs-12 px-3 pt-3 mb-0">
-            
-            <li class="mb-3">
-              <span class="text-muted">${Instalacion}</span>
-            </li>
-            <li class="mb-3">
-              <span class="text-muted">Soporte en línea</span>
-            </li>
-            <li class="mb-3">
-              <span class="text-muted">Soporte Técnico<span class="badge bg-light text-default ms-1"><i class="ri-check-line"></i></span></span>
-            </li>
-            <li class="mb-3">
-              <span class="text-muted">Fecha de pago<span class="badge bg-light text-default ms-1">03 de capa mes</span></span>
-            </li>
-            <li class="mb-4">
-              <span class="text-muted">Contrato por 8 meses</span>
-            </li>
-          </ul>
+          <div class="text-center fs-12 px-3 pt-3 mb-0">
+          ${val.landing_caracteristica}
+          </div>
           <div class="d-grid">
             <button class="btn btn-primary-light btn-wave">Empezar</button>
           </div>
