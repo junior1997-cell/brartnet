@@ -16,16 +16,23 @@
       // $this->id_empresa_sesion = isset($_SESSION['idempresa']) ? $_SESSION["idempresa"] : 0;
     }
 
-    public function listar_tabla_facturacion() {    
+    public function listar_tabla_facturacion( $fecha_i, $fecha_f, $cliente, $comprobante, $estado_sunat ) {    
 
-      $filtro_id_trabajador  = '';
-      if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
-        $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
-      } 
+      $filtro_id_trabajador  = ''; $filtro_fecha = ""; $filtro_cliente = ""; $filtro_comprobante = ""; $filtro_estado_sunat = "";
+
+      if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {  $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";    } 
+
+      if ( !empty($fecha_i) && !empty($fecha_f) ) { $filtro_fecha = "AND DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') BETWEEN '$fecha_i' AND '$fecha_f'"; } 
+      else if (!empty($fecha_i)) { $filtro_fecha = "AND DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') = '$fecha_i'"; }
+      else if (!empty($fecha_f)) { $filtro_fecha = "AND DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') = '$fecha_f'"; }
+      
+      if ( empty($cliente) ) { } else {  $filtro_cliente = "AND v.idpersona_cliente = '$cliente'"; } 
+      if ( empty($comprobante) ) { } else {  $filtro_comprobante = "AND v.idsunat_c01 = '$comprobante'"; } 
+      if ( empty($estado_sunat) ) { } else {  $filtro_estado_sunat = "AND v.sunat_estado = '$estado_sunat'"; } 
 
       $sql = "SELECT v.*, CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END AS venta_total_v2, 
       CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS tp_comprobante_v2,
-      DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') as fecha_emision_format, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, 
+      DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') as fecha_emision_format, LEFT(v.periodo_pago_month, 3) as periodo_pago_month_v2,  p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, 
       p.numero_documento, p.foto_perfil, tc.abreviatura as tp_comprobante_v1, sdi.abreviatura as tipo_documento, v.estado,
       CASE 
         WHEN p.tipo_persona_sunat = 'NATURAL' THEN 
@@ -50,7 +57,8 @@
       INNER JOIN persona AS p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = v.idsunat_c01
-      WHERE v.estado = 1 AND v.estado_delete = 1 $filtro_id_trabajador ORDER BY v.fecha_emision DESC;";
+      WHERE v.estado = 1 AND v.estado_delete = 1 $filtro_id_trabajador $filtro_cliente $filtro_comprobante $filtro_estado_sunat $filtro_fecha
+      ORDER BY v.fecha_emision DESC, p.nombre_razonsocial ASC;"; #return $sql;
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
 
       return $venta;
@@ -251,6 +259,13 @@
         $filtro_id_trabajador = "pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
       } 
 
+      $sql_00 ="SELECT v.tipo_comprobante, COUNT( v.idventa ) as cantidad
+      FROM venta as v
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      WHERE v.sunat_estado = 'ACEPTADA' AND v.estado = '1' AND v.estado_delete = '1'
+      GROUP BY v.tipo_comprobante;";
+      $coun_comprobante = ejecutarConsultaArray($sql_00); if ($coun_comprobante['status'] == false) {return $coun_comprobante; }
+
       $sql_01 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '01' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '01' ) AS ventas_mes_anterior;";
@@ -299,10 +314,11 @@
 
       return ['status' => true, 'message' =>'todo okey', 
         'data'=>[
-          'mes_nombre' => $mes_nombre,
-          'factura'=> floatval($factura['data']['venta_total']), 'factura_p' => floatval($factura_p['data']['porcentaje']) , 'factura_line' => $mes_factura ,
-          'boleta' => floatval($boleta['data']['venta_total']), 'boleta_p' => floatval($boleta_p['data']['porcentaje']) , 'boleta_line' => $mes_boleta ,
-          'ticket' => floatval($ticket['data']['venta_total']), 'ticket_p' => floatval($ticket_p['data']['porcentaje']) , 'ticket_line' => $mes_ticket ,
+          'mes_nombre'        => $mes_nombre,
+          'coun_comprobante'  => $coun_comprobante['data'],
+          'factura'           => floatval($factura['data']['venta_total']), 'factura_p' => floatval($factura_p['data']['porcentaje']) , 'factura_line'  => $mes_factura ,
+          'boleta'            => floatval($boleta['data']['venta_total']), 'boleta_p'   => floatval($boleta_p['data']['porcentaje']) , 'boleta_line'    => $mes_boleta ,
+          'ticket'            => floatval($ticket['data']['venta_total']), 'ticket_p'   => floatval($ticket_p['data']['porcentaje']) , 'ticket_line'    => $mes_ticket ,
         ]
       ];
 
@@ -370,12 +386,17 @@
         $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
       } 
       $sql = "SELECT v.idventa, v.tipo_comprobante, v.serie_comprobante, v.numero_comprobante,  
-      CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS tp_comprobante_v2
+      CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS nombre_tipo_comprobante_v2,
+      CASE
+        WHEN TIMESTAMPDIFF(DAY, v.fecha_emision, CURDATE()) = 1 THEN 'hace 1 día'
+        WHEN TIMESTAMPDIFF(DAY, v.fecha_emision, CURDATE()) > 1 THEN CONCAT('hace ', TIMESTAMPDIFF(DAY, v.fecha_emision, CURDATE()), ' días')
+        ELSE 'hoy'
+      END AS fecha_emision_dif
       FROM venta as v
       INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.codigo = v.tipo_comprobante
       WHERE v.tipo_comprobante = '$tipo_comprobante' AND v.sunat_estado ='ACEPTADA' AND  v.fecha_emision >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)  $filtro_id_trabajador 
-      ORDER BY v.numero_comprobante DESC;";  #return $sql;
+      ORDER BY CONVERT(v.numero_comprobante, SIGNED) DESC;";  #return $sql;
       return ejecutarConsultaArray($sql); 
     }
 
@@ -402,6 +423,34 @@
     public function select2_codigo_x_anulacion_comprobante(){
       $sql = "SELECT idsunat_c09_codigo_nota_credito as idsunat_c09, codigo, nombre, estado FROM sunat_c09_codigo_nota_credito;";
       return ejecutarConsultaArray($sql);      
+    }
+
+    public function select2_filtro_tipo_comprobante($tipos){
+      $sql="SELECT idtipo_comprobante, codigo, abreviatura AS tipo_comprobante, serie,
+      CASE idtipo_comprobante WHEN '3' THEN 'BOLETA' WHEN '7' THEN 'NOTA CRED. FACTURA' WHEN '8' THEN 'NOTA CRED. BOLETA' ELSE abreviatura END AS nombre_tipo_comprobante_v2
+      FROM sunat_c01_tipo_comprobante WHERE codigo in ($tipos) ;";
+      return ejecutarConsultaArray($sql);
+    }
+
+    public function select2_filtro_cliente(){
+      $filtro_id_trabajador  = '';
+      if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+        $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+      } 
+      $sql="SELECT p.idpersona, pc.idpersona_cliente, 
+      CASE 
+        WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+        WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+        ELSE '-'
+      END AS cliente_nombre_completo, p.numero_documento, sc06.abreviatura as nombre_tipo_documento
+      
+      FROM venta as v 
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
+      INNER JOIN persona as p ON p.idpersona = pc.idpersona
+      INNER JOIN sunat_c06_doc_identidad as sc06 on p.tipo_documento=sc06.code_sunat
+      WHERE v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador
+      GROUP BY p.idpersona, pc.idpersona_cliente, p.numero_documento, sc06.abreviatura ORDER BY p.nombre_razonsocial ;";
+      return ejecutarConsultaArray($sql);
     }
   }
 ?>

@@ -150,10 +150,7 @@
             <?php } ?>            
             <?php  if ($_SESSION['cotizacion'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Cotizacion</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['nota_de_credito'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Nota de credito</a></li>
-            <?php } ?>
+            <?php } ?>            
             <?php  if ($_SESSION['nota_de_debito'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Nota de debito</a></li>
             <?php } ?>

@@ -62,25 +62,64 @@ if (!isset($_SESSION["user_nombre"])) {
             <!-- TABLA - FACTURA -->
             <div class="col-xl-9" id="div-tabla">
               <div class="card custom-card">
-                <!-- <div class="card-header justify-content-between">
-                  <div class="card-title">
-                    Manage Invoices
-                  </div>
-                  <div class="d-flex">
-                    <button class="btn btn-sm btn-primary btn-wave waves-light"><i class="ri-add-line fw-semibold align-middle me-1"></i> Create Invoice</button>
+                <div class="card-header justify-content-between">
+                  
+                    <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                      <div class="form-group">
+                        <label for="filtro_fecha_i" class="form-label">
+                        <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_fecha_i();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
+                          Fecha Inicio</label>
+                        <input type="date" class="form-control" name="filtro_fecha_i" id="filtro_fecha_i" value="<?php echo date("Y-m-d");?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">                        
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                      <div class="form-group">
+                        <label for="filtro_fecha_f" class="form-label">
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_fecha_f();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
+                          Fecha Fin</label>
+                        <input type="date" class="form-control" name="filtro_fecha_f" id="filtro_fecha_f" value="<?php echo date("Y-m-d");?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">                        
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-4 col-xxl-4">
+                      <div class="form-group">
+                        <label for="filtro_cliente" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_cliente();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Cliente
+                          <span class="charge_filtro_cliente"></span>
+                        </label>
+                        <select class="form-control" name="filtro_cliente" id="filtro_cliente" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                      <div class="form-group">
+                        <label for="filtro_comprobante" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_comprobante();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Comprobante
+                          <span class="charge_filtro_comprobante"></span>
+                        </label>
+                        <select class="form-control" name="filtro_comprobante" id="filtro_comprobante" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
+                    </div>
+                 
+                  <div class="d-flex"> 
                     <div class="dropdown ms-2">
                       <button class="btn btn-icon btn-secondary-light btn-sm btn-wave waves-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="ti ti-dots-vertical"></i>
                       </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="javascript:void(0);">All Invoices</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">Paid Invoices</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">Pending Invoices</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">Overdue Invoices</a></li>
+                      <ul class="dropdown-menu otros-filtros">                        
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ACEPTADA')" ><i class="ri-check-fill align-middle me-1"></i> Solo aceptados</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ANULADO')" ><i class="ri-close-fill align-middle me-1"></i> Solo anulados</a></li>
+                        <li><a class="dropdown-item active" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('')" ><i class="bi bi-border-all align-middle me-1"></i> Todos</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="bi bi-list-check"></i> Ver mas detalles</a></li>
                       </ul>
                     </div>
                   </div>
-                </div> -->
+                </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-ventas">
@@ -88,7 +127,8 @@ if (!isset($_SESSION["user_nombre"])) {
                         <tr>
                           <th class="text-center"><center>#</center></th>
                           <th class="text-center"><center>OP</center></th>
-                          <th>Fecha</th>
+                          <th>Creación</th>
+                          <th>Periodo</th>
                           <th>Cliente</th>
                           <th>Correlativo</th>
                           <th>Total</th> 
@@ -101,7 +141,8 @@ if (!isset($_SESSION["user_nombre"])) {
                         <tr>
                         <th class="text-center"><center>#</center></th>
                           <th class="text-center"><center>OP</center></th>
-                          <th>Fecha</th>
+                          <th>Creación</th>
+                          <th>Periodo</th>
                           <th>Cliente</th>
                           <th>Correlativo</th>
                           <th>Total</th>
@@ -120,14 +161,14 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="card custom-card">
                 <div class="card-body p-0">
                   <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-top">
-                    <div class="svg-icon-background bg-primary-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-success">
+                    <div class="svg-icon-background bg-info-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-info">
                         <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v5a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h6a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Zm13.71,6.29a1,1,0,0,0-1.42,0l-3.29,3.3-1.29-1.3a1,1,0,0,0-1.42,1.42l2,2a1,1,0,0,0,1.42,0l4-4A1,1,0,0,0,21.21,16.29Z" />
                       </svg>
                     </div>
                     <div class="flex-fill">
                       <h6 class="mb-2 fs-12">Total Factura
-                        <span class="badge bg-primary fw-semibold float-end"> 0 </span>
+                        <span class="badge bg-info fw-semibold float-end vw_count_factura"> 0 </span>
                       </h6>
                       <div class="pb-0 mt-0">
                         <div>
@@ -150,7 +191,7 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
                     <div class="flex-fill">
                       <h6 class="mb-2 fs-12">Total Boleta
-                        <span class="badge bg-success fw-semibold float-end">0  </span>
+                        <span class="badge bg-success fw-semibold float-end vw_count_boleta">0  </span>
                       </h6>
                       <div>
                         <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_boleta" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
@@ -165,13 +206,13 @@ if (!isset($_SESSION["user_nombre"])) {
                   </div>
                   <div class="d-flex align-items-top p-4 border-bottom border-block-end-dashed">
                     <div class="svg-icon-background bg-warning-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">
-                      <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24" class="svg-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24" class="svg-warning">
                         <path d="M13,16H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2ZM9,10h2a1,1,0,0,0,0-2H9a1,1,0,0,0,0,2Zm12,2H18V3a1,1,0,0,0-.5-.87,1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0A1,1,0,0,0,2,3V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V13A1,1,0,0,0,21,12ZM5,20a1,1,0,0,1-1-1V4.73L6,5.87a1.08,1.08,0,0,0,1,0l3-1.72,3,1.72a1.08,1.08,0,0,0,1,0l2-1.14V19a3,3,0,0,0,.18,1Zm15-1a1,1,0,0,1-2,0V14h2Zm-7-7H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2Z" />
                       </svg>
                     </div>
                     <div class="flex-fill">
                       <h6 class="mb-2 fs-12">Total Ticket
-                        <span class="badge bg-warning fw-semibold float-end">0 </span>
+                        <span class="badge bg-warning fw-semibold float-end vw_count_ticket">0 </span>
                       </h6>
                       <div>
                         <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_ticket" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
@@ -864,6 +905,36 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
           </div>
           <!-- End::Modal-Agregar-Producto -->
+
+          <!-- MODAL - VER MAS COLUMNAS -->
+          <div class="modal fade modal-effect" id="modal-facturacion-detalle" tabindex="-1" aria-labelledby="title-modal-facturacion-detalle-label" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="title-modal-facturacion-detalle-label">Lista Detallada</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body table-responsive">
+                  <table id="tabla-facturacion-detalle" class="table table-bordered w-100">
+                    <thead>                      
+                      <th>ID</th>
+                      <th>Fecha Emision</th>
+                      <th>Cliente</th>
+                      <th>Venta?</th>
+                      <th>P/U.</th>
+                      <th>Descripción</th>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                  
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End::Modal-Producto -->
 
         </div>
       </div>

@@ -9,7 +9,7 @@ require_once "../modelos/Numeracion.php";
 require_once "../modelos/Facturacion.php";
 
 $usuario      = new Usuario();
-$permiso      = new Permiso();
+$permisos      = new Permiso();
 $numeracion   = new Numeracion();
 $facturacion  = new Facturacion();   
 
@@ -145,7 +145,7 @@ switch ($_GET["op"]) {
 
   case 'permisos':
     
-    $rspta = $permiso->listar_todos_permisos();
+    $rspta = $permisos->listar_todos_permisos();
 
     $id = $_GET['id'];
     $marcados = $usuario->listarmarcados($id); # Obtener los permisos asignados al usuario
@@ -173,7 +173,7 @@ switch ($_GET["op"]) {
 
   case 'permisosEmpresa':
     
-    $rspta = $permiso->listarEmpresa();
+    $rspta = $permisos->listarEmpresa();
     
     $id = $_GET['id'];
     $marcados = $usuario->listarmarcadosEmpresa($id); # Obtener los permisos asignados al usuario
@@ -201,7 +201,7 @@ switch ($_GET["op"]) {
 
   case 'permisosEmpresaTodos':
     
-    $rspta = $permiso->listarEmpresa();
+    $rspta = $permisos->listarEmpresa();
     $marcados = $usuario->listarmarcadosEmpresaTodos();
     //Declaramos el array para almacenar todos los permisos marcados
     $valores = array();
@@ -308,6 +308,7 @@ switch ($_GET["op"]) {
       $_SESSION['user_cargo']           = $rspta['data']['usuario']['cargo'];
       $_SESSION['user_imagen']          = $rspta['data']['usuario']['foto_perfil'];
       $_SESSION['user_login']           = $rspta['data']['usuario']['login'];
+      $_SESSION['user_update_sistema']  = $rspta['data']['usuario']['estado_update_sistema'];
 
       // $_SESSION['idusuario_empresa'] = $rspta['data']['sucursal']['idusuario_empresa'];
       // $_SESSION['idempresa']         = $rspta['data']['sucursal']['idempresa'];
@@ -370,7 +371,7 @@ switch ($_GET["op"]) {
       in_array(18, $valores) ? $_SESSION['guia_de_remision']          = 1 : $_SESSION['guia_de_remision']          = 0;
       in_array(19, $valores) ? $_SESSION['cliente']                   = 1 : $_SESSION['cliente']                   = 0;
       in_array(20, $valores) ? $_SESSION['anticipos']                 = 1 : $_SESSION['anticipos']                 = 0;
-      in_array(21, $valores) ? $_SESSION['estado de envio']           = 1 : $_SESSION['estado de envio']           = 0;
+      in_array(21, $valores) ? $_SESSION['estado_de_envio']           = 1 : $_SESSION['estado_de_envio']           = 0;
       in_array(22, $valores) ? $_SESSION['anulados']                  = 1 : $_SESSION['anulados']                  = 0;
       in_array(23, $valores) ? $_SESSION['validar_solo_factura']      = 1 : $_SESSION['validar_solo_factura']      = 0;
       in_array(24, $valores) ? $_SESSION['validar_solo_boleta']       = 1 : $_SESSION['validar_solo_boleta']       = 0;
@@ -411,6 +412,12 @@ switch ($_GET["op"]) {
       echo json_encode($data, true);
     }
     
+  break;
+
+  case 'update_sistema':
+    $rspta = $usuario->update_sistema($_GET["id_tabla"]);
+    if ($rspta['status'] == true) {  $_SESSION['user_update_sistema'] = 1;  } # actualizamos el estado de sesion
+    echo json_encode($rspta, true);
   break;
 
   case 'salir':     

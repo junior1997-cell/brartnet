@@ -196,7 +196,7 @@ if (!isset($_SESSION["user_nombre"])) {
         <table border="0" align="center" width="300px" style="font-size: 12px !important;">
           <thead>
             <tr><td colspan="4"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td> </tr>
-            <tr><th>Cant.</th> <th>Producto</th> <th>P.U.</th> <th>Importe</th></tr>
+            <tr><th>Cant.</th> <th>Descripción</th> <th>P.U.</th> <th>Importe</th></tr>
             <tr><td colspan="4"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
           </thead>        
           <tbody style="font-size: 11px !important;">
@@ -242,7 +242,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </td>
               <td style="font-size: 11px;">
                 <span>Autorizado mediante resolución Nro: 182-2016/SUNAT Representación impresa del comprobante de venta electrónico, puede ser consultada en:</span>
-                <span class="text-blue"><b><?php echo $e_web; ?></b></span>
+                <span class="fw-bold"><b><?php echo $e_web; ?></b></span>
                 <span style="font-size: 10px; margin-top: 5px;">Hash:  <?php echo $sunat_hash; ?>  </span>
               </td>
             </tr>

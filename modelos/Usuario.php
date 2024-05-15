@@ -113,6 +113,12 @@ class Usuario
 		return $activar;
 	}
 
+	//Implementamos un método para desactivar usuario
+	public function update_sistema($idusuario) {
+		$sql = "UPDATE usuario set estado_update_sistema='1' where idusuario='$idusuario'";
+		return ejecutarConsulta($sql, 'U');		
+	}
+
 	//Implementamos un método para activar usuario
 	public function cargo_persona($idpersona)	{
 		$sql = "SELECT p.idpersona, p.nombre_razonsocial, cp.nombre as cargo_trabajador
@@ -207,7 +213,7 @@ class Usuario
 	//Funcion para verificar el acceso al sistema
 	public function verificar($login, $clave)	{
 
-		$sql = "SELECT u.idusuario, u.idpersona, pt.idpersona_trabajador, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, p.numero_documento, 
+		$sql = "SELECT u.idusuario, u.idpersona, u.estado_update_sistema, pt.idpersona_trabajador, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, p.numero_documento, 
 		p.celular, p.correo, ct.nombre as cargo, u.login, p.foto_perfil, p.tipo_documento
 		FROM usuario as u
 		INNER JOIN persona as p ON p.idpersona = u.idpersona

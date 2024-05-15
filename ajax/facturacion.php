@@ -221,8 +221,8 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'listar_tabla_facturacion':
 
-        $rspta = $facturacion->listar_tabla_facturacion();
-        $data = []; $count = 1;
+        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"], $_GET["filtro_estado_sunat"] );
+        $data = []; $count = 1; #echo json_encode($rspta); die();
 
         if($rspta['status'] == true){
 
@@ -257,7 +257,8 @@ if (!isset($_SESSION["user_nombre"])) {
               </ul>
             </div>',
               "2" =>  $value['fecha_emision_format'],
-              "3" => '<div class="d-flex flex-fill align-items-center">
+              "3" =>  $value['periodo_pago_month_v2'] .'-'. $value['periodo_pago_year'],
+              "4" => '<div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
                   <span class="avatar"> <img class="w-35px h-auto" src="../assets/modulo/persona/perfil/' . $img_proveedor . '" alt="" onclick="ver_img_proveedor(\'' . $img_proveedor . '\', \'' . encodeCadenaHtml(($value['nombre_razonsocial']) .' '. ($value['apellidos_nombrecomercial'])) . '\')"> </span>
                 </div>
@@ -266,9 +267,9 @@ if (!isset($_SESSION["user_nombre"])) {
                   <span class="text-muted"><b>'.$value['tipo_documento'] .'</b>: '. $value['numero_documento'].'</span>
                 </div>
               </div>',
-              "4" =>  '<b>'.$value['tp_comprobante_v2'].'</b>' . ' <br> ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'],
-              "5" =>  $value['venta_total_v2'] , 
-              "6" => $value['tipo_comprobante'] == '01' || $value['tipo_comprobante'] == '03' || $value['tipo_comprobante'] == '07' ?
+              "5" =>  '<b>'.$value['tp_comprobante_v2'].'</b>' . ' <br> ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'],
+              "6" =>  $value['venta_total_v2'] , 
+              "7" => $value['tipo_comprobante'] == '01' || $value['tipo_comprobante'] == '03' || $value['tipo_comprobante'] == '07' ?
                 (
                   $value['sunat_estado'] == 'ACEPTADA' ? 
                   '<a class="badge bg-outline-info fs-13 cursor-pointer m-r-5px" href="'.$url_xml.'" download data-bs-toggle="tooltip" title="Descargar XML" ><i class="bi bi-filetype-xml"></i></a>' . 
@@ -279,7 +280,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   )
                 )
                 : '' , 
-              "7" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
+              "8" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
                 '<span class="badge bg-success-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-check-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' :                    
                 '<span class="badge bg-danger-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-close-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>'                              
               ),              
@@ -465,8 +466,9 @@ if (!isset($_SESSION["user_nombre"])) {
             $tipo_comprobante   = $value['tipo_comprobante'];
             $serie_comprobante  = $value['serie_comprobante'];
             $numero_comprobante = $value['numero_comprobante'];
-            $tp_comprobante_v2  = $value['tp_comprobante_v2'];
-            $data .= '<option idventa="'.$idventa.'" tipo_comprobante="'.$tipo_comprobante.'"  value="' . $serie_comprobante.'-'. $numero_comprobante  . '">'  . $serie_comprobante.'-'. $numero_comprobante . '</option>';
+            $tp_comprobante_v2  = $value['nombre_tipo_comprobante_v2'];
+            $fecha_emision_dif  = $value['fecha_emision_dif'];
+            $data .= '<option idventa="'.$idventa.'" tipo_comprobante="'.$tipo_comprobante.'" title="'.$fecha_emision_dif.'"  value="' . $serie_comprobante.'-'. $numero_comprobante  . '">'  . $serie_comprobante.'-'. $numero_comprobante . '</option>';
           }
 
           $retorno = array(
@@ -513,21 +515,39 @@ if (!isset($_SESSION["user_nombre"])) {
         } else { echo json_encode($rspta, true); }      
       break; 
 
-      case 'listar_crl_comprobante':
-        $rspta = $correlacion_compb->listar_crl_comprobante($_GET["tipos"]); $cont = 1; $data = "";
-          if($rspta['status'] == true){
-            foreach ($rspta['data'] as $key => $value) {
-              $data .= '<option  value=' . $value['codigo']  . '>' . $value['tipo_comprobante'] . '</option>';
-            }
-    
-            $retorno = array(
-              'status' => true, 
-              'message' => 'Salió todo ok', 
-              'data' => $data, 
-            );
-            echo json_encode($retorno, true);
-    
-          } else { echo json_encode($rspta, true); }
+      case 'select2_filtro_tipo_comprobante':
+        $rspta = $facturacion->select2_filtro_tipo_comprobante($_GET["tipos"]); $cont = 1; $data = "";
+        if($rspta['status'] == true){
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value="' . $value['idtipo_comprobante']  . '" >' . $value['nombre_tipo_comprobante_v2'] . '</option>';
+          }
+  
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+          echo json_encode($retorno, true);
+  
+        } else { echo json_encode($rspta, true); }
+      break;
+
+      case 'select2_filtro_cliente':
+        $rspta = $facturacion->select2_filtro_cliente(); $cont = 1; $data = "";
+        if($rspta['status'] == true){
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value="' . $value['idpersona_cliente']  . '">' . $cont. '. '. $value['cliente_nombre_completo'] .' - '. $value['nombre_tipo_documento'] .': '. $value['numero_documento'] . '</option>';
+            $cont++;
+          }
+  
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+          echo json_encode($retorno, true);
+  
+        } else { echo json_encode($rspta, true); }
       break;
 
       case 'select_categoria':
