@@ -1090,7 +1090,9 @@ function filtros() {
   listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente, filtro_comprobante, filtro_estado_sunat);
 }
 
-function filtrar_solo_estado_sunat(estado) {
+function filtrar_solo_estado_sunat(estado, etiqueta) {  
+  $(".otros-filtros").find("li>a").removeClass("active");
+  $(".otros-filtros").find(`li>a${etiqueta}`).addClass("active"); 
   filtro_estado_sunat = estado; filtros();
 }
 

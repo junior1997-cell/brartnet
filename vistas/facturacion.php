@@ -111,9 +111,9 @@ if (!isset($_SESSION["user_nombre"])) {
                         <i class="ti ti-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu otros-filtros">                        
-                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ACEPTADA')" ><i class="ri-check-fill align-middle me-1"></i> Solo aceptados</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ANULADO')" ><i class="ri-close-fill align-middle me-1"></i> Solo anulados</a></li>
-                        <li><a class="dropdown-item active" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('')" ><i class="bi bi-border-all align-middle me-1"></i> Todos</a></li>
+                        <li><a class="dropdown-item o-f-ac" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ACEPTADA', '.o-f-ac')" ><i class="ri-check-fill align-middle me-1"></i> Solo aceptados</a></li>
+                        <li><a class="dropdown-item o-f-an" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ANULADO', '.o-f-an')" ><i class="ri-close-fill align-middle me-1"></i> Solo anulados</a></li>
+                        <li><a class="dropdown-item o-f-to active" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('', '.o-f-to')" ><i class="bi bi-border-all align-middle me-1"></i> Todos</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="javascript:void(0);"><i class="bi bi-list-check"></i> Ver mas detalles</a></li>
                       </ul>
