@@ -60,6 +60,8 @@ if (!isset($_SESSION["user_nombre"])) {
               }
             }  
 
+            $imagen_perfil = empty($value['foto_perfil']) ? 'no-perfil.jpg' :   $value['foto_perfil'];
+
             $data[] = array(
               "0" => $cont++,
               "1" => '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
@@ -70,7 +72,7 @@ if (!isset($_SESSION["user_nombre"])) {
               
               "3" =>'<div class="d-flex flex-fill align-items-center">
                         <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Cliente">
-                          <span class="avatar"> <img src="../assets/modulo/persona/perfil/'.$value['foto_perfil'].'" alt=""> </span>
+                          <span class="avatar"> <img src="../assets/modulo/persona/perfil/'.$imagen_perfil.'" alt=""> </span>
                         </div>
                         <div>
                           <span class="d-block fw-semibold text-primary">'. $value['nombre_completo'] .'</span>

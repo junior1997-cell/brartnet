@@ -18,17 +18,7 @@ class Cliente
 	U-- actualizar
 	D-- delete -- eliminar*/
 
-	// validar inicio de sesión del usuario cliente
-	public function verificar($login, $clave){
-		$sql = "SELECT pc.idpersona_cliente, p.idpersona, p.nombre_razonsocial, p.apellidos_nombrecomercial
-		FROM persona_cliente AS pc
-		INNER JOIN persona AS p ON pc.idpersona = p.idpersona
-		WHERE landing_user = '$login' AND landing_password = '$clave'
-		AND estado = 1 AND estado_delete = 1";
-		$user = ejecutarConsultaSimpleFila($sql); if ($user['status'] == false) {  return $user; } 
-		$data = [ 'status'=>true, 'message'=>'todo okey','data'=> ['usuario' => $user['data']]  ];
-    return $data;
-	}
+	
 
 	//Implementamos un método para insertar registros
 	public function insertar_cliente(	$idtipo_persona, $idbancos, $idcargo_trabajador, $tipo_persona_sunat, $tipo_documento, $numero_documento, $nombre_razonsocial, 

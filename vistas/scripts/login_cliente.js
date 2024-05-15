@@ -12,7 +12,7 @@ $(function () {
     btnIngresar.prop("disabled", true).html(`<i class="bx bx-loader-circle bx-spin font-size-15px" ></i> Validando datos<span class="bx-burst">...</span>`).removeClass('btn-primary').addClass('btn-outline-dark');
 
     
-    $.post( "../ajax/persona_cliente.php?op=verificarC", { "loginc": loginc, "clavec": clavec, "st": st },  function (e) {
+    $.post( "ajax/usuario_cliente.php?op=verificarC", { "loginc": loginc, "clavec": clavec, "st": st },  function (e) {
 			try {
 				e = JSON.parse(e); //console.log(e);				
 				setTimeout(validar_response(e), 1000);
@@ -41,16 +41,16 @@ function validar_response(e) {
 			// const toast = new bootstrap.Toast(dangert); toast.show();
 			toastr_error('Acceso denegado', 'Las credenciales proporcionadas son incorrectas. Por favor, verifica tu nombre de usuario y contraseña e intenta nuevamente');
 			$('.login-btn').html('Iniciar sesion').prop("disabled", false).removeClass('disabled btn-outline-dark').addClass('btn-primary');
-		} else if (e.data.usuario == null) {
+		} else if (e.data.usuario_cliente == null) {
 			// const dangert = document.getElementById('user-incorrecto'); 
 			// const toast = new bootstrap.Toast(dangert); toast.show();
 			toastr_error('Acceso denegado', 'Las credenciales proporcionadas son incorrectas. Por favor, verifica tu nombre de usuario y contraseña e intenta nuevamente');
 			$('.login-btn').html('Iniciar sesion').prop("disabled", false).removeClass('disabled btn-outline-dark').addClass('btn-primary');
 		} else {
-			toastr_success('Bienvenido de vuelta.', 'Te damos la bienvenida de vuelta. ¡Esperamos que disfrutes tu experiencia!');
+			toastr_success('Bienvenido.', 'Te damos la bienvenida. ¡Esperamos que disfrutes tu experiencia!');
 			var redirecinando = varaibles_get();
 			$('.login-btn').html('Iniciar sesion').prop("disabled", false).removeClass('disabled btn-outline-dark').addClass('btn-primary');
-			localStorage.setItem('nube_id_usuario', e.data.usuario.idusuario);
+			localStorage.setItem('nube_id_usuario', e.data.usuario_cliente.idpersona_cliente);
 
 			if (redirecinando.file == '' || redirecinando.file == null) {	$(location).attr("href", "ver_pagos.php");	} else { $(location).attr("href", redirecinando.file); }			      
 		}
