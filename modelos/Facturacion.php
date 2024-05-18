@@ -181,6 +181,19 @@
       return ejecutarConsultaSimpleFila($sql);
     }
 
+    public function mostrar_cliente($id){
+      $sql = "SELECT p.*, 
+      CASE 
+        WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+        WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+        ELSE '-'
+      END AS cliente_nombre_completo,  pc.idcentro_poblado, pc.fecha_afiliacion, pc.ip_personal
+      FROM persona_cliente as pc
+      INNER JOIN persona as p ON p.idpersona = pc.idpersona
+      WHERE pc.idpersona_cliente = '$id'";
+      return ejecutarConsultaSimpleFila($sql);
+    }
+
     public function mostrar_detalle_venta($idventa){
 
       $sql_1 = "SELECT v.*, CONCAT(v.serie_comprobante, '-', v.numero_comprobante) as serie_y_numero_comprobante, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y %h:%i:%s %p') AS fecha_emision_format, 
@@ -376,7 +389,7 @@
       INNER JOIN persona as p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sc06 ON sc06.code_sunat = p.tipo_documento
       INNER JOIN plan as pl ON pl.idplan = pc.idplan
-      WHERE p.idpersona > 2 $filtro_id_trabajador ORDER BY p.nombre_razonsocial ASC;"; 
+      WHERE p.estado = '1' and p.estado_delete = '1' and pc.estado = '1' and pc.estado_delete = '1' and p.idpersona > 2 $filtro_id_trabajador ORDER BY p.nombre_razonsocial ASC;"; 
       return ejecutarConsultaArray($sql);
     }
 

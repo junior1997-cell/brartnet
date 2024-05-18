@@ -25,7 +25,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $productos          = new Producto();
 
     date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
-    $imagen_error = "this.src='../dist/svg/404-v2.svg'";
+    $imagen_error = "this.src='../assets/svg/404-v2.svg'";
     $toltip = '<script> $(function () { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
 
     // ══════════════════════════════════════  DATOS DE FACTURACION ══════════════════════════════════════
@@ -250,17 +250,18 @@ if (!isset($_SESSION["user_nombre"])) {
               "1" => '<div class="btn-group ">
               <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
               <ul class="dropdown-menu">                
-                '.( $value['tipo_comprobante'] == '12' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_papelera_venta(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="bx bx-trash"></i> Eliminar o papelera </a></li>' : '').'  
+              <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_editar_venta(' . $value['idventa'] . ');" ><i class="bi bi-eye"></i> Ver</a></li>
                 <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_ticket(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato Ticket</a></li>                
                 <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_a4_completo(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato A4 completo</a></li>                
                 <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_a4_comprimido(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="ti ti-checkup-list"></i> Formato A4 comprimido</a></li>
+                '.( $value['tipo_comprobante'] == '12' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_papelera_venta(' . $value['idventa'] .', \''.$value['tipo_comprobante'] . '\');" ><i class="bx bx-trash"></i> Eliminar o papelera </a></li>' : '').'  
               </ul>
             </div>',
               "2" =>  $value['fecha_emision_format'],
               "3" =>  $value['periodo_pago_month_v2'] .'-'. $value['periodo_pago_year'],
               "4" => '<div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                  <span class="avatar"> <img class="w-35px h-auto" src="../assets/modulo/persona/perfil/' . $img_proveedor . '" alt="" onclick="ver_img_proveedor(\'' . $img_proveedor . '\', \'' . encodeCadenaHtml(($value['nombre_razonsocial']) .' '. ($value['apellidos_nombrecomercial'])) . '\')"> </span>
+                  <span class="avatar"> <img class="w-35px h-auto" src="../assets/modulo/persona/perfil/' . $img_proveedor . '" alt="" onclick="ver_img_pefil(' .$value['idpersona_cliente'] . ')" onerror="'.$imagen_error.'"> </span>
                 </div>
                 <div>
                   <span class="d-block fw-semibold text-primary" data-bs-toggle="tooltip" title="'.$value['cliente_nombre_completo'] .'">'.$value['cliente_nombre_recortado'] .'</span>
@@ -280,7 +281,53 @@ if (!isset($_SESSION["user_nombre"])) {
                   )
                 )
                 : '' , 
-              "8" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
+              "8" => empty($value['mp_comprobante']) ? '' :  '<center><div class="svg-icon-background bg-warning-transparent cursor-pointer" onclick="ver_comprobante_pago('. $value['idventa'] .');" data-bs-toggle="tooltip" title="Baucher: '. $value['metodo_pago'] .'">                      
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-warning">
+                  <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v5a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h6a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Zm13.71,6.29a1,1,0,0,0-1.42,0l-3.29,3.3-1.29-1.3a1,1,0,0,0-1.42,1.42l2,2a1,1,0,0,0,1.42,0l4-4A1,1,0,0,0,21.21,16.29Z" />
+                </svg>
+              </div></center>' , 
+              "9" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
+                '<span class="badge bg-success-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-check-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' :                    
+                '<span class="badge bg-danger-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-close-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>'                              
+              ),              
+            ];
+          }
+          $results =[
+            'status'=> true,
+            "sEcho" => 1,
+            "iTotalRecords" => count($data),
+            "iTotalDisplayRecords" => count($data),
+            "aaData" => $data
+          ];
+          echo json_encode($results);
+
+        } else { echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data']; }
+      break;
+
+      case 'listar_tabla_ver_mas_detalle_facturacion':
+
+        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"], $_GET["filtro_estado_sunat"] );
+        $data = []; $count = 1; #echo json_encode($rspta); die();
+
+        if($rspta['status'] == true){
+
+          foreach($rspta['data'] as $key => $value){           
+
+            $data[] = [
+              "0" => '<span class="text-nowrap fs-11">'. $value['idventa'].'</span>',
+              "1" => '<span class="text-nowrap fs-11">'. $value['es_cobro'].'</span>',
+              "2" =>  $value['fecha_emision_format'],
+              "3" => '<span class="text-nowrap fs-11">'. $value['periodo_pago_month_v2'] .'-'. $value['periodo_pago_year'].'</span>',
+              "4" => '<span class="text-nowrap fs-11">'. $value['cliente_nombre_completo'].'</span>',
+              "5" => '<span class="text-nowrap fs-11">'. $value['tipo_documento'] .'</span>',
+              "6" => '<span class="text-nowrap fs-11">'. $value['numero_documento'].'</span>',
+              "7" => '<span class="text-nowrap fs-11">'. $value['tp_comprobante_v2'].'</span>',
+              "8" => '<span class="text-nowrap fs-11">'. $value['serie_comprobante'] . '-' . $value['numero_comprobante'].'</span>',
+              "9" =>  $value['venta_total_v2'] ,
+              "10" =>  $value['total_recibido'] ,
+              "11" =>  $value['total_vuelto'] ,
+              "12" => '<span class="text-nowrap fs-11">'. $value['metodo_pago'] .'</span>',
+              "13" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
                 '<span class="badge bg-success-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-check-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' :                    
                 '<span class="badge bg-danger-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-close-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>'                              
               ),              
@@ -350,6 +397,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'mostrar_venta':
         $rspta=$facturacion->mostrar_venta($_POST["idventa"]);
+        echo json_encode($rspta, true);
+      break; 
+
+      case 'mostrar_cliente':
+        $rspta=$facturacion->mostrar_cliente($_POST["idcliente"]);
         echo json_encode($rspta, true);
       break; 
 

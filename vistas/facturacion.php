@@ -18,6 +18,15 @@ if (!isset($_SESSION["user_nombre"])) {
     <link rel="stylesheet" href="../assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css">
     <link rel="stylesheet" href="../assets/libs/filepond-plugin-image-edit/filepond-plugin-image-edit.min.css">
     <link rel="stylesheet" href="../assets/libs/dropzone/dropzone.css">
+
+    <style>
+      #tabla-facturacion-detalle td {        
+        vertical-align: middle !important;
+        line-height: 1.462 !important;
+        font-size: .6875rem !important;
+        font-weight: 50 !important;
+      }
+    </style>
   </head>
 
   <body id="body-ventas">
@@ -115,7 +124,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <li><a class="dropdown-item o-f-an" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ANULADO', '.o-f-an')" ><i class="ri-close-fill align-middle me-1"></i> Solo anulados</a></li>
                         <li><a class="dropdown-item o-f-to active" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('', '.o-f-to')" ><i class="bi bi-border-all align-middle me-1"></i> Todos</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="bi bi-list-check"></i> Ver mas detalles</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="view_mas_detalle();"><i class="bi bi-list-check"></i> Ver mas detalles</a></li>
                       </ul>
                     </div>
                   </div>
@@ -132,7 +141,8 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th>Cliente</th>
                           <th>Correlativo</th>
                           <th>Total</th> 
-                          <th><center>SUNAT</center></th>        
+                          <th><center>SUNAT</center></th>   
+                          <th>Boucher</th>      
                           <th><center>Estado</center></th>               
                         </tr>
                       </thead>
@@ -147,6 +157,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th>Correlativo</th>
                           <th>Total</th>
                           <th class="text-center" ><center>SUNAT</center></th>
+                          <th>Boucher</th>   
                           <th><center>Estado</center></th>
                         </tr>
                       </tfoot>
@@ -293,14 +304,14 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <input type="hidden" id="tipo_comprobante_hidden" value="03">
                                 <input type="hidden" name="idsunat_c01" id="idsunat_c01" value="3">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante1" value="03"  onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante1'); es_valido_cliente();">
-                                  <label class="btn btn-sm btn-outline-primary btn-boleta" for="tipo_comprobante1"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante2" value="01" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante2'); es_valido_cliente();">
-                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante2"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante3" value="12" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante3'); es_valido_cliente();">
-                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante3"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante4" value="07" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante4'); ">
-                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante4" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Nota de Crédito."><i class="bi bi-file-earmark-x-fill me-1 align-middle d-inline-block"></i> NC</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante03" value="03"  onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante03'); es_valido_cliente();">
+                                  <label class="btn btn-sm btn-outline-primary btn-boleta" for="tipo_comprobante03"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante01" value="01" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante01'); es_valido_cliente();">
+                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante01"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante12" value="12" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante12'); es_valido_cliente();">
+                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante12"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante07" value="07" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante07'); ">
+                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante07" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Nota de Crédito."><i class="bi bi-file-earmark-x-fill me-1 align-middle d-inline-block"></i> NC</label>
                                 </div>
                               </div>
                             </div>                            
@@ -371,7 +382,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <label for="observacion_documento" class="form-label">Observacion</label>
                               <textarea name="observacion_documento" id="observacion_documento" class="form-control" rows="2" placeholder="ejemp: Cobro de servicio de internet."></textarea>
                             </div>
-                          </div>
+                          </div> 
                           
                           <!-- FECHA EMISION -->
                           <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 div_es_cobro">
@@ -610,6 +621,113 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>              
             </div>
 
+            <!-- TABLA - MAS DETALLES FACTURA -->
+            <div class="col-xl-12" id="div-tabla-mas-detalles" style="display: none;">
+              <div class="card custom-card">
+                <div class="card-header justify-content-between">
+                  
+                    <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                      <div class="form-group">
+                        <label for="filtro_md_fecha_i" class="form-label">
+                        <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_md_fecha_i();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
+                          Fecha Inicio</label>
+                        <input type="date" class="form-control" name="filtro_md_fecha_i" id="filtro_md_fecha_i" value="<?php echo date("Y-m-d");?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">                        
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                      <div class="form-group">
+                        <label for="filtro_md_fecha_f" class="form-label">
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_md_fecha_f();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
+                          Fecha Fin</label>
+                        <input type="date" class="form-control" name="filtro_md_fecha_f" id="filtro_md_fecha_f" value="<?php echo date("Y-m-d");?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">                        
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-4 col-xxl-4">
+                      <div class="form-group">
+                        <label for="filtro_md_cliente" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_md_cliente();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Cliente
+                          <span class="charge_filtro_md_cliente"></span>
+                        </label>
+                        <select class="form-control" name="filtro_md_cliente" id="filtro_md_cliente" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                      <div class="form-group">
+                        <label for="filtro_md_comprobante" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_md_comprobante();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Comprobante
+                          <span class="charge_filtro_md_comprobante"></span>
+                        </label>
+                        <select class="form-control" name="filtro_md_comprobante" id="filtro_md_comprobante" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
+                    </div>
+                 
+                  <div class="d-flex"> 
+                    <div class="dropdown ms-2">
+                      <button class="btn btn-icon btn-secondary-light btn-sm btn-wave waves-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="ti ti-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu md-otros-filtros">                        
+                        <li><a class="dropdown-item md-o-f-ac" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ACEPTADA', '.o-f-ac')" ><i class="ri-check-fill align-middle me-1"></i> Solo aceptados</a></li>
+                        <li><a class="dropdown-item md-o-f-an" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ANULADO', '.o-f-an')" ><i class="ri-close-fill align-middle me-1"></i> Solo anulados</a></li>
+                        <li><a class="dropdown-item md-o-f-to active" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('', '.o-f-to')" ><i class="bi bi-border-all align-middle me-1"></i> Todos</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="bi bi-list-check"></i> Ver mas detalles</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered w-100" style="width: 100%;" id="tabla-facturacion-detalle">
+                      <thead>
+                        <tr>
+                          <th class="text-center"><center>#</center></th>
+                          <th class="text-center"><center>Cobro?</center></th>
+                          <th class="text-center"><center>Emision</center></th>
+                          <th>Periodo</th>
+                          <th>Cliente</th>
+                          <th>Tipo</th>
+                          <th>Num.</th>
+                          <th>Comp.</th>
+                          <th>Num.</th>
+                          <th class="text-nowrap" >Total Cobro</th> 
+                          <th>Recibido</th> 
+                          <th>Vuelto</th> 
+                          <th><center>Método</center></th>        
+                          <th><center>Estado</center></th>               
+                        </tr>
+                      </thead>
+                      <tbody class="fs-11" ></tbody>
+                      <tfoot>
+                        <tr>
+                          <th class="text-center"><center>#</center></th>
+                          <th class="text-center"><center>Cobro?</center></th>
+                          <th class="text-center"><center>Emision</center></th>
+                          <th>Periodo</th>
+                          <th>Cliente</th>
+                          <th>Tipo</th>
+                          <th>Num.</th>
+                          <th>Comp.</th>
+                          <th>Num.</th>
+                          <th class="text-nowrap" >Total Cobro</th> 
+                          <th>Recibido</th> 
+                          <th>Vuelto</th> 
+                          <th><center>Método</center></th>        
+                          <th><center>Estado</center></th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>                
+              </div>
+            </div>
+
           </div>
           <!-- End::row-1 -->
 
@@ -646,38 +764,15 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
           </div>          
 
-          <!-- MODAL - VER COMPROBANTE venta -->
-          <div class="modal fade modal-effect" id="modal-ver-comprobante1" tabindex="-1" aria-labelledby="modal-ver-comprobante1Label" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h6 class="modal-title title-modal-comprobante1" id="modal-ver-comprobante1Label1">COMPROBANTE</h6>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <div id="comprobante-container1" class="text-center"> <!-- archivo --> 
-                    <div class="row" >
-                      <div class="col-lg-12 text-center"> <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-danger py-1" data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
-                </div>
-              </div>
-            </div>
-          </div> 
-          <!-- End::Modal-Ver-Comprobante venta -->
-
-          <!-- MODAL - VER FOTO PROVEEDOR -->
-          <div class="modal fade modal-effect" id="modal-ver-foto-proveedor" tabindex="-1" aria-labelledby="modal-ver-foto-proveedor" aria-hidden="true">
+          <!-- MODAL - VER FOTO -->
+          <div class="modal fade modal-effect" id="modal-ver-imgenes" tabindex="-1" aria-labelledby="modal-ver-imgenes" aria-hidden="true">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h6 class="modal-title title-foto-proveedor" id="modal-ver-foto-proveedorLabel1">Imagen</h6>
+                  <h6 class="modal-title title-ver-imgenes" id="modal-ver-imgenesLabel1">Imagen</h6>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body html_ver_foto_proveedor">
+                <div class="modal-body html_modal_ver_imgenes">
                   
                 </div>
                 <div class="modal-footer">
@@ -906,35 +1001,7 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::Modal-Agregar-Producto -->
 
-          <!-- MODAL - VER MAS COLUMNAS -->
-          <div class="modal fade modal-effect" id="modal-facturacion-detalle" tabindex="-1" aria-labelledby="title-modal-facturacion-detalle-label" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="title-modal-facturacion-detalle-label">Lista Detallada</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body table-responsive">
-                  <table id="tabla-facturacion-detalle" class="table table-bordered w-100">
-                    <thead>                      
-                      <th>ID</th>
-                      <th>Fecha Emision</th>
-                      <th>Cliente</th>
-                      <th>Venta?</th>
-                      <th>P/U.</th>
-                      <th>Descripción</th>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                  
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- End::Modal-Producto -->
+         
 
         </div>
       </div>

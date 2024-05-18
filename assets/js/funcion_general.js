@@ -822,10 +822,10 @@ function doc_view_download_expand(filename, ruta='', nombre_decarga='', width='5
   }       
 
   var div_html = `<div class="row">
-    <div class="col-6 col-md-6">
+    <div class="col-6 col-md-6 text-center">
       <a class="btn btn-sm btn-block btn-warning" href="${ruta_file}" download="${nombre_decarga}" type="button"><i class="fas fa-download"></i> Descargar</a>
     </div>
-    <div class="col-6 col-md-6">
+    <div class="col-6 col-md-6 text-center">
       <a class="btn btn-sm btn-block btn-info ${expand_disabled}" href="${ruta_file}" target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo</a>
     </div>
     <div class="col-12 col-md-12 mt-2"  width="auto">   

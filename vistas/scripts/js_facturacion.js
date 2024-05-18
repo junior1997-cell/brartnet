@@ -379,6 +379,149 @@ function mostrar_para_nota_credito(input) {
   }
 }
 
+function ver_editar_venta(idventa) {
+  show_hide_form(2);
+  limpiar_form_venta();  
+
+  if (idventa == '') {
+    
+  } else {         
+
+    $("#cargando-1-formulario").hide();
+    $("#cargando-2-fomulario").show();    
+
+    $.post("../ajax/facturacion.php?op=mostrar_editar_detalles_venta", {'idventa': idventa }, function (e, status) {
+
+      e = JSON.parse(e); console.log(e);
+      if (e.status == true) {    
+
+        $("#idpersona_cliente").val(e.data.venta.idpersona_cliente).trigger('change');             
+        $("#observacion_documento").val(e.data.venta.observacion_documento); 
+        $("#periodo_pago").val(e.data.venta.periodo_pago); 
+
+        $("#total_recibido").val(e.data.venta.total_recibido);
+        $("#metodo_pago").val(e.data.venta.metodo_pago).trigger('change');     
+        $("#mp_monto").val(e.data.venta.mp_monto);    
+        $("#mp_serie_comprobante").val(e.data.venta.mp_serie_comprobante);  
+
+        if (e.data.venta.mp_comprobante == null || e.data.venta.mp_comprobante == '') {   } else {          
+          if (UrlExists(`../assets/modulo/facturacion/ticket/${e.data.venta.mp_comprobante}`) == 200) {
+            file_pond_mp_comprobante.addFile(`../assets/modulo/facturacion/ticket/${e.data.venta.mp_comprobante}`, { index: 0 });
+          } else {
+            toastr_error('Erro de carga!!',`Hubo un error en la carga de tu comprobante de pago. <br> ${e.data.venta.metodo_pago}: ${e.data.venta.mp_serie_comprobante}`);
+          }          
+        }  
+        
+        
+        if (e.data.venta.tipo_comprobante == '01') {
+          $("#tipo_comprobante01").prop("checked", true);
+        } else if (e.data.venta.tipo_comprobante == '03') {
+          $("#tipo_comprobante03").prop("checked", true);
+        } else if (e.data.venta.tipo_comprobante == '07') {
+          $("#tipo_comprobante07").prop("checked", true);
+        } else if (e.data.venta.tipo_comprobante == '12') {
+          $("#tipo_comprobante12").prop("checked", true);
+        }
+
+        $.each(e.data.detalle, function(index, val1) {
+          var img = val1.imagen == "" || val1.imagen == null ?img = `../assets/modulo/productos/no-producto.png` : `../assets/modulo/productos/${val1.imagen}` ;          
+
+          var fila = `
+            <tr class="filas" id="fila${cont}"> 
+
+              <td class="py-1">
+                <!--  <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${val1.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button> -->
+                <!-- <button type="button" class="btn btn-danger btn-sm btn-file-delete-${cont}" onclick="eliminarDetalle(${val1.idproducto}, ${cont});"><i class="fas fa-times"></i></button> -->
+              </td>
+
+              <td class="py-1 text-nowrap">
+                <span class="fs-11" ><i class="bi bi-upc"></i> ${val1.codigo} <br> <i class="bi bi-person"></i> ${val1.codigo_alterno}</span>                
+              </td>
+
+              <td class="py-1">         
+                <input type="hidden" name="idproducto[]" value="${val1.idproducto}">
+
+                <div class="d-flex flex-fill align-items-center">
+                  <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(val1.nombre_producto)}')"> </span></div>
+                  <div>
+                    <span class="d-block fs-11 fw-semibold text-nowrap text-primary">${val1.nombre_producto}</span>
+                    <span class="d-block fs-10 text-muted">M: <b>${val1.marca}</b> | C: <b>${val1.categoria}</b></span> 
+                  </div>
+                </div>
+              </td>
+
+              <td class="py-1">
+                <span class="fs-11 um_nombre_${cont}">${val1.um_abreviatura}</span> 
+                <input type="hidden" class="um_nombre_${cont}" name="um_nombre[]" id="um_nombre[]" value="${val1.um_nombre}">
+                <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${val1.um_abreviatura}">
+              </td>
+
+              <td class="py-1 form-group">
+                <input type="number" class="w-100px valid_cantidad form-control-sm form-control producto_${val1.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${val1.cantidad}" min="0.01" required readonly onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
+                <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${val1.cantidad}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();" >            
+              </td> 
+
+              <td class="py-1 form-group">
+                <input type="number" class="w-135px form-control form-control-sm valid_precio_con_igv" name="valid_precio_con_igv[${cont}]" id="valid_precio_con_igv_${cont}" value="${val1.precio_venta}" min="0.01" required readonly onkeyup="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); " onchange="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); ">
+                <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${val1.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
+                <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
+                <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
+                <input type="hidden" class="precio_compra_${cont}" name="precio_compra[]" value="${val1.precio_compra}"  >
+                <input type="hidden" class="precio_venta_descuento_${cont}" name="precio_venta_descuento[]" value="${val1.precio_venta_descuento}"  >
+              </td> 
+
+              <td class="py-1 form-group">
+                <input type="number" class="w-100px form-control form-control-sm valid_descuento" name="valid_descuento_${cont}" value="${val1.descuento}" min="0.00" required readonly onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
+                <input type="hidden" class="descuento_${cont}" name="descuento[]" value="${val1.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+                <input type="hidden" class="descuento_porcentaje_${cont}" name="descuento_porcentaje[]" value="${val1.descuento_porcentaje}" >
+              </td>
+
+              <td class="py-1 text-right">
+                <span class="text-right fs-11 subtotal_producto_${cont}" id="subtotal_producto">${val1.subtotal}</span> 
+                <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="${val1.subtotal}" >
+                <input type="hidden" name="subtotal_no_descuento_producto[]" id="subtotal_no_descuento_producto_${cont}" value="${val1.subtotal_no_descuento}" > 
+              </td>
+              <td class="py-1"><button type="button" onclick="modificarSubtotales();" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+              
+            </tr>`;
+
+          detalles = detalles + 1;
+          $("#tabla-productos-seleccionados tbody").append(fila);
+          array_data_venta.push({ id_cont: cont });
+          modificarSubtotales();        
+          
+          // reglas de validación     
+          $('.valid_precio_con_igv').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
+          });
+          $('.valid_cantidad').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
+          });
+          $('.valid_descuento').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
+          });
+
+          cont++;
+          evaluar();
+          
+          
+        });
+
+        $(".btn-guardar").hide();
+        $("#form-facturacion").valid();
+
+        $("#cargando-1-formulario").show();
+        $("#cargando-2-fomulario").hide();
+      } else{ ver_errores(e); }
+      
+    }).fail( function(e) { ver_errores(e); } );
+
+  }
+}
+
 function evaluar() {
   if (detalles > 0) {
     $(".btn-guardar").show();

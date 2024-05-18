@@ -243,11 +243,11 @@ if (!isset($_SESSION["user_nombre"])) {
                                 </div>
                                 <div class="form-group mt-2">
                                   <label for="cuenta1" class="form-label">Cuenta:</label>
-                                  <input type="number" id="cuenta1" name="cuenta1" class="form-control"/>
+                                  <input type="text" id="cuenta1" name="cuenta1" class="form-control"/>
                                 </div>
                                 <div class="form-group mt-2">
                                   <label for="cci1" class="form-label">CCI:</label>
-                                  <input type="number" id="cci1" name="cci1" class="form-control"/>
+                                  <input type="text" id="cci1" name="cci1" class="form-control"/>
                                 </div>
                               </div>
                             </div>
@@ -262,11 +262,11 @@ if (!isset($_SESSION["user_nombre"])) {
                                 </div>
                                 <div class="form-group mt-2">
                                   <label for="cuenta2" class="form-label">Cuenta:</label>
-                                  <input type="number" id="cuenta2" name="cuenta2" class="form-control"/>
+                                  <input type="text" id="cuenta2" name="cuenta2" class="form-control"/>
                                 </div>
                                 <div class="form-group mt-2">
                                   <label for="cci2" class="form-label">CCI:</label>
-                                  <input type="number" id="cci2" name="cci2" class="form-control"/>
+                                  <input type="text" id="cci2" name="cci2" class="form-control"/>
                                 </div>
                               </div>
                             </div>
@@ -281,11 +281,11 @@ if (!isset($_SESSION["user_nombre"])) {
                                 </div>
                                 <div class="form-group mt-2">
                                   <label for="cuenta3" class="form-label">Cuenta:</label>
-                                  <input type="number" id="cuenta3" name="cuenta3" class="form-control"/>
+                                  <input type="text" id="cuenta3" name="cuenta3" class="form-control"/>
                                 </div>
                                 <div class="form-group mt-2">
                                   <label for="cci3" class="form-label">CCI:</label>
-                                  <input type="number" id="cci3" name="cci3" class="form-control"/>
+                                  <input type="text" id="cci3" name="cci3" class="form-control"/>
                                 </div>
                               </div>
                             </div>
@@ -299,11 +299,11 @@ if (!isset($_SESSION["user_nombre"])) {
                                 </div>
                                 <div class="form-group mt-2">
                                   <label for="cuenta4" class="form-label">Cuenta:</label>
-                                  <input type="number" id="cuenta4" name="cuenta4" class="form-control"/>
+                                  <input type="text" id="cuenta4" name="cuenta4" class="form-control"/>
                                 </div>
                                 <div class="form-group mt-2">
                                   <label for="cci4" class="form-label">CCI:</label>
-                                  <input type="number" id="cci4" name="cci4" class="form-control"/>
+                                  <input type="text" id="cci4" name="cci4" class="form-control"/>
                                 </div>
                               </div>
                             </div>

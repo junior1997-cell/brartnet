@@ -27,7 +27,9 @@
       Swal.fire({
         title: "¿Has actualizado?",
         icon: "question",
-        html: `¡Existe una Nueva actualización en el sistema de facturación! Descubre las últimas mejoras y características ahora disponibles. <br> <br>
+        html: `¡Existe una Nueva actualización en el sistema de facturación! Descubre las últimas mejoras y características ahora disponibles. <br> 
+        link: <a class="text-blue" href="https://chromewebstore.google.com/detail/clear-cache/cppjkneekbjaeellbfkmgnhonkkjfpdn?hl=es" target="_blank">https://chromewebstore.google.com/detail/clear-cache</a> 
+        <br><br>
         <img src="../assets/video/clear_cache_tutorial.gif" alt="img" width="400px"> 
         `,        
         showCloseButton: true,
