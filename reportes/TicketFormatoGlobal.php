@@ -71,6 +71,10 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $user_en_atencion     = mb_convert_encoding($venta_f['data']['venta']['user_en_atencion'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['user_en_atencion'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
+    $es_cobro             = $venta_f['data']['venta']['es_cobro'];
+    $p_p_month_v2         = $venta_f['data']['venta']['periodo_pago_month_v2'];
+    $_p_year              = $venta_f['data']['venta']['periodo_pago_year'];
+
     $fecha_emision        = $venta_f['data']['venta']['fecha_emision'];
     $fecha_emision_format = $venta_f['data']['venta']['fecha_emision_format'];
     $fecha_emision_dmy    = $venta_f['data']['venta']['fecha_emision_dmy'];
@@ -155,7 +159,7 @@ if (!isset($_SESSION["user_nombre"])) {
           </svg>
         </a>
 
-        <button type="button" class="btn btn-warning p-1 mb-2 m-l-5px w-40px" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="decargar_imagen();">
+        <button type="button" class="btn btn-outline-warning p-1 mb-2 m-l-5px w-40px" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="decargar_imagen();">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
         </button>      
       </div>    
@@ -188,6 +192,9 @@ if (!isset($_SESSION["user_nombre"])) {
             <tr ><td colspan="2"><strong>DNI/RUC:</strong> <?php echo $c_numero_documento ; ?></td> </tr>
             <tr ><td colspan="2"><strong>Dir.:</strong> <?php echo $c_direccion ; ?></td></tr> 
             <tr ><td colspan="2"><strong>Atención:</strong> <?php echo $user_en_atencion; ?> </td> </tr>
+            <?php if ($es_cobro == 'SI') {?>
+            <tr ><td colspan="2"><strong>Período cobro:</strong> <?php echo $p_p_month_v2 . '-' . $_p_year ; ?> </td> </tr>
+            <?php }?>
             <tr ><td colspan="2"><strong>Observación:</strong> <?php echo $observacion_documento ; ?> </td></tr>
           </tbody>
         </table>         

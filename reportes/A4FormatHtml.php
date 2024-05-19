@@ -191,6 +191,19 @@ if (!isset($_SESSION["user_nombre"])) {
     .table-products tbody tr:nth-of-type(odd) {  background-color: #F4F4F5; -webkit-print-color-adjust: exact; }
     .table-products { border-collapse: collapse; width: 100%; font-size: 12px; }
     .table-footer { width: 40%; float: right; font-size: 12px; padding: 8px; }
+    .text-nowrap { white-space: nowrap !important; }
+
+    /* min-width = como minimo ─|──────── */
+    @media (min-width: 992px) {
+
+      .justify-a4-documento{ display: flex;  justify-content: center;  align-items: start; }
+
+    }
+
+    /* max-width = como maximo ────────| */
+    @media (max-width:991.98px) {
+      .justify-a4-btn{ display: flex;  justify-content: center;  align-items: start; }
+    }
 
     @media print {
       @page { size: A4; }
@@ -238,8 +251,8 @@ if (!isset($_SESSION["user_nombre"])) {
   </style>
 </head>
 
-<body  style="background-color: white !important; display: flex;  justify-content: center;  align-items: start;"><!---->
-  <div class="tm_hide_print">
+<body class="justify-a4-documento" style="background-color: white !important; "><!---->
+  <div class="tm_hide_print justify-a4-btn">
     <button type="button" style="margin-bottom: 5px;">
       <a  type="button" class="btn btn-outline-info p-1 mb-2 m-l-5px w-40px" href="javascript:window.print()" data-bs-toggle="tooltip" title="Imprimir Ticket">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer">
@@ -250,8 +263,12 @@ if (!isset($_SESSION["user_nombre"])) {
       </a>
     </button>
     <br>
-    <button type="button" class="btn btn-warning p-1 mb-2 m-l-5px w-40px" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="decargar_imagen();">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+    <button type="button" class="btn btn-warning p-1 mb-2 m-l-5px w-40px" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="decargar_imagen();" style="cursor: pointer;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+        <polyline points="21 15 16 10 5 21"></polyline>
+      </svg>
     </button>      
   </div>   
 
@@ -267,7 +284,7 @@ if (!isset($_SESSION["user_nombre"])) {
         </div>
         
         <div class="document-header">
-          <div class="document-header-content"><strong style="display: block; margin-bottom: 5px;">
+          <div class="document-header-content text-nowrap"><strong style="display: block; margin-bottom: 5px;">
             <p>R.U.C. N° <?php echo $e_numero_documento;?></p>
             <p style="text-transform: uppercase; font-size: 19px;"><?php echo $nombre_comprobante;?> electrónica</p>
             </strong> <strong style="display: block; font-size: 19px;"> <p><?php echo $serie_y_numero_comprobante;?></p> </strong>
@@ -326,7 +343,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <th role="columnheader" style="text-align: right; width: 80px;"> Total  </th>
             </tr>
           </thead>
-          <tbody style="border-bottom: 1px solid gray; border-top: 1px solid gray;">
+          <tbody class="text-nowrap" style="border-bottom: 1px solid gray; border-top: 1px solid gray;">
             
             <?php echo $html_venta;?>
             <!-- <tr class="item-list">

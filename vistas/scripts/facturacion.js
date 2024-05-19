@@ -91,6 +91,7 @@ function show_hide_form(flag) {
 		$("#div-tabla").show();
     $("#div-mini-reporte").show();
 		$("#div-formulario").hide();
+    $("#div-tabla-mas-detalles").hide();
 
 		$(".btn-agregar").show();
 		$(".btn-guardar").hide();
@@ -100,6 +101,7 @@ function show_hide_form(flag) {
 		$("#div-tabla").hide();
     $("#div-mini-reporte").hide();
 		$("#div-formulario").show();
+    $("#div-tabla-mas-detalles").hide();
 
 		$(".btn-agregar").hide();		
 		$(".btn-cancelar").show();

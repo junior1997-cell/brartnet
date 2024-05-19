@@ -3,7 +3,7 @@
 
   <!-- Start::main-sidebar-header -->
   <div class="main-sidebar-header">
-    <a href="index.php" class="header-logo">
+    <a href="escritorio.php" class="header-logo">
       <img src="../assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
       <img src="../assets/images/brand-logos/toggle-logo.png" alt="logo" class="toggle-logo">
       <img src="../assets/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark">
@@ -140,7 +140,7 @@
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
             <i class='bx bx-cart-add side-menu__icon'></i>
-            <span class="side-menu__label">Realizar venta<span class="badge bg-secondary-transparent ms-2">New</span></span>
+            <span class="side-menu__label">Realizar cobro<span class="badge bg-secondary-transparent ms-2">New</span></span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
           <ul class="slide-menu child1">

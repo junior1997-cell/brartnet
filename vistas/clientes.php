@@ -176,7 +176,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                       <div class="row" id="cargando-1-fomulario">
 
-                        <div class="col-6">
+                        <div class="col-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
 
                           <div class="row">
                             <!-- Grupo -->
@@ -283,7 +283,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                         </div>
                         <!-- --------------DIRECCION -->
-                        <div class="col-6">
+                        <div class="col-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
 
                           <div class="row">
                             <!-- Grupo -->
@@ -340,7 +340,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                         </div>
 
-                        <div class="col-12 ">
+                        <div class="col-12 col-md-12">
 
                           <div class="row">
                             <!-- Grupo -->
