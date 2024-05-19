@@ -258,7 +258,7 @@
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta Dia/mes</a></li>  
             <?php } ?>         
             <?php  if ($_SESSION['venta_por_vendedor'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta por vendedor</a></li>
+            <li class="slide"> <a href="reporte_x_trabajador.php" class="side-menu__item">Cobros por Trbajador</a></li>
             <?php } ?>         
             <?php  if ($_SESSION['venta_agrupada'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta agrupada</a></li>
