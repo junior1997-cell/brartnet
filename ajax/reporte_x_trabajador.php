@@ -60,13 +60,12 @@ if (!isset($_SESSION["user_nombre"])) {
                   <span class="text-muted text-nowrap">Cel.: ' . '<a href="tel:+51'.$value['cellCliente'].'" data-bs-toggle="tooltip" title="Clic para hacer llamada">'.$value['cellCliente'].'</a>' . '</span>
                 </div>
               </div>',
-              "2" => $value['tipo_comprobante'] ,
-              "3" => $value['correlativo'] ,
-              "4" => $value['venta_total'] ,
-              "5" => $value['nombre_completoTrabajador'] ,
-              "6" => $value['user_created_pago'] ,
-              "7" => $value['peridoPago'] ,
-              "8" => $value['fecha_emision'] ,
+              "2" => '<b>'.$value['tp_comprobante_v2'].'</b>' . ' <br> ' . $value['correlativo'],
+              "3" => $value['total_Pag_servicio'] ,
+              "4" => $value['nombre_completoTrabajador'] ,
+              "5" => $value['user_created_pago'] ,
+              "6" => $value['peridoPago'] ,
+              "7" => $value['fecha_emision'] ,
 
             );
           }

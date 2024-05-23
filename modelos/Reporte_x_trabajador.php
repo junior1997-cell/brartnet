@@ -53,16 +53,19 @@ class Reporte_x_trabajador
 		WHEN p1.tipo_persona_sunat = 'JURÍDICA' THEN p1.nombre_razonsocial 
 		ELSE '-'
 		END AS nombre_completoCliente, 
-		i.abreviatura as tipoDocumentoCliente, p1.numero_documento nroDocumentoCliente, p1.celular as cellCliente, 
+		i.abreviatura as tipoDocumentoCliente, 
+		CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS tp_comprobante_v2,
+		p1.numero_documento nroDocumentoCliente, p1.celular as cellCliente, 
 		p1.foto_perfil as foto_perfilCliente, pc.idpersona_cliente as idCliente, 
 		p2.nombre_razonsocial as nombre_completoTrabajador, 
 		pt.idpersona_trabajador as idTrabajador,tc.abreviatura as tipo_comprobante, v.user_created, 
 		u.idusuario, u.idpersona, pu.nombre_razonsocial as user_created_pago  ,
 		v.crear_enviar_sunat, v.es_cobro,  CONCAT(v.serie_comprobante,'-', v.numero_comprobante) as correlativo, v.fecha_emision, v.name_day, 
 		v.name_month, v.name_year, v.periodo_pago, v.periodo_pago_format, CONCAT(v.periodo_pago_month,' ', v.periodo_pago_year ) as peridoPago,
-		v.venta_total, v.observacion_documento, 
+		v.venta_total total_general,vd.subtotal_no_descuento as total_Pag_servicio , v.observacion_documento, 
 		v.estado, v.estado_delete, v.created_at, v.updated_at, v.user_trash, v.user_delete, v.user_created, v.user_updated
 		FROM venta as v
+    INNER JOIN venta_detalle as vd on v.idventa = vd.idventa
 		INNER JOIN sunat_c01_tipo_comprobante as tc on v.tipo_comprobante = tc.codigo
 		INNER JOIN persona_cliente as pc on v.idpersona_cliente= pc.idpersona_cliente
 		INNER JOIN persona_trabajador as pt on pc.idpersona_trabajador = pt.idpersona_trabajador
@@ -71,7 +74,8 @@ class Reporte_x_trabajador
 		INNER JOIN persona as p2 on pt.idpersona = p2.idpersona
 		INNER JOIN usuario as u on v.user_created = u.idusuario
 		INNER JOIN persona as pu on u.idpersona = pu.idpersona
-		WHERE v.estado='1' and v.estado_delete ='1' and v.es_cobro='SI'
+		WHERE v.estado='1' and v.estado_delete ='1' and v.es_cobro='SI' and vd.um_nombre='SERVICIOS'
+		
 		$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
 		ORDER BY v.idventa DESC";
 		return ejecutarConsulta($sql);
@@ -84,8 +88,7 @@ class Reporte_x_trabajador
 			$filtro_id_trabajador = "WHERE pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		} 
 		$sql = "SELECT LPAD(pt.idpersona_trabajador, 5, '0') as idtrabajador, pt.idpersona_trabajador, pt.idpersona,  per_t.nombre_razonsocial
-		FROM  venta as v
-    INNER JOIN  persona_cliente as pc on v.idpersona_cliente = pc.idpersona_cliente
+		FROM  persona_cliente as pc 	
 		INNER JOIN persona_trabajador as pt ON pt.idpersona_trabajador = pc.idpersona_trabajador
 		INNER JOIN persona as per_t ON per_t.idpersona = pt.idpersona
 		$filtro_id_trabajador
