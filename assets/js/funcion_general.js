@@ -869,7 +869,7 @@ function doc_view_icon(filename, color_class='', font_size_class='' ) {
   }else if ( extrae_extencion(filename) == "pdf" ) {    
     html = `<i class="far fa-file-pdf ${(color_class==''? 'text-danger': color_class)} ${font_size_class}"></i>`;  
   } else if (
-    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "jpe" ||
+    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "JPG" || extrae_extencion(filename) == "jpe" ||
     extrae_extencion(filename) == "jfif" || extrae_extencion(filename) == "gif" || extrae_extencion(filename) == "png" ||
     extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
     extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" || extrae_extencion(filename) == "avif" ) {
@@ -906,7 +906,7 @@ function identificando_archivo(filename, ruta, width = '100%', height = 'auto') 
   } else if ( extrae_extencion(filename) == "pfx" || extrae_extencion(filename) == "p12" ) {    
     return `<img src="../assets/img/default/pfx.jpg" alt="" width="50%" >`;
   } else if (
-    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "jpe" ||
+    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "JPG" || extrae_extencion(filename) == "jpe" ||
     extrae_extencion(filename) == "jfif" || extrae_extencion(filename) == "gif" || extrae_extencion(filename) == "png" ||
     extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
     extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" || extrae_extencion(filename) == "avif" ) {
@@ -927,7 +927,7 @@ function pdf_o_img(filename) {
     data = true;
 
   } else if (
-    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "jpe" ||
+    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "JPG" || extrae_extencion(filename) == "jpe" ||
     extrae_extencion(filename) == "jfif" || extrae_extencion(filename) == "gif" || extrae_extencion(filename) == "png" ||
     extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
     extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" || extrae_extencion(filename) == "avif" ) {
@@ -941,7 +941,7 @@ function pdf_o_img(filename) {
 function es_img(filename) {
   data = false;
   if (
-    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "jpe" ||
+    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "JPG" || extrae_extencion(filename) == "jpe" ||
     extrae_extencion(filename) == "jfif" || extrae_extencion(filename) == "gif" || extrae_extencion(filename) == "png" ||
     extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
     extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" || extrae_extencion(filename) == "avif") {

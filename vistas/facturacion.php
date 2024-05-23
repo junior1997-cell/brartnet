@@ -268,7 +268,7 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
 
             <!-- FORMULARIO -->
-            <div class="col-xxl-12 col-xl-12" id="div-formulario"  style="display: none;">              
+            <div class="col-xl-12" id="div-formulario"  style="display: none;">              
               <div class="card custom-card">
                 <div class="card-body">                    
                   
@@ -632,7 +632,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <label for="filtro_md_fecha_i" class="form-label">
                         <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_md_fecha_i();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
                           Fecha Inicio</label>
-                        <input type="date" class="form-control" name="filtro_md_fecha_i" id="filtro_md_fecha_i" value="<?php echo date("Y-m-d");?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">                        
+                        <input type="date" class="form-control" name="filtro_md_fecha_i" id="filtro_md_fecha_i" value="<?php echo date("Y-m-d");?>" onchange="cargando_search(); delay(function(){filtros_md()}, 50 );">                        
                       </div>
                     </div>
                     <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
@@ -641,7 +641,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <label for="filtro_md_fecha_f" class="form-label">
                           <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_md_fecha_f();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
                           Fecha Fin</label>
-                        <input type="date" class="form-control" name="filtro_md_fecha_f" id="filtro_md_fecha_f" value="<?php echo date("Y-m-d");?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">                        
+                        <input type="date" class="form-control" name="filtro_md_fecha_f" id="filtro_md_fecha_f" value="<?php echo date("Y-m-d");?>" onchange="cargando_search(); delay(function(){filtros_md()}, 50 );">                        
                       </div>
                     </div>
                     <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
@@ -652,7 +652,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           Cliente
                           <span class="charge_filtro_md_cliente"></span>
                         </label>
-                        <select class="form-control" name="filtro_md_cliente" id="filtro_md_cliente" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                        <select class="form-control" name="filtro_md_cliente" id="filtro_md_cliente" onchange="cargando_search(); delay(function(){filtros_md()}, 50 );" > <!-- lista de categorias --> </select>
                       </div>
                     </div>
                     <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
@@ -663,7 +663,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           Comprobante
                           <span class="charge_filtro_md_comprobante"></span>
                         </label>
-                        <select class="form-control" name="filtro_md_comprobante" id="filtro_md_comprobante" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                        <select class="form-control" name="filtro_md_comprobante" id="filtro_md_comprobante" onchange="cargando_search(); delay(function(){filtros_md()}, 50 );" > <!-- lista de categorias --> </select>
                       </div>
                     </div>
                  
@@ -673,11 +673,9 @@ if (!isset($_SESSION["user_nombre"])) {
                         <i class="ti ti-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu md-otros-filtros">                        
-                        <li><a class="dropdown-item md-o-f-ac" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ACEPTADA', '.o-f-ac')" ><i class="ri-check-fill align-middle me-1"></i> Solo aceptados</a></li>
-                        <li><a class="dropdown-item md-o-f-an" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ANULADO', '.o-f-an')" ><i class="ri-close-fill align-middle me-1"></i> Solo anulados</a></li>
-                        <li><a class="dropdown-item md-o-f-to active" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('', '.o-f-to')" ><i class="bi bi-border-all align-middle me-1"></i> Todos</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="bi bi-list-check"></i> Ver mas detalles</a></li>
+                        <li><a class="dropdown-item md-o-f-ac" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat_md('ACEPTADA', '.md-o-f-ac')" ><i class="ri-check-fill align-middle me-1"></i> Solo aceptados</a></li>
+                        <li><a class="dropdown-item md-o-f-an" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat_md('ANULADO', '.md-o-f-an')" ><i class="ri-close-fill align-middle me-1"></i> Solo anulados</a></li>
+                        <li><a class="dropdown-item md-o-f-to active" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat_md('', '.md-o-f-to')" ><i class="bi bi-border-all align-middle me-1"></i> Todos</a></li>                        
                       </ul>
                     </div>
                   </div>
@@ -687,7 +685,7 @@ if (!isset($_SESSION["user_nombre"])) {
                     <table class="table table-bordered w-100" style="width: 100%;" id="tabla-facturacion-detalle">
                       <thead>
                         <tr>
-                          <th class="text-center"><center>#</center></th>
+                          <th class="text-center"><center>ID</center></th>
                           <th class="text-center"><center>Cobro?</center></th>
                           <th class="text-center"><center>Emision</center></th>
                           <th>Periodo</th>
@@ -706,7 +704,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       <tbody class="fs-11" ></tbody>
                       <tfoot>
                         <tr>
-                          <th class="text-center"><center>#</center></th>
+                          <th class="text-center"><center>ID</center></th>
                           <th class="text-center"><center>Cobro?</center></th>
                           <th class="text-center"><center>Emision</center></th>
                           <th>Periodo</th>
@@ -1038,8 +1036,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js"></script>
-    <script src="scripts/js_facturacion.js"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.1"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.1"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

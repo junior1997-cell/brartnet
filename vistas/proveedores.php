@@ -364,10 +364,7 @@
         <?php include("template/scripts.php"); ?>
         <?php include("template/custom_switcherjs.php"); ?>    
 
-        <!-- Select2 Cdn -->
-        <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
-
-        <script src="scripts/proveedores.js"></script>
+        <script src="scripts/proveedores.js?version_jdl=1.1"></script>
         <script> $(function () { $('[data-bs-toggle="tooltip"]').tooltip(); }); </script>
 
       

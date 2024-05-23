@@ -30,6 +30,9 @@ async function init(){
   lista_select2("../ajax/facturacion.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_comprobante', null, '.charge_filtro_comprobante');
   lista_select2("../ajax/facturacion.php?op=select2_filtro_cliente", '#filtro_cliente', null, '.charge_filtro_cliente');
 
+  lista_select2("../ajax/facturacion.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_md_comprobante', null, '.charge_filtro_md_comprobante');
+  lista_select2("../ajax/facturacion.php?op=select2_filtro_cliente", '#filtro_md_cliente', null, '.charge_filtro_md_cliente');
+
   lista_select2("../ajax/facturacion.php?op=select2_cliente", '#idpersona_cliente', null);
   lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#nc_motivo_anulacion', '01');  
 
@@ -50,6 +53,9 @@ async function init(){
 
   $("#filtro_cliente").select2({ templateResult: templateCliente, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_comprobante").select2({ templateResult: templateComprobante, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+
+  $("#filtro_md_cliente").select2({ templateResult: templateCliente, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_md_comprobante").select2({ templateResult: templateComprobante, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
   $("#nc_tipo_comprobante").val(null).trigger('change'); // Limpiamos aqui para no generar un bucle infinito
 
@@ -892,10 +898,16 @@ function mayus(e) {
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   MAS DETALLES FACTURACION :::::::::::::::::::::::::::::::::::::::::::::
-
+var active_filtro_md = false;
+var filtro_estado_sunat_md = '';
 function view_mas_detalle() {
+  active_filtro_md = true;
+  var filtro_fecha_i      = $("#filtro_md_fecha_i").val();
+  var filtro_fecha_f      = $("#filtro_md_fecha_f").val();  
+  var filtro_cliente      = $("#filtro_md_cliente").select2('val') == null ? '' : $("#filtro_md_cliente").select2('val');
+  var filtro_comprobante  = $("#filtro_md_comprobante").select2('val')== null ? '' : $("#filtro_md_comprobante").select2('val');
   show_hide_form(3);
-  tbla_mas_detalle('', '', '', '', '')
+  tbla_mas_detalle(filtro_fecha_i, filtro_fecha_f, filtro_cliente, filtro_comprobante, filtro_estado_sunat_md)
 }
 
 function tbla_mas_detalle(filtro_fecha_i='', filtro_fecha_f='', filtro_cliente='', filtro_comprobante='', filtro_estado_sunat='') {
@@ -961,6 +973,42 @@ function tbla_mas_detalle(filtro_fecha_i='', filtro_fecha_f='', filtro_cliente='
       // { targets: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], visible: false, searchable: false, },
     ],
   }).DataTable();
+}
+
+function filtrar_solo_estado_sunat_md(estado, etiqueta) {  
+  $(".md-otros-filtros").find("li>a").removeClass("active");
+  $(".md-otros-filtros").find(`li>a${etiqueta}`).addClass("active"); 
+  filtro_estado_sunat_md = estado; filtros_md();
+}
+
+function filtros_md() {  
+  if (active_filtro_md == true) {    
+  
+    var filtro_fecha_i      = $("#filtro_md_fecha_i").val();
+    var filtro_fecha_f      = $("#filtro_md_fecha_f").val();  
+    var filtro_cliente      = $("#filtro_md_cliente").select2('val');
+    var filtro_comprobante  = $("#filtro_md_comprobante").select2('val');
+    
+    var nombre_filtro_fecha_i     = $('#filtro_md_fecha_i').val();
+    var nombre_filtro_fecha_f     = ' ─ ' + $('#filtro_md_fecha_f').val();
+    var nombre_filtro_cliente     = ' ─ ' + $('#filtro_md_cliente').find(':selected').text();
+    var nombre_filtro_comprobante = ' ─ ' + $('#filtro_md_comprobante').find(':selected').text();
+
+    // filtro de fechas
+    if (filtro_fecha_i == '' || filtro_fecha_i == 0 || filtro_fecha_i == null) { filtro_fecha_i = ""; nombre_filtro_fecha_i = ""; }
+    if (filtro_fecha_f == '' || filtro_fecha_f == 0 || filtro_fecha_f == null) { filtro_fecha_f = ""; nombre_filtro_fecha_f = ""; }
+
+    // filtro de cliente
+    if (filtro_cliente == '' || filtro_cliente == 0 || filtro_cliente == null) { filtro_cliente = ""; nombre_filtro_cliente = ""; }
+
+    // filtro de comprobante
+    if (filtro_comprobante == '' || filtro_comprobante == 0 || filtro_comprobante == null) { filtro_comprobante = ""; nombre_filtro_comprobante = ""; }
+
+    $('.buscando_tabla').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${filtro_fecha_i} ${filtro_fecha_f} ${nombre_filtro_cliente}...`);
+    //console.log(filtro_categoria, fecha_2, filtro_marca, comprobante);
+
+    tbla_mas_detalle(filtro_fecha_i, filtro_fecha_f, filtro_cliente, filtro_comprobante, filtro_estado_sunat_md);
+  }
 }
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -1177,6 +1225,11 @@ function reload_filtro_fecha_i(){ $('#filtro_fecha_i').val("").trigger("change")
 function reload_filtro_fecha_f(){ $('#filtro_fecha_f').val("").trigger("change") } 
 function reload_filtro_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_filtro_cliente", '#filtro_cliente', null, '.charge_filtro_cliente'); } 
 function reload_filtro_comprobante(){ lista_select2("../ajax/facturacion.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_comprobante', null, '.charge_filtro_comprobante'); }
+
+function reload_filtro_md_fecha_i(){ $('#filtro_md_fecha_i').val("").trigger("change") } 
+function reload_filtro_md_fecha_f(){ $('#filtro_md_fecha_f').val("").trigger("change") } 
+function reload_filtro_md_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_filtro_cliente", '#filtro_md_cliente', null, '.charge_filtro_md_cliente'); } 
+function reload_filtro_md_comprobante(){ lista_select2("../ajax/facturacion.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_md_comprobante', null, '.charge_filtro_md_comprobante'); }
 
 
 function printIframe(id) {

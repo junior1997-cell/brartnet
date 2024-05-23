@@ -715,15 +715,12 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>
 
-    <!-- Select2 Cdn -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <script src="scripts/plan.js"></script>
-    <script src="scripts/zona.js"></script>
-    <script src="scripts/centro_poblado.js"></script>
-    <script src="scripts/bancos.js"></script>
-    <script src="scripts/cargo_trabajador.js"></script>
-    <script src="scripts/categoria_incidencia.js"></script>
+    <script src="scripts/plan.js?version_jdl=1.1"></script>
+    <script src="scripts/zona.js?version_jdl=1.1"></script>
+    <script src="scripts/centro_poblado.js?version_jdl=1.1"></script>
+    <script src="scripts/bancos.js?version_jdl=1.1"></script>
+    <script src="scripts/cargo_trabajador.js?version_jdl=1.1"></script>
+    <script src="scripts/categoria_incidencia.js?version_jdl=1.1"></script>
 
 
 
