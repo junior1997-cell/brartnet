@@ -160,7 +160,7 @@ if (!isset($_SESSION["user_nombre"])) {
                     <div class="col-12 col-xl-5 col-xxl-5 ">
                       <div class="row">
                         <!-- card de montos -->
-                        <div class="col-xl-12 col-xxl-12">
+                        <div class="col-xl-12 col-xxl-12 p-5">
                           <div class="row">
                             <div class="col-xxl-6 col-lg-6 col-md-6">
                               <div class="card custom-card overflow-hidden">
