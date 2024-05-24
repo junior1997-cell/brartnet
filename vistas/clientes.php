@@ -647,7 +647,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/custom_switcherjs.php"); ?>
 
 
-    <script src="scripts/persona_cliente.js"></script>
+    <script src="scripts/persona_cliente.js?version_jdl=1.1"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

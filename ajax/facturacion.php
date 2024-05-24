@@ -314,7 +314,7 @@ if (!isset($_SESSION["user_nombre"])) {
           foreach($rspta['data'] as $key => $value){           
 
             $data[] = [
-              "0" => '<span class="text-nowrap fs-11">'. $value['idventa'].'</span>',
+              "0" => '<span class="text-nowrap fs-11">'. $value['idventa_v2'].'</span>',
               "1" => '<span class="text-nowrap fs-11">'. $value['es_cobro'].'</span>',
               "2" =>  $value['fecha_emision_format'],
               "3" => '<span class="text-nowrap fs-11">'. $value['periodo_pago_month_v2'] .'-'. $value['periodo_pago_year'].'</span>',
@@ -588,7 +588,7 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta = $facturacion->select2_filtro_cliente(); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value="' . $value['idpersona_cliente']  . '">' . $cont. '. '. $value['cliente_nombre_completo'] .' - '. $value['nombre_tipo_documento'] .': '. $value['numero_documento'] . '</option>';
+            $data .= '<option  value="' . $value['idpersona_cliente']  . '">' . $cont. '. '. $value['cliente_nombre_completo'] .' - '. $value['nombre_tipo_documento'] .': '. $value['numero_documento'] .' (' .$value['cantidad'].')'. '</option>';
             $cont++;
           }
   

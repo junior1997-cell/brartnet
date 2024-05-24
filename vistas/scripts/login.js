@@ -50,8 +50,11 @@ function validar_response(e) {
 			toastr_success('Bienvenido de vuelta.', 'Te damos la bienvenida de vuelta. ¡Esperamos que disfrutes tu experiencia!');
 			var redirecinando = varaibles_get();
 			$('.login-btn').html('Iniciar sesion').prop("disabled", false).removeClass('disabled btn-outline-dark').addClass('btn-primary');
+			
 			localStorage.setItem('nube_id_usuario', e.data.usuario.idusuario);
-
+			localStorage.setItem('nube_id_persona', e.data.usuario.idpersona);
+			localStorage.setItem('nube_id_cargo', e.data.usuario.cargo);
+			
 			if (e.data.sucursal == null) {
 				localStorage.setItem('nube_id_sucursal', 0);
 				localStorage.setItem('nube_nombre_sucursal', '');
@@ -64,7 +67,7 @@ function validar_response(e) {
 				localStorage.setItem('nube_direcion_sucursal', e.data.sucursal.domicilio_fiscal);
 			}
 
-			if (redirecinando.file == '' || redirecinando.file == null) {	$(location).attr("href", "escritorio.php");	} else { $(location).attr("href", redirecinando.file); }			      
+			// if (redirecinando.file == '' || redirecinando.file == null) {	$(location).attr("href", "escritorio.php");	} else { $(location).attr("href", redirecinando.file); }			      
 		}
 
 	} else {
