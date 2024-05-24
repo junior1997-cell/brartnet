@@ -1,4 +1,13 @@
 
+localStorage.setItem('nube_id_usuario', 0);
+localStorage.setItem('nube_id_persona', 0);
+localStorage.setItem('nube_cargo', '');
+localStorage.setItem('nube_id_sucursal', 0);
+localStorage.setItem('nube_nombre_sucursal', '');
+localStorage.setItem('nube_codigo_sucursal', '');
+localStorage.setItem('nube_direcion_sucursal', '');
+			
+
 $(function () {
   $("#frmAcceso").on("submit", function (e) {
     e.preventDefault();
@@ -53,7 +62,7 @@ function validar_response(e) {
 			
 			localStorage.setItem('nube_id_usuario', e.data.usuario.idusuario);
 			localStorage.setItem('nube_id_persona', e.data.usuario.idpersona);
-			localStorage.setItem('nube_id_cargo', e.data.usuario.cargo);
+			localStorage.setItem('nube_cargo', e.data.usuario.cargo);
 			
 			if (e.data.sucursal == null) {
 				localStorage.setItem('nube_id_sucursal', 0);
@@ -67,7 +76,7 @@ function validar_response(e) {
 				localStorage.setItem('nube_direcion_sucursal', e.data.sucursal.domicilio_fiscal);
 			}
 
-			// if (redirecinando.file == '' || redirecinando.file == null) {	$(location).attr("href", "escritorio.php");	} else { $(location).attr("href", redirecinando.file); }			      
+			if (redirecinando.file == '' || redirecinando.file == null) {	$(location).attr("href", "escritorio.php");	} else { $(location).attr("href", redirecinando.file); }			      
 		}
 
 	} else {

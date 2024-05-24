@@ -29,15 +29,14 @@ Class Ajax_general
   }
 
   // ══════════════════════════════════════ RENIEC WFACX ══════════════════════════════════════
-  public function datos_reniec_otro($ruc)	{ 
-    $token = 'apis-token-1.aTSI1U7KEuT-6bbbCguH-4Y8TI6KS73N';
-    $nndnii = $_GET['nrodni'];
+  public function datos_reniec_otro($dni)	{ 
+    $token = 'apis-token-1.aTSI1U7KEuT-6bbbCguH-4Y8TI6KS73N';    
 
     // Iniciar llamada a API
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-      CURLOPT_URL => 'https://api.apis.net.pe/v1/dni?numero=' . $nndnii,
+      CURLOPT_URL => 'https://api.apis.net.pe/v1/dni?numero=' . $dni,
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_MAXREDIRS => 2,

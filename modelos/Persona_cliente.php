@@ -22,25 +22,51 @@ class Cliente
 
 	//Implementamos un método para insertar registros
 	public function insertar_cliente(	$idtipo_persona, $idbancos, $idcargo_trabajador, $tipo_persona_sunat, $tipo_documento, $numero_documento, $nombre_razonsocial, 
-		$apellidos_nombrecomercial,	$fecha_nacimiento, $celular, $direccion, $distrito, $departamento, $provincia, $ubigeo, $correo,	$idpersona_trabajador,
-		$idzona_antena, $idselec_centroProbl, $idplan, $ip_personal, $fecha_afiliacion,  $fecha_cancelacion,	$usuario_microtick,$nota, 
-		$estado_descuento, $descuento,	$img_perfil	) {
+	$apellidos_nombrecomercial,	$fecha_nacimiento, $celular, $direccion, $distrito, $departamento, $provincia, $ubigeo, $correo,	$idpersona_trabajador,
+	$idzona_antena, $idselec_centroProbl, $idplan, $ip_personal, $fecha_afiliacion,  $fecha_cancelacion,	$usuario_microtick,$nota, 
+	$estado_descuento, $descuento,	$img_perfil	) {
 
-		$sql1 = "INSERT INTO persona(idtipo_persona, idbancos, idcargo_trabajador, tipo_persona_sunat, nombre_razonsocial, 
-		apellidos_nombrecomercial, tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, departamento, provincia, 
-		distrito, cod_ubigeo, correo,foto_perfil) 
-		VALUES ( '$idtipo_persona', '$idbancos', '$idcargo_trabajador', '$tipo_persona_sunat', '$nombre_razonsocial', 
-		'$apellidos_nombrecomercial', '$tipo_documento', '$numero_documento', '$fecha_nacimiento', '$celular', '$direccion', '$departamento', '$provincia', 
-		'$distrito', '$ubigeo', '$correo','$img_perfil')";
-		$inst_persona = ejecutarConsulta_retornarID($sql1, 'C');if ($inst_persona['status'] == false) {return $inst_persona;}
+		if ($tipo_documento != '0') {
+			$sql_0 = "SELECT p.* CASE 
+				WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+				WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+				ELSE '-'
+			END AS cliente_nombre_completo  FROM persona as p WHERE p.numero_documento = '$numero_documento'";
+			$buscando = ejecutarConsultaArray($sql_0);
+		}
 
-		$id = $inst_persona['data'];
+		if ( empty($buscando['data']) ) {
+			$sql1 = "INSERT INTO persona(idtipo_persona, idbancos, idcargo_trabajador, tipo_persona_sunat, nombre_razonsocial, 
+			apellidos_nombrecomercial, tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, departamento, provincia, 
+			distrito, cod_ubigeo, correo,foto_perfil) 
+			VALUES ( '$idtipo_persona', '$idbancos', '$idcargo_trabajador', '$tipo_persona_sunat', '$nombre_razonsocial', 
+			'$apellidos_nombrecomercial', '$tipo_documento', '$numero_documento', '$fecha_nacimiento', '$celular', '$direccion', '$departamento', '$provincia', 
+			'$distrito', '$ubigeo', '$correo','$img_perfil')";
+			$inst_persona = ejecutarConsulta_retornarID($sql1, 'C');if ($inst_persona['status'] == false) {return $inst_persona;}
 
-		$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador,idcentro_poblado, ip_personal, fecha_afiliacion, fecha_cancelacion,usuario_microtick,nota, descuento, estado_descuento) 
-		VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador','$idselec_centroProbl','$ip_personal', '$fecha_afiliacion', '$fecha_cancelacion', '$usuario_microtick','$nota', '$descuento', '$estado_descuento')";
-		$insertar =  ejecutarConsulta($sql2, 'C');	if ($inst_persona['status'] == false) {	return $inst_persona;	}
+			$id = $inst_persona['data'];
 
-		return $insertar;
+			$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador,idcentro_poblado, ip_personal, fecha_afiliacion, fecha_cancelacion,usuario_microtick,nota, descuento, estado_descuento) 
+			VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador','$idselec_centroProbl','$ip_personal', '$fecha_afiliacion', '$fecha_cancelacion', '$usuario_microtick','$nota', '$descuento', '$estado_descuento')";
+			$insertar =  ejecutarConsulta($sql2, 'C');	if ($inst_persona['status'] == false) {	return $inst_persona;	}
+
+			return $insertar;
+		} else {
+			$info_repetida = ''; 
+
+			foreach ($buscando['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+					<span class="font-size-15px text-danger"><b>Nombre: </b>'.$value['cliente_nombre_completo'].'</span><br>
+					<b>Distrito: </b>'.$value['distrito'].'<br>
+					<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+					<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+					<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+			return array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
+		}		
+
+		
 	}
 
 	//Implementamos un método para editar registros

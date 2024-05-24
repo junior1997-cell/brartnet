@@ -212,7 +212,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 col-xxl-4 mt-2" >
                                 <div class="form-group">
                                   <label class="form-label" for="tipo_documento">Tipo Doc. <sup class="text-danger">*</sup></label>
-                                  <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento"></select>
+                                  <select name="tipo_documento" id="tipo_documento" class="form-control" placeholder="Tipo de documento" ></select>
                                 </div>
                               </div>
 
@@ -222,7 +222,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <label class="form-label" for="numero_documento">N° de documento <sup class="text-danger">*</sup></label>
                                   <div class="input-group ">
                                     <input type="text" class="form-control" name="numero_documento" id="numero_documento" placeholder="" aria-describedby="icon-view-password">
-                                    <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito' );">
+                                    <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('#form-agregar-cliente', '_t', '#tipo_documento', '#numero_documento', '#nombre_razonsocial', '#apellidos_nombrecomercial', '#direccion', '#distrito' );">
                                       <i class='bx bx-search-alt' id="search_t"></i>
                                       <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
                                     </button>
