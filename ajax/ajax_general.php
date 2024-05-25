@@ -30,7 +30,13 @@ if (!isset($_SESSION["user_nombre"])) {
     case 'reniec_jdl':
       $dni = $_POST["dni"];
       $rspta = $ajax_general->datos_reniec_jdl($dni);
-      echo json_encode($rspta);
+      if ( isset($rspta['success']) ) {
+        echo json_encode($rspta);
+      }else{
+        $rspta = $ajax_general->datos_reniec_otro($dni);
+        echo json_encode($rspta);
+      }
+     
     break;
     // RENIEC WFACX
     case 'reniec_otro':
@@ -138,7 +144,7 @@ if (!isset($_SESSION["user_nombre"])) {
       $data = "";
       if ($rspta['status'] == true) {
         foreach ($rspta['data'] as $key => $reg) {
-          $data .= '<option value="' . $reg['nombre'] . '" data-iddistrito="' . $reg['idubigeo_distrito'] . '" iddistrito="' . $reg['idubigeo_distrito'] . '" iddepartamento= "' . $reg['idubigeo_departamento'] . '" ubigeo_inei="' . $reg['ubigeo_inei'] . '" latitud="' . $reg['latitud'] . '" longitud="' . $reg['longitud'] . '" Frontera="' . $reg['frontera'] . '" >' . $reg['nombre'] . '</option>';
+          $data .= '<option value="' . $reg['nombre'] . '" title="' . $reg['provincia'] . '" data-iddistrito="' . $reg['idubigeo_distrito'] . '"  iddistrito="' . $reg['idubigeo_distrito'] . '" iddepartamento= "' . $reg['idubigeo_departamento'] . '" ubigeo_inei="' . $reg['ubigeo_inei'] . '" latitud="' . $reg['latitud'] . '" longitud="' . $reg['longitud'] . '" Frontera="' . $reg['frontera'] . '" >' . $reg['nombre'] . '</option>';
         }
         $retorno = array(
           'status' => true,

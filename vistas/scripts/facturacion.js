@@ -94,8 +94,14 @@ function templateSerieNumero (state) {
 
 function show_hide_form(flag) {
 	if (flag == 1) {        // TABLA PRINCIPAL
-		$("#div-tabla").show();
-    $("#div-mini-reporte").show();
+    if (localStorage.getItem('nube_cargo') == 'TÉCNICO DE RED') {
+      $("#div-tabla").show().removeClass('col-xl-9').addClass('col-xl-12');
+      $("#div-mini-reporte").hide();
+    } else {
+      $("#div-tabla").show().removeClass('col-xl-12').addClass('col-xl-9');
+      $("#div-mini-reporte").show();      
+    }		
+    
 		$("#div-formulario").hide();
     $("#div-tabla-mas-detalles").hide();
 

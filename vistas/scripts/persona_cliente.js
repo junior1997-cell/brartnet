@@ -36,7 +36,7 @@ function init() {
   $("#filtro_p_all_zona_antena").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   
   $("#tipo_documento").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#distrito").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#distrito").select2({ templateResult: templateDistrito, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
   $("#idplan").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#idzona_antena").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -44,6 +44,13 @@ function init() {
 
   $("#tipo_persona_sunat").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#idselec_centroProbl").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+}
+
+function templateDistrito (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; } 
+  var $state = $(`<span class="fs-11" > ${state.text}</span><span class="fs-9" > (${state.title})</span>`);
+  return $state;
 }
 
 //Función limpiar
@@ -147,18 +154,27 @@ function wiev_tabla_formulario(flag) {
 
 }
 
-
 //nombres segun el tipo de doc
 $('#tipo_documento').change(function () {
-  var tipo = $(this).val();
+  var tipo = $(this).val() == '' ||  $(this).val() == null ? '' : $(this).val() ;
 
-  if (tipo !== null && tipo !== '' && tipo == '6') {
-    $('.nombre_razon').html('Razón Social <sup class="text-danger">*</sup>');
-    $('.apellidos_nombrecomer').html('Nombre comercial <sup class="text-danger">*</sup>');
-  } else {
+  if (tipo == '' || tipo == '0' ) { 
+    $("#numero_documento").rules('remove', 'required minlength');
     $('.nombre_razon').html('Nombres <sup class="text-danger">*</sup>');
     $('.apellidos_nombrecomer').html('Apellidos <sup class="text-danger">*</sup>');
-  }
+  }else if (tipo == '1') {
+    $("#numero_documento").rules('add', { required: true, minlength: 8, maxlength: 8, messages: { required: 'Campo requerido', minlength: 'Mínimo {0}', maxlength: 'Máximo {0}' } }); 
+    $('.nombre_razon').html('Nombres <sup class="text-danger">*</sup>');
+    $('.apellidos_nombrecomer').html('Apellidos <sup class="text-danger">*</sup>');
+  }else if (tipo == '6') {
+    $("#numero_documento").rules('remove', 'required');
+    $('.nombre_razon').html('Razón Social <sup class="text-danger">*</sup>');
+    $('.apellidos_nombrecomer').html('Nombre comercial <sup class="text-danger">*</sup>');
+    $("#numero_documento").rules('add', { required: true, minlength: 11, maxlength: 11, messages: { required: 'Campo requerido', minlength: 'Mínimo {0}', maxlength: 'Máximo {0}' } }); 
+
+  } 
+
+  $("#form-agregar-cliente").valid();
 
 });
 
@@ -615,7 +631,7 @@ $(function () {
 
       tipo_persona_sunat:   { required: true },
       tipo_documento:       { required: true, minlength: 1, maxlength: 2, },
-      numero_documento:     { required: true, minlength: 8, maxlength: 20, },
+      numero_documento:     { required: true, minlength: 8, maxlength: 20, number: true, },
       nombre_razonsocial:   { required: true, minlength: 2, maxlength: 200, },
       apellidos_nombrecomercial: { required: true, minlength: 4, maxlength: 200, },
       correo:    			      { minlength: 4, maxlength: 100, },       
@@ -634,7 +650,7 @@ $(function () {
       idplan:               { required: true },
       ip_personal:          { minlength: 9, maxlength: 45, },
       fecha_afiliacion:     { required: true },
-      fecha_cancelacion:     { required: true },
+      fecha_cancelacion:    { required: true },
       usuario_microtick:    { required: true, minlength: 4, maxlength: 60, },
       nota:                 { minlength: 4, maxlength: 400, },
 
@@ -864,3 +880,5 @@ function printIframe(id) {
   iframe.focus(); // Para asegurarse de que el iframe está en foco
   iframe.contentWindow.print(); // Llama a la función de imprimir del documento dentro del iframe
 }
+
+

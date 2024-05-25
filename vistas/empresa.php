@@ -130,7 +130,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <label for="documento" class="form-label">Número de Documento:</label>
                                 <div class="input-group">                            
                                   <input type="number" class="form-control" name="documento" id="documento" placeholder="" aria-describedby="icon-view-password">
-                                  <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('_t', '#tipo_doc', '#documento', '#razon_social', '#nomb_comercial', '#domicilio_fiscal', '#distrito' );" >
+                                  <button class="btn btn-primary" type="button" onclick="buscar_sunat_reniec('#formulario-empresa', '_t', '#tipo_doc', '#documento', '#razon_social', '#nomb_comercial', '#domicilio_fiscal', '#distrito' );" >
                                     <i class='bx bx-search-alt' id="search_t"></i>
                                     <div class="spinner-border spinner-border-sm" role="status" id="charge_t" style="display: none;"></div>
                                   </button>

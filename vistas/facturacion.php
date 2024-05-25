@@ -67,9 +67,9 @@ if (!isset($_SESSION["user_nombre"])) {
 
           <!-- Start::row-1 -->
           <div class="row">     
-
+            
             <!-- TABLA - FACTURA -->
-            <div class="col-xl-9" id="div-tabla">
+            <div class="<?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? 'col-xl-12' : 'col-xl-9'; ?>" id="div-tabla">
               <div class="card custom-card">
                 <div class="card-header justify-content-between">
                   
@@ -168,7 +168,7 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
 
             <!-- REPORTE- MINI -->
-            <div class="col-xl-3" id="div-mini-reporte">
+            <div class="col-xl-3" id="div-mini-reporte" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? 'style="display: none;"' : '' ; ?> >
               <div class="card custom-card">
                 <div class="card-body p-0">
                   <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-top">

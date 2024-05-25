@@ -960,7 +960,7 @@ function reload_zoom() {
 
 /*  ══════════════════════════════════════════ - A P I S - ══════════════════════════════════════════ */
 // Buscar Reniec SUNAT
-function buscar_sunat_reniec(input='', tipo_documento, dniruc, nombre, apellido, direccion, distrito, titular) {
+function buscar_sunat_reniec(formulario= '', input='', tipo_documento, dniruc, nombre, apellido, direccion, distrito, titular) {
   //console.log(input);
 
   $(`#search${input}`).hide(); $(`#charge${input}`).show();
@@ -1000,7 +1000,7 @@ function buscar_sunat_reniec(input='', tipo_documento, dniruc, nombre, apellido,
             toastr_success('Éxito!!!', 'Persona encontrada!!!', 700);
           }
         }
-        
+        $(formulario).valid();
       });
     } else {
 
@@ -1063,7 +1063,8 @@ function buscar_sunat_reniec(input='', tipo_documento, dniruc, nombre, apellido,
               $(distrito).val(api_distrito).trigger('change');
             }
           }
-        }          
+        } 
+        $(formulario).valid();         
       });
     } else {
 
@@ -1072,17 +1073,19 @@ function buscar_sunat_reniec(input='', tipo_documento, dniruc, nombre, apellido,
       $(nombre).val(''); $(apellido).val('');  $(direccion).val(''); $(titular).val('');      
 
       toastr_info('Alerta!!', 'Asegurese de que el RUC tenga 11 dígitos!!!', 700);
+      $(formulario).valid();
     }
   } else if (tipo_doc == "0" || tipo_doc == "4" || tipo_doc == "7") {    
 
     $(`#search${input}`).show();  $(`#charge${input}`).hide();
     toastr_info('Alerta!!', 'No necesita hacer consulta.', 700);
-
+    $(formulario).valid();
   } else {
 
     $(tipo_documento).addClass("is-invalid");
     $(`#search${input}`).show(); $(`#charge${input}`).hide();    
     toastr_error('Error!!', 'Selecione un tipo de documento.', 700);
+    $(formulario).valid();
   }
 }
 
