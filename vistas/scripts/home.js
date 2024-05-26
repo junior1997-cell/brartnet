@@ -122,13 +122,13 @@ function mostrar_planes() {
       e.data.forEach((val, key)=> {
         var Instalacion = val.idplan == 1 ? "Instalación por zona de cobertura" : "Instalación";
 
-        var codigoHTML = `<div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border border-2 rounded-4">
+        var codigoHTML = `<div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 border-end border-inline-end-dashed">
         <div class="p-4">
           <h6 class="fw-semibold text-center">${val.plan}</h6>
           <div class="py-3 d-flex align-items-center justify-content-center">
-            <i class="ri-router-line la-4x text-primary"></i>
+            <i class="bx bx-broadcast bx-burst la-4x text-primary"></i>
             <div class="text-end ms-5">
-              <p class="fs-25 fw-semibold mb-0">S/ ${val.costo}</p>
+              <p class="fs-25 fw-semibold mb-0">S/ ${ parseFloat(val.costo) }</p>
               <p class="text-muted fs-11 fw-semibold mb-0">por mes</p>
             </div>
           </div>
@@ -136,7 +136,7 @@ function mostrar_planes() {
           ${val.landing_caracteristica}
           </div>
           <div class="d-grid">
-            <button class="btn btn-primary-light btn-wave">Empezar</button>
+            <a href="https://wa.me/+51929676935?text=Deseo%20cotizar%20los%20planes%20de%20internet" target="_blank" class="btn btn-primary-light btn-wave">Empezar</a>
           </div>
         </div>
       </div>`;
@@ -199,13 +199,65 @@ $(document).ready(function () {
   init();
 });
 
+$('#precio-anio').on('click', function () {
+  toastr_warning('No Disponible', 'Este plan no está disponible en este momento, tenga paciencia.', 700);
+});
 
-//  :::::::::::::::: F O R M A  P A G O   :::::::::::::::: 
-function banner_forma_pago(){
-  
 
+//  :::::::::::::::: ENVIAR MENSAJE WHATSAPP   :::::::::::::::: 
+function enviar_mensaje_whatsapp(){  
+  var nombre  = $('#contact_address_name').val();
+  var phone   = $('#contact_address_phone').val();
+  var address = $('#contact_address_address').val();
+  var message = $('#contact_address_message').val();
+
+  const phone_wa    = '+51929676935'; // Reemplaza con el número de teléfono en formato internacional
+  const message_wa  = `*Nombre:*%20${nombre}%0A*Cel:*%20${phone}%0A*Direc:*%20${address}%0A*Mensaje:*%20${message}`;
+ 
+  const whatsappUrl = `https://wa.me/${phone_wa}?text=${message_wa}`;  // Construir la URL de WhatsApp
   
+  const a = document.createElement('a'); // Crear un elemento <a> dinámicamente
+  a.href = whatsappUrl;
+  a.target = '_blank';  
+  a.click(); // Simular un clic en el enlace
 }
+
+
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
+$(function () {
+  $("#form-contactar-home").validate({
+    rules: {
+      contact_address_name: { required: true, maxlength:100 },
+      contact_address_phone: { required: true, number:true, minlength: 9, maxlength:9},
+      contact_address_address: { required: true},
+      contact_address_message: { maxlength: 200},
+    },
+    messages: {
+      contact_address_name: { required: "Campo requerido",maxlength: "Máximo {0}" },
+      contact_address_phone: { required: "Campo requerido",minlength: "Mínimo {0}", maxlength:"Máximo {0}" },
+      contact_address_address: { required: "Campo requerido" },
+      contact_address_message: { maxlength: "Máximo {0}" },      
+    },
+    errorElement: "span",
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (e) {
+      window.scroll({ top: document.body.scrollHeight, left: document.body.scrollHeight, behavior: "smooth", });
+      enviar_mensaje_whatsapp(e);
+    },
+  });
+});
 
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

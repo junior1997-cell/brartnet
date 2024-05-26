@@ -25,17 +25,15 @@ class Cliente
 	$apellidos_nombrecomercial,	$fecha_nacimiento, $celular, $direccion, $distrito, $departamento, $provincia, $ubigeo, $correo,	$idpersona_trabajador,
 	$idzona_antena, $idselec_centroProbl, $idplan, $ip_personal, $fecha_afiliacion,  $fecha_cancelacion,	$usuario_microtick,$nota, 
 	$estado_descuento, $descuento,	$img_perfil	) {
+		
+		$sql_0 = "SELECT p.*, CASE 
+			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+			ELSE '-'
+		END AS cliente_nombre_completo  FROM persona as p WHERE p.numero_documento = '$numero_documento'";
+		$buscando = ejecutarConsultaArray($sql_0);		
 
-		if ($tipo_documento != '0') {
-			$sql_0 = "SELECT p.* CASE 
-				WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-				WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
-				ELSE '-'
-			END AS cliente_nombre_completo  FROM persona as p WHERE p.numero_documento = '$numero_documento'";
-			$buscando = ejecutarConsultaArray($sql_0);
-		}
-
-		if ( empty($buscando['data']) ) {
+		if ( empty($buscando['data']) || $tipo_documento == '0' ) {
 			$sql1 = "INSERT INTO persona(idtipo_persona, idbancos, idcargo_trabajador, tipo_persona_sunat, nombre_razonsocial, 
 			apellidos_nombrecomercial, tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, departamento, provincia, 
 			distrito, cod_ubigeo, correo,foto_perfil) 

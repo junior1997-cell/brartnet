@@ -31,9 +31,13 @@ if (!isset($_SESSION["user_nombre"])) {
       $dni = $_POST["dni"];
       $rspta = $ajax_general->datos_reniec_jdl($dni);
       if ( isset($rspta['success']) ) {
-        echo json_encode($rspta);
+        if ($rspta['success'] === true) {
+          echo json_encode($rspta);
+        } else {
+          $rspta = $ajax_general->datos_reniec_otro($dni);
+          echo json_encode($rspta);
+        }        
       }else{
-        $rspta = $ajax_general->datos_reniec_otro($dni);
         echo json_encode($rspta);
       }
      

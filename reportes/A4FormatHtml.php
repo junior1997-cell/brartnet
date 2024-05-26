@@ -193,6 +193,13 @@ if (!isset($_SESSION["user_nombre"])) {
     .table-footer { width: 40%; float: right; font-size: 12px; padding: 8px; }
     .text-nowrap { white-space: nowrap !important; }
 
+    .lds-spinner {
+      display: block;
+      margin: auto;
+      width: 24px;
+      height: 24px;
+    }
+
     /* min-width = como minimo ─|──────── */
     @media (min-width: 992px) {
 
@@ -263,11 +270,22 @@ if (!isset($_SESSION["user_nombre"])) {
       </a>
     </button>
     <br>
-    <button type="button" class="btn btn-warning p-1 mb-2 m-l-5px w-40px" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="decargar_imagen();" style="cursor: pointer;">
+    <button type="button" style="margin-bottom: 5px; cursor: pointer;" class="btn btn-warning p-1 mb-2 m-l-5px w-40px" id="btn-descargar" data-bs-toggle="tooltip" title="Descargar imagen" onclick="decargar_imagen();" style="cursor: pointer;">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image">
         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
         <circle cx="8.5" cy="8.5" r="1.5"></circle>
         <polyline points="21 15 16 10 5 21"></polyline>
+      </svg>
+    </button>  
+    <br>  
+    <button type="button" style="margin-bottom: 5px; cursor: pointer;" class="btn btn-outline-danger p-1 mb-2 m-l-5px w-40px" id="btn-compartir" data-bs-toggle="tooltip" title="Compartir Imagen" onclick="compartir_imagen();">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2">
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
       </svg>
     </button>      
   </div>   
@@ -430,15 +448,69 @@ if (!isset($_SESSION["user_nombre"])) {
 
   <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
   <script>
-    function decargar_imagen() {
-      
-      var titulo = document.title; // Obtener el título de la página
 
+    const mi_btn_compartir = document.getElementById("btn-compartir");
+    const mi_btn_descargar = document.getElementById("btn-descargar");
+    const spinnerSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-spinner" style="background: none;"><circle cx="50" cy="50" fill="none" stroke="#000" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138" transform="rotate(180 50 50)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="0 50 50;360 50 50"></animateTransform></circle></svg>`;    
+    const sharedSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2"><circle cx="18" cy="5" r="3"></circle> <circle cx="6" cy="12" r="3"></circle> <circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line> <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>`;      
+    const imgenSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`;              
+
+    var titulo = document.title; // Obtener el título de la página
+
+    // ══════════════════════════════════════ DESCARGAR FORMATO IMAGEN ══════════════════════════════════════
+
+    function decargar_imagen() {       
+
+      mi_btn_descargar.innerHTML = spinnerSVG; // Agregar el SVG del spinner al div
+      setTimeout(function() {
+        extraccion_de_datos_imagen();
+      }, 2000); // 3000 milisegundos = 3 segundos          
+    }
+
+    function extraccion_de_datos_imagen() {
       domtoimage.toJpeg(document.getElementById('iframe-img-descarga'), { quality: 0.95 }).then(function (dataUrl) {
         var link = document.createElement('a');
         link.download = `${titulo}.jpeg`;
         link.href = dataUrl;
         link.click();
+        mi_btn_descargar.innerHTML = imgenSVG; // Agregar el SVG del spinner al div
+      });
+    }
+
+    // ══════════════════════════════════════ COMPARTIR FORMATO IMAGEN ══════════════════════════════════════
+    function compartir_imagen() {                           
+      mi_btn_compartir.innerHTML = spinnerSVG; // Agregar el SVG del spinner al div
+      setTimeout(function() {
+        extraccion_de_datos_compartir();
+      }, 2000); // 3000 milisegundos = 3 segundos
+    }
+
+    function extraccion_de_datos_compartir() {
+
+      const fileName = "comprobante.png";          
+
+      domtoimage.toBlob(document.getElementById('iframe-img-descarga'), { quality: 0.95 }).then(function (dataBlob) {           
+        
+        const blob = dataBlob;
+        const file = new File([blob], fileName, { type: blob.type });
+
+        // Verificar si la API de Web Share es compatible y compartir la imagen
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            title: `Comprobante: ${titulo}`,
+            text: 'Guarda este comprobante en un lugar seguro.',
+            files: [file]
+          }).then(() => {
+            console.log('Compartido exitosamente');
+            mi_btn_compartir.innerHTML = sharedSVG; // Agregar el SVG del spinner al div
+          }).catch((error) => {
+            console.error('Error al compartir:', error);
+            mi_btn_compartir.innerHTML = sharedSVG; // Agregar el SVG del spinner al div
+          });
+        } else {
+          alert('La API de compartir no es soportada en este navegador.');
+          mi_btn_compartir.innerHTML = sharedSVG; // Agregar el SVG del spinner al div
+        }
       });
     }
   </script>

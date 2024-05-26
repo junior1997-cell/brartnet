@@ -7,7 +7,7 @@
 
   <title>.:: Boleta de Venta Electrónica - Impresion ::.</title>
   <!-- Bootstrap Css -->
-	<link id="style" href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link id="style" href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Style Css -->
   <link href="../assets/css/styles.min.css" rel="stylesheet">
   <link href="../assets/css/style_new.css" rel="stylesheet">
@@ -22,11 +22,11 @@
     /* tambi�n puedes poner display:none */
   </style>
 
-  
+
 </head>
 
 <body>
-  
+
 
   <table class="comprobante" align="center" cellspacing="5" width="100%">
     <tbody>

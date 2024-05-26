@@ -2,7 +2,15 @@
 <html lang="es" dir="ltr" data-nav-layout="horizontal" data-nav-style="menu-click" data-menu-position="fixed" data-theme-mode="light" style="--primary-rgb: 58, 88, 146;">
 
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TXTGYFYT8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
+    gtag('config', 'G-4TXTGYFYT8');
+  </script>
   <!-- Meta Data -->
   <meta charset="UTF-8">
   <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
@@ -452,23 +460,23 @@
               <div class="text-lg-end">
                 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                   <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide-to="0" class="active" aria-current="true"
-                        aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
                   </div>
                   <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="assets/images/media/landing/3.png" class="d-block w-100" alt="...">
+                      <img src="assets/modulo/home/beneficio/img-1.jpg" class="d-block w-100" alt="...">
                     </div>
                     <div class="carousel-item">
-                        <img src="assets/images/media/landing/2.jpg" class="d-block w-100" alt="...">
+                      <img src="assets/modulo/home/beneficio/img-2.jpg" class="d-block w-100" alt="...">
                     </div>
                     <div class="carousel-item">
-                        <img src="assets/images/media/landing/1.png" class="d-block w-100" alt="...">
+                      <img src="assets/modulo/home/beneficio/img-3.jpg" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                      <img src="assets/modulo/home/beneficio/img-4.png" class="d-block w-100" alt="...">
                     </div>
                   </div>
                   <button class="carousel-control-prev" type="button"
@@ -527,7 +535,7 @@
           <div class="row">
 
 
-          <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mx-auto">
               <div class="card custom-card overlay-card">
                 <img src="assets/modulo/home/cobertura/demo-tocache.jpg" class="card-img" alt="..." >
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center" >
@@ -540,7 +548,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mx-auto">
               <div class="card custom-card overlay-card">
                 <img src="assets/modulo/home/cobertura/demo-shunte.jpg" class="card-img" alt="...">
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
@@ -553,7 +561,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mx-auto">
               <div class="card custom-card overlay-card">
                 <img src="assets/modulo/home/cobertura/demo-polvora.jpg" class="card-img" alt="..." style="height: 100;">
                 <div class="card-img-overlay p-0 d-flex justify-content-center align-items-center">
@@ -645,8 +653,23 @@
               <p class="text-muted fs-15 mb-5 fw-normal">Nuestro equipo está compuesto por empleados altamente calificados que trabajan arduamente para ofrecer un servicio de calidad y excelencia.</p>
             </div>
           </div>
-          <div class="row" id="tecnico_redes">
-            <!-- Lista de trabajadores :: tecnicos de redes -->
+          <div class="row" >
+            <div class="col-xxl-3 col-xl-3 col-lg-6 col-md-6 col-sm-12 mx-auto">
+              <div class="card custom-card text-center team-card ">
+                <div class="card-body p-4 ">
+                  <span class="avatar avatar-xxl avatar-rounded mb-3 team-avatar">
+                    <img src="assets/images/brand-logos/logo-short.png" alt="">
+                  </span>
+                  <p class="fw-semibold fs-17 mb-0 text-default">Corporacion Brartnet</p>
+                  <span class="text-muted fs-14 text-primary fw-semibold">Empresa</span>
+                  <p class="text-muted text-justify mt-2 fs-13">
+                    Queremos conocer sus necesidades y optimizar su experiencia con nuestros servicios de internet. Nuestro equipo está listo para ofrecer soluciones personalizadas.                  </p>
+                  <div class="mt-2">
+                    <a href="https://wa.me/+51929676935?text=Deseo%20cotizar%20los%20planes%20de%20internet" class="btn btn-light text-success" target="_blank"><i class="bi bi-whatsapp"></i> Contacto</a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -665,32 +688,24 @@
           <div class="d-flex justify-content-center mb-4">
             <ul class="nav nav-tabs mb-3 tab-style-6 bg-primary-transparent" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pricing-monthly" data-bs-toggle="tab" data-bs-target="#pricing-monthly-pane" type="button" role="tab" aria-controls="pricing-monthly-pane" aria-selected="true">Pago Mensual</button>
+                <button class="nav-link active" id="precio-mensual" data-bs-toggle="tab" data-bs-target="#precio-mensual-pane" type="button" role="tab" aria-controls="precio-mensual-pane" aria-selected="true">Pago Mensual</button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pricing-yearly" data-bs-toggle="tab" data-bs-target="#pago-anual" type="button" role="tab" aria-controls="pago-anual" aria-selected="true">Pago Anual</button>
+                <button class="nav-link" id="precio-anio" data-bs-toggle="tab" data-bs-target="#precio-anio-pane" type="button" role="tab" aria-controls="precio-anio-pane" aria-selected="false">Pago Anual</button>
               </li>
             </ul>
           </div>
           <div class="card custom-card overflow-hidden shadow-none">
             <div class="card-body p-0">
               <div class="tab-content" id="myTabContent">
-                <div class="tab-pane show active p-0" id="pricing-monthly-pane" role="tabpanel" aria-labelledby="pricing-monthly" tabindex="0">
+                <div class="tab-pane show active p-0" id="precio-mensual-pane" role="tabpanel" aria-labelledby="precio-mensual" tabindex="0">
                   <div class="row" id="planes">
 
                   </div>
                 </div>
 
-                <div class="toast-container position-fixed top-0 end-0 p-3" id="pricing-yearly-pane">
-                  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header text-default">
-                        <img class="bd-placeholder-img rounded me-2" src="assets/images/brand-logos/favicon.ico" alt="...">
-                        <strong class="me-auto">Ynex</strong>
-                        <small>11 mins ago</small>
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">Hello, world! This is a toast message.</div>
-                  </div>
+                <div class="tab-pane p-0" id="precio-anio-pane" role="tabpanel" aria-labelledby="precio-anio" tabindex="0">
+                 
                 </div>
 
               </div>
@@ -746,55 +761,62 @@
             <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
               <div class="card custom-card border shadow-none">
                 <div class="card-body p-0">
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d30444.274596168965!2d78.54114692513858!3d17.48198883339408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d17.4886524!2d78.5495041!4m5!1s0x3bcb9c7ec139a15d%3A0x326d1c90786b2ab6!2sspruko%20technologies!3m2!1d17.474805099999998!2d78.570258!5e0!3m2!1sen!2sin!4v1670225507254!5m2!1sen!2sin" height="365" style="border:0;width:100%" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m24!1m12!1m3!1d3902.838729933131!2d-76.51895016867427!3d-8.190922250647905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m9!3e0!4m3!3m2!1d-8.188871599999999!2d-76.51066329999999!4m3!3m2!1d-8.1910644!2d-76.5189706!5e1!3m2!1sen!2sin!4v1716609791861!5m2!1sen!2sin"  height="365" style="border:0;width:100%" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
               </div>
             </div>
             <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12">
               <div class="card custom-card  overflow-hidden section-bg border overflow-hidden shadow-none">
                 <div class="card-body">
-                  <div class="row gy-3 mt-2 px-3">
-                    <div class="col-xl-6">
-                      <div class="row gy-3">
-                        <div class="col-xl-12">
-                          <label for="contact-address-name" class="form-label ">Nombre Completo :</label>
-                          <input type="text" class="form-control " id="contact-address-name" placeholder="ingrese su nombre">
-                        </div>
-                        <div class="col-xl-12">
-                          <label for="contact-address-phone" class="form-label ">N° Teléfono :</label>
-                          <input type="text" class="form-control " id="contact-address-phone" placeholder="ingrese su teléfono">
-                        </div>
-                        <div class="col-xl-12">
-                          <label for="contact-address-address" class="form-label ">dirección :</label>
-                          <textarea class="form-control " id="contact-address-address" rows="1"></textarea>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xl-6">
-                      <label for="contact-address-message" class="form-label ">Mensaje :</label>
-                      <textarea class="form-control " id="contact-address-message" rows="8"></textarea>
-                    </div>
-                    <div class="col-xl-12">
-                      <div class="d-flex  mt-4 ">
-                        <div class="">
-                          <div class="btn-list">
-                            <button class="btn btn-icon btn-primary-light btn-wave">
-                              <i class="ri-facebook-line fw-bold"></i>
-                            </button>
-                            <button class="btn btn-icon btn-primary-light btn-wave">
-                              <i class="ri-twitter-line fw-bold"></i>
-                            </button>
-                            <button class="btn btn-icon btn-primary-light btn-wave">
-                              <i class="ri-instagram-line fw-bold"></i>
-                            </button>
+                  <form name="form-contactar-home" id="form-contactar-home" method="POST">
+                    <div class="row gy-3 mt-2 px-3">
+                      
+                      <div class="col-xl-6">
+                        <div class="row gy-2">
+                          <div class="col-xl-12">
+                            <div class="form-group">
+                              <label for="contact_address_name" class="form-label ">Nombre Completo :</label>
+                              <input type="text" name="contact_address_name" id="contact_address_name" class="form-control " placeholder="ingrese su nombre">
+                            </div>                            
+                          </div>
+                          <div class="col-xl-12">
+                            <div class="form-group">
+                              <label for="contact_address_phone" class="form-label ">N° Teléfono :</label>
+                              <input type="tel" name="contact_address_phone" id="contact_address_phone" class="form-control " placeholder="ingrese su teléfono">
+                            </div>                            
+                          </div>
+                          <div class="col-xl-12">
+                            <div class="form-group">
+                              <label for="contact_address_address" class="form-label ">Dirección :</label>
+                              <textarea name="contact_address_address" id="contact_address_address" class="form-control " rows="2"></textarea>
+                            </div>                            
                           </div>
                         </div>
-                        <div class="ms-auto">
-                          <button class="btn btn-primary  btn-wave">Enviar Mensaje</button>
-                        </div>
                       </div>
+                      <div class="col-xl-6">
+                        <div class="form-group">
+                          <label for="contact_address_message" class="form-label ">Mensaje :</label>
+                          <textarea name="contact_address_message" id="contact_address_message" class="form-control " rows="8"></textarea>
+                        </div>
+                       
+                      </div>
+                      
+                      <div class="col-xl-12">
+                        <div class="d-flex  mt-4 ">
+                          <div class="">
+                            <div class="btn-list">
+                              <button type="button" class="btn btn-icon btn-primary-light btn-wave"><i class="ri-facebook-line fw-bold"></i></button>
+                              <button type="button" class="btn btn-icon btn-primary-light btn-wave"><i class="ri-twitter-line fw-bold"></i></button>
+                              <button type="button" class="btn btn-icon btn-primary-light btn-wave"><i class="ri-instagram-line fw-bold"></i></button>
+                            </div>
+                          </div>
+                          <div class="ms-auto">
+                            <button type="submit" class="btn btn-primary  btn-wave">Enviar Mensaje</button>
+                          </div>
+                        </div>
+                      </div>                      
                     </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -933,22 +955,7 @@
         </div>
       </div>
     </div>
-    <!-- End Modal Forma de Pago -->
-
-    <!-- :::::::::::::::::::::::::::: Toast :::::::::::::::::::::::::::: -->
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-      <div id="pago-anual" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header text-default">
-          <img class="bd-placeholder-img rounded me-2" src="assets/images/brand-logos/logo-short.png" alt="...">
-          <strong class="me-auto">Pago Anual</strong>
-          <small>1 seg</small>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body bg-white"> Este plan no está disponible en este momento, tenga paciencia.</div>
-      </div>
-
-    </div>
-    <!-- /.toast-container -->
+    <!-- End Modal Forma de Pago -->    
 
     <!-- :::::::::::::::::::::::::::: Modal Login - Usiario :::::::::::::::::::::::::::: -->
     <div class="modal fade" id="login-cliente" tabindex="-1" aria-labelledby="login-clienteLabel" aria-hidden="true">
@@ -1046,10 +1053,10 @@
   <!-- Toastr -->
   <script src="assets/libs/toastr/toastr.min.js"></script>
 
-  <script src="assets/js/funcion_crud.js?version_jdl=1.1"></script>
+  <script src="assets/js/funcion_crud.js?version_jdl=1.3"></script>
 
-  <script src="vistas/scripts/home.js?version_jdl=1.1"></script>
-  <script src="vistas/scripts/login_cliente.js?version_jdl=1.1"></script>
+  <script src="vistas/scripts/home.js?version_jdl=1.3"></script>
+  <script src="vistas/scripts/login_cliente.js?version_jdl=1.3"></script>
 
   <script>
     $(document).on('ready', function () {

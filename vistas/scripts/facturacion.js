@@ -255,7 +255,7 @@ function limpiar_form_venta(){
 }
 
 function listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente, filtro_comprobante, filtro_estado_sunat){
-  console.log('holaaaaaaaaaaaaaa');
+  
   tabla_principal_facturacion = $("#tabla-ventas").dataTable({
     // responsive: true, 
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
