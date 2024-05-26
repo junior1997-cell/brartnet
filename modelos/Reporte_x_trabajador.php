@@ -81,6 +81,26 @@ class Reporte_x_trabajador
 		return ejecutarConsulta($sql);
 	}
 
+	public function tabla_cliente_x_c($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago) {
+		$sql="SELECT 	pc.idpersona_cliente, pc.idpersona, pc.idpersona_trabajador ,	
+					CASE 
+						WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+						WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+					ELSE '-'
+					END AS nombre_completoCliente, pc.idplan, pl.nombre as nombre_plan, pl.costo, pc.fecha_cancelacion,i.abreviatura as tipoDocumentoCliente, 
+					 p.celular as cellCliente, p.foto_perfil as foto_perfilCliente,p.numero_documento as nroDocumentoCliente
+					FROM persona_cliente AS pc
+					LEFT JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente AND v.name_year='$filtro_anio_pago' AND v.name_month='$filtro_p_all_mes_pago'
+					JOIN persona_trabajador as pt ON pc.idpersona_trabajador = pt.idpersona_trabajador
+					INNER JOIN plan AS pl ON pc.idplan = pl.idplan
+					INNER JOIN persona as p ON pc.idpersona = p.idpersona
+					INNER JOIN persona as p1 ON pt.idpersona = p1.idpersona
+					INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
+					WHERE v.idpersona_cliente IS NULL AND pt.idpersona_trabajador ='$filtro_trabajador'
+					AND PC.estado='1' AND PC.estado_delete = '1';";
+					return ejecutarConsulta($sql);
+	}
+
 	// ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════
 	public function select2_filtro_trabajador()	{
 		$filtro_id_trabajador  = '';
