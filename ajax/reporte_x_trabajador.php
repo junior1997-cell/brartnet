@@ -66,6 +66,55 @@ if (!isset($_SESSION["user_nombre"])) {
               "5" => $value['user_created_pago'] ,
               "6" => $value['peridoPago'] ,
               "7" => $value['fecha_emision'] ,
+              "8" => $value['nombre_completoCliente'] ,
+              "9" => $value['tipoDocumentoCliente'] . ' : ' . $value['nroDocumentoCliente'] ,
+              "10" => $value['cellCliente'] ,
+
+            );
+          }
+          $results = [
+            'status'=> true,
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode($results, true);
+        } else {
+          echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
+        }
+
+      break;
+
+      case 'tabla_cliente_x_c' : 
+        $rspta = $reporte_x_trabajador->tabla_cliente_x_c($_GET["filtro_trabajador"],$_GET["filtro_anio_pago"],$_GET["filtro_p_all_mes_pago"]);
+        //Vamos a declarar un array
+        $data = [];
+        $cont = 1;
+
+        if ($rspta['status'] == true) {
+          //dia_cancelacion
+          foreach ($rspta['data'] as $key => $value) {
+
+            $imagen_perfil = empty($value['foto_perfilCliente']) ? 'no-perfil.jpg' :   $value['foto_perfilCliente'];
+
+            $data[] = array(
+              "0" => $cont++,
+              "1" => '<div class="d-flex flex-fill align-items-center">
+              <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
+                <span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\')"> </span>
+              </div>
+              <div>
+                <span class="d-block fw-semibold text-primary">' . $value['nombre_completoCliente'] . '</span>
+                <span class="text-muted text-nowrap">' . $value['tipoDocumentoCliente'] . ' : ' . $value['nroDocumentoCliente'] . '</span> |
+                <span class="text-muted text-nowrap">Cel.: ' . '<a href="tel:+51'.$value['cellCliente'].'" data-bs-toggle="tooltip" title="Clic para hacer llamada">'.$value['cellCliente'].'</a>' . '</span>
+              </div>
+            </div>',
+              "2" => '<b>'.$value['nombre_plan'].'</b>',
+              "3" => $value['costo'] ,
+              "4" => $value['fecha_cancelacion'] ,
+              "5" => $value['nombre_completoCliente'] ,
+              "6" => $value['cellCliente'] ,
 
             );
           }

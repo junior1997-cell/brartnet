@@ -43,7 +43,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <div class="container-fluid">
 
             <!-- Start::page-header -->
-            <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+            <div class="d-md-flex d-block align-items-center justify-content-between my-2 page-header-breadcrumb">
               <div>
                 <div class="d-md-flex d-block align-items-center ">
                   <div>
@@ -53,7 +53,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
               </div>
 
-              <div class="btn-list mt-md-0 mt-2">
+              <div class="btn-list mt-md-0 mt-2 mb-2">
                 <nav>
                   <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">Cobros</a></li>
@@ -116,134 +116,207 @@ if (!isset($_SESSION["user_nombre"])) {
                       </div>
                     </div>
                   </div>
-                  <div class="row">
-                    <!--Tabla reporte-->
-                    <div class="col-12 col-lg-7 col-xxl-7">
-                      <div class="card-body">
-                        <div id="div-tabla" class="table-responsive">
-                          <table id="tabla-cliente" class="table table-bordered w-100 style_tabla_datatable" style="width: 100%;">
-                            <thead class="buscando_tabla">
-                              <tr id="id_buscando_tabla">
-                                <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
-                              </tr>
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th>Cliente</th>
-                                <th>Correlativo</th>
-                                <th>Total</th>
-                                <th>Trabajador Asignado</th>
-                                <th>Trabajador Cobro</th>
-                                <th>Periodo</th>
-                                <th>F. Creación</th>
+                  <div class="card-body">
+                    <div class="row">
+                      <!--Tabla reporte-->
+                      <div class="col-12 col-lg-7 col-xxl-7">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="card-body">
+                              <p class="fw-semibold fs-18 mb-2 text-center bg-light">Tabla de Cobros por Trabajador!</p>
+                              <div id="div-tabla" class="table-responsive">
+                                <table id="tabla-cliente" class="table table-bordered w-100 style_tabla_datatable" style="width: 100%;">
+                                  <thead class="buscando_tabla">
+                                    <tr id="id_buscando_tabla">
+                                      <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                    </tr>
+                                    <tr>
+                                      <th class="text-center">#</th>
+                                      <th>Cliente</th>
+                                      <th>Correlativo</th>
+                                      <th>Total</th>
+                                      <th>Trabajador Asignado</th>
+                                      <th>Trabajador Cobro</th>
+                                      <th>Periodo</th>
+                                      <th>F. Creación</th>
+                                      <th>Nombre</th>
+                                      <th>Documento</th>
+                                      <th>Celular</th>
 
-                              </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th>Cliente</th>
-                                <th>Correlativo</th>
-                                <th>Total</th>
-                                <th>Trabajador Asignado</th>
-                                <th>Trabajador Cobro</th>
-                                <th>Periodo</th>
-                                <th>F. Creación</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody></tbody>
+                                  <tfoot>
+                                    <tr>
+                                      <th class="text-center">#</th>
+                                      <th>Cliente</th>
+                                      <th>Correlativo</th>
+                                      <th>Total</th>
+                                      <th>Trabajador Asignado</th>
+                                      <th>Trabajador Cobro</th>
+                                      <th>Periodo</th>
+                                      <th>F. Creación</th>
+                                      <th>Nombre</th>
+                                      <th>Documento</th>
+                                      <th>Celular</th>
 
-                              </tr>
-                            </tfoot>
-                          </table>
+                                    </tr>
+                                  </tfoot>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                          <!--Tabla clientes que no pagan-->
+                          <div class="col-12">
+                            <div class="alert alert-solid-warning alert-dismissible fade show div_alert_c_t">
+                              <h6> Lista de clientes que no realizaron el pago. <strong> Para poder ver; debe selecccionar el Trabajador, Año y Mes</strong></h6>
+                            </div>
+                            <div class="card-body div_tbl_cxt">
+                              <p class="fw-semibold fs-18 mb-2 text-center bg-light">Tabla de Clientes por Cobrar - Trabajador!</p>
+                              <div id="div-tabla" class="table-responsive">
+                                <table id="tabla-cliente_x_cobrar" class="table table-bordered w-100 style_tabla_datatable" style="width: 100%;">
+                                  <thead class="buscando_tabla_x_c">
+                                    <tr id="id_busc_tbl_cobros_x_c">
+                                      <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                    </tr>
+                                    <tr>
+                                      <th class="text-center">#</th>
+                                      <th>Cliente</th>
+                                      <th>Nombre Plan</th>
+                                      <th>Monto</th>
+                                      <th>F. Cancelación</th>
+                                      <th>Nombre Cliente</th>
+                                      <th>Num. Celular</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody></tbody>
+                                  <tfoot>
+                                    <th class="text-center">#</th>
+                                    <th>Cliente</th>
+                                    <th>Nombre Plan</th>
+                                    <th>Monto</th>
+                                    <th>F. Cancelación</th>
+                                    <th>Nombre Cliente</th>
+                                    <th>Num. Celular</th>
+                                    </tr>
+                                  </tfoot>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <!--Graficos del reporte-->
-                    <div class="col-12 col-xl-5 col-xxl-5 ">
-                      <div class="row">
-                        <!-- card de montos -->
-                        <div class="col-xl-12 col-xxl-12 p-5">
-                          <div class="row">
-                            <div class="col-xxl-6 col-lg-6 col-md-6">
-                              <div class="card custom-card overflow-hidden">
-                                <div class="card-body">
-                                  <div class="d-flex align-items-top justify-content-between">
-                                    <div>
-                                      <span class="avatar avatar-md avatar-rounded bg-primary">
-                                        <i class="ti ti-users fs-16"></i>
-                                      </span>
-                                    </div>
-                                    <div class="flex-fill ms-3">
-                                      <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                        <div>
-                                          <p class="text-muted mb-0">Total Customers</p>
-                                          <h4 class="fw-semibold mt-1">1,02,890</h4>
+                      <!--Graficos del reporte-->
+                      <div class="col-12 col-xl-5 col-xxl-5 ">
+                        <div class="row">
+                          <!-- card de montos -->
+                          <div class="col-xl-12 col-xxl-12">
+                            <div class="row">
+                              <div class="col-xxl-4 col-lg-4 col-md-6">
+                                <div class="card custom-card overflow-hidden">
+                                  <div class="card-body">
+                                    <div class="d-flex align-items-top justify-content-between">
+                                      <div>
+                                        <span class="avatar avatar-md avatar-rounded bg-primary">
+                                          <i class="ti ti-users fs-16"></i>
+                                        </span>
+                                      </div>
+                                      <div class="flex-fill ms-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                          <div>
+                                            <p class="text-muted mb-0">Total Tiket</p>
+                                            <h4 class="fw-semibold mt-1">102,890</h4>
+                                          </div>
+                                          <div id="crm-total-customers"></div>
                                         </div>
-                                        <div id="crm-total-customers"></div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div class="col-xxl-6 col-lg-6 col-md-6">
-                              <div class="card custom-card overflow-hidden">
-                                <div class="card-body">
-                                  <div class="d-flex align-items-top justify-content-between">
-                                    <div>
-                                      <span class="avatar avatar-md avatar-rounded bg-secondary">
-                                        <i class="ti ti-wallet fs-16"></i>
-                                      </span>
-                                    </div>
-                                    <div class="flex-fill ms-3">
-                                      <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                        <div>
-                                          <p class="text-muted mb-0">Total Revenue</p>
-                                          <h4 class="fw-semibold mt-1">$56,562</h4>
+                              <div class="col-xxl-4 col-lg-4 col-md-6">
+                                <div class="card custom-card overflow-hidden">
+                                  <div class="card-body">
+                                    <div class="d-flex align-items-top justify-content-between">
+                                      <div>
+                                        <span class="avatar avatar-md avatar-rounded bg-secondary">
+                                          <i class="ti ti-wallet fs-16"></i>
+                                        </span>
+                                      </div>
+                                      <div class="flex-fill ms-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                          <div>
+                                            <p class="text-muted mb-0">Total Boleta</p>
+                                            <h4 class="fw-semibold mt-1">$56,562</h4>
+                                          </div>
+                                          <div id="crm-total-revenue"></div>
                                         </div>
-                                        <div id="crm-total-revenue"></div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div class="col-xxl-6 col-lg-6 col-md-6">
-                              <div class="card custom-card overflow-hidden">
-                                <div class="card-body">
-                                  <div class="d-flex align-items-top justify-content-between">
-                                    <div>
-                                      <span class="avatar avatar-md avatar-rounded bg-success">
-                                        <i class="ti ti-wave-square fs-16"></i>
-                                      </span>
-                                    </div>
-                                    <div class="flex-fill ms-3">
-                                      <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                        <div>
-                                          <p class="text-muted mb-0">Conversion Ratio</p>
-                                          <h4 class="fw-semibold mt-1">12.08%</h4>
+                              <div class="col-xxl-4 col-lg-4 col-md-6">
+                                <div class="card custom-card overflow-hidden">
+                                  <div class="card-body">
+                                    <div class="d-flex align-items-top justify-content-between">
+                                      <div>
+                                        <span class="avatar avatar-md avatar-rounded bg-success">
+                                          <i class="ti ti-wave-square fs-16"></i>
+                                        </span>
+                                      </div>
+                                      <div class="flex-fill ms-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                          <div>
+                                            <p class="text-muted mb-0">Total Facturas</p>
+                                            <h4 class="fw-semibold mt-1">12.08%</h4>
+                                          </div>
+                                          <div id="crm-conversion-ratio"></div>
                                         </div>
-                                        <div id="crm-conversion-ratio"></div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div class="col-xxl-6 col-lg-6 col-md-6">
-                              <div class="card custom-card overflow-hidden">
-                                <div class="card-body">
-                                  <div class="d-flex align-items-top justify-content-between">
-                                    <div>
-                                      <span class="avatar avatar-md avatar-rounded bg-warning">
-                                        <i class="ti ti-briefcase fs-16"></i>
-                                      </span>
-                                    </div>
-                                    <div class="flex-fill ms-3">
-                                      <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                        <div>
-                                          <p class="text-muted mb-0">Total Deals</p>
-                                          <h4 class="fw-semibold mt-1">2,543</h4>
+                              <div class="col-xxl-4 col-lg-4 col-md-6 mx-auto">
+                                <div class="card custom-card overflow-hidden">
+                                  <div class="card-body">
+                                    <div class="d-flex align-items-top justify-content-between">
+                                      <div>
+                                        <span class="avatar avatar-md avatar-rounded bg-warning">
+                                          <i class="ti ti-briefcase fs-16"></i>
+                                        </span>
+                                      </div>
+                                      <div class="flex-fill ms-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                          <div>
+                                            <p class="text-muted mb-0">Total Cobro</p>
+                                            <h4 class="fw-semibold mt-1">2,543</h4>
+                                          </div>
+                                          <div id="crm-total-deals"></div>
                                         </div>
-                                        <div id="crm-total-deals"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-xxl-4 col-lg-4 col-md-6 mx-auto">
+                                <div class="card custom-card overflow-hidden">
+                                  <div class="card-body">
+                                    <div class="d-flex align-items-top justify-content-between">
+                                      <div>
+                                        <span class="avatar avatar-md avatar-rounded bg-warning">
+                                          <i class="ti ti-briefcase fs-16"></i>
+                                        </span>
+                                      </div>
+                                      <div class="flex-fill ms-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                          <div>
+                                            <p class="text-muted mb-0">Pendiente</p>
+                                            <h4 class="fw-semibold mt-1">2,543</h4>
+                                          </div>
+                                          <div id="crm-total-deals"></div>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -251,73 +324,21 @@ if (!isset($_SESSION["user_nombre"])) {
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <!--Graficos de pastel-->
-                        <div class="col-xl-12 col-xxl-12">
-                          <div class="card custom-card">
-                            <div class="card-header justify-content-between">
-                              <div class="card-title">
-                                Leads By Source
+                          <!--Graficos de pastel-->
+                          <div class="col-xl-12 col-xxl-12">
+                            <div class="card custom-card">
+                              <div class="card-header">
+                                <div class="card-title">Simple Donut Chart</div>
                               </div>
-                              <div class="dropdown">
-                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-icon btn-sm btn-light" data-bs-toggle="dropdown">
-                                  <i class="fe fe-more-vertical"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item" href="javascript:void(0);">Week</a></li>
-                                  <li><a class="dropdown-item" href="javascript:void(0);">Month</a></li>
-                                  <li><a class="dropdown-item" href="javascript:void(0);">Year</a></li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div class="card-body p-0 overflow-hidden">
-                              <div class="leads-source-chart d-flex align-items-center justify-content-center">
-                                <canvas id="leads-source" class="chartjs-chart w-100 p-4"></canvas>
-                                <div class="lead-source-value">
-                                  <span class="d-block fs-14">Total</span>
-                                  <span class="d-block fs-25 fw-bold">4,145</span>
-                                </div>
-                              </div>
-                              <div class="row row-cols-12 border-top border-block-start-dashed">
-                                <div class="col p-0">
-                                  <div class="ps-4 py-3 pe-3 text-center border-end border-inline-end-dashed">
-                                    <span class="text-muted fs-12 mb-1 crm-lead-legend mobile d-inline-block">Mobile
-                                    </span>
-                                    <div><span class="fs-16 fw-semibold">1,624</span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col p-0">
-                                  <div class="p-3 text-center border-end border-inline-end-dashed">
-                                    <span class="text-muted fs-12 mb-1 crm-lead-legend desktop d-inline-block">Desktop
-                                    </span>
-                                    <div><span class="fs-16 fw-semibold">1,267</span></div>
-                                  </div>
-                                </div>
-                                <div class="col p-0">
-                                  <div class="p-3 text-center border-end border-inline-end-dashed">
-                                    <span class="text-muted fs-12 mb-1 crm-lead-legend laptop d-inline-block">Laptop
-                                    </span>
-                                    <div><span class="fs-16 fw-semibold">1,153</span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col p-0">
-                                  <div class="p-3 text-center">
-                                    <span class="text-muted fs-12 mb-1 crm-lead-legend tablet d-inline-block">Tablet
-                                    </span>
-                                    <div><span class="fs-16 fw-semibold">679</span></div>
-                                  </div>
-                                </div>
+                              <div class="card-body">
+                                <div id="donut-simple"></div>
                               </div>
                             </div>
                           </div>
                         </div>
-
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -343,12 +364,40 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>
 
+    <!-- Apex Charts JS -->
+    <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+
+    <!-- Internal Apex Pie Charts JS 
+    <script src="../assets/js/apexcharts-pie.js"></script>-->
+
 
     <script src="scripts/reporte_x_trabajador.js?version_jdl=1.1"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();
       });
+    </script>
+    <script>
+      /* simple donut chart */
+      var options = {
+        series: [44, 55, 41, 17, 15,9],
+        chart: {
+          type: "donut",
+          height: 290,
+        },
+        legend: {
+          position: "bottom",
+        },
+        colors: ["#845adf", "#23b7e5", "#f5b849", "#49b6f5", "#e6533c" , "#4eac4c"],
+        labels: ["Team A", "Team B", "Team C", "Team D", "Team E","Team f"],
+        dataLabels: {
+          dropShadow: {
+            enabled: false,
+          },
+        },
+      };
+      var chart = new ApexCharts(document.querySelector("#donut-simple"), options);
+      chart.render();
     </script>
 
 
