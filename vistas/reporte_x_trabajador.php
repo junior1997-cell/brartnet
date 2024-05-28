@@ -119,7 +119,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="card-body">
                     <div class="row">
                       <!--Tabla reporte-->
-                      <div class="col-12 col-lg-7 col-xxl-7">
+                      <div class="col-12 col-lg-6 col-xxl-6">
                         <div class="row">
                           <div class="col-12">
                             <div class="card-body">
@@ -207,27 +207,26 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                       <!--Graficos del reporte-->
-                      <div class="col-12 col-xl-5 col-xxl-5 ">
+                      <div class="col-12 col-xl-6 col-xxl-6 ">
                         <div class="row">
                           <!-- card de montos -->
                           <div class="col-xl-12 col-xxl-12">
                             <div class="row">
                               <div class="col-xxl-4 col-lg-4 col-md-6">
                                 <div class="card custom-card overflow-hidden">
-                                  <div class="card-body">
+                                  <div class="card-body" style=" padding: 5px !important; ">
                                     <div class="d-flex align-items-top justify-content-between">
                                       <div>
-                                        <span class="avatar avatar-md avatar-rounded bg-primary">
-                                          <i class="ti ti-users fs-16"></i>
+                                        <span class="avatar avatar-md avatar-rounded bg-primary">                                        
+                                        <i class="fa-solid fa-wallet"></i>
                                         </span>
                                       </div>
                                       <div class="flex-fill ms-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                           <div>
-                                            <p class="text-muted mb-0">Total Tiket</p>
-                                            <h4 class="fw-semibold mt-1">102,890</h4>
+                                            <p class="text-muted mb-0 tiket_info ">Tiket <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="0">0</span> </p>
+                                            <h7 class="fw-semibold mt-1 total_tiket">S/ 0.00</h7>
                                           </div>
-                                          <div id="crm-total-customers"></div>
                                         </div>
                                       </div>
                                     </div>
@@ -236,7 +235,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               </div>
                               <div class="col-xxl-4 col-lg-4 col-md-6">
                                 <div class="card custom-card overflow-hidden">
-                                  <div class="card-body">
+                                  <div class="card-body" style=" padding: 5px !important; ">
                                     <div class="d-flex align-items-top justify-content-between">
                                       <div>
                                         <span class="avatar avatar-md avatar-rounded bg-secondary">
@@ -246,10 +245,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <div class="flex-fill ms-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                           <div>
-                                            <p class="text-muted mb-0">Total Boleta</p>
-                                            <h4 class="fw-semibold mt-1">$56,562</h4>
+                                          <p class="text-muted mb-0 boleta_info ">Boleta <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="0">0</span> </p>
+                                            <h7 class="fw-semibold mt-1 total_boleta">S/ 0.00</h7>
                                           </div>
-                                          <div id="crm-total-revenue"></div>
                                         </div>
                                       </div>
                                     </div>
@@ -258,7 +256,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               </div>
                               <div class="col-xxl-4 col-lg-4 col-md-6">
                                 <div class="card custom-card overflow-hidden">
-                                  <div class="card-body">
+                                  <div class="card-body" style=" padding: 5px !important; ">
                                     <div class="d-flex align-items-top justify-content-between">
                                       <div>
                                         <span class="avatar avatar-md avatar-rounded bg-success">
@@ -268,10 +266,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <div class="flex-fill ms-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                           <div>
-                                            <p class="text-muted mb-0">Total Facturas</p>
-                                            <h4 class="fw-semibold mt-1">12.08%</h4>
+                                          <p class="text-muted mb-0 factura_info ">Factura <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="0">0</span> </p>
+                                            <h7 class="fw-semibold mt-1 total_factura">S/ 0.00</h7>
                                           </div>
-                                          <div id="crm-conversion-ratio"></div>
                                         </div>
                                       </div>
                                     </div>
@@ -280,7 +277,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               </div>
                               <div class="col-xxl-4 col-lg-4 col-md-6 mx-auto">
                                 <div class="card custom-card overflow-hidden">
-                                  <div class="card-body">
+                                  <div class="card-body" style=" padding: 5px !important; ">
                                     <div class="d-flex align-items-top justify-content-between">
                                       <div>
                                         <span class="avatar avatar-md avatar-rounded bg-warning">
@@ -290,10 +287,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <div class="flex-fill ms-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                           <div>
-                                            <p class="text-muted mb-0">Total Cobro</p>
-                                            <h4 class="fw-semibold mt-1">2,543</h4>
+                                          <p class="text-muted mb-0 total_info ">Total <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="10">10</span> </p>
+                                            <h7 class="fw-semibold mt-1 total_general">S/ 0.00</h7>
                                           </div>
-                                          <div id="crm-total-deals"></div>
                                         </div>
                                       </div>
                                     </div>
@@ -302,7 +298,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               </div>
                               <div class="col-xxl-4 col-lg-4 col-md-6 mx-auto">
                                 <div class="card custom-card overflow-hidden">
-                                  <div class="card-body">
+                                  <div class="card-body" style=" padding: 5px !important; ">
                                     <div class="d-flex align-items-top justify-content-between">
                                       <div>
                                         <span class="avatar avatar-md avatar-rounded bg-warning">
@@ -312,8 +308,8 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <div class="flex-fill ms-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                           <div>
-                                            <p class="text-muted mb-0">Pendiente</p>
-                                            <h4 class="fw-semibold mt-1">2,543</h4>
+                                          <p class="text-muted mb-0 total_pendiente ">Pendiente <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="120">120</span> </p>
+                                            <h7 class="fw-semibold mt-1 total_g_pend">S/ 0.00</h7>
                                           </div>
                                           <div id="crm-total-deals"></div>
                                         </div>
@@ -328,7 +324,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-xl-12 col-xxl-12">
                             <div class="card custom-card">
                               <div class="card-header">
-                                <div class="card-title">Simple Donut Chart</div>
+                                <div class="card-title">Montos por Persona que Cobro</div>
                               </div>
                               <div class="card-body">
                                 <div id="donut-simple"></div>

@@ -132,6 +132,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
       break;
 
+
+      case 'totales_card_F_B_T':
+        $rspta = $reporte_x_trabajador->totales_card_F_B_T($_POST["filtro_trabajador"],$_POST["filtro_anio_pago"],$_POST["filtro_p_all_mes_pago"],$_POST["filtro_tipo_comprob"]);
+        echo json_encode($rspta, true);
+      break;
       // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 
 
       case 'select2_filtro_trabajador':
