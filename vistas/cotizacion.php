@@ -12,7 +12,7 @@ if (!isset($_SESSION["user_nombre"])) {
   <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
 
   <head>
-    <?php $title_page = "Emitir Comprobante";  include("template/head.php"); ?>
+    <?php $title_page = "Cotización";  include("template/head.php"); ?>
 
     <link rel="stylesheet" href="../assets/libs/filepond/filepond.min.css">
     <link rel="stylesheet" href="../assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css">
@@ -49,8 +49,8 @@ if (!isset($_SESSION["user_nombre"])) {
                 <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                 <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                 <div>
-                  <p class="fw-semibold fs-18 mb-0">Facturación</p>
-                  <span class="fs-semibold text-muted">Administra tus comprobantes de pago.</span>
+                  <p class="fw-semibold fs-18 mb-0">Cotización</p>
+                  <span class="fs-semibold text-muted">Administra tus cotizacioes.</span>
                 </div>
               </div>
             </div>
@@ -58,7 +58,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <nav>
                 <ol class="breadcrumb mb-0">
                   <li class="breadcrumb-item"><a href="javascript:void(0);">Realizar cobro</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Facturación</li>
+                  <li class="breadcrumb-item active" aria-current="page">Cotización</li>
                 </ol>
               </nav>
             </div>
@@ -102,17 +102,6 @@ if (!isset($_SESSION["user_nombre"])) {
                         <select class="form-control" name="filtro_cliente" id="filtro_cliente" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
                       </div>
                     </div>
-                    <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
-                    <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
-                      <div class="form-group">
-                        <label for="filtro_comprobante" class="form-label">                         
-                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_comprobante();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                          Comprobante
-                          <span class="charge_filtro_comprobante"></span>
-                        </label>
-                        <select class="form-control" name="filtro_comprobante" id="filtro_comprobante" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
-                      </div>
-                    </div>
                  
                   <div class="d-flex"> 
                     <div class="dropdown ms-2">
@@ -137,12 +126,10 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th class="text-center"><center>#</center></th>
                           <th class="text-center"><center>OP</center></th>
                           <th>Creación</th>
-                          <th>Periodo</th>
                           <th>Cliente</th>
                           <th>Correlativo</th>
                           <th>Total</th> 
-                          <th><center>SUNAT</center></th>   
-                          <th>Boucher</th>      
+                          <th><center>Vendido?</center></th>               
                           <th><center>Estado</center></th>               
                         </tr>
                       </thead>
@@ -152,12 +139,10 @@ if (!isset($_SESSION["user_nombre"])) {
                         <th class="text-center"><center>#</center></th>
                           <th class="text-center"><center>OP</center></th>
                           <th>Creación</th>
-                          <th>Periodo</th>
                           <th>Cliente</th>
                           <th>Correlativo</th>
                           <th>Total</th>
-                          <th class="text-center" ><center>SUNAT</center></th>
-                          <th>Boucher</th>   
+                          <th><center>Vendido?</center></th> 
                           <th><center>Estado</center></th>
                         </tr>
                       </tfoot>
@@ -172,14 +157,14 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="card custom-card">
                 <div class="card-body p-0">
                   <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-top">
-                    <div class="svg-icon-background bg-info-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-info">
+                    <div class="svg-icon-background bg-success-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-success">
                         <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v5a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h6a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Zm13.71,6.29a1,1,0,0,0-1.42,0l-3.29,3.3-1.29-1.3a1,1,0,0,0-1.42,1.42l2,2a1,1,0,0,0,1.42,0l4-4A1,1,0,0,0,21.21,16.29Z" />
                       </svg>
                     </div>
                     <div class="flex-fill">
-                      <h6 class="mb-2 fs-12">Total Factura
-                        <span class="badge bg-info fw-semibold float-end vw_count_factura"> 0 </span>
+                      <h6 class="mb-2 fs-12">Total Vendido
+                        <span class="badge bg-success fw-semibold float-end vw_count_factura"> 0 </span>
                       </h6>
                       <div class="pb-0 mt-0">
                         <div>
@@ -195,14 +180,14 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
                   </div>
                   <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-top">
-                    <div class="svg-icon-background bg-success-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">                      
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-success">
+                    <div class="svg-icon-background bg-warning-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">                      
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-warning">
                         <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v5a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h6a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Zm13.71,6.29a1,1,0,0,0-1.42,0l-3.29,3.3-1.29-1.3a1,1,0,0,0-1.42,1.42l2,2a1,1,0,0,0,1.42,0l4-4A1,1,0,0,0,21.21,16.29Z" />
                       </svg>
                     </div>
                     <div class="flex-fill">
-                      <h6 class="mb-2 fs-12">Total Boleta
-                        <span class="badge bg-success fw-semibold float-end vw_count_boleta">0  </span>
+                      <h6 class="mb-2 fs-12">Total en Espera
+                        <span class="badge bg-warning fw-semibold float-end vw_count_boleta">0  </span>
                       </h6>
                       <div>
                         <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_boleta" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
@@ -214,51 +199,8 @@ if (!isset($_SESSION["user_nombre"])) {
                         </p>
                       </div>
                     </div>
-                  </div>
-                  <div class="d-flex align-items-top p-4 border-bottom border-block-end-dashed">
-                    <div class="svg-icon-background bg-warning-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">
-                      <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24" class="svg-warning">
-                        <path d="M13,16H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2ZM9,10h2a1,1,0,0,0,0-2H9a1,1,0,0,0,0,2Zm12,2H18V3a1,1,0,0,0-.5-.87,1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0l-3,1.72-3-1.72a1,1,0,0,0-1,0A1,1,0,0,0,2,3V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V13A1,1,0,0,0,21,12ZM5,20a1,1,0,0,1-1-1V4.73L6,5.87a1.08,1.08,0,0,0,1,0l3-1.72,3,1.72a1.08,1.08,0,0,0,1,0l2-1.14V19a3,3,0,0,0,.18,1Zm15-1a1,1,0,0,1-2,0V14h2Zm-7-7H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2Z" />
-                      </svg>
-                    </div>
-                    <div class="flex-fill">
-                      <h6 class="mb-2 fs-12">Total Ticket
-                        <span class="badge bg-warning fw-semibold float-end vw_count_ticket">0 </span>
-                      </h6>
-                      <div>
-                        <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_ticket" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
-                        <p class="text-muted fs-11 mb-0 lh-1">
-                          <span class="text-success me-1 fw-semibold vw_total_ticket_p">
-                            <i class="ri-arrow-up-s-line me-1 align-middle"></i>0%
-                          </span>
-                          <span>this month</span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- <div class="d-flex align-items-top p-4 border-bottom border-block-end-dashed">
-                    <div class="svg-icon-background bg-light me-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" class="svg-dark">
-                        <path d="M19,12h-7V5c0-0.6-0.4-1-1-1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9C20,12.4,19.6,12,19,12z M12,19.9c-3.8,0.6-7.4-2.1-7.9-5.9C3.5,10.2,6.2,6.6,10,6.1V13c0,0.6,0.4,1,1,1h6.9C17.5,17.1,15.1,19.5,12,19.9z M15,2c-0.6,0-1,0.4-1,1v6c0,0.6,0.4,1,1,1h6c0.6,0,1-0.4,1-1C22,5.1,18.9,2,15,2z M16,8V4.1C18,4.5,19.5,6,19.9,8H16z" />
-                      </svg>
-                    </div>
-                    <div class="flex-fill">
-                      <h6 class="mb-2 fs-12">Overdue Invoices
-                        <span class="badge bg-light text-default fw-semibold float-end">
-                          1,105
-                        </span>
-                      </h6>
-                      <div>
-                        <h4 class="fs-18 fw-semibold mb-2">$<span class="count-up" data-count="32.47">32.47</span>K</h4>
-                        <p class="text-muted fs-11 mb-0 lh-1">
-                          <span class="text-success me-1 fw-semibFold">
-                            <i class="ri-arrow-down-s-line me-1 align-middle"></i>0.46%
-                          </span>
-                          <span>this month</span>
-                        </p>
-                      </div>
-                    </div>
-                  </div> -->
+                  </div>                
+                  
                   <div class="p-4">
                     <p class="fs-15 fw-semibold">Mini reporte <span class="text-muted fw-normal">(Últimos 6 meses) :</span></p>
                     <div id="invoice-list-stats"></div>
@@ -285,15 +227,38 @@ if (!isset($_SESSION["user_nombre"])) {
                       <!-- NUMERO DOC -->
                       <input type="hidden" class="form-control" name="numero_documento" id="numero_documento" value="0">  
                       <!-- ID VENTA PARA: NOTA DE CREDITO -->                   
-                      <input type="hidden" class="form-control" name="nc_idventa" id="nc_idventa" value="0">                     
+                      <input type="hidden" class="form-control" name="nc_idventa" id="nc_idventa" value="0">      
+                      <!-- CREAR Y EMITIR -->
+                      <input type="hidden" class="form-control" name="crear_y_emitir" id="crear_y_emitir" value="NO">      
+                      
+                      <!-- NC -->
+                      <input type="hidden" name="nc_tipo_comprobante" id="nc_tipo_comprobante" value="">
+                      <input type="hidden" name="nc_serie_y_numero" id="nc_serie_y_numero" value="">
+                      <input type="hidden" name="nc_motivo_anulacion" id="nc_motivo_anulacion" value="">
+
+                      <!-- ES COBRO -->
+                      <input type="hidden" name="es_cobro_inp" id="es_cobro_inp" value="NO">
+                      <input type="hidden" name="periodo_pago" id="periodo_pago" value="">
+
+                      <!-- METODO DE PAGO -->
+                      <input type="hidden" name="total_recibido" id="total_recibido" value="0">
+                      <input type="hidden" name="mp_monto" id="mp_monto" value="0">
+                      <input type="hidden" name="total_vuelto" id="total_vuelto" value="0">
+                      <input type="hidden" name="mp_serie_comprobante" id="mp_serie_comprobante" value="">
+                      <input type="hidden" name="mp_comprobante" id="mp_comprobante" value="">                      
+
+                      <!-- USAR ANTICIPO -->
+                      <input type="hidden" name="usar_anticipo" id="usar_anticipo" value="NO">
+                      <input type="hidden" name="ua_monto_disponible" id="ua_monto_disponible" value="0">
+                      <input type="hidden" name="ua_monto_usado" id="ua_monto_usado" value="0">
 
                       <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                         <div class="row gy-3">
-                          <!-- ENVIO AUTOMATICO -->
+                          <!-- CREAR Y MOSTRAR-->
                           <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 px-0">
                             <div class="custom-toggle-switch d-flex align-items-center mb-1">
-                              <input id="crear_y_emitir" name="crear_y_emitir" type="checkbox" checked="" value="SI">
-                              <label for="crear_y_emitir" class="label-warning"></label><span class="ms-3">Crear y emitir SUNAT</span>
+                              <input id="crear_y_mostrar" name="crear_y_mostrar" type="checkbox" checked="" value="SI">
+                              <label for="crear_y_mostrar" class="label-warning"></label><span class="ms-3">Crear y mostrar</span>
                             </div>
                           </div>
                           <!--  TIPO COMPROBANTE  -->
@@ -301,22 +266,11 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="mb-sm-0 mb-2">
                               <p class="fs-14 mb-2 fw-semibold">Tipo de comprobante</p>
                               <div class="mb-0 authentication-btn-group">
-                                <input type="hidden" id="tipo_comprobante_hidden" value="03">
-                                <input type="hidden" name="idsunat_c01" id="idsunat_c01" value="3">
+                                <input type="hidden" id="tipo_comprobante_hidden" value="100">
+                                <input type="hidden" name="idsunat_c01" id="idsunat_c01" value="43">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                  
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante12" value="12" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante12'); es_valido_cliente();">
-                                  <label class="btn btn-sm btn-outline-primary btn-tiket" for="tipo_comprobante12"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
-                                  
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante03" value="03"  onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante03'); es_valido_cliente();">
-                                  <label class="btn btn-sm btn-outline-primary btn-boleta" for="tipo_comprobante03"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
-                                  
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante01" value="01" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante01'); es_valido_cliente();">
-                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante01"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
-                                  
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante07" value="07" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante07'); ">
-                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante07" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Nota de Crédito."><i class="bi bi-file-earmark-x-fill me-1 align-middle d-inline-block"></i> NC</label>
-
+                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante100" value="100"  onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante100');" onclick="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante100');">
+                                  <label class="btn btn-sm btn-outline-primary btn-boleta" for="tipo_comprobante100"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Cotización</label>
                                 </div>
                               </div>
                             </div>                            
@@ -338,48 +292,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                 Cliente
                                 <span class="charge_idpersona_cliente"></span>
                               </label>
-                              <select class="form-control" name="idpersona_cliente" id="idpersona_cliente" onchange="es_valido_cliente(); usar_anticipo_valid();"></select>
+                              <select class="form-control" name="idpersona_cliente" id="idpersona_cliente" ></select>
                             </div>
-                          </div>
-
-                          <!--  NC - TIPO DE COMPROBANTE  -->
-                          <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6 div_nc_tipo_comprobante">
-                            <div class="form-group">
-                              <label for="nc_tipo_comprobante" class="form-label">                                
-                                Comprobante a anular
-                              </label>
-                              <select class="form-control" name="nc_tipo_comprobante" id="nc_tipo_comprobante" onchange="buscar_comprobante_anular();">
-                                <option value="01">FACTURA</option>
-                                <option value="03">BOLETA DE VENTA</option>
-                              </select>
-                            </div>
-                          </div>
-                          
-                          <!--  NC - SERIE Y NUMERO COMPROBANTE  -->
-                          <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6 div_nc_serie_y_numero">
-                            <div class="form-group">
-                              <label for="nc_serie_y_numero" class="form-label">
-                                <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
-                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_nc_serie_y_numero();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                Series y número
-                                <span class="charge_nc_serie_y_numero"></span>
-                              </label>
-                              <select class="form-control" name="nc_serie_y_numero" id="nc_serie_y_numero" onchange="mostrar_para_nota_credito(this);"></select>
-                            </div>
-                          </div>
-
-                          <!--  NC - SERIE Y NUMERO COMPROBANTE  -->
-                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 div_nc_motivo_anulacion">
-                            <div class="form-group">
-                              <label for="nc_motivo_anulacion" class="form-label">
-                                <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
-                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_nc_motivo_anulacion();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                Motivo
-                                <span class="charge_nc_motivo_anulacion"></span>
-                              </label>
-                              <select class="form-control" name="nc_motivo_anulacion" id="nc_motivo_anulacion" ></select>
-                            </div>
-                          </div>
+                          </div>                          
                           
                           <!-- DESCRIPCION -->
                           <div class="col-md-6 col-lg-12 col-xl-12 col-xxl-12">
@@ -387,23 +302,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <label for="observacion_documento" class="form-label">Observacion</label>
                               <textarea name="observacion_documento" id="observacion_documento" class="form-control" rows="2" placeholder="ejemp: Cobro de servicio de internet."></textarea>
                             </div>
-                          </div> 
-                          
-                          <!-- FECHA EMISION -->
-                          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 div_es_cobro">
-                            <div class="form-group">
-                              <label for="es_cobro" class="form-label">Es cobro?</label>
-                              <div class="toggle toggle-secondary on es_cobro" onclick="delay(function(){es_cobro_valid()}, 100 );" >  <span></span>   </div>
-                              <input type="hidden" class="form-control" name="es_cobro_inp" id="es_cobro_inp" value="SI" >
-                            </div>
-                          </div>  
-
-                          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 datos-de-cobro-mensual">
-                            <div class="form-group">
-                              <label for="periodo_pago" class="form-label">Periodo Pago</label>
-                              <input type="month" class="form-control" name="periodo_pago" id="periodo_pago" >
-                            </div>
-                          </div>                                                                  
+                          </div>                                                 
 
                         </div>
                       </div>
@@ -472,24 +371,15 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th></th>
                               </tfoot>
                             </table>
-                          </div>
-
-                          <div class="col-12 pt-3 div_pago_rapido">
-                            <button type="button" class="btn btn-primary btn-sm pago_rapido" onclick="pago_rapido(this)" >0</button>
-                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >10</button>
-                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >20</button>
-                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >50</button>
-                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >100</button>
-                            <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)" >200</button>
-                          </div>
+                          </div>                          
 
                           <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 div_m_pagos">
                             <div class="row">
 
-                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 pt-3">
                                 <div class="form-group">
                                   <label for="metodo_pago" class="form-label">Método de pago</label>
-                                  <select class="form-control" name="metodo_pago" id="metodo_pago" onchange="capturar_pago_venta();">
+                                  <select class="form-control" name="metodo_pago" id="metodo_pago" >
                                     <option value="EFECTIVO" selected >EFECTIVO</option>
                                     <option value="MIXTO">MIXTO</option>
                                     <option value="CAJA HUANCAYO">CAJA HUANCAYO</option>
@@ -504,90 +394,38 @@ if (!isset($_SESSION["user_nombre"])) {
                                     <option value="TUNKI">TUNKI</option>                                
                                   </select>                              
                                 </div>
-                              </div> 
+                              </div>    
                               
-                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 pt-3">
                                 <div class="form-group">
-                                  <label for="total_recibido" class="form-label">Monto a pagar</label>
-                                  <input type="number" name="total_recibido" id="total_recibido" class="form-control"  onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();"  placeholder="Ingrese monto a pagar." >                           
-                                </div>
-                              </div> 
-
-                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3" id="content-mp-monto" style="display: none;">
-                                <div class="form-group">
-                                  <label for="mp_monto" class="form-label">Monto: <span class="span-tipo-pago"></span></label>
-                                  <input type="number" name="mp_monto" id="mp_monto" class="form-control" onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();" placeholder="Pagar con" />
-                                </div>
-                              </div>
-
-                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
-                                <div class="form-group">
-                                  <label for="total_vuelto" class="form-label">Vuelto <small class="falta_o_completo"></small></label>
-                                  <input type="number" name="total_vuelto" id="total_vuelto" class="form-control-plaintext px-2 total_vuelto" readonly placeholder="Ingrese monto a pagar." >                           
-                                </div>
-                              </div> 
-
-                            </div>
-                          </div>                          
-
-                          <!-- USAR SALDO -->
-                          <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3 pt-3 div_usar_anticipo">
-                            <div class="form-group">
-                              <label for="usar_anticipo" class="form-label">Usar anticipos?</label>
-                              <div class="toggle toggle-secondary usar_anticipo" onclick="delay(function(){usar_anticipo_valid()}, 100 );" >  <span></span>   </div>
-                              <input type="hidden" class="form-control" name="usar_anticipo" id="usar_anticipo" value="NO" >
-                            </div>
-                          </div>                           
-
-                          <div class="col-md-12 col-lg-9 col-xl-9 col-xxl-9 pt-3 datos-de-saldo" style="display: none !important;">
-
-                            <div class="row">    
-                              <div class="col-12 pl-0">
-                                <div class="text-primary p-l-10px" style="position: relative; top: 7px;"><label class="bg-white" for=""><b>DATOS DE ANTICIPOS</b></label></div>
-                              </div>
-                            </div>
-
-                            <div class="card-body" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 5px 4px rgb(255 255 255 / 60%);">
-                              <div class="row ">                                                                
-                                
-                                <!-- SALDO -->
-                                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-                                  <div class="form-group">
-                                    <label for="ua_monto_disponible" class="form-label">Saldo Disponible</label>
-                                    <input type="number" class="form-control-plaintext" name="ua_monto_disponible" id="ua_monto_disponible" readonly>
-                                  </div>
-                                </div> 
-
-                                <!-- Saldo Usar -->
-                                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-                                  <div class="form-group">
-                                    <label for="ua_monto_usado" class="form-label">Saldo Usar</label>
-                                    <input type="number" class="form-control" name="ua_monto_usado" id="ua_monto_usado" >
-                                  </div>
-                                </div>       
-
-                              </div>
-                            </div>
-                          </div>  
-
-                          <div class="col-12" id="content-metodo-pago">
-                            <div class="row">
-                              <!-- Código de Baucher -->
-                              <div class="col-sm-6 col-lg-6 col-xl-6 pt-3" >
-                                <div class="form-group">
-                                  <label for="mp_serie_comprobante">Código de Baucher <span class="span-code-baucher-pago"></span> </label>
-                                  <input type="text" name="mp_serie_comprobante" id="mp_serie_comprobante" class="form-control" onClick="this.select();" placeholder="Codigo de baucher" />
+                                  <label for="tiempo_entrega" class="form-label">Tiempo de entrega</label>
+                                  <select class="form-control" name="tiempo_entrega" id="tiempo_entrega" >
+                                    <option value="Inmediato">Inmediato</option>
+                                    <option value="2 días despues de contar con la aprobación y abono">2 días despues de contar con la aprobación y abono</option>
+                                    <option value="3 días despues de contar con la aprobación y abono">3 días despues de contar con la aprobación y abono</option>
+                                    <option value="4 días despues de contar con la aprobación y abono">4 días despues de contar con la aprobación y abono</option>
+                                    <option value="5 días despues de contar con la aprobación y abono">5 días despues de contar con la aprobación y abono</option>
+                                    <option value="6 días despues de contar con la aprobación y abono">6 días despues de contar con la aprobación y abono</option>                             
+                                  </select>                              
                                 </div>
                               </div>  
-                              <!-- Baucher -->
-                              <div class="col-sm-6 col-lg-6 col-xl-6 pt-3" >
-                                <div class="form-group">                              
-                                  <input type="file" class="multiple-filepond" name="mp_comprobante" id="mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" accept="image/*, application/pdf" >                             
-                                  <input type="hidden" name="mp_comprobante_old" id="mp_comprobante_old">
+
+                              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 pt-3">
+                                <div class="form-group">
+                                  <label for="validez_cotizacion" class="form-label">Validez de cotizacion</label>
+                                  <select class="form-control" name="validez_cotizacion" id="validez_cotizacion" >
+                                    <option value="3 Días calendario">3 Días calendario</option>
+                                    <option value="7 Días calendario">7 Días calendario</option>
+                                    <option value="7 Días calendario">10 Días calendario</option>
+                                    <option value="15 Días calendario">15 Días calendario</option>
+                                    <option value="30 Días calendario">30 Días calendario</option>                           
+                                  </select>                              
                                 </div>
-                              </div>
+                              </div>  
+
                             </div>
-                          </div>                          
+                          </div> 
+                                                 
                         </div>
                         <!-- ::::::::::: CARGANDO ... :::::::: -->
                         <div class="row" id="cargando-4-fomulario" style="display: none;" >
@@ -1002,9 +840,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
           </div>
-          <!-- End::Modal-Agregar-Producto -->
-
-         
+          <!-- End::Modal-Agregar-Producto -->         
 
         </div>
       </div>
@@ -1041,8 +877,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.7"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.7"></script>
+    <script src="scripts/cotizacion.js?version_jdl=1.7"></script>
+    <script src="scripts/js_cotizacion.js?version_jdl=1.7"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

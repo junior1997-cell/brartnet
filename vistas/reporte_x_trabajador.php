@@ -371,7 +371,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/js/apexcharts-pie.js"></script>-->
 
 
-    <script src="scripts/reporte_x_trabajador.js?version_jdl=1.3"></script>
+    <script src="scripts/reporte_x_trabajador.js?version_jdl=1.7"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

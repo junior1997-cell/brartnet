@@ -235,7 +235,7 @@ class Cliente
 
 		FROM persona_cliente as pc
 		INNER JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente 
-		where pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
+		where v.sunat_estado='ACEPTADA' AND v.estado_delete='1' AND v.estado_delete='1' and pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
 		GROUP BY v.periodo_pago_year
 		ORDER BY v.periodo_pago_year DESC";
 		$pagos = ejecutarConsulta($sql_1);

@@ -13,7 +13,7 @@
     }
 
     function listar_tabla(){
-      $sql = "SELECT * FROM sunat_c01_tipo_comprobante WHERE estado_delete = 1 ORDER BY estado DESC, codigo ASC";
+      $sql = "SELECT *, LPAD(idtipo_comprobante, 5, '0') AS idtipo_comprobante_v2 FROM sunat_c01_tipo_comprobante WHERE estado_delete = 1 ORDER BY estado DESC, codigo ASC";
       return ejecutarConsulta($sql);
     }
 

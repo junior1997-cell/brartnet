@@ -48,7 +48,11 @@
   <link rel="canonical" href="https://corporacionbrartnet.jdl.pe">
 
   <!-- Favicon -->
-  <link rel="icon" href="assets/images/brand-logos/ico-brartnet.svg" type="image/x-icon">
+  <link rel="icon" type="image/x-icon" href="assets/images/brand-logos/ico-brartnet.svg" >
+  <link rel="icon" type="image/png" href="ssets/images/brand-logos/favicon-x2.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="ssets/images/brand-logos/favicon-x1.png" sizes="64x64 32x32 16x16">
+  <link rel="apple-touch-icon" href="ssets/images/brand-logos/apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="ssets/images/brand-logos/logo192.png">
 
   <!-- Bootstrap Css -->
   <link id="style" href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -1053,10 +1057,10 @@
   <!-- Toastr -->
   <script src="assets/libs/toastr/toastr.min.js"></script>
 
-  <script src="assets/js/funcion_crud.js?version_jdl=1.3"></script>
+  <script src="assets/js/funcion_crud.js?version_jdl=1.6"></script>
 
-  <script src="vistas/scripts/home.js?version_jdl=1.3"></script>
-  <script src="vistas/scripts/login_cliente.js?version_jdl=1.3"></script>
+  <script src="vistas/scripts/home.js?version_jdl=1.5"></script>
+  <script src="vistas/scripts/login_cliente.js?version_jdl=1.4"></script>
 
   <script>
     $(document).on('ready', function () {
