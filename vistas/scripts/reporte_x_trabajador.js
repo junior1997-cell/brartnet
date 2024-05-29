@@ -138,6 +138,32 @@ function tabla_cliente_x_cobrar(filtro_trabajador, filtro_anio_pago, filtro_p_al
   }).DataTable();
 }
 
+function calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob){
+	$.post("../ajax/reporte_x_trabajador.php?op=totales_card_F_B_T", { filtro_trabajador: filtro_trabajador,filtro_anio_pago:filtro_anio_pago,filtro_p_all_mes_pago:filtro_p_all_mes_pago,filtro_tipo_comprob:filtro_tipo_comprob }, function (e, status) {
+		e = JSON.parse(e); //console.log(e.data);
+
+   if (e.status == true) {
+
+    $('.tiket_info').html(`${e.data['12_ticket']['nombre']} <span class="ms-1 badge bg-secondary-transparent" >${e.data['12_ticket']['cantidad']}</span>`);
+    $('.total_tiket').html(`S/ ${e.data['12_ticket']['total']}`);
+    /**-------------- */
+    $('.boleta_info').html(`${e.data['03_boleta']['nombre']} <span class="ms-1 badge bg-secondary-transparent" >${e.data['03_boleta']['cantidad']}</span>`);
+    $('.total_boleta').html(`S/ ${e.data['03_boleta']['total']}`);
+    /**-------------- */
+    $('.factura_info').html(`${e.data['01_factura']['nombre']} <span class="ms-1 badge bg-secondary-transparent" >${e.data['01_factura']['cantidad']}</span>`);
+    $('.total_factura').html(`S/ ${e.data['01_factura']['total']}`);
+    /**-------------- */
+    $('.total_info').html(`${e.data['00_total']['nombre']} <span class="ms-1 badge bg-secondary-transparent">${e.data['00_total']['cantidad']}</span>`);
+    $('.total_general').html(`S/ ${e.data['00_total']['total']}`);
+    /**-------------- */
+    $('.total_pendiente').html(`${e.data['04_pendiente']['nombre']} <span class="ms-1 badge bg-secondary-transparent">${e.data['04_pendiente']['cantidad']}</span>`);
+    $('.total_g_pend').html(`S/ ${e.data['04_pendiente']['total']}`);
+
+    } else { ver_errores(e); }
+
+	}).fail( function(e) { ver_errores(e); } );
+}
+
 
 $(document).ready(function () {
   init();
@@ -177,6 +203,7 @@ function filtros() {
   //console.log(filtro_categoria, fecha_2, filtro_p_all_mes_pago, comprobante);
 
   tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
+  calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
 
   if (filtro_trabajador != "" && filtro_anio_pago != "" && filtro_p_all_mes_pago != "") {
     

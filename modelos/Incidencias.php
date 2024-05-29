@@ -104,6 +104,7 @@
             $trabajardorhtml .='<span class="avatar avatar-sm avatar-rounded"> <img src="../assets/modulo/persona/perfil/'.$valor['foto_perfil'].'" alt="img" data-toggle="tooltip" data-placement="top" title="'.$valor['nombre_razonsocial'].'"> </span>';
           };
           foreach ($trabadores['data'] as $key => $value) { array_push($array_trabadores, $value['idpersona_trabajador'] ); }
+          
           $data = [
 
             'idincidencias'           =>  $incidencias['data']['idincidencias'],
