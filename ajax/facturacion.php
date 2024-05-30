@@ -496,13 +496,14 @@ if (!isset($_SESSION["user_nombre"])) {
             $tipo_documento   = $value['tipo_documento'];
             $numero_documento = $value['numero_documento'];
             $direccion        = $value['direccion'];
-            $data .= '<option tipo_documento="'.$tipo_documento.'" numero_documento="'.$numero_documento.'" direccion="'.$direccion.'" value="' . $value['idpersona_cliente']  . '">' . $value['cliente_nombre_completo']  . ' - '. $value['nombre_tipo_documento'].': '. $value['numero_documento'] . ' - '. $value['plan_pago'].': '. $value['plan_costo'] . '</option>';
+            $dia_cancelacion= $value['dia_cancelacion_v2'];
+            $data .= '<option tipo_documento="'.$tipo_documento.'" dia_cancelacion="'.$dia_cancelacion.'" numero_documento="'.$numero_documento.'" direccion="'.$direccion.'" value="' . $value['idpersona_cliente']  . '">' . $value['cliente_nombre_completo']  . ' - '. $value['nombre_tipo_documento'].': '. $value['numero_documento'] . ' - '. $value['plan_pago'].': '. $value['plan_costo'] . '</option>';
           }
 
           $retorno = array(
             'status' => true, 
             'message' => 'Salió todo ok', 
-            'data' => '<option tipo_documento="0" numero_documento="00000000" direccion="" value="1" >CLIENTES VARIOS - 0000000</option>'.$data, 
+            'data' => '<option tipo_documento="0" dia_cancelacion="" numero_documento="00000000" direccion="" value="1" >CLIENTES VARIOS - 0000000</option>'.$data, 
           );
           echo json_encode($retorno, true);
 

@@ -118,33 +118,33 @@
       $coun_comprobante = ejecutarConsultaArray($sql_00); if ($coun_comprobante['status'] == false) {return $coun_comprobante; }
 
       $sql_01 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
-      FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND cot_estado = 'PENDIENTE' ) AS ventas_mes_actual,
-      ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND cot_estado = 'PENDIENTE' ) AS ventas_mes_anterior;";
-      $factura_p = ejecutarConsultaSimpleFila($sql_01); if ($factura_p['status'] == false) {return $factura_p; }
-      $sql_01 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE sunat_estado = 'ACEPTADA' AND cot_estado = 'PENDIENTE' AND estado = '1' AND estado_delete = '1';";
-      $factura = ejecutarConsultaSimpleFila($sql_01); if ($factura['status'] == false) {return $factura; }
-
-      $sql_03 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND cot_estado = 'VENDIDO' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND cot_estado = 'VENDIDO' ) AS ventas_mes_anterior;";
-      $boleta_p = ejecutarConsultaSimpleFila($sql_03); if ($boleta_p['status'] == false) {return $boleta_p; }
-      $sql_03 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE sunat_estado = 'ACEPTADA' AND cot_estado = 'VENDIDO' AND estado = '1' AND estado_delete = '1';";
-      $boleta = ejecutarConsultaSimpleFila($sql_03); if ($boleta['status'] == false) {return $boleta; }      
+      $vendido_p = ejecutarConsultaSimpleFila($sql_01); if ($vendido_p['status'] == false) {return $vendido_p; }
+      $sql_01 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE sunat_estado = 'ACEPTADA' AND cot_estado = 'VENDIDO' AND estado = '1' AND estado_delete = '1';";
+      $vendido = ejecutarConsultaSimpleFila($sql_01); if ($vendido['status'] == false) {return $vendido; }
 
-      $mes_factura = []; $mes_nombre = []; $date_now = date("Y-m-d");  $fecha_actual = date("Y-m-d", strtotime("-5 months", strtotime($date_now)));
+      $sql_03 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
+      FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND cot_estado = 'PENDIENTE' ) AS ventas_mes_actual,
+      ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND cot_estado = 'PENDIENTE' ) AS ventas_mes_anterior;";
+      $pendiente_p = ejecutarConsultaSimpleFila($sql_03); if ($pendiente_p['status'] == false) {return $pendiente_p; }
+      $sql_03 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE sunat_estado = 'ACEPTADA' AND cot_estado = 'PENDIENTE' AND estado = '1' AND estado_delete = '1';";
+      $pendiente = ejecutarConsultaSimpleFila($sql_03); if ($pendiente['status'] == false) {return $pendiente; }      
+
+      $mes_vendido = []; $mes_nombre = []; $date_now = date("Y-m-d");  $fecha_actual = date("Y-m-d", strtotime("-5 months", strtotime($date_now)));
       for ($i=1; $i <=6 ; $i++) { 
         $nro_mes = floatval( date("m", strtotime($fecha_actual)) );
-        $sql_mes = "SELECT MONTHNAME(fecha_emision) AS fecha_emision , COALESCE(SUM(venta_total), 0) AS venta_total FROM venta WHERE MONTH(fecha_emision) = '$nro_mes' AND sunat_estado = 'ACEPTADA' AND cot_estado = 'PENDIENTE' AND estado = '1' AND estado_delete = '1';";
+        $sql_mes = "SELECT MONTHNAME(fecha_emision) AS fecha_emision , COALESCE(SUM(venta_total), 0) AS venta_total FROM venta WHERE MONTH(fecha_emision) = '$nro_mes' AND sunat_estado = 'ACEPTADA' AND cot_estado = 'VENDIDO' AND estado = '1' AND estado_delete = '1';";
         $mes_f = ejecutarConsultaSimpleFila($sql_mes); if ($mes_f['status'] == false) {return $mes_f; }
-        array_push($mes_factura, floatval($mes_f['data']['venta_total']) ); array_push($mes_nombre, $meses_espanol[$nro_mes] );
+        array_push($mes_vendido, floatval($mes_f['data']['venta_total']) ); array_push($mes_nombre, $meses_espanol[$nro_mes] );
         $fecha_actual= date("Y-m-d", strtotime("1 months", strtotime($fecha_actual)));
       }
 
-      $mes_boleta = [];  $date_now = date("Y-m-d");  $fecha_actual = date("Y-m-d", strtotime("-5 months", strtotime($date_now)));
+      $mes_pendiente = [];  $date_now = date("Y-m-d");  $fecha_actual = date("Y-m-d", strtotime("-5 months", strtotime($date_now)));
       for ($i=1; $i <=6 ; $i++) { 
-        $sql_mes = "SELECT MONTHNAME(fecha_emision) AS fecha_emision , COALESCE(SUM(venta_total), 0) AS venta_total FROM venta WHERE MONTH(fecha_emision) = '".date("m", strtotime($fecha_actual))."' AND sunat_estado = 'ACEPTADA' AND cot_estado = 'VENDIDO' AND estado = '1' AND estado_delete = '1';";
+        $sql_mes = "SELECT MONTHNAME(fecha_emision) AS fecha_emision , COALESCE(SUM(venta_total), 0) AS venta_total FROM venta WHERE MONTH(fecha_emision) = '".date("m", strtotime($fecha_actual))."' AND sunat_estado = 'ACEPTADA' AND cot_estado = 'PENDIENTE' AND estado = '1' AND estado_delete = '1';";
         $mes_b = ejecutarConsultaSimpleFila($sql_mes); if ($mes_b['status'] == false) {return $mes_b; }
-        array_push($mes_boleta, floatval($mes_b['data']['venta_total']) ); 
+        array_push($mes_pendiente, floatval($mes_b['data']['venta_total']) ); 
         $fecha_actual= date("Y-m-d", strtotime("1 months", strtotime($fecha_actual)));
       }      
 
@@ -152,8 +152,8 @@
         'data'=>[
           'mes_nombre'        => $mes_nombre,
           'coun_comprobante'  => $coun_comprobante['data'],
-          'factura'           => floatval($factura['data']['venta_total']), 'factura_p' => floatval($factura_p['data']['porcentaje']) , 'factura_line'  => $mes_factura ,
-          'boleta'            => floatval($boleta['data']['venta_total']), 'boleta_p'   => floatval($boleta_p['data']['porcentaje']) , 'boleta_line'    => $mes_boleta ,          
+          'vendido'           => floatval($vendido['data']['venta_total']), 'vendido_p'     => floatval($vendido_p['data']['porcentaje']) , 'vendido_line'      => $mes_vendido ,
+          'pendiente'         => floatval($pendiente['data']['venta_total']), 'pendiente_p' => floatval($pendiente_p['data']['porcentaje']) , 'pendiente_line'  => $mes_pendiente ,          
         ]
       ];
 

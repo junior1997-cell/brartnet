@@ -119,9 +119,8 @@ function show_hide_form(flag) {
 
 function mini_reporte() {
 
-  $(".vw_total_factura").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
-  $(".vw_total_boleta").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
-  $(".vw_total_ticket").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
+  $(".vw_total_vendido").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
+  $(".vw_total_pendiente").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
 
   $.getJSON(`../ajax/cotizacion.php?op=mini_reporte`, function (e, textStatus, jqXHR) {
 
@@ -132,23 +131,20 @@ function mini_reporte() {
         if (val.cot_estado == 'PENDIENTE') { $(".vw_count_boleta").html( val.cantidad ); }
       });
     
-      $(".vw_total_factura").html( `${formato_miles(e.data.factura)}` ).addClass('count-up');
-      $(".vw_total_factura_p").html( `${e.data.factura_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.factura_p)}%` );
-      e.data.factura_p >= 0? $(".vw_total_factura_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_factura_p").addClass('text-danger').removeClass('text-success') ;
+      $(".vw_total_vendido").html( `${formato_miles(e.data.vendido)}` ).addClass('count-up');
+      $(".vw_total_vendido_p").html( `${e.data.vendido_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.vendido_p)}%` );
+      e.data.vendido_p >= 0? $(".vw_total_vendido_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_vendido_p").addClass('text-danger').removeClass('text-success') ;
 
-      $(".vw_total_boleta").html( `${formato_miles(e.data.boleta)}` ).addClass('count-up');
-      $(".vw_total_boleta_p").html( `${e.data.boleta_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.boleta_p)}%` );
-      e.data.boleta_p >= 0? $(".vw_total_boleta_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_boleta_p").addClass('text-danger').removeClass('text-success') ;
+      $(".vw_total_pendiente").html( `${formato_miles(e.data.pendiente)}` ).addClass('count-up');
+      $(".vw_total_pendiente_p").html( `${e.data.pendiente_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.pendiente_p)}%` );
+      e.data.pendiente_p >= 0? $(".vw_total_pendiente_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_pendiente_p").addClass('text-danger').removeClass('text-success') ;
 
-      $(".vw_total_ticket").html( `${formato_miles(e.data.ticket)}` ).addClass('count-up');
-      $(".vw_total_ticket_p").html( `${e.data.ticket_p >= 0? '<i class="ri-arrow-up-s-line me-1 align-middle"></i>' : '<i class="ri-arrow-down-s-line me-1 align-middle"></i>'} ${(e.data.ticket_p)}%` );
-      e.data.ticket_p >= 0? $(".vw_total_ticket_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_ticket_p").addClass('text-danger').removeClass('text-success') ;
-
+ 
       // MINI CHART
       var options = {
         series: [
-          { name: 'Vendido', data: e.data.factura_line }, 
-          { name: 'Pendinte', data: e.data.boleta_line },          
+          { name: 'Vendido', data: e.data.vendido_line }, 
+          { name: 'Pendinte', data: e.data.pendiente_line },          
         ],
         chart: { type: 'bar', height: 210, stacked: true },
         plotOptions: { bar: { horizontal: false, columnWidth: '25%', endingShape: 'rounded', }, },
@@ -329,6 +325,15 @@ function guardar_editar_facturacion(e) {
         Swal.fire("Correcto!", "Venta guardada correctamente", "success");
         tabla_principal_facturacion.ajax.reload(null, false);
         limpiar_form_venta(); show_hide_form(1); 
+
+        if ($('#crear_y_mostrar').is(':checked')) {
+          $("#modal-imprimir-comprobante .modal-dialog").removeClass("modal-sm modal-md modal-lg modal-xxl").addClass("modal-xl");
+          var rutacarpeta = "../reportes/A4FormatHtmlCotizacion.php?id=" + result.value.data;
+          $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir A4" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO A4 - FACTURA`);
+          $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+          $("#modal-imprimir-comprobante").modal("show");
+        } 
+
       } else if ( result.value.status == 'error_personalizado'){        
         tabla_principal_facturacion.ajax.reload(null, false);
         limpiar_form_venta(); show_hide_form(1); ver_errores(result.value);

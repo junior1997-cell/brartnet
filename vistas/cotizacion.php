@@ -168,9 +168,9 @@ if (!isset($_SESSION["user_nombre"])) {
                       </h6>
                       <div class="pb-0 mt-0">
                         <div>
-                          <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_factura" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
+                          <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_vendido" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
                           <p class="text-muted fs-11 mb-0 lh-1">
-                            <span class="text-success me-1 fw-semibold vw_total_factura_p">
+                            <span class="text-success me-1 fw-semibold vw_total_vendido_p">
                               <i class="ri-arrow-up-s-line me-1 align-middle"></i>0%
                             </span>
                             <span>this month</span>
@@ -190,9 +190,9 @@ if (!isset($_SESSION["user_nombre"])) {
                         <span class="badge bg-warning fw-semibold float-end vw_count_boleta">0  </span>
                       </h6>
                       <div>
-                        <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_boleta" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
+                        <h4 class="fs-18 fw-semibold mb-2">S/ <span class="vw_total_pendiente" data-count="0"><div class="spinner-border spinner-border-sm" role="status"></div></span></h4>
                         <p class="text-muted fs-11 mb-0 lh-1">
-                          <span class="text-success me-1 fw-semibold vw_total_boleta_p">
+                          <span class="text-success me-1 fw-semibold vw_total_pendiente_p">
                             <i class="ri-arrow-down-s-line me-1 align-middle"></i>0%
                           </span>
                           <span>this month</span>
@@ -877,8 +877,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/cotizacion.js?version_jdl=1.7"></script>
-    <script src="scripts/js_cotizacion.js?version_jdl=1.7"></script>
+    <script src="scripts/cotizacion.js?version_jdl=1.9"></script>
+    <script src="scripts/js_cotizacion.js?version_jdl=1.9"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

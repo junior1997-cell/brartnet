@@ -361,7 +361,7 @@
 
     // ══════════════════════════════════════ U S A R   A N T I C I P O ══════════════════════════════════════
     public function mostrar_anticipos($idcliente){
-      $sql = "SELECT pc.idpersona_cliente, p.nombre_razonsocial AS nombres,  p.apellidos_nombrecomercial AS apellidos,
+      $sql = "SELECT  pc.idpersona_cliente, p.nombre_razonsocial AS nombres,  p.apellidos_nombrecomercial AS apellidos,
         (
           IFNULL( (SELECT  SUM( CASE  WHEN ac.tipo = 'EGRESO' THEN ac.total * -1 ELSE ac.total END )
           FROM anticipo_cliente AS ac
@@ -381,7 +381,8 @@
       if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
         $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
       } 
-      $sql = "SELECT LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_cliente, p.idpersona,  p.nombre_razonsocial, p.apellidos_nombrecomercial,
+      $sql = "SELECT pc.*, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, DAY(pc.fecha_cancelacion) AS dia_cancelacion_v2,
+       pc.idpersona_cliente, p.idpersona,  p.nombre_razonsocial, p.apellidos_nombrecomercial,
       CASE 
         WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
         WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 

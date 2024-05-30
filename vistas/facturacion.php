@@ -290,10 +290,17 @@ if (!isset($_SESSION["user_nombre"])) {
                       <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                         <div class="row gy-3">
                           <!-- ENVIO AUTOMATICO -->
-                          <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 px-0">
+                          <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4 px-0">
                             <div class="custom-toggle-switch d-flex align-items-center mb-1">
                               <input id="crear_y_emitir" name="crear_y_emitir" type="checkbox" checked="" value="SI">
-                              <label for="crear_y_emitir" class="label-warning"></label><span class="ms-3">Crear y emitir SUNAT</span>
+                              <label for="crear_y_emitir" class="label-warning"></label><span class="ms-3">SUNAT</span>
+                            </div>
+                          </div>
+                          <!-- CREAR Y MOSTRAR-->
+                          <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4 px-0">
+                            <div class="custom-toggle-switch d-flex align-items-center mb-1">
+                              <input id="crear_y_mostrar" name="crear_y_mostrar" type="checkbox" checked="" value="SI">
+                              <label for="crear_y_mostrar" class="label-warning"></label><span class="ms-3">Crear y mostrar</span>
                             </div>
                           </div>
                           <!--  TIPO COMPROBANTE  -->
@@ -400,7 +407,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                           <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 datos-de-cobro-mensual">
                             <div class="form-group">
-                              <label for="periodo_pago" class="form-label">Periodo Pago</label>
+                              <label for="periodo_pago" class="form-label">Periodo Pago <span class="text-success fs-10 bx-flashing span_dia_cancelacion"></span></label>
                               <input type="month" class="form-control" name="periodo_pago" id="periodo_pago" >
                             </div>
                           </div>                                                                  
@@ -1041,8 +1048,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.7"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.7"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.9"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.9"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

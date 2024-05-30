@@ -43,7 +43,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     if ( empty($venta_f['data']['venta']) ) { echo "Comprobante no existe"; die();  }
 
-    $logo_empresa = "../assets/images/brand-logos/logo1.png";      
+    $logo_empresa = "../assets/modulo/facturacion/cotizacion/proforma-cabecera.png";      
     // $encoder = Base64ImageEncoder::fromFileName($logo_empresa, $allowedFormats = ['jpeg', 'png', 'gif']);    
     // $encoder->getMimeType(); // image/jpeg for instance
     // $encoder->getContent(); // base64 encoded image bytes.
@@ -104,6 +104,9 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $observacion_documento= mb_convert_encoding($venta_f['data']['venta']['observacion_documento'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['observacion_documento'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     $sunat_hash           = mb_convert_encoding($venta_f['data']['venta']['sunat_hash'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['sunat_hash'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    
+    $cot_tiempo_entrega   = mb_convert_encoding($venta_f['data']['venta']['cot_tiempo_entrega'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['cot_tiempo_entrega'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $cot_validez          = mb_convert_encoding($venta_f['data']['venta']['cot_validez'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['cot_validez'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
 
     // detalle x producto ================================================================================
@@ -113,7 +116,7 @@ if (!isset($_SESSION["user_nombre"])) {
     
       $html_venta .= '<tr class="item-list">'.       
         '<td style="text-align: center; padding-left: 8px; font-size: 10px;">' .  floatval($val['cantidad'])  . '</td>' .
-        '<td style="text-align: center; padding-left: 8px; font-size: 10px;">' .  $val['um_abreviatura_a']  . '</td>' .
+        '<td style="text-align: center; padding-left: 8px; font-size: 10px;">' .  $val['um_nombre_a']  . '</td>' .
         '<td style="padding: 0.5rem; text-align: left; font-size: 10px; word-break: break-all;">' . ($val['codigo']) . '</td>' .
         '<td style="padding: 0.5rem; text-align: left;  font-size: 10px; overflow-wrap: break-word;">' . ($val['nombre_producto']) . '</td>' .
         '<td style="padding: 0.5rem; text-align: right; font-size: 10px;">' .     number_format( floatval($val['precio_venta']) , 2, '.', ',') . '</td>' .
@@ -158,34 +161,40 @@ if (!isset($_SESSION["user_nombre"])) {
     }
 
     .flex { display: flex; }
-    .header-primary {align-items: center; justify-content: center;  }
+    .header-primary {align-items: start; justify-content: center;  }
     .image-logo {     
-      height: 120px; width: 65%;
+      height: 320px; 
+      width: 100%;
       background-repeat: no-repeat; 
-      background-position: center; background-size: contain; 
+      /* background-position: center;  */
+      background-size: contain; 
       /* filter: grayscale(100%); */
     }
     .image-logo-container {
       height: 120px; width: 100%;
-      background-color: #a5a5a5 !important; 
-      border: 1px solid gray;
+      /* background-color: #a5a5a5 !important; 
+      border: 1px solid gray; */
       border-radius: 5px;
       text-align: center;
     }
 
     .document-header {
-      width: 50%;
-      border: 1px solid gray;
-      padding: 0em 1em 0 1em;
+      width: 70%;
+      /* border: 1px solid gray; */
+      /* padding: 0em 1em 0 1em; */
       text-align: center;
       border-radius: 7px;
-      background-color: #dedede;
+      /* background-color: #dedede; */
       -webkit-print-color-adjust: exact;
       line-height: 0.5;
       align-self: stretch;
-      padding-top: 17px;
+      /* padding-top: 17px; */
       font-size: 15px;
     }
+
+    .document-header-content {       
+        padding-top: 17px;        
+      }
 
     .table-products thead th { padding: 5px 8px;  }
     .table-products tbody tr:nth-of-type(odd) {  background-color: #F4F4F5; -webkit-print-color-adjust: exact; }
@@ -221,33 +230,38 @@ if (!isset($_SESSION["user_nombre"])) {
       }
       .tm_hide_print {  display: none !important;  }
       .flex { display: flex; }
-      .header-primary {align-items: center; justify-content: center;  }
+      .header-primary {align-items: start; justify-content: center;  }
       .image-logo {     
-      height: 120px; width: 65%;
-        background-repeat: no-repeat; 
+        height: 320px; 
+        width: 100%;
+        /* background-repeat: no-repeat;  */
         background-position: center; background-size: contain; 
         filter: grayscale(100%);
       }
       .image-logo-container {
         height: 120px; width: 100%;
-        background-color: #a5a5a5 !important; 
-        border: 1px solid gray;
+        /* background-color: #a5a5a5 !important; 
+        border: 1px solid gray; */
         border-radius: 5px;
         text-align: center;
       }
 
       .document-header {
-        width: 50%;
-        border: 1px solid gray;
-        padding: 0em 1em 0 1em;
+        width: 70%;
+        /* border: 1px solid gray; */
+        /* padding: 0em 1em 0 1em; */
         text-align: center;
         border-radius: 7px;
-        background-color: #dedede;
+        /* background-color: #dedede; */
         -webkit-print-color-adjust: exact;
         line-height: 0.5;
         align-self: stretch;
-        padding-top: 17px;
+        /* padding-top: 17px; */
         font-size: 15px;
+      }
+
+      .document-header-content {       
+        padding-top: 17px;        
       }
 
       .table-products thead th { padding: 5px 8px;  }
@@ -295,145 +309,129 @@ if (!isset($_SESSION["user_nombre"])) {
     
       <div class="flex header-primary" style="margin-bottom: 15px;">
         
-        <div style="width: 50%; padding-left: 0px; padding-right: 10px;">         
+        <div style="width: 30%; padding-left: 0px; padding-right: 10px;">         
           <div class="image-logo-container"> 
-            <center> <div class="image-logo" style="background-image: url(&quot;../assets/images/brand-logos/logo1.png&quot;);"></div></center>
+             <div class="image-logo" style="background-image: url(&quot;<?php echo $logo_empresa;?>&quot;);"></div>
           </div>
         </div>
         
         <div class="document-header">
-          <div class="document-header-content text-nowrap"><strong style="display: block; margin-bottom: 5px;">
-            <p>R.U.C. N° <?php echo $e_numero_documento;?></p>
-            <p style="text-transform: uppercase; font-size: 19px;"><?php echo $nombre_comprobante;?> electrónica</p>
-            </strong> <strong style="display: block; font-size: 19px;"> <p><?php echo $serie_y_numero_comprobante;?></p> </strong>
+          <div class="document-header-content ">
+            <table style="width: 100%; padding: 0px; font-size: 12px;">
+              <tbody>
+                <tr>
+                  <td style="width: 60%; padding-left: 15px; padding-right: 15px;" >
+                    <strong style="margin-bottom: 0px;">Oficina: </strong> <?php echo $e_domicilio_fiscal;?> <br>
+                    <strong style="margin-bottom: 0px;">Teléfono: </strong> <?php echo $e_telefono1 .' - ' . $e_telefono2;?> <br>
+                    <strong style="margin-bottom: 0px;">Correo: </strong> <?php echo $e_correo;?> <br>
+                  </td>
+                  <td>
+                    <strong style="margin-bottom: 0px; font-size: 35px; color: #1554a0;"> PROFORMA </strong>
+                    <div style="text-align: center;" ><strong style="display: block; font-size: 25px;"> <?php echo $serie_y_numero_comprobante;?></strong></div> 
+                    <p style="font-size: 15px;">R.U.C. N° <?php echo $e_numero_documento;?></p>
+                    <strong>Fecha:</strong> <?php echo $fecha_emision_format;?>
+                  </td>
+                </tr>                
+              </tbody>
+            </table>            
+            
           </div>
         </div>
       </div>
-      <div>
-        <div style="display: inline-block; vertical-align: top; width: 46.9%; border-radius: 7px; margin-right: 16px;">
-          <table style="width: 100%; padding: 0px; font-size: 12px;">
+      <div style="margin-top: 4em; text-align: center;">
+        <strong style="font-size: 20px; color: #1554a0;"><?php echo $e_razon_social;?></strong>
+      </div>
+      <div style="margin-top: 1rem; padding-right: 2rem; padding-left: 2rem;" >
+        <div style="display: inline-block; vertical-align: top; width: 45%; border: 3px solid #8080804d; border-radius: 2px; margin-right: 16px; margin-left: 16px;">
+          <table style="width: 100%; padding-bottom: 15px; font-size: 12px;">
             <tbody>
               <tr>
-                <td><strong style="margin-bottom: 0px;"> <?php echo $e_razon_social;?> </strong></td>
-              </tr> <!---->
-              <tr>
-                <td><?php echo $e_domicilio_fiscal;?></td>
-              </tr> <!---->
-              <tr><td><b>Correo:</b> <?php echo $e_correo;?></td></tr>
-              <tr><td><b>Cel.:</b> <?php echo $e_telefono1 .' - ' . $e_telefono2;?></td></tr>
+                <td><strong style="margin-bottom: 0px;">EMSIOR:</strong> <?php echo $e_razon_social;?></td>
+              </tr>               
+              <tr><td><b>RUC:</b> <?php echo $e_numero_documento;?></td></tr>
+              <tr><td><b>E-MAIL:</b> <?php echo $e_correo;?></td></tr>
             </tbody>
           </table>
         </div>
-        <div style="display: inline-block; vertical-align: top; width: 50%; border: 1px solid gray; border-radius: 7px; margin-bottom: 15px;">
+        <div style="display: inline-block; vertical-align: top; width: 45%; border: 3px solid #8080804d; border-radius: 2px; margin-bottom: 15px;">
           <table style="width: 100%; padding: 0.5em; font-size: 12px;">
-            <tbody>
+            <tbody>              
               <tr>
-                <td width="30%"><strong>Fecha emisión</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td><?php echo $fecha_emision_format;?></td>
-              </tr> 
-              <tr>
-                <td width="30%"><strong>Señor(es)</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_nombre_completo;?> </td>
+                <td width="30%"><strong>CLIENTE:</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_nombre_completo;?> </td>
               </tr>
               <tr>
                 <td width="30%"><strong><?php echo $c_tipo_documento_name;?></strong></td> <td style="width: 1rem; text-align: right;">:</td> <td><span><?php echo $c_numero_documento;?></span></td>
               </tr>
               <tr>
-                <td width="30%"><strong>Dirección</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_direccion;?></td>
-              </tr> 
-              <?php if ($tipo_comprobante == '07') {?>
+                <td width="30%"><strong>E-MAIL:</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_direccion;?></td>
+              </tr>               
               <tr>
-                <td width="30%"><strong>Doc. Baja</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_nc_serie_y_numero;?></td>
-              </tr> 
-              <?php }?>
+                <td width="30%"><strong>TELEFONO:</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_nc_serie_y_numero;?></td>
+              </tr>               
             </tbody>
           </table>
         </div>
       </div>
-      <div style="border: 1px solid gray; border-radius: 7px;">
-        <table role="grid" class="table-products" style="table-layout: fixed;">
-          <thead>
-            <tr role="row">
-              <th role="columnheader" style="text-align: center; width: 25px;">Cant.</th>
-              <th role="columnheader" style="text-align: center; width: 50px;">Unidad</th>
-              <th role="columnheader" style="text-align: left; width: 50px;"> Código </th>
-              <th role="columnheader" style="text-align: left; width: auto;">Descripción</th>
-              <th role="columnheader" style="text-align: right; width: 50px;">P.U.</th> 
-              <th role="columnheader" style="text-align: right; width: 50px;">Dcto.</th> 
-              <th role="columnheader" style="text-align: right; width: 80px;"> Total  </th>
-            </tr>
-          </thead>
-          <tbody  style="border-bottom: 1px solid gray; border-top: 1px solid gray;">
-            
-            <?php echo $html_venta;?>
-            <!-- <tr class="item-list">
-              <td style="text-align: center; padding-left: 8px; font-size: 10px;"> 1.00 </td>
-              <td style="padding: 0.5rem; text-align: center; font-size: 10px;"> UNIDAD </td>
-              <td style="padding: 0.5rem; text-align: left; font-size: 10px; word-break: break-all;"> PIURA &nbsp;  </td>
-              <td style="padding: 0.5rem; text-align: left; min-width: 200px; font-size: 10px; overflow-wrap: break-word;">
-                FACTURACION POR SERVICIO DE CORRESPONSALI CORRESPONDIENTE AL MES DE ABRIL 2024 <br></td>
-              <td style="padding: 0.5rem; text-align: right; font-size: 10px;"> 136.40</td> 
-              <td style="text-align: right; padding-right: 8px; font-size: 10px;"> 136.40 </td>
-            </tr> -->
-          </tbody>
-        </table>
-        <div style="overflow: hidden;">
-          <table class="table-footer">
-            <tbody>
-              <tr>
-                <td style="float: right; text-transform: uppercase;">  Subtotal</td>
-                <td style="text-align: right;"> S/ </td>
-                <td style="float: right;"><?php echo $venta_subtotal_no_dcto;?></td>
+      <div style="padding-right: 2rem; padding-left: 2rem;">      
+        <div style="border: 3px solid #8080804d; border-radius: 2px;">
+          <table role="grid" class="table-products" style="table-layout: fixed;">
+            <thead>
+              <tr role="row">
+                <th role="columnheader" style="text-align: center; width: 25px;">Cant.</th>
+                <th role="columnheader" style="text-align: center; width: 60px;">Unidad</th>
+                <th role="columnheader" style="text-align: left; width: 50px;"> Código </th>
+                <th role="columnheader" style="text-align: left; width: auto;">Descripción</th>
+                <th role="columnheader" style="text-align: right; width: 50px;">P.U.</th> 
+                <th role="columnheader" style="text-align: right; width: 50px;">Dcto.</th> 
+                <th role="columnheader" style="text-align: right; width: 80px;"> Total  </th>
               </tr>
-              <tr>
-                <td style="float: right; text-transform: uppercase;">  Descuento</td>
-                <td style="text-align: right;"> S/ </td>
-                <td style="float: right;"><?php echo $venta_descuento;?></td>
-              </tr>
-              <tr>
-                <td style="float: right; text-transform: uppercase;">  OP. Exonerada</td>
-                <td style="text-align: right;"> S/ </td>
-                <td style="float: right;"><?php echo $venta_subtotal?></td>
-              </tr> 
-              <tr>
-                <td style="text-align: right;">I.G.V</td>
-                <td style="text-align: right;"> S/ </td>
-                <td style="text-align: right;">0.00</td>
-              </tr> 
-              <tr>
-                <td style="text-align: right; font-weight: bolder;">TOTAL</td>
-                <td style="text-align: right; font-weight: bolder;"> S/ </td>
-                <td style="text-align: right; font-weight: bolder;"><?php echo $venta_total;?> </td>
-              </tr> 
+            </thead>
+            <tbody  style=" border-top: 3px solid #8080804d;">
+              
+              <?php echo $html_venta;?>
+
+              <tr class="item-list">                
+                <td colspan="6" style="padding: 5px; text-align: center;"> <strong>TOTAL</strong>  </td>                
+                <td style="padding: 5px; text-align: right; padding-right: 8px; font-size: 12px;"> <strong><?php echo $venta_total;?></strong>  
+              </td>
+
+              <tr class="item-list">                
+                <td colspan="7" style="font-size: 12px; padding: 5px;"> <strong>IMPORTE EN LETRAS: <?php echo $total_en_letra;?></strong>   </td>                
+                
+              </td>
+
+              <!-- <tr class="item-list">
+                <td style="text-align: center; padding-left: 8px; font-size: 10px;"> 1.00 </td>
+                <td style="padding: 0.5rem; text-align: center; font-size: 10px;"> UNIDAD </td>
+                <td style="padding: 0.5rem; text-align: left; font-size: 10px; word-break: break-all;"> PIURA &nbsp;  </td>
+                <td style="padding: 0.5rem; text-align: left; min-width: 200px; font-size: 10px; overflow-wrap: break-word;">
+                  FACTURACION POR SERVICIO DE CORRESPONSALI CORRESPONDIENTE AL MES DE ABRIL 2024 <br></td>
+                <td style="padding: 0.5rem; text-align: right; font-size: 10px;"> 136.40</td> 
+                <td style="text-align: right; padding-right: 8px; font-size: 10px;"> 136.40 </td>
+              </tr> -->
             </tbody>
           </table>
+          
         </div>
       </div>
-      <div style="border: 1px solid gray; border-radius: 7px; padding: 7px; font-size: 12px; overflow: hidden; margin-top: 15px; line-height: 1.5;">
-        <div style="display: inline-block; vertical-align: top;">
-          <div>
-            <div><strong>IMPORTE EN LETRAS</strong>: <span><?php echo $total_en_letra;?></span></div> <!---->
-            <!----> <!----> <!----> <!----> <!----> <!---->
-            <div><strong>RESUMEN</strong>: <span> <?php echo $sunat_hash ;?></span></div> <!---->
-          </div>
-          <div style="margin-top: 10px;"></div>
-        </div>
-        <div style="display: inline-block; float: right; margin: -7px;">
-          <img  src="<?php echo $logoQr;?>" width="100px">
-        </div>
-      </div> <!---->
-      <div style="margin-top: 15px;">
-        <div style="border: 1px solid gray; padding: 7px; font-size: 12px; border-radius: 7px;">
-          <strong>OBSERVACIONES</strong>: <br> <span style="white-space: pre-wrap;"><?php echo $observacion_documento;?></span><br></div> <!---->
-        <div style="border: 1px solid gray; padding: 7px; font-size: 12px; border-radius: 7px; margin-top: 15px;">
-          <div>
-            <strong>FORMA DE PAGO: </strong> <span>Contado</span> 
-            <?php if ($tipo_comprobante != '07') {?> | 
-            <strong><span><?php echo $metodo_pago;?>:</strong> <span><?php echo $total_recibido;?></span> |
-            <strong>VUELTO:</strong> <span><?php echo $total_vuelto;?></span>
-            <?php }?>
+      <div style="padding-right: 2rem; padding-left: 2rem;">
+
+      
+        <div style="margin-top: 15px;">
+          <div style="border: 1px solid gray; padding: 7px; font-size: 12px; border-radius: 7px;">
+            <strong>OBSERVACIONES</strong>: <br> <span style="white-space: pre-wrap;"><?php echo $observacion_documento;?></span><br>
           </div> <!---->
-        </div> <!---->
-        <div style="text-align: center; font-size: 11px; margin-top: 15px;">
-          Representación impresa de la <b style=" text-transform: lowercase;"><?php echo $nombre_comprobante;?></b>  electrónica. Consulte su documento en <strong> <?php echo $e_web;?> </strong>
+          <div style="border: 1px solid gray; padding: 7px; font-size: 12px; border-radius: 7px; margin-top: 15px;">
+            <div>
+              <strong>FORMA DE PAGO: </strong> <span>Contado</span> <br>              
+              <strong><span>TIEMPO DE ENTREGA:</strong> <span><?php echo $cot_tiempo_entrega;?></span> <br>
+              <strong>VALIDEZ:</strong> <span><?php echo $cot_validez;?></span>
+              
+            </div> <!---->
+          </div> <!---->
+          <div style="text-align: center; font-size: 11px; margin-top: 15px;">
+            Representación impresa de la <b style=" text-transform: lowercase;"><?php echo $nombre_comprobante;?></b>  electrónica. Consulte su documento en <strong> <?php echo $e_web;?> </strong>
+          </div>
         </div>
       </div>
     </div>

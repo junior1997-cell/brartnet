@@ -509,7 +509,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>
 
-    <script src="scripts/producto.js?version_jdl=1.7"></script>
+    <script src="scripts/producto.js?version_jdl=1.9"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

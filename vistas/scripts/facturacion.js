@@ -227,6 +227,7 @@ function limpiar_form_venta(){
   file_pond_mp_comprobante.removeFiles();
   $("#mp_comprobante_old").val('');
 
+  $(".span_dia_cancelacion").html(``);
 
   $("#venta_total").val("");     
   $(".venta_total").html("0");
@@ -351,6 +352,13 @@ function guardar_editar_facturacion(e) {
         Swal.fire("Correcto!", "Venta guardada correctamente", "success");
         tabla_principal_facturacion.ajax.reload(null, false);
         limpiar_form_venta(); show_hide_form(1); reload_nc_serie_y_numero();
+        if ($('#crear_y_mostrar').is(':checked')) {
+          $("#modal-imprimir-comprobante .modal-dialog").removeClass("modal-sm modal-lg modal-xl modal-xxl").addClass("modal-md");          
+          var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + result.value.data;
+          $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - FACTURA`);
+          $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+          $("#modal-imprimir-comprobante").modal("show");
+        }
       } else if ( result.value.status == 'error_personalizado'){        
         tabla_principal_facturacion.ajax.reload(null, false);
         limpiar_form_venta(); show_hide_form(1); reload_nc_serie_y_numero(); ver_errores(result.value);
@@ -518,7 +526,9 @@ function usar_anticipo_valid() {
 
 // ::::::::::::::::::::::::::::::::::::::::::::: CLIENTE VALIDO :::::::::::::::::::::::::::::::::::::::::::::
 function es_valido_cliente() {
+
   var id_cliente = $('#idpersona_cliente').val() == ''  || $('#idpersona_cliente').val() == null ? '' : $('#idpersona_cliente').val();
+  $(".span_dia_cancelacion").html(``);
 
   if (id_cliente != null && id_cliente != '') {
 
@@ -526,9 +536,13 @@ function es_valido_cliente() {
     var tipo_documento    = $('#idpersona_cliente').select2('data')[0].element.attributes.tipo_documento.value;
     var numero_documento  = $('#idpersona_cliente').select2('data')[0].element.attributes.numero_documento.value;
     var direccion         = $('#idpersona_cliente').select2('data')[0].element.attributes.direccion.value;  
+    var dia_cancelacion = $('#idpersona_cliente').select2('data')[0].element.attributes.dia_cancelacion.value;  
     var campos_requeridos = ""; 
     var es_valido = true; 
     
+    if (id_cliente != '1') {
+      $(".span_dia_cancelacion").html(`(${dia_cancelacion} de cada mes.)`); // obtenemos la fecha de cancelacion
+    }    
 
     if (tipo_comprobante == '01') {       // FACTURA
       
@@ -553,6 +567,7 @@ function es_valido_cliente() {
     } else {
       sw_cancelar('Cliente no permitido', `El cliente no cumple con los siguientes requsitos:  <ul class="pt-3 text-left font-size-13px"> ${campos_requeridos} </ul>`, 10000);
       $("#idpersona_cliente").val('').trigger('change'); 
+      $(".span_dia_cancelacion").html(``);
     }   
     
     console.log(tipo_comprobante, tipo_documento, numero_documento, direccion, es_valido);
