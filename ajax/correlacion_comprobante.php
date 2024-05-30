@@ -34,13 +34,14 @@ switch ($_GET["op"]){
             ''
             ).
           '</div>',
-          "2" => $value['codigo'],
-          "3" => $value['nombre'],
-          "4" => $value['abreviatura'],
-          "5" => $value['serie'],
-          "6" => $value['numero'],
-          "7" => $value['un1001'],
-          "8" => $value['estado'] == '1' ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
+          "2" => $value['idtipo_comprobante_v2'],
+          "3" => $value['codigo'],
+          "4" => $value['nombre'],
+          "5" => $value['abreviatura'],
+          "6" => $value['serie'],
+          "7" => $value['numero'],
+          "8" => $value['un1001'],
+          "9" => $value['estado'] == '1' ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>Activo</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>Desactivado</span>'
         ];
       }
       $results =[

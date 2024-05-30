@@ -63,6 +63,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <tr>
                             <th class="text-center">#</th>
                             <th class="text-center">Acciones</th>
+                            <th>ID</th>
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Abreviatura</th>
@@ -77,6 +78,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <tr>
                             <th class="text-center">#</th>
                             <th class="text-center">Acciones</th>
+                            <th>ID</th>
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Abreviatura</th>
@@ -178,7 +180,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>
 
-    <script src="scripts/correlacion_comprobante.js?version_jdl=1.3"></script>
+    <script src="scripts/correlacion_comprobante.js?version_jdl=1.7"></script>
 
     <script>
       $(function() {

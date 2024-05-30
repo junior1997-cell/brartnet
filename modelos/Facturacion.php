@@ -57,7 +57,7 @@
       INNER JOIN persona AS p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = v.idsunat_c01
-      WHERE v.estado = 1 AND v.estado_delete = 1 $filtro_id_trabajador $filtro_cliente $filtro_comprobante $filtro_estado_sunat $filtro_fecha
+      WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante <> '100' $filtro_id_trabajador $filtro_cliente $filtro_comprobante $filtro_estado_sunat $filtro_fecha
       ORDER BY v.fecha_emision DESC, p.nombre_razonsocial ASC;"; #return $sql;
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
 
@@ -69,13 +69,16 @@
       $impuesto, $crear_y_emitir, $idsunat_c01 , $tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento, $es_cobro, $periodo_pago,
       $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,
       $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
-      $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion,
+      $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion, $tiempo_entrega, $validez_cotizacion,
       //DATOS TABLA venta DETALLE
       $idproducto, $um_nombre, $um_abreviatura, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $precio_venta_descuento, $descuento, $descuento_porcentaje, 
       $subtotal_producto, $subtotal_no_descuento    
     ){
-      $tipo_v = "";
-      if ($tipo_comprobante == '12') {
+      $tipo_v = ""; $cot_estado = "";
+      if ($tipo_comprobante == '100') {
+        $tipo_v = "COTIZACIÓN";
+        $cot_estado = "PENDIENTE";
+      }else if ($tipo_comprobante == '12') {
         $tipo_v = "TICKET";
       }else if ($tipo_comprobante == '07') {
         $tipo_v = "NOTA DE CRÉDITO";        
@@ -97,10 +100,10 @@
       if ( empty( $buscando_error['data'] ) ) {
         $sql_1 = "INSERT INTO venta(idpersona_cliente, iddocumento_relacionado, crear_enviar_sunat, es_cobro, idsunat_c01, tipo_comprobante, serie_comprobante,  periodo_pago,  impuesto, 
         venta_subtotal, venta_descuento, venta_igv, venta_total, metodo_pago, mp_serie_comprobante, mp_comprobante, mp_monto, venta_credito, vc_numero_operacion, 
-        vc_fecha_proximo_pago, total_recibido, total_vuelto, usar_anticipo, ua_monto_disponible, ua_monto_usado, nc_motivo_nota, nc_tipo_comprobante, nc_serie_y_numero, observacion_documento) 
+        vc_fecha_proximo_pago, total_recibido, total_vuelto, usar_anticipo, ua_monto_disponible, ua_monto_usado, nc_motivo_nota, nc_tipo_comprobante, nc_serie_y_numero, cot_tiempo_entrega, cot_validez, cot_estado, observacion_documento) 
         VALUES ('$idpersona_cliente', '$nc_idventa', '$crear_y_emitir', '$es_cobro', '$idsunat_c01', '$tipo_comprobante', '$serie_comprobante', '$periodo_pago', '$impuesto', '$venta_subtotal', '$venta_descuento',
         '$venta_igv','$venta_total','$metodo_pago','$mp_serie_comprobante','$mp_comprobante','$mp_monto','','',CURRENT_TIMESTAMP, '$total_recibido', '$total_vuelto',
-        '$usar_anticipo','$ua_monto_disponible','$ua_monto_usado', '$nc_motivo_anulacion', '$nc_tipo_comprobante', '$nc_serie_y_numero','$observacion_documento')"; 
+        '$usar_anticipo','$ua_monto_disponible','$ua_monto_usado', '$nc_motivo_anulacion', '$nc_tipo_comprobante', '$nc_serie_y_numero', '$tiempo_entrega', '$validez_cotizacion', '$cot_estado', '$observacion_documento')"; 
         $newdata = ejecutarConsulta_retornarID($sql_1, 'C'); if ($newdata['status'] == false) { return  $newdata;}
         $id = $newdata['data'];
 

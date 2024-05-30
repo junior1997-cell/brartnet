@@ -149,7 +149,7 @@
             <li class="slide"> <a href="facturacion.php" class="side-menu__item">Facturación</a></li>
             <?php } ?>            
             <?php  if ($_SESSION['cotizacion'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Cotizacion</a></li>
+            <li class="slide"> <a href="cotizacion.php" class="side-menu__item">Cotizacion</a></li>
             <?php } ?>            
             <?php  if ($_SESSION['nota_de_debito'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Nota de debito</a></li>
