@@ -57,6 +57,8 @@ function tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_a
     },
     createdRow: function (row, data, ixdex) {
       // columna: Acciones
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-nowrap text-center"); }
+      // columna: Cliente
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: Cliente
       if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
@@ -76,6 +78,8 @@ function tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_a
     columnDefs: [
       //{ targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [8,9,10], visible: false, searchable: false, },
+      { targets: [3], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-start">S/</span> <span class="float-end ${color} "> ${number} </span>`; } return number; }, },      
+
     ],
   }).DataTable();
 }
@@ -113,11 +117,11 @@ function tabla_cliente_x_cobrar(filtro_trabajador, filtro_anio_pago, filtro_p_al
     },
     createdRow: function (row, data, ixdex) {
       // columna: Acciones
-      if (data[0] != '') { $("td", row).eq(1).addClass("text-center"); }
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: Acciones
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: Cliente
-      //if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
     },
     language: {
       lengthMenu: "_MENU_ ",
@@ -134,6 +138,8 @@ function tabla_cliente_x_cobrar(filtro_trabajador, filtro_anio_pago, filtro_p_al
     columnDefs: [
        { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [5,6], visible: false, searchable: false, },
+      { targets: [3], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-start">S/</span> <span class="float-end ${color} "> ${number} </span>`; } return number; }, },      
+
     ],
   }).DataTable();
 }
@@ -201,6 +207,42 @@ function calculando_totales_pay(filtro_trabajador, filtro_anio_pago, filtro_p_al
 	}).fail( function(e) { ver_errores(e); } );
 }
 
+function calculando_totales_producto(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob){
+
+  $.getJSON("../ajax/reporte_x_trabajador.php?op=totales_x_producto", { filtro_trabajador: filtro_trabajador,filtro_anio_pago:filtro_anio_pago,filtro_p_all_mes_pago:filtro_p_all_mes_pago,filtro_tipo_comprob:filtro_tipo_comprob }, function (e, textStatus, jqXHR) {
+    console.log(e);
+    if (e.status == true) {
+      var html_producto = "";
+      e.data.forEach((val, key) => {
+
+        var html_user = "";
+        val.user.forEach((val2, key2) => {
+          var imagen_perfil = (val2.foto_perfil == "" || val2.foto_perfil == null ? 'no-perfil.jpg' :   val2.foto_perfil);
+          html_user = html_user.concat(`<span class="avatar avatar-sm avatar-rounded" data-bs-toggle="tooltip" title="${val2.nombre_razonsocial}"><img src="../assets/modulo/persona/perfil/${imagen_perfil}" alt="img"></span>`);
+        });
+
+        html_producto = html_producto.concat(`<tr>
+          <td class="text-center" ><span class="fs-11 text-muted">${key+1}</span> </td>  
+          <td><span class="fs-11 text-muted">${val.nombre_producto}</span> </td>
+          <td class="text-center"><span class="badge bg-primary-transparent">${ parseFloat(val.cantidad) }</span></td>
+          <td>${ formato_miles(val.subtotal)}</td>
+          <td>
+            <div class="avatar-list-stacked">
+              ${html_user}
+              <!-- <a class="avatar avatar-sm bg-primary text-fixed-white avatar-rounded" href="javascript:void(0);"> +5 </a> -->
+            </div>
+          </td>
+        </tr>`);
+
+      });
+
+      $('#tabla-x-producto tbody').html(html_producto);
+      $('[data-bs-toggle="tooltip"]').tooltip();
+    } else {
+      ver_errores(e);
+    }   
+  }).fail( function(e) { ver_errores(e); } );	
+}
 
 $(document).ready(function () {
   init();
@@ -242,6 +284,7 @@ function filtros() {
   tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
   calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
   calculando_totales_pay(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
+  calculando_totales_producto(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
   
 
   if (filtro_trabajador != "" && filtro_anio_pago != "" && filtro_p_all_mes_pago != "") {

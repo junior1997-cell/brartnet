@@ -52,7 +52,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "0" => $cont++,
               "1" => '<div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                  <span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\')"> </span>
+                  <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\')"> </span>
                 </div>
                 <div>
                   <span class="d-block fw-semibold text-primary">' . $value['nombre_completoCliente'] . '</span>
@@ -102,7 +102,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "0" => $cont++,
               "1" => '<div class="d-flex flex-fill align-items-center">
               <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                <span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\')"> </span>
+                <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\')"> </span>
               </div>
               <div>
                 <span class="d-block fw-semibold text-primary">' . $value['nombre_completoCliente'] . '</span>
@@ -140,6 +140,11 @@ if (!isset($_SESSION["user_nombre"])) {
       
       case 'totales_pay':
         $rspta = $reporte_x_trabajador->grafico_pay($_POST["filtro_trabajador"],$_POST["filtro_anio_pago"],$_POST["filtro_p_all_mes_pago"],$_POST["filtro_tipo_comprob"]);
+        echo json_encode($rspta, true);
+      break;
+
+      case 'totales_x_producto':
+        $rspta = $reporte_x_trabajador->ventas_por_producto($_GET["filtro_trabajador"],$_GET["filtro_anio_pago"],$_GET["filtro_p_all_mes_pago"],$_GET["filtro_tipo_comprob"]);
         echo json_encode($rspta, true);
       break;
       

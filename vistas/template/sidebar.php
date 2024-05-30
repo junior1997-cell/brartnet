@@ -248,7 +248,7 @@
         <?php  if ($_SESSION['reporte'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
-            <box-icon name='bar-chart-square side-menu__icon'></box-icon>
+            <i class='bx bx-line-chart side-menu__icon'></i>
             <span class="side-menu__label">Reportes</span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
@@ -258,7 +258,7 @@
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta Dia/mes</a></li>  
             <?php } ?>         
             <?php  if ($_SESSION['venta_por_vendedor'] == '1') { ?>
-            <li class="slide"> <a href="reporte_x_trabajador.php" class="side-menu__item">Cobros por Trbajador</a></li>
+            <li class="slide"> <a href="reporte_x_trabajador.php" class="side-menu__item">Cobros por Trabajador</a></li>
             <?php } ?>         
             <?php  if ($_SESSION['venta_agrupada'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta agrupada</a></li>

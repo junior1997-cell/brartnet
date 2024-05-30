@@ -98,7 +98,7 @@ class Reporte_x_trabajador
 		INNER JOIN persona as p2 on pt.idpersona = p2.idpersona
 		INNER JOIN usuario as u on v.user_created = u.idusuario
 		INNER JOIN persona as pu on u.idpersona = pu.idpersona
-		WHERE v.estado='1' and v.estado_delete ='1' and v.es_cobro='SI' and vd.um_nombre='SERVICIOS'
+		WHERE v.sunat_estado = 'ACEPTADA' and v.estado='1' and v.estado_delete ='1' and v.es_cobro='SI' and vd.um_nombre='SERVICIOS'
 		
 		$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
 		ORDER BY v.idventa DESC";
@@ -130,8 +130,7 @@ class Reporte_x_trabajador
                               CARD MONTOS TOTALES
 /* ════════════════════════════════════════════════════════════════════════════ */
 
-	public function totales_card_F_B_T($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob)
-	{
+	public function totales_card_F_B_T($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob)	{
 
 		$filtro_sql_trab  = '';
 		$filtro_sql_ap  = '';
@@ -326,8 +325,7 @@ class Reporte_x_trabajador
 
 	/**============================================================================ */
 	/**============================================================================ */
-	public function grafico_pay($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob)
-	{
+	public function grafico_pay($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob)	{
 		//$dataarray  = array();
 		$array_pay_total  = array();
 		$array_pay_nombre  = array();
@@ -402,7 +400,7 @@ class Reporte_x_trabajador
 		INNER JOIN persona as p2 on pt.idpersona = p2.idpersona
 		INNER JOIN usuario as u on v.user_created = u.idusuario
 		INNER JOIN persona as pu on u.idpersona = pu.idpersona
-		WHERE v.estado='1' and v.estado_delete ='1' and v.es_cobro='SI' 
+		WHERE v.sunat_estado = 'ACEPTADA' and v.estado='1' and v.estado_delete ='1' and v.es_cobro='SI' 
 		and vd.um_nombre='SERVICIOS' $filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
     GROUP by v.user_created,pu.nombre_razonsocial;";
 
@@ -414,6 +412,54 @@ class Reporte_x_trabajador
 		}
 
 		return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' => ['series' => $array_pay_total, 'labels' => $array_pay_nombre],];
+	}
+
+	public function ventas_por_producto($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob) {
+		$data = [];
+		$filtro_sql_trab  = '';
+		$filtro_sql_ap  = '';
+		$filtro_sql_mp  = '';
+		$filtro_sql_tc  = '';
+		$filtro_sql_trab_pend  = '';
+
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {	$filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
+
+		if (empty($filtro_trabajador) 	  || $filtro_trabajador 	 	== 'TODOS') {	} else {	$filtro_sql_trab	= "AND pc.idpersona_trabajador = '$filtro_trabajador'";	}
+		if (empty($filtro_anio_pago) 	   	|| $filtro_anio_pago 		 	== 'TODOS') {	} else {	$filtro_sql_ap 		= "AND v.name_year             = '$filtro_anio_pago'";	}
+		if (empty($filtro_p_all_mes_pago) || $filtro_p_all_mes_pago	== 'TODOS') {	} else {	$filtro_sql_mp 		= "AND v.name_month            = '$filtro_p_all_mes_pago'";	}
+		if (empty($filtro_tipo_comprob)   || $filtro_tipo_comprob   == 'TODOS') {	} else {	$filtro_sql_tc 		= "AND v.tipo_comprobante      = '$filtro_tipo_comprob'";	}
+
+		
+		$sql_0 = "SELECT vd.idproducto, pro.nombre as nombre_producto, SUM(vd.cantidad) as cantidad, SUM(vd.subtotal) as subtotal
+		FROM venta_detalle as vd
+    INNER JOIN venta as v ON v.idventa = vd.idventa
+		INNER JOIN persona_cliente as pc on v.idpersona_cliente= pc.idpersona_cliente
+		INNER JOIN producto as pro ON pro.idproducto = vd.idproducto
+    WHERE v.sunat_estado = 'ACEPTADA' and v.estado='1' and v.estado_delete ='1' $filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
+		GROUP BY vd.idproducto ORDER BY SUM(vd.cantidad) DESC;";
+		$producto  = ejecutarConsultaArray($sql_0);
+
+		foreach ($producto['data'] as $key => $val) {
+			$id = $val['idproducto'];
+			$sql_1 = "SELECT v.user_created, pu.nombre_razonsocial, pu.foto_perfil
+			FROM venta as v
+			INNER JOIN venta_detalle as vd on vd.idventa = v.idventa
+			INNER JOIN usuario as u on v.user_created = u.idusuario
+			INNER JOIN persona as pu on u.idpersona = pu.idpersona
+			WHERE vd.idproducto = '$id' and v.sunat_estado = 'ACEPTADA' and  v.estado='1' and v.estado_delete ='1'
+			GROUP BY v.user_created, pu.nombre_razonsocial, pu.foto_perfil;";
+			$user  = ejecutarConsultaArray($sql_1);
+			$data[] = [
+				'idproducto'=> $val['idproducto'],
+				'nombre_producto'=> $val['nombre_producto'],
+				'cantidad'=> $val['cantidad'],
+				'subtotal'=> $val['subtotal'],
+				'user'=> $user['data'],
+			];
+		}
+
+		return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' => $data,];
+
 	}
 
 	// ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════

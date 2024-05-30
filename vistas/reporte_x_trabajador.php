@@ -135,10 +135,10 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <th>Cliente</th>
                                       <th>Correlativo</th>
                                       <th>Total</th>
-                                      <th>Trabajador Asignado</th>
-                                      <th>Trabajador Cobro</th>
+                                      <th>Asignado</th>
+                                      <th>Cobrador</th>
                                       <th>Periodo</th>
-                                      <th>F. Creación</th>
+                                      <th>Creación</th>
                                       <th>Nombre</th>
                                       <th>Documento</th>
                                       <th>Celular</th>
@@ -152,10 +152,10 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <th>Cliente</th>
                                       <th>Correlativo</th>
                                       <th>Total</th>
-                                      <th>Trabajador Asignado</th>
-                                      <th>Trabajador Cobro</th>
+                                      <th>Asignado</th>
+                                      <th>Cobrador</th>
                                       <th>Periodo</th>
-                                      <th>F. Creación</th>
+                                      <th>Creación</th>
                                       <th>Nombre</th>
                                       <th>Documento</th>
                                       <th>Celular</th>
@@ -169,9 +169,9 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!--Tabla clientes que no pagan-->
                           <div class="col-12">
                             <div class="alert alert-solid-warning alert-dismissible fade show div_alert_c_t">
-                              <h6> Lista de clientes que no realizaron el pago. <strong> Para poder ver; debe selecccionar el Trabajador, Año y Mes</strong></h6>
+                              <h6 > Lista de clientes que no realizaron el pago. <strong> Para poder ver; debe selecccionar el Trabajador, Año y Mes</strong></h6>
                             </div>
-                            <div class="card-body div_tbl_cxt">
+                            <div class="card-body div_tbl_cxt" style="display: none;">
                               <p class="fw-semibold fs-18 mb-2 text-center bg-light">Tabla de Clientes por Cobrar - Trabajador!</p>
                               <div id="div-tabla" class="table-responsive">
                                 <table id="tabla-cliente_x_cobrar" class="table table-bordered w-100 style_tabla_datatable" style="width: 100%;">
@@ -182,9 +182,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                     <tr>
                                       <th class="text-center">#</th>
                                       <th>Cliente</th>
-                                      <th>Nombre Plan</th>
+                                      <th>Plan</th>
                                       <th>Monto</th>
-                                      <th>F. Cancelación</th>
+                                      <th>Cancelación</th>
                                       <th>Nombre Cliente</th>
                                       <th>Num. Celular</th>
                                     </tr>
@@ -193,9 +193,9 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <tfoot>
                                     <th class="text-center">#</th>
                                     <th>Cliente</th>
-                                    <th>Nombre Plan</th>
+                                    <th>Plan</th>
                                     <th>Monto</th>
-                                    <th>F. Cancelación</th>
+                                    <th>Cancelación</th>
                                     <th>Nombre Cliente</th>
                                     <th>Num. Celular</th>
                                     </tr>
@@ -328,6 +328,33 @@ if (!isset($_SESSION["user_nombre"])) {
                               </div>
                               <div class="card-body">
                                 <div id="donut-simple"></div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-xl-12 col-xxl-12">
+                            <div class="card custom-card">
+                              <div class="card-header">
+                                <div class="card-title">Montos por Producto o Servicio</div>
+                              </div>
+                              <div class="card-body">
+                                <div class="table-responsive">
+                                  <table id="tabla-x-producto" class="table text-nowrap table-bordered table-hover border-primary">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Producto</th>
+                                        <th scope="col">Cant.</th>
+                                        <th scope="col">Costo</th>
+                                        <th scope="col">Involucrados</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      
+                                    </tbody>
+                                  </table>
+                                </div>
+                                
                               </div>
                             </div>
                           </div>
