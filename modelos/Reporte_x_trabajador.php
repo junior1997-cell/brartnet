@@ -138,7 +138,7 @@ class Reporte_x_trabajador
 		$filtro_sql_mp  = '';
 		$filtro_sql_tc  = '';
 		$filtro_sql_trab_pend  = '';
-		
+
 
 		//$data = Array(); $array_ticket = []; $array_factura = []; $array_boleta = [];  $array_total = [];
 		$data  = array();
@@ -191,11 +191,11 @@ class Reporte_x_trabajador
 			return $sqlboleta;
 		}
 
-		$nombre_tipo_comprob_b = (empty($sqlboleta['data']) ? 0 : (empty($sqlboleta['data']['tp_comprobante_v2']) ? "BOLETA" : "BOLETA")  );
-		$cantidad_comprob_b    = (empty($sqlboleta['data']) ? 0 : (empty($sqlboleta['data']['total_ventas']) ? 0 : floatval($sqlboleta['data']['total_ventas']) ) );
-		$total_comprob_b       = (empty($sqlboleta['data']) ? 0 : (empty($sqlboleta['data']['total_general']) ? 0 : floatval($sqlboleta['data']['total_general']) ) );
+		$nombre_tipo_comprob_b = (empty($sqlboleta['data']) ? 0 : (empty($sqlboleta['data']['tp_comprobante_v2']) ? "BOLETA" : "BOLETA"));
+		$cantidad_comprob_b    = (empty($sqlboleta['data']) ? 0 : (empty($sqlboleta['data']['total_ventas']) ? 0 : floatval($sqlboleta['data']['total_ventas'])));
+		$total_comprob_b       = (empty($sqlboleta['data']) ? 0 : (empty($sqlboleta['data']['total_general']) ? 0 : floatval($sqlboleta['data']['total_general'])));
 
-		$new_boleta= array('nombre' => $nombre_tipo_comprob_b, 'cantidad' => $cantidad_comprob_b ,'total' => $total_comprob_b);
+		$new_boleta = array('nombre' => $nombre_tipo_comprob_b, 'cantidad' => $cantidad_comprob_b, 'total' => $total_comprob_b);
 
 
 		$sql_factura = "SELECT tc.abreviatura AS tp_comprobante_v2,
@@ -220,11 +220,11 @@ class Reporte_x_trabajador
 			return $sqlfactura;
 		}
 
-		$nombre_tipo_comprob_f = (empty($sqlfactura['data']) ? 0 : (empty($sqlfactura['data']['tp_comprobante_v2']) ? "FACTURA" : $sqlfactura['data']['tp_comprobante_v2'])  );
-		$cantidad_comprob_f    = (empty($sqlfactura['data']) ? 0 : (empty($sqlfactura['data']['total_ventas']) ? 0 : floatval($sqlfactura['data']['total_ventas']) ) );
-		$total_comprob_f       = (empty($sqlfactura['data']) ? 0 : (empty($sqlfactura['data']['total_general']) ? 0 : floatval($sqlfactura['data']['total_general']) ) );
+		$nombre_tipo_comprob_f = (empty($sqlfactura['data']) ? 0 : (empty($sqlfactura['data']['tp_comprobante_v2']) ? "FACTURA" : $sqlfactura['data']['tp_comprobante_v2']));
+		$cantidad_comprob_f    = (empty($sqlfactura['data']) ? 0 : (empty($sqlfactura['data']['total_ventas']) ? 0 : floatval($sqlfactura['data']['total_ventas'])));
+		$total_comprob_f       = (empty($sqlfactura['data']) ? 0 : (empty($sqlfactura['data']['total_general']) ? 0 : floatval($sqlfactura['data']['total_general'])));
 
-		$new_factura= array('nombre' => $nombre_tipo_comprob_f, 'cantidad' => $cantidad_comprob_f ,'total' => $total_comprob_f);
+		$new_factura = array('nombre' => $nombre_tipo_comprob_f, 'cantidad' => $cantidad_comprob_f, 'total' => $total_comprob_f);
 
 		$sql_ticket = "SELECT tc.abreviatura AS tp_comprobante_v2,
 		COUNT(v.idventa) AS total_ventas, SUM(v.venta_total) AS total_general
@@ -246,11 +246,11 @@ class Reporte_x_trabajador
 			return $sqlticket;
 		}
 
-		$nombre_tipo_comprob_tik = (empty($sqlticket['data']) ? 0 : (empty($sqlticket['data']['tp_comprobante_v2']) ? "TICKET" : $sqlticket['data']['tp_comprobante_v2'])  );
-		$cantidad_comprob_tik    = (empty($sqlticket['data']) ? 0 : (empty($sqlticket['data']['total_ventas']) ? 0 : floatval($sqlticket['data']['total_ventas']) ) );
-		$total_comprob_tik       = (empty($sqlticket['data']) ? 0 : (empty($sqlticket['data']['total_general']) ? 0 : floatval($sqlticket['data']['total_general']) ) );
+		$nombre_tipo_comprob_tik = (empty($sqlticket['data']) ? 0 : (empty($sqlticket['data']['tp_comprobante_v2']) ? "TICKET" : $sqlticket['data']['tp_comprobante_v2']));
+		$cantidad_comprob_tik    = (empty($sqlticket['data']) ? 0 : (empty($sqlticket['data']['total_ventas']) ? 0 : floatval($sqlticket['data']['total_ventas'])));
+		$total_comprob_tik       = (empty($sqlticket['data']) ? 0 : (empty($sqlticket['data']['total_general']) ? 0 : floatval($sqlticket['data']['total_general'])));
 
-		$new_ticket= array('nombre' => $nombre_tipo_comprob_tik, 'cantidad' => $cantidad_comprob_tik ,'total' => $total_comprob_tik);
+		$new_ticket = array('nombre' => $nombre_tipo_comprob_tik, 'cantidad' => $cantidad_comprob_tik, 'total' => $total_comprob_tik);
 
 		$sql_total = "SELECT 'TOTAL' AS tp_comprobante_v2,
 				COUNT(v.idventa) AS total_ventas, SUM(v.venta_total) AS total_general
@@ -272,22 +272,21 @@ class Reporte_x_trabajador
 			return $sqltotal;
 		}
 
-		$nombre_tipo_comprob_tt = (empty($sqltotal['data']) ? 0 : (empty($sqltotal['data']['tp_comprobante_v2']) ? "TOTAL" : $sqltotal['data']['tp_comprobante_v2'])  );
-		$cantidad_comprob_tt    = (empty($sqltotal['data']) ? 0 : (empty($sqltotal['data']['total_ventas']) ? 0 : floatval($sqltotal['data']['total_ventas']) ) );
-		$total_comprob_tt       = (empty($sqltotal['data']) ? 0 : (empty($sqltotal['data']['total_general']) ? 0 : floatval($sqltotal['data']['total_general']) ) );
+		$nombre_tipo_comprob_tt = (empty($sqltotal['data']) ? 0 : (empty($sqltotal['data']['tp_comprobante_v2']) ? "TOTAL" : $sqltotal['data']['tp_comprobante_v2']));
+		$cantidad_comprob_tt    = (empty($sqltotal['data']) ? 0 : (empty($sqltotal['data']['total_ventas']) ? 0 : floatval($sqltotal['data']['total_ventas'])));
+		$total_comprob_tt       = (empty($sqltotal['data']) ? 0 : (empty($sqltotal['data']['total_general']) ? 0 : floatval($sqltotal['data']['total_general'])));
 
-		$new_total= array('nombre' => $nombre_tipo_comprob_tt, 'cantidad' => $cantidad_comprob_tt ,'total' => $total_comprob_tt);
+		$new_total = array('nombre' => $nombre_tipo_comprob_tt, 'cantidad' => $cantidad_comprob_tt, 'total' => $total_comprob_tt);
 
 		// ------------------------ pendiente
-		$new_totalpendiente= array('nombre' => 'PENDIENTE', 'cantidad' => 0 ,'total' => 0);
+		$new_totalpendiente = array('nombre' => 'PENDIENTE', 'cantidad' => 0, 'total' => 0);
 
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
 			$filtro_sql_trab_pend = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		}
 
 		if (empty($filtro_trabajador) || $filtro_trabajador == 'TODOS' || empty($filtro_anio_pago) || $filtro_anio_pago == 'TODOS' || empty($filtro_p_all_mes_pago) || $filtro_p_all_mes_pago == 'TODOS') {
-			
-		}else {
+		} else {
 			$filtro_sql_trab_pend	= "AND pt.idpersona_trabajador = '$filtro_trabajador'";
 			$sql_pendiente = "SELECT COUNT(pc.idpersona_cliente) as cantidad, SUM(pl.costo) as total_pendiente
 			FROM persona_cliente AS pc
@@ -305,13 +304,12 @@ class Reporte_x_trabajador
 				return $sqlpendiente;
 			}
 
-			$cantidad_comprob_tp    = (empty($sqlpendiente['data']) ? 0 : (empty($sqlpendiente['data']['cantidad']) ? 0 : floatval($sqlpendiente['data']['cantidad']) ) );
-			$total_comprob_tp       = (empty($sqlpendiente['data']) ? 0 : (empty($sqlpendiente['data']['total_pendiente']) ? 0 : floatval($sqlpendiente['data']['total_pendiente']) ) );
-			
-			// Modificamos la cantidad y el total a 0
-			$new_totalpendiente['cantidad'] =$cantidad_comprob_tp;
-			$new_totalpendiente['total'] = $total_comprob_tp;
+			$cantidad_comprob_tp    = (empty($sqlpendiente['data']) ? 0 : (empty($sqlpendiente['data']['cantidad']) ? 0 : floatval($sqlpendiente['data']['cantidad'])));
+			$total_comprob_tp       = (empty($sqlpendiente['data']) ? 0 : (empty($sqlpendiente['data']['total_pendiente']) ? 0 : floatval($sqlpendiente['data']['total_pendiente'])));
 
+			// Modificamos la cantidad y el total a 0
+			$new_totalpendiente['cantidad'] = $cantidad_comprob_tp;
+			$new_totalpendiente['total'] = $total_comprob_tp;
 		};
 
 
@@ -324,7 +322,98 @@ class Reporte_x_trabajador
 		);
 
 		return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' => $data, 'affected_rows' => $sqlboleta['affected_rows'],];
+	}
 
+	/**============================================================================ */
+	/**============================================================================ */
+	public function grafico_pay($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob)
+	{
+		//$dataarray  = array();
+		$array_pay_total  = array();
+		$array_pay_nombre  = array();
+
+		$filtro_sql_trab  = '';
+		$filtro_sql_ap  = '';
+		$filtro_sql_mp  = '';
+		$filtro_sql_tc  = '';
+		$filtro_sql_trab_pend  = '';
+
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+			$filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";
+		}
+
+		if (empty($filtro_trabajador) 	   || $filtro_trabajador 	   == 'TODOS') {
+		} else {
+			$filtro_sql_trab	= "AND pt.idpersona_trabajador = '$filtro_trabajador'";
+		}
+		if (empty($filtro_anio_pago) 	   || $filtro_anio_pago 		 == 'TODOS') {
+		} else {
+			$filtro_sql_ap 	= "AND v.name_year             = '$filtro_anio_pago'";
+		}
+		if (empty($filtro_p_all_mes_pago) || $filtro_p_all_mes_pago == 'TODOS') {
+		} else {
+			$filtro_sql_mp 		= "AND v.name_month            = '$filtro_p_all_mes_pago'";
+		}
+		if (empty($filtro_tipo_comprob)   || $filtro_tipo_comprob   == 'TODOS') {
+		} else {
+			$filtro_sql_tc 		= "AND v.tipo_comprobante      = '$filtro_tipo_comprob'";
+		}
+
+		// ------------------------ pendiente
+		array_push($array_pay_nombre, "PENDIENTE");
+		$total_comprob_tp = 0;
+
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+			$filtro_sql_trab_pend = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";
+		}
+
+		if (empty($filtro_trabajador) || $filtro_trabajador == 'TODOS' || empty($filtro_anio_pago) || $filtro_anio_pago == 'TODOS' || empty($filtro_p_all_mes_pago) || $filtro_p_all_mes_pago == 'TODOS') {
+			$total_comprob_tp = 0;
+		} else {
+			$filtro_sql_trab_pend	= "AND pt.idpersona_trabajador = '$filtro_trabajador'";
+			$sql_pendiente = "SELECT SUM(pl.costo) as total_pendiente
+					FROM persona_cliente AS pc
+					LEFT JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente AND v.name_year='$filtro_anio_pago' AND v.name_month='$filtro_p_all_mes_pago'
+					JOIN persona_trabajador as pt ON pc.idpersona_trabajador = pt.idpersona_trabajador
+					INNER JOIN plan AS pl ON pc.idplan = pl.idplan
+					INNER JOIN persona as p ON pc.idpersona = p.idpersona
+					INNER JOIN persona as p1 ON pt.idpersona = p1.idpersona
+					INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
+					WHERE v.idpersona_cliente IS NULL  $filtro_sql_trab_pend
+					AND PC.estado='1' AND PC.estado_delete = '1';";
+
+			$sqlpendiente = ejecutarConsultaSimpleFila($sql_pendiente);
+			if ($sqlpendiente['status'] == false) {
+				return $sqlpendiente;
+			}
+
+			$total_comprob_tp       = (empty($sqlpendiente['data']) ? 0 : (empty($sqlpendiente['data']['total_pendiente']) ? 0 : floatval($sqlpendiente['data']['total_pendiente'])));
+		};
+
+		// Modificamos la cantidad y el total a 0
+		array_push($array_pay_total, $total_comprob_tp);
+
+
+		$sql = "SELECT v.user_created,pu.nombre_razonsocial, SUM(vd.subtotal_no_descuento) as total 
+		FROM venta as v
+    INNER JOIN venta_detalle as vd on v.idventa = vd.idventa
+		INNER JOIN persona_cliente as pc on v.idpersona_cliente= pc.idpersona_cliente
+		INNER JOIN persona_trabajador as pt on pc.idpersona_trabajador = pt.idpersona_trabajador
+		INNER JOIN persona as p2 on pt.idpersona = p2.idpersona
+		INNER JOIN usuario as u on v.user_created = u.idusuario
+		INNER JOIN persona as pu on u.idpersona = pu.idpersona
+		WHERE v.estado='1' and v.estado_delete ='1' and v.es_cobro='SI' 
+		and vd.um_nombre='SERVICIOS' $filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
+    GROUP by v.user_created,pu.nombre_razonsocial;";
+
+		$totales  = ejecutarConsultaArray($sql);
+
+		foreach ($totales['data'] as $key => $value) {
+			array_push($array_pay_total, (empty($value['total']) ? 0 : floatval($value['total'])));
+			array_push($array_pay_nombre, $value['nombre_razonsocial']);
+		}
+
+		return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' => ['series' => $array_pay_total, 'labels' => $array_pay_nombre],];
 	}
 
 	// ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════

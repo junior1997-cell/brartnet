@@ -374,7 +374,7 @@ if (!isset($_SESSION["user_nombre"])) {
       });
     </script>
     <script>
-      /* simple donut chart */
+      /* simple donut chart 
       var options = {
         series: [44, 55, 41, 17, 15,9],
         chart: {
@@ -384,7 +384,7 @@ if (!isset($_SESSION["user_nombre"])) {
         legend: {
           position: "bottom",
         },
-        colors: ["#845adf", "#23b7e5", "#f5b849", "#49b6f5", "#e6533c" , "#4eac4c"],
+        colors: ["#e6533c","#845adf", "#23b7e5", "#f5b849", "#49b6f5" , "#4eac4c"],
         labels: ["Team A", "Team B", "Team C", "Team D", "Team E","Team f"],
         dataLabels: {
           dropShadow: {
@@ -393,7 +393,7 @@ if (!isset($_SESSION["user_nombre"])) {
         },
       };
       var chart = new ApexCharts(document.querySelector("#donut-simple"), options);
-      chart.render();
+      chart.render();*/
     </script>
 
 

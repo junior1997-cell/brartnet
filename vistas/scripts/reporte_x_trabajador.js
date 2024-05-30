@@ -138,6 +138,8 @@ function tabla_cliente_x_cobrar(filtro_trabajador, filtro_anio_pago, filtro_p_al
   }).DataTable();
 }
 
+
+
 function calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob){
 	$.post("../ajax/reporte_x_trabajador.php?op=totales_card_F_B_T", { filtro_trabajador: filtro_trabajador,filtro_anio_pago:filtro_anio_pago,filtro_p_all_mes_pago:filtro_p_all_mes_pago,filtro_tipo_comprob:filtro_tipo_comprob }, function (e, status) {
 		e = JSON.parse(e); //console.log(e.data);
@@ -158,6 +160,41 @@ function calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filt
     /**-------------- */
     $('.total_pendiente').html(`${e.data['04_pendiente']['nombre']} <span class="ms-1 badge bg-secondary-transparent">${e.data['04_pendiente']['cantidad']}</span>`);
     $('.total_g_pend').html(`S/ ${e.data['04_pendiente']['total']}`);
+
+    } else { ver_errores(e); }
+
+	}).fail( function(e) { ver_errores(e); } );
+}
+var chart; // Variable global para almacenar el gráfico
+function calculando_totales_pay(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob){
+	$.post("../ajax/reporte_x_trabajador.php?op=totales_pay", { filtro_trabajador: filtro_trabajador,filtro_anio_pago:filtro_anio_pago,filtro_p_all_mes_pago:filtro_p_all_mes_pago,filtro_tipo_comprob:filtro_tipo_comprob }, function (e, status) {
+		e = JSON.parse(e); console.log(e.data.series); console.log(e.data.labels);
+
+   if (e.status == true) {
+     /* simple donut chart */
+    var options = {
+      series: e.data.series,
+      chart: {
+        type: "donut",
+        height: 290,
+      },
+      legend: {
+        position: "bottom",
+      },
+      colors: ["#e6533c","#845adf", "#23b7e5", "#f5b849", "#49b6f5" , "#4eac4c"],
+      labels: e.data.labels,
+      dataLabels: {
+        dropShadow: {
+          enabled: false,
+        },
+      },
+    };
+    /*var chart = new ApexCharts(document.querySelector("#donut-simple"), options);
+    chart.render();*/
+    if (chart) { chart.destroy(); }// Destruye el gráfico existente si hay uno
+    
+    chart = new ApexCharts(document.querySelector("#donut-simple"), options);
+    chart.render();
 
     } else { ver_errores(e); }
 
@@ -204,6 +241,8 @@ function filtros() {
 
   tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
   calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
+  calculando_totales_pay(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
+  
 
   if (filtro_trabajador != "" && filtro_anio_pago != "" && filtro_p_all_mes_pago != "") {
     
