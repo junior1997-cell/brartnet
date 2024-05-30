@@ -132,6 +132,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                     </tr>
                                     <tr>
                                       <th class="text-center">#</th>
+                                      <th>Cobro?</th>
                                       <th>Cliente</th>
                                       <th>Correlativo</th>
                                       <th>Total</th>
@@ -149,6 +150,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <tfoot>
                                     <tr>
                                       <th class="text-center">#</th>
+                                      <th>Cobro?</th>
                                       <th>Cliente</th>
                                       <th>Correlativo</th>
                                       <th>Total</th>
@@ -352,6 +354,15 @@ if (!isset($_SESSION["user_nombre"])) {
                                     <tbody>
                                       
                                     </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Producto</th>
+                                        <th scope="col">Cant.</th>
+                                        <th scope="col" class="text-right total_x_producto">Costo</th>
+                                        <th scope="col">Involucrados</th>
+                                      </tr>
+                                    </tfoot>
                                   </table>
                                 </div>
                                 

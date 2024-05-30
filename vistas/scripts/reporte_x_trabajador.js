@@ -59,9 +59,11 @@ function tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_a
       // columna: Acciones
       if (data[0] != '') { $("td", row).eq(0).addClass("text-nowrap text-center"); }
       // columna: Cliente
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center"); }
       // columna: Cliente
       if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: Cliente
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
     },
     language: {
       lengthMenu: "_MENU_ ",
@@ -69,16 +71,16 @@ function tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_a
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     footerCallback: function( tfoot, data, start, end, display ) {
-      var api1 = this.api(); var total1 = api1.column( 3).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
-      $( api1.column( 3 ).footer() ).html( `<span class="float-start">S/</span> <span class="float-end">${formato_miles(total1)}</span> ` );       
+      var api1 = this.api(); var total1 = api1.column( 4).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      $( api1.column( 4 ).footer() ).html( `<span class="float-start">S/</span> <span class="float-end">${formato_miles(total1)}</span> ` );       
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
     "order": [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
       //{ targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [8,9,10], visible: false, searchable: false, },
-      { targets: [3], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-start">S/</span> <span class="float-end ${color} "> ${number} </span>`; } return number; }, },      
+      { targets: [9,10,11], visible: false, searchable: false, },
+      { targets: [4], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-start">S/</span> <span class="float-end ${color} "> ${number} </span>`; } return number; }, },      
 
     ],
   }).DataTable();
@@ -213,6 +215,7 @@ function calculando_totales_producto(filtro_trabajador, filtro_anio_pago, filtro
     console.log(e);
     if (e.status == true) {
       var html_producto = "";
+      var html_total_producto = 0;
       e.data.forEach((val, key) => {
 
         var html_user = "";
@@ -225,7 +228,7 @@ function calculando_totales_producto(filtro_trabajador, filtro_anio_pago, filtro
           <td class="text-center" ><span class="fs-11 text-muted">${key+1}</span> </td>  
           <td><span class="fs-11 text-muted">${val.nombre_producto}</span> </td>
           <td class="text-center"><span class="badge bg-primary-transparent">${ parseFloat(val.cantidad) }</span></td>
-          <td>${ formato_miles(val.subtotal)}</td>
+          <td class="text-right">${ formato_miles(val.subtotal)}</td>
           <td>
             <div class="avatar-list-stacked">
               ${html_user}
@@ -233,10 +236,11 @@ function calculando_totales_producto(filtro_trabajador, filtro_anio_pago, filtro
             </div>
           </td>
         </tr>`);
-
+        html_total_producto += parseFloat(val.subtotal);
       });
 
       $('#tabla-x-producto tbody').html(html_producto);
+      $('.total_x_producto').html(formato_miles(html_total_producto));
       $('[data-bs-toggle="tooltip"]').tooltip();
     } else {
       ver_errores(e);

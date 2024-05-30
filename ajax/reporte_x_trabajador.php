@@ -50,7 +50,8 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = array(
               "0" => $cont++,
-              "1" => '<div class="d-flex flex-fill align-items-center">
+              "1" => $value['es_cobro'],
+              "2" => '<div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
                   <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\')"> </span>
                 </div>
@@ -60,15 +61,15 @@ if (!isset($_SESSION["user_nombre"])) {
                   <span class="text-muted text-nowrap">Cel.: ' . '<a href="tel:+51'.$value['cellCliente'].'" data-bs-toggle="tooltip" title="Clic para hacer llamada">'.$value['cellCliente'].'</a>' . '</span>
                 </div>
               </div>',
-              "2" => '<b>'.$value['tp_comprobante_v2'].'</b>' . ' <br> ' . $value['correlativo'],
-              "3" => $value['total_Pag_servicio'] ,
-              "4" => $value['nombre_completoTrabajador'] ,
-              "5" => $value['user_created_pago'] ,
-              "6" => $value['peridoPago'] ,
-              "7" => $value['fecha_emision'] ,
-              "8" => $value['nombre_completoCliente'] ,
-              "9" => $value['tipoDocumentoCliente'] . ' : ' . $value['nroDocumentoCliente'] ,
-              "10" => $value['cellCliente'] ,
+              "3" => '<b>'.$value['tp_comprobante_v2'].'</b>' . ' <br> ' . $value['correlativo'],
+              "4" => $value['total_Pag_servicio'] ,
+              "5" => $value['nombre_completoTrabajador'] ,
+              "6" => $value['user_created_pago'] ,
+              "7" => $value['peridoPago'] ,
+              "8" => $value['fecha_emision'] ,
+              "9" => $value['nombre_completoCliente'] ,
+              "10" => $value['tipoDocumentoCliente'] . ' : ' . $value['nroDocumentoCliente'] ,
+              "11" => $value['cellCliente'] ,
 
             );
           }

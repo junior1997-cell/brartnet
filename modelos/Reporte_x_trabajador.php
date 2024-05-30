@@ -443,10 +443,11 @@ class Reporte_x_trabajador
 			$id = $val['idproducto'];
 			$sql_1 = "SELECT v.user_created, pu.nombre_razonsocial, pu.foto_perfil
 			FROM venta as v
+			INNER JOIN persona_cliente as pc on v.idpersona_cliente= pc.idpersona_cliente
 			INNER JOIN venta_detalle as vd on vd.idventa = v.idventa
 			INNER JOIN usuario as u on v.user_created = u.idusuario
 			INNER JOIN persona as pu on u.idpersona = pu.idpersona
-			WHERE vd.idproducto = '$id' and v.sunat_estado = 'ACEPTADA' and  v.estado='1' and v.estado_delete ='1'
+			WHERE vd.idproducto = '$id' and v.sunat_estado = 'ACEPTADA' and  v.estado='1' and v.estado_delete ='1' $filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
 			GROUP BY v.user_created, pu.nombre_razonsocial, pu.foto_perfil;";
 			$user  = ejecutarConsultaArray($sql_1);
 			$data[] = [
