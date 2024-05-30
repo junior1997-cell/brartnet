@@ -122,7 +122,7 @@ class Reporte_x_trabajador
 					INNER JOIN persona as p1 ON pt.idpersona = p1.idpersona
 					INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
 					WHERE v.idpersona_cliente IS NULL AND pt.idpersona_trabajador ='$filtro_trabajador'
-					AND PC.estado='1' AND PC.estado_delete = '1';";
+					AND pc.estado='1' AND pc.estado_delete = '1';";
 		return ejecutarConsulta($sql);
 	}
 
@@ -297,7 +297,7 @@ class Reporte_x_trabajador
 			INNER JOIN persona as p1 ON pt.idpersona = p1.idpersona
 			INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
 			WHERE v.idpersona_cliente IS NULL  $filtro_sql_trab_pend
-			AND PC.estado='1' AND PC.estado_delete = '1';";
+			AND pc.estado='1' AND pc.estado_delete = '1';";
 
 			$sqlpendiente = ejecutarConsultaSimpleFila($sql_pendiente);
 			if ($sqlpendiente['status'] == false) {
@@ -380,7 +380,7 @@ class Reporte_x_trabajador
 					INNER JOIN persona as p1 ON pt.idpersona = p1.idpersona
 					INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
 					WHERE v.idpersona_cliente IS NULL  $filtro_sql_trab_pend
-					AND PC.estado='1' AND PC.estado_delete = '1';";
+					AND pc.estado='1' AND pc.estado_delete = '1';";
 
 			$sqlpendiente = ejecutarConsultaSimpleFila($sql_pendiente);
 			if ($sqlpendiente['status'] == false) {

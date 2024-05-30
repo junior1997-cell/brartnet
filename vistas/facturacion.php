@@ -308,8 +308,8 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="mb-sm-0 mb-2">
                               <p class="fs-14 mb-2 fw-semibold">Tipo de comprobante</p>
                               <div class="mb-0 authentication-btn-group">
-                                <input type="hidden" id="tipo_comprobante_hidden" value="03">
-                                <input type="hidden" name="idsunat_c01" id="idsunat_c01" value="3">
+                                <input type="hidden" id="tipo_comprobante_hidden" value="12">
+                                <input type="hidden" name="idsunat_c01" id="idsunat_c01" value="12">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                   
                                   <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante12" value="12" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante12'); es_valido_cliente();">
@@ -1048,8 +1048,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.9"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.9"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.10"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.10"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

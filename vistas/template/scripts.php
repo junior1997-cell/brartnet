@@ -49,7 +49,7 @@
 <!-- JQuery ZOOM imagen -->
 <script type="text/javascript" src="../assets/libs/jquery-zoom/jquery.zoom.js"></script>
 <!-- Funciones Crud y Generales -->
-<script type="text/javascript" src="../assets/js/funcion_crud.js?version_jdl=1.9"></script>
+<script type="text/javascript" src="../assets/js/funcion_crud.js?version_jdl=1.10"></script>
 <script type="text/javascript" src="../assets/js/funcion_general.js?version_jdl=1.2"></script>
 
 <!-- Data Table -->
