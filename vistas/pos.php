@@ -484,7 +484,7 @@
         <script src="../assets/libs/wnumb/wNumb.min.js"></script>
 
         <!-- Internal Products JS -->
-        <script src="../assets/js/products.js?version_jdl=1.11"></script>
+        <script src="../assets/js/products.js?version_jdl=1.12"></script>
 
         <!-- Custom JS -->
         <script src="../assets/js/custom.js"></script>
