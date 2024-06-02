@@ -171,7 +171,22 @@ class Cliente
 		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
 		
 		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
-		pc.fecha_cancelacion,	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
+		pc.fecha_cancelacion,	pc.fecha_afiliacion, 
+		DATEDIFF(
+			IF(DAY(fecha_cancelacion) >= DAY(CURDATE()),
+				DATE_ADD(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), INTERVAL DAY(fecha_cancelacion) DAY),
+				DATE_ADD(LAST_DAY(CURDATE()), INTERVAL DAY(fecha_cancelacion) DAY)
+			),
+			CURDATE()
+    ) AS dias_para_proximo_pago,
+		DATE_FORMAT(
+			IF(DAY(fecha_cancelacion) >= DAY(CURDATE()),
+				DATE_ADD(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), INTERVAL DAY(fecha_cancelacion) DAY),
+				DATE_ADD(LAST_DAY(CURDATE()), INTERVAL DAY(fecha_cancelacion) DAY)				
+			),
+		'%d/%m/%Y'
+		)AS proximo_pago,
+		pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
 		CASE 
 			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
@@ -390,7 +405,7 @@ class Cliente
 	public function select2_filtro_dia_pago()	{
 		$filtro_id_trabajador  = '';
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
-			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+			$filtro_id_trabajador = "WHERE pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		} 
 		$sql = "SELECT DISTINCT DAY(pc.fecha_cancelacion) as dia_cancelacion
 		FROM persona_cliente as pc $filtro_id_trabajador

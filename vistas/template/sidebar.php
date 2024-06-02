@@ -288,14 +288,18 @@
         <li class="slide">
           <a href="gasto_de_trabajador.php" class="side-menu__item">
             <i class='bx bx-dollar-circle side-menu__icon' ></i><span class="side-menu__label"> Gastos Trabajador</span>
-          </a>
-          <a href="incidencias.php" class="side-menu__item">
-            <i class='bx bx-task side-menu__icon' ></i><span class="side-menu__label">Incidencias</span>
-            <!-- <i class="bx bx-task side-menu__icon"></i> -->
-          </a>
+          </a>          
         </li>
         <?php } ?>
-        <!-- End::slide -->        
+        <!-- End::slide --> 
+        
+        <!-- Start::slide -->        
+        <li class="slide">         
+          <a href="incidencias.php" class="side-menu__item">
+            <i class='bx bx-task side-menu__icon' ></i><span class="side-menu__label">Incidencias</span>            
+          </a>
+        </li>        
+        <!-- End::slide --> 
 
         <!-- Start::slide__category -->
         <li class="slide__category"><span class="category-name">G E S T I O N - R R H H</span></li>
@@ -404,8 +408,7 @@
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
           <ul class="slide-menu child1">
-            <li class="slide side-menu__label1"><a href="javascript:void(0)">Configuración</a></li>
-           
+            <li class="slide side-menu__label1"><a href="javascript:void(0)">Configuración</a></li>           
             <li class="slide"><a href="general.php" class="side-menu__item">General</a></li>                  
           </ul>
         </li>
@@ -442,10 +445,12 @@
 
         
       </ul>
-      <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24"
+      <div class="slide-right" id="slide-right">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24"
           height="24" viewBox="0 0 24 24">
           <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
-        </svg></div>
+        </svg>
+      </div>
     </nav>
     <!-- End::nav -->
 

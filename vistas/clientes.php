@@ -121,13 +121,13 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th class="text-center">#</th>
                           <th class="text-center">Acciones</th>
                           <th>Cliente</th>
-                          <th>Direccion</th>
+                          <th>Lugar/Direccion</th>
                           <th>Falta</th>
                           <th>Cancelación</th>
                           <th>Zona/Plan</th>
                           <th>IP</th>
                           <th>Trabajador</th>                                
-                          <th class="text-center">Obs.</th>
+                          <th class="text-center">Observación.</th>
 
                           <th class="text-center">Nombres</th>
                           <th class="text-center">Tipo Documento</th>
@@ -154,7 +154,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th>Zona/Plan</th>
                           <th>IP</th>
                           <th>Trabajador</th>
-                          <th class="text-center">Obs.</th>
+                          <th class="text-center">Observación.</th>
 
                           <th class="text-center">Nombres</th>
                           <th class="text-center">Tipo Documento</th>
@@ -606,8 +606,8 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>                      
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                <div class="modal-footer py-2">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cerrar</button>
                 </div>
               </div>
             </div>
@@ -631,6 +631,25 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::modal-imprimir_ticket -->
 
+           <!-- MODAL - VER FOTO -->
+           <div class="modal fade modal-effect" id="modal-ver-imgenes" tabindex="-1" aria-labelledby="modal-ver-imgenes" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title fs-13 title-ver-imgenes" id="modal-ver-imgenesLabel1">Imagen</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body html_modal_ver_imgenes">
+                  
+                </div>
+                <div class="modal-footer py-2">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
+                </div>
+              </div>
+            </div>
+          </div> 
+          <!-- End::Modal - Ver foto proveedor -->
+
         </div>
       </div>
       <!-- End::app-content -->
@@ -647,7 +666,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/custom_switcherjs.php"); ?>
 
 
-    <script src="scripts/persona_cliente.js?version_jdl=1.10"></script>
+    <script src="scripts/persona_cliente.js?version_jdl=1.11"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

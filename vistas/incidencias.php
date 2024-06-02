@@ -13,7 +13,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
   <head>
 
-    <?php $title_page = "Gastos";
+    <?php $title_page = "Incidencias";
     include("template/head.php"); ?>
     <style>
       .choices {
@@ -332,7 +332,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Custom JS -->
     <script src="../assets/js/custom.js"></script>
 
-    <script src="scripts/incidencias.js?version_jdl=1.10"></script>
+    <script src="scripts/incidencias.js?version_jdl=1.11"></script>
 
     <script>
       flatpickr("#adDate", { enableTime: false, dateFormat: "d-m-Y", });

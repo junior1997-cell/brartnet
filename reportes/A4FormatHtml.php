@@ -113,7 +113,7 @@ if (!isset($_SESSION["user_nombre"])) {
     
       $html_venta .= '<tr class="item-list">'.       
         '<td style="text-align: center; padding-left: 8px; font-size: 10px;">' .  floatval($val['cantidad'])  . '</td>' .
-        '<td style="text-align: center; padding-left: 8px; font-size: 10px;">' .  $val['um_abreviatura_a']  . '</td>' .
+        '<td style="text-align: center; padding-left: 8px; font-size: 10px;">' .  $val['um_nombre_a']  . '</td>' .
         '<td style="padding: 0.5rem; text-align: left; font-size: 10px; word-break: break-all;">' . ($val['codigo']) . '</td>' .
         '<td style="padding: 0.5rem; text-align: left;  font-size: 10px; overflow-wrap: break-word;">' . ($val['nombre_producto']) . '</td>' .
         '<td style="padding: 0.5rem; text-align: right; font-size: 10px;">' .     number_format( floatval($val['precio_venta']) , 2, '.', ',') . '</td>' .
@@ -412,7 +412,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <div>
             <div><strong>IMPORTE EN LETRAS</strong>: <span><?php echo $total_en_letra;?></span></div> <!---->
             <!----> <!----> <!----> <!----> <!----> <!---->
-            <div><strong>RESUMEN</strong>: <span> <?php echo $sunat_hash ;?></span></div> <!---->
+            <div><strong>CÓDIGO QR</strong>: <span> <?php echo $sunat_hash ;?></span></div> <!---->
           </div>
           <div style="margin-top: 10px;"></div>
         </div>

@@ -302,19 +302,20 @@ function guardar_y_editar_cliente(e) {
     contentType: false,
     processData: false,
     success: function (e) {
-      e = JSON.parse(e); console.log(e);
-      if (e.status == true) {
-        Swal.fire("Correcto!", "Color registrado correctamente.", "success");
-
-        tabla_cliente.ajax.reload(null, false);
-
-        limpiar_cliente();
-
-        wiev_tabla_formulario(1);
-        $("#guardar_registro_cliente").html('Guardar Cambios').removeClass('disabled');
-      } else {
-        ver_errores(e);
-      }
+      try {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Color registrado correctamente.", "success");
+          tabla_cliente.ajax.reload(null, false);
+          limpiar_cliente();
+          wiev_tabla_formulario(1);
+          $("#guardar_registro_cliente").html('Guardar Cambios').removeClass('disabled');
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+      $(".btn-guardar").html('<i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar').removeClass('disabled send-data');
+     
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -329,7 +330,7 @@ function guardar_y_editar_cliente(e) {
       return xhr;
     },
     beforeSend: function () {
-      $("#guardar_registro_cliente").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $(".btn-guardar").html('<i class="ri-save-2-line label-btn-icon me-2" ></i> <i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled send-data');
       $("#barra_progress_cliente").css({ width: "0%", });
       $("#barra_progress_cliente").text("0%");
     },
@@ -804,9 +805,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function ver_img(img, nombre) {
-  $(".title-modal-img").html(`-${nombre}`);
-  $('#modal-ver-img').modal("show");
-  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
+  $(".title-ver-imgenes").html(`- ${nombre}`);
+  $('#modal-ver-imgenes').modal("show");
+  $('.html_modal_ver_imgenes').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
   $(`.jq_image_zoom`).zoom({ on: 'grab' });
 }
 
