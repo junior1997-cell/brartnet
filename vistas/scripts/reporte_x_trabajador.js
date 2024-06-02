@@ -20,12 +20,14 @@ function init() {
   $("#filtro_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_p_all_anio_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_p_all_mes_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_p_all_es_cobro").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  
   $("#filtro_tipo_comprob").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
 }
 
 //Función Listar
-function tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob) {
+function tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob,filtro_p_all_es_cobro) {
 
   tabla_cliente = $('#tabla-cliente').dataTable({
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
@@ -38,7 +40,7 @@ function tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_a
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "px-2 btn btn-sm btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/reporte_x_trabajador.php?op=tabla_principal_cliente&filtro_trabajador=${filtro_trabajador}&filtro_anio_pago=${filtro_anio_pago}&filtro_p_all_mes_pago=${filtro_p_all_mes_pago}&filtro_tipo_comprob=${filtro_tipo_comprob}`,
+      url: `../ajax/reporte_x_trabajador.php?op=tabla_principal_cliente&filtro_trabajador=${filtro_trabajador}&filtro_anio_pago=${filtro_anio_pago}&filtro_p_all_mes_pago=${filtro_p_all_mes_pago}&filtro_tipo_comprob=${filtro_tipo_comprob}&filtro_p_all_es_cobro=${filtro_p_all_es_cobro}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -146,10 +148,14 @@ function tabla_cliente_x_cobrar(filtro_trabajador, filtro_anio_pago, filtro_p_al
   }).DataTable();
 }
 
-
-
-function calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob){
-	$.post("../ajax/reporte_x_trabajador.php?op=totales_card_F_B_T", { filtro_trabajador: filtro_trabajador,filtro_anio_pago:filtro_anio_pago,filtro_p_all_mes_pago:filtro_p_all_mes_pago,filtro_tipo_comprob:filtro_tipo_comprob }, function (e, status) {
+function calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob,filtro_p_all_es_cobro){
+	$.post("../ajax/reporte_x_trabajador.php?op=totales_card_F_B_T", 
+  { filtro_trabajador: filtro_trabajador,
+    filtro_anio_pago:filtro_anio_pago,
+    filtro_p_all_mes_pago:filtro_p_all_mes_pago,
+    filtro_tipo_comprob:filtro_tipo_comprob,
+    filtro_p_all_es_cobro:filtro_p_all_es_cobro
+  }, function (e, status) {
 		e = JSON.parse(e); //console.log(e.data);
 
    if (e.status == true) {
@@ -174,9 +180,15 @@ function calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filt
 	}).fail( function(e) { ver_errores(e); } );
 }
 var chart; // Variable global para almacenar el gráfico
-function calculando_totales_pay(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob){
-	$.post("../ajax/reporte_x_trabajador.php?op=totales_pay", { filtro_trabajador: filtro_trabajador,filtro_anio_pago:filtro_anio_pago,filtro_p_all_mes_pago:filtro_p_all_mes_pago,filtro_tipo_comprob:filtro_tipo_comprob }, function (e, status) {
-		e = JSON.parse(e); console.log(e.data.series); console.log(e.data.labels);
+function calculando_totales_pay(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob,filtro_p_all_es_cobro){
+	$.post("../ajax/reporte_x_trabajador.php?op=totales_pay", 
+  { filtro_trabajador: filtro_trabajador,
+    filtro_anio_pago:filtro_anio_pago,
+    filtro_p_all_mes_pago:filtro_p_all_mes_pago,
+    filtro_tipo_comprob:filtro_tipo_comprob,
+    filtro_p_all_es_cobro:filtro_p_all_es_cobro
+  }, function (e, status) {
+		e = JSON.parse(e); //console.log(e.data.series); console.log(e.data.labels);
 
    if (e.status == true) {
      /* simple donut chart */
@@ -209,9 +221,15 @@ function calculando_totales_pay(filtro_trabajador, filtro_anio_pago, filtro_p_al
 	}).fail( function(e) { ver_errores(e); } );
 }
 
-function calculando_totales_producto(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob){
+function calculando_totales_producto(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob,filtro_p_all_es_cobro){
 
-  $.getJSON("../ajax/reporte_x_trabajador.php?op=totales_x_producto", { filtro_trabajador: filtro_trabajador,filtro_anio_pago:filtro_anio_pago,filtro_p_all_mes_pago:filtro_p_all_mes_pago,filtro_tipo_comprob:filtro_tipo_comprob }, function (e, textStatus, jqXHR) {
+  $.getJSON("../ajax/reporte_x_trabajador.php?op=totales_x_producto", 
+  { filtro_trabajador: filtro_trabajador,
+    filtro_anio_pago:filtro_anio_pago,
+    filtro_p_all_mes_pago:filtro_p_all_mes_pago,
+    filtro_tipo_comprob:filtro_tipo_comprob,
+    filtro_p_all_es_cobro:filtro_p_all_es_cobro 
+  }, function (e, textStatus, jqXHR) {
     console.log(e);
     if (e.status == true) {
       var html_producto = "";
@@ -273,27 +291,29 @@ function filtros() {
   var filtro_trabajador      = $("#filtro_trabajador").select2('val');
   var filtro_anio_pago     = $("#filtro_p_all_anio_pago").select2('val'); 
   var filtro_p_all_mes_pago  = $("#filtro_p_all_mes_pago").select2('val');
+  var filtro_p_all_es_cobro  = $("#filtro_p_all_es_cobro").select2('val');
   var filtro_tipo_comprob     = $("#filtro_tipo_comprob").select2('val');
   
   
   if (filtro_trabajador == '' || filtro_trabajador == 0 || filtro_trabajador == null) { filtro_trabajador = ""; nombre_trabajador = ""; }       // filtro de trabajador  
   if (filtro_anio_pago == '' || filtro_anio_pago == 0 || filtro_anio_pago == null) { filtro_anio_pago = ""; nombre_anio_pago = ""; }                 // filtro de dia pago  
   if (filtro_p_all_mes_pago == '' || filtro_p_all_mes_pago == 0 || filtro_p_all_mes_pago == null) { filtro_p_all_mes_pago = ""; nombre_mes_pago = ""; }                                     // filtro de plan
+  if (filtro_p_all_es_cobro == '' || filtro_p_all_es_cobro == 0 || filtro_p_all_es_cobro == null) { filtro_p_all_es_cobro = ""; nombre_es_pago = ""; }                                     // filtro de plan
   if (filtro_tipo_comprob == '' || filtro_tipo_comprob == 0 || filtro_tipo_comprob == null) { filtro_tipo_comprob = ""; nombre_tipo_comprob = ""; }  // filtro de zona antena
 
   $('#id_buscando_tabla').html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_trabajador} ${nombre_anio_pago} ${nombre_mes_pago}...`);
   $('#id_busc_tbl_cobros_x_c').html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_trabajador} ${nombre_anio_pago} ${nombre_mes_pago}...`);
   //console.log(filtro_categoria, fecha_2, filtro_p_all_mes_pago, comprobante);
 
-  tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
-  calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
-  calculando_totales_pay(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
-  calculando_totales_producto(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob);
+  tabla_principal_cliente(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob, filtro_p_all_es_cobro);
+  calculando_totales_card_F_B_T(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob, filtro_p_all_es_cobro);
+  calculando_totales_pay(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob, filtro_p_all_es_cobro);
+  calculando_totales_producto(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_tipo_comprob, filtro_p_all_es_cobro);
   
 
   if (filtro_trabajador != "" && filtro_anio_pago != "" && filtro_p_all_mes_pago != "") {
     
-    tabla_cliente_x_cobrar(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago);
+    tabla_cliente_x_cobrar(filtro_trabajador, filtro_anio_pago, filtro_p_all_mes_pago, filtro_p_all_es_cobro);
     $(".div_tbl_cxt").show(); $(".div_alert_c_t").hide();
 
   } else {  

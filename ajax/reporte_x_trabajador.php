@@ -32,7 +32,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'tabla_principal_cliente':
-        $rspta = $reporte_x_trabajador->tabla_principal_cliente($_GET["filtro_trabajador"],$_GET["filtro_anio_pago"],$_GET["filtro_p_all_mes_pago"],$_GET["filtro_tipo_comprob"]);
+        $rspta = $reporte_x_trabajador->tabla_principal_cliente($_GET["filtro_trabajador"],$_GET["filtro_anio_pago"],$_GET["filtro_p_all_mes_pago"],$_GET["filtro_tipo_comprob"], $_GET['filtro_p_all_es_cobro']);
         //Vamos a declarar un array
         $data = [];
         $cont = 1;
@@ -135,17 +135,17 @@ if (!isset($_SESSION["user_nombre"])) {
 
 
       case 'totales_card_F_B_T':
-        $rspta = $reporte_x_trabajador->totales_card_F_B_T($_POST["filtro_trabajador"],$_POST["filtro_anio_pago"],$_POST["filtro_p_all_mes_pago"],$_POST["filtro_tipo_comprob"]);
+        $rspta = $reporte_x_trabajador->totales_card_F_B_T($_POST["filtro_trabajador"],$_POST["filtro_anio_pago"],$_POST["filtro_p_all_mes_pago"],$_POST["filtro_tipo_comprob"], $_POST['filtro_p_all_es_cobro']);
         echo json_encode($rspta, true);
       break;
       
       case 'totales_pay':
-        $rspta = $reporte_x_trabajador->grafico_pay($_POST["filtro_trabajador"],$_POST["filtro_anio_pago"],$_POST["filtro_p_all_mes_pago"],$_POST["filtro_tipo_comprob"]);
+        $rspta = $reporte_x_trabajador->grafico_pay($_POST["filtro_trabajador"],$_POST["filtro_anio_pago"],$_POST["filtro_p_all_mes_pago"],$_POST["filtro_tipo_comprob"], $_POST['filtro_p_all_es_cobro']);
         echo json_encode($rspta, true);
       break;
 
       case 'totales_x_producto':
-        $rspta = $reporte_x_trabajador->ventas_por_producto($_GET["filtro_trabajador"],$_GET["filtro_anio_pago"],$_GET["filtro_p_all_mes_pago"],$_GET["filtro_tipo_comprob"]);
+        $rspta = $reporte_x_trabajador->ventas_por_producto($_GET["filtro_trabajador"],$_GET["filtro_anio_pago"],$_GET["filtro_p_all_mes_pago"],$_GET["filtro_tipo_comprob"], $_GET['filtro_p_all_es_cobro']);
         echo json_encode($rspta, true);
       break;
       

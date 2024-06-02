@@ -37,13 +37,14 @@ class Reporte_x_trabajador
 	}
 
 	//Implementar un método para listar los registros
-	public function tabla_principal_cliente($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob)
+	public function tabla_principal_cliente($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob, $filtro_p_all_es_cobro)
 	{
 
 		$filtro_sql_trab  = '';
 		$filtro_sql_ap  = '';
 		$filtro_sql_mp  = '';
 		$filtro_sql_tc  = '';
+		$filtro_sql_es_c  = '';
 
 		/*filtro_trabajador: 7
 		filtro_anio_pago: 2024
@@ -70,6 +71,10 @@ class Reporte_x_trabajador
 		} else {
 			$filtro_sql_tc 		= "AND v.tipo_comprobante      = '$filtro_tipo_comprob'";
 		}
+		if (empty($filtro_p_all_es_cobro)   || $filtro_p_all_es_cobro   == 'TODOS') {
+		} else {
+			$filtro_sql_es_c 		= "AND v.es_cobro      = '$filtro_p_all_es_cobro'";
+		}
 
 		$sql = "SELECT v.idventa, 		
 		CASE 
@@ -86,7 +91,7 @@ class Reporte_x_trabajador
 		u.idusuario, u.idpersona, pu.nombre_razonsocial as user_created_pago  ,
 		v.crear_enviar_sunat, v.es_cobro,  CONCAT(v.serie_comprobante,'-', v.numero_comprobante) as correlativo, v.fecha_emision, v.name_day, 
 		v.name_month, v.name_year, v.periodo_pago, v.periodo_pago_format, CONCAT(v.periodo_pago_month,' ', v.periodo_pago_year ) as peridoPago,
-		v.venta_total total_general,vd.subtotal_no_descuento as total_Pag_servicio , v.observacion_documento, 
+		v.venta_total total_general,vd.subtotal as total_Pag_servicio , v.observacion_documento, 
 		v.estado, v.estado_delete, v.created_at, v.updated_at, v.user_trash, v.user_delete, v.user_created, v.user_updated
 		FROM venta as v
     INNER JOIN venta_detalle as vd on v.idventa = vd.idventa
@@ -98,9 +103,10 @@ class Reporte_x_trabajador
 		INNER JOIN persona as p2 on pt.idpersona = p2.idpersona
 		INNER JOIN usuario as u on v.user_created = u.idusuario
 		INNER JOIN persona as pu on u.idpersona = pu.idpersona
-		WHERE v.sunat_estado = 'ACEPTADA' and v.estado='1' and v.estado_delete ='1' and v.es_cobro='SI' and vd.um_nombre='SERVICIOS'
+		WHERE v.sunat_estado = 'ACEPTADA' and v.estado='1' and v.estado_delete ='1' and vd.um_nombre='SERVICIOS'
+		and v.tipo_comprobante !='07'
 		
-		$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
+		$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc $filtro_sql_es_c
 		ORDER BY v.idventa DESC";
 		return ejecutarConsulta($sql);
 	}
@@ -130,14 +136,15 @@ class Reporte_x_trabajador
                               CARD MONTOS TOTALES
 /* ════════════════════════════════════════════════════════════════════════════ */
 
-	public function totales_card_F_B_T($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob)	{
+	public function totales_card_F_B_T($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob,$filtro_p_all_es_cobro)
+	{
 
 		$filtro_sql_trab  = '';
 		$filtro_sql_ap  = '';
 		$filtro_sql_mp  = '';
 		$filtro_sql_tc  = '';
 		$filtro_sql_trab_pend  = '';
-
+		$filtro_sql_es_c  = '';
 
 		//$data = Array(); $array_ticket = []; $array_factura = []; $array_boleta = [];  $array_total = [];
 		$data  = array();
@@ -163,6 +170,10 @@ class Reporte_x_trabajador
 		} else {
 			$filtro_sql_tc 		= "AND v.tipo_comprobante      = '$filtro_tipo_comprob'";
 		}
+		if (empty($filtro_p_all_es_cobro)   || $filtro_p_all_es_cobro   == 'TODOS') {
+		} else {
+			$filtro_sql_es_c 		= "AND v.es_cobro      = '$filtro_p_all_es_cobro'";
+		}
 
 		// WHEN v.tipo_comprobante = '03' THEN 'BOLETA' 
 		// WHEN v.tipo_comprobante = '07' THEN 'NOTA CRED.' 
@@ -171,7 +182,7 @@ class Reporte_x_trabajador
 
 		$sql_boleta = "SELECT tc.abreviatura AS tp_comprobante_v2,
 				COUNT(v.idventa) AS total_ventas,
-				SUM(v.venta_total) AS total_general
+				SUM(vd.subtotal) AS total_general
 		FROM venta AS v
 		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
 		INNER JOIN sunat_c01_tipo_comprobante AS tc ON v.tipo_comprobante = tc.codigo
@@ -182,9 +193,9 @@ class Reporte_x_trabajador
 		INNER JOIN persona AS p2 ON pt.idpersona = p2.idpersona
 		INNER JOIN usuario AS u ON v.user_created = u.idusuario
 		INNER JOIN persona AS pu ON u.idpersona = pu.idpersona
-		WHERE v.estado = '1' AND v.estado_delete = '1' AND v.es_cobro = 'SI' AND vd.um_nombre = 'SERVICIOS' and
-			v.tipo_comprobante = '03'
-			$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc ";
+		WHERE v.estado = '1' AND v.estado_delete = '1'  AND vd.um_nombre = 'SERVICIOS' and
+			v.tipo_comprobante = '03' AND v.sunat_estado = 'ACEPTADA'
+			$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc $filtro_sql_es_c ";
 		$sqlboleta = ejecutarConsultaSimpleFila($sql_boleta);
 		if ($sqlboleta['status'] == false) {
 			return $sqlboleta;
@@ -199,7 +210,7 @@ class Reporte_x_trabajador
 
 		$sql_factura = "SELECT tc.abreviatura AS tp_comprobante_v2,
 				COUNT(v.idventa) AS total_ventas,
-				SUM(v.venta_total) AS total_general
+				SUM(vd.subtotal) AS total_general
 		FROM venta AS v
 		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
 		INNER JOIN sunat_c01_tipo_comprobante AS tc ON v.tipo_comprobante = tc.codigo
@@ -210,9 +221,9 @@ class Reporte_x_trabajador
 		INNER JOIN persona AS p2 ON pt.idpersona = p2.idpersona
 		INNER JOIN usuario AS u ON v.user_created = u.idusuario
 		INNER JOIN persona AS pu ON u.idpersona = pu.idpersona
-		WHERE v.estado = '1' AND v.estado_delete = '1' AND v.es_cobro = 'SI' AND vd.um_nombre = 'SERVICIOS' and
-			v.tipo_comprobante = '01'
-			$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc ";
+		WHERE v.estado = '1' AND v.estado_delete = '1'  AND vd.um_nombre = 'SERVICIOS' and
+			v.tipo_comprobante = '01' AND v.sunat_estado = 'ACEPTADA'
+			$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc $filtro_sql_es_c ";
 
 		$sqlfactura = ejecutarConsultaSimpleFila($sql_factura);
 		if ($sqlfactura['status'] == false) {
@@ -226,7 +237,7 @@ class Reporte_x_trabajador
 		$new_factura = array('nombre' => $nombre_tipo_comprob_f, 'cantidad' => $cantidad_comprob_f, 'total' => $total_comprob_f);
 
 		$sql_ticket = "SELECT tc.abreviatura AS tp_comprobante_v2,
-		COUNT(v.idventa) AS total_ventas, SUM(v.venta_total) AS total_general
+		COUNT(v.idventa) AS total_ventas, SUM(vd.subtotal) AS total_general
 		FROM venta AS v
 		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
 		INNER JOIN sunat_c01_tipo_comprobante AS tc ON v.tipo_comprobante = tc.codigo
@@ -237,9 +248,9 @@ class Reporte_x_trabajador
 		INNER JOIN persona AS p2 ON pt.idpersona = p2.idpersona
 		INNER JOIN usuario AS u ON v.user_created = u.idusuario
 		INNER JOIN persona AS pu ON u.idpersona = pu.idpersona
-		WHERE v.estado = '1' AND v.estado_delete = '1' AND v.es_cobro = 'SI' AND vd.um_nombre = 'SERVICIOS' and
-			v.tipo_comprobante = '12'
-			$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc ";
+		WHERE v.estado = '1' AND v.estado_delete = '1' AND vd.um_nombre = 'SERVICIOS' and
+			v.tipo_comprobante = '12' AND v.sunat_estado = 'ACEPTADA'
+			$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc $filtro_sql_es_c ";
 		$sqlticket = ejecutarConsultaSimpleFila($sql_ticket);
 		if ($sqlticket['status'] == false) {
 			return $sqlticket;
@@ -252,7 +263,7 @@ class Reporte_x_trabajador
 		$new_ticket = array('nombre' => $nombre_tipo_comprob_tik, 'cantidad' => $cantidad_comprob_tik, 'total' => $total_comprob_tik);
 
 		$sql_total = "SELECT 'TOTAL' AS tp_comprobante_v2,
-				COUNT(v.idventa) AS total_ventas, SUM(v.venta_total) AS total_general
+				COUNT(v.idventa) AS total_ventas, SUM(vd.subtotal) AS total_general
 		FROM venta AS v
 		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
 		INNER JOIN sunat_c01_tipo_comprobante AS tc ON v.tipo_comprobante = tc.codigo
@@ -263,8 +274,9 @@ class Reporte_x_trabajador
 		INNER JOIN persona AS p2 ON pt.idpersona = p2.idpersona
 		INNER JOIN usuario AS u ON v.user_created = u.idusuario
 		INNER JOIN persona AS pu ON u.idpersona = pu.idpersona
-		WHERE v.estado = '1' AND v.estado_delete = '1' AND v.es_cobro = 'SI' AND vd.um_nombre = 'SERVICIOS'
-				$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc";
+		WHERE v.estado = '1' AND v.estado_delete = '1' AND vd.um_nombre = 'SERVICIOS' AND v.sunat_estado = 'ACEPTADA'
+		and v.tipo_comprobante !='07'
+				$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc $filtro_sql_es_c";
 
 		$sqltotal = ejecutarConsultaSimpleFila($sql_total);
 		if ($sqltotal['status'] == false) {
@@ -325,7 +337,8 @@ class Reporte_x_trabajador
 
 	/**============================================================================ */
 	/**============================================================================ */
-	public function grafico_pay($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob)	{
+	public function grafico_pay($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob,$filtro_p_all_es_cobro)
+	{
 		//$dataarray  = array();
 		$array_pay_total  = array();
 		$array_pay_nombre  = array();
@@ -335,6 +348,7 @@ class Reporte_x_trabajador
 		$filtro_sql_mp  = '';
 		$filtro_sql_tc  = '';
 		$filtro_sql_trab_pend  = '';
+		$filtro_sql_es_c = '';
 
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
 			$filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";
@@ -355,6 +369,10 @@ class Reporte_x_trabajador
 		if (empty($filtro_tipo_comprob)   || $filtro_tipo_comprob   == 'TODOS') {
 		} else {
 			$filtro_sql_tc 		= "AND v.tipo_comprobante      = '$filtro_tipo_comprob'";
+		}
+		if (empty($filtro_p_all_es_cobro)   || $filtro_p_all_es_cobro   == 'TODOS') {
+		} else {
+			$filtro_sql_es_c 		= "AND v.es_cobro      = '$filtro_p_all_es_cobro'";
 		}
 
 		// ------------------------ pendiente
@@ -392,7 +410,7 @@ class Reporte_x_trabajador
 		array_push($array_pay_total, $total_comprob_tp);
 
 
-		$sql = "SELECT v.user_created,pu.nombre_razonsocial, SUM(vd.subtotal_no_descuento) as total 
+		$sql = "SELECT v.user_created,pu.nombre_razonsocial, SUM(vd.subtotal) as total 
 		FROM venta as v
     INNER JOIN venta_detalle as vd on v.idventa = vd.idventa
 		INNER JOIN persona_cliente as pc on v.idpersona_cliente= pc.idpersona_cliente
@@ -400,8 +418,9 @@ class Reporte_x_trabajador
 		INNER JOIN persona as p2 on pt.idpersona = p2.idpersona
 		INNER JOIN usuario as u on v.user_created = u.idusuario
 		INNER JOIN persona as pu on u.idpersona = pu.idpersona
-		WHERE v.sunat_estado = 'ACEPTADA' and v.estado='1' and v.estado_delete ='1' and v.es_cobro='SI' 
-		and vd.um_nombre='SERVICIOS' $filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
+		WHERE v.sunat_estado = 'ACEPTADA' and v.estado='1' and v.estado_delete ='1'  
+		and vd.um_nombre='SERVICIOS' AND  v.tipo_comprobante !='07'
+		 $filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc $filtro_sql_es_c
     GROUP by v.user_created,pu.nombre_razonsocial;";
 
 		$totales  = ejecutarConsultaArray($sql);
@@ -414,28 +433,49 @@ class Reporte_x_trabajador
 		return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' => ['series' => $array_pay_total, 'labels' => $array_pay_nombre],];
 	}
 
-	public function ventas_por_producto($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob) {
+	public function ventas_por_producto($filtro_trabajador, $filtro_anio_pago, $filtro_p_all_mes_pago, $filtro_tipo_comprob,$filtro_p_all_es_cobro)
+	{
 		$data = [];
 		$filtro_sql_trab  = '';
 		$filtro_sql_ap  = '';
 		$filtro_sql_mp  = '';
 		$filtro_sql_tc  = '';
+		$filtro_sql_es_c  = '';
 		$filtro_sql_trab_pend  = '';
 
-		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {	$filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+			$filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";
+		}
 
-		if (empty($filtro_trabajador) 	  || $filtro_trabajador 	 	== 'TODOS') {	} else {	$filtro_sql_trab	= "AND pc.idpersona_trabajador = '$filtro_trabajador'";	}
-		if (empty($filtro_anio_pago) 	   	|| $filtro_anio_pago 		 	== 'TODOS') {	} else {	$filtro_sql_ap 		= "AND v.name_year             = '$filtro_anio_pago'";	}
-		if (empty($filtro_p_all_mes_pago) || $filtro_p_all_mes_pago	== 'TODOS') {	} else {	$filtro_sql_mp 		= "AND v.name_month            = '$filtro_p_all_mes_pago'";	}
-		if (empty($filtro_tipo_comprob)   || $filtro_tipo_comprob   == 'TODOS') {	} else {	$filtro_sql_tc 		= "AND v.tipo_comprobante      = '$filtro_tipo_comprob'";	}
+		if (empty($filtro_trabajador) 	  || $filtro_trabajador 	 	== 'TODOS') {
+		} else {
+			$filtro_sql_trab	= "AND pc.idpersona_trabajador = '$filtro_trabajador'";
+		}
+		if (empty($filtro_anio_pago) 	   	|| $filtro_anio_pago 		 	== 'TODOS') {
+		} else {
+			$filtro_sql_ap 		= "AND v.name_year             = '$filtro_anio_pago'";
+		}
+		if (empty($filtro_p_all_mes_pago) || $filtro_p_all_mes_pago	== 'TODOS') {
+		} else {
+			$filtro_sql_mp 		= "AND v.name_month            = '$filtro_p_all_mes_pago'";
+		}
+		if (empty($filtro_tipo_comprob)   || $filtro_tipo_comprob   == 'TODOS') {
+		} else {
+			$filtro_sql_tc 		= "AND v.tipo_comprobante      = '$filtro_tipo_comprob'";
+		}
+		if (empty($filtro_p_all_es_cobro)   || $filtro_p_all_es_cobro   == 'TODOS') {
+		} else {
+			$filtro_sql_es_c 		= "AND v.es_cobro      = '$filtro_p_all_es_cobro'";
+		}
 
-		
 		$sql_0 = "SELECT vd.idproducto, pro.nombre as nombre_producto, SUM(vd.cantidad) as cantidad, SUM(vd.subtotal) as subtotal
 		FROM venta_detalle as vd
     INNER JOIN venta as v ON v.idventa = vd.idventa
 		INNER JOIN persona_cliente as pc on v.idpersona_cliente= pc.idpersona_cliente
 		INNER JOIN producto as pro ON pro.idproducto = vd.idproducto
-    WHERE v.sunat_estado = 'ACEPTADA' and v.estado='1' and v.estado_delete ='1' $filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
+    WHERE v.sunat_estado = 'ACEPTADA' and v.estado='1' and v.estado_delete ='1' 
+		and v.tipo_comprobante !='07'
+		$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc $filtro_sql_es_c
 		GROUP BY vd.idproducto ORDER BY SUM(vd.cantidad) DESC;";
 		$producto  = ejecutarConsultaArray($sql_0);
 
@@ -447,20 +487,21 @@ class Reporte_x_trabajador
 			INNER JOIN venta_detalle as vd on vd.idventa = v.idventa
 			INNER JOIN usuario as u on v.user_created = u.idusuario
 			INNER JOIN persona as pu on u.idpersona = pu.idpersona
-			WHERE vd.idproducto = '$id' and v.sunat_estado = 'ACEPTADA' and  v.estado='1' and v.estado_delete ='1' $filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc
+			WHERE vd.idproducto = '$id' and v.sunat_estado = 'ACEPTADA' and  v.estado='1' and v.estado_delete ='1' 
+			and v.tipo_comprobante !='07'
+			$filtro_sql_trab $filtro_sql_ap $filtro_sql_mp $filtro_sql_tc $filtro_sql_es_c
 			GROUP BY v.user_created, pu.nombre_razonsocial, pu.foto_perfil;";
 			$user  = ejecutarConsultaArray($sql_1);
 			$data[] = [
-				'idproducto'=> $val['idproducto'],
-				'nombre_producto'=> $val['nombre_producto'],
-				'cantidad'=> $val['cantidad'],
-				'subtotal'=> $val['subtotal'],
-				'user'=> $user['data'],
+				'idproducto' => $val['idproducto'],
+				'nombre_producto' => $val['nombre_producto'],
+				'cantidad' => $val['cantidad'],
+				'subtotal' => $val['subtotal'],
+				'user' => $user['data'],
 			];
 		}
 
 		return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' => $data,];
-
 	}
 
 	// ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════
@@ -513,13 +554,14 @@ class Reporte_x_trabajador
 	{
 		$filtro_id_trabajador  = '';
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
-			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+			$filtro_id_trabajador =  "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		}
 		$sql = "SELECT DISTINCT v.tipo_comprobante, tc.abreviatura
 		FROM venta as v 
     INNER JOIN sunat_c01_tipo_comprobante as tc on v.tipo_comprobante = tc.codigo
     INNER JOIN persona_cliente as pc on v.idpersona_cliente = pc.idpersona_cliente
-    where v.es_cobro = 'si'		$filtro_id_trabajador
+		where tc.codigo != '07'
+    $filtro_id_trabajador
 		ORDER BY tc.abreviatura DESC;";
 		return ejecutarConsulta($sql);
 	}

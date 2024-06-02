@@ -82,7 +82,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       </div>
                     </div>
                     <!-- ::::::::::::::::::::: FILTRO AÑO DE PAGO :::::::::::::::::::::: -->
-                    <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                    <div class="col-md-3 col-lg-2 col-xl-2 col-xxl-2">
                       <div class="form-group">
                         <label for="filtro_p_all_anio_pago" class="form-label">
                           <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_anio_pago');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
@@ -94,7 +94,7 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
 
                     <!-- ::::::::::::::::::::: FILTRO MES :::::::::::::::::::::: -->
-                    <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                    <div class="col-md-3 col-lg-2 col-xl-2 col-xxl-2">
                       <div class="form-group">
                         <label for="filtro_p_all_mes_pago" class="form-label">
                           <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_p_all_mes_pago');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
@@ -102,6 +102,20 @@ if (!isset($_SESSION["user_nombre"])) {
                           <span class="charge_filtro_p_all_mes_pago"></span>
                         </label>
                         <select class="form-control" name="filtro_p_all_mes_pago" id="filtro_p_all_mes_pago" onchange="cargando_search(); delay(function(){filtros()}, 50 );"> </select>
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO COBRO :::::::::::::::::::::: -->
+                    <div class="col-md-3 col-lg-2 col-xl-2 col-xxl-2">
+                      <div class="form-group">
+                        <label for="filtro_p_all_es_cobro" class="form-label">
+                          <!-- <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_p_all_es_cobro');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span> -->
+                          ¿ ES COBRO ?
+                          <span class="charge_filtro_p_all_es_cobro"></span>
+                        </label>
+                        <select class="form-control" name="filtro_p_all_es_cobro" id="filtro_p_all_es_cobro" onchange="cargando_search(); delay(function(){filtros()}, 50 );"> 
+                        <option value="SI">SI</option>
+                        <option value="NO">NO</option>
+                        </select>
                       </div>
                     </div>
                     <!-- ::::::::::::::::::::: FILTRO TIPO COMPROBANTE :::::::::::::::::::::: -->
@@ -171,7 +185,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!--Tabla clientes que no pagan-->
                           <div class="col-12">
                             <div class="alert alert-solid-warning alert-dismissible fade show div_alert_c_t">
-                              <h6 > Lista de clientes que no realizaron el pago. <strong> Para poder ver; debe selecccionar el Trabajador, Año y Mes</strong></h6>
+                              <h6> Lista de clientes que no realizaron el pago. <strong> Para poder ver; debe selecccionar el Trabajador, Año y Mes</strong></h6>
                             </div>
                             <div class="card-body div_tbl_cxt" style="display: none;">
                               <p class="fw-semibold fs-18 mb-2 text-center bg-light">Tabla de Clientes por Cobrar - Trabajador!</p>
@@ -219,8 +233,8 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <div class="card-body" style=" padding: 5px !important; ">
                                     <div class="d-flex align-items-top justify-content-between">
                                       <div>
-                                        <span class="avatar avatar-md avatar-rounded bg-primary">                                        
-                                        <i class="fa-solid fa-wallet"></i>
+                                        <span class="avatar avatar-md avatar-rounded bg-primary">
+                                          <i class="fa-solid fa-wallet"></i>
                                         </span>
                                       </div>
                                       <div class="flex-fill ms-3">
@@ -247,7 +261,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <div class="flex-fill ms-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                           <div>
-                                          <p class="text-muted mb-0 boleta_info ">Boleta <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="0">0</span> </p>
+                                            <p class="text-muted mb-0 boleta_info ">Boleta <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="0">0</span> </p>
                                             <h7 class="fw-semibold mt-1 total_boleta">S/ 0.00</h7>
                                           </div>
                                         </div>
@@ -268,7 +282,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <div class="flex-fill ms-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                           <div>
-                                          <p class="text-muted mb-0 factura_info ">Factura <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="0">0</span> </p>
+                                            <p class="text-muted mb-0 factura_info ">Factura <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="0">0</span> </p>
                                             <h7 class="fw-semibold mt-1 total_factura">S/ 0.00</h7>
                                           </div>
                                         </div>
@@ -289,7 +303,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <div class="flex-fill ms-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                           <div>
-                                          <p class="text-muted mb-0 total_info ">Total <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="10">10</span> </p>
+                                            <p class="text-muted mb-0 total_info ">Total <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="10">10</span> </p>
                                             <h7 class="fw-semibold mt-1 total_general">S/ 0.00</h7>
                                           </div>
                                         </div>
@@ -310,7 +324,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <div class="flex-fill ms-3">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                           <div>
-                                          <p class="text-muted mb-0 total_pendiente ">Pendiente <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="120">120</span> </p>
+                                            <p class="text-muted mb-0 total_pendiente ">Pendiente <span class="ms-1 badge bg-secondary-transparent cantidad_t count-up" data-count="120">120</span> </p>
                                             <h7 class="fw-semibold mt-1 total_g_pend">S/ 0.00</h7>
                                           </div>
                                           <div id="crm-total-deals"></div>
@@ -352,7 +366,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      
+
                                     </tbody>
                                     <tfoot>
                                       <tr>
@@ -365,7 +379,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                     </tfoot>
                                   </table>
                                 </div>
-                                
+
                               </div>
                             </div>
                           </div>
