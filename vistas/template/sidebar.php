@@ -102,41 +102,10 @@
 
         <!-- Start::slide__category -->
         <li class="slide__category"><span class="category-name">G E S T I O N - D E - V E N T A S</span></li>
-        <!-- End::slide__category -->
+        <!-- End::slide__category -->        
 
         <!-- Start::slide -->
-        <?php  if ($_SESSION['caja'] == '1') { ?>
-        <li class="slide has-sub">
-          <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-file-blank side-menu__icon"></i>
-            <span class="side-menu__label">Caja<span class="badge bg-secondary-transparent ms-2">New</span></span>
-            <i class="fe fe-chevron-right side-menu__angle"></i>
-          </a>
-          <ul class="slide-menu child1">
-            <li class="slide side-menu__label1"> <a href="javascript:void(0)">Caja</a> </li>
-            <?php  if ($_SESSION['caja_chica'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Caja chica</a></li> 
-            <?php } ?>         
-            <?php  if ($_SESSION['ingreso_egreso'] == '1') { ?>  
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Ingreso / Egreso</a></li>
-            <?php } ?>                 
-          </ul>
-        </li>
-        <?php } ?>
-        <!-- End::slide -->
-
-        <!-- Start::slide -->
-        <?php  if ($_SESSION['POS'] == '1') { ?>
-        <li class="slide">
-          <a href="pos.php" class="side-menu__item">
-            <i class="bx bx-home side-menu__icon"></i><span class="side-menu__label"> POS</span>
-          </a>
-        </li>
-        <?php } ?>
-        <!-- End::slide -->
-
-        <!-- Start::slide -->
-        <?php  if ($_SESSION['realizar_venta'] == '1') { ?>
+        <?php  if ($_SESSION['realizar_cobro'] == '1') { ?>
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
             <i class='bx bx-cart-add side-menu__icon'></i>
@@ -150,13 +119,7 @@
             <?php } ?>            
             <?php  if ($_SESSION['cotizacion'] == '1') { ?>
             <li class="slide"> <a href="cotizacion.php" class="side-menu__item">Cotizacion</a></li>
-            <?php } ?>            
-            <?php  if ($_SESSION['nota_de_debito'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Nota de debito</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['guia_de_remision'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Guia remision</a></li>
-            <?php } ?>
+            <?php } ?>             
             <?php  if ($_SESSION['cliente'] == '1') { ?>
             <li class="slide"> <a href="clientes.php" class="side-menu__item">Clientes</a></li>
             <?php } ?>
@@ -166,83 +129,11 @@
           </ul>
         </li>
         <?php } ?>
-        <!-- End::slide -->
-
-        <!-- Start::slide -->
-        <?php  if ($_SESSION['comprobante'] == '1') { ?>
-        <li class="slide has-sub">
-          <a href="javascript:void(0);" class="side-menu__item">
-            <i class='bx bxs-file-doc side-menu__icon'></i>
-            <span class="side-menu__label">Comprobante</span>
-            <i class="fe fe-chevron-right side-menu__angle"></i>
-          </a>
-          <ul class="slide-menu child1">
-            <li class="slide side-menu__label1"> <a href="javascript:void(0)">Comprobante</a> </li>
-            <?php  if ($_SESSION['estado_de_envio'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Estado de envio</a> </li>   
-            <?php } ?>       
-            <?php  if ($_SESSION['anulados'] == '1') { ?>  
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Anulados</a> </li>   
-            <?php } ?>       
-            <?php  if ($_SESSION['validar_solo_factura'] == '1') { ?>           
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Validar solo factura</a> </li>   
-            <?php } ?>       
-            <?php  if ($_SESSION['validar_solo_boleta'] == '1') { ?>           
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Validar solo boleta</a> </li>     
-            <?php } ?>      
-          </ul>
-        </li>
-        <?php } ?>
-        <!-- End::slide -->
-
-        <!-- Start::slide -->
-        <?php  if ($_SESSION['resumen_de_baja'] == '1') { ?>
-        <li class="slide has-sub">
-          <a href="javascript:void(0);" class="side-menu__item">
-            <i class="bx bx-error side-menu__icon"></i>
-            <span class="side-menu__label">Resumen de baja</span>
-            <i class="fe fe-chevron-right side-menu__angle"></i>
-          </a>
-          <ul class="slide-menu child1">
-            <li class="slide side-menu__label1"><a href="javascript:void(0)">Resumen de baja</a></li>
-            <?php  if ($_SESSION['resumen_de_baja'] == '1') { ?>
-            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Anular boletas</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['resumen_de_baja'] == '1') { ?>
-            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Anular facturas</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['resumen_de_baja'] == '1') { ?>
-            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Anular nota de credito</a></li>     
-            <?php } ?>      
-          </ul>
-        </li>
-        <?php } ?>
-        <!-- End::slide -->
-
-        <!-- Start::slide -->
-        <?php  if ($_SESSION['creditos_pendientes'] == '1') { ?>
-        <li class="slide">
-          <a href="no_disponible.php" class="side-menu__item">
-            <i class="bx bx-home side-menu__icon"></i><span class="side-menu__label"> Creditos pendiente</span>
-          </a>
-        </li>
-        <?php } ?>
-        <!-- End::slide -->
+        <!-- End::slide --> 
 
         <!-- Start::slide__category -->
         <li class="slide__category"><span class="category-name">C O N T A B I L I D A D</span></li>
-        <!-- End::slide__category -->
-
-
-        <!-- Start::slide -->
-        <?php  if ($_SESSION['kardex_por_articulos'] == '1') { ?>
-        <li class="slide">
-          <a href="no_disponible.php" class="side-menu__item">
-            <i class="bx bx-home side-menu__icon"></i><span class="side-menu__label"> Kardex por articulo</span>
-          </a>
-        </li>
-        <?php } ?>
-        <!-- End::slide -->
+        <!-- End::slide__category -->        
 
         <!-- Start::slide -->
         <?php  if ($_SESSION['reporte'] == '1') { ?>
@@ -253,28 +144,10 @@
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
           <ul class="slide-menu child1 mega-menu">
-            <li class="slide side-menu__label1"> <a href="javascript:void(0)">Reportes</a></li>
-            <?php  if ($_SESSION['venta_dia_mes'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta Dia/mes</a></li>  
-            <?php } ?>         
+            <li class="slide side-menu__label1"> <a href="javascript:void(0)">Reportes</a></li>               
             <?php  if ($_SESSION['venta_por_vendedor'] == '1') { ?>
             <li class="slide"> <a href="reporte_x_trabajador.php" class="side-menu__item">Cobros por Trabajador</a></li>
-            <?php } ?>         
-            <?php  if ($_SESSION['venta_agrupada'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta agrupada</a></li>
-            <?php } ?>         
-            <?php  if ($_SESSION['venta_por_cliente'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Venta por cliente</a></li>
-            <?php } ?>         
-            <?php  if ($_SESSION['PLE_ventas'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">PLE ventas</a></li>
-            <?php } ?>         
-            <?php  if ($_SESSION['reporte_compras'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Compras</a></li>
-            <?php } ?>         
-            <?php  if ($_SESSION['margen_de_ganancia'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Margen de ganancia</a></li>
-            <?php } ?>         
+            <?php } ?>             
             <?php  if ($_SESSION['correo_enviado'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Correo enviados</a></li>
             <?php } ?>     
@@ -361,7 +234,7 @@
           </a>
           <ul class="slide-menu child1">
             <li class="slide side-menu__label1"><a href="javascript:void(0)">SUNAT</a></li>
-            <?php  if ($_SESSION['tipo_de_tributos'] == '1') { ?>
+            <?php  if ($_SESSION['catalogo_de_codigo'] == '1') { ?>
             <li class="slide"><a href="catalogos_y_codigos.php" class="side-menu__item">Catálago de Códigos</a></li>
             <?php } ?>             
             <?php  if ($_SESSION['correlativo_numeracion'] == '1') { ?>          
@@ -387,13 +260,7 @@
             <li class="slide side-menu__label1"><a href="javascript:void(0)">Empresa</a></li>
             <?php  if ($_SESSION['empresa_configuracion'] == '1') { ?>
             <li class="slide"><a href="empresa.php" class="side-menu__item">Empresa</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['correo_SMTP'] == '1') { ?>
-            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Correo/SMTP</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['notificaciones'] == '1') { ?>
-            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Notificaciones</a></li>
-            <?php } ?>
+            <?php } ?>            
           </ul>
         </li>
         <?php } ?>

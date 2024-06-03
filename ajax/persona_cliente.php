@@ -422,7 +422,8 @@ if (!isset($_SESSION["user_nombre"])) {
         $data = "";
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value="' . $value['idpersona_trabajador']  . '">' . $value['idtrabajador']. ' '.  $value['nombre_razonsocial']  . '</option>';
+            $cant_cliente   = $value['cant_cliente'];
+            $data .= '<option  value="' . $value['idpersona_trabajador']  . '">' . $value['idtrabajador']. ' '.  $value['nombre_razonsocial'] . ' ('.$cant_cliente.')' . '</option>';
           }
 
           $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
@@ -439,7 +440,8 @@ if (!isset($_SESSION["user_nombre"])) {
         $data = "";
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value="' . $value['dia_cancelacion']  . '">Día ' . $value['dia_cancelacion'] . '</option>';
+            $cant_cliente   = $value['cant_cliente'];
+            $data .= '<option  value="' . $value['dia_cancelacion']  . '">Día ' . $value['dia_cancelacion'] . ' ('.$cant_cliente.')'.'</option>';
           }
 
           $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
@@ -456,7 +458,8 @@ if (!isset($_SESSION["user_nombre"])) {
         $data = "";
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value="' . $value['anio_cancelacion']  . '">' . $value['anio_cancelacion'] . '</option>';
+            $cant_cliente   = $value['cant_cliente'];
+            $data .= '<option  value="' . $value['anio_cancelacion']  . '">' . $value['anio_cancelacion'] . ' ('.$cant_cliente.')'. '</option>';
           }
 
           $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
@@ -472,7 +475,8 @@ if (!isset($_SESSION["user_nombre"])) {
         $data = "";
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value="' . $value['idplan']  . '">' . $value['nombre'] . ' ' . $value['costo'] . '</option>';
+            $cant_cliente   = $value['cant_cliente'];
+            $data .= '<option  value="' . $value['idplan']  . '">' . $value['nombre'] . ' ' . $value['costo'] .' ('.$cant_cliente.')'. '</option>';
           }
 
           $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
@@ -489,7 +493,11 @@ if (!isset($_SESSION["user_nombre"])) {
         $data = "";
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value="' . $value['idzona_antena']  . '">' . $value['nombre'] . ' - IP: ' . $value['ip_antena'] . '</option>';
+            $idzona_antena  = $value['idzona_antena'];
+            $nombre         = $value['nombre'];
+            $ip_antena      = $value['ip_antena'];
+            $cant_cliente   = $value['cant_cliente'];
+            $data .= '<option value="' . $idzona_antena . '" cant_cliente="' . $cant_cliente . '">' . $nombre . ' - IP: ' . $ip_antena .' ('.$cant_cliente.')'. '</option>';
           }
 
           $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );

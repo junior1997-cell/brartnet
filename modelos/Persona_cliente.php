@@ -273,27 +273,29 @@ class Cliente
 		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
 		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
 		
-		$sql = "SELECT 
-				pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, v.periodo_pago_year,	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento, cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
-				CASE 
-					WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-					WHEN p.tipo_persona_sunat = 'NINGUNO' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-					WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
-					ELSE '-'
-				END AS cliente_nombre_completo, 
-				p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc,
-				SUM(CASE WHEN v.periodo_pago_month = 'Enero'  AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_enero,
-				SUM(CASE WHEN v.periodo_pago_month = 'Febrero' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_febrero,
-				SUM(CASE WHEN v.periodo_pago_month = 'Marzo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_marzo,
-				SUM(CASE WHEN v.periodo_pago_month = 'Abril' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_abril,
-				SUM(CASE WHEN v.periodo_pago_month = 'Mayo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_mayo,
-				SUM(CASE WHEN v.periodo_pago_month = 'Junio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_junio,
-				SUM(CASE WHEN v.periodo_pago_month = 'Julio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_julio,
-				SUM(CASE WHEN v.periodo_pago_month = 'Agosto' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_agosto,
-				SUM(CASE WHEN v.periodo_pago_month = 'Septiembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_septiembre,
-				SUM(CASE WHEN v.periodo_pago_month = 'Octubre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_octubre,
-				SUM(CASE WHEN v.periodo_pago_month = 'Noviembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_noviembre,
-				SUM(CASE WHEN v.periodo_pago_month = 'Diciembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_diciembre
+		$sql = "SELECT pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.ip_personal, 
+		DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, v.periodo_pago_year,	
+		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento, cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
+		CASE 
+			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+			WHEN p.tipo_persona_sunat = 'NINGUNO' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+			ELSE '-'
+		END AS cliente_nombre_completo, 
+		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,
+		pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc,
+		SUM(CASE WHEN v.periodo_pago_month = 'Enero'  AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_enero,
+		SUM(CASE WHEN v.periodo_pago_month = 'Febrero' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_febrero,
+		SUM(CASE WHEN v.periodo_pago_month = 'Marzo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_marzo,
+		SUM(CASE WHEN v.periodo_pago_month = 'Abril' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_abril,
+		SUM(CASE WHEN v.periodo_pago_month = 'Mayo' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_mayo,
+		SUM(CASE WHEN v.periodo_pago_month = 'Junio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_junio,
+		SUM(CASE WHEN v.periodo_pago_month = 'Julio' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_julio,
+		SUM(CASE WHEN v.periodo_pago_month = 'Agosto' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_agosto,
+		SUM(CASE WHEN v.periodo_pago_month = 'Septiembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_septiembre,
+		SUM(CASE WHEN v.periodo_pago_month = 'Octubre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_octubre,
+		SUM(CASE WHEN v.periodo_pago_month = 'Noviembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_noviembre,
+		SUM(CASE WHEN v.periodo_pago_month = 'Diciembre' AND v.es_cobro = 'SI' THEN v.venta_total ELSE null END) AS venta_diciembre
 			
 		FROM persona_cliente AS pc
 		INNER JOIN persona AS p on pc.idpersona=p.idpersona
@@ -391,24 +393,24 @@ class Cliente
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
 			$filtro_id_trabajador = "WHERE pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		} 
-		$sql = "SELECT LPAD(pt.idpersona_trabajador, 5, '0') as idtrabajador, pt.idpersona_trabajador, pt.idpersona,  per_t.nombre_razonsocial
+		$sql = "SELECT LPAD(pt.idpersona_trabajador, 5, '0') as idtrabajador, pt.idpersona_trabajador, pt.idpersona,  per_t.nombre_razonsocial, COUNT(pc.idpersona_cliente) AS cant_cliente
 		FROM persona_cliente as pc
 		INNER JOIN persona_trabajador as pt ON pt.idpersona_trabajador = pc.idpersona_trabajador
 		INNER JOIN persona as per_t ON per_t.idpersona = pt.idpersona
 		$filtro_id_trabajador
 		GROUP BY pc.idpersona_trabajador
-		ORDER BY per_t.nombre_razonsocial;";
+		ORDER BY  COUNT(pc.idpersona_cliente) desc, per_t.nombre_razonsocial asc;";
 		return ejecutarConsulta($sql);
 	}
-
 	
 	public function select2_filtro_dia_pago()	{
 		$filtro_id_trabajador  = '';
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
 			$filtro_id_trabajador = "WHERE pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		} 
-		$sql = "SELECT DISTINCT DAY(pc.fecha_cancelacion) as dia_cancelacion
+		$sql = "SELECT DAY(pc.fecha_cancelacion) as dia_cancelacion, COUNT(pc.idpersona_cliente) AS cant_cliente
 		FROM persona_cliente as pc $filtro_id_trabajador
+		GROUP BY DAY(pc.fecha_cancelacion)
 		ORDER BY DAY(pc.fecha_cancelacion) ASC;";
 		return ejecutarConsulta($sql);
 	}
@@ -418,9 +420,12 @@ class Cliente
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
 			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		} 
-		$sql = "SELECT DISTINCT YEAR(pc.fecha_cancelacion) as anio_cancelacion
-		FROM persona_cliente as pc $filtro_id_trabajador
-		ORDER BY YEAR(pc.fecha_cancelacion) DESC;";
+		$sql = "SELECT YEAR(v.periodo_pago_format) as anio_cancelacion, COUNT(pc.idpersona_cliente) AS cant_cliente
+		FROM venta as v
+		INNER JOIN persona_cliente as pc on pc.idpersona_cliente = v.idpersona_cliente
+		where v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' $filtro_id_trabajador
+		GROUP BY YEAR(v.periodo_pago_format)
+		ORDER BY YEAR(v.periodo_pago_format) DESC;";
 		return ejecutarConsulta($sql);
 	}
 
@@ -429,11 +434,11 @@ class Cliente
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
 			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		} 
-		$sql = "SELECT pl.idplan, pl.nombre, pl.costo
+		$sql = "SELECT pl.idplan, pl.nombre, pl.costo, COUNT(pc.idpersona_cliente) AS cant_cliente
 		FROM persona_cliente as pc
 		INNER JOIN plan as pl ON pl.idplan = pc.idplan
 		WHERE pl.estado = '1' and pl.estado_delete = '1' $filtro_id_trabajador
-		GROUP BY pc.idplan ORDER BY pl.nombre;";
+		GROUP BY pc.idplan ORDER BY COUNT(idpersona_cliente) desc, pl.nombre asc;";
 		return ejecutarConsulta($sql);
 	}
 
@@ -442,11 +447,11 @@ class Cliente
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
 			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		} 
-		$sql = "SELECT za.idzona_antena, za.nombre, za.ip_antena
+		$sql = "SELECT za.idzona_antena, za.nombre, za.ip_antena, COUNT(pc.idpersona_cliente) AS cant_cliente
 		FROM persona_cliente as pc
 		INNER JOIN zona_antena as za ON za.idzona_antena = pc.idzona_antena
 		WHERE za.estado = '1' and za.estado_delete = '1' $filtro_id_trabajador
-		GROUP BY pc.idzona_antena ORDER BY za.nombre;";
+		GROUP BY pc.idzona_antena ORDER BY COUNT(idpersona_cliente) desc, za.nombre asc;";
 		return ejecutarConsulta($sql);
 	}
 	
