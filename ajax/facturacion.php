@@ -326,7 +326,8 @@ if (!isset($_SESSION["user_nombre"])) {
               "10" =>  $value['total_recibido'] ,
               "11" =>  $value['total_vuelto'] ,
               "12" => '<span class="text-nowrap fs-11">'. $value['metodo_pago'] .'</span>',
-              "13" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
+              "13" => '<span class="text-nowrap fs-11">'. $value['user_created_v2'] .' '.$value['user_en_atencion'] .'</span>',
+              "14" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
                 '<span class="badge bg-success-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-check-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' :                    
                 '<span class="badge bg-danger-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-close-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>'                              
               ),              

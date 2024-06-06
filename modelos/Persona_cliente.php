@@ -150,9 +150,17 @@ class Cliente
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar_cliente($idpersona_cliente)	{
 		$sql = "SELECT pc.idpersona_cliente, pc.idpersona, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan, pc.ip_personal, pc.idcentro_poblado,
-		pc.fecha_afiliacion, pc.fecha_cancelacion, pc.nota, pc.usuario_microtick, pc.descuento, pc.estado_descuento, pc.estado, p.*
+		pc.fecha_afiliacion, pc.fecha_cancelacion, pc.nota, pc.usuario_microtick, pc.descuento, pc.estado_descuento, pc.estado, p.*,
+		CASE 
+			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+			WHEN p.tipo_persona_sunat = 'NINGUNO' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+			ELSE '-'
+		END AS cliente_nombre_completo, DAY(pc.fecha_cancelacion) AS dia_cancelacion_v2,
+		pl.costo as plan_costo, pl.nombre as nombre_plan
 		FROM persona_cliente as pc
 		INNER JOIN persona as p on pc.idpersona=p.idpersona
+		INNER JOIN plan as pl on pl.idplan=pc.idplan
 		WHERE idpersona_cliente='$idpersona_cliente';";
 
 		return ejecutarConsultaSimpleFila($sql);
@@ -337,6 +345,19 @@ class Cliente
 						AND v.periodo_pago_month = '$mes' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za";
 		return ejecutarConsulta($sql);
 
+	}
+
+	// ══════════════════════════════════════ R E A L I Z A R  P A G O   C L I E N T E  ══════════════════════════════════════ 
+
+	public function listar_producto_x_precio($precio){
+		$sql = "SELECT p.*, um.nombre AS unidad_medida, um.abreviatura as um_abreviatura, cat.nombre AS categoria, mc.nombre AS marca
+		FROM producto AS p
+		INNER JOIN sunat_unidad_medida AS um ON p.idsunat_unidad_medida = um.idsunat_unidad_medida
+		INNER JOIN categoria AS cat ON p.idcategoria = cat.idcategoria
+		INNER JOIN marca AS mc ON p.idmarca = mc.idmarca
+		WHERE p.precio_venta = '$precio' and p.nombre like '%INTERNET%' ;";
+			return ejecutarConsultaSimpleFila($sql);
+		
 	}
 
 	// ══════════════════════════════════════  IMPRIMIR PAGOS  ══════════════════════════════════════

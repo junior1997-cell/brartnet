@@ -29,7 +29,7 @@ if (!isset($_SESSION["user_nombre"])) {
     </style>
   </head>
 
-  <body id="body-ventas">
+  <body id="body-ventas" idusuario="<?php echo $_SESSION['idusuario'];?>" idpersona="<?php echo $_SESSION['idpersona'];?>" idpersona_trabajador="<?php echo $_SESSION['idpersona_trabajador'];?>" >
     <?php include("template/switcher.php"); ?>
     <?php include("template/loader.php"); ?>
 
@@ -293,14 +293,14 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4 px-0">
                             <div class="custom-toggle-switch d-flex align-items-center mb-1">
                               <input id="crear_y_emitir" name="crear_y_emitir" type="checkbox" checked="" value="SI">
-                              <label for="crear_y_emitir" class="label-warning"></label><span class="ms-3">SUNAT</span>
+                              <label for="crear_y_emitir" class="label-warning"></label><span class="ms-3 fs-11">SUNAT</span>
                             </div>
                           </div>
                           <!-- CREAR Y MOSTRAR-->
                           <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4 px-0">
                             <div class="custom-toggle-switch d-flex align-items-center mb-1">
                               <input id="crear_y_mostrar" name="crear_y_mostrar" type="checkbox" checked="" value="SI">
-                              <label for="crear_y_mostrar" class="label-warning"></label><span class="ms-3">Crear y mostrar</span>
+                              <label for="crear_y_mostrar" class="label-warning"></label><span class="ms-3 fs-11">Crear y mostrar</span>
                             </div>
                           </div>
                           <!--  TIPO COMPROBANTE  -->
@@ -710,6 +710,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th>Recibido</th> 
                           <th>Vuelto</th> 
                           <th><center>Método</center></th>        
+                          <th><center>Creador</center></th>        
                           <th><center>Estado</center></th>               
                         </tr>
                       </thead>
@@ -728,7 +729,8 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th class="text-nowrap" >Total Cobro</th> 
                           <th>Recibido</th> 
                           <th>Vuelto</th> 
-                          <th><center>Método</center></th>        
+                          <th><center>Método</center></th>   
+                          <th><center>Creador</center></th>     
                           <th><center>Estado</center></th>
                         </tr>
                       </tfoot>
@@ -1048,8 +1050,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.12"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.12"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.13"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.13"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

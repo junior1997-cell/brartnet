@@ -18,9 +18,11 @@
 
     public function listar_tabla_facturacion( $fecha_i, $fecha_f, $cliente, $comprobante, $estado_sunat ) {    
 
-      $filtro_id_trabajador  = ''; $filtro_fecha = ""; $filtro_cliente = ""; $filtro_comprobante = ""; $filtro_estado_sunat = "";
+      $filtro_id_trabajador  = ''; $filtro_id_punto ='';
+      $filtro_fecha = ""; $filtro_cliente = ""; $filtro_comprobante = ""; $filtro_estado_sunat = "";
 
       if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {  $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";    } 
+      if ($_SESSION['user_cargo'] == 'PUNTO DE COBRO') { $filtro_id_punto = "AND (v.user_created = '$this->id_usr_sesion' OR pc.idpersona_trabajador = '$this->id_trabajador_sesion')";  } 
 
       if ( !empty($fecha_i) && !empty($fecha_f) ) { $filtro_fecha = "AND DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') BETWEEN '$fecha_i' AND '$fecha_f'"; } 
       else if (!empty($fecha_i)) { $filtro_fecha = "AND DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') = '$fecha_i'"; }
@@ -51,13 +53,15 @@
         WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
         WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
         ELSE '-'
-      END AS cliente_nombre_completo
+      END AS cliente_nombre_completo, pu.nombre_razonsocial as user_en_atencion, LPAD(v.user_created, 3, '0') AS user_created_v2
       FROM venta AS v
       INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN persona AS p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = v.idsunat_c01
-      WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante <> '100' $filtro_id_trabajador $filtro_cliente $filtro_comprobante $filtro_estado_sunat $filtro_fecha
+      LEFT JOIN usuario as u ON u.idusuario = v.user_created
+      LEFT JOIN persona as pu ON pu.idpersona = u.idpersona
+      WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante <> '100' $filtro_id_trabajador $filtro_id_punto $filtro_cliente $filtro_comprobante $filtro_estado_sunat $filtro_fecha
       ORDER BY v.fecha_emision DESC, p.nombre_razonsocial ASC;"; #return $sql;
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
 
@@ -271,15 +275,14 @@
 
       $meses_espanol = array( 1 => "Ene", 2 => "Feb", 3 => "Mar", 4 => "Abr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Ago", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dic" );
 
-      $filtro_id_trabajador  = '';
-      if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
-        $filtro_id_trabajador = "pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
-      } 
+      $filtro_id_trabajador  = ''; $filtro_id_user  = '';
+      if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";  } 
+      if ($_SESSION['user_cargo'] == 'PUNTO DE COBRO') { $filtro_id_user = "AND (v.user_created = '$this->id_usr_sesion' OR pc.idpersona_trabajador = '$this->id_trabajador_sesion')";  } 
 
       $sql_00 ="SELECT v.tipo_comprobante, COUNT( v.idventa ) as cantidad
       FROM venta as v
       INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-      WHERE v.sunat_estado = 'ACEPTADA' AND v.estado = '1' AND v.estado_delete = '1'
+      WHERE v.sunat_estado = 'ACEPTADA' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador $filtro_id_user
       GROUP BY v.tipo_comprobante;";
       $coun_comprobante = ejecutarConsultaArray($sql_00); if ($coun_comprobante['status'] == false) {return $coun_comprobante; }
 
@@ -287,21 +290,24 @@
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '01' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '01' ) AS ventas_mes_anterior;";
       $factura_p = ejecutarConsultaSimpleFila($sql_01); if ($factura_p['status'] == false) {return $factura_p; }
-      $sql_01 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE sunat_estado = 'ACEPTADA' AND tipo_comprobante = '01' AND estado = '1' AND estado_delete = '1';";
+      $sql_01 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '01' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador $filtro_id_user;";
       $factura = ejecutarConsultaSimpleFila($sql_01); if ($factura['status'] == false) {return $factura; }
 
       $sql_03 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '03' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '03' ) AS ventas_mes_anterior;";
       $boleta_p = ejecutarConsultaSimpleFila($sql_03); if ($boleta_p['status'] == false) {return $boleta_p; }
-      $sql_03 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE sunat_estado = 'ACEPTADA' AND tipo_comprobante = '03' AND estado = '1' AND estado_delete = '1';";
+      $sql_03 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '03' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador $filtro_id_user;";
       $boleta = ejecutarConsultaSimpleFila($sql_03); if ($boleta['status'] == false) {return $boleta; }
 
       $sql_12 = "SELECT ROUND( COALESCE(( ( ventas_mes_actual.total_ventas_mes_actual - COALESCE(ventas_mes_anterior.total_ventas_mes_anterior, 0) ) / COALESCE( ventas_mes_anterior.total_ventas_mes_anterior, ventas_mes_actual.total_ventas_mes_actual ) * 100 ),0), 2 ) AS porcentaje, ventas_mes_actual.total_ventas_mes_actual, ventas_mes_anterior.total_ventas_mes_anterior
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '12' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '12' ) AS ventas_mes_anterior;";
       $ticket_p = ejecutarConsultaSimpleFila($sql_12); if ($ticket_p['status'] == false) {return $ticket_p; }
-      $sql_12 = "SELECT IFNULL( SUM( venta_total), 0 ) as venta_total FROM venta WHERE tipo_comprobante = '12' AND estado = '1' AND estado_delete = '1';";
+      $sql_12 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '12' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador $filtro_id_user;";
       $ticket = ejecutarConsultaSimpleFila($sql_12); if ($ticket['status'] == false) {return $ticket; }
 
       $mes_factura = []; $mes_nombre = []; $date_now = date("Y-m-d");  $fecha_actual = date("Y-m-d", strtotime("-5 months", strtotime($date_now)));

@@ -85,16 +85,7 @@
             <?php } ?>
             <?php  if ($_SESSION['unidad_de_medida'] == '1') { ?>
             <li class="slide"> <a href="unidad_medida.php" class="side-menu__item">Unidad Medida</a></li>  
-            <?php } ?>
-            <?php  if ($_SESSION['stok_precio'] == '1') { ?>          
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Stok / Precio</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['transferencia_de_stock'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Tranferencia de Stok</a></li>
-            <?php } ?>
-            <?php  if ($_SESSION['inventario'] == '1') { ?>
-            <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Inventario</a></li>   
-            <?php } ?>         
+            <?php } ?>             
           </ul>
         </li>
         <?php } ?>

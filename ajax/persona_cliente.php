@@ -13,7 +13,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
     require_once "../modelos/Persona_cliente.php";
 
-    $persona_cliente = new Cliente();
+    require_once "../modelos/Facturacion.php";
+    require '../vendor/autoload.php';                   // CONEXION A COMPOSER
+    $see = require '../modelos/SunatCertificado.php';   // EMISION DE COMPROBANTES
+
+    $persona_cliente = new Cliente();   
+    $facturacion        = new Facturacion();   
+
+
     date_default_timezone_set('America/Lima');
     $date_now = date("d_m_Y__h_i_s_A");
     $toltip = '<script> $(function() { $(\'[data-bs-toggle="tooltip"]\').tooltip(); }); </script>';
@@ -49,6 +56,47 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $estado_descuento           = isset($_POST["estado_descuento"]) ? limpiarCadena($_POST["estado_descuento"]) : "";
     $descuento                  = isset($_POST["descuento"]) ? limpiarCadena($_POST["descuento"]) : "";
+
+    // ══════════════════════════════════════  DATOS DE FACTURACION ══════════════════════════════════════
+
+    $f_idventa                = isset($_POST["f_idventa"]) ? limpiarCadena($_POST["f_idventa"]) : "";   
+    $f_impuesto               = isset($_POST["f_impuesto"]) ? limpiarCadena($_POST["f_impuesto"]) : "";   
+    $f_crear_y_emitir         = isset($_POST["f_crear_y_emitir"]) ? ( empty($_POST["f_crear_y_emitir"]) ? 'NO' : 'SI' ) : ""; 
+
+    $f_idsunat_c01            = isset($_POST["f_idsunat_c01"]) ? limpiarCadena($_POST["f_idsunat_c01"]) : "";    
+    $f_tipo_comprobante       = isset($_POST["f_tipo_comprobante"]) ? limpiarCadena($_POST["f_tipo_comprobante"]) : "";    
+    $f_serie_comprobante      = isset($_POST["f_serie_comprobante"]) ? limpiarCadena($_POST["f_serie_comprobante"]) : "";    
+    $f_idpersona_cliente      = isset($_POST["f_idpersona_cliente"]) ? limpiarCadena($_POST["f_idpersona_cliente"]) : "";         
+    $f_observacion_documento  = isset($_POST["f_observacion_documento"]) ? limpiarCadena($_POST["f_observacion_documento"]) : "";    
+    $f_es_cobro               = isset($_POST["f_es_cobro_inp"]) ? limpiarCadena($_POST["f_es_cobro_inp"]) : "";    
+    $f_periodo_pago           = isset($_POST["f_periodo_pago"]) ? limpiarCadena($_POST["f_periodo_pago"]) : "";    
+    
+    $f_metodo_pago            = isset($_POST["f_metodo_pago"]) ? limpiarCadena($_POST["f_metodo_pago"]) : "";  
+    $f_total_recibido         = isset($_POST["f_total_recibido"]) ? limpiarCadena($_POST["f_total_recibido"]) : "";  
+    $f_mp_monto               = isset($_POST["f_mp_monto"]) ? limpiarCadena($_POST["f_mp_monto"]) : "";  
+    $f_total_vuelto           = isset($_POST["f_total_vuelto"]) ? limpiarCadena($_POST["f_total_vuelto"]) : "";  
+
+    $f_usar_anticipo          = isset($_POST["f_usar_anticipo"]) ? limpiarCadena($_POST["f_usar_anticipo"]) : "";  
+    $f_ua_monto_disponible    = isset($_POST["f_ua_monto_disponible"]) ? limpiarCadena($_POST["f_ua_monto_disponible"]) : "";  
+    $f_ua_monto_usado         = isset($_POST["f_ua_monto_usado"]) ? limpiarCadena($_POST["f_ua_monto_usado"]) : "";  
+
+    $f_mp_serie_comprobante   = isset($_POST["f_mp_serie_comprobante"]) ? limpiarCadena($_POST["f_mp_serie_comprobante"]) : "";       
+
+    $f_venta_subtotal         = isset($_POST["f_venta_subtotal"]) ? limpiarCadena($_POST["f_venta_subtotal"]) : "";    
+    $f_tipo_gravada           = isset($_POST["f_tipo_gravada"]) ? limpiarCadena($_POST["f_tipo_gravada"]) : "";
+    $f_venta_descuento        = isset($_POST["f_venta_descuento"]) ? limpiarCadena($_POST["f_venta_descuento"]) : "";    
+    $f_venta_igv              = isset($_POST["f_venta_igv"]) ? limpiarCadena($_POST["f_venta_igv"]) : "";            
+    $f_venta_total            = isset($_POST["f_venta_total"]) ? limpiarCadena($_POST["f_venta_total"]) : "";   
+
+    $f_nc_idventa             = isset($_POST["f_nc_idventa"]) ? limpiarCadena($_POST["f_nc_idventa"]) : "";    
+    $f_nc_tipo_comprobante    = isset($_POST["f_nc_tipo_comprobante"]) ? limpiarCadena($_POST["f_nc_tipo_comprobante"]) : "";    
+    $f_nc_serie_y_numero      = isset($_POST["f_nc_serie_y_numero"]) ? limpiarCadena($_POST["f_nc_serie_y_numero"]) : "";    
+    $f_nc_motivo_anulacion    = isset($_POST["f_nc_motivo_anulacion"]) ? limpiarCadena($_POST["f_nc_motivo_anulacion"]) : "";    
+
+    $f_tiempo_entrega         = isset($_POST["f_tiempo_entrega"]) ? limpiarCadena($_POST["f_tiempo_entrega"]) : "";    
+    $f_validez_cotizacion     = isset($_POST["f_validez_cotizacion"]) ? limpiarCadena($_POST["f_validez_cotizacion"]) : "";    
+     
+    $f_mp_comprobante_old     = isset($_POST["f_mp_comprobante_old"]) ? limpiarCadena($_POST["f_mp_comprobante_old"]) : ""; 
 
     
     // $idpersona_cliente, $idzona_antena, $idplan, $id_tecnico, $ip_personal, $fecha_afiliacion, $nota, $descuento, $estado_descuento
@@ -186,7 +234,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
                 <ul class="dropdown-menu">
                   
-                  <li><a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-coin"></i> Realizar Pago</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-coin"></i> Realizar Pago</a></li>
                   <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
                   ( $value['estado'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
                   '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
@@ -249,65 +297,65 @@ if (!isset($_SESSION["user_nombre"])) {
         $bg_light = $rspta['data']['cliente']['estado'] == 1 ? '' : 'bg-danger-transparent';
         $num_anios = $rspta['data']['cliente']['total_anios_pago']; // Asegúrate de que esto refleje el número correcto de años
         $primero = true; $tercero = true;
-        echo '<table class="table table-striped table-bordered table-condensed mb-3">
+        echo '<table class="table table-striped table-bordered table-condensed mb-2">
           <thead>
-            <th>N°</th> <th>APELLIDOS Y NOMBRES</th> <th>CANCELACIÓN</th> <th>IMPORTE</th> <th>AÑO</th> <th>ENE</th> <th>FEB</th> <th>MAR</th> <th>ABR</th>
-            <th>MAY</th> <th>JUN</th> <th>JUL</th> <th>AGO</th> <th>SEP</th> <th>OCT</th> <th>NOV</th> <th>DIC</th> <th>OBSERVACIONES</th>
+            <th class="font-size-11px">APELLIDOS Y NOMBRES</th> <th class="font-size-11px" >CANCELACIÓN</th> <th class="font-size-11px" >IMPORTE</th> <th class="font-size-11px" >AÑO</th> <th class="font-size-11px" >ENE</th> <th class="font-size-11px" >FEB</th> <th class="font-size-11px" >MAR</th> <th class="font-size-11px" >ABR</th>
+            <th class="font-size-11px" >MAY</th> <th class="font-size-11px" >JUN</th> <th class="font-size-11px" >JUL</th> <th class="font-size-11px" >AGO</th> <th class="font-size-11px" >SEP</th> <th class="font-size-11px" >OCT</th> <th class="font-size-11px" >NOV</th> <th class="font-size-11px" >DIC</th> <th class="font-size-11px" >OBSERVACIONES</th>
           </thead>
-          <tbody>';
+        <tbody>';
     
         if ($num_anios > 0) {
           foreach ($rspta['data']['pagos'] as $key => $val) {
               echo '<tr>';
               if ($primero) {
-                  echo '<th class="py-0 '.$bg_light.' text-center" rowspan="'.$num_anios.'">1</th>
-                    <td class="py-0 '.$bg_light.' text-nowrap" rowspan="'.$num_anios.'"><div class="d-flex flex-fill align-items-center">
-                        <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                          <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($rspta['data']['cliente']['cliente_nombre_completo']) . '\')" alt="" > </span>
-                        </div>
-                        <div>
-                          <span class="d-block fw-semibold text-primary">' . $rspta['data']['cliente']['cliente_nombre_completo'] . '</span>
-                          <span class="text-muted fs-10 text-nowrap">' . $rspta['data']['cliente']['tipo_doc'] . ' : ' . $rspta['data']['cliente']['numero_documento'] . '</span> |
-                          <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $rspta['data']['cliente']['idcliente'] . '</span>
-                        </div>
-                      </div></td>
-                    <td class="py-0 '.$bg_light.' text-center" rowspan="'.$num_anios.'">'.$rspta['data']['cliente']['fecha_cancelacion_format'].'</td>                            
-                    <td class="py-0 '.$bg_light.' text-center" rowspan="'.$num_anios.'">'.$rspta['data']['cliente']['costo'].'</td>';
+                echo '<td class="py-1 px-1 '.$bg_light.' text-nowrap" rowspan="'.$num_anios.'"><div class="d-flex flex-fill align-items-center">
+                    <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
+                      <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($rspta['data']['cliente']['cliente_nombre_completo']) . '\')" alt="" > </span>
+                    </div>
+                    <div>
+                      <span class="d-block fs-11 fw-semibold text-primary">' . $rspta['data']['cliente']['cliente_nombre_completo'] . '</span>
+                      <span class="text-muted fs-10 text-nowrap">' . $rspta['data']['cliente']['tipo_doc'] . ' : ' . $rspta['data']['cliente']['numero_documento'] . '</span> |
+                      <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $rspta['data']['cliente']['idcliente'] . '</span>
+                    </div>
+                  </div></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" rowspan="'.$num_anios.'">'.$rspta['data']['cliente']['fecha_cancelacion_format'].'</td>                            
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" rowspan="'.$num_anios.'">'.$rspta['data']['cliente']['costo'].'</td>';
                   $primero = false;
               }
-              echo '<td class="py-0 '.$bg_light.' text-nowrap">'.$val['periodo_pago_year'].'</td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Enero") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_enero'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Febrero") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_febrero'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Marzo") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_marzo'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Abril") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_abril'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Mayo") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_mayo'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Junio") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_junio'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Julio") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_julio'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Agosto") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_agosto'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Septiembre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_septiembre'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Octubre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_octubre'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Noviembre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_noviembre'] . '</a></td>
-                  <td class="py-0 '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Diciembre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_diciembre'] . '</a></td>';
+              echo '<td class="py-1 px-1 font-size-11px '.$bg_light.' text-nowrap">'.$val['periodo_pago_year'].'</td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Enero") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_enero'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Febrero") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_febrero'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Marzo") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_marzo'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Abril") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_abril'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Mayo") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_mayo'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Junio") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_junio'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Julio") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_julio'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Agosto") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_agosto'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Septiembre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_septiembre'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Octubre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_octubre'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Noviembre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_noviembre'] . '</a></td>
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" ><a onclick="pagos_cliente_x_mes(\'' . $val['idpersona_cliente'] . '\', \'' . encodeCadenaHtml("Diciembre") . '\', \'' . encodeCadenaHtml($val['periodo_pago_year']) . '\')" type="button">' . $val['venta_diciembre'] . '</a></td>';
                   
                   if ($tercero) {
                     echo '<td class="py-0 '.$bg_light.'" rowspan="'.$num_anios.'"><textarea cols="30" rows="2" class="textarea_datatable '.$bg_light.' bg-light " readonly="">' . $rspta['data']['cliente']['nota'] . '</textarea></td>';
-                    $tercero = false; }
+                    $tercero = false; 
+                  }
               echo '</tr>';
           }
         } else {
-          echo '<th class="py-0 '.$bg_light.' text-center">1</th>
+          echo '
           <td class="py-0 '.$bg_light.' text-nowrap"><div class="d-flex flex-fill align-items-center">
               <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
                 <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($rspta['data']['cliente']['cliente_nombre_completo']) . '\')" alt="" > </span>
               </div>
               <div>
-                <span class="d-block fw-semibold text-primary">' . $rspta['data']['cliente']['cliente_nombre_completo'] . '</span>
+                <span class="d-block fs-11 fw-semibold text-primary">' . $rspta['data']['cliente']['cliente_nombre_completo'] . '</span>
                 <span class="text-muted fs-10 text-nowrap">' . $rspta['data']['cliente']['tipo_doc'] . ' : ' . $rspta['data']['cliente']['numero_documento'] . '</span> |
                 <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $rspta['data']['cliente']['idcliente'] . '</span>
               </div>
             </div></td>
-          <td class="py-0 '.$bg_light.' text-center">'.$rspta['data']['cliente']['fecha_cancelacion_format'].'</td>                            
-          <td class="py-0 '.$bg_light.' text-center">'.$rspta['data']['cliente']['costo'].'</td>
+          <td class="py-0 font-size-11px '.$bg_light.' text-center">'.$rspta['data']['cliente']['fecha_cancelacion_format'].'</td>                            
+          <td class="py-0 font-size-11px '.$bg_light.' text-center">'.$rspta['data']['cliente']['costo'].'</td>
           <td colspan="14" class="text-center">No se registró ningún pago</td>';
         }
     
@@ -321,15 +369,15 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta = $persona_cliente->ver_pagos_all_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_anio_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
         
         echo '<table class="table  table-hover table-bordered table-condensed">
-        <thead>
-          <tr id="id_buscando_tabla_pago_all"> 
-            <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
-          </tr>
-          <tr class="fs-10"> 
-            <th class="font-size-11px">N°</th> <th class="font-size-11px">APELLIDOS Y NOMBRES</th> <th class="font-size-11px" >CANCELACIÓN</th> <th class="font-size-11px" >IMPORTE</th> <th class="font-size-11px" >AÑO</th> <th class="font-size-11px" >ENE</th> <th class="font-size-11px" >FEB</th> <th class="font-size-11px" >MAR</th> <th class="font-size-11px" >ABR</th>
-            <th class="font-size-11px" >MAY</th> <th class="font-size-11px" >JUN</th> <th class="font-size-11px" >JUL</th> <th class="font-size-11px" >AGO</th> <th class="font-size-11px" >SEP</th> <th class="font-size-11px" >OCT</th> <th class="font-size-11px" >NOV</th> <th class="font-size-11px" >DIC</th> <th class="font-size-11px" >OBSERVACIONES</th>
-          </tr>
-        </thead>
+          <thead>
+            <tr id="id_buscando_tabla_pago_all"> 
+              <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+            </tr>
+            <tr class="fs-10"> 
+              <th class="font-size-11px">N°</th> <th class="font-size-11px">APELLIDOS Y NOMBRES</th> <th class="font-size-11px" >CANCELACIÓN</th> <th class="font-size-11px" >IMPORTE</th> <th class="font-size-11px" >AÑO</th> <th class="font-size-11px" >ENE</th> <th class="font-size-11px" >FEB</th> <th class="font-size-11px" >MAR</th> <th class="font-size-11px" >ABR</th>
+              <th class="font-size-11px" >MAY</th> <th class="font-size-11px" >JUN</th> <th class="font-size-11px" >JUL</th> <th class="font-size-11px" >AGO</th> <th class="font-size-11px" >SEP</th> <th class="font-size-11px" >OCT</th> <th class="font-size-11px" >NOV</th> <th class="font-size-11px" >DIC</th> <th class="font-size-11px" >OBSERVACIONES</th>
+            </tr>
+          </thead>
         <tbody>';
 
         foreach ($rspta['data'] as $key => $val) {
@@ -412,6 +460,117 @@ if (!isset($_SESSION["user_nombre"])) {
         </table>';
       break;
 
+      // ══════════════════════════════════════ R E A L I Z A R  P A G O   C L I E N T E  ══════════════════════════════════════ 
+
+      case 'guardar_editar_facturacion':
+
+        $rspta = ""; $mp_comprobante = ""; 
+        $sunat_estado = ""; $sunat_observacion= ""; $sunat_code= ""; $sunat_hash= ""; $sunat_mensaje= ""; $sunat_error= ""; 
+
+        if ( floatval($f_venta_total) > 699 ) {
+          # code...
+        } else {
+          # code...
+        }        
+
+        if ($f_metodo_pago == 'EFECTIVO' ) {
+          # code...
+        } else {
+          
+          if ( empty($_POST["f_mp_comprobante"]) || isset($_FILES['f_mp_comprobante']) && $_FILES['f_mp_comprobante']['name'] ) {
+            # code...
+          } else {          
+            $mp_comprobante = json_decode($_POST["f_mp_comprobante"], true);
+            $decoded_data = base64_decode($mp_comprobante['data']);  // Decodificar el archivo base64
+            $ext = explode(".", $mp_comprobante["name"]);          
+            $mp_comprobante = $f_metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);          
+            $ruta_destino = '../assets/modulo/facturacion/ticket/'.$mp_comprobante; // Ruta donde deseas guardar el archivo en el servidor
+            
+            if (file_put_contents($ruta_destino, $decoded_data) !== false) { // Guardar el archivo decodificado en el servidor
+              # El archivo se ha guardado correctamente en el servidor
+            } else {
+              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Archivo no aceptado!!', 'message' => 'El archivo de baucher de pago esta corroido, porfavor cambie de archivo', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+              echo json_encode($retorno, true); die();
+            }
+          }      
+        }          
+
+        if (empty($idventa)) {
+          
+          $rspta = $facturacion->insertar( $f_impuesto, $f_crear_y_emitir,$f_idsunat_c01  ,$f_tipo_comprobante, $f_serie_comprobante, $f_idpersona_cliente, $f_observacion_documento, $f_es_cobro, $f_periodo_pago,
+          $f_metodo_pago, $f_total_recibido, $f_mp_monto, $f_total_vuelto, $f_usar_anticipo, $f_ua_monto_disponible, $f_ua_monto_usado,  $f_mp_serie_comprobante,$mp_comprobante, $f_venta_subtotal, $f_tipo_gravada, $f_venta_descuento, $f_venta_igv, $f_venta_total,
+          $f_nc_idventa, $f_nc_tipo_comprobante, $f_nc_serie_y_numero, $f_nc_motivo_anulacion, $f_tiempo_entrega, $f_validez_cotizacion,
+          $_POST["idproducto"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
+          $_POST["f_descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 
+
+          $idventa = $rspta['id_tabla'];
+
+          if ($rspta['status'] == true) {             // validacion de creacion de documento
+        
+            if ($f_tipo_comprobante == '12') {          // SUNAT TICKET     
+              $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, 'ACEPTADA' , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+              echo json_encode($rspta, true);             
+
+            } else if ($f_tipo_comprobante == '01') {   // SUNAT FACTURA
+              
+              include( '../modelos/SunatFactura.php');
+              $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);            
+              if ( empty($sunat_observacion) && empty($sunat_error) ) {
+                echo json_encode($rspta, true); 
+              } else {              
+                $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+                echo json_encode($retorno, true); 
+              }                
+              
+            } else if ($f_tipo_comprobante == '03') {   // SUNAT BOLETA 
+              
+              include( '../modelos/SunatBoleta.php');
+              $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+              if ( empty($sunat_observacion) && empty($sunat_error) ) {
+                echo json_encode($rspta, true); 
+              } else {              
+                $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+                echo json_encode($retorno, true);
+              } 
+              
+            } else if ($f_tipo_comprobante == '07') {   // SUNAT NOTA DE CREDITO 
+              
+              include( '../modelos/SunatNotaCredito.php');
+              $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+              if ( empty($sunat_observacion) && empty($sunat_error) ) {
+                $update_sunat = $facturacion->actualizar_doc_anulado_x_nota_credito( $nc_idventa); // CAMBIAMOS DE ESTADO EL DOC ANULADO
+                echo json_encode($rspta, true); 
+              } else {              
+                $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+                echo json_encode($retorno, true);
+              }
+                  
+            } else {
+              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'SUNAT en mantenimiento!!', 'message' => 'El sistema de sunat esta mantenimiento, esperamos su comprención, sea paciente', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+              echo json_encode($retorno, true);
+            }
+          } else{
+            echo json_encode($rspta, true);
+          }
+
+        } else {
+
+          $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Datos incompletos', 'message' => 'No se enviaron los datos completos: idventa', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+          echo json_encode($retorno, true);
+        }
+    
+      break; 
+
+      case 'mostrar_datos_cliente':
+        $rspta = $persona_cliente->mostrar_cliente($_GET["idpersona_cliente"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+      break;
+
+      case 'listar_producto_x_precio':
+        $rspta=$persona_cliente->listar_producto_x_precio($_POST["precio"]);
+        echo json_encode($rspta, true);
+      break;
 
 
       // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 
