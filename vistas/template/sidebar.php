@@ -231,9 +231,7 @@
             <?php  if ($_SESSION['correlativo_numeracion'] == '1') { ?>          
             <li class="slide"><a href="correlacion_comprobante.php" class="side-menu__item">Tipos de Comprobantes</a></li>
             <?php } ?>
-            <?php  if ($_SESSION['cargar_certificado'] == '1') { ?>
-            <li class="slide"><a href="no_disponible.php" class="side-menu__item">Cargar Certificado</a></li>  
-            <?php } ?>          
+                 
           </ul>
         </li>
         <?php } ?>

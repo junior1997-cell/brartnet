@@ -65,7 +65,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <tr>
                             <th class="text-center">#</th>
                             <th>Cliente</th>
-                            <th>Saldo Disponible</th>
+                            <th>Disponible</th>
                             <th>Anticipos</th>
                           </tr>
                         </thead>
@@ -74,7 +74,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <tr>
                           <th class="text-center">#</th>
                             <th>Cliente</th>
-                            <th class="bg-light" id="Saldo">Saldo Disponible</th>
+                            <th class="bg-light" id="Saldo">Disponible</th>
                             <th>Anticipos</th>
                           </tr>
                         </tfoot>
@@ -91,12 +91,12 @@ if (!isset($_SESSION["user_nombre"])) {
             <div class="col-xxl-7 col-xl-7">
               <div id="select-user">
                 <div class="alert alert-solid-warning alert-dismissible fade show">
-                  <h6 class="text-center">POR FAVOR SELECCIONE UN CLIENTE !!!</h6>
+                  <div class="text-center">POR FAVOR SELECCIONE UN CLIENTE !!!</div>
                 </div>
               </div>
               <div id="tbl-anticipo" style="display: none;">
                 <div class="alert alert-solid-info alert-dismissible fade show">
-                  <h6  class="text-center"><b id="nomb_cliente"></b></h6>
+                  <div  class="text-center fs-15"><b id="nomb_cliente"></b></div>
                 </div>
                 <div class="card custom-card">
                   <div class="card-body">
@@ -109,7 +109,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th>Acciones</th>
                             <th>Tipo</th>
                             <th>Fecha</th>
-                            <th>Serie Anticipo</th>
+                            <th>Serie</th>
                             <th>Descripción</th>
                             <th>Venta</th>
                             <th>Monto</th>
@@ -123,7 +123,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <th>Acciones</th>
                             <th>Tipo</th>
                             <th>Fecha</th>
-                            <th>Serie Anticipo</th>
+                            <th>Serie</th>
                             <th>Descripción</th>
                             <th>Venta</th>
                             <th class="bg-light" id="total">Monto</th>

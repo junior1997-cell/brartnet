@@ -41,13 +41,11 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[]=[
               "0" => $count++,
               "1" =>  '<div class="d-flex flex-fill align-items-center">
-                        <div>
-                          <p class="d-block fw-semibold text-primary">'.$value['nombres'] .' '.$value['apellidos'] .'</p>
-                        </div>
+                        <div><p class="d-block fw-semibold fs-11 text-primary">'.$value['nombres'] .' '.$value['apellidos'] .'</p> </div>
                       </div>',
 
-              "2" =>  '<p class="d-block fw-semibold text-primary">'.$value['total_anticipo'] .'</p>',
-              "3" =>  '<div class="hstack gap-2 fs-15 text-center">' .
+              "2" =>  '<p class="d-block fs-11 fw-semibold text-primary">'.$value['total_anticipo'] .'</p>',
+              "3" =>  '<div class="hstack gap-2 fs-11 text-center">' .
                         '<button class="btn btn-icon btn-sm btn-info-light" onclick="mostrar_tbla_anticipos(' . $value['idpersona_cliente'] . ', \'' . $value['nombres'] . '\', \'' . $value['apellidos'] . '\')" data-bs-toggle="tooltip" title="Mostrar Anticipos"><i class="ri-arrow-left-right-line"></i></button>'.
                       '</div>',
             ];
@@ -75,21 +73,21 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[]=[
               "0" => $count++,
               "1" =>  ' <div class="dropdown-center">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownCenterBtn" data-bs-toggle="dropdown" aria-expanded="false"> <i class="nav-icon fa-solid fa-gears"></i> </button>
+                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownCenterBtn" data-bs-toggle="dropdown" aria-expanded="false"> <i class="nav-icon fa-solid fa-gears"></i> </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownCenterBtn" style="">
-                          <li><a class="dropdown-item" onclick="mostrar_anticipo('.($value['idanticipo_cliente']).')">Editar</a></li>
-                          <li><a class="dropdown-item" onclick="eliminar_papelera_anticipo(' . $value['idanticipo_cliente'] . ', \'' . addslashes($value['sc_anticipo']) . '\', \'' . addslashes($value['nc_anticipo']) . '\')">Eliminar</a></li>
-                          <li><a class="dropdown-item" onclick="TickcetAnticipo_ciente('.($value['idanticipo_cliente']).')" target="_blanck">Imprimir Ticket</a></li>
-                          <li><a class="dropdown-item" target="_blank" href="../reportes/A4ComprimidoAnticipo_cliente.php?id='.$value['idanticipo_cliente'].'&idanticipo_cliente='.($value['idanticipo_cliente']).'"  >A4 Comprimido</a></li>
-                          <li><a class="dropdown-item" target="_blank" href="../reportes/A4CompletoAnticipo_cliente.php?id='.$value['idanticipo_cliente'].'&idanticipo_cliente='.($value['idanticipo_cliente']).'"  >A4 Completo</a></li>
+                          <li><a class="dropdown-item" href="javascript:void(0);" onclick="mostrar_anticipo('.($value['idanticipo_cliente']).')">Editar</a></li>
+                          <li><a class="dropdown-item" href="javascript:void(0);" onclick="eliminar_papelera_anticipo(' . $value['idanticipo_cliente'] . ', \'' . addslashes($value['sc_anticipo']) . '\', \'' . addslashes($value['nc_anticipo']) . '\')">Eliminar</a></li>
+                          <li><a class="dropdown-item" href="javascript:void(0);" onclick="TickcetAnticipo_ciente('.($value['idanticipo_cliente']).')">Formato Ticket</a></li>
+                          <!--<li><a class="dropdown-item" href="javascript:void(0);" target="_blank" href="../reportes/A4ComprimidoAnticipo_cliente.php?id='.$value['idanticipo_cliente'].'&idanticipo_cliente='.($value['idanticipo_cliente']).'"  >A4 Comprimido</a></li>-->
+                          <li><a class="dropdown-item"  target="_blank" href="../reportes/A4CompletoAnticipo_cliente.php?id='.$value['idanticipo_cliente'].'&idanticipo_cliente='.($value['idanticipo_cliente']).'"  >Formato A4</a></li>
                         </ul>
                       </div> ',
               "2" =>  $value['tipo'] == 'INGRESO' ? '<span class="badge bg-success-transparent">'.$value['tipo'] .'</span>' : '<span class="badge bg-danger-transparent">'.$value['tipo'] .'</span>',
               "3" =>  (new DateTime($value['fecha_anticipo']))->format('d/m/Y'),
-              "4" => '<p><b>'.$value['sc_anticipo'].'-'.$value['nc_anticipo'].'</b></p>',
-              "5" => '<textarea class="textarea_datatable bg-light"  readonly>' .($value['descripcion']). '</textarea>',
-              "6" => '<p><b>'.$value['sc_venta'].'-'.$value['nc_venta'].'</b></p>',
-              "7" =>'<p><b><span style="color: ' . ($value['monto_anticipo'] < 0 ? 'red' : 'inherit') . ';">'.$value['monto_anticipo'].'</span></b></p>',
+              "4" => '<span class="fs-11">'.$value['sc_anticipo'].'-'.$value['nc_anticipo'].'</span>',
+              "5" => '<textarea class="textarea_datatable fs-11 bg-light" rows="1"  readonly>' .($value['descripcion']). '</textarea>',
+              "6" => '<span class="fs-11">'.$value['sc_venta'].'-'.$value['nc_venta'].'</span>',
+              "7" => $value['monto_anticipo'],
               "8" => $value['nombres'] .' '.$value['apellidos']
             ];
           }
