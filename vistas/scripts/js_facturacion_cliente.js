@@ -4,7 +4,7 @@ var cont = 0;
 var detalles = 0;
 var conNO = 1;
 
-function agregarDetalleComprobante(idproducto, individual) {
+function agregarDetalleComprobante(idproducto, tipo_producto, individual) {
   
   $(`.btn-add-producto-1-${idproducto}`).html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);  
   $(`.btn-add-producto-2-${idproducto}`).html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);  
@@ -69,7 +69,13 @@ function agregarDetalleComprobante(idproducto, individual) {
               <span class="fs-11 um_nombre_${cont}">${e.data.um_abreviatura}</span> 
               <input type="hidden" class="um_nombre_${cont}" name="um_nombre[]" id="um_nombre[]" value="${e.data.unidad_medida}">
               <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${e.data.um_abreviatura}">
-            </td>            
+            </td>   
+            
+            <td class="py-1">       
+              <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(tipo_producto == 'PR' ? 'NO' : 'SI' )}">  
+              <input type="${(tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+              <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
+            </td>  
 
             <td class="py-1 form-group">
               <input type="number" class="w-100px valid_cantidad form-control form-control-sm producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input( this, '#cantidad_${cont}'); update_price(); ">
@@ -120,6 +126,12 @@ function agregarDetalleComprobante(idproducto, individual) {
             $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
           });
 
+          if (tipo_producto == 'SR') {
+            $(`#valid_periodo_pago_${cont}`).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+          }else{
+            $(`#valid_periodo_pago_${cont}`).rules('remove', 'required');
+          }
+
           cont++;   
           evaluar();
         } else {
@@ -149,7 +161,7 @@ function listar_producto_x_codigo() {
       if (e.data == null) {
         toastr_warning('No existe', 'Proporcione un codigo existente o el producto pertenece a otra categoria.');
       } else {
-        if ($(`.producto_${e.data.idproducto}`).hasClass("producto_selecionado")) {
+        if ($(`.producto_${e.data.idproducto}`).hasClass("producto_selecionado") && e.data.tipo == 'PR') {
           if (document.getElementsByClassName(`producto_${e.data.idproducto}`).length == 1) {
             var cant_producto = $(`.producto_${e.data.idproducto}`).val();
             var sub_total = parseInt(cant_producto, 10) + 1;
@@ -198,6 +210,12 @@ function listar_producto_x_codigo() {
               <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${e.data.um_abreviatura}">
             </td>
 
+            <td class="py-1">       
+              <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(e.data.tipo == 'PR' ? 'NO' : 'SI' )}">  
+              <input type="${(e.data.tipo == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+              <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
+            </td> 
+
             <td class="py-1 form-group">
               <input type="number" class="w-100px valid_cantidad form-control form-control-sm producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
               <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${cantidad}" min="0.01" required  >            
@@ -245,6 +263,12 @@ function listar_producto_x_codigo() {
             $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
             $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
           });
+
+          if (e.data.tipo == 'SR') {
+            $(`#valid_periodo_pago_${cont}`).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+          }else{
+            $(`#valid_periodo_pago_${cont}`).rules('remove', 'required');
+          }
 
           cont++;  
           evaluar();
@@ -315,6 +339,12 @@ function mostrar_para_nota_credito(input) {
                 <input type="hidden" class="um_nombre_${cont}" name="um_nombre[]" id="um_nombre[]" value="${val1.um_nombre}">
                 <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${val1.um_abreviatura}">
               </td>
+
+              <td class="py-1">       
+                <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(val1.tipo_producto == 'PR' ? 'NO' : 'SI' )}">  
+                <input type="${(val1.tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value="${val1.periodo_pago}" readonly  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+                <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="${val1.periodo_pago}">
+              </td> 
 
               <td class="py-1 form-group">
                 <input type="number" class="w-100px valid_cantidad form-control-sm form-control producto_${val1.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${val1.cantidad}" min="0.01" required readonly onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
@@ -418,6 +448,12 @@ function listar_producto_x_precio(precio) {
             <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${e.data.um_abreviatura}">
           </td>
 
+          <td class="py-1">       
+            <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(e.data.tipo == 'PR' ? 'NO' : 'SI' )}">  
+            <input type="${(e.data.tipo == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+            <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
+          </td> 
+
           <td class="py-1 form-group">
             <input type="number" class="w-100px valid_cantidad form-control form-control-sm producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="1" min="0.01" required onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
             <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="1" min="0.01" required  >            
@@ -465,6 +501,12 @@ function listar_producto_x_precio(precio) {
           $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
           $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
         });
+
+        if (e.data.tipo == 'SR') {
+          $(`#valid_periodo_pago_${cont}`).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+        }else{
+          $(`#valid_periodo_pago_${cont}`).rules('remove', 'required');
+        }
 
         cont++;  
         evaluar();         

@@ -112,7 +112,11 @@ if (empty($venta_f['data']['venta'])) {
   $arrayItem = [];
 
   foreach ($venta_f['data']['detalle'] as $key => $val) {
-    $nombre_producto      = mb_convert_encoding($val['nombre_producto'], 'UTF-8', mb_detect_encoding($val['nombre_producto'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $es_cobro       = $val['es_cobro'];
+    $p_p_month_year = $val['es_cobro'] == 'SI' ? ' - ' . $val['periodo_pago_v2']: '';
+    $p_p_year       = $val['periodo_pago_year'];
+
+    $nombre_producto      = mb_convert_encoding($val['nombre_producto']. $p_p_month_year, 'UTF-8', mb_detect_encoding($val['nombre_producto'] . $p_p_month_year, "UTF-8, ISO-8859-1, ISO-8859-15", true));
     $cantidad             = floatval($val['cantidad']);
     $precio_venta         = floatval($val['precio_venta']);  
     $precio_venta_dcto    = floatval($val['precio_venta_descuento']);  

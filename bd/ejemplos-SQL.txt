@@ -25,6 +25,16 @@ SET vd1.tipo = CASE v.tipo_comprobante
     WHEN '12' THEN 'TICKET'
 END;
 
+:::::::::::::::::::: ACTUALIZA COBRO EN: VENTA_DETALLE :::::::::::
+UPDATE venta_detalle vd
+INNER JOIN venta v ON v.idventa = vd.idventa
+SET
+  vd.es_cobro = v.es_cobro,
+  vd.periodo_pago = v.periodo_pago,
+  vd.periodo_pago_format = v.periodo_pago_format,
+  vd.periodo_pago_month = v.periodo_pago_month,
+  vd.periodo_pago_year = v.periodo_pago_year
+WHERE v.es_cobro = 'SI';
 
 ::::::::::::::::::: POWER BI - VENTAS :::::::::::::::::::::::::::::::
 SELECT v.idventa as v_idventa, v.idpersona_cliente as v_idpersona_cliente, v.iddocumento_relacionado as v_iddocumento_relacionado, v.crear_enviar_sunat as v_crear_enviar_sunat, 

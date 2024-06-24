@@ -34,7 +34,9 @@
 
       $sql = "SELECT v.*, LPAD(v.idventa, 5, '0') AS idventa_v2, CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END AS venta_total_v2, 
       CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS tp_comprobante_v2,
-      DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') as fecha_emision_format, LEFT(v.periodo_pago_month, 3) as periodo_pago_month_v2,  p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, 
+      DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') as fecha_emision_format, LEFT(v.periodo_pago_month, 3) as periodo_pago_month_v2,  
+      
+      p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, 
       p.numero_documento, p.foto_perfil, tc.abreviatura as tp_comprobante_v1, sdi.abreviatura as tipo_documento, v.estado,
       CASE 
         WHEN p.tipo_persona_sunat = 'NATURAL' THEN 
@@ -53,8 +55,10 @@
         WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
         WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
         ELSE '-'
-      END AS cliente_nombre_completo, pu.nombre_razonsocial as user_en_atencion, LPAD(v.user_created, 3, '0') AS user_created_v2
+      END AS cliente_nombre_completo, pu.nombre_razonsocial as user_en_atencion, LPAD(v.user_created, 3, '0') AS user_created_v2,
+      GROUP_CONCAT( CASE vd.es_cobro WHEN 'SI' THEN CONCAT( LEFT(vd.periodo_pago_month, 3), '-',  vd.periodo_pago_year, ',<br>') ELSE '' END SEPARATOR ' ') AS periodo_pago_mes_anio
       FROM venta AS v
+      INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
       INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN persona AS p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
@@ -62,6 +66,7 @@
       LEFT JOIN usuario as u ON u.idusuario = v.user_created
       LEFT JOIN persona as pu ON pu.idpersona = u.idpersona
       WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante <> '100' $filtro_id_trabajador $filtro_id_punto $filtro_cliente $filtro_comprobante $filtro_estado_sunat $filtro_fecha
+      GROUP BY v.idventa
       ORDER BY v.fecha_emision DESC, p.nombre_razonsocial ASC;"; #return $sql;
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
 
@@ -70,12 +75,12 @@
 
     public function insertar(
       // DATOS TABLA venta
-      $impuesto, $crear_y_emitir, $idsunat_c01 , $tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento, $es_cobro, $periodo_pago,
+      $impuesto, $crear_y_emitir, $idsunat_c01 , $tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento,
       $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,
       $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
       $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion, $tiempo_entrega, $validez_cotizacion,
       //DATOS TABLA venta DETALLE
-      $idproducto, $um_nombre, $um_abreviatura, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $precio_venta_descuento, $descuento, $descuento_porcentaje, 
+      $idproducto, $um_nombre, $um_abreviatura, $es_cobro, $periodo_pago, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $precio_venta_descuento, $descuento, $descuento_porcentaje, 
       $subtotal_producto, $subtotal_no_descuento    
     ){
       $tipo_v = ""; $cot_estado = "";
@@ -85,8 +90,7 @@
       }else if ($tipo_comprobante == '12') {
         $tipo_v = "TICKET";
       }else if ($tipo_comprobante == '07') {
-        $tipo_v = "NOTA DE CRÉDITO";        
-        $periodo_pago = ""; 
+        $tipo_v = "NOTA DE CRÉDITO";         
         $metodo_pago= ""; $total_recibido= ""; $mp_monto= ""; $total_vuelto= ""; $mp_serie_comprobante = "";$mp_comprobante = "";
         $usar_anticipo= "NO"; $ua_monto_disponible= ""; $ua_monto_usado= "";        
       }else if ($tipo_comprobante == '03') {
@@ -102,10 +106,10 @@
       $buscando_error = ejecutarConsultaArray($sql); if ($buscando_error['status'] == false) {return $buscando_error; }
 
       if ( empty( $buscando_error['data'] ) ) {
-        $sql_1 = "INSERT INTO venta(idpersona_cliente, iddocumento_relacionado, crear_enviar_sunat, es_cobro, idsunat_c01, tipo_comprobante, serie_comprobante,  periodo_pago,  impuesto, 
+        $sql_1 = "INSERT INTO venta(idpersona_cliente, iddocumento_relacionado, crear_enviar_sunat, idsunat_c01, tipo_comprobante, serie_comprobante,  impuesto, 
         venta_subtotal, venta_descuento, venta_igv, venta_total, metodo_pago, mp_serie_comprobante, mp_comprobante, mp_monto, venta_credito, vc_numero_operacion, 
         vc_fecha_proximo_pago, total_recibido, total_vuelto, usar_anticipo, ua_monto_disponible, ua_monto_usado, nc_motivo_nota, nc_tipo_comprobante, nc_serie_y_numero, cot_tiempo_entrega, cot_validez, cot_estado, observacion_documento) 
-        VALUES ('$idpersona_cliente', '$nc_idventa', '$crear_y_emitir', '$es_cobro', '$idsunat_c01', '$tipo_comprobante', '$serie_comprobante', '$periodo_pago', '$impuesto', '$venta_subtotal', '$venta_descuento',
+        VALUES ('$idpersona_cliente', '$nc_idventa', '$crear_y_emitir', '$idsunat_c01', '$tipo_comprobante', '$serie_comprobante', '$impuesto', '$venta_subtotal', '$venta_descuento',
         '$venta_igv','$venta_total','$metodo_pago','$mp_serie_comprobante','$mp_comprobante','$mp_monto','','',CURRENT_TIMESTAMP, '$total_recibido', '$total_vuelto',
         '$usar_anticipo','$ua_monto_disponible','$ua_monto_usado', '$nc_motivo_anulacion', '$nc_tipo_comprobante', '$nc_serie_y_numero', '$tiempo_entrega', '$validez_cotizacion', '$cot_estado', '$observacion_documento')"; 
         $newdata = ejecutarConsulta_retornarID($sql_1, 'C'); if ($newdata['status'] == false) { return  $newdata;}
@@ -117,8 +121,8 @@
         if ( !empty($newdata['data']) ) {      
           while ($i < count($idproducto)) {
 
-            $sql_2 = "INSERT INTO venta_detalle( idventa, idproducto, tipo, cantidad, precio_compra, precio_venta, precio_venta_descuento, descuento, descuento_porcentaje, subtotal, subtotal_no_descuento, um_nombre, um_abreviatura)
-            VALUES ('$id', '$idproducto[$i]', '$tipo_v', '$cantidad[$i]', '$precio_compra[$i]',  '$precio_con_igv[$i]', '$precio_venta_descuento[$i]', '$descuento[$i]', '$descuento_porcentaje[$i]', '$subtotal_producto[$i]', '$subtotal_no_descuento[$i]', '$um_nombre[$i]', '$um_abreviatura[$i]');";
+            $sql_2 = "INSERT INTO venta_detalle( idventa, idproducto, tipo, cantidad, precio_compra, precio_venta, precio_venta_descuento, descuento, descuento_porcentaje, subtotal, subtotal_no_descuento, um_nombre, um_abreviatura, es_cobro, periodo_pago)
+            VALUES ('$id', '$idproducto[$i]', '$tipo_v', '$cantidad[$i]', '$precio_compra[$i]',  '$precio_con_igv[$i]', '$precio_venta_descuento[$i]', '$descuento[$i]', '$descuento_porcentaje[$i]', '$subtotal_producto[$i]', '$subtotal_no_descuento[$i]', '$um_nombre[$i]', '$um_abreviatura[$i]','$es_cobro[$i]', '$periodo_pago[$i]');";
             $detalle_new =  ejecutarConsulta_retornarID($sql_2, 'C'); if ($detalle_new['status'] == false) { return  $detalle_new;}          
             $id_d = $detalle_new['data'];
             $i = $i + 1;
@@ -227,7 +231,8 @@
       $venta = ejecutarConsultaSimpleFila($sql_1); if ($venta['status'] == false) {return $venta; }
 
 
-      $sql_2 = "SELECT vc.*, p.idproducto, p.idsunat_unidad_medida, p.idcategoria, p.idmarca, p.nombre as nombre_producto, p.codigo, p.codigo_alterno, p.imagen, 
+      $sql_2 = "SELECT vc.*, CONCAT(UPPER(MONTHNAME(periodo_pago_format)),' ', YEAR(periodo_pago_format)) AS periodo_pago_v2, p.idproducto, p.idsunat_unidad_medida, 
+      p.idcategoria, p.idmarca, p.nombre as nombre_producto, p.codigo, p.codigo_alterno, p.imagen, p.tipo as tipo_producto,
       um.nombre AS um_nombre_a, um.abreviatura as um_abreviatura_a, cat.nombre AS categoria, mc.nombre AS marca
       FROM venta_detalle AS vc
       INNER JOIN producto AS p ON p.idproducto = vc.idproducto

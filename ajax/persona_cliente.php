@@ -497,10 +497,10 @@ if (!isset($_SESSION["user_nombre"])) {
 
         if (empty($idventa)) {
           
-          $rspta = $facturacion->insertar( $f_impuesto, $f_crear_y_emitir,$f_idsunat_c01  ,$f_tipo_comprobante, $f_serie_comprobante, $f_idpersona_cliente, $f_observacion_documento, $f_es_cobro, $f_periodo_pago,
+          $rspta = $facturacion->insertar( $f_impuesto, $f_crear_y_emitir,$f_idsunat_c01  ,$f_tipo_comprobante, $f_serie_comprobante, $f_idpersona_cliente, $f_observacion_documento, 
           $f_metodo_pago, $f_total_recibido, $f_mp_monto, $f_total_vuelto, $f_usar_anticipo, $f_ua_monto_disponible, $f_ua_monto_usado,  $f_mp_serie_comprobante,$mp_comprobante, $f_venta_subtotal, $f_tipo_gravada, $f_venta_descuento, $f_venta_igv, $f_venta_total,
           $f_nc_idventa, $f_nc_tipo_comprobante, $f_nc_serie_y_numero, $f_nc_motivo_anulacion, $f_tiempo_entrega, $f_validez_cotizacion,
-          $_POST["idproducto"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
+          $_POST["idproducto"], $_POST["um_nombre"],$_POST["um_abreviatura"],  $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
           $_POST["f_descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 
 
           $idventa = $rspta['id_tabla'];

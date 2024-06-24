@@ -109,16 +109,20 @@ if (!isset($_SESSION["user_nombre"])) {
     // detalle x producto ================================================================================
     $html_venta = ''; $cont = 1; $cantidad = 0;
     
-    foreach ($venta_f['data']['detalle'] as $key => $val) {      
+    foreach ($venta_f['data']['detalle'] as $key => $val) {  
+      
+      $es_cobro       = $val['es_cobro'];
+      $p_p_month_year = $val['es_cobro'] == 'SI' ? ' - ' . $val['periodo_pago_v2']: '';
+      $p_p_year       = $val['periodo_pago_year'];
     
       $html_venta .= '<tr class="item-list">'.       
         '<td style="text-align: center; padding-left: 8px; font-size: 10px;">' .  floatval($val['cantidad'])  . '</td>' .
         '<td style="text-align: center; padding-left: 8px; font-size: 10px;">' .  $val['um_nombre_a']  . '</td>' .
-        '<td style="padding: 0.5rem; text-align: left; font-size: 10px; word-break: break-all;">' . ($val['codigo']) . '</td>' .
-        '<td style="padding: 0.5rem; text-align: left;  font-size: 10px; overflow-wrap: break-word;">' . ($val['nombre_producto']) . '</td>' .
-        '<td style="padding: 0.5rem; text-align: right; font-size: 10px;">' .     number_format( floatval($val['precio_venta']) , 2, '.', ',') . '</td>' .
-        '<td style="padding: 0.5rem; text-align: right; font-size: 10px;">' .     number_format( floatval($val['descuento']) , 2, '.', ',') . '</td>' .
-        '<td style="text-align: right; padding-right: 8px; font-size: 10px;">' .  number_format( floatval($val['subtotal_no_descuento']) , 2, '.', ',') . '</td>' .
+        '<td style="text-align: left;   padding: 0.5rem; font-size: 10px; word-break: break-all;">' . ($val['codigo']) . '</td>' .
+        '<td style="text-align: left;   padding: 0.5rem; font-size: 10px; overflow-wrap: break-word;">' . ($val['nombre_producto'].$p_p_month_year) . '</td>' .
+        '<td style="text-align: right;  padding: 0.5rem; font-size: 10px;">' .    number_format( floatval($val['precio_venta']) , 2, '.', ',') . '</td>' .
+        '<td style="text-align: right;  padding: 0.5rem; font-size: 10px;">' .    number_format( floatval($val['descuento']) , 2, '.', ',') . '</td>' .
+        '<td style="text-align: right;  padding-right: 8px; font-size: 10px;">' . number_format( floatval($val['subtotal_no_descuento']) , 2, '.', ',') . '</td>' .
         '</tr>';
       $cantidad += floatval($val['cantidad']);
     }
@@ -262,32 +266,21 @@ if (!isset($_SESSION["user_nombre"])) {
   <div class="tm_hide_print justify-a4-btn">
     <button type="button" style="margin-bottom: 5px;">
       <a  type="button" class="btn btn-outline-info p-1 mb-2 m-l-5px w-40px" href="javascript:window.print()" data-bs-toggle="tooltip" title="Imprimir Ticket">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer">
-          <polyline points="6 9 6 2 18 2 18 9"></polyline>
-          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-          <rect x="6" y="14" width="12" height="8"></rect>
-        </svg>
+        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#08a62f"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
       </a>
     </button>
     <br>
-    <button type="button" style="margin-bottom: 5px; cursor: pointer;" class="btn btn-warning p-1 mb-2 m-l-5px w-40px" id="btn-descargar" data-bs-toggle="tooltip" title="Descargar imagen" onclick="decargar_imagen();" style="cursor: pointer;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-        <polyline points="21 15 16 10 5 21"></polyline>
-      </svg>
+    <button type="button" style="margin-bottom: 5px; cursor: pointer;" class="btn btn-warning p-1 mb-2 m-l-5px w-40px" id="btn-descargar" data-bs-toggle="tooltip" title="Descargar imagen" onclick="descargar_imagen();" style="cursor: pointer;">
+      <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#c76a00"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-photo-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 8h.01" /><path d="M12.5 21h-6.5a3 3 0 0 1 -3 -3v-12a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v6.5" /><path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l4 4" /><path d="M14 14l1 -1c.653 -.629 1.413 -.815 2.13 -.559" /><path d="M19 16v6" /><path d="M22 19l-3 3l-3 -3" /></svg>
     </button>  
     <br>  
     <button type="button" style="margin-bottom: 5px; cursor: pointer;" class="btn btn-outline-danger p-1 mb-2 m-l-5px w-40px" id="btn-compartir" data-bs-toggle="tooltip" title="Compartir Imagen" onclick="compartir_imagen();">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2">
-        <circle cx="18" cy="5" r="3"></circle>
-        <circle cx="6" cy="12" r="3"></circle>
-        <circle cx="18" cy="19" r="3"></circle>
-        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-      </svg>
-    </button>      
+      <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#014cbc"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-share"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M8.7 10.7l6.6 -3.4" /><path d="M8.7 13.3l6.6 3.4" /></svg>
+    </button>  
+    <br>  
+    <button type="button" style="margin-bottom: 5px; cursor: pointer;" class="btn btn-outline-danger p-1 mb-2 m-l-5px w-40px" id="btn-descargar-pdf" data-bs-toggle="tooltip" title="Descargar PDF" onclick="descargar_pdf();">      
+      <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#990000"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-pdf"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6" /><path d="M17 18h2" /><path d="M20 15h-3v6" /><path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z" /></svg>
+    </button>    
   </div>   
 
   <div id="iframe-img-descarga" style="background-color: #fcfcff; font-family: sans-serif; font-size: 12px; width: 780px !important; border-radius: 5px;">
@@ -353,7 +346,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <thead>
             <tr role="row">
               <th role="columnheader" style="text-align: center; width: 25px;">Cant.</th>
-              <th role="columnheader" style="text-align: center; width: 50px;">Unidad</th>
+              <th role="columnheader" style="text-align: center; width: 60px;">Unidad</th>
               <th role="columnheader" style="text-align: left; width: 50px;"> Código </th>
               <th role="columnheader" style="text-align: left; width: auto;">Descripción</th>
               <th role="columnheader" style="text-align: right; width: 50px;">P.U.</th> 
@@ -443,23 +436,27 @@ if (!isset($_SESSION["user_nombre"])) {
   <!-- Bootstrap JS -->
   <script src="../assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Dropzone JS -->
+  <!-- DomToImg JS -->
   <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script>
 
-  <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+  <!-- JsPdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
   <script>
 
     const mi_btn_compartir = document.getElementById("btn-compartir");
     const mi_btn_descargar = document.getElementById("btn-descargar");
+    const mi_btn_descargar_pdf = document.getElementById("btn-descargar-pdf");
     const spinnerSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-spinner" style="background: none;"><circle cx="50" cy="50" fill="none" stroke="#000" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138" transform="rotate(180 50 50)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="0 50 50;360 50 50"></animateTransform></circle></svg>`;    
     const sharedSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2"><circle cx="18" cy="5" r="3"></circle> <circle cx="6" cy="12" r="3"></circle> <circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line> <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>`;      
     const imgenSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`;              
+    const pdfSVG = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#990000"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-pdf"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6" /><path d="M17 18h2" /><path d="M20 15h-3v6" /><path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z" /></svg>`;              
 
     var titulo = document.title; // Obtener el título de la página
 
     // ══════════════════════════════════════ DESCARGAR FORMATO IMAGEN ══════════════════════════════════════
 
-    function decargar_imagen() {       
+    function descargar_imagen() {       
 
       mi_btn_descargar.innerHTML = spinnerSVG; // Agregar el SVG del spinner al div
       setTimeout(function() {
@@ -513,6 +510,50 @@ if (!isset($_SESSION["user_nombre"])) {
         }
       });
     }
+
+    // ══════════════════════════════════════ DESCARGAR FORMATO PDF ══════════════════════════════════════
+    function descargar_pdf() {       
+      mi_btn_descargar_pdf.innerHTML = spinnerSVG; // Agregar el SVG del spinner al div
+      setTimeout(function() {
+        extraccion_de_datos_pdf();
+      }, 2000); // 3000 milisegundos = 3 segundos          
+    }
+
+    function extraccion_de_datos_pdf() {
+      domtoimage.toBlob(document.getElementById('iframe-img-descarga'), { quality: 0.95 }).then(function (dataBlob) {           
+        
+        const blob = dataBlob;
+        const reader = new FileReader();
+
+        reader.onloadend = function() {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF();         
+          
+          // Crear una imagen para obtener las dimensiones originales
+          const img = new Image();
+          img.src = reader.result;
+
+          img.onload = function() {
+              
+            const imgWidth = img.width;                                     // Obtener dimensiones originales de la imagen
+            const imgHeight = img.height;                                   // Obtener dimensiones originales de la imagen
+
+            // Crear un nuevo documento PDF con las dimensiones de la imagen
+            const pdf = new jsPDF({ orientation: imgWidth > imgHeight ? 'landscape' : 'portrait', unit: 'px', format: [imgWidth +20, imgHeight +20] });
+            
+            const x = (pdf.internal.pageSize.getWidth() - imgWidth) / 2;    // Calcular las coordenadas para centrar la imagen
+            const y = (pdf.internal.pageSize.getHeight() - imgHeight) / 2;  // Calcular las coordenadas para centrar la imagen
+            
+            pdf.addImage(reader.result, 'PNG', x, y, imgWidth, imgHeight);  // Añadir la imagen al PDF            
+            pdf.save(`${titulo}.pdf`);                                      // Descargar el PDF
+          };                                     
+        };
+        
+        reader.readAsDataURL(dataBlob);                                     // Leer el Blob como una URL de datos
+        mi_btn_descargar_pdf.innerHTML = pdfSVG;                            // Agregar el SVG del spinner al div
+      });
+    }   
+
   </script>
 </body>
 

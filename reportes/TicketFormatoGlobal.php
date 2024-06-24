@@ -71,9 +71,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $user_en_atencion     = mb_convert_encoding($venta_f['data']['venta']['user_en_atencion'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['user_en_atencion'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
-    $es_cobro             = $venta_f['data']['venta']['es_cobro'];
-    $p_p_month_v2         = $venta_f['data']['venta']['periodo_pago_month_v2'];
-    $_p_year              = $venta_f['data']['venta']['periodo_pago_year'];
+   
 
     $fecha_emision        = $venta_f['data']['venta']['fecha_emision'];
     $fecha_emision_format = $venta_f['data']['venta']['fecha_emision_format'];
@@ -104,10 +102,14 @@ if (!isset($_SESSION["user_nombre"])) {
     $html_venta = ''; $cont = 1; $cantidad = 0;
     
     foreach ($venta_f['data']['detalle'] as $key => $val) {      
+
+      $es_cobro       = $val['es_cobro'];
+      $p_p_month_year = $val['es_cobro'] == 'SI' ? ' - ' . $val['periodo_pago_v2']: '';
+      $p_p_year       = $val['periodo_pago_year'];
     
       $html_venta .= '<tr >'.       
        '<td>' . floatval($val['cantidad'])  . '</td>' .
-       '<td >' . ($val['nombre_producto']) . '</td>' .
+       '<td >' . ($val['nombre_producto'] .$p_p_month_year) . '</td>' .
        '<td style="text-align: right;">' . number_format( floatval($val['precio_venta']) , 2, '.', ',') . '</td>' .
        '<td style="text-align: right;">' . number_format( floatval($val['subtotal_no_descuento']) , 2, '.', ',') . '</td>' .
        '</tr>';
@@ -159,32 +161,21 @@ if (!isset($_SESSION["user_nombre"])) {
     <body style="background-color: white; display: flex;  justify-content: center;  align-items: center;">
       
       <div class="d-block align-items-center justify-content-between tm_hide_print">
-        <a  type="button" class="btn btn-outline-info p-1 mb-2 m-l-5px w-40px" href="javascript:window.print()" data-bs-toggle="tooltip" title="Imprimir Ticket">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer">
-            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-            <rect x="6" y="14" width="12" height="8"></rect>
-          </svg>
+        <a  type="button" class="btn btn-outline-success p-1 mb-2 m-l-5px w-40px" href="javascript:window.print()" data-bs-toggle="tooltip" title="Imprimir Ticket">          
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-printer"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><path d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z" /></svg>
         </a>
 
-        <button type="button" class="btn btn-outline-warning p-1 mb-2 m-l-5px w-40px" id="btn-descargar" data-bs-toggle="tooltip" title="Descargar Imagen" onclick="decargar_imagen();">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21 15 16 10 5 21"></polyline>
-          </svg>
+        <button type="button" class="btn btn-outline-warning p-1 mb-2 m-l-5px w-40px" id="btn-descargar" data-bs-toggle="tooltip" title="Descargar Imagen" onclick="descargar_imagen();">          
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-photo-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 8h.01" /><path d="M12.5 21h-6.5a3 3 0 0 1 -3 -3v-12a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v6.5" /><path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l4 4" /><path d="M14 14l1 -1c.653 -.629 1.413 -.815 2.13 -.559" /><path d="M19 16v6" /><path d="M22 19l-3 3l-3 -3" /></svg>
         </button>      
 
-        <button type="button" class="btn btn-outline-danger p-1 mb-2 m-l-5px w-40px" id="btn-compartir" data-bs-toggle="tooltip" title="Compartir Imagen" onclick="compartir_imagen();">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2">
-            <circle cx="18" cy="5" r="3"></circle>
-            <circle cx="6" cy="12" r="3"></circle>
-            <circle cx="18" cy="19" r="3"></circle>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-          </svg>
-        </button>      
+        <button type="button" class="btn btn-outline-info p-1 mb-2 m-l-5px w-40px" id="btn-compartir" data-bs-toggle="tooltip" title="Compartir Imagen" onclick="compartir_imagen();">         
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-share"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M8.7 10.7l6.6 -3.4" /><path d="M8.7 13.3l6.6 3.4" /></svg>
+        </button>    
+        
+        <button type="button" class="btn btn-outline-danger p-1 mb-2 m-l-5px w-40px" id="btn-descargar-pdf" data-bs-toggle="tooltip" title="Compartir Imagen" onclick="descargar_pdf();">          
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-pdf"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6" /><path d="M17 18h2" /><path d="M20 15h-3v6" /><path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z" /></svg>
+        </button>   
       </div>    
 
       <!-- codigo imprimir -->
@@ -214,10 +205,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <tr ><td colspan="2"><strong>Cliente:</strong> <?php echo $c_nombre_completo ; ?> </td> </tr>
             <tr ><td colspan="2"><strong>DNI/RUC:</strong> <?php echo $c_numero_documento ; ?></td> </tr>
             <tr ><td colspan="2"><strong>Dir.:</strong> <?php echo $c_direccion ; ?></td></tr> 
-            <tr ><td colspan="2"><strong>Atención:</strong> <?php echo $user_en_atencion; ?> </td> </tr>
-            <?php if ($es_cobro == 'SI') {?>
-            <tr ><td colspan="2"><strong>Período cobro:</strong> <?php echo $p_p_month_v2 . '-' . $_p_year ; ?> </td> </tr>
-            <?php }?>
+            <tr ><td colspan="2"><strong>Atención:</strong> <?php echo $user_en_atencion; ?> </td> </tr>            
             <tr ><td colspan="2"><strong>Observación:</strong> <?php echo $observacion_documento ; ?> </td></tr>
           </tbody>
         </table>         
@@ -293,23 +281,26 @@ if (!isset($_SESSION["user_nombre"])) {
       <!-- Bootstrap JS -->
       <script src="../assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-      <!-- Dropzone JS -->
+      <!-- DomToImg JS -->
       <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script>
 
-
+      <!-- JsPdf -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
       <script>
         const mi_btn_compartir = document.getElementById("btn-compartir");
         const mi_btn_descargar = document.getElementById("btn-descargar");
+        const mi_btn_descargar_pdf = document.getElementById("btn-descargar-pdf");
         const spinnerSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-spinner" style="background: none;"><circle cx="50" cy="50" fill="none" stroke="#000" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138" transform="rotate(180 50 50)"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="0 50 50;360 50 50"></animateTransform></circle></svg>`;    
         const sharedSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2"><circle cx="18" cy="5" r="3"></circle> <circle cx="6" cy="12" r="3"></circle> <circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line> <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>`;      
         const imgenSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`;              
+        const pdfSVG = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#990000"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-pdf"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6" /><path d="M17 18h2" /><path d="M20 15h-3v6" /><path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z" /></svg>`;              
 
         var titulo = document.title; // Obtener el título de la página
 
         // ══════════════════════════════════════ DESCARGAR FORMATO IMAGEN ══════════════════════════════════════
 
-        function decargar_imagen() {          
+        function descargar_imagen() {          
           mi_btn_descargar.innerHTML = spinnerSVG; // Agregar el SVG del spinner al div
           setTimeout(function() {
             extraccion_de_datos_imagen();
@@ -363,6 +354,48 @@ if (!isset($_SESSION["user_nombre"])) {
             }
           });
         }
+
+        // ══════════════════════════════════════ DESCARGAR FORMATO PDF ══════════════════════════════════════
+        function descargar_pdf() {       
+          mi_btn_descargar_pdf.innerHTML = spinnerSVG; // Agregar el SVG del spinner al div
+          setTimeout(function() {
+            extraccion_de_datos_pdf();
+          }, 2000); // 3000 milisegundos = 3 segundos          
+        }
+
+        function extraccion_de_datos_pdf() {
+          domtoimage.toBlob(document.getElementById('iframe-img-descarga'), { quality: 0.95 }).then(function (dataBlob) {           
+            
+            const blob = dataBlob;
+            const reader = new FileReader();
+
+            reader.onloadend = function() {
+              const { jsPDF } = window.jspdf;
+              
+              const img = new Image();        // Crear una imagen para obtener las dimensiones originales
+              img.src = reader.result;
+
+              img.onload = function() {
+                
+                const imgWidth = img.width;   // Obtener dimensiones originales de la imagen
+                const imgHeight = img.height; // Obtener dimensiones originales de la imagen
+
+                // Crear un nuevo documento PDF con las dimensiones de la imagen
+                const pdf = new jsPDF({ orientation: imgWidth > imgHeight ? 'landscape' : 'portrait', unit: 'px', format: [imgWidth +20, imgHeight +20] });
+                
+                const x = (pdf.internal.pageSize.getWidth() - imgWidth) / 2;    // Calcular las coordenadas para centrar la imagen
+                const y = (pdf.internal.pageSize.getHeight() - imgHeight) / 2;  // Calcular las coordenadas para centrar la imagen
+                
+                pdf.addImage(reader.result, 'PNG', x, y, imgWidth, imgHeight);  // Añadir la imagen al PDF
+                
+                pdf.save(`${titulo}.pdf`);                                      // Descargar el PDF
+              };              
+            };
+            
+            reader.readAsDataURL(dataBlob);                                     // Leer el Blob como una URL de datos
+            mi_btn_descargar_pdf.innerHTML = pdfSVG;                            // Agregar el SVG del spinner al div
+          });
+        }   
       </script>
 
 

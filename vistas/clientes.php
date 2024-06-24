@@ -673,9 +673,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       <!-- NUMERO DOC -->
                       <input type="hidden" class="form-control" name="f_numero_documento" id="f_numero_documento" value="0">  
                       <!-- ID VENTA PARA: NOTA DE CREDITO -->                   
-                      <input type="hidden" class="form-control" name="f_nc_idventa" id="f_nc_idventa" value="0">
-                      <!-- ES PAGO -->
-                      <input type="hidden" class="form-control" name="f_es_cobro_inp" id="f_es_cobro_inp" value="SI">  
+                      <input type="hidden" class="form-control" name="f_nc_idventa" id="f_nc_idventa" value="0">                    
                       
                       <!-- ID CLIENTE -->
                       <input type="hidden" class="form-control" name="f_idpersona_cliente" id="f_idpersona_cliente" value="">                          
@@ -741,15 +739,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <label for="f_observacion_documento" class="form-label">Observacion</label>
                               <textarea name="f_observacion_documento" id="f_observacion_documento" class="form-control" rows="2" placeholder="ejemp: Cobro de servicio de internet."></textarea>
                             </div>
-                          </div> 
-                          
-                          <!-- FECHA EMISION -->
-                          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 datos-de-cobro-mensual">
-                            <div class="form-group">
-                              <label for="f_periodo_pago" class="form-label">Periodo Pago <span class="text-success fs-10 bx-flashing span_dia_cancelacion"></span></label>
-                              <input type="month" class="form-control" name="f_periodo_pago" id="f_periodo_pago" >
-                            </div>
-                          </div>                                                                  
+                          </div>                                                                                        
 
                         </div>
                       </div>
@@ -784,6 +774,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="fs-11 py-1">Cod</th> 
                                 <th class="fs-11 py-1">Producto</th>
                                 <th class="fs-11 py-1">Unidad</th>
+                                <th class="font-size-11px py-1">Periodo</th>
                                 <th class="fs-11 py-1">Cantidad</th>                                        
                                 <th class="fs-11 py-1" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
                                 <th class="fs-11 py-1">Descuento</th>
@@ -1111,8 +1102,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Dropzone JS -->
     <script src="../assets/libs/dropzone/dropzone-min.js"></script>
 
-    <script src="scripts/persona_cliente.js?version_jdl=1.13"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.13"></script>
+    <script src="scripts/persona_cliente.js?version_jdl=1.14"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.14"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

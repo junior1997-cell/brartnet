@@ -26,44 +26,44 @@ if (!isset($_SESSION["user_nombre"])) {
 
     // ══════════════════════════════════════  DATOS DE FACTURACION ══════════════════════════════════════
 
-    $idventa                = isset($_POST["idventa"]) ? limpiarCadena($_POST["idventa"]) : "";   
-    $impuesto               = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";   
-    $crear_y_emitir         = isset($_POST["crear_y_emitir"]) ? ( empty($_POST["crear_y_emitir"]) ? 'NO' : 'SI' ) : ""; 
+    $idventa                = isset($_POST["f_idventa"]) ? limpiarCadena($_POST["f_idventa"]) : "";   
+    $impuesto               = isset($_POST["f_impuesto"]) ? limpiarCadena($_POST["f_impuesto"]) : "";   
+    $crear_y_emitir         = isset($_POST["f_crear_y_emitir"]) ? ( empty($_POST["f_crear_y_emitir"]) ? 'NO' : 'SI' ) : ""; 
 
-    $idsunat_c01            = isset($_POST["idsunat_c01"]) ? limpiarCadena($_POST["idsunat_c01"]) : "";    
-    $tipo_comprobante       = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
-    $serie_comprobante      = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";    
-    $idpersona_cliente      = isset($_POST["idpersona_cliente"]) ? limpiarCadena($_POST["idpersona_cliente"]) : "";         
-    $observacion_documento  = isset($_POST["observacion_documento"]) ? limpiarCadena($_POST["observacion_documento"]) : "";    
-    $es_cobro               = isset($_POST["es_cobro_inp"]) ? limpiarCadena($_POST["es_cobro_inp"]) : "";    
-    $periodo_pago           = isset($_POST["periodo_pago"]) ? limpiarCadena($_POST["periodo_pago"]) : "";    
+    $idsunat_c01            = isset($_POST["f_idsunat_c01"]) ? limpiarCadena($_POST["f_idsunat_c01"]) : "";    
+    $tipo_comprobante       = isset($_POST["f_tipo_comprobante"]) ? limpiarCadena($_POST["f_tipo_comprobante"]) : "";    
+    $serie_comprobante      = isset($_POST["f_serie_comprobante"]) ? limpiarCadena($_POST["f_serie_comprobante"]) : "";    
+    $idpersona_cliente      = isset($_POST["f_idpersona_cliente"]) ? limpiarCadena($_POST["f_idpersona_cliente"]) : "";         
+    $observacion_documento  = isset($_POST["f_observacion_documento"]) ? limpiarCadena($_POST["f_observacion_documento"]) : "";    
+    // $es_cobro               = isset($_POST["f_es_cobro_inp"]) ? limpiarCadena($_POST["f_es_cobro_inp"]) : "";    
+    // $periodo_pago           = isset($_POST["f_periodo_pago"]) ? limpiarCadena($_POST["f_periodo_pago"]) : "";    
     
-    $metodo_pago            = isset($_POST["metodo_pago"]) ? limpiarCadena($_POST["metodo_pago"]) : "";  
-    $total_recibido         = isset($_POST["total_recibido"]) ? limpiarCadena($_POST["total_recibido"]) : "";  
-    $mp_monto               = isset($_POST["mp_monto"]) ? limpiarCadena($_POST["mp_monto"]) : "";  
-    $total_vuelto           = isset($_POST["total_vuelto"]) ? limpiarCadena($_POST["total_vuelto"]) : "";  
+    $metodo_pago            = isset($_POST["f_metodo_pago"]) ? limpiarCadena($_POST["f_metodo_pago"]) : "";  
+    $total_recibido         = isset($_POST["f_total_recibido"]) ? limpiarCadena($_POST["f_total_recibido"]) : "";  
+    $mp_monto               = isset($_POST["f_mp_monto"]) ? limpiarCadena($_POST["f_mp_monto"]) : "";  
+    $total_vuelto           = isset($_POST["f_total_vuelto"]) ? limpiarCadena($_POST["f_total_vuelto"]) : "";  
 
-    $usar_anticipo          = isset($_POST["usar_anticipo"]) ? limpiarCadena($_POST["usar_anticipo"]) : "";  
-    $ua_monto_disponible    = isset($_POST["ua_monto_disponible"]) ? limpiarCadena($_POST["ua_monto_disponible"]) : "";  
-    $ua_monto_usado         = isset($_POST["ua_monto_usado"]) ? limpiarCadena($_POST["ua_monto_usado"]) : "";  
+    $usar_anticipo          = isset($_POST["f_usar_anticipo"]) ? limpiarCadena($_POST["f_usar_anticipo"]) : "";  
+    $ua_monto_disponible    = isset($_POST["f_ua_monto_disponible"]) ? limpiarCadena($_POST["f_ua_monto_disponible"]) : "";  
+    $ua_monto_usado         = isset($_POST["f_ua_monto_usado"]) ? limpiarCadena($_POST["f_ua_monto_usado"]) : "";  
 
-    $mp_serie_comprobante   = isset($_POST["mp_serie_comprobante"]) ? limpiarCadena($_POST["mp_serie_comprobante"]) : "";       
+    $mp_serie_comprobante   = isset($_POST["f_mp_serie_comprobante"]) ? limpiarCadena($_POST["f_mp_serie_comprobante"]) : "";       
 
-    $venta_subtotal         = isset($_POST["venta_subtotal"]) ? limpiarCadena($_POST["venta_subtotal"]) : "";    
-    $tipo_gravada           = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";
-    $venta_descuento        = isset($_POST["venta_descuento"]) ? limpiarCadena($_POST["venta_descuento"]) : "";    
-    $venta_igv              = isset($_POST["venta_igv"]) ? limpiarCadena($_POST["venta_igv"]) : "";            
-    $venta_total            = isset($_POST["venta_total"]) ? limpiarCadena($_POST["venta_total"]) : "";   
+    $venta_subtotal         = isset($_POST["f_venta_subtotal"]) ? limpiarCadena($_POST["f_venta_subtotal"]) : "";    
+    $tipo_gravada           = isset($_POST["f_tipo_gravada"]) ? limpiarCadena($_POST["f_tipo_gravada"]) : "";
+    $venta_descuento        = isset($_POST["f_venta_descuento"]) ? limpiarCadena($_POST["f_venta_descuento"]) : "";    
+    $venta_igv              = isset($_POST["f_venta_igv"]) ? limpiarCadena($_POST["f_venta_igv"]) : "";            
+    $venta_total            = isset($_POST["f_venta_total"]) ? limpiarCadena($_POST["f_venta_total"]) : "";   
 
-    $nc_idventa             = isset($_POST["nc_idventa"]) ? limpiarCadena($_POST["nc_idventa"]) : "";    
-    $nc_tipo_comprobante    = isset($_POST["nc_tipo_comprobante"]) ? limpiarCadena($_POST["nc_tipo_comprobante"]) : "";    
-    $nc_serie_y_numero      = isset($_POST["nc_serie_y_numero"]) ? limpiarCadena($_POST["nc_serie_y_numero"]) : "";    
-    $nc_motivo_anulacion    = isset($_POST["nc_motivo_anulacion"]) ? limpiarCadena($_POST["nc_motivo_anulacion"]) : "";    
+    $nc_idventa             = isset($_POST["f_nc_idventa"]) ? limpiarCadena($_POST["f_nc_idventa"]) : "";    
+    $nc_tipo_comprobante    = isset($_POST["f_nc_tipo_comprobante"]) ? limpiarCadena($_POST["f_nc_tipo_comprobante"]) : "";    
+    $nc_serie_y_numero      = isset($_POST["f_nc_serie_y_numero"]) ? limpiarCadena($_POST["f_nc_serie_y_numero"]) : "";    
+    $nc_motivo_anulacion    = isset($_POST["f_nc_motivo_anulacion"]) ? limpiarCadena($_POST["f_nc_motivo_anulacion"]) : "";    
 
-    $tiempo_entrega         = isset($_POST["tiempo_entrega"]) ? limpiarCadena($_POST["tiempo_entrega"]) : "";    
-    $validez_cotizacion     = isset($_POST["validez_cotizacion"]) ? limpiarCadena($_POST["validez_cotizacion"]) : "";    
+    $tiempo_entrega         = isset($_POST["f_tiempo_entrega"]) ? limpiarCadena($_POST["f_tiempo_entrega"]) : "";    
+    $validez_cotizacion     = isset($_POST["f_validez_cotizacion"]) ? limpiarCadena($_POST["f_validez_cotizacion"]) : "";    
      
-    $mp_comprobante_old     = isset($_POST["mp_comprobante_old"]) ? limpiarCadena($_POST["mp_comprobante_old"]) : "";     
+    $mp_comprobante_old     = isset($_POST["f_mp_comprobante_old"]) ? limpiarCadena($_POST["f_mp_comprobante_old"]) : "";     
 
     switch ($_GET["op"]){
 
@@ -104,10 +104,10 @@ if (!isset($_SESSION["user_nombre"])) {
 
         if (empty($idventa)) {
           
-          $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$idsunat_c01  ,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento, $es_cobro, $periodo_pago,
+          $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$idsunat_c01  ,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento,
           $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,  $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
           $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion, $tiempo_entrega, $validez_cotizacion,
-          $_POST["idproducto"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
+          $_POST["idproducto"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
           $_POST["descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 
 
           $idventa = $rspta['id_tabla'];
@@ -257,7 +257,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </ul>
             </div>',
               "2" =>  $value['fecha_emision_format'],
-              "3" =>  $value['periodo_pago_month_v2'] .'-'. $value['periodo_pago_year'],
+              "3" =>  $value['periodo_pago_mes_anio'] ,
               "4" => '<div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
                   <span class="avatar"> <img class="w-35px h-auto" src="../assets/modulo/persona/perfil/' . $img_proveedor . '" alt="" onclick="ver_img_pefil(' .$value['idpersona_cliente'] . ')" onerror="'.$imagen_error.'"> </span>
@@ -453,7 +453,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $img = empty($value['imagen']) ? 'no-producto.png' : $value['imagen'];
             $data_btn_1 = 'btn-add-producto-1-'.$value['idproducto']; $data_btn_2 = 'btn-add-producto-2-'.$value['idproducto'];
             $datas[] = [
-              "0" => '<button class="btn btn-warning '.$data_btn_1.' mr-1 px-2 py-1" onclick="agregarDetalleComprobante(' . $value['idproducto'] . ', false)" data-bs-toggle="tooltip" title="Agregar"><span class="fa fa-plus"></span></button>' ,
+              "0" => '<button class="btn btn-warning '.$data_btn_1.' mr-1 px-2 py-1" onclick="agregarDetalleComprobante(' . $value['idproducto'] .', \''.$_GET["tipo_producto"]. '\', '.($_GET["tipo_producto"] == 'PR' ? 'false': 'true' ).')" data-bs-toggle="tooltip" title="Agregar"><span class="fa fa-plus"></span></button>' ,
               "1" => '<span class="fs-12"> <i class="bi bi-upc"></i> '.$value['codigo'] .'<br> <i class="bi bi-person"></i> '.$value['codigo_alterno'] .'</span>' ,
               "2" =>  '<div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="../assets/modulo/productos/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml(($value['nombre'])) . '\')"> </span></div>

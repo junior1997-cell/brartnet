@@ -277,30 +277,30 @@ if (!isset($_SESSION["user_nombre"])) {
                     <div class="row" id="cargando-1-formulario">
 
                       <!-- IMPUESTO -->
-                      <input type="hidden" name="idventa" id="idventa" />
+                      <input type="hidden" name="f_idventa" id="f_idventa" />
                       <!-- IMPUESTO -->
-                      <input type="hidden" class="form-control" name="impuesto" id="impuesto" value="0">   
+                      <input type="hidden" class="form-control" name="f_impuesto" id="f_impuesto" value="0">   
                       <!-- TIPO DOC -->
-                      <input type="hidden" class="form-control" name="tipo_documento" id="tipo_documento" value="0">  
+                      <input type="hidden" class="form-control" name="f_tipo_documento" id="f_tipo_documento" value="0">  
                       <!-- NUMERO DOC -->
-                      <input type="hidden" class="form-control" name="numero_documento" id="numero_documento" value="0">  
+                      <input type="hidden" class="form-control" name="f_numero_documento" id="f_numero_documento" value="0">  
                       <!-- ID VENTA PARA: NOTA DE CREDITO -->                   
-                      <input type="hidden" class="form-control" name="nc_idventa" id="nc_idventa" value="0">                     
+                      <input type="hidden" class="form-control" name="f_nc_idventa" id="f_nc_idventa" value="0">                     
 
                       <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                         <div class="row gy-3">
                           <!-- ENVIO AUTOMATICO -->
-                          <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4 px-0">
+                          <div class="col-md-12 col-lg-4 col-xl-5 col-xxl-5 px-0">
                             <div class="custom-toggle-switch d-flex align-items-center mb-1">
-                              <input id="crear_y_emitir" name="crear_y_emitir" type="checkbox" checked="" value="SI">
-                              <label for="crear_y_emitir" class="label-warning"></label><span class="ms-3 fs-11">SUNAT</span>
+                              <input id="f_crear_y_emitir" name="f_crear_y_emitir" type="checkbox" checked="" value="SI">
+                              <label for="f_crear_y_emitir" class="label-warning"></label><span class="ms-3 fs-11">SUNAT</span>
                             </div>
                           </div>
                           <!-- CREAR Y MOSTRAR-->
-                          <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4 px-0">
+                          <div class="col-md-12 col-lg-4 col-xl-5 col-xxl-5 px-0">
                             <div class="custom-toggle-switch d-flex align-items-center mb-1">
-                              <input id="crear_y_mostrar" name="crear_y_mostrar" type="checkbox" checked="" value="SI">
-                              <label for="crear_y_mostrar" class="label-warning"></label><span class="ms-3 fs-11">Crear y mostrar</span>
+                              <input id="f_crear_y_mostrar" name="f_crear_y_mostrar" type="checkbox" checked="" value="SI">
+                              <label for="f_crear_y_mostrar" class="label-warning"></label><span class="ms-3 fs-11">Crear y mostrar</span>
                             </div>
                           </div>
                           <!--  TIPO COMPROBANTE  -->
@@ -308,21 +308,21 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="mb-sm-0 mb-2">
                               <p class="fs-14 mb-2 fw-semibold">Tipo de comprobante</p>
                               <div class="mb-0 authentication-btn-group">
-                                <input type="hidden" id="tipo_comprobante_hidden" value="12">
-                                <input type="hidden" name="idsunat_c01" id="idsunat_c01" value="12">
+                                <input type="hidden" id="f_tipo_comprobante_hidden" value="12">
+                                <input type="hidden" name="f_idsunat_c01" id="f_idsunat_c01" value="12">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                   
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante12" value="12" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante12'); es_valido_cliente();">
-                                  <label class="btn btn-sm btn-outline-primary btn-tiket" for="tipo_comprobante12"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
+                                  <input type="radio" class="btn-check" name="f_tipo_comprobante" id="f_tipo_comprobante12" value="12" onchange="modificarSubtotales(); ver_series_comprobante('#f_tipo_comprobante12'); es_valido_cliente();">
+                                  <label class="btn btn-sm btn-outline-primary btn-tiket" for="f_tipo_comprobante12"><i class='bx bx-file-blank me-1 align-middle d-inline-block'></i> Ticket</label>
                                   
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante03" value="03"  onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante03'); es_valido_cliente();">
-                                  <label class="btn btn-sm btn-outline-primary btn-boleta" for="tipo_comprobante03"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
+                                  <input type="radio" class="btn-check" name="f_tipo_comprobante" id="f_tipo_comprobante03" value="03"  onchange="modificarSubtotales(); ver_series_comprobante('#f_tipo_comprobante03'); es_valido_cliente();">
+                                  <label class="btn btn-sm btn-outline-primary btn-boleta" for="f_tipo_comprobante03"><i class="ri-article-line me-1 align-middle d-inline-block"></i>Boleta</label>
                                   
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante01" value="01" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante01'); es_valido_cliente();">
-                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante01"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
+                                  <input type="radio" class="btn-check" name="f_tipo_comprobante" id="f_tipo_comprobante01" value="01" onchange="modificarSubtotales(); ver_series_comprobante('#f_tipo_comprobante01'); es_valido_cliente();">
+                                  <label class="btn btn-sm btn-outline-primary" for="f_tipo_comprobante01"><i class="ri-article-line me-1 align-middle d-inline-block"></i> Factura</label>
                                   
-                                  <input type="radio" class="btn-check" name="tipo_comprobante" id="tipo_comprobante07" value="07" onchange="modificarSubtotales(); ver_series_comprobante('#tipo_comprobante07'); ">
-                                  <label class="btn btn-sm btn-outline-primary" for="tipo_comprobante07" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Nota de Crédito."><i class="bi bi-file-earmark-x-fill me-1 align-middle d-inline-block"></i> NC</label>
+                                  <input type="radio" class="btn-check" name="f_tipo_comprobante" id="f_tipo_comprobante07" value="07" onchange="modificarSubtotales(); ver_series_comprobante('#f_tipo_comprobante07'); ">
+                                  <label class="btn btn-sm btn-outline-primary" for="f_tipo_comprobante07" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Nota de Crédito."><i class="bi bi-file-earmark-x-fill me-1 align-middle d-inline-block"></i> NC</label>
 
                                 </div>
                               </div>
@@ -331,31 +331,29 @@ if (!isset($_SESSION["user_nombre"])) {
                           
                           <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                             <div class="form-group">
-                              <label for="fecha_venta" class="form-label">Serie <span class="charge_serie_comprobante"></span></label>
-                              <select class="form-control" name="serie_comprobante" id="serie_comprobante"></select>
+                              <label for="f_serie_comprobante" class="form-label">Serie <span class="f_charge_serie_comprobante"></span></label>
+                              <select class="form-control" name="f_serie_comprobante" id="f_serie_comprobante"></select>
                             </div>
                           </div>
 
                           <!--  PROVEEDOR  -->
                           <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 div_idpersona_cliente">
                             <div class="form-group">
-                              <label for="idpersona_cliente" class="form-label">
+                              <label for="f_idpersona_cliente" class="form-label">
                                 <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
-                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idpersona_cliente();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_f_idpersona_cliente();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
                                 Cliente
-                                <span class="charge_idpersona_cliente"></span>
+                                <span class="charge_f_idpersona_cliente"></span>
                               </label>
-                              <select class="form-control" name="idpersona_cliente" id="idpersona_cliente" onchange="es_valido_cliente(); usar_anticipo_valid();"></select>
+                              <select class="form-control" name="f_idpersona_cliente" id="f_idpersona_cliente" onchange="es_valido_cliente(); usar_anticipo_valid();"></select>
                             </div>
-                          </div>
+                          </div> 
 
                           <!--  NC - TIPO DE COMPROBANTE  -->
                           <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6 div_nc_tipo_comprobante">
                             <div class="form-group">
-                              <label for="nc_tipo_comprobante" class="form-label">                                
-                                Comprobante a anular
-                              </label>
-                              <select class="form-control" name="nc_tipo_comprobante" id="nc_tipo_comprobante" onchange="buscar_comprobante_anular();">
+                              <label for="f_nc_tipo_comprobante" class="form-label"> Comprobante a anular</label>
+                              <select class="form-control" name="f_nc_tipo_comprobante" id="f_nc_tipo_comprobante" onchange="buscar_comprobante_anular();">
                                 <option value="01">FACTURA</option>
                                 <option value="03">BOLETA DE VENTA</option>
                               </select>
@@ -365,52 +363,52 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!--  NC - SERIE Y NUMERO COMPROBANTE  -->
                           <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6 div_nc_serie_y_numero">
                             <div class="form-group">
-                              <label for="nc_serie_y_numero" class="form-label">
+                              <label for="f_nc_serie_y_numero" class="form-label">
                                 <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
-                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_nc_serie_y_numero();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_f_nc_serie_y_numero();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
                                 Series y número
-                                <span class="charge_nc_serie_y_numero"></span>
+                                <span class="charge_f_nc_serie_y_numero"></span>
                               </label>
-                              <select class="form-control" name="nc_serie_y_numero" id="nc_serie_y_numero" onchange="mostrar_para_nota_credito(this);"></select>
+                              <select class="form-control" name="f_nc_serie_y_numero" id="f_nc_serie_y_numero" onchange="mostrar_para_nota_credito(this);"></select>
                             </div>
                           </div>
 
                           <!--  NC - SERIE Y NUMERO COMPROBANTE  -->
                           <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 div_nc_motivo_anulacion">
                             <div class="form-group">
-                              <label for="nc_motivo_anulacion" class="form-label">
+                              <label for="f_nc_motivo_anulacion" class="form-label">
                                 <!-- <span class="badge bg-success m-r-4px cursor-pointer" onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span> -->
-                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_nc_motivo_anulacion();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_f_nc_motivo_anulacion();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
                                 Motivo
-                                <span class="charge_nc_motivo_anulacion"></span>
+                                <span class="charge_f_nc_motivo_anulacion"></span>
                               </label>
-                              <select class="form-control" name="nc_motivo_anulacion" id="nc_motivo_anulacion" ></select>
+                              <select class="form-control" name="f_nc_motivo_anulacion" id="f_nc_motivo_anulacion" ></select>
                             </div>
                           </div>
                           
                           <!-- DESCRIPCION -->
                           <div class="col-md-6 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="form-group">
-                              <label for="observacion_documento" class="form-label">Observacion</label>
-                              <textarea name="observacion_documento" id="observacion_documento" class="form-control" rows="2" placeholder="ejemp: Cobro de servicio de internet."></textarea>
+                              <label for="f_observacion_documento" class="form-label">Observacion</label>
+                              <textarea name="f_observacion_documento" id="f_observacion_documento" class="form-control" rows="2" placeholder="ejemp: Cobro de servicio de internet."></textarea>
                             </div>
                           </div> 
                           
                           <!-- FECHA EMISION -->
-                          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 div_es_cobro">
+                          <!-- <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 div_es_cobro">
                             <div class="form-group">
-                              <label for="es_cobro" class="form-label">Es cobro?</label>
+                              <label for="f_es_cobro_inp" class="form-label">Es cobro?</label>
                               <div class="toggle toggle-secondary on es_cobro" onclick="delay(function(){es_cobro_valid()}, 100 );" >  <span></span>   </div>
-                              <input type="hidden" class="form-control" name="es_cobro_inp" id="es_cobro_inp" value="SI" >
+                              <input type="hidden" class="form-control" name="f_es_cobro_inp" id="f_es_cobro_inp" value="SI" >
                             </div>
                           </div>  
 
                           <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 datos-de-cobro-mensual">
                             <div class="form-group">
-                              <label for="periodo_pago" class="form-label">Periodo Pago <span class="text-success fs-10 bx-flashing span_dia_cancelacion"></span></label>
-                              <input type="month" class="form-control" name="periodo_pago" id="periodo_pago" >
+                              <label for="f_periodo_pago" class="form-label">Periodo Pago <span class="text-success fs-10 bx-flashing span_dia_cancelacion"></span></label>
+                              <input type="month" class="form-control" name="f_periodo_pago" id="f_periodo_pago" >
                             </div>
-                          </div>                                                                  
+                          </div>                                                                   -->
 
                         </div>
                       </div>
@@ -423,10 +421,9 @@ if (!isset($_SESSION["user_nombre"])) {
                               <i class="ri-add-circle-line label-btn-icon me-2"></i> Producto
                             </button>
                           </div>
-                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-2 mt-xs-3 div_agregar_producto">
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-3 mt-xs-3 div_agregar_producto">
                             <button class="btn btn-primary label-btn m-r-10px" type="button"  onclick="listar_tabla_producto('SR');"  >
-                            <i class="ri-add-fill label-btn-icon me-2"></i> 
-                              Servicio
+                            <i class="ri-add-fill label-btn-icon me-2"></i> Servicio <span class="font-size-10px">(Planes)</span>
                             </button>
                           </div>  
 
@@ -441,39 +438,40 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive pt-3">
                             <table id="tabla-productos-seleccionados" class="table table-striped table-bordered table-condensed table-hover">
                               <thead class="bg-color-dark text-white">
-                                <th class="fs-11 py-1" data-toggle="tooltip" data-original-title="Opciones">Op.</th>
-                                <th class="fs-11 py-1">Cod</th> 
-                                <th class="fs-11 py-1">Producto</th>
-                                <th class="fs-11 py-1">Unidad</th>
-                                <th class="fs-11 py-1">Cantidad</th>                                        
-                                <th class="fs-11 py-1" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
-                                <th class="fs-11 py-1">Descuento</th>
-                                <th class="fs-11 py-1">Subtotal</th>
-                                <th class="fs-11 py-1 text-center" ><i class='bx bx-cog fs-4'></i></th>
+                                <th class="font-size-11px py-1" data-toggle="tooltip" data-original-title="Opciones">Op.</th>
+                                <th class="font-size-11px py-1">Cod</th> 
+                                <th class="font-size-11px py-1">Producto</th>
+                                <th class="font-size-11px py-1">Unidad</th>
+                                <th class="font-size-11px py-1">Periodo</th>
+                                <th class="font-size-11px py-1">Cantidad</th>                                        
+                                <th class="font-size-11px py-1" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
+                                <th class="font-size-11px py-1">Descuento</th>
+                                <th class="font-size-11px py-1">Subtotal</th>
+                                <th class="font-size-11px py-1 text-center" ><i class='bx bx-cog fs-4'></i></th>
                               </thead>
                               <tbody ></tbody>
                               <tfoot>
                                 <td colspan="6"></td>
 
                                 <th class="text-right">
-                                  <h6 class="fs-11 tipo_gravada">SUBTOTAL</h6>
+                                  <h6 class="fs-11 f_tipo_gravada">SUBTOTAL</h6>
                                   <h6 class="fs-11 ">DESCUENTO</h6>
                                   <h6 class="fs-11 val_igv">IGV (18%)</h6>
                                   <h5 class="fs-13 font-weight-bold">TOTAL</h5>
                                 </th>
                                 <th class="text-right"> 
-                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between venta_subtotal"> <span>S/</span>  0.00</h6>
-                                  <input type="hidden" name="venta_subtotal" id="venta_subtotal" />
-                                  <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between f_venta_subtotal"> <span>S/</span>  0.00</h6>
+                                  <input type="hidden" name="f_venta_subtotal" id="f_venta_subtotal" />
+                                  <input type="hidden" name="f_tipo_gravada" id="f_tipo_gravada" />
 
-                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between venta_descuento"><span>S/</span> 0.00</h6>
-                                  <input type="hidden" name="venta_descuento" id="venta_descuento" />
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between f_venta_descuento"><span>S/</span> 0.00</h6>
+                                  <input type="hidden" name="f_venta_descuento" id="f_venta_descuento" />
 
-                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between venta_igv"><span>S/</span> 0.00</h6>
-                                  <input type="hidden" name="venta_igv" id="venta_igv" />
+                                  <h6 class="fs-11 font-weight-bold d-flex justify-content-between f_venta_igv"><span>S/</span> 0.00</h6>
+                                  <input type="hidden" name="f_venta_igv" id="f_venta_igv" />
                                   
-                                  <h5 class="fs-13 font-weight-bold d-flex justify-content-between venta_total"><span>S/</span> 0.00</h5>
-                                  <input type="hidden" name="venta_total" id="venta_total" />
+                                  <h5 class="fs-13 font-weight-bold d-flex justify-content-between f_venta_total"><span>S/</span> 0.00</h5>
+                                  <input type="hidden" name="f_venta_total" id="f_venta_total" />
                                   
                                 </th>
                                 <th></th>
@@ -495,8 +493,8 @@ if (!isset($_SESSION["user_nombre"])) {
 
                               <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
                                 <div class="form-group">
-                                  <label for="metodo_pago" class="form-label">Método de pago</label>
-                                  <select class="form-control" name="metodo_pago" id="metodo_pago" onchange="capturar_pago_venta();">
+                                  <label for="f_metodo_pago" class="form-label">Método de pago</label>
+                                  <select class="form-control" name="f_metodo_pago" id="f_metodo_pago" onchange="capturar_pago_venta();">
                                     <option value="EFECTIVO" selected >EFECTIVO</option>
                                     <option value="MIXTO">MIXTO</option>
                                     <option value="CAJA HUANCAYO">CAJA HUANCAYO</option>
@@ -515,22 +513,22 @@ if (!isset($_SESSION["user_nombre"])) {
                               
                               <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
                                 <div class="form-group">
-                                  <label for="total_recibido" class="form-label">Monto a pagar</label>
-                                  <input type="number" name="total_recibido" id="total_recibido" class="form-control"  onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();"  placeholder="Ingrese monto a pagar." >                           
+                                  <label for="f_total_recibido" class="form-label">Monto a pagar</label>
+                                  <input type="number" name="f_total_recibido" id="f_total_recibido" class="form-control"  onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();"  placeholder="Ingrese monto a pagar." >                           
                                 </div>
                               </div> 
 
                               <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3" id="content-mp-monto" style="display: none;">
                                 <div class="form-group">
-                                  <label for="mp_monto" class="form-label">Monto: <span class="span-tipo-pago"></span></label>
-                                  <input type="number" name="mp_monto" id="mp_monto" class="form-control" onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();" placeholder="Pagar con" />
+                                  <label for="f_mp_monto" class="form-label">Monto: <span class="span-tipo-pago"></span></label>
+                                  <input type="number" name="f_mp_monto" id="f_mp_monto" class="form-control" onClick="this.select();" onchange="calcular_vuelto();" onkeyup="calcular_vuelto();" placeholder="Pagar con" />
                                 </div>
                               </div>
 
                               <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
                                 <div class="form-group">
-                                  <label for="total_vuelto" class="form-label">Vuelto <small class="falta_o_completo"></small></label>
-                                  <input type="number" name="total_vuelto" id="total_vuelto" class="form-control-plaintext px-2 total_vuelto" readonly placeholder="Ingrese monto a pagar." >                           
+                                  <label for="f_total_vuelto" class="form-label">Vuelto <small class="falta_o_completo"></small></label>
+                                  <input type="number" name="f_total_vuelto" id="f_total_vuelto" class="form-control-plaintext px-2 f_total_vuelto" readonly placeholder="Ingrese monto a pagar." >                           
                                 </div>
                               </div> 
 
@@ -540,9 +538,9 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!-- USAR SALDO -->
                           <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3 pt-3 div_usar_anticipo">
                             <div class="form-group">
-                              <label for="usar_anticipo" class="form-label">Usar anticipos?</label>
-                              <div class="toggle toggle-secondary usar_anticipo" onclick="delay(function(){usar_anticipo_valid()}, 100 );" >  <span></span>   </div>
-                              <input type="hidden" class="form-control" name="usar_anticipo" id="usar_anticipo" value="NO" >
+                              <label for="f_usar_anticipo" class="form-label">Usar anticipos?</label>
+                              <div class="toggle toggle-secondary f_usar_anticipo" onclick="delay(function(){usar_anticipo_valid()}, 100 );" >  <span></span>   </div>
+                              <input type="hidden" class="form-control" name="f_usar_anticipo" id="f_usar_anticipo" value="NO" >
                             </div>
                           </div>                           
 
@@ -560,16 +558,16 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <!-- SALDO -->
                                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                                   <div class="form-group">
-                                    <label for="ua_monto_disponible" class="form-label">Saldo Disponible</label>
-                                    <input type="number" class="form-control-plaintext" name="ua_monto_disponible" id="ua_monto_disponible" readonly>
+                                    <label for="f_ua_monto_disponible" class="form-label">Saldo Disponible</label>
+                                    <input type="number" class="form-control-plaintext" name="f_ua_monto_disponible" id="f_ua_monto_disponible" readonly>
                                   </div>
                                 </div> 
 
                                 <!-- Saldo Usar -->
                                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                                   <div class="form-group">
-                                    <label for="ua_monto_usado" class="form-label">Saldo Usar</label>
-                                    <input type="number" class="form-control" name="ua_monto_usado" id="ua_monto_usado" >
+                                    <label for="f_ua_monto_usado" class="form-label">Saldo Usar</label>
+                                    <input type="number" class="form-control" name="f_ua_monto_usado" id="f_ua_monto_usado" >
                                   </div>
                                 </div>       
 
@@ -582,15 +580,15 @@ if (!isset($_SESSION["user_nombre"])) {
                               <!-- Código de Baucher -->
                               <div class="col-sm-6 col-lg-6 col-xl-6 pt-3" >
                                 <div class="form-group">
-                                  <label for="mp_serie_comprobante">Código de Baucher <span class="span-code-baucher-pago"></span> </label>
-                                  <input type="text" name="mp_serie_comprobante" id="mp_serie_comprobante" class="form-control" onClick="this.select();" placeholder="Codigo de baucher" />
+                                  <label for="f_mp_serie_comprobante">Código de Baucher <span class="span-code-baucher-pago"></span> </label>
+                                  <input type="text" name="f_mp_serie_comprobante" id="f_mp_serie_comprobante" class="form-control" onClick="this.select();" placeholder="Codigo de baucher" />
                                 </div>
                               </div>  
                               <!-- Baucher -->
                               <div class="col-sm-6 col-lg-6 col-xl-6 pt-3" >
                                 <div class="form-group">                              
-                                  <input type="file" class="multiple-filepond" name="mp_comprobante" id="mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" accept="image/*, application/pdf" >                             
-                                  <input type="hidden" name="mp_comprobante_old" id="mp_comprobante_old">
+                                  <input type="file" class="multiple-filepond" name="f_mp_comprobante" id="f_mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" accept="image/*, application/pdf" >                             
+                                  <input type="hidden" name="f_mp_comprobante_old" id="f_mp_comprobante_old">
                                 </div>
                               </div>
                             </div>
@@ -1050,8 +1048,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.13"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.13"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.14"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.14"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

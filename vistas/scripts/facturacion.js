@@ -12,7 +12,7 @@ var filtro_estado_sunat = "" ;
 // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T C H O I C E ══════════════════════════════════════
 
 // const choice_distrito       = new Choices('#distrito',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
-// const choice_tipo_documento = new Choices('#tipo_documento',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+// const choice_tipo_documento = new Choices('#f_tipo_documento',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
 // const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
 
 async function init(){
@@ -33,8 +33,8 @@ async function init(){
   lista_select2("../ajax/facturacion.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_md_comprobante', null, '.charge_filtro_md_comprobante');
   lista_select2("../ajax/facturacion.php?op=select2_filtro_cliente", '#filtro_md_cliente', null, '.charge_filtro_md_cliente');
 
-  lista_select2("../ajax/facturacion.php?op=select2_cliente", '#idpersona_cliente', null);
-  lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#nc_motivo_anulacion', '01');  
+  lista_select2("../ajax/facturacion.php?op=select2_cliente", '#f_idpersona_cliente', null);
+  lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#f_nc_motivo_anulacion', '01');  
 
   lista_select2("../ajax/facturacion.php?op=select_categoria", '#categoria', null);
   lista_select2("../ajax/facturacion.php?op=select_u_medida", '#u_medida', null);
@@ -45,11 +45,11 @@ async function init(){
   // lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", choice_idbanco, null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
-  $("#idpersona_cliente").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#nc_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#nc_serie_y_numero").select2({ templateResult: templateSerieNumero, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#nc_motivo_anulacion").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#metodo_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#f_idpersona_cliente").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#f_nc_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#f_nc_serie_y_numero").select2({ templateResult: templateSerieNumero, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#f_nc_motivo_anulacion").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#f_metodo_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
   $("#filtro_cliente").select2({ templateResult: templateCliente, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_comprobante").select2({ templateResult: templateComprobante, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -57,7 +57,7 @@ async function init(){
   $("#filtro_md_cliente").select2({ templateResult: templateCliente, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_md_comprobante").select2({ templateResult: templateComprobante, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
-  $("#nc_tipo_comprobante").val(null).trigger('change'); // Limpiamos aqui para no generar un bucle infinito
+  $("#f_nc_tipo_comprobante").val(null).trigger('change'); // Limpiamos aqui para no generar un bucle infinito
 
   await activar_btn_agregar(); // Esperamos a al carga total de los datos para poder: CREAR
 }
@@ -211,38 +211,39 @@ function doc1_eliminar() {
 function limpiar_form_venta(){
 
   array_data_venta = [];
-  $("#idventa").val('');
+  $("#f_idventa").val('');
+  $("#f_nc_idventa").val('0');
 
-  $("#idpersona_cliente").val('').trigger('change'); 
-  $("#metodo_pago").val('').trigger('change'); 
-  $("#observacion_documento").val(''); 
-  $("#periodo_pago").val('');
+  $("#f_idpersona_cliente").val('').trigger('change'); 
+  $("#f_metodo_pago").val('').trigger('change'); 
+  $("#f_observacion_documento").val(''); 
+  $("#f_periodo_pago").val('');
   $("#codigob").val('');  
   
-  $("#total_recibido").val(0);
-  $("#mp_monto").val(0);
-  $("#total_vuelto").val(0);
-  $("#ua_monto_usado").val('');
-  $("#mp_serie_comprobante").val('');
+  $("#f_total_recibido").val(0);
+  $("#f_mp_monto").val(0);
+  $("#f_total_vuelto").val(0);
+  $("#f_ua_monto_usado").val('');
+  $("#f_mp_serie_comprobante").val('');
   file_pond_mp_comprobante.removeFiles();
-  $("#mp_comprobante_old").val('');
+  $("#f_mp_comprobante_old").val('');
 
   $(".span_dia_cancelacion").html(``);
 
-  $("#venta_total").val("");     
-  $(".venta_total").html("0");
+  $("#f_venta_total").val("");     
+  $(".f_venta_total").html("0");
 
-  $(".venta_subtotal").html("<span>S/</span> 0.00");
-  $("#venta_subtotal").val("");
+  $(".f_venta_subtotal").html("<span>S/</span> 0.00");
+  $("#f_venta_subtotal").val("");
 
-  $(".venta_descuento").html("<span>S/</span> 0.00");
-  $("#venta_descuento").val("");
+  $(".f_venta_descuento").html("<span>S/</span> 0.00");
+  $("#f_venta_descuento").val("");
 
-  $(".venta_igv").html("<span>S/</span> 0.00");
-  $("#venta_igv").val("");
+  $(".f_venta_igv").html("<span>S/</span> 0.00");
+  $("#f_venta_igv").val("");
 
-  $(".venta_total").html("<span>S/</span> 0.00");
-  $("#venta_total").val("");
+  $(".f_venta_total").html("<span>S/</span> 0.00");
+  $("#f_venta_total").val("");
 
   $(".filas").remove();
 
@@ -294,6 +295,8 @@ function listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: Opciones
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center"); }
+      // columna: Cliente
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
       // columna: Cliente
       if (data[4] != '') { $("td", row).eq(4).addClass("text-nowrap"); }
       // columna: Monto
@@ -351,8 +354,8 @@ function guardar_editar_facturacion(e) {
       if (result.value.status == true){
         Swal.fire("Correcto!", "Venta guardada correctamente", "success");
         tabla_principal_facturacion.ajax.reload(null, false);
-        limpiar_form_venta(); show_hide_form(1); reload_nc_serie_y_numero();
-        if ($('#crear_y_mostrar').is(':checked')) {
+        limpiar_form_venta(); show_hide_form(1); reload_f_nc_serie_y_numero();
+        if ($('#f_crear_y_mostrar').is(':checked')) {
           $("#modal-imprimir-comprobante .modal-dialog").removeClass("modal-sm modal-lg modal-xl modal-xxl").addClass("modal-md");          
           var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + result.value.data;
           $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - FACTURA`);
@@ -361,7 +364,7 @@ function guardar_editar_facturacion(e) {
         }
       } else if ( result.value.status == 'error_personalizado'){        
         tabla_principal_facturacion.ajax.reload(null, false);
-        limpiar_form_venta(); show_hide_form(1); reload_nc_serie_y_numero(); ver_errores(result.value);
+        limpiar_form_venta(); show_hide_form(1); reload_f_nc_serie_y_numero(); ver_errores(result.value);
       } else {
         ver_errores(result.value);
       }      
@@ -408,12 +411,12 @@ function eliminar_papelera_venta(idventa, nombre){
 function ver_series_comprobante(input) {
   if (cambio_de_tipo_comprobante == '07') { limpiar_form_venta(); } // Limpiamos si el comprobante anterior era: Nota de Credito
 
-  $("#serie_comprobante").html('');
-  $(".charge_serie_comprobante").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
+  $("#f_serie_comprobante").html('');
+  $(".f_charge_serie_comprobante").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
 
   var tipo_comprobante = $(input).val() == ''  || $(input).val() == null ? '' : $(input).val();
   var nc_tp = ""; // En caso de ser Nota de Credito
-  $('#tipo_comprobante_hidden').val(tipo_comprobante);
+  $('#f_tipo_comprobante_hidden').val(tipo_comprobante);
 
   $(".div_idpersona_cliente").show();
   $(".div_nc_tipo_comprobante").hide();
@@ -431,25 +434,25 @@ function ver_series_comprobante(input) {
   if (form_validate_facturacion) { // FORM-VALIDATE
   
     if ( tipo_comprobante == '01') {   
-      $("#idsunat_c01").val(2); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
-      $("#periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-      $("#metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } });       
+      $("#f_idsunat_c01").val(2); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+      $("#f_periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#f_metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } });       
     } else if ( tipo_comprobante == '03') {
-      $("#idsunat_c01").val(3); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
-      $("#periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-      $("#metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#f_idsunat_c01").val(3); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+      $("#f_periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#f_metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
     } else if ( tipo_comprobante == '07') {
-      var nc_tipo_comprobante = $('#nc_tipo_comprobante').val() == '' || $('#nc_tipo_comprobante').val() == null ? '' : $('#nc_tipo_comprobante').val();
+      var nc_tipo_comprobante = $('#f_nc_tipo_comprobante').val() == '' || $('#f_nc_tipo_comprobante').val() == null ? '' : $('#f_nc_tipo_comprobante').val();
       if (nc_tipo_comprobante == '01') {
-        $("#idsunat_c01").val(7); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+        $("#f_idsunat_c01").val(7); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
       } else if (nc_tipo_comprobante == '03') {
-        $("#idsunat_c01").val(8); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
+        $("#f_idsunat_c01").val(8); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
       }
       
-      var nc_tp = $('#nc_tipo_comprobante').val() == ''  || $('#nc_tipo_comprobante').val() == null ? '' : $('#nc_tipo_comprobante').val();
-      $("#periodo_pago").rules('remove', 'required');
-      $("#metodo_pago").rules('remove', 'required');
-      $('#es_cobro_inp').val('NO'); $('#usar_anticipo').val('NO');
+      var nc_tp = $('#f_nc_tipo_comprobante').val() == ''  || $('#f_nc_tipo_comprobante').val() == null ? '' : $('#f_nc_tipo_comprobante').val();
+      $("#f_periodo_pago").rules('remove', 'required');
+      $("#f_metodo_pago").rules('remove', 'required');
+      $('#f_es_cobro_inp').val('NO'); $('#f_usar_anticipo').val('NO');
 
       $(".div_idpersona_cliente").hide();
       $(".div_nc_tipo_comprobante").show();
@@ -463,16 +466,16 @@ function ver_series_comprobante(input) {
       $(".div_usar_anticipo").hide();
       $(".datos-de-saldo").hide();
     } else if ( tipo_comprobante == '12') {
-      $("#idsunat_c01").val(12); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante      
-      $("#periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-      $("#metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#f_idsunat_c01").val(12); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante      
+      $("#f_periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#f_metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
     }
   }
 
   $.getJSON("../ajax/facturacion.php?op=select2_series_comprobante", { tipo_comprobante: tipo_comprobante, nc_tp:nc_tp },  function (e, status) {    
     if (e.status == true) {      
-      $("#serie_comprobante").html(e.data);
-      $(".charge_serie_comprobante").html('');
+      $("#f_serie_comprobante").html(e.data);
+      $(".f_charge_serie_comprobante").html('');
       $("#form-facturacion").valid();
     } else { ver_errores(e); }
   }).fail( function(e) { ver_errores(e); } );
@@ -482,44 +485,44 @@ function ver_series_comprobante(input) {
 
 // ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR COBROS :::::::::::::::::::::::::::::::::::::::::::::
 function es_cobro_valid() { console.log($(".es_cobro").hasClass("on"));
-  var tipo_comprobante = $('#tipo_comprobante_hidden').val() == ''  || $('#tipo_comprobante_hidden').val() == null ? '' : $('#tipo_comprobante_hidden').val();
+  var tipo_comprobante = $('#f_tipo_comprobante_hidden').val() == ''  || $('#f_tipo_comprobante_hidden').val() == null ? '' : $('#f_tipo_comprobante_hidden').val();
   if ($(".es_cobro").hasClass("on") == true) {
-    $("#es_cobro_inp").val("SI");
+    $("#f_es_cobro_inp").val("SI");
     $(".datos-de-cobro-mensual").show("slow");   
     if (form_validate_facturacion) { 
       if ( tipo_comprobante == '07') { } else{
-        $("#periodo_pago").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+        $("#f_periodo_pago").rules('add', { required: true, messages: {  required: "Campo requerido" } });
       }
     }
   } else {
-    $("#es_cobro_inp").val("NO");
+    $("#f_es_cobro_inp").val("NO");
     $(".datos-de-cobro-mensual").hide("slow");
-    if (form_validate_facturacion) { $("#periodo_pago").rules('remove', 'required'); }
+    if (form_validate_facturacion) { $("#f_periodo_pago").rules('remove', 'required'); }
   }
   $("#form-facturacion").valid();
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR ANTICIPOS :::::::::::::::::::::::::::::::::::::::::::::
 function usar_anticipo_valid() { 
-  $("#ua_monto_usado").val('');
+  $("#f_ua_monto_usado").val('');
 
-  var id_cliente = $('#idpersona_cliente').val() == ''  || $('#idpersona_cliente').val() == null ? '' : $('#idpersona_cliente').val(); 
+  var id_cliente = $('#f_idpersona_cliente').val() == ''  || $('#f_idpersona_cliente').val() == null ? '' : $('#f_idpersona_cliente').val(); 
 
-  if ($(".usar_anticipo").hasClass("on") == true) {
+  if ($(".f_usar_anticipo").hasClass("on") == true) {
 
-    $("#usar_anticipo").val("SI");
+    $("#f_usar_anticipo").val("SI");
     $(".datos-de-saldo").show("slow");
     if (id_cliente != '') {
       $.getJSON(`../ajax/facturacion.php?op=mostrar_anticipos`, {id_cliente:id_cliente}, function (e, textStatus, jqXHR) {
-        $("#ua_monto_disponible").val(e.data.total_anticipo);
-        if (form_validate_facturacion) { $("#ua_monto_usado").rules('add', { required: true, max: parseFloat(e.data.total_anticipo) , messages: {  required: "Campo requerido", max: "Saldo disponible: {0}" } }); }
+        $("#f_ua_monto_disponible").val(e.data.total_anticipo);
+        if (form_validate_facturacion) { $("#f_ua_monto_usado").rules('add', { required: true, max: parseFloat(e.data.total_anticipo) , messages: {  required: "Campo requerido", max: "Saldo disponible: {0}" } }); }
         $("#form-facturacion").valid();
       }).fail( function(e) { ver_errores(e); } );
     }
   } else {
-    $("#usar_anticipo").val("NO");
+    $("#f_usar_anticipo").val("NO");
     $(".datos-de-saldo").hide("slow");
-    if (form_validate_facturacion) { $("#ua_monto_usado").rules('remove', 'required'); }
+    if (form_validate_facturacion) { $("#f_ua_monto_usado").rules('remove', 'required'); }
     $("#form-facturacion").valid();
   }
 }
@@ -527,16 +530,16 @@ function usar_anticipo_valid() {
 // ::::::::::::::::::::::::::::::::::::::::::::: CLIENTE VALIDO :::::::::::::::::::::::::::::::::::::::::::::
 function es_valido_cliente() {
 
-  var id_cliente = $('#idpersona_cliente').val() == ''  || $('#idpersona_cliente').val() == null ? '' : $('#idpersona_cliente').val();
+  var id_cliente = $('#f_idpersona_cliente').val() == ''  || $('#f_idpersona_cliente').val() == null ? '' : $('#f_idpersona_cliente').val();
   $(".span_dia_cancelacion").html(``);
 
   if (id_cliente != null && id_cliente != '') {
 
-    var tipo_comprobante = $('#tipo_comprobante_hidden').val() == ''  || $('#tipo_comprobante_hidden').val() == null ? '' : $('#tipo_comprobante_hidden').val();
-    var tipo_documento    = $('#idpersona_cliente').select2('data')[0].element.attributes.tipo_documento.value;
-    var numero_documento  = $('#idpersona_cliente').select2('data')[0].element.attributes.numero_documento.value;
-    var direccion         = $('#idpersona_cliente').select2('data')[0].element.attributes.direccion.value;  
-    var dia_cancelacion = $('#idpersona_cliente').select2('data')[0].element.attributes.dia_cancelacion.value;  
+    var tipo_comprobante = $('#f_tipo_comprobante_hidden').val() == ''  || $('#f_tipo_comprobante_hidden').val() == null ? '' : $('#f_tipo_comprobante_hidden').val();
+    var tipo_documento    = $('#f_idpersona_cliente').select2('data')[0].element.attributes.tipo_documento.value;
+    var numero_documento  = $('#f_idpersona_cliente').select2('data')[0].element.attributes.numero_documento.value;
+    var direccion         = $('#f_idpersona_cliente').select2('data')[0].element.attributes.direccion.value;  
+    var dia_cancelacion = $('#f_idpersona_cliente').select2('data')[0].element.attributes.dia_cancelacion.value;  
     var campos_requeridos = ""; 
     var es_valido = true; 
     
@@ -566,7 +569,7 @@ function es_valido_cliente() {
      
     } else {
       sw_cancelar('Cliente no permitido', `El cliente no cumple con los siguientes requsitos:  <ul class="pt-3 text-left font-size-13px"> ${campos_requeridos} </ul>`, 10000);
-      $("#idpersona_cliente").val('').trigger('change'); 
+      $("#f_idpersona_cliente").val('').trigger('change'); 
       $(".span_dia_cancelacion").html(``);
     }   
     
@@ -665,19 +668,19 @@ function ver_formato_a4_completo(idventa, tipo_comprobante) {
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   N O T A   D E   C R E D I T O :::::::::::::::::::::::::::::::::::::::::::::
 
 function buscar_comprobante_anular() { 
-  $('.charge_nc_serie_y_numero').html('<div class="spinner-border spinner-border-sm" role="status"></div>');
-  var tipo_comprobante = $('#nc_tipo_comprobante').val() == '' || $('#nc_tipo_comprobante').val() == null ? '' : $('#nc_tipo_comprobante').val();
-  var tipo_comprobante_hidden = $('#tipo_comprobante_hidden').val() == '' || $('#tipo_comprobante_hidden').val() == null ? '' : $('#tipo_comprobante_hidden').val();
+  $('.charge_f_nc_serie_y_numero').html('<div class="spinner-border spinner-border-sm" role="status"></div>');
+  var tipo_comprobante = $('#f_nc_tipo_comprobante').val() == '' || $('#f_nc_tipo_comprobante').val() == null ? '' : $('#f_nc_tipo_comprobante').val();
+  var tipo_comprobante_hidden = $('#f_tipo_comprobante_hidden').val() == '' || $('#f_tipo_comprobante_hidden').val() == null ? '' : $('#f_tipo_comprobante_hidden').val();
 
   if (tipo_comprobante_hidden == '07') {   
-    ver_series_comprobante('#tipo_comprobante4');
+    ver_series_comprobante('#f_tipo_comprobante07');
   }  
 
   $.getJSON(`../ajax/facturacion.php?op=select2_comprobantes_anular`, {tipo_comprobante: tipo_comprobante}, function (e, textStatus, jqXHR) {
     if (e.status == true) {
-      $("#nc_serie_y_numero").html(e.data);
-      $("#nc_serie_y_numero").val(null).trigger('change');
-      $('.charge_nc_serie_y_numero').html('');
+      $("#f_nc_serie_y_numero").html(e.data);
+      $("#f_nc_serie_y_numero").val(null).trigger('change');
+      $('.charge_f_nc_serie_y_numero').html('');
     } else {
       ver_errores(e);
     }
@@ -1040,30 +1043,28 @@ $(function(){
   form_validate_facturacion = $("#form-facturacion").validate({
     ignore: '',
     rules: {
-      idpersona_cliente:      { required: true },
-      tipo_comprobante:       { required: true },
-      serie_comprobante:      { required: true, },
-      observacion_documento:  { minlength: 4 },
-      periodo_pago:           { required: true},
-      metodo_pago:            { required: true},
-      total_recibido:         { required: true, min: 0, step: 0.01},      
-      mp_monto:               { required: true, min: 0, step: 0.01},
-      total_vuelto:           { required: true, step: 0.01},
-      ua_monto_usado:         { required: true, min: 1, step: 0.01},
-      mp_serie_comprobante:   { minlength: 4},
+      f_idpersona_cliente:      { required: true },
+      f_tipo_comprobante:       { required: true },
+      f_serie_comprobante:      { required: true, },
+      f_observacion_documento:  { minlength: 4 },      
+      f_metodo_pago:            { required: true},
+      f_total_recibido:         { required: true, min: 0, step: 0.01},      
+      f_mp_monto:               { required: true, min: 0, step: 0.01},
+      f_total_vuelto:           { required: true, step: 0.01},
+      f_ua_monto_usado:         { required: true, min: 1, step: 0.01},
+      f_mp_serie_comprobante:   { minlength: 4},
       // mp_comprobante:         { extension: "png|jpg|jpeg|webp|svg|pdf",  }, 
     },
     messages: {
-      idpersona_cliente:      { required: "Campo requerido", },
-      tipo_comprobante:       { required: "Campo requerido", },
-      periodo_pago:           { required: "Campo requerido", },
-      serie_comprobante:      { required: "Campo requerido", },
-      observacion_documento:  { minlength: "Minimo {0} caracteres", },
+      f_idpersona_cliente:      { required: "Campo requerido", },
+      f_tipo_comprobante:       { required: "Campo requerido", },      
+      f_serie_comprobante:      { required: "Campo requerido", },
+      f_observacion_documento:  { minlength: "Minimo {0} caracteres", },
       // mp_comprobante:         { extension: "Ingrese imagenes validas ( {0} )", },
-      total_recibido:         { step: "Solo 2 decimales."},      
-      mp_monto:               { step: "Solo 2 decimales."},
-      total_vuelto:           { step: "Solo 2 decimales."},
-      ua_monto_usado:         { step: "Solo 2 decimales."},
+      f_total_recibido:         { step: "Solo 2 decimales."},      
+      f_mp_monto:               { step: "Solo 2 decimales."},
+      f_total_vuelto:           { step: "Solo 2 decimales."},
+      f_ua_monto_usado:         { step: "Solo 2 decimales."},
     },
 
     errorElement: "span",
@@ -1239,9 +1240,9 @@ function filtrar_solo_estado_sunat(estado, etiqueta) {
   filtro_estado_sunat = estado; filtros();
 }
 
-function reload_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_cliente", '#idpersona_cliente', null, '.charge_idpersona_cliente'); }
-function reload_nc_serie_y_numero(){ buscar_comprobante_anular() }
-function reload_nc_motivo_anulacion(){ lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#nc_motivo_anulacion', '01', '.charge_nc_motivo_anulacion'); }
+function reload_f_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_cliente", '#f_idpersona_cliente', null, '.charge_f_idpersona_cliente'); }
+function reload_f_nc_serie_y_numero(){ buscar_comprobante_anular() }
+function reload_f_nc_motivo_anulacion(){ lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#f_nc_motivo_anulacion', '01', '.charge_f_nc_motivo_anulacion'); }
 
 function reload_filtro_fecha_i(){ $('#filtro_fecha_i').val("").trigger("change") } 
 function reload_filtro_fecha_f(){ $('#filtro_fecha_f').val("").trigger("change") } 

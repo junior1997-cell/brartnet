@@ -4,7 +4,7 @@ var cont = 0;
 var detalles = 0;
 var conNO = 1;
 
-function agregarDetalleComprobante(idproducto, individual) {
+function agregarDetalleComprobante(idproducto, tipo_producto, individual) {
   
   $(`.btn-add-producto-1-${idproducto}`).html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);  
   $(`.btn-add-producto-2-${idproducto}`).html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);  
@@ -33,7 +33,7 @@ function agregarDetalleComprobante(idproducto, individual) {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {         
 
-          if ($("#tipo_comprobante").select2("val") == "01") {
+          if ($("#f_tipo_comprobante").select2("val") == "01") {
             var subtotal = cantidad * e.data.precio_venta;
           }else{
             var subtotal = cantidad * e.data.precio_venta;
@@ -69,7 +69,13 @@ function agregarDetalleComprobante(idproducto, individual) {
               <span class="fs-11 um_nombre_${cont}">${e.data.um_abreviatura}</span> 
               <input type="hidden" class="um_nombre_${cont}" name="um_nombre[]" id="um_nombre[]" value="${e.data.unidad_medida}">
               <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${e.data.um_abreviatura}">
-            </td>            
+            </td>   
+            
+            <td class="py-1">       
+              <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(tipo_producto == 'PR' ? 'NO' : 'SI' )}">  
+              <input type="${(tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+              <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
+            </td>  
 
             <td class="py-1 form-group">
               <input type="number" class="w-100px valid_cantidad form-control form-control-sm producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input( this, '#cantidad_${cont}'); update_price(); ">
@@ -119,6 +125,11 @@ function agregarDetalleComprobante(idproducto, individual) {
             $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
             $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
           });
+          if (tipo_producto == 'SR') {
+            $(`#valid_periodo_pago_${cont}`).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+          }else{
+            $(`#valid_periodo_pago_${cont}`).rules('remove', 'required');
+          }
 
           cont++;   
           evaluar();
@@ -149,7 +160,7 @@ function listar_producto_x_codigo() {
       if (e.data == null) {
         toastr_warning('No existe', 'Proporcione un codigo existente o el producto pertenece a otra categoria.');
       } else {
-        if ($(`.producto_${e.data.idproducto}`).hasClass("producto_selecionado")) {
+        if ($(`.producto_${e.data.idproducto}`).hasClass("producto_selecionado") && e.data.tipo == 'PR') {
           if (document.getElementsByClassName(`producto_${e.data.idproducto}`).length == 1) {
             var cant_producto = $(`.producto_${e.data.idproducto}`).val();
             var sub_total = parseInt(cant_producto, 10) + 1;
@@ -162,7 +173,7 @@ function listar_producto_x_codigo() {
         } else {      
         
 
-          if ($("#tipo_comprobante").select2("val") == "01") {
+          if ($("#f_tipo_comprobante").select2("val") == "01") {
             var subtotal = cantidad * e.data.precio_venta;
           }else{
             var subtotal = cantidad * e.data.precio_venta;
@@ -197,6 +208,12 @@ function listar_producto_x_codigo() {
               <input type="hidden" class="um_nombre_${cont}" name="um_nombre[]" id="um_nombre[]" value="${e.data.unidad_medida}">
               <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${e.data.um_abreviatura}">
             </td>
+
+            <td class="py-1">       
+              <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(e.data.tipo == 'PR' ? 'NO' : 'SI' )}">  
+              <input type="${(e.data.tipo == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+              <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
+            </td> 
 
             <td class="py-1 form-group">
               <input type="number" class="w-100px valid_cantidad form-control form-control-sm producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${cantidad}" min="0.01" required onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
@@ -246,6 +263,12 @@ function listar_producto_x_codigo() {
             $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
           });
 
+          if (e.data.tipo == 'SR') {
+            $(`#valid_periodo_pago_${cont}`).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+          }else{
+            $(`#valid_periodo_pago_${cont}`).rules('remove', 'required');
+          }
+
           cont++;  
           evaluar();
         }
@@ -271,7 +294,7 @@ function mostrar_para_nota_credito(input) {
   } else {     
 
     var idventa         = $(input).select2('data')[0].element.attributes.idventa.value;
-    $("#nc_idventa").val(idventa);
+    $("#f_nc_idventa").val(idventa);
 
     $("#cargando-3-formulario").hide();
     $("#cargando-4-fomulario").show();    
@@ -281,7 +304,7 @@ function mostrar_para_nota_credito(input) {
       e = JSON.parse(e); console.log(e);
       if (e.status == true) {    
 
-        $("#idpersona_cliente").val(e.data.venta.idpersona_cliente).trigger('change');         
+        $("#f_idpersona_cliente").val(e.data.venta.idpersona_cliente).trigger('change');         
 
         $.each(e.data.detalle, function(index, val1) {
           var img = val1.imagen == "" || val1.imagen == null ?img = `../assets/modulo/productos/no-producto.png` : `../assets/modulo/productos/${val1.imagen}` ;          
@@ -315,6 +338,12 @@ function mostrar_para_nota_credito(input) {
                 <input type="hidden" class="um_nombre_${cont}" name="um_nombre[]" id="um_nombre[]" value="${val1.um_nombre}">
                 <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${val1.um_abreviatura}">
               </td>
+
+              <td class="py-1">       
+                <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(val1.tipo_producto == 'PR' ? 'NO' : 'SI' )}">  
+                <input type="${(val1.tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value="${val1.periodo_pago}" readonly  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+                <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="${val1.periodo_pago}">
+              </td> 
 
               <td class="py-1 form-group">
                 <input type="number" class="w-100px valid_cantidad form-control-sm form-control producto_${val1.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${val1.cantidad}" min="0.01" required readonly onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
@@ -395,14 +424,14 @@ function ver_editar_venta(idventa) {
       e = JSON.parse(e); console.log(e);
       if (e.status == true) {    
 
-        $("#idpersona_cliente").val(e.data.venta.idpersona_cliente).trigger('change');             
-        $("#observacion_documento").val(e.data.venta.observacion_documento); 
-        $("#periodo_pago").val(e.data.venta.periodo_pago); 
+        $("#f_idpersona_cliente").val(e.data.venta.idpersona_cliente).trigger('change');             
+        $("#f_observacion_documento").val(e.data.venta.observacion_documento); 
+        $("#f_periodo_pago").val(e.data.venta.periodo_pago); 
 
-        $("#total_recibido").val(e.data.venta.total_recibido);
-        $("#metodo_pago").val(e.data.venta.metodo_pago).trigger('change');     
-        $("#mp_monto").val(e.data.venta.mp_monto);    
-        $("#mp_serie_comprobante").val(e.data.venta.mp_serie_comprobante);  
+        $("#f_total_recibido").val(e.data.venta.total_recibido);
+        $("#f_metodo_pago").val(e.data.venta.metodo_pago).trigger('change');     
+        $("#f_mp_monto").val(e.data.venta.mp_monto);    
+        $("#f_mp_serie_comprobante").val(e.data.venta.mp_serie_comprobante);  
 
         if (e.data.venta.mp_comprobante == null || e.data.venta.mp_comprobante == '') {   } else {          
           if (UrlExists(`../assets/modulo/facturacion/ticket/${e.data.venta.mp_comprobante}`) == 200) {
@@ -414,13 +443,13 @@ function ver_editar_venta(idventa) {
         
         
         if (e.data.venta.tipo_comprobante == '01') {
-          $("#tipo_comprobante01").prop("checked", true);
+          $("#f_tipo_comprobante01").prop("checked", true);
         } else if (e.data.venta.tipo_comprobante == '03') {
-          $("#tipo_comprobante03").prop("checked", true);
+          $("#f_tipo_comprobante03").prop("checked", true);
         } else if (e.data.venta.tipo_comprobante == '07') {
-          $("#tipo_comprobante07").prop("checked", true);
+          $("#f_tipo_comprobante07").prop("checked", true);
         } else if (e.data.venta.tipo_comprobante == '12') {
-          $("#tipo_comprobante12").prop("checked", true);
+          $("#f_tipo_comprobante12").prop("checked", true);
         }
 
         $.each(e.data.detalle, function(index, val1) {
@@ -455,6 +484,12 @@ function ver_editar_venta(idventa) {
                 <input type="hidden" class="um_nombre_${cont}" name="um_nombre[]" id="um_nombre[]" value="${val1.um_nombre}">
                 <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${val1.um_abreviatura}">
               </td>
+
+              <td class="py-1">       
+                <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(val1.tipo_producto == 'PR' ? 'NO' : 'SI' )}">  
+                <input type="${(val1.tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value="${val1.periodo_pago}"  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+                <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="${val1.periodo_pago}">
+              </td> 
 
               <td class="py-1 form-group">
                 <input type="number" class="w-100px valid_cantidad form-control-sm form-control producto_${val1.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${val1.cantidad}" min="0.01" required readonly onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
@@ -528,35 +563,35 @@ function evaluar() {
   } else {
     $(".btn-guardar").hide();
     cont = 0;
-    $(".venta_subtotal").html("<span>S/</span> 0.00");
-    $("#venta_subtotal").val(0);
+    $(".f_venta_subtotal").html("<span>S/</span> 0.00");
+    $("#f_venta_subtotal").val(0);
 
-    $(".venta_descuento").html("<span>S/</span> 0.00");
-    $("#venta_descuento").val(0);
+    $(".f_venta_descuento").html("<span>S/</span> 0.00");
+    $("#f_venta_descuento").val(0);
 
-    $(".venta_igv").html("<span>S/</span> 0.00");
-    $("#venta_igv").val(0);
+    $(".f_venta_igv").html("<span>S/</span> 0.00");
+    $("#f_venta_igv").val(0);
 
-    $(".venta_total").html("<span>S/</span> 0.00");
-    $("#venta_total").val(0);
+    $(".f_venta_total").html("<span>S/</span> 0.00");
+    $("#f_venta_total").val(0);
     $(".pago_rapido").html(0);
 
   }
 }
 
-function default_val_igv() { if ($("#tipo_comprobante").select2("val") == "01") { $("#impuesto").val(0); } } // FACTURA
+function default_val_igv() { if ($("#f_tipo_comprobante").select2("val") == "01") { $("#f_impuesto").val(0); } } // FACTURA
 
 function modificarSubtotales() {  
 
-  var val_igv = $("#impuesto").val();
+  var val_igv = $("#f_impuesto").val();
 
-  if ($("#tipo_comprobante").select2("val") == null) {    
+  if ($("#f_tipo_comprobante").select2("val") == null) {    
 
-    $("#impuesto").val(0);
+    $("#f_impuesto").val(0);
     $(".val_igv").html('IGV (0%)');
 
-    $("#tipo_gravada").val('SUBTOTAL');
-    $(".tipo_gravada").html('SUBTOTAL');
+    $("#f_tipo_gravada").val('SUBTOTAL');
+    $(".f_tipo_gravada").html('SUBTOTAL');
 
     if (array_data_venta.length == 0) {
     } else {
@@ -593,16 +628,16 @@ function modificarSubtotales() {
       });
       calcularTotalesSinIgv();
     }
-  } else if ($("#tipo_comprobante").select2("val") == "12") {      // TICKET 
+  } else if ($("#f_tipo_comprobante").select2("val") == "12") {      // TICKET 
 
     if (array_data_venta.length === 0) {
       if (val_igv == '' || val_igv <= 0) {
-        $("#tipo_gravada").val('SUBTOTAL');
-        $(".tipo_gravada").html('SUBTOTAL');
+        $("#f_tipo_gravada").val('SUBTOTAL');
+        $(".f_tipo_gravada").html('SUBTOTAL');
         $(".val_igv").html(`IGV (0%)`);
       } else {
-        $("#tipo_gravada").val('GRAVADA');
-        $(".tipo_gravada").html('GRAVADA');
+        $("#f_tipo_gravada").val('GRAVADA');
+        $(".f_tipo_gravada").html('GRAVADA');
         $(".val_igv").html(`IGV (${redondearExp((val_igv * 100), 2)}%)`);
       }
       
@@ -643,7 +678,7 @@ function modificarSubtotales() {
 
       calcularTotalesConIgv();
     }
-  } else if ($("#tipo_comprobante").select2("val") == "01" || $("#tipo_comprobante").select2("val") == "03" ) { // FACTURA O BOLETA 
+  } else if ($("#f_tipo_comprobante").select2("val") == "01" || $("#f_tipo_comprobante").select2("val") == "03" ) { // FACTURA O BOLETA 
 
     $(".hidden").show(); //Mostramos: IGV, PRECIO SIN IGV
     $("#colspan_subtotal").attr("colspan", 7); //cambiamos el: colspan    
@@ -651,12 +686,12 @@ function modificarSubtotales() {
 
     if (array_data_venta.length === 0) {
       if (val_igv == '' || val_igv <= 0) {
-        $("#tipo_gravada").val('NO GRAVADA');
-        $(".tipo_gravada").html('NO GRAVADA');
+        $("#f_tipo_gravada").val('NO GRAVADA');
+        $(".f_tipo_gravada").html('NO GRAVADA');
         $(".val_igv").html(`IGV (0%)`);
       } else {
-        $("#tipo_gravada").val('GRAVADA');
-        $(".tipo_gravada").html('GRAVADA');
+        $("#f_tipo_gravada").val('GRAVADA');
+        $(".f_tipo_gravada").html('GRAVADA');
         $(".val_igv").html(`IGV (${(parseFloat(val_igv) * 100).toFixed(2)}%)`);
       }
       
@@ -699,11 +734,11 @@ function modificarSubtotales() {
     }
   } else {
 
-    $("#impuesto").val(0);    
+    $("#f_impuesto").val(0);    
     $(".val_igv").html('IGV (0%)');
 
-    $("#tipo_gravada").val('SUBTOTAL');
-    $(".tipo_gravada").html('SUBTOTAL');
+    $("#f_tipo_gravada").val('SUBTOTAL');
+    $(".f_tipo_gravada").html('SUBTOTAL');
 
     if (array_data_venta.length === 0) {
     } else {
@@ -760,25 +795,25 @@ function calcularTotalesSinIgv() {
       descuento += parseFloat( $(`.descuento_${element.id_cont}`).val() );
     });
 
-    $(".venta_subtotal").html("<span>S/</span> " + formato_miles(total));
-    $("#venta_subtotal").val(redondearExp(total, 2));
+    $(".f_venta_subtotal").html("<span>S/</span> " + formato_miles(total));
+    $("#f_venta_subtotal").val(redondearExp(total, 2));
 
-    $(".venta_descuento").html("<span>S/</span> " + formato_miles(descuento));
-    $("#venta_descuento").val(redondearExp(descuento, 2));
+    $(".f_venta_descuento").html("<span>S/</span> " + formato_miles(descuento));
+    $("#f_venta_descuento").val(redondearExp(descuento, 2));
 
-    $(".venta_igv").html("<span>S/</span> 0.00");
-    $("#venta_igv").val(0.0);
+    $(".f_venta_igv").html("<span>S/</span> 0.00");
+    $("#f_venta_igv").val(0.0);
     $(".val_igv").html('IGV (0%)');
 
-    $(".venta_total").html("<span>S/</span> " + formato_miles(total));
-    $("#venta_total").val(redondearExp(total, 2));
+    $(".f_venta_total").html("<span>S/</span> " + formato_miles(total));
+    $("#f_venta_total").val(redondearExp(total, 2));
     $(".pago_rapido").html(redondearExp(total, 2));
     $(".pago_rapido").html(redondearExp(total, 2));
   }
 }
 
 function calcularTotalesConIgv() {
-  var val_igv = $('#impuesto').val();
+  var val_igv = $('#f_impuesto').val();
   var igv = 0;
   var total = 0.0;
   var descuento = 0.0;
@@ -795,17 +830,17 @@ function calcularTotalesConIgv() {
   subotal_sin_igv = redondearExp(quitar_igv_del_precio(total, val_igv, 'entero') , 2);
   igv = (parseFloat(total) - parseFloat(subotal_sin_igv)).toFixed(2);
 
-  $(".venta_subtotal").html(`<span>S/</span> ${formato_miles(subotal_sin_igv)}`);
-  $("#venta_subtotal").val(redondearExp(subotal_sin_igv, 2));
+  $(".f_venta_subtotal").html(`<span>S/</span> ${formato_miles(subotal_sin_igv)}`);
+  $("#f_venta_subtotal").val(redondearExp(subotal_sin_igv, 2));
 
-  $(".venta_descuento").html("<span>S/</span> " + formato_miles(descuento));
-  $("#venta_descuento").val(redondearExp(descuento, 2));
+  $(".f_venta_descuento").html("<span>S/</span> " + formato_miles(descuento));
+  $("#f_venta_descuento").val(redondearExp(descuento, 2));
 
-  $(".venta_igv").html("<span>S/</span> " + formato_miles(igv));
-  $("#venta_igv").val(igv);
+  $(".f_venta_igv").html("<span>S/</span> " + formato_miles(igv));
+  $("#f_venta_igv").val(igv);
 
-  $(".venta_total").html("<span>S/</span> " + formato_miles(total));
-  $("#venta_total").val(redondearExp(total, 2));
+  $(".f_venta_total").html("<span>S/</span> " + formato_miles(total));
+  $("#f_venta_total").val(redondearExp(total, 2));
   $(".pago_rapido").html(redondearExp(total, 2));
   $(".pago_rapido").html(redondearExp(total, 2));
   total = 0.0;
@@ -839,7 +874,7 @@ $(document).ready(function () {
           //Obtenemos la id unica de la sugerencia pulsada
           var id = $(this).attr("id");
           //Editamos el valor del input con data de la sugerencia pulsada
-          $("#numero_documento").val($("#" + id).attr("ndocumento"));
+          $("#f_numero_documento").val($("#" + id).attr("ndocumento"));
           $("#razon_social").val($("#" + id).attr("ncomercial"));
           $("#domicilio_fiscal").val($("#" + id).attr("domicilio"));
           $("#idpersona").val(id);
@@ -855,7 +890,7 @@ $(document).ready(function () {
 });
 
 function quitasuge1() {
-  if ($("#numero_documento").val() == "") {
+  if ($("#f_numero_documento").val() == "") {
     $("#suggestions").fadeOut();
   }
   $("#suggestions").fadeOut();
@@ -878,44 +913,44 @@ function update_price() {
 
 function capturar_pago_venta() {   
   
-  var metodo_pago = $("#metodo_pago").val() == null || $("#metodo_pago").val() == "" ? "" : $("#metodo_pago").val() ;
+  var metodo_pago = $("#f_metodo_pago").val() == null || $("#f_metodo_pago").val() == "" ? "" : $("#f_metodo_pago").val() ;
   $(".span-code-baucher-pago").html(`(${metodo_pago == null ? 'Seleccione metodo pago' : metodo_pago })`);
   $(".span-tipo-pago").html(`(${metodo_pago == null ? 'Seleccione' : metodo_pago })`);
-  $("#mp_monto").val(0);
+  $("#f_mp_monto").val(0);
   if (metodo_pago == null || metodo_pago == '' || metodo_pago == "EFECTIVO" || metodo_pago == "CREDITO") {
     $("#content-metodo-pago").hide();
     $("#content-mp-monto").hide();  
-    if (form_validate_facturacion) { $("#mp_monto").rules('remove', 'required'); }    
+    if (form_validate_facturacion) { $("#f_mp_monto").rules('remove', 'required'); }    
   } else if ( metodo_pago == "MIXTO" ) {
     $("#content-metodo-pago").show();
     if (detalles > 0) { $("#content-mp-monto").show(); }   
-    if (form_validate_facturacion) { $("#mp_monto").rules('add', { required: true, messages: {  required: "Campo requerido" } }); }         
+    if (form_validate_facturacion) { $("#f_mp_monto").rules('add', { required: true, messages: {  required: "Campo requerido" } }); }         
   } else {    
     $("#content-metodo-pago").show();      
     $("#content-mp-monto").hide();
-    if (form_validate_facturacion) { $("#mp_monto").rules('remove', 'required'); }
+    if (form_validate_facturacion) { $("#f_mp_monto").rules('remove', 'required'); }
   }  
   calcular_vuelto();
   if (form_validate_facturacion) { $("#form-facturacion").valid();}
 }
 
 function calcular_vuelto() {
-  var contado     = $('#total_recibido').val()  == null || $('#total_recibido').val() == '' ? 0 : parseFloat($('#total_recibido').val());  
-  var mixto       = $('#mp_monto').val()        == null || $('#mp_monto').val()       == '' ? 0 : parseFloat($('#mp_monto').val());
-  var venta_total = $('#venta_total').val()     == null || $('#venta_total').val()    == '' ? 0 : parseFloat($('#venta_total').val());
+  var contado     = $('#f_total_recibido').val()  == null || $('#f_total_recibido').val() == '' ? 0 : parseFloat($('#f_total_recibido').val());  
+  var mixto       = $('#f_mp_monto').val()        == null || $('#f_mp_monto').val()       == '' ? 0 : parseFloat($('#f_mp_monto').val());
+  var venta_total = $('#f_venta_total').val()     == null || $('#f_venta_total').val()    == '' ? 0 : parseFloat($('#f_venta_total').val());
   
-  if ($('#total_recibido').val() != '' || $('#mp_monto').val() != '' ) { 
-    if ($("#metodo_pago").val() == "MIXTO") {    
+  if ($('#f_total_recibido').val() != '' || $('#f_mp_monto').val() != '' ) { 
+    if ($("#f_metodo_pago").val() == "MIXTO") {    
       var vuelto_1 = redondearExp(( ( contado + mixto ) - venta_total ), 2); 
       
-      $('#total_vuelto').val(vuelto_1);
-      vuelto_1 < 0 ? $('.total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
+      $('#f_total_vuelto').val(vuelto_1);
+      vuelto_1 < 0 ? $('.f_total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.f_total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
       vuelto_1 < 0 ? $('.falta_o_completo').html('(falta)').addClass('text-danger').removeClass('text-success') : $('.falta_o_completo').html('(completo)').addClass('text-success').removeClass('text-danger') ;
     } else {    
       var vuelto_2 = redondearExp((contado - venta_total), 2) ; 
       
-      $('#total_vuelto').val(vuelto_2);
-      vuelto_2 < 0 ? $('.total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
+      $('#f_total_vuelto').val(vuelto_2);
+      vuelto_2 < 0 ? $('.f_total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.f_total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
       vuelto_2 < 0 ? $('.falta_o_completo').html('(falta)').addClass('text-danger').removeClass('text-success') : $('.falta_o_completo').html('(completo)').addClass('text-success').removeClass('text-danger') ;
     } 
   }  
@@ -924,7 +959,7 @@ function calcular_vuelto() {
 
 function pago_rapido(val) {
   var pago_monto = $(val).text(); console.log(pago_monto);
-  $('#total_recibido').val(pago_monto);
+  $('#f_total_recibido').val(pago_monto);
   calcular_vuelto();
   $("#form-facturacion").valid();
 }
