@@ -457,7 +457,7 @@ class Papelera{
       }
     }
 
-    $sql_20 = "SELECT * FROM sunat_tipo_tributo WHERE estado = '0' AND estado_delete = '1';";
+    /*$sql_20 = "SELECT * FROM sunat_tipo_tributo WHERE estado = '0' AND estado_delete = '1';";
     $tipo_tributo = ejecutarConsultaArray($sql_20);  
     if ($tipo_tributo['status'] == false) { return $tipo_tributo; }
 
@@ -475,7 +475,7 @@ class Papelera{
             'list_archivo'     => $value20['nombre'],
           ];
       }
-    }
+    }*/
 
 
     $sql_21 = "SELECT suc.idsunat_usuario_comprobante, p.nombre_razonsocial, p.apellidos_nombrecomercial, scc.abreviatura AS tp_comprobante, suc.created_at, suc.updated_at
