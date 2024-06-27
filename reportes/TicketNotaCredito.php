@@ -100,11 +100,15 @@ if (!isset($_SESSION["user_nombre"])) {
     // detalle x producto ================================================================================
     $html_venta = ''; $cont = 1; $cantidad = 0;
     
-    foreach ($venta_f['data']['detalle'] as $key => $val) {      
+    foreach ($venta_f['data']['detalle'] as $key => $val) {  
+      
+      $es_cobro       = $val['es_cobro'];
+      $p_p_month_year = $val['es_cobro'] == 'SI' ? ' - ' . $val['periodo_pago_v2']: '';
+      $p_p_year       = $val['periodo_pago_year'];
     
       $html_venta .= '<tr >'.       
        '<td>' . floatval($val['cantidad'])  . '</td>' .
-       '<td >' . ($val['nombre_producto']) . '</td>' .
+       '<td >' . ($val['nombre_producto'] .$p_p_month_year) . '</td>' .
        '<td style="text-align: right;">' . number_format( floatval($val['precio_venta']) , 2, '.', ',') . '</td>' .
        '<td style="text-align: right;">' . number_format( floatval($val['subtotal_no_descuento']) , 2, '.', ',') . '</td>' .
        '</tr>';

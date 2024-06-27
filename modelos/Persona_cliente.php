@@ -179,21 +179,27 @@ class Cliente
 		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
 		
 		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
-		pc.fecha_cancelacion,	pc.fecha_afiliacion, 
-		DATEDIFF(
-			IF(DAY(fecha_cancelacion) >= DAY(CURDATE()),
-				DATE_ADD(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), INTERVAL DAY(fecha_cancelacion) DAY),
-				DATE_ADD(LAST_DAY(CURDATE()), INTERVAL DAY(fecha_cancelacion) DAY)
-			),
-			CURDATE()
-    ) AS dias_para_proximo_pago,
-		DATE_FORMAT(
-			IF(DAY(fecha_cancelacion) >= DAY(CURDATE()),
-				DATE_ADD(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), INTERVAL DAY(fecha_cancelacion) DAY),
-				DATE_ADD(LAST_DAY(CURDATE()), INTERVAL DAY(fecha_cancelacion) DAY)				
-			),
-		'%d/%m/%Y'
-		)AS proximo_pago,
+		pc.fecha_cancelacion,	pc.fecha_afiliacion,
+		IF(fecha_cancelacion > CURDATE(),
+			DATEDIFF(fecha_cancelacion, CURDATE()),
+			DATEDIFF(
+				IF(DAY(fecha_cancelacion) >= DAY(CURDATE()),
+					DATE_ADD(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), INTERVAL DAY(fecha_cancelacion) DAY),
+					DATE_ADD(LAST_DAY(CURDATE()), INTERVAL DAY(fecha_cancelacion) DAY)
+				),
+				CURDATE()
+			) 
+		) AS dias_para_proximo_pago,
+		IF(fecha_cancelacion > CURDATE(),
+			DATE_FORMAT(fecha_cancelacion, '%d/%m/%Y'),
+			DATE_FORMAT(
+				IF(DAY(fecha_cancelacion) >= DAY(CURDATE()),
+					DATE_ADD(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), INTERVAL DAY(fecha_cancelacion) DAY),
+					DATE_ADD(LAST_DAY(CURDATE()), INTERVAL DAY(fecha_cancelacion) DAY)				
+				),
+			'%d/%m/%Y'
+			)
+		)	AS proximo_pago,
 		pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
 		CASE 
 			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
@@ -260,7 +266,7 @@ class Cliente
 		FROM persona_cliente as pc
 		INNER JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente 
 		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
-		where v.sunat_estado='ACEPTADA' AND v.estado_delete='1' AND v.estado_delete='1' and pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
+		where v.sunat_estado='ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado_delete='1' AND v.estado_delete='1' and pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
 		GROUP BY vd.periodo_pago_year
 		ORDER BY vd.periodo_pago_year DESC";
 		$pagos = ejecutarConsulta($sql_1);
@@ -317,7 +323,7 @@ class Cliente
 		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado        
 		LEFT JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente
 		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
-		WHERE v.sunat_estado='ACEPTADA' AND v.estado_delete='1' AND v.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za
+		WHERE v.sunat_estado='ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado_delete='1' AND v.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za
 		GROUP BY pc.idpersona_cliente
 		ORDER BY pc.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
@@ -337,6 +343,7 @@ class Cliente
 
 		$sql = "SELECT v.idventa, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y') AS fecha_emision, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion, 
 			CONCAT(v.serie_comprobante, '-', v.numero_comprobante) AS SNCompb, v.venta_total,
+			CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END AS venta_total_v2,
 			CONCAT(v.periodo_pago_month, '-', v.periodo_pago_year) AS periodo_pago,
 			v.tipo_comprobante, v.sunat_estado, v.estado, v.estado_delete
 		FROM venta v

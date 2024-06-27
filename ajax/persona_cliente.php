@@ -443,14 +443,15 @@ if (!isset($_SESSION["user_nombre"])) {
           <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.$value['fecha_emision'].'</td>
           <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.$value['periodo_pago'].'</td>
           <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.$value['SNCompb'].'</td>
-          <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.$value['venta_total'].'</td>
+          <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center '.($value['venta_total_v2'] < 0 ? 'text-danger':'').' ">'.$value['venta_total_v2'].'</td>
           <td class="py-2 text-center" >
             <button class="btn btn-icon btn-secondary-transparent rounded-pill btn-wave" onclick="TickcetPagoCliente('.($value['idventa']).', \'' . encodeCadenaHtml($value['tipo_comprobante']) . '\')" target="_blanck" data-bs-toggle="tooltip" title="Ticket">
              <i class="ri-ticket-line"></i> 
             </button>
           </td>
           <td class="py-0 text-nowrap"><div class="d-flex flex-fill align-items-center">'.
-          ($value['estado'] == '1' ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' : '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>')
+          ($value['sunat_estado'] == 'ACEPTADA' ? '<span class="badge bg-success-transparent"><i class="ri-check-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' : 
+          '<span class="badge bg-danger-transparent"><i class="ri-close-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>')
           .'</td>
         </tr>';
           
