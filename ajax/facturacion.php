@@ -109,7 +109,7 @@ if (!isset($_SESSION["user_nombre"])) {
           $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion, $tiempo_entrega, $validez_cotizacion,
           $_POST["idproducto"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
           $_POST["descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 
-
+          // echo json_encode($rspta, true); die();
           $idventa = $rspta['id_tabla'];
 
           if ($rspta['status'] == true) {             // validacion de creacion de documento
@@ -655,6 +655,28 @@ if (!isset($_SESSION["user_nombre"])) {
   
           foreach ($rspta['data'] as $key => $value) {
             $data  .= '<option value="' . $value['idmarca'] . '" title ="' . $value['nombre'] . '" >' . $value['nombre'] . '</option>';
+          }
+  
+          $retorno = array(
+            'status' => true,
+            'message' => 'Salió todo ok',
+            'data' => $data,
+          );
+  
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+      break;
+
+      case 'select2_banco':
+        $rspta = $facturacion->select2_banco();
+        $data = "";
+  
+        if ($rspta['status']) {
+  
+          foreach ($rspta['data'] as $key => $value) {
+            $data  .= '<option value="' . $value['nombre'] . '" title ="' . $value['icono'] . '" >' . $value['nombre'] . '</option>';
           }
   
           $retorno = array(

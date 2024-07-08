@@ -265,8 +265,8 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="d-md-flex d-block align-items-center ">
                               <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_banco();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-bancos"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
                               <div>
-                                <p class="fw-semibold fs-18 mb-0">Bancos</p>
-                                <span class="fs-semibold text-muted">Administra de manera eficiente tus bancos.</span>
+                                <p class="fw-semibold fs-18 mb-0">Método de Pago</p>
+                                <span class="fs-semibold text-muted">Administra de manera eficiente tus Método de Pago.</span>
                               </div>
                             </div>
                           </div>
@@ -274,7 +274,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="btn-list mt-md-0 mt-2">
                             <nav>
                               <ol class="breadcrumb mb-0">
-                                <li class="breadcrumb-item"><a href="javascript:void(0);">Bancos</a></li>
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Método de Pago</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Home</li>
                               </ol>
                             </nav>
@@ -507,7 +507,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="modal-dialog modal-dialog-scrollable modal-md">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Agregar Banco</h4>
+                    <h4 class="modal-title">Agregar Método de Pago</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
 
@@ -715,12 +715,12 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>
 
-    <script src="scripts/plan.js?version_jdl=1.14"></script>
-    <script src="scripts/zona.js?version_jdl=1.14"></script>
-    <script src="scripts/centro_poblado.js?version_jdl=1.14"></script>
-    <script src="scripts/bancos.js?version_jdl=1.14"></script>
-    <script src="scripts/cargo_trabajador.js?version_jdl=1.14"></script>
-    <script src="scripts/categoria_incidencia.js?version_jdl=1.14"></script>
+    <script src="scripts/plan.js?version_jdl=1.16"></script>
+    <script src="scripts/zona.js?version_jdl=1.16"></script>
+    <script src="scripts/centro_poblado.js?version_jdl=1.16"></script>
+    <script src="scripts/bancos.js?version_jdl=1.16"></script>
+    <script src="scripts/cargo_trabajador.js?version_jdl=1.16"></script>
+    <script src="scripts/categoria_incidencia.js?version_jdl=1.16"></script>
 
 
 

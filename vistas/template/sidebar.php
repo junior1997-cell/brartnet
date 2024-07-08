@@ -117,6 +117,9 @@
             <?php  if ($_SESSION['anticipos'] == '1') { ?>
             <li class="slide"> <a href="anticipo_cliente.php" class="side-menu__item">Anticipos</a></li>
             <?php } ?>
+            <?php  if ($_SESSION['facturacion'] == '1') { ?>
+            <li class="slide"> <a href="periodo_facturacion.php" class="side-menu__item">Periodos Facturados</a></li>
+            <?php } ?>     
           </ul>
         </li>
         <?php } ?>

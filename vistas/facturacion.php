@@ -26,6 +26,8 @@ if (!isset($_SESSION["user_nombre"])) {
         font-size: .6875rem !important;
         font-weight: 50 !important;
       }
+      #tabla-ventas_filter label{ width: 100% !important; }
+      #tabla-ventas_filter label input{ width: 100% !important; }
     </style>
   </head>
 
@@ -493,7 +495,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
                               <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
                                 <div class="form-group">
-                                  <label for="f_metodo_pago" class="form-label">Método de pago</label>
+                                  <label for="f_metodo_pago" class="form-label">
+                                    <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_f_metodo_pago();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                    Método de pago
+                                    <span class="charge_f_metodo_pago"></span>
+                                  </label>
                                   <select class="form-control" name="f_metodo_pago" id="f_metodo_pago" onchange="capturar_pago_venta();">
                                     <option value="EFECTIVO" selected >EFECTIVO</option>
                                     <option value="MIXTO">MIXTO</option>
@@ -502,6 +508,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                     <option value="BANCO DE LA NACIÓN">BANCO DE LA NACIÓN</option>
                                     <option value="COOPACT">COOPACT</option>
                                     <option value="BBVA CONTINENTAL">BBVA CONTINENTAL</option>
+                                    <option value="BCP">BCP</option>
                                     <option value="YAPE">YAPE</option>
                                     <option value="PLIN">PLIN</option>
                                     <option value="CULQI">CULQI</option>                                                      
@@ -1041,6 +1048,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/libs/filepond-plugin-image-crop/filepond-plugin-image-crop.min.js"></script>
     <script src="../assets/libs/filepond-plugin-image-resize/filepond-plugin-image-resize.min.js"></script>
     <script src="../assets/libs/filepond-plugin-image-transform/filepond-plugin-image-transform.min.js"></script>
+    <script src="https://unpkg.com/medium-zoom/dist/medium-zoom.min.js"></script>
 
     <!-- Dropzone JS -->
     <script src="../assets/libs/dropzone/dropzone-min.js"></script>
@@ -1048,8 +1056,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.14"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.14"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.16"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.16"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

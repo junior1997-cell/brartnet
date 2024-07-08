@@ -22,6 +22,9 @@
 <script src="../assets/js/simplebar.js"></script>
 <!-- Color Picker JS -->
 <script src="../assets/libs/@simonwep/pickr/pickr.es5.min.js"></script>
+<!-- Date & Time Picker JS -->
+<script src="../assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="../assets/libs/flatpickr/l10n/es.js"></script>
 
 
 <!-- :::::::::::::::::: P L U G I N   D I F E R E N T E S   A L   P R O Y E C T O :::::::::::::::::: -->
@@ -49,7 +52,7 @@
 <!-- JQuery ZOOM imagen -->
 <script type="text/javascript" src="../assets/libs/jquery-zoom/jquery.zoom.js"></script>
 <!-- Funciones Crud y Generales -->
-<script type="text/javascript" src="../assets/js/funcion_crud.js?version_jdl=1.14"></script>
+<script type="text/javascript" src="../assets/js/funcion_crud.js?version_jdl=1.16"></script>
 <script type="text/javascript" src="../assets/js/funcion_general.js?version_jdl=1.2"></script>
 
 <!-- Data Table -->

@@ -83,7 +83,7 @@
       $idproducto, $um_nombre, $um_abreviatura, $es_cobro, $periodo_pago, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $precio_venta_descuento, $descuento, $descuento_porcentaje, 
       $subtotal_producto, $subtotal_no_descuento    
     ){
-      $tipo_v = ""; $cot_estado = "";
+      $tipo_v = ""; $cot_estado = ""; $fecha_actual_amd = date('Y-m-d');
       if ($tipo_comprobante == '100') {
         $tipo_v = "COTIZACIÓN";
         $cot_estado = "PENDIENTE";
@@ -105,11 +105,20 @@
       WHERE v.tipo_comprobante = '$tipo_comprobante' and ((v.sunat_error <> '' AND  v.sunat_error is not null  ) or (v.sunat_observacion <> '' AND  v.sunat_observacion is not null  ));";
       $buscando_error = ejecutarConsultaArray($sql); if ($buscando_error['status'] == false) {return $buscando_error; }
 
+      $sql_periodo = "SELECT idperiodo_contable FROM periodo_contable WHERE estado = '1' AND estado_delete = '1' AND '$fecha_actual_amd' BETWEEN fecha_inicio AND fecha_fin;";
+      $buscando_periodo = ejecutarConsultaSimpleFila($sql_periodo); if ($buscando_periodo['status'] == false) {return $buscando_periodo; }
+      $idperiodo_contable = empty($buscando_periodo['data']) ? '' : (empty($buscando_periodo['data']['idperiodo_contable']) ? '' : $buscando_periodo['data']['idperiodo_contable'] ) ;
+      // return $sql_periodo;
+      if ( empty($idperiodo_contable) ) {  
+        $retorno = array( 'status' => 'error_usuario', 'titulo' => 'No existe periodo!!', 'message' => ' No cierre el módulo. <br> No existe un periodo contable del mes: <b>'. nombre_mes(date('Y-m-d')).'-'.date('Y'). '</b>. '. ($_SESSION['user_cargo'] == 'ADMINISTRADOR' ? 'Configure el período contable en el módulo siguiente: <a href="periodo_facturacion.php" target="_blank" >Periodo contable</a>' : 'Solicite a su administrador que configure el período contable para el mes actual.'), 'user' =>  $_SESSION['user_nombre'], 'data' => $buscando_error['data'], 'id_tabla' => '' );
+        return $retorno;
+      }
+
       if ( empty( $buscando_error['data'] ) ) {
-        $sql_1 = "INSERT INTO venta(idpersona_cliente, iddocumento_relacionado, crear_enviar_sunat, idsunat_c01, tipo_comprobante, serie_comprobante,  impuesto, 
+        $sql_1 = "INSERT INTO venta(idpersona_cliente, idperiodo_contable, iddocumento_relacionado, crear_enviar_sunat, idsunat_c01, tipo_comprobante, serie_comprobante,  impuesto, 
         venta_subtotal, venta_descuento, venta_igv, venta_total, metodo_pago, mp_serie_comprobante, mp_comprobante, mp_monto, venta_credito, vc_numero_operacion, 
         vc_fecha_proximo_pago, total_recibido, total_vuelto, usar_anticipo, ua_monto_disponible, ua_monto_usado, nc_motivo_nota, nc_tipo_comprobante, nc_serie_y_numero, cot_tiempo_entrega, cot_validez, cot_estado, observacion_documento) 
-        VALUES ('$idpersona_cliente', '$nc_idventa', '$crear_y_emitir', '$idsunat_c01', '$tipo_comprobante', '$serie_comprobante', '$impuesto', '$venta_subtotal', '$venta_descuento',
+        VALUES ('$idpersona_cliente', '$idperiodo_contable', '$nc_idventa', '$crear_y_emitir', '$idsunat_c01', '$tipo_comprobante', '$serie_comprobante', '$impuesto', '$venta_subtotal', '$venta_descuento',
         '$venta_igv','$venta_total','$metodo_pago','$mp_serie_comprobante','$mp_comprobante','$mp_monto','','',CURRENT_TIMESTAMP, '$total_recibido', '$total_vuelto',
         '$usar_anticipo','$ua_monto_disponible','$ua_monto_usado', '$nc_motivo_anulacion', '$nc_tipo_comprobante', '$nc_serie_y_numero', '$tiempo_entrega', '$validez_cotizacion', '$cot_estado', '$observacion_documento')"; 
         $newdata = ejecutarConsulta_retornarID($sql_1, 'C'); if ($newdata['status'] == false) { return  $newdata;}
@@ -479,6 +488,12 @@
       INNER JOIN sunat_c06_doc_identidad as sc06 on p.tipo_documento=sc06.code_sunat
       WHERE v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador
       GROUP BY p.idpersona, pc.idpersona_cliente, p.numero_documento, sc06.abreviatura ORDER BY  count(v.idventa) desc, p.nombre_razonsocial asc ;";
+      return ejecutarConsultaArray($sql);
+    }
+
+    public function select2_banco(){
+     
+      $sql="SELECT * FROM bancos WHERE idbancos <> 1 and estado = '1' AND estado_delete = '1';";
       return ejecutarConsultaArray($sql);
     }
   }

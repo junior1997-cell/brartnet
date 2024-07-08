@@ -332,7 +332,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Custom JS -->
     <script src="../assets/js/custom.js"></script>
 
-    <script src="scripts/incidencias.js?version_jdl=1.14"></script>
+    <script src="scripts/incidencias.js?version_jdl=1.16"></script>
 
     <script>
       flatpickr("#adDate", { enableTime: false, dateFormat: "d-m-Y", });

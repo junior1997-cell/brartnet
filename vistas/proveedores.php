@@ -364,7 +364,7 @@
         <?php include("template/scripts.php"); ?>
         <?php include("template/custom_switcherjs.php"); ?>    
 
-        <script src="scripts/proveedores.js?version_jdl=1.14"></script>
+        <script src="scripts/proveedores.js?version_jdl=1.16"></script>
         <script> $(function () { $('[data-bs-toggle="tooltip"]').tooltip(); }); </script>
 
       

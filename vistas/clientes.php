@@ -21,6 +21,11 @@ if (!isset($_SESSION["user_nombre"])) {
     <link rel="stylesheet" href="../assets/libs/filepond-plugin-image-edit/filepond-plugin-image-edit.min.css">
     <link rel="stylesheet" href="../assets/libs/dropzone/dropzone.css">
 
+    <style>
+      #tabla-cliente_filter label{ width: 100% !important; }
+      #tabla-cliente_filter label input{ width: 100% !important; }
+    </style>
+
   </head>
 
   <body id="body-usuario">
@@ -1102,8 +1107,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Dropzone JS -->
     <script src="../assets/libs/dropzone/dropzone-min.js"></script>
 
-    <script src="scripts/persona_cliente.js?version_jdl=1.14"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.14"></script>
+    <script src="scripts/persona_cliente.js?version_jdl=1.16"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.15"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

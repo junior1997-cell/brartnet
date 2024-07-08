@@ -130,6 +130,8 @@ function listar_tabla(filtro_categoria = '', filtro_unidad_medida = '', filtro_m
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center") }
       // columna: #
       if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: #
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
       // columna: 5
       if (data[15] == 1 ) { $("td", row).eq(1).attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'No tienes opcion a modificar'); }
     },

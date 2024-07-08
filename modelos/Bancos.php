@@ -122,7 +122,7 @@ Class Bancos
 
 	//Implementar un método para listar los registros
 	public function listar(){
-		$sql="SELECT * FROM bancos WHERE idbancos > 1 	AND estado=1  AND estado_delete=1 ORDER BY nombre ASC";
+		$sql="SELECT * FROM bancos WHERE idbancos > 1 	AND estado=1  AND estado_delete=1 ORDER BY idbancos asc,  nombre ASC";
 		return ejecutarConsulta($sql);
 	}
 	

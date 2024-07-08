@@ -35,6 +35,7 @@ async function init(){
 
   lista_select2("../ajax/facturacion.php?op=select2_cliente", '#f_idpersona_cliente', null);
   lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#f_nc_motivo_anulacion', '01');  
+  lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago', null, 'charge_f_metodo_pago');  
 
   lista_select2("../ajax/facturacion.php?op=select_categoria", '#categoria', null);
   lista_select2("../ajax/facturacion.php?op=select_u_medida", '#u_medida', null);
@@ -49,7 +50,7 @@ async function init(){
   $("#f_nc_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#f_nc_serie_y_numero").select2({ templateResult: templateSerieNumero, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#f_nc_motivo_anulacion").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#f_metodo_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#f_metodo_pago").select2({  templateResult: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
   $("#filtro_cliente").select2({ templateResult: templateCliente, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_comprobante").select2({ templateResult: templateComprobante, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -69,11 +70,20 @@ async function activar_btn_agregar() {
 function templateCliente (state) {
   //console.log(state);
   if (!state.id) { return state.text; }
-  var baseUrl = state.title != '' ? `../dist/docs/persona/perfil/${state.title}`: '../dist/svg/user_default.svg'; 
-  var onerror = `onerror="this.src='../dist/svg/user_default.svg';"`;
+  var baseUrl = state.title != '' ? `../assets/modulo/bancos/${state.title}`: '../assets/modulo/bancos/logo-sin-banco.svg'; 
+  var onerror = `onerror="this.src='../assets/modulo/bancos/logo-sin-banco.svg';"`;
   var $state = $(`<span class="fs-11" > ${state.text}</span>`);
   return $state;
 }
+
+function templateBanco (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../assets/modulo/bancos/${state.title}`: '../assets/modulo/bancos/logo-sin-banco.svg'; 
+  var onerror = `onerror="this.src='../assets/modulo/bancos/logo-sin-banco.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
 
 function templateComprobante (state) {
   //console.log(state);
@@ -365,6 +375,8 @@ function guardar_editar_facturacion(e) {
       } else if ( result.value.status == 'error_personalizado'){        
         tabla_principal_facturacion.ajax.reload(null, false);
         limpiar_form_venta(); show_hide_form(1); reload_f_nc_serie_y_numero(); ver_errores(result.value);
+      } else if ( result.value.status == 'error_usuario'){    
+        ver_errores(result.value);
       } else {
         ver_errores(result.value);
       }      
@@ -1243,6 +1255,7 @@ function filtrar_solo_estado_sunat(estado, etiqueta) {
 function reload_f_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_cliente", '#f_idpersona_cliente', null, '.charge_f_idpersona_cliente'); }
 function reload_f_nc_serie_y_numero(){ buscar_comprobante_anular() }
 function reload_f_nc_motivo_anulacion(){ lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#f_nc_motivo_anulacion', '01', '.charge_f_nc_motivo_anulacion'); }
+function reload_f_metodo_pago(){ lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago', null, 'charge_f_metodo_pago');   }
 
 function reload_filtro_fecha_i(){ $('#filtro_fecha_i').val("").trigger("change") } 
 function reload_filtro_fecha_f(){ $('#filtro_fecha_f').val("").trigger("change") } 
@@ -1320,5 +1333,16 @@ function ver_comprobante_pago(id_venta) {
   /* multiple upload */
   const MultipleElement = document.querySelector('.multiple-filepond');
   file_pond_mp_comprobante = FilePond.create(MultipleElement, FilePond_Facturacion_LabelsES );
+
+  // Ensure mediumZoom is available before using it
+  document.addEventListener("DOMContentLoaded", function() {
+    file_pond_mp_comprobante.on('addfile', (error, file) => {
+      if (!error) {
+        setTimeout(() => {
+          mediumZoom('.filepond--image-preview');
+        }, 100); // Delay to ensure image is rendered
+      }
+    });
+  });
 
 })();
