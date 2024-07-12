@@ -2,7 +2,7 @@
 
   require "../config/Conexion_v2.php";
 
-  class Periodo_facturacion
+  class Avance_cobro
   {
 
     //Implementamos nuestro constructor
@@ -16,105 +16,101 @@
       // $this->id_empresa_sesion = isset($_SESSION['idempresa']) ? $_SESSION["idempresa"] : 0;
     }
 
-    public function listar_tabla_principal( $anio, $periodo,  $cliente, $comprobante ) {    
+    public function listar_tabla_principal(  $periodo,  $trabajador ) {    
       
-      $filtro_anio = "";  $filtro_periodo = ""; $filtro_cliente = ""; $filtro_comprobante = "";
-    
-      if ( empty($anio) )      { } else { $filtro_anio = "AND pco.periodo_year = '$anio'"; } 
-      if ( empty($periodo) )      { } else { $filtro_periodo = "AND pco.periodo = '$periodo'"; } 
-      if ( empty($cliente) )      { } else { $filtro_cliente = "AND v.idpersona_cliente = '$cliente'"; } 
-      if ( empty($comprobante) )  { } else { $filtro_comprobante = "AND v.idsunat_c01 = '$comprobante'"; } 
+      $filtro_periodo = ""; $filtro_trabajador_1 = ""; $filtro_trabajador_2 = "";    
+      
+      if ( empty($periodo) )    { } else { $filtro_periodo = "AND DATE_FORMAT( vd.periodo_pago_format, '%Y-%m') = '$periodo'"; } 
+      if ( empty($trabajador) ) { } else { $filtro_trabajador_1 = "WHERE pc.idpersona_trabajador = '$trabajador'"; } 
+      if ( empty($trabajador) ) { } else { $filtro_trabajador_2 = "AND pc.idpersona_trabajador = '$trabajador'"; } 
 
-      $sql = "SELECT pco.*, LPAD(pco.idperiodo_contable, 5, '0') AS idventa_v2,
-      COALESCE(SUM(CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END), 0) AS venta_total, count(v.idventa) as cantidad_comprobante
-      FROM periodo_contable as pco
-      LEFT JOIN venta as v ON v.idperiodo_contable = pco.idperiodo_contable  and v.estado = '1' and v.estado_delete = '1' and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100'
-      WHERE pco.estado = '1' and pco.estado_delete = '1' 
-      $filtro_anio $filtro_cliente $filtro_comprobante $filtro_periodo    
-      GROUP BY pco.periodo   
-      ORDER BY pco.periodo DESC;"; #return $sql;
+      $sql = "SELECT pco.idcentro_poblado, pco.centro_poblado, ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) as avance,
+       COALESCE(co.cant_cobrado,0) as cant_cobrado,  pco.cant_cliente as cant_total
+      FROM 
+      (SELECT cp.idcentro_poblado, cp.nombre as centro_poblado, COUNT(pc.idpersona_cliente) as cant_cliente
+      FROM persona_cliente as pc       
+      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
+      $filtro_trabajador_1
+      GROUP BY cp.idcentro_poblado
+      order by COUNT(pc.idpersona_cliente) DESC) AS pco 
+
+      LEFT JOIN
+
+      (SELECT cp.idcentro_poblado, cp.nombre as centro_poblado, COUNT(v.idventa) as cant_cobrado 
+      FROM venta as v
+      INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
+      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
+      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100' $filtro_periodo $filtro_trabajador_2
+      GROUP BY cp.idcentro_poblado
+      order by COUNT(v.idventa) DESC) as co ON pco.idcentro_poblado = co.idcentro_poblado
+      order by ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) DESC ;"; #return $sql;
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
 
       return $venta;
     }
 
-    public function insertar_periodo(  $periodo, $fecha_inicio, $fecha_fin ){
-     
-
-      $sql = "SELECT DATE_FORMAT(fecha_inicio, '%d-%m-%Y') AS fecha_inicio, DATE_FORMAT(fecha_fin, '%d-%m-%Y') AS fecha_fin,
-      periodo, periodo_format, periodo_month, periodo_year, estado, estado_delete
-      FROM periodo_contable
-      WHERE ('$fecha_inicio' BETWEEN fecha_fin AND fecha_inicio ) OR ( '$fecha_fin' BETWEEN fecha_fin AND fecha_inicio ) OR periodo = '$periodo';";
-      $buscando_error = ejecutarConsultaArray($sql); if ($buscando_error['status'] == false) {return $buscando_error; }
-
-      if ( empty( $buscando_error['data'] ) ) {
-
-        $sql_1 = " INSERT INTO periodo_contable( fecha_inicio, fecha_fin, periodo) 
-        VALUES ('$fecha_inicio', '$fecha_fin', '$periodo')"; 
-        $newdata = ejecutarConsulta_retornarID($sql_1, 'C'); if ($newdata['status'] == false) { return  $newdata;}      
-        return $newdata;
-
-      } else {
-
-        $info_repetida = ''; 
-
-        foreach ($buscando_error['data'] as $key => $val) {
-          $info_repetida .= '<li class="text-left font-size-13px">
-           <span class="font-size-13px text-danger"><b>Periodo: </b>'.$val['periodo_year'] .'-'.$val['periodo_month'].'</span><br>
-            <span class="font-size-13px text-danger"><b>Fecha inicio: </b>'.$val['fecha_inicio'].'</span><br>
-            <span class="font-size-13px text-danger"><b>Fecha fin: </b>'.$val['fecha_fin'].'</span><br>
-            <b>Papelera: </b>'.( $val['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
-            <b>Eliminado: </b>'. ($val['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
-            <hr class="m-t-2px m-b-2px">
-          </li>'; 
-        }
-
-        $retorno = array( 'status' => 'error_usuario', 'titulo' => 'Errores anteriores!!', 'message' => 'No se podran generar comprobantes hasta corregir los errores anteriores a este: '. $info_repetida, 'user' =>  $_SESSION['user_nombre'], 'data' => $buscando_error['data'], 'id_tabla' => '' );
-        return $retorno;
-      }      
-    }
-
-    public function editar_periodo($idperiodo_contable, $periodo, $fecha_inicio, $fecha_fin ) {
-
-      $sql_1 = "UPDATE periodo_contable SET fecha_inicio='$fecha_inicio',fecha_fin='$fecha_fin',
-      periodo='$periodo' WHERE idperiodo_contable='$idperiodo_contable'";
-      return ejecutarConsulta($sql_1, 'U');
+    public function mostrar_reporte($periodo,  $trabajador){
+      $filtro_periodo = ""; $filtro_trabajador_1 = ""; $filtro_trabajador_2 = "";    
       
-    }
+      if ( empty($periodo) )    { } else { $filtro_periodo = "AND DATE_FORMAT( vd.periodo_pago_format, '%Y-%m') = '$periodo'"; } 
+      if ( empty($trabajador) ) { } else { $filtro_trabajador_1 = "WHERE pc.idpersona_trabajador = '$trabajador'"; } 
+      if ( empty($trabajador) ) { } else { $filtro_trabajador_2 = "AND pc.idpersona_trabajador = '$trabajador'"; } 
 
-    public function mostrar_editar_periodo($id){
-      $sql = "SELECT * FROM  periodo_contable WHERE idperiodo_contable = '$id'; ";
-      return ejecutarConsultaSimpleFila($sql);
-    }
+      $sql = "SELECT ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) as avance,
+      COALESCE(co.cant_cobrado,0) as cant_cobrado,  pco.cant_cliente as cant_total
+      FROM 
 
-    public function bloquear_fechas_usadas( $id ){
-      $data = []; $omitir_periodo = '';
-      if ( !empty( $id ) ) {  $omitir_periodo = "AND idperiodo_contable <> '$id'";  }
-      
-      $sql = "SELECT fecha_inicio, fecha_fin, periodo_year, periodo_month FROM  periodo_contable where  estado = '1' and estado_delete = '1' $omitir_periodo;";
-      $fechas = ejecutarConsultaArray($sql);
+      (SELECT pc.idpersona_trabajador, COUNT(pc.idpersona_cliente) as cant_cliente
+      FROM persona_cliente as pc       
+      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
+      $filtro_trabajador_1
+      GROUP BY pc.idpersona_trabajador
+      order by COUNT(pc.idpersona_cliente) DESC) AS pco 
 
-      foreach ($fechas['data'] as $key => $val) {
-        $data[] = [
-          'from'    => $val['fecha_inicio'],
-          'to'      => $val['fecha_fin'],
-          'periodo' => $val['periodo_year'] .'-'. $val['periodo_month'],
-        ];
-      }
+      LEFT JOIN
 
-      return array( 'status' => true, 'message' => 'todo ok', 'user' =>  $_SESSION['user_nombre'], 'data' => $data, 'id_tabla' => '' );
-         
-    }
+      (SELECT pc.idpersona_trabajador, COUNT(v.idventa) as cant_cobrado 
+      FROM venta as v
+      INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
+      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
+      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100' $filtro_periodo $filtro_trabajador_2
+      GROUP BY pc.idpersona_trabajador
+      order by COUNT(v.idventa) DESC) as co ON pco.idpersona_trabajador = co.idpersona_trabajador
+      order by ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) DESC ;"; #return $sql;
+      $centro_poblado = ejecutarConsultaSimpleFila($sql); if ($centro_poblado['status'] == false) {return $centro_poblado; }
 
-    public function eliminar($id){
-      $sql = "UPDATE periodo_contable SET estado_delete = '0' WHERE idperiodo_contable = '$id'";
-      return ejecutarConsulta($sql, 'D');
-    }
+      $sql_plan = "SELECT pco.idplan, pco.plan, ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) as avance,
+       COALESCE(co.cant_cobrado,0) as cant_cobrado,  pco.cant_cliente as cant_total
+      FROM 
+      (SELECT cp.idplan, cp.nombre as plan, COUNT(pc.idpersona_cliente) as cant_cliente
+      FROM persona_cliente as pc       
+      INNER JOIN plan as cp ON cp.idplan = pc.idplan
+      $filtro_trabajador_1
+      GROUP BY cp.idplan
+      order by COUNT(pc.idpersona_cliente) DESC) AS pco 
 
-    public function papelera($id){
-      $sql = "UPDATE periodo_contable SET estado = '0'  WHERE idperiodo_contable = '$id'";
-      return ejecutarConsulta($sql, 'T');
-    }   
+      LEFT JOIN
+
+      (SELECT cp.idplan, cp.nombre as plan, COUNT(v.idventa) as cant_cobrado 
+      FROM venta as v
+      INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
+      INNER JOIN plan as cp ON cp.idplan = pc.idplan
+      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100' $filtro_periodo $filtro_trabajador_2
+      GROUP BY cp.idplan
+      order by COUNT(v.idventa) DESC) as co ON pco.idplan = co.idplan
+      order by ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) DESC ;"; #return $sql;
+      $plan = ejecutarConsultaArray($sql_plan); if ($plan['status'] == false) {return $plan; }
+
+      return ['status' => true, 'message' =>'todo okey', 
+      'data'=>[
+        'centro_poblado'  => $centro_poblado['data'],
+        'plan'            => $plan['data'],
+      ]
+    ];
+    } 
 
     Public function mini_reporte($filtro_anio, $periodo,  $cliente, $comprobante){
 
@@ -206,73 +202,6 @@
 
     }
 
-    // ══════════════════════════════════════ DETALLE COMPROBANTE ══════════════════════════════════════
-
-    public function reasignar_periodo(  $idperiodo, $venta ){        
-
-      // $sql_periodo = "SELECT * FROM periodo_contable WHERE periodo ='$periodo';";
-      // $buscar_periodo = ejecutarConsultaSimpleFila($sql_periodo); if ($buscar_periodo['status'] == false) {return $buscar_periodo; }
-      $actualizando = '';
-      foreach ( $venta as $key => $val ) {
-        
-        $idventa = $val['idventa'];
-        
-        $sql_1 = "UPDATE venta SET idperiodo_contable='$idperiodo' WHERE idventa='$idventa';"; 
-        $actualizando = ejecutarConsulta($sql_1, 'U');  if ($actualizando['status'] == false) {return $actualizando; }
-      }   
-      
-      return $actualizando;
-    }
-
-    public function listar_tabla_comprobante( $idperiodo,  $mes_emision, $cliente, $comprobante ) {    
-     
-      $filtro_periodo = ""; $filtro_mes_emision = ""; $filtro_cliente = ""; $filtro_comprobante = "";       
-      
-      if ( empty($idperiodo) ) { } else {  $filtro_periodo = "AND v.idperiodo_contable = '$idperiodo'"; }
-      if ( empty($mes_emision) ) { } else {  $filtro_mes_emision = "AND DATE_FORMAT(v.fecha_emision, '%Y-%m') = '$mes_emision'"; }  
-      if ( empty($cliente) ) { } else {  $filtro_cliente = "AND v.idpersona_cliente = '$cliente'"; } 
-      if ( empty($comprobante) ) { } else {  $filtro_comprobante = "AND v.idsunat_c01 = '$comprobante'"; } 
-
-      $sql = "SELECT v.*, LPAD(v.idventa, 5, '0') AS idventa_v2, CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END AS venta_total_v2, 
-      CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS tp_comprobante_v2,
-      DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') as fecha_emision_format, LEFT(v.periodo_pago_month, 3) as periodo_pago_month_v2,
-      p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, 
-      p.numero_documento, p.foto_perfil, tc.abreviatura as tp_comprobante_v1, sdi.abreviatura as tipo_documento, v.estado,
-      CASE 
-        WHEN p.tipo_persona_sunat = 'NATURAL' THEN 
-          CASE 
-            WHEN LENGTH(  CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial)  ) <= 27 THEN  CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-            ELSE CONCAT( LEFT(CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial ), 27) , '...')
-          END         
-        WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN 
-          CASE 
-            WHEN LENGTH(  p.nombre_razonsocial  ) <= 27 THEN  p.nombre_razonsocial 
-            ELSE CONCAT(LEFT( p.nombre_razonsocial, 27) , '...')
-          END
-        ELSE '-'
-      END AS cliente_nombre_recortado,
-      CASE 
-        WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-        WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
-        ELSE '-'
-      END AS cliente_nombre_completo, pu.nombre_razonsocial as user_en_atencion, LPAD(v.user_created, 3, '0') AS user_created_v2,
-      CONCAT(pco.periodo_month, '-', pco.periodo_year) as nombre_periodo
-      FROM venta AS v
-      INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
-      INNER JOIN persona AS p ON p.idpersona = pc.idpersona
-      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
-      INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = v.idsunat_c01
-      LEFT JOIN usuario as u ON u.idusuario = v.user_created
-      LEFT JOIN persona as pu ON pu.idpersona = u.idpersona
-      LEFT JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable
-      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100' $filtro_periodo $filtro_mes_emision $filtro_cliente $filtro_comprobante 
-      ORDER BY v.fecha_emision DESC, p.nombre_razonsocial ASC;"; #return $sql;
-      $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
-
-      return $venta;
-    }
-
-
     // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
     
     public function select2_filtro_tipo_comprobante($tipos){
@@ -318,6 +247,21 @@
       GROUP BY pco.idperiodo_contable, pco.periodo_year, periodo_month
       ORDER BY periodo DESC";
       return ejecutarConsultaArray($sql);
+    }
+
+    public function select2_filtro_trabajador()	{
+      $filtro_id_trabajador  = '';
+      // if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+      //   $filtro_id_trabajador = "WHERE pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+      // } 
+      $sql = "SELECT LPAD(pt.idpersona_trabajador, 5, '0') as idtrabajador, pt.idpersona_trabajador, pt.idpersona,  per_t.nombre_razonsocial, COUNT(pc.idpersona_cliente) AS cant_cliente
+      FROM persona_cliente as pc
+      INNER JOIN persona_trabajador as pt ON pt.idpersona_trabajador = pc.idpersona_trabajador
+      INNER JOIN persona as per_t ON per_t.idpersona = pt.idpersona
+      $filtro_id_trabajador
+      GROUP BY pc.idpersona_trabajador
+      ORDER BY  COUNT(pc.idpersona_cliente) desc, per_t.nombre_razonsocial asc;";
+      return ejecutarConsulta($sql);
     }
   }
 ?>

@@ -141,7 +141,7 @@ function show_hide_form(flag) {
 	}
 }
 
-function mini_reporte(filtro_periodo, filtro_cliente, filtro_comprobante) {
+function mini_reporte(filtro_anio, filtro_periodo, filtro_cliente, filtro_comprobante) {
 
   $(".vw_total_factura").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
   $(".vw_total_boleta").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
@@ -149,7 +149,7 @@ function mini_reporte(filtro_periodo, filtro_cliente, filtro_comprobante) {
 
   if (chart_6_month) { chart_6_month.destroy(); } 
 
-  $.getJSON(`../ajax/periodo_facturacion.php?op=mini_reporte&filtro_periodo=${filtro_periodo}&filtro_cliente=${filtro_cliente}&filtro_comprobante=${filtro_comprobante}`,  function (e, textStatus, jqXHR) {
+  $.getJSON(`../ajax/periodo_facturacion.php?op=mini_reporte&filtro_anio=${filtro_anio}&filtro_periodo=${filtro_periodo}&filtro_cliente=${filtro_cliente}&filtro_comprobante=${filtro_comprobante}`,  function (e, textStatus, jqXHR) {
 
     if (e.status == true) {      
 
@@ -751,7 +751,7 @@ function filtros() {
   //console.log(filtro_categoria, fecha_2, filtro_marca, comprobante);
 
   listar_tabla_principal(filtro_anio, filtro_periodo, filtro_cliente, filtro_comprobante);
-  mini_reporte(filtro_periodo, filtro_cliente, filtro_comprobante);
+  mini_reporte(filtro_anio, filtro_periodo, filtro_cliente, filtro_comprobante);
 }
 
 function filtrar_solo_estado_sunat(estado, etiqueta) {  

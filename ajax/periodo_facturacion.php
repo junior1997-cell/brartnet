@@ -97,7 +97,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;      
 
       case 'mini_reporte':
-        $rspta=$periodo_facturacion->mini_reporte($_GET["filtro_periodo"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"]);
+        $rspta=$periodo_facturacion->mini_reporte($_GET["filtro_anio"],$_GET["filtro_periodo"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"]);
         echo json_encode($rspta, true);
       break; 
 

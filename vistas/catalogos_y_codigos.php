@@ -210,7 +210,7 @@ if (!isset($_SESSION["user_nombre"])) {
       <?php include("template/custom_switcherjs.php"); ?>
 
       <!-- Script de Modulos -->
-      <script src="scripts/catalogos_y_codigos.js?version_jdl=1.11"></script>
+      <script src="scripts/catalogos_y_codigos.js?version_jdl=1.19"></script>
 
       <script>
         $(document).ready(function () {

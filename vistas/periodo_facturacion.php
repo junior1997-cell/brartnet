@@ -121,7 +121,7 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
                   </div>
                  
-                  <div class="d-flex"> 
+                  <!-- <div class="d-flex"> 
                     <div class="dropdown ms-2">
                       <button class="btn btn-icon btn-secondary-light btn-sm btn-wave waves-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="ti ti-dots-vertical"></i>
@@ -134,7 +134,8 @@ if (!isset($_SESSION["user_nombre"])) {
                         <li><a class="dropdown-item" href="javascript:void(0);" onclick="view_mas_detalle();"><i class="bi bi-list-check"></i> Ver mas detalles</a></li>
                       </ul>
                     </div>
-                  </div>
+                  </div> -->
+
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
@@ -501,7 +502,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     
     
-    <script src="scripts/periodo_facturacion.js?version_jdl=1.16"></script>
+    <script src="scripts/periodo_facturacion.js?version_jdl=1.19"></script>
     
     <script>
       $(function() {

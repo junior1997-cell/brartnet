@@ -138,10 +138,13 @@
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
           <ul class="slide-menu child1 mega-menu">
-            <li class="slide side-menu__label1"> <a href="javascript:void(0)">Reportes</a></li>               
+            <li class="slide side-menu__label1"> <a href="javascript:void(0)">Reportes</a></li>     
+            <?php  if ($_SESSION['venta_por_vendedor'] == '1') { ?>
+            <li class="slide"> <a href="avance_cobro.php" class="side-menu__item">Avance de Cobros</a></li>
+            <?php } ?>              
             <?php  if ($_SESSION['venta_por_vendedor'] == '1') { ?>
             <li class="slide"> <a href="reporte_x_trabajador.php" class="side-menu__item">Cobros por Trabajador</a></li>
-            <?php } ?>             
+            <?php } ?>                        
             <?php  if ($_SESSION['correo_enviado'] == '1') { ?>
             <li class="slide"> <a href="no_disponible.php" class="side-menu__item">Correo enviados</a></li>
             <?php } ?>     

@@ -1,6 +1,7 @@
 
 localStorage.setItem('nube_id_usuario', 0);
 localStorage.setItem('nube_id_persona', 0);
+localStorage.setItem('nube_id_persona_trabajador', '');
 localStorage.setItem('nube_cargo', '');
 localStorage.setItem('nube_id_sucursal', 0);
 localStorage.setItem('nube_nombre_sucursal', '');
@@ -62,6 +63,7 @@ function validar_response(e) {
 			
 			localStorage.setItem('nube_id_usuario', e.data.usuario.idusuario);
 			localStorage.setItem('nube_id_persona', e.data.usuario.idpersona);
+			localStorage.setItem('nube_id_persona_trabajador', e.data.usuario.idpersona_trabajador);
 			localStorage.setItem('nube_cargo', e.data.usuario.cargo);
 			
 			if (e.data.sucursal == null) {
