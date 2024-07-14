@@ -134,13 +134,16 @@
         <li class="slide has-sub">
           <a href="javascript:void(0);" class="side-menu__item">
             <i class='bx bx-line-chart side-menu__icon'></i>
-            <span class="side-menu__label">Reportes</span>
+            <span class="side-menu__label">Reportes <span class="badge bg-secondary-transparent ms-2">New</span></span>
             <i class="fe fe-chevron-right side-menu__angle"></i>
           </a>
           <ul class="slide-menu child1 mega-menu">
-            <li class="slide side-menu__label1"> <a href="javascript:void(0)">Reportes</a></li>     
+            <li class="slide side-menu__label1"> <a href="javascript:void(0)">Reportes <span class="badge bg-secondary-transparent ms-2">New</span></a></li>     
             <?php  if ($_SESSION['venta_por_vendedor'] == '1') { ?>
-            <li class="slide"> <a href="avance_cobro.php" class="side-menu__item">Avance de Cobros</a></li>
+            <li class="slide"> <a href="retraso_cobro.php" class="side-menu__item">Retraso de Cobros </a></li>
+            <?php } ?>      
+            <?php  if ($_SESSION['venta_por_vendedor'] == '1') { ?>
+            <li class="slide"> <a href="avance_cobro.php" class="side-menu__item">Avance de Cobros </a></li>
             <?php } ?>              
             <?php  if ($_SESSION['venta_por_vendedor'] == '1') { ?>
             <li class="slide"> <a href="reporte_x_trabajador.php" class="side-menu__item">Cobros por Trabajador</a></li>

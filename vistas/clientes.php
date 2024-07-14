@@ -24,6 +24,9 @@ if (!isset($_SESSION["user_nombre"])) {
     <style>
       #tabla-cliente_filter label{ width: 100% !important; }
       #tabla-cliente_filter label input{ width: 100% !important; }
+
+      #tabla_all_pagos_filter label{ width: 100% !important; }
+      #tabla_all_pagos_filter label input{ width: 100% !important; }
     </style>
 
   </head>
@@ -279,13 +282,41 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
                     
                   </div>
-                  <div class="table-responsive" id="div_tabla_all_pagos">
-                    <div class="row" >
+                  <div class="table-responsive" >
+                    <table id="tabla_all_pagos" class="table table-bordered w-100" style="width: 100%;">
+                      <thead>
+                        <tr>
+                          <th class="font-size-11px text-nowrap">N°</th> 
+                          <th class="font-size-11px text-nowrap">APELLIDOS Y NOMBRES</th> 
+                          <th class="font-size-11px text-nowrap" >CANCELACIÓN</th> 
+                          <th class="font-size-11px text-nowrap" >IMPORTE</th> 
+                          <th class="font-size-11px text-nowrap" >AÑO</th> 
+                          <th class="font-size-11px text-nowrap" >ENE</th> 
+                          <th class="font-size-11px text-nowrap" >FEB</th> 
+                          <th class="font-size-11px text-nowrap" >MAR</th> 
+                          <th class="font-size-11px text-nowrap" >ABR</th>
+                          <th class="font-size-11px text-nowrap" >MAY</th> 
+                          <th class="font-size-11px text-nowrap" >JUN</th> 
+                          <th class="font-size-11px text-nowrap" >JUL</th> 
+                          <th class="font-size-11px text-nowrap" >AGO</th> 
+                          <th class="font-size-11px text-nowrap" >SEP</th> 
+                          <th class="font-size-11px text-nowrap" >OCT</th> 
+                          <th class="font-size-11px text-nowrap" >NOV</th> 
+                          <th class="font-size-11px text-nowrap" >DIC</th> 
+                          <th class="font-size-11px text-nowrap" >OBSERVACIONES</th>  
+                          <th class="font-size-11px text-nowrap" >ID</th>
+                          <th class="font-size-11px text-nowrap" >PERIODO</th>          
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                    <!-- <div class="row" >
                       <div class="col-lg-12 text-center">
                         <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
                         <h4 class="bx-flashing">Cargando...</h4>
                       </div>
-                    </div>                      
+                    </div>                       -->
                   </div>
                   
                 </div>
@@ -1107,8 +1138,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Dropzone JS -->
     <script src="../assets/libs/dropzone/dropzone-min.js"></script>
 
-    <script src="scripts/persona_cliente.js?version_jdl=1.19"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.19"></script>
+    <script src="scripts/persona_cliente.js?version_jdl=1.21"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.21"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

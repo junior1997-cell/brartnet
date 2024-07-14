@@ -2,7 +2,7 @@
 
   require "../config/Conexion_v2.php";
 
-  class Avance_cobro
+  class Retraso_cobro
   {
 
     //Implementamos nuestro constructor
@@ -20,31 +20,50 @@
       
       $filtro_periodo = ""; $filtro_trabajador_1 = ""; $filtro_trabajador_2 = "";    
       
-      if ( empty($periodo) )    { } else { $filtro_periodo = "AND DATE_FORMAT( vd.periodo_pago_format, '%Y-%m') = '$periodo'"; } 
+      if ( empty($periodo) )    { } else { $filtro_periodo = "AND DATE_FORMAT( vd.periodo_pago_format, '%Y') = '$periodo'"; } 
       if ( empty($trabajador) ) { } else { $filtro_trabajador_1 = "WHERE pc.idpersona_trabajador = '$trabajador'"; } 
       if ( empty($trabajador) ) { } else { $filtro_trabajador_2 = "AND pc.idpersona_trabajador = '$trabajador'"; } 
 
-      $sql = "SELECT pco.idcentro_poblado, pco.centro_poblado, ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) as avance,
-       COALESCE(co.cant_cobrado,0) as cant_cobrado,  pco.cant_cliente as cant_total
+      $sql = "SELECT LPAD(pco.idpersona_cliente, 5, '0') as idpersona_cliente_v2, pco.idpersona_cliente,  pco.cliente_nombre_completo, 
+      CONCAT( YEAR(pco.primera_venta), '-', UPPER( LEFT(MONTHNAME(pco.primera_venta),1)),SUBSTR(MONTHNAME(pco.primera_venta),2)) as mes_inicio,
+      ROUND( COALESCE( (pco.cant_total_mes - co.cant_cobrado) , 0) , 2) as avance, COALESCE(co.cant_cobrado,0) as cant_cobrado, pco.cant_total_mes as cant_total,
+      CASE  
+        WHEN (pco.cant_total_mes - co.cant_cobrado) = 0 THEN 'SIN DEUDA' 
+        WHEN (pco.cant_total_mes - co.cant_cobrado) > 0 THEN 'DEUDA' 
+        WHEN (pco.cant_total_mes - co.cant_cobrado) < 0 THEN 'ADELANTO'
+        ELSE '-'
+      END AS estado_deuda,
+      CASE  
+        WHEN (pco.cant_total_mes - co.cant_cobrado) < 0 THEN ABS((pco.cant_total_mes - co.cant_cobrado))
+        ELSE (pco.cant_total_mes - co.cant_cobrado)
+      END AS avance_v2,
+      pco.tipo_doc, pco.numero_documento
       FROM 
-      (SELECT cp.idcentro_poblado, cp.nombre as centro_poblado, COUNT(pc.idpersona_cliente) as cant_cliente
-      FROM persona_cliente as pc       
-      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
-      $filtro_trabajador_1
-      GROUP BY cp.idcentro_poblado
-      order by COUNT(pc.idpersona_cliente) DESC) AS pco 
+      (SELECT pc.idpersona_cliente , MIN(vd.periodo_pago_format) AS primera_venta, TIMESTAMPDIFF(MONTH, MIN(vd.periodo_pago_format), CURDATE()) +1 AS cant_total_mes,
+      CASE 
+        WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+        WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
+        ELSE '-'
+      END AS cliente_nombre_completo,i.abreviatura as tipo_doc, p.numero_documento
+      FROM persona_cliente as pc
+      INNER JOIN persona AS p ON p.idpersona = pc.idpersona
+      INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
+      INNER JOIN venta v ON v.idpersona_cliente = pc.idpersona_cliente
+      INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
+      WHERE vd.es_cobro = 'SI' and v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) $filtro_trabajador_2
+      GROUP BY pc.idpersona_cliente
+      ORDER BY pc.idpersona_cliente, cant_total_mes) AS pco 
 
       LEFT JOIN
 
-      (SELECT cp.idcentro_poblado, cp.nombre as centro_poblado, COUNT(v.idventa) as cant_cobrado 
+      (SELECT pc.idpersona_cliente,  COUNT(v.idventa) as cant_cobrado 
       FROM venta as v
       INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
       INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
-      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
-      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) $filtro_periodo $filtro_trabajador_2
-      GROUP BY cp.idcentro_poblado
-      order by COUNT(v.idventa) DESC) as co ON pco.idcentro_poblado = co.idcentro_poblado
-      order by ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) DESC ;"; #return $sql;
+      WHERE vd.es_cobro = 'SI' and v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' )  $filtro_periodo $filtro_trabajador_2
+      GROUP BY pc.idpersona_cliente
+      order by COUNT(v.idventa) DESC) as co ON pco.idpersona_cliente = co.idpersona_cliente
+      ORDER BY avance DESC;"; #return $sql;
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
 
       return $venta;
@@ -75,7 +94,7 @@
       INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
       INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
-      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) $filtro_periodo $filtro_trabajador_2
+      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100' $filtro_periodo $filtro_trabajador_2
       GROUP BY pc.idpersona_trabajador
       order by COUNT(v.idventa) DESC) as co ON pco.idpersona_trabajador = co.idpersona_trabajador
       order by ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) DESC ;"; #return $sql;
@@ -98,7 +117,7 @@
       INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
       INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN plan as cp ON cp.idplan = pc.idplan
-      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) $filtro_periodo $filtro_trabajador_2
+      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100' $filtro_periodo $filtro_trabajador_2
       GROUP BY cp.idplan
       order by COUNT(v.idventa) DESC) as co ON pco.idplan = co.idplan
       order by ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) DESC ;"; #return $sql;
@@ -224,7 +243,7 @@
       INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN persona as p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sc06 on p.tipo_documento=sc06.code_sunat
-      WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' )
+      WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100'
       GROUP BY p.idpersona ORDER BY  count(v.idventa) desc, p.nombre_razonsocial asc ;";
       return ejecutarConsultaArray($sql);
     }
@@ -232,7 +251,7 @@
     public function select2_filtro_anio(){      
      
       $sql="SELECT  pco.periodo_year,  count(v.idventa) as cant_comprobante FROM periodo_contable as pco
-      LEFT JOIN venta as v ON v.idperiodo_contable = pco.idperiodo_contable  and v.estado = '1' and v.estado_delete = '1' and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' )
+      LEFT JOIN venta as v ON v.idperiodo_contable = pco.idperiodo_contable  and v.estado = '1' and v.estado_delete = '1' and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100'
       WHERE pco.estado = '1' and pco.estado_delete = '1'
       GROUP BY pco.periodo_year
       ORDER BY periodo DESC";
@@ -242,7 +261,7 @@
     public function select2_periodo(){      
      
       $sql="SELECT pco.idperiodo_contable, pco.periodo_year, pco.periodo_month, count(v.idventa) as cant_comprobante FROM periodo_contable as pco
-      LEFT JOIN venta as v ON v.idperiodo_contable = pco.idperiodo_contable  and v.estado = '1' and v.estado_delete = '1' and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' )
+      LEFT JOIN venta as v ON v.idperiodo_contable = pco.idperiodo_contable  and v.estado = '1' and v.estado_delete = '1' and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100'
       WHERE pco.estado = '1' and pco.estado_delete = '1'
       GROUP BY pco.idperiodo_contable, pco.periodo_year, periodo_month
       ORDER BY periodo DESC";
@@ -261,6 +280,21 @@
       $filtro_id_trabajador
       GROUP BY pc.idpersona_trabajador
       ORDER BY  COUNT(pc.idpersona_cliente) desc, per_t.nombre_razonsocial asc;";
+      return ejecutarConsulta($sql);
+    }
+
+    public function select2_filtro_anio_cobro()	{
+      $filtro_id_trabajador  = '';
+      // if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+      //   $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+      // } 
+      $sql = "SELECT YEAR(vd.periodo_pago_format) as anio_cancelacion, COUNT(pc.idpersona_cliente) AS cant_cliente
+      FROM venta as v
+      INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
+      INNER JOIN persona_cliente as pc on pc.idpersona_cliente = v.idpersona_cliente
+      where v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' $filtro_id_trabajador
+      GROUP BY YEAR(vd.periodo_pago_format)
+      ORDER BY YEAR(vd.periodo_pago_format) DESC;";
       return ejecutarConsulta($sql);
     }
   }

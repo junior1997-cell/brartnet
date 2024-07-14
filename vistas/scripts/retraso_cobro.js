@@ -20,13 +20,15 @@ async function init(){
   $("#guardar_registro_cambio_periodo").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-cambio-periodo").submit(); } });
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador');
+  lista_select2("../ajax/retraso_cobro.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador');
+  lista_select2("../ajax/retraso_cobro.php?op=select2_filtro_anio_cobro",  '#filtro_periodo_anio',  moment().format('YYYY'), '.charge_filtro_periodo_anio');
 
-  // lista_select2("../ajax/avance_cobro.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_md_comprobante', null, '.charge_filtro_md_comprobante');
-  // lista_select2("../ajax/avance_cobro.php?op=select2_filtro_cliente", '#filtro_md_cliente', null, '.charge_filtro_md_cliente');
+  // lista_select2("../ajax/retraso_cobro.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_md_comprobante', null, '.charge_filtro_md_comprobante');
+  // lista_select2("../ajax/retraso_cobro.php?op=select2_filtro_cliente", '#filtro_md_cliente', null, '.charge_filtro_md_cliente');
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
  
+  $("#filtro_periodo_anio").select2({ theme: "bootstrap4", placeholder: "Seleccione" });
   $("#filtro_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione" });
 
   await activar_btn_agregar(); // Esperamos a al carga total de los datos para poder: CREAR
@@ -99,7 +101,7 @@ function mini_reporte(filtro_anio, filtro_periodo, filtro_cliente, filtro_compro
 
   if (chart_6_month) { chart_6_month.destroy(); } 
 
-  $.getJSON(`../ajax/avance_cobro.php?op=mini_reporte&filtro_anio=${filtro_anio}&filtro_periodo=${filtro_periodo}&filtro_cliente=${filtro_cliente}&filtro_comprobante=${filtro_comprobante}`,  function (e, textStatus, jqXHR) {
+  $.getJSON(`../ajax/retraso_cobro.php?op=mini_reporte&filtro_anio=${filtro_anio}&filtro_periodo=${filtro_periodo}&filtro_cliente=${filtro_cliente}&filtro_comprobante=${filtro_comprobante}`,  function (e, textStatus, jqXHR) {
 
     if (e.status == true) {      
 
@@ -168,7 +170,7 @@ function listar_tabla_principal(filtro_periodo, filtro_trabajador){
   
   tbl_principal_periodo = $("#tabla-ventas").dataTable({
     // responsive: true, 
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 5, 15, 25, 75, 100, 200,], ["Todos", 5, 15, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
@@ -180,7 +182,7 @@ function listar_tabla_principal(filtro_periodo, filtro_trabajador){
       // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/avance_cobro.php?op=listar_tabla_principal&filtro_periodo=${filtro_periodo}&filtro_trabajador=${filtro_trabajador}`,
+      url: `../ajax/retraso_cobro.php?op=listar_tabla_principal&filtro_periodo=${filtro_periodo}&filtro_trabajador=${filtro_trabajador}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -221,13 +223,14 @@ function listar_tabla_principal(filtro_periodo, filtro_trabajador){
       $( api2.column( 3 ).footer() ).html( `<center >${total1}/${(total2)}</center> ` );    
     },
     "bDestroy": true,
-    "iDisplayLength": 10,
+    "iDisplayLength": 15,
     "order": [[0, "asc"]],
     columnDefs: [      
       // { targets: [4, 5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       // { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-start">S/</span> <span class="float-end ${color} "> ${number} </span>`; } return number; }, },      
 
-       { targets: [5,6], visible: false, searchable: false, },
+      { targets: [5,6,7], visible: false, searchable: false, },
+      {targets: 3, orderData: 7 }
     ],
   }).DataTable();
 }
@@ -237,7 +240,7 @@ function mostrar_reporte(filtro_periodo, filtro_trabajador){
   if (chart_total_porcentaje) { chart_total_porcentaje.destroy(); } 
   $('#avance-plan tbody').html('<div class="text-center my-3"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"></div></div>');
 
-  $.getJSON(`../ajax/avance_cobro.php?op=mostrar_reporte`, { filtro_periodo:filtro_periodo, filtro_trabajador:filtro_trabajador }, function (e, textStatus, jqXHR) {
+  $.getJSON(`../ajax/retraso_cobro.php?op=mostrar_reporte`, { filtro_periodo:filtro_periodo, filtro_trabajador:filtro_trabajador }, function (e, textStatus, jqXHR) {
     
     $('.total_avance_cobrado').html(`${e.data.centro_poblado.cant_cobrado}`);
     $('.total_avance_cobrado_porcent').html(`${e.data.centro_poblado.avance}%`);
@@ -295,8 +298,61 @@ function mostrar_reporte(filtro_periodo, filtro_trabajador){
   }).fail( function(e) { ver_errores(e); } );
 }
 
-// ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   R E A S I G N A R   P E R I O D O :::::::::::::::::::::::::::::::::::::::::::::
+// .....::::::::::::::::::::::::::::::::::::: V E R   P A G O S  X  C L I E N T E   :::::::::::::::::::::::::::::::::::::::..
+function ver_pagos_x_cliente(idcliente) {
+  
+  $('#modal-ver-detalle-cobro').modal('show');
+  $('#html-detalle-cobro').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
+  
+  $.get(`../ajax/persona_cliente.php?op=ver_pagos_x_cliente&idcliente=${idcliente}`,  function (e, textStatus, jqXHR) {
+    $('#html-detalle-cobro').html(e);
+    
+    $('[data-bs-toggle="tooltip"]').tooltip();
+  });
+}
 
+// .....::::::::::::::::::::::::::::::::::::: V E R   P A G O S  C L I E N T E  P O R   M E S :::::::::::::::::::::::::::::::::::::::..
+
+function pagos_cliente_x_mes(idpersona_cliente, mes, anio){
+
+  $("#pago-cliente-mes").modal("show");
+  $('#div_tabla_pagos_Cx_mes').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
+
+  $.get(`../ajax/persona_cliente.php?op=pagos_cliente_x_mes&id=${idpersona_cliente}&mes=${mes}&filtroA=&filtroB=&filtroC=&filtroD=&filtroE=`,  function (e, textStatus, jqXHR) {
+    $('#div_tabla_pagos_Cx_mes').html(e);
+    $('#id_buscando_tabla_pago_xmes').hide();
+    $('[data-bs-toggle="tooltip"]').tooltip();
+  });
+  
+}
+
+// .....::::::::::::::::::::::::::::::::::::: I M P R I M I R   T I C K E T :::::::::::::::::::::::::::::::::::::::..
+
+function TickcetPagoCliente(idventa, tipo_comprobante){
+
+  $("#pago-cliente-mes").modal('hide');
+  // console.log(idventa);
+  if (tipo_comprobante == '01') {
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-Label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - FACTURA`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+  } else if (tipo_comprobante == '03') {
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-Label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - BOLETA`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+  } else if (tipo_comprobante == '12') {
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
+    $("#modal-imprimir-comprobante-Label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - NOTA DE VENTA`);
+    $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    $("#modal-imprimir-comprobante").modal("show");
+  } else  {
+    // toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+    toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
+  }
+  
+}
 
 $(document).ready(function () {
   init(); 
@@ -350,7 +406,7 @@ function cargando_search() {
 
 function filtros() {  
 
-  var filtro_periodo    = $("#filtro_periodo").val() == '' || $("#filtro_periodo").val() == null ? '' : $("#filtro_periodo").val();
+  var filtro_periodo    = $("#filtro_periodo_anio").val() == '' || $("#filtro_periodo_anio").val() == null ? '' : $("#filtro_periodo_anio").val();
   var filtro_trabajador = $("#filtro_trabajador").val() == '' || $("#filtro_trabajador").val() == null ? '' : $("#filtro_trabajador").val() ;
   
   // $('.buscando_tabla').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${filtro_periodo} ${nombre_filtro_cliente}...`);
@@ -359,7 +415,7 @@ function filtros() {
   mostrar_reporte( filtro_periodo, filtro_trabajador )
 }
 
-function reload_filtro_periodo(){ $('#filtro_periodo').val("").trigger("change") } 
+function reload_filtro_periodo_anio(){ var filtro = $("#filtro_periodo_anio").val(); lista_select2("../ajax/retraso_cobro.php?op=select2_filtro_anio_cobro",  '#filtro_periodo_anio',  filtro, '.charge_filtro_periodo_anio'); } 
 function reload_filtro_trabajador(){ lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador'); } 
 
 

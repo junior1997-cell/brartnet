@@ -1057,10 +1057,10 @@
   <!-- Toastr -->
   <script src="assets/libs/toastr/toastr.min.js"></script>
 
-  <script src="assets/js/funcion_crud.js?version_jdl=1.19"></script>
+  <script src="assets/js/funcion_crud.js?version_jdl=1.21"></script>
 
-  <script src="vistas/scripts/home.js?version_jdl=1.19"></script>
-  <script src="vistas/scripts/login_cliente.js?version_jdl=1.19"></script>
+  <script src="vistas/scripts/home.js?version_jdl=1.21"></script>
+  <script src="vistas/scripts/login_cliente.js?version_jdl=1.21"></script>
 
   <script>
     $(document).on('ready', function () {

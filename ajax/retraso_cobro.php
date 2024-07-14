@@ -11,9 +11,9 @@ if (!isset($_SESSION["user_nombre"])) {
 
   if ($_SESSION['venta_por_vendedor'] == 1) {
 
-    require_once "../modelos/Avance_cobro.php";
+    require_once "../modelos/Retraso_cobro.php";
 
-    $avance_cobro        = new Avance_cobro();      
+    $retraso_cobro        = new Retraso_cobro();      
 
     date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
     $imagen_error = "this.src='../assets/svg/404-v2.svg'";
@@ -30,7 +30,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'listar_tabla_principal':
 
-        $rspta = $avance_cobro->listar_tabla_principal($_GET["filtro_periodo"], $_GET["filtro_trabajador"]);
+        $rspta = $retraso_cobro->listar_tabla_principal($_GET["filtro_periodo"], $_GET["filtro_trabajador"]);
         $data = []; $count = 1; //echo json_encode($rspta); die();
 
         if($rspta['status'] == true){
@@ -39,17 +39,18 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = [
               "0" => $count++,
-              "1" => '<span class="fs-11">'.$value['centro_poblado'] .'</span>' ,
-              "2" => '<div class="d-flex align-items-center w-200px">
-                <div class="progress progress-animate progress-xs w-100" role="progressbar" aria-valuenow="'.$value['avance'].'" aria-valuemin="0" aria-valuemax="100">
-                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: '.$value['avance'].'%"></div>
-                </div>
-                <div class="ms-2 fs-10">'.$value['avance'].'%</div>
-              </div>',              
-              "3" => $value['cant_cobrado'] .'/'.  $value['cant_total'] ,
-              "4" => '',
-              "5" => $value['cant_cobrado'],
-              "6" => $value['cant_total']
+              "1" =>  $value['mes_inicio'],
+              "2" => '<span class="fs-11 text-primary">'.$value['cliente_nombre_completo'].'</span> <br>' . 
+              '<span class="fs-11">'.$value['tipo_doc'] .': '.$value['numero_documento'] .'</span> | '.
+              '<span class="fs-11"><i class="ti ti-fingerprint fs-15"></i> '.$value['idpersona_cliente_v2'] .'</span>' ,              
+              "3" => $value['cant_cobrado'] .'/'.  $value['cant_total']  ,
+              "4" => $value['estado_deuda'] == 'SIN DEUDA' ? '<button type="button" class="btn btn-sm btn-outline-success my-1 me-2" data-bs-toggle="tooltip" title="Ver cobros" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" >'.$value['estado_deuda'].' <span class="badge ms-2 fs-11">'.$value['avance_v2'].'</span></button>' : 
+              ( $value['estado_deuda'] == 'DEUDA' ? '<button type="button" class="btn btn-sm btn-outline-danger my-1 me-2" data-bs-toggle="tooltip" title="Ver cobros" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" >'.$value['estado_deuda'].' <span class="badge ms-2 fs-11">'.$value['avance_v2'].'</span></button>' :
+                ($value['estado_deuda'] == 'ADELANTO' ? '<button type="button" class="btn btn-sm btn-outline-info my-1 me-2" data-bs-toggle="tooltip" title="Ver cobros" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" >'.$value['estado_deuda'].' <span class="badge ms-2 fs-11">'.$value['avance_v2'].'</span></button>' : '-')
+              ),
+              "5" =>  $value['cant_cobrado'],
+              "6" => $value['cant_total'],
+              "7" => $value['avance']
             ];
           }
           $results =[
@@ -65,14 +66,14 @@ if (!isset($_SESSION["user_nombre"])) {
       break;      
 
       case 'mostrar_reporte':
-        $rspta=$avance_cobro->mostrar_reporte( $_GET["filtro_periodo"], $_GET["filtro_trabajador"] );
+        $rspta=$retraso_cobro->mostrar_reporte( $_GET["filtro_periodo"], $_GET["filtro_trabajador"] );
         echo json_encode($rspta, true);
       break; 
       
     
 
       case 'mini_reporte':
-        $rspta=$avance_cobro->mini_reporte($_GET["filtro_anio"],$_GET["filtro_periodo"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"]);
+        $rspta=$retraso_cobro->mini_reporte($_GET["filtro_anio"],$_GET["filtro_periodo"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"]);
         echo json_encode($rspta, true);
       break; 
 
@@ -84,7 +85,7 @@ if (!isset($_SESSION["user_nombre"])) {
       // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════      
 
       case 'select2_filtro_tipo_comprobante':
-        $rspta = $avance_cobro->select2_filtro_tipo_comprobante($_GET["tipos"]); $cont = 1; $data = "";
+        $rspta = $retraso_cobro->select2_filtro_tipo_comprobante($_GET["tipos"]); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
             $data .= '<option  value="' . $value['idtipo_comprobante']  . '" >' . $value['nombre_tipo_comprobante_v2'] . '</option>';
@@ -101,7 +102,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'select2_filtro_cliente':
-        $rspta = $avance_cobro->select2_filtro_cliente(); $cont = 1; $data = "";
+        $rspta = $retraso_cobro->select2_filtro_cliente(); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
             $data .= '<option  value="' . $value['idpersona_cliente']  . '">' . $cont. '. '. $value['cliente_nombre_completo'] .' - '. $value['nombre_tipo_documento'] .': '. $value['numero_documento'] .' (' .$value['cantidad'].')'. '</option>';
@@ -119,7 +120,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'select2_filtro_anio':
-        $rspta = $avance_cobro->select2_filtro_anio(); $cont = 1; $data = "";
+        $rspta = $retraso_cobro->select2_filtro_anio(); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
             $data .= '<option  value="' . $value['periodo_year'] . '"> '. $value['periodo_year'] .' (' .$value['cant_comprobante'].')'. '</option>';
@@ -137,7 +138,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'select2_periodo':
-        $rspta = $avance_cobro->select2_periodo(); $cont = 1; $data = "";
+        $rspta = $retraso_cobro->select2_periodo(); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
             $data .= '<option  value="' . $value['idperiodo_contable'] . '"> '. $value['periodo_year'] .'-' .$value['periodo_month']. ' ('.$value['cant_comprobante']. ')'. '</option>';
@@ -156,7 +157,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'select2_filtro_trabajador':
 
-        $rspta = $avance_cobro->select2_filtro_trabajador();        
+        $rspta = $retraso_cobro->select2_filtro_trabajador();        
         $data = "";
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
@@ -171,6 +172,24 @@ if (!isset($_SESSION["user_nombre"])) {
         }
 
       break;  
+
+      case 'select2_filtro_anio_cobro':
+
+        $rspta = $retraso_cobro->select2_filtro_anio_cobro();        
+        $data = "";
+        if ($rspta['status'] == true) {
+          foreach ($rspta['data'] as $key => $value) {
+            $cant_cliente   = $value['cant_cliente'];
+            $data .= '<option  value="' . $value['anio_cancelacion']  . '">' . $value['anio_cancelacion'] . '</option>';
+          }
+
+          $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
+          echo json_encode($retorno, true);
+        } else {
+          echo json_encode($rspta, true);
+        }
+
+      break;
      
 
       default: 

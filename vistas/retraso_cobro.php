@@ -12,7 +12,7 @@ if (!isset($_SESSION["user_nombre"])) {
   <html lang="es" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="icon-overlay-close">
 
   <head>
-    <?php $title_page = "Avances de Cobros";  include("template/head.php"); ?>
+    <?php $title_page = "Retraso de Cobros";  include("template/head.php"); ?>
 
     <link rel="stylesheet" href="../assets/libs/filepond/filepond.min.css">
     <link rel="stylesheet" href="../assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css">
@@ -46,7 +46,7 @@ if (!isset($_SESSION["user_nombre"])) {
         <div class="container-fluid">
 
           <!-- Start::page-header -->
-          <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+          <!-- <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
             <div>
               <div class="d-md-flex d-block align-items-center ">
                 <div><i class='fa-3x bx bx-line-chart mr-2'></i></div>
@@ -64,13 +64,23 @@ if (!isset($_SESSION["user_nombre"])) {
                 </ol>
               </nav>
             </div>
-          </div>
+          </div> -->
           <!-- End::page-header -->
 
           <!-- Start::row-1 -->
           <div class="row">    
+
+            <div class="col-sm-4 mt-3">
+              <div class="d-md-flex d-block align-items-center ">
+                <div><i class='fa-3x bx bx-line-chart mr-2'></i></div>
+                <div>
+                  <p class="fw-semibold fs-18 mb-0"> Retraso de Cobros</p>
+                  <span class="fs-semibold text-muted">Organiza tu tiempo y enfócate en tus cobros pendientes.</span>
+                </div>
+              </div>
+            </div>
             
-            <div class="col-sm-12">
+            <div class="col-sm-8 mt-3">
               
               <div class="card custom-card">
                 <div class="card-body">
@@ -79,12 +89,14 @@ if (!isset($_SESSION["user_nombre"])) {
                     <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
                     <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 col-xxl-3">
                       <div class="form-group">
-                        <label for="filtro_periodo" class="form-label">
-                        <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_periodo();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
-                          Cobro Mes</label>
-                        <input type="month" class="form-control" name="filtro_periodo" id="filtro_periodo" value="<?php echo date('Y-m'); ?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">                        
+                        <label for="filtro_periodo_anio" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_periodo_anio();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Cobro Año
+                          <span class="charge_filtro_periodo_anio"></span>
+                        </label>
+                        <select class="form-control" name="filtro_periodo_anio" id="filtro_periodo_anio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
                       </div>
-                    </div>  
+                    </div>
                     <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
                     <div class="col-sm-6 col-md-6 col-lg-3 col-xl-4 col-xxl-4">
                       <div class="form-group">
@@ -98,7 +110,7 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>
                     
 
-                  </div>
+                  </div> 
                 </div>
               </div>
             </div>
@@ -115,24 +127,26 @@ if (!isset($_SESSION["user_nombre"])) {
                       <thead>
                         <tr>
                           <th class="text-center"><center>#</center></th>
-                          <th>Lugar</th>
+                          <th>Mes Inicio</th>
                           <th>Avance</th>                            
-                          <th>Cant</th>     
+                          <th>Cant Mes</th>     
                           <th><center>Ver</center></th>               
                           <th><center>Cobrado</center></th>               
                           <th><center>Total</center></th>               
+                          <th><center>Avance</center></th>               
                         </tr>
                       </thead>
                       <tbody></tbody>
                       <tfoot>
                         <tr>
                         <th class="text-center"><center>#</center></th>
-                          <th>Lugar</th>
+                          <th>Mes Inicio</th>
                           <th>Avance</th>                         
-                          <th class="text-center" >Cant</th>     
+                          <th class="text-center" >Cant Mes</th>     
                           <th><center>Ver</center></th>
                           <th><center>Cobrado</center></th>   
                           <th><center>Total</center></th>
+                          <th><center>Avance</center></th>
                         </tr>
                       </tfoot>
                     </table>
@@ -199,70 +213,64 @@ if (!isset($_SESSION["user_nombre"])) {
           <!-- End::row-1 -->         
         
           <!-- MODAL - AGREGAR PERIDDO - charge 3 -->
-          <div class="modal fade modal-effect" id="modal-agregar-periodo" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-periodoLabel">
-            <div class="modal-dialog modal-md modal-dialog-scrollable">
+          <div class="modal fade modal-effect" id="modal-ver-detalle-cobro" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-periodoLabel">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
                   <h6 class="modal-title" id="modal-agregar-periodoLabel1">Registrar Periodo</h6>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                  <form name="form-agregar-periodo" id="form-agregar-periodo" method="POST" class="needs-validation" novalidate >
-                    <div class="row gy-2" id="cargando-3-formulario">
-
-                      <!-- ----------------------- ID ------------- -->
-                      <input type="hidden" id="idperiodo_contable" name="idperiodo_contable">
-
-                      <div class="col-md-12 col-lg-12 col-xl-6 col-xxl-6">
-                        <div class="form-group">
-                          <label for="periodo" class="form-label">Periodo</label>
-                          <input type="month" name="periodo" id="periodo" class="form-control">
-                        </div>
-                      </div>
-                      <div class="col-md-12 col-lg-12 col-xl-6 col-xxl-6">
-                        <div class="form-group">
-                          <label for="periodo_anio" class="form-label">Año <small class="text-info" id="periodo_anio_small">(Selecione el periodo)</small> </label>
-                          <input type="number" name="periodo_anio" id="periodo_anio" class="form-control" value="0000" disabled>
-                        </div>
-                      </div>
-                      <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6">
-                        <div class="form-group">
-                          <label for="fecha_inicio" class="form-label"><i class="bi bi-info-circle-fill cursor-pointer" data-bs-toggle="tooltip" title="Uso: Para determinar qué documentos estarán incluidos a partir de esta fecha de inicio." ></i> Fecha Inicio</label>
-                          <input type="text" name="fecha_inicio" id="fecha_inicio" class="form-control">
-                        </div>
-                      </div>
-                      <div class="col-md-12 col-lg-6 col-xl-6 col-xxl-6">
-                        <div class="form-group">
-                          <label for="fecha_fin" class="form-label"><i class="bi bi-info-circle-fill cursor-pointer" data-bs-toggle="tooltip" title="Uso: Para determinar qué documentos estarán incluidos antes de esta fecha de finalización." ></i> Fecha Fin</label>
-                          <input type="text" name="fecha_fin" id="fecha_fin" class="form-control">
-                        </div>
-                      </div>
-
-                      <!-- Chargue -->
-                      <div class="p-l-25px col-lg-12" id="barra_progress_periodo_div" style="display: none;" >
-                        <div  class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 
-                          <div id="barra_progress_periodo" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
-                        </div>
-                      </div>
-
-                    </div>
-                    <div class="row" id="cargando-4-fomulario" style="display: none;">
-                      <div class="col-lg-12 text-center">
-                        <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
-                        <h4 class="bx-flashing">Cargando...</h4>
-                      </div>
-                    </div>
-                    <button type="submit" style="display: none;" id="submit-form-periodo">Submit</button>
-                  </form>
+                <div class="modal-body" id="html-detalle-cobro">
+                  
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_form_periodo();"><i class="las la-times fs-lg"></i> Close</button>
-                  <button type="button" class="btn btn-sm btn-primary" id="guardar_registro_periodo"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal"><i class="las la-times fs-lg"></i> Close</button>
                 </div>
               </div> 
             </div>
           </div>
-          <!-- End::Modal-Agregar-Producto -->         
+          <!-- End::Modal-Agregar-Producto -->    
+           
+          <!-- Start::Modal-pago-cliente-x-mes -->
+          <div class="modal fade" id="pago-cliente-mes" tabindex="-1" aria-labelledby="pago-cliente-mesLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="pago-cliente-mesLabel1">Pagos por Mes</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="table-responsive" id="div_tabla_pagos_Cx_mes">
+                    <div class="row" >
+                      <div class="col-lg-12 text-center">
+                        <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                        <h4 class="bx-flashing">Cargando...</h4>
+                      </div>
+                    </div>                      
+                  </div>
+                </div>
+                <div class="modal-footer py-2">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End::Modal-pago-cliente-x-mes -->
+
+          <!-- MODAL - IMPRIMIR -->
+          <div class="modal fade modal-effect" id="modal-imprimir-comprobante" tabindex="-1" aria-labelledby="modal-imprimir-comprobante-label" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-imprimir-comprobante-label">COMPROBANTE</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" >                  
+                  <div id="html-imprimir-comprobante" class="text-center" > </div>
+                </div>                
+              </div>
+            </div>
+          </div> 
 
         </div>
       </div>
@@ -280,7 +288,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
     <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>    
     
-    <script src="scripts/avance_cobro.js?version_jdl=1.21"></script>
+    <script src="scripts/retraso_cobro.js?version_jdl=1.21"></script>
     
     <script>
       $(function() {

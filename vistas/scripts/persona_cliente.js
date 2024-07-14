@@ -1,4 +1,5 @@
 var tabla_cliente;
+var tabla_pagos_all_cliente;
 
 var form_validate_facturacion;
 var array_data_venta = [];
@@ -568,14 +569,97 @@ function cargar_fltros_pagos_all_cliente() {
 }
 
 function ver_pagos_all_cliente(filtro_trabajador ='', filtro_dia_pago ='', filtro_anio_pago='', filtro_plan ='', filtro_zona_antena ='') {  
-
-  $('#div_tabla_all_pagos').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
   
-  $.get(`../ajax/persona_cliente.php?op=ver_pagos_all_cliente&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_anio_pago=${filtro_anio_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,  function (e, textStatus, jqXHR) {
-    $('#div_tabla_all_pagos').html(e);
-    $('#id_buscando_tabla_pago_all').hide();
-    $('[data-bs-toggle="tooltip"]').tooltip();
+  // $('#div_tabla_all_pagos').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
+  
+  // $.get(`../ajax/persona_cliente.php?op=ver_pagos_all_cliente&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_anio_pago=${filtro_anio_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,  function (e, textStatus, jqXHR) {
+  //   $('#div_tabla_all_pagos').html(e);
+  //   $('#id_buscando_tabla_pago_all').hide();
+  //   $('[data-bs-toggle="tooltip"]').tooltip();
+  // });
+
+  $('#tabla_all_pagos').DataTable().destroy(); // reiniciamos la tabla
+
+  tabla_pagos_all_cliente = $('#tabla_all_pagos').DataTable({
+    scrollY: calcularScrollY(),
+    scrollCollapse: true,
+    paging: false,
+    scrollX: true,
+    searching: true,
+    // "aProcessing": true,//Activamos el procesamiento del datatables
+    // "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-5'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
+    buttons: [
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_pagos_all_cliente) { tabla_pagos_all_cliente.ajax.reload(null, false); } } },
+      { extend: 'copy', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
+      { extend: 'excel', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
+      // { extend: 'pdf', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
+      // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
+    ],
+    ajax: {
+      url: `../ajax/persona_cliente.php?op=ver_pagos_all_cliente_v2&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_anio_pago=${filtro_anio_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+      complete: function () {
+        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');
+        $(".buttons-copy").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Copiar');
+        $(".buttons-excel").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Excel');
+        $(".buttons-pdf").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'PDF');
+        $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
+        $('[data-bs-toggle="tooltip"]').tooltip();
+        $('#id_buscando_tabla').remove();
+      },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: ENE 
+      if (data[5] != '') { $("td", row).eq(5).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-01')`); } else { if( parseInt(`${data[19]}01`) <= parseInt( moment().format('YYYYMM') ) ) {$("td", row).eq(5).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: FEB
+      if (data[6] != '') { $("td", row).eq(6).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-02')`); } else { if( parseInt(`${data[19]}02`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(6).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: MAR
+      if (data[7] != '') { $("td", row).eq(7).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-03')`); } else { if( parseInt(`${data[19]}03`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(7).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: ABR
+      if (data[8] != '') { $("td", row).eq(8).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-04')`); } else { if( parseInt(`${data[19]}04`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(8).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: MAY
+      if (data[9] != '') { $("td", row).eq(9).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-05')`); } else { if( parseInt(`${data[19]}05`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(9).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: JUN
+      if (data[10] != '') { $("td", row).eq(10).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-06')`); } else { if( parseInt(`${data[19]}06`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(10).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: JUL
+      if (data[11] != '') { $("td", row).eq(11).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-07')`); } else { if( parseInt(`${data[19]}07`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(11).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: AGO
+      if (data[12] != '') { $("td", row).eq(12).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-08')`); } else { if( parseInt(`${data[19]}08`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(12).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: SEP
+      if (data[13] != '') { $("td", row).eq(13).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-09')`); } else { if( parseInt(`${data[19]}09`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(13).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: OCT
+      if (data[14] != '') { $("td", row).eq(14).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-10')`); } else { if( parseInt(`${data[19]}10`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(14).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: NOV
+      if (data[15] != '') { $("td", row).eq(15).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-11')`); } else { if( parseInt(`${data[19]}11`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(15).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+      // columna: DIC
+      if (data[16] != '') { $("td", row).eq(16).addClass("cursor-pointer").attr("onclick", `pagos_cliente_x_mes(${data[18]}, '${data[19]}-12')`); } else { if( parseInt(`${data[19]}12`) <= parseInt( moment().format('YYYYMM') ) ) { $("td", row).eq(16).html('<i class="bi bi-x-lg text-danger"></i>').addClass('text-center');} }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    columnDefs: [      
+      // { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [ 18, 19], visible: false, searchable: false, },
+    ],
   });
+ 
+}
+
+function calcularScrollY() {
+  var windowHeight = window.innerHeight;                              // Altura de la ventana  
+  var new_espacio = redondearExp( ( (windowHeight * 30) / 100) ,2) ;  // Optenemos dinamicamente el tamaño a reducir
+  var availableHeight = windowHeight - new_espacio ;                  // Altura disponible con margen-top de: 30%
+  return availableHeight + 'px';
 }
 
 // .....::::::::::::::::::::::::::::::::::::: V E R   P A G O S  C L I E N T E  P O R   M E S :::::::::::::::::::::::::::::::::::::::..

@@ -178,7 +178,7 @@ class Cliente
 		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
 		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
 		
-		$sql = "SELECT pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
+		$sql = "SELECT LPAD(pc.idpersona_cliente, 5, '0') as idpersona_cliente_v2, pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
 		pc.fecha_cancelacion,	pc.fecha_afiliacion,
 		IF(fecha_cancelacion > CURDATE(),
 			DATEDIFF(fecha_cancelacion, CURDATE()),
@@ -290,7 +290,7 @@ class Cliente
 		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
 		
 		$sql = "SELECT pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.ip_personal, 
-		DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, v.periodo_pago_year,	
+		DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, 	
 		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento, cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
 		CASE 
 			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
@@ -299,7 +299,7 @@ class Cliente
 			ELSE '-'
 		END AS cliente_nombre_completo, 
 		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,
-		pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc,
+		pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc, vd.periodo_pago_year, vd.periodo_pago,
 		SUM(CASE WHEN vd.periodo_pago_month = 'Enero'  AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_enero,
 		SUM(CASE WHEN vd.periodo_pago_month = 'Febrero' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_febrero,
 		SUM(CASE WHEN vd.periodo_pago_month = 'Marzo' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_marzo,
@@ -341,11 +341,12 @@ class Cliente
 		if ( empty($filtroD) 	|| $filtroD == 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtroD'";	}
 		if ( empty($filtroE)  || $filtroE == 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtroE'";	}
 
-		$sql = "SELECT v.idventa, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y') AS fecha_emision, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion, 
+		$sql = "SELECT LPAD(v.idventa, 5, '0') as idventa_v2, v.idventa, DATE_FORMAT(v.fecha_emision, '%d/%m/%Y') AS fecha_emision, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion, 
 			CONCAT(v.serie_comprobante, '-', v.numero_comprobante) AS SNCompb, v.venta_total,
 			CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END AS venta_total_v2,
 			CONCAT(v.periodo_pago_month, '-', v.periodo_pago_year) AS periodo_pago,
-			v.tipo_comprobante, v.sunat_estado, v.estado, v.estado_delete
+			v.tipo_comprobante, v.sunat_estado, v.estado, v.estado_delete, v.observacion_documento,
+			GROUP_CONCAT( CASE vd.es_cobro WHEN 'SI' THEN CONCAT( LEFT(vd.periodo_pago_month, 3), '-',  vd.periodo_pago_year, ',<br>') ELSE '' END SEPARATOR ' ') AS periodo_pago_mes_anio
 		FROM venta v
 		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
 			INNER JOIN persona_cliente as pc ON v.idpersona_cliente = pc.idpersona_cliente
@@ -353,7 +354,7 @@ class Cliente
 			INNER JOIN persona AS p1 ON pc.idpersona = p1.idpersona
 			INNER JOIN persona AS p2 ON pt.idpersona = p2.idpersona
 		WHERE v.estado_delete = '1' AND  v.idpersona_cliente = '$id'
-		AND vd.periodo_pago_month = '$mes' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za
+		AND vd.periodo_pago = '$mes' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za
 		GROUP BY v.idventa";
 		return ejecutarConsulta($sql);
 

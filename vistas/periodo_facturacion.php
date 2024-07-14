@@ -502,7 +502,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     
     
-    <script src="scripts/periodo_facturacion.js?version_jdl=1.19"></script>
+    <script src="scripts/periodo_facturacion.js?version_jdl=1.21"></script>
     
     <script>
       $(function() {

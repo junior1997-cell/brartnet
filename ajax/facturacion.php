@@ -15,7 +15,7 @@ if (!isset($_SESSION["user_nombre"])) {
     require_once "../modelos/Producto.php";
 
     require '../vendor/autoload.php';                   // CONEXION A COMPOSER
-    $see = require '../modelos/SunatCertificado.php';   // EMISION DE COMPROBANTES
+    $see = require '../sunat/SunatCertificado.php';   // EMISION DE COMPROBANTES
 
     $facturacion        = new Facturacion();      
     $productos          = new Producto();
