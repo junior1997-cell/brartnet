@@ -241,8 +241,8 @@ function mostrar_reporte(filtro_periodo, filtro_trabajador){
     
     $('.total_avance_cobrado').html(`${e.data.centro_poblado.cant_cobrado}`);
     $('.total_avance_cobrado_porcent').html(`${e.data.centro_poblado.avance}%`);
-    $('.total_avance_por_cobrar').html(`${e.data.centro_poblado.cant_total - e.data.centro_poblado.cant_cobrado}`);
-    $('.total_avance_por_cobrar_porcent').html(`${100 - e.data.centro_poblado.avance}%`);
+    $('.total_avance_por_cobrar').html(`${  (e.data.centro_poblado.cant_total - e.data.centro_poblado.cant_cobrado) }`);
+    $('.total_avance_por_cobrar_porcent').html(`${ formato_miles( 100 - e.data.centro_poblado.avance) }%`);
 
     var options = {
       chart: { height: 229, type: "radialBar", },    

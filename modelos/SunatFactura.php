@@ -171,8 +171,9 @@ if (empty($venta_f['data']['venta'])) {
     // Mostrar error al conectarse a SUNAT.
     $sunat_error = limpiarCadena("Codigo Error: " . $result->getError()->getCode() . " \n Mensaje Error: " . $result->getError()->getMessage());
     $code = (int)$result->getError()->getCode();
+    $sunat_mensaje = limpiarCadena("Codigo Error: " . $result->getError()->getCode() . " \n Mensaje Error: " . $result->getError()->getMessage());
     if ($code === 0) {
-      $sunat_estado = 'ACEPTADA';
+      $sunat_estado = 'RECHAZADA';
     } else if ($code >= 2000 && $code <= 3999) {
       $sunat_estado = 'RECHAZADA';
     } else {

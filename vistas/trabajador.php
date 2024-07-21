@@ -465,7 +465,7 @@
         <?php include("template/scripts.php"); ?>
         <?php include("template/custom_switcherjs.php"); ?>    
 
-        <script src="scripts/trabajador.js?version_jdl=1.21"></script>
+        <script src="scripts/trabajador.js?version_jdl=1.23"></script>
         <script> $(function () { $('[data-bs-toggle="tooltip"]').tooltip(); }); </script>
 
       

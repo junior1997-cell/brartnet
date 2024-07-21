@@ -138,6 +138,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <tr>
                           <th class="text-center"><center>#</center></th>
                           <th class="text-center"><center>OP</center></th>
+                          <th class="text-center"><center>ID</center></th>
                           <th>Creación</th>
                           <th>Periodo</th>
                           <th>Cliente</th>
@@ -153,6 +154,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         <tr>
                         <th class="text-center"><center>#</center></th>
                           <th class="text-center"><center>OP</center></th>
+                          <th class="text-center"><center>ID</center></th>
                           <th>Creación</th>
                           <th>Periodo</th>
                           <th>Cliente</th>
@@ -1056,8 +1058,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.21"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.21"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.23"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.23"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

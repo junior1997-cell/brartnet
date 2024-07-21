@@ -155,7 +155,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
 
-            <div class="col-xxl-3 col-xl-3">
+            <div class="col-xxl-3 col-xl-3" style="display: none !important;">
               <div class="card custom-card overflow-hidden">
                 <div class="card-header justify-content-between">
                   <div class="card-title">Avance por plan</div>                  
@@ -184,7 +184,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
 
-            <div class="col-xl-3 col-xxl-3">
+            <div class="col-xl-3 col-xxl-3" style="display: none !important;">
               <div class="card custom-card">
                 <div class="card-header justify-content-between">
                   <div class="card-title">Avance total</div>                  
@@ -288,7 +288,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
     <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>    
     
-    <script src="scripts/retraso_cobro.js?version_jdl=1.21"></script>
+    <script src="scripts/retraso_cobro.js?version_jdl=1.23"></script>
     
     <script>
       $(function() {
