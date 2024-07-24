@@ -15,11 +15,15 @@ var filtro_estado_sunat = "" ;
 // const choice_tipo_documento = new Choices('#f_tipo_documento',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
 // const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
 
+var myElement1 = document.getElementById('recent-jobs');
+myElement1.style.height = '300px'; // Cambia esta altura según tus necesidades
+new SimpleBar(myElement1, { autoHide: true });
+
 async function init(){
 
   // filtros(); // Listamos la tabla principal
   $(".btn-tiket").click();   // Selecionamos la BOLETA
-  mini_reporte();
+  //mini_reporte();
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $(".btn-guardar").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-venta").submit(); }  });
@@ -37,9 +41,14 @@ async function init(){
   lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#f_nc_motivo_anulacion', '01');  
   lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago', null, 'charge_f_metodo_pago');  
 
-  lista_select2("../ajax/facturacion.php?op=select_categoria", '#categoria', null);
-  lista_select2("../ajax/facturacion.php?op=select_u_medida", '#u_medida', null);
-  lista_select2("../ajax/facturacion.php?op=select_marca", '#marca', null);
+  lista_select2("../ajax/facturacion.php?op=select2_periodo_contable", '#filtro-periodo-facturado', moment().format('YYYY-MM'));  
+
+  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro-trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador');
+
+
+  // lista_select2("../ajax/facturacion.php?op=select_categoria", '#categoria', null);
+  // lista_select2("../ajax/facturacion.php?op=select_u_medida", '#u_medida', null);
+  // lista_select2("../ajax/facturacion.php?op=select_marca", '#marca', null);
 
   // lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_distrito", choice_distrito, null);
   // lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_tipo_documento", choice_tipo_documento, null);  
@@ -145,7 +154,9 @@ function mini_reporte() {
   $(".vw_total_boleta").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
   $(".vw_total_ticket").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
 
-  $.getJSON(`../ajax/facturacion.php?op=mini_reporte`, function (e, textStatus, jqXHR) {
+  var periodo_facturado = $("#filtro-periodo-facturado").val();
+
+  $.getJSON(`../ajax/facturacion.php?op=mini_reporte`, {periodo_facturado:periodo_facturado}, function (e, textStatus, jqXHR) {
 
     if (e.status == true) {      
 
@@ -168,7 +179,7 @@ function mini_reporte() {
       e.data.ticket_p >= 0? $(".vw_total_ticket_p").addClass('text-success').removeClass('text-danger') : $(".vw_total_ticket_p").addClass('text-danger').removeClass('text-success') ;
 
       // MINI CHART
-      var options = {
+      var options_ultimos_6_meses = {
         series: [
           { name: 'Factura', data: e.data.factura_line }, 
           { name: 'Boleta', data: e.data.boleta_line }, 
@@ -197,11 +208,49 @@ function mini_reporte() {
         fill: { opacity: 1 },
         tooltip: { y: {  formatter: function (val) { return "S/ " + val ; } } }
       };
-      var chart = new ApexCharts(document.querySelector("#invoice-list-stats"), options);
-      chart.render();
+      var chart_barra = new ApexCharts(document.querySelector("#invoice-list-stats"), options_ultimos_6_meses);
+      chart_barra.render();
+
+      
     } else {
       ver_errores(e);
     }
+
+  }).fail( function(e) { ver_errores(e); } );  
+}
+
+function mini_reporte_v2() {
+  $('#avance-plan tbody').html(`<tr><td colspan="3" class="" ><div class="text-center my-3"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"></div></div></td></tr>`);
+
+  $.getJSON(`../ajax/facturacion.php?op=mini_reporte_v2`, { filtro_periodo:$("#filtro-periodo-cobro").val(), filtro_trabajador:$("#filtro-trabajador").val() }, function (e, textStatus, jqXHR) {
+    
+    $('.total_avance_cobrado').html(`${e.data.total.cant_cobrado}`);
+    $('.total_avance_cobrado_porcent').html(`${ redondearExp(e.data.total.avance, 1)}%`);
+    $('.total_avance_por_cobrar').html(`${  (e.data.total.cant_total - e.data.total.cant_cobrado) }`);
+    $('.total_avance_por_cobrar_porcent').html(`${ redondearExp( (100 - e.data.total.avance), 1) }%`);
+
+    $('#avance-plan tbody').html('');
+    e.data.centro_poblado.forEach((val, key) => {
+      $('#avance-plan tbody').append(`
+        <tr>
+          <td class="py-1 ">
+            <div class="d-flex align-items-center">
+              <span class="avatar avatar-rounded avatar-sm p-2  me-2">
+                <i class="ri-map-pin-line fs-15 text-primary"></i>
+              </span>
+              <div class="fw-semibold fs-10">${val.centro_poblado} (${val.cant_cobrado}/${val.cant_total})</div>
+            </div>
+          </td>                          
+          <td class="py-1 ">
+            <div class="progress progress-xs">
+              <div class="progress-bar ${(val.avance == 100 ? 'bg-success' : 'bg-primary')}" role="progressbar" style="width: ${val.avance}%" aria-valuenow="${val.avance}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <span class="fs-10"><i class="ri-arrow-up-s-fill me-1 text-success align-middle "></i>${val.avance}%</span>
+          </td>
+          
+        </tr>
+      `);
+    });
 
   }).fail( function(e) { ver_errores(e); } );
 }

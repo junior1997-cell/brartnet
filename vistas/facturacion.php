@@ -71,7 +71,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <div class="row">     
             
             <!-- TABLA - FACTURA -->
-            <div class="<?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? 'col-xl-12' : 'col-xl-9'; ?>" id="div-tabla">
+            <div class="col-xl-9" id="div-tabla">
               <div class="card custom-card">
                 <div class="card-header justify-content-between">
                   
@@ -172,9 +172,112 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
 
             <!-- REPORTE- MINI -->
-            <div class="col-xl-3" id="div-mini-reporte" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? 'style="display: none;"' : '' ; ?> >
-              <div class="card custom-card">
+            <div class="col-xl-3" id="div-mini-reporte"  >
+
+              <div class="" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? ''  : 'style="display: none;"' ; ?>>
+                
+                <div class="row">
+
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="filtro-periodo-cobro" class="fs-10">Periodo Cobro</label>                     
+                      <input type="month" class="form-control form-control-primary form-control-sm" id="filtro-periodo-cobro" value="<?php echo date('Y-m'); ?>" onchange=" mini_reporte_v2()" >
+                    </div>     
+                  </div>                  
+
+                  <div class="col-lg-6" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? 'style="display: none;"' : '' ; ?>>
+                    <div class="form-group">
+                      <label for="filtro-trabajador" class="fs-10">Trabajador</label>
+                      <select class="form-select form-control-primary text-primary form-select-sm mb-3" aria-label=".form-select-sm example" id="filtro-trabajador" onchange=" mini_reporte_v2()">
+                        <option selected="">Buscando datos...</option>                     
+                      </select>
+                    </div>  
+                  </div>
+
+                  <div class="col-lg-12 mt-2">
+                    <div class="row">
+
+                      <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                        <div class="card custom-card shadow-none ">
+                          <div class="card-body py-3 px-3">
+                            <a href="javascript:void(0);">
+                              <div class="d-flex justify-content-between flex-wrap">
+                                <div class="me-1">
+                                  <span class="avatar avatar-rounded fw-bold avatar-md bg-success-transparent total_avance_cobrado_porcent">0%</span>
+                                </div>
+                                <div>
+                                  <span class="fw-semibold mb-1 total_avance_cobrado">0</span>
+                                  <span class="fs-10 d-block text-muted text-end"> Cobrado</span>
+                                </div>
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                        <div class="card custom-card shadow-none ">
+                          <div class="card-body py-3 px-3">
+                            <a href="javascript:void(0);">
+                              <div class="d-flex justify-content-between flex-wrap">
+                                <div class="me-1">
+                                  <span class="avatar avatar-rounded fw-bold avatar-md bg-danger-transparent total_avance_por_cobrar_porcent">0%</span>
+                                </div>
+                                <div>
+                                  <span class="fw-semibold mb-1 total_avance_por_cobrar">0</span>
+                                  <span class="fs-10 d-block text-muted text-end">Por Cobrar</span>
+                                </div>
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-xxl-12 col-xl-12">
+                    <div class="card custom-card overflow-hidden shadow-none ">
+                      
+                      <div class="card-body p-0 ">
+                        <div id="recent-jobs">
+                          <div class="table-responsive">
+                            <table class="table table-hover text-nowrap " id="avance-plan">
+                              <thead>
+                                <tr>
+                                  <th scope="col" class="font-size-12px ">Plan</th>
+                                  <th scope="col" class="font-size-12px ">Avance</th>
+                                </tr>
+                              </thead>
+                              <tbody class="">
+                                <tr>
+                                  <td colspan="3" class="">
+                                    <div class="text-center my-3"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"></div></div>
+                                  </td>                          
+                                </tr>                                
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>                
+              </div>
+
+              <div class="card custom-card" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? 'style="display: none;"' : '' ; ?>>
                 <div class="card-body p-0">
+
+                  <div class="px-2 pt-2 border-bottom border-block-end-dashed">
+                    <div class="form-group">
+                      <label for="filtro-periodo-facturado" class="fs-10">Periodo Facturado</label>
+                      <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" id="filtro-periodo-facturado" onchange="mini_reporte();">
+                        <option selected="">Buscando datos...</option>                     
+                      </select>
+                    </div>                    
+                  </div>
+
                   <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-top">
                     <div class="svg-icon-background bg-info-transparent me-4 cursor-pointer" onclick="mini_reporte();" data-bs-toggle="tooltip" title="Actualizar">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-info">
@@ -1058,8 +1161,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.23"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.23"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.25"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.25"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

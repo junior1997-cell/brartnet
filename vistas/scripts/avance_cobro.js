@@ -281,7 +281,7 @@ function mostrar_reporte(filtro_periodo, filtro_trabajador){
           </td>                          
           <td>
             <div class="progress progress-xs">
-              <div class="progress-bar bg-primary" role="progressbar" style="width: ${val.avance}%" aria-valuenow="${val.avance}" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar ${(val.avance == 100 ? 'bg-success' : 'bg-primary')}" role="progressbar" style="width: ${val.avance}%" aria-valuenow="${val.avance}" aria-valuemin="0" aria-valuemax="100">
               </div>
             </div>
           </td>

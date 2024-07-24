@@ -39,7 +39,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = [
               "0" => $count++,
-              "1" =>  $value['mes_inicio'],
+              "1" =>  $value['mes_inicio'] .'<br> <i class="">'. $value['dia_cancelacion'] . '</i>' ,
               "2" => '<span class="fs-11 text-primary">'.$value['cliente_nombre_completo'].'</span> <br>' . 
               '<span class="fs-11">'.$value['tipo_doc'] .': '.$value['numero_documento'] .'</span> | '.
               '<span class="fs-11"><i class="ti ti-fingerprint fs-15"></i> '.$value['idpersona_cliente_v2'] .'</span>' ,              

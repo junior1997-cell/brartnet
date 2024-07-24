@@ -455,12 +455,9 @@
         <!-- Chartjs Chart JS -->
         <script src="../assets/libs/chart.js/chart.min.js"></script>  
 
-        <script src="scripts/escritorio.js?version_jdl=1.23"></script>
-
-        <?php include("template/custom_switcherjs.php"); ?>        
-
-        <!-- Custom JS -->
-        <script src="../assets/js/custom.js"></script>
+        <script src="scripts/escritorio.js?version_jdl=1.25"></script>
+                
+        <?php include("template/custom_switcherjs.php"); ?>
 
       </body>
 

@@ -229,6 +229,10 @@ class Cliente
 		pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, 	pc.fecha_afiliacion, pc.descuento,pc.estado_descuento,
 		cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick, COUNT(DISTINCT vd.periodo_pago_year) AS total_anios_pago,
 		CASE 
+			WHEN pc.fecha_cancelacion  > CURDATE() THEN DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y')
+			ELSE CONCAT( DATE_FORMAT(pc.fecha_cancelacion, '%d'), ' de cada mes' )
+		END AS dia_cancelacion_v2,
+		CASE 
 			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
 			ELSE '-'
@@ -292,6 +296,10 @@ class Cliente
 		$sql = "SELECT pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.ip_personal, 
 		DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, 	
 		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento, cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
+		CASE 
+			WHEN pc.fecha_cancelacion  > CURDATE() THEN DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y')
+			ELSE CONCAT( DATE_FORMAT(pc.fecha_cancelacion, '%d'), ' de cada mes' )
+		END AS dia_cancelacion_v2,
 		CASE 
 			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 			WHEN p.tipo_persona_sunat = 'NINGUNO' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
@@ -454,12 +462,13 @@ class Cliente
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
 			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		} 
-		$sql = "SELECT YEAR(v.periodo_pago_format) as anio_cancelacion, COUNT(pc.idpersona_cliente) AS cant_cliente
+		$sql = "SELECT YEAR(vd.periodo_pago_format) as anio_cancelacion, COUNT(pc.idpersona_cliente) AS cant_cliente
 		FROM venta as v
+		INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
 		INNER JOIN persona_cliente as pc on pc.idpersona_cliente = v.idpersona_cliente
-		where v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' $filtro_id_trabajador
-		GROUP BY YEAR(v.periodo_pago_format)
-		ORDER BY YEAR(v.periodo_pago_format) DESC;";
+		where v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) $filtro_id_trabajador
+		GROUP BY YEAR(vd.periodo_pago_format)
+		ORDER BY YEAR(vd.periodo_pago_format) DESC;";
 		return ejecutarConsulta($sql);
 	}
 

@@ -61,7 +61,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "6" => $value['venta_total'] ,        
               "7" =>$value['cantidad_comprobante']     ,  
               "8" => '<!--<button class="btn btn-icon btn-sm btn-info-light border-info" onclick="asignar_nuevo_comprobante(' . $value['idperiodo_contable'] . ')" data-bs-toggle="tooltip" title="Detalle Factura"><i class="bi bi-list-ol"></i></button>-->
-              <button class="btn btn-icon btn-sm btn-info-light border-info" onclick="reasignar_comprobante(' . $value['idperiodo_contable'] . ')" data-bs-toggle="tooltip" title="Reasignar Periodo"><i class="bi bi-arrow-left-right"></i></button>'
+              <button class="btn btn-icon btn-sm btn-info-light border-info" onclick="reasignar_comprobante(' . $value['idperiodo_contable'] .', \'' . $value['periodo_year'] . '-'.  $value['periodo_month'] . '\')" data-bs-toggle="tooltip" title="Reasignar Periodo"><i class="bi bi-arrow-left-right"></i></button>'
             ];
           }
           $results =[

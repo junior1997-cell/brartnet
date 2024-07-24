@@ -482,6 +482,7 @@
           <li><a class="dropdown-item d-flex" href="usuario.php"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Profile</a></li>          
           <li><a class="dropdown-item d-flex" href="empresa.php"><i class="ti ti-adjustments-horizontal fs-18 me-2 op-7"></i>Empresa</a></li>          
           <li><a class="dropdown-item d-flex" href="https://wa.link/oetgkf" target="_blank"><i class="ti ti-headset fs-18 me-2 op-7"></i>Soporte</a></li>
+          <li><a class="dropdown-item d-flex" href="javascript:void(0);" onclick="abrir_calculadora()" ><i class="bi bi-calculator fs-18 me-2 op-7"></i>Calculadora</a></li>
           <li><a class="dropdown-item d-flex text-danger" href="../ajax/usuario.php?op=salir&file=<?php echo basename($_SERVER['PHP_SELF']); ?>"><i class="ti ti-logout fs-18 me-2 op-7"></i>Salir</a></li>
         </ul>
       </div>

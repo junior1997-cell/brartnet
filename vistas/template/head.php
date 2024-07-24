@@ -1,4 +1,8 @@
 
+<?php 
+  $scheme_host  =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/brartnet/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/');
+?>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TXTGYFYT8"></script>
 <script>
@@ -17,6 +21,15 @@
 <meta name="Description" content="Sistema de Facturacion Electronica">
 <meta name="Author" content="JDL TECNOLOGY SAC">
 <meta name="keywords" content="admin,admin dashboard,admin panel,admin template,bootstrap,clean,dashboard,flat,jquery,modern,responsive,premium admin templates,responsive admin,ui,ui kit.">
+
+<meta name="msapplication-navbutton-color" content="#444">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link rel="manifest" href="<?php echo $scheme_host;?>assets/images/app-download/manifest.json?v=<?php echo date('ymd'); ?>">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="../assets/images/brand-logos/toggle-dark">
+<meta name="theme-color" content="#ffffff">
 
 <!-- Favicon -->
 <link rel="icon" href="../assets/images/brand-logos/ico-brartnet.svg" type="image/x-icon">

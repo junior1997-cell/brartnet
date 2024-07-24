@@ -285,7 +285,7 @@
       return ejecutarConsultaSimpleFila($sql);
     }
 
-    Public function mini_reporte(){
+    Public function mini_reporte($periodo_facturacion){
 
       $meses_espanol = array( 1 => "Ene", 2 => "Feb", 3 => "Mar", 4 => "Abr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Ago", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dic" );
 
@@ -295,6 +295,7 @@
 
       $sql_00 ="SELECT v.tipo_comprobante, COUNT( v.idventa ) as cantidad
       FROM venta as v
+      INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable and pco.periodo = '$periodo_facturacion'
       INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
       WHERE v.sunat_estado = 'ACEPTADA' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador $filtro_id_user
       GROUP BY v.tipo_comprobante;";
@@ -304,7 +305,10 @@
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '01' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '01' ) AS ventas_mes_anterior;";
       $factura_p = ejecutarConsultaSimpleFila($sql_01); if ($factura_p['status'] == false) {return $factura_p; }
-      $sql_01 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      $sql_01 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total 
+      FROM venta as v 
+      INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable and pco.periodo = '$periodo_facturacion'
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
       WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '01' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador $filtro_id_user;";
       $factura = ejecutarConsultaSimpleFila($sql_01); if ($factura['status'] == false) {return $factura; }
 
@@ -312,7 +316,10 @@
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '03' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '03' ) AS ventas_mes_anterior;";
       $boleta_p = ejecutarConsultaSimpleFila($sql_03); if ($boleta_p['status'] == false) {return $boleta_p; }
-      $sql_03 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      $sql_03 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total 
+      FROM venta as v     
+      INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable and pco.periodo = '$periodo_facturacion'  
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
       WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '03' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador $filtro_id_user;";
       $boleta = ejecutarConsultaSimpleFila($sql_03); if ($boleta['status'] == false) {return $boleta; }
 
@@ -320,7 +327,10 @@
       FROM ( SELECT COALESCE(SUM(venta_total), 0) total_ventas_mes_actual FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE()) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE()) AND tipo_comprobante = '12' ) AS ventas_mes_actual,
       ( SELECT SUM(venta_total) AS total_ventas_mes_anterior FROM venta WHERE MONTH (periodo_pago_format) = MONTH (CURRENT_DATE() - INTERVAL 1 MONTH) AND YEAR (periodo_pago_format) = YEAR (CURRENT_DATE() - INTERVAL 1 MONTH) AND tipo_comprobante = '12' ) AS ventas_mes_anterior;";
       $ticket_p = ejecutarConsultaSimpleFila($sql_12); if ($ticket_p['status'] == false) {return $ticket_p; }
-      $sql_12 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      $sql_12 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total 
+      FROM venta as v 
+      INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable and pco.periodo = '$periodo_facturacion'
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
       WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '12' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador $filtro_id_user;";
       $ticket = ejecutarConsultaSimpleFila($sql_12); if ($ticket['status'] == false) {return $ticket; }
 
@@ -359,6 +369,69 @@
         ]
       ];
 
+    }
+
+    Public function mini_reporte_v2($periodo,  $trabajador){ 
+      $filtro_periodo = ""; $filtro_trabajador_1 = ""; $filtro_trabajador_2 = "";    
+      
+      if ( empty($periodo) )    { } else { $filtro_periodo = "AND DATE_FORMAT( vd.periodo_pago_format, '%Y-%m') = '$periodo'"; } 
+      if ( empty($trabajador) ) { } else { $filtro_trabajador_1 = "WHERE pc.idpersona_trabajador = '$trabajador'"; } 
+      if ( empty($trabajador) ) { } else { $filtro_trabajador_2 = "AND pc.idpersona_trabajador = '$trabajador'"; } 
+
+      $sql = "SELECT pco.idcentro_poblado, pco.centro_poblado, ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) as avance,
+       COALESCE(co.cant_cobrado,0) as cant_cobrado,  pco.cant_cliente as cant_total
+      FROM 
+      (SELECT cp.idcentro_poblado, cp.nombre as centro_poblado, COUNT(pc.idpersona_cliente) as cant_cliente
+      FROM persona_cliente as pc       
+      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
+      $filtro_trabajador_1
+      GROUP BY cp.idcentro_poblado
+      order by COUNT(pc.idpersona_cliente) DESC) AS pco 
+
+      LEFT JOIN
+
+      (SELECT cp.idcentro_poblado, cp.nombre as centro_poblado, COUNT(v.idventa) as cant_cobrado 
+      FROM venta as v
+      INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
+      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
+      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) 
+      $filtro_periodo $filtro_trabajador_2
+      GROUP BY cp.idcentro_poblado
+      order by COUNT(v.idventa) DESC) as co ON pco.idcentro_poblado = co.idcentro_poblado
+      order by ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) DESC ;"; #return $sql;
+      $centro_poblado = ejecutarConsultaArray($sql); if ($centro_poblado['status'] == false) {return $centro_poblado; }
+
+      $sql = "SELECT ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) as avance,
+      COALESCE(co.cant_cobrado,0) as cant_cobrado,  pco.cant_cliente as cant_total
+      FROM 
+
+      (SELECT pc.idpersona_trabajador, COUNT(pc.idpersona_cliente) as cant_cliente
+      FROM persona_cliente as pc       
+      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
+      $filtro_trabajador_1
+      GROUP BY pc.idpersona_trabajador
+      order by COUNT(pc.idpersona_cliente) DESC) AS pco 
+
+      LEFT JOIN
+
+      (SELECT pc.idpersona_trabajador, COUNT(v.idventa) as cant_cobrado 
+      FROM venta as v
+      INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
+      INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
+      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) $filtro_periodo $filtro_trabajador_2
+      GROUP BY pc.idpersona_trabajador
+      order by COUNT(v.idventa) DESC) as co ON pco.idpersona_trabajador = co.idpersona_trabajador
+      order by ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) DESC ;"; #return $sql;
+      $total = ejecutarConsultaSimpleFila($sql); if ($total['status'] == false) {return $total; }
+
+      return ['status' => true, 'message' =>'todo okey', 
+        'data'=>[
+          'total'  => $total['data'],
+          'centro_poblado'    => $centro_poblado['data'],
+        ]
+      ];
     }
 
     public function listar_producto_x_codigo($codigo){
@@ -494,6 +567,17 @@
     public function select2_banco(){
      
       $sql="SELECT * FROM bancos WHERE idbancos <> 1 and estado = '1' AND estado_delete = '1';";
+      return ejecutarConsultaArray($sql);
+    }
+
+    public function select2_periodo_contable(){      
+     
+      $sql="SELECT pco.periodo, pco.idperiodo_contable, pco.periodo_year, pco.periodo_month, count(v.idventa) as cant_comprobante 
+      FROM periodo_contable as pco
+      LEFT JOIN venta as v ON v.idperiodo_contable = pco.idperiodo_contable  and v.estado = '1' and v.estado_delete = '1' and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante <> '100'
+      WHERE pco.estado = '1' and pco.estado_delete = '1'
+      GROUP BY pco.idperiodo_contable, pco.periodo_year, periodo_month
+      ORDER BY periodo DESC";
       return ejecutarConsultaArray($sql);
     }
   }

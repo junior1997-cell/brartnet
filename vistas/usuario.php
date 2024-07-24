@@ -274,7 +274,7 @@
         <?php include("template/scripts.php"); ?>
         <?php include("template/custom_switcherjs.php"); ?>    
 
-        <script src="scripts/usuario.js?version_jdl=1.23"></script>
+        <script src="scripts/usuario.js?version_jdl=1.25"></script>
         <script> $(function () { $('[data-bs-toggle="tooltip"]').tooltip(); }); </script>
 
       

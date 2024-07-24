@@ -41,11 +41,12 @@
       INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
       INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
-      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) $filtro_periodo $filtro_trabajador_2
+      WHERE v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) 
+      $filtro_periodo $filtro_trabajador_2
       GROUP BY cp.idcentro_poblado
       order by COUNT(v.idventa) DESC) as co ON pco.idcentro_poblado = co.idcentro_poblado
       order by ROUND( COALESCE((( co.cant_cobrado /  pco.cant_cliente) * 100), 0) , 2) DESC ;"; #return $sql;
-      $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
+      $venta = ejecutarConsultaArray($sql); if ($venta['status'] == false) {return $venta; }
 
       return $venta;
     }
@@ -105,11 +106,11 @@
       $plan = ejecutarConsultaArray($sql_plan); if ($plan['status'] == false) {return $plan; }
 
       return ['status' => true, 'message' =>'todo okey', 
-      'data'=>[
-        'centro_poblado'  => $centro_poblado['data'],
-        'plan'            => $plan['data'],
-      ]
-    ];
+        'data'=>[
+          'centro_poblado'  => $centro_poblado['data'],
+          'plan'            => $plan['data'],
+        ]
+      ];
     } 
 
     Public function mini_reporte($filtro_anio, $periodo,  $cliente, $comprobante){

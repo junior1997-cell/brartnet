@@ -509,10 +509,11 @@ function limpiar_form_reasignar() {
   $(".error.invalid-feedback").remove();
 }
 
-function reasignar_comprobante(idperiodo) {
+function reasignar_comprobante(idperiodo, periodo_actual) {
   limpiar_form_reasignar();
   show_hide_form(2);
   $('#idperiodo_ver').val(idperiodo);
+  $('#periodo-actual').html(periodo_actual);
   activar_filtro_reasignar = true;
 
   tabla_detalle_comprobante(idperiodo, filtro_emision_mes, '', '');

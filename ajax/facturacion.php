@@ -13,12 +13,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
     require_once "../modelos/Facturacion.php";
     require_once "../modelos/Producto.php";
+    require_once "../modelos/Avance_cobro.php";
 
     require '../vendor/autoload.php';                   // CONEXION A COMPOSER
     $see = require '../sunat/SunatCertificado.php';   // EMISION DE COMPROBANTES
 
     $facturacion        = new Facturacion();      
-    $productos          = new Producto();
+    $productos          = new Producto(); 
+    $avance_cobro        = new Avance_cobro();  
 
     date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
     $imagen_error = "this.src='../assets/svg/404-v2.svg'";
@@ -427,7 +429,12 @@ if (!isset($_SESSION["user_nombre"])) {
       break; 
 
       case 'mini_reporte':
-        $rspta=$facturacion->mini_reporte();
+        $rspta=$facturacion->mini_reporte($_GET["periodo_facturado"]);
+        echo json_encode($rspta, true);
+      break; 
+
+      case 'mini_reporte_v2':
+        $rspta = $facturacion->mini_reporte_v2($_GET["filtro_periodo"], $_GET["filtro_trabajador"]);
         echo json_encode($rspta, true);
       break; 
 
@@ -690,6 +697,24 @@ if (!isset($_SESSION["user_nombre"])) {
         } else {
           echo json_encode($rspta, true);
         }
+      break;
+
+      case 'select2_periodo_contable':
+        $rspta = $facturacion->select2_periodo_contable(); $cont = 1; $data = "";
+        if($rspta['status'] == true){
+          foreach ($rspta['data'] as $key => $value) {
+            $data .= '<option  value="' . $value['periodo'] . '"> '. $value['periodo_year'] .'-' .$value['periodo_month']. ' ('.$value['cant_comprobante']. ')'. '</option>';
+            $cont++;
+          }
+  
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+          echo json_encode($retorno, true);
+  
+        } else { echo json_encode($rspta, true); }
       break;
 
       default: 

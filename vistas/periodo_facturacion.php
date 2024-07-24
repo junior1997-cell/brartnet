@@ -295,13 +295,16 @@ if (!isset($_SESSION["user_nombre"])) {
 
                             <div class="card-body" style="border-radius: 5px; box-shadow: 0 0 2px rgb(0 0 0), 0 1px 5px 4px rgb(255 255 255 / 60%);">
                               <div class="row ">                                                                
-                                
+                                <div class="col-md-12 mb-3">
+                                  <label for="form-label">Periodo Actual</label>
+                                  <h5 id="periodo-actual"></h5>
+                                </div>
                                 <!-- SALDO -->
                                 <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                   <div class="form-group">
                                     <label for="t_idperiodo" class="form-label">
                                       <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_periodo();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                      Periodo Mes          
+                                      Periodo a cambiar          
                                       <span class="charge_t_idperiodo"></span>                            
                                     </label>
                                     <select class="form-control" name="t_idperiodo" id="t_idperiodo" > <!-- lista --> </select>
@@ -498,11 +501,9 @@ if (!isset($_SESSION["user_nombre"])) {
 
     <!-- Apex Charts JS -->
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
-    <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>      
-
+    <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>     
     
-    
-    <script src="scripts/periodo_facturacion.js?version_jdl=1.23"></script>
+    <script src="scripts/periodo_facturacion.js?version_jdl=1.25"></script>
     
     <script>
       $(function() {

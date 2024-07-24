@@ -281,14 +281,13 @@ if (!isset($_SESSION["user_nombre"])) {
       <?php include("template/footer.php"); ?>
     </div>
 
-    <?php include("template/scripts.php"); ?>
-    <?php include("template/custom_switcherjs.php"); ?>   
+    <?php include("template/scripts.php"); ?>      
 
     <!-- Apex Charts JS -->
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
     <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>    
     
-    <script src="scripts/retraso_cobro.js?version_jdl=1.23"></script>
+    <script src="scripts/retraso_cobro.js?version_jdl=1.25"></script>
     
     <script>
       $(function() {
@@ -297,7 +296,7 @@ if (!isset($_SESSION["user_nombre"])) {
       });
     </script>
 
-
+    <?php include("template/custom_switcherjs.php"); ?> 
   </body>
 
 

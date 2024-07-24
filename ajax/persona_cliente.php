@@ -319,7 +319,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $rspta['data']['cliente']['idcliente'] . '</span>
                     </div>
                   </div></td>
-                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" rowspan="'.$num_anios.'">'.$rspta['data']['cliente']['fecha_cancelacion_format'].'</td>                            
+                  <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" rowspan="'.$num_anios.'">'.$rspta['data']['cliente']['dia_cancelacion_v2'].'</td>                            
                   <td class="py-1 px-1 font-size-11px '.$bg_light.' text-center" rowspan="'.$num_anios.'">'.$rspta['data']['cliente']['costo'].'</td>';
                   $primero = false;
               }
@@ -447,7 +447,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $val['idcliente'] . '</span>
                 </div>
               </div>',
-              "2" => $val['fecha_cancelacion_format'],
+              "2" => $val['dia_cancelacion_v2'],
               "3" => $val['costo'] ,
               "4" => '<div class="font-size-11px" >'.  $val['periodo_pago_year']  .'</div>',
               "5" => ( empty($val['venta_enero'])  ? '': '<div class="font-size-11px" data-bs-toggle="tooltip" title="Ver detalle" >' . $val['venta_enero'] . '</div>' ),

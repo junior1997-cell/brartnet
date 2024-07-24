@@ -40,7 +40,12 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[] = [
               "0" => $count++,
               "1" => '<span class="fs-11">'.$value['centro_poblado'] .'</span>' ,
-              "2" => '<div class="d-flex align-items-center w-200px">
+              "2" => $value['avance'] == 100 ? '<div class="d-flex align-items-center w-200px">
+                <div class="progress progress-animate progress-xs w-100" role="progressbar" aria-valuenow="'.$value['avance'].'" aria-valuemin="0" aria-valuemax="100">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: '.$value['avance'].'%"></div>
+                </div>
+                <div class="ms-2 fs-10">'.$value['avance'].'%</div>
+              </div>' : '<div class="d-flex align-items-center w-200px">
                 <div class="progress progress-animate progress-xs w-100" role="progressbar" aria-valuenow="'.$value['avance'].'" aria-valuemin="0" aria-valuemax="100">
                   <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: '.$value['avance'].'%"></div>
                 </div>
