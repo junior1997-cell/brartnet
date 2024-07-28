@@ -40,7 +40,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <div class="page">
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
-      <?php if($_SESSION['facturacion']==1) { ?>
+      <?php if($_SESSION['avance_de_cobro']==1) { ?>
       <!-- Start::app-content -->
       <div class="main-content app-content">
         <div class="container-fluid">
@@ -280,7 +280,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
     <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>    
     
-    <script src="scripts/avance_cobro.js?version_jdl=1.25"></script>
+    <script src="scripts/avance_cobro.js?version_jdl=1.26"></script>
     
     <script>
       $(function() {

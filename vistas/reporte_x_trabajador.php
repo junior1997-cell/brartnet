@@ -36,7 +36,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <div class="page">
       <?php include("template/header.php") ?>
       <?php include("template/sidebar.php") ?>
-      <?php if ($_SESSION['cliente'] == 1) { ?>
+      <?php if ($_SESSION['cobro_por_trabajador'] == 1) { ?>
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
@@ -419,7 +419,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/js/apexcharts-pie.js"></script>-->
 
 
-    <script src="scripts/reporte_x_trabajador.js?version_jdl=1.25"></script>
+    <script src="scripts/reporte_x_trabajador.js?version_jdl=1.26"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

@@ -9,7 +9,7 @@ if (!isset($_SESSION["user_nombre"])) {
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
-  if ($_SESSION['venta_por_vendedor'] == 1) {
+  if ($_SESSION['avance_de_cobro'] == 1) {
 
     require_once "../modelos/Avance_cobro.php";
 

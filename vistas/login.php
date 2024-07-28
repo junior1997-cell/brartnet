@@ -177,7 +177,7 @@
         <!-- End Clients Section -->
       </div>
 
-      <div class="d-lg-none position-absolute top-0 right-0 bottom-0 left-0 bg-img-hero" style="background-image: url(../assets/images/media/media-71.jpg);"></div>
+      <div class="d-lg-none position-absolute top-0 right-0 bottom-0 left-0 bg-img-hero" style="background-image: url(../assets/images/media/media-fondo-login.jpg);"></div>
     </div>
     <!-- End Hero Section -->    
 
@@ -289,10 +289,10 @@
   <!-- Toastr -->
   <script src="../assets/libs/toastr/toastr.min.js"></script>
 
-  <script src="../assets/js/funcion_general.js?version_jdl=1.25"></script>
-  <script src="../assets/js/funcion_crud.js?version_jdl=1.25"></script>  
+  <script src="../assets/js/funcion_general.js?version_jdl=1.26"></script>
+  <script src="../assets/js/funcion_crud.js?version_jdl=1.26"></script>  
 
-  <script src="scripts/login.js?version_jdl=1.25"></script>  
+  <script src="scripts/login.js?version_jdl=1.26"></script>  
 
   <!-- IE Support -->
   <script>

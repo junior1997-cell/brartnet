@@ -854,7 +854,7 @@ function listar_tabla_producto(tipo = 'PR'){
   $("#modal-producto").modal('show');
   $("#title-modal-producto-label").html( (tipo == 'PR' ? 'Seleccionar Producto' : 'Seleccionar Servicio') );
   tabla_productos = $("#tabla-productos").dataTable({
-    responsive: true, 
+    responsive: false, 
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor

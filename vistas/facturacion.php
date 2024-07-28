@@ -1161,8 +1161,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.25"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.25"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.26"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.26"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

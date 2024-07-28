@@ -360,18 +360,22 @@ switch ($_GET["op"]) {
       in_array(9, $valores) ? $_SESSION['cotizacion']                = 1 : $_SESSION['cotizacion']                = 0;
       in_array(10, $valores) ? $_SESSION['cliente']                   = 1 : $_SESSION['cliente']                   = 0;
       in_array(11, $valores) ? $_SESSION['anticipos']                 = 1 : $_SESSION['anticipos']                 = 0;
-      in_array(12, $valores) ? $_SESSION['gastos_trabajador']         = 1 : $_SESSION['gastos_trabajador']         = 0;
-      in_array(13, $valores) ? $_SESSION['incidencias_trabajador']    = 1 : $_SESSION['incidencias_trabajador']    = 0;
-      in_array(14, $valores) ? $_SESSION['venta_por_vendedor']        = 1 : $_SESSION['venta_por_vendedor']        = 0;
-      in_array(15, $valores) ? $_SESSION['correo_enviado']            = 1 : $_SESSION['correo_enviado']            = 0;
-      in_array(16, $valores) ? $_SESSION['usuario']                   = 1 : $_SESSION['usuario']                   = 0;
-      in_array(17, $valores) ? $_SESSION['registrar_trabajador']      = 1 : $_SESSION['registrar_trabajador']      = 0;
-      in_array(18, $valores) ? $_SESSION['tipo_de_seguro']            = 1 : $_SESSION['tipo_de_seguro']            = 0;
-      in_array(19, $valores) ? $_SESSION['boleta_de_pago']            = 1 : $_SESSION['boleta_de_pago']            = 0;
-      in_array(20, $valores) ? $_SESSION['catalogo_de_codigo']        = 1 : $_SESSION['catalogo_de_codigo']        = 0;
-      in_array(21, $valores) ? $_SESSION['correlativo_numeracion']    = 1 : $_SESSION['correlativo_numeracion']    = 0;
-      in_array(22, $valores) ? $_SESSION['empresa_configuracion']     = 1 : $_SESSION['empresa_configuracion']     = 0;
-      in_array(23, $valores) ? $_SESSION['configuracion']             = 1 : $_SESSION['configuracion']             = 0;          
+      in_array(12, $valores) ? $_SESSION['periodo_facturado']         = 1 : $_SESSION['periodo_facturado']         = 0;
+      in_array(13, $valores) ? $_SESSION['gastos_trabajador']         = 1 : $_SESSION['gastos_trabajador']         = 0;
+      in_array(14, $valores) ? $_SESSION['incidencias_trabajador']    = 1 : $_SESSION['incidencias_trabajador']    = 0;
+      in_array(15, $valores) ? $_SESSION['retraso_de_cobro']          = 1 : $_SESSION['retraso_de_cobro']          = 0;
+      in_array(16, $valores) ? $_SESSION['avance_de_cobro']           = 1 : $_SESSION['avance_de_cobro']           = 0;
+      in_array(17, $valores) ? $_SESSION['cobro_por_trabajador']      = 1 : $_SESSION['cobro_por_trabajador']      = 0;
+      in_array(18, $valores) ? $_SESSION['correo_enviado']            = 1 : $_SESSION['correo_enviado']            = 0;
+      in_array(19, $valores) ? $_SESSION['usuario']                   = 1 : $_SESSION['usuario']                   = 0;
+      in_array(20, $valores) ? $_SESSION['registrar_trabajador']      = 1 : $_SESSION['registrar_trabajador']      = 0;
+      in_array(21, $valores) ? $_SESSION['tipo_de_seguro']            = 1 : $_SESSION['tipo_de_seguro']            = 0;
+      in_array(22, $valores) ? $_SESSION['boleta_de_pago']            = 1 : $_SESSION['boleta_de_pago']            = 0;
+      in_array(23, $valores) ? $_SESSION['catalogo_de_codigo']        = 1 : $_SESSION['catalogo_de_codigo']        = 0;
+      in_array(24, $valores) ? $_SESSION['correlativo_numeracion']    = 1 : $_SESSION['correlativo_numeracion']    = 0;
+      in_array(25, $valores) ? $_SESSION['empresa_configuracion']     = 1 : $_SESSION['empresa_configuracion']     = 0;
+      in_array(26, $valores) ? $_SESSION['configuracion']             = 1 : $_SESSION['configuracion']             = 0;
+         
 
       $data = [ 'status'=>true, 'message'=>'todo okey','data'=> $rspta['data']  ];
       echo json_encode($data, true);
