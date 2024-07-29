@@ -270,8 +270,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>    
 
-    <script src="scripts/categoria.js?version_jdl=1.26"></script>
-    <script src="scripts/marca.js?version_jdl=1.26"></script>
+    <script src="scripts/categoria.js?version_jdl=1.27"></script>
+    <script src="scripts/marca.js?version_jdl=1.27"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

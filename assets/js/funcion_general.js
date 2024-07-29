@@ -164,9 +164,10 @@ function restrigir_fecha_ant(nombre_input, fecha_minima) {
   $(nombre_input).rules("add", { min: fecha_minima, messages: { min: `Ingresa una fecha mayor a: ${format_d_m_a(fecha_minima)}` } });
 }
 
-function cant_dias_mes(date_anio, date_mes) {
+function cant_dias_mes(date_anio, date_mes, array = false) {
 	var año = date_anio;
   var mes = date_mes;
+  var fecha_array = [];
 
   if (date_anio == '' || date_anio == null || date_mes =='' || date_mes ==null ) {
     return '';
@@ -174,6 +175,10 @@ function cant_dias_mes(date_anio, date_mes) {
     var diasMes = new Date(año, mes, 0).getDate();
     var diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     
+    if (array == true) {
+      for (let index = 1; index <= diasMes; index++) { fecha_array.push(index); }
+      return fecha_array;
+    }
     // for (var dia = 1; dia <= diasMes; dia++) {
     //   // Ojo, hay que restarle 1 para obtener el mes correcto
     //   var indice = new Date(año, mes - 1, dia).getDay();

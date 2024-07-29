@@ -24,9 +24,44 @@
       switch ($_GET["op"]) {       
 
         case 'ver_reporte':
-          $rspta = $escritorio->ver_reporte();
+          $rspta = $escritorio->ver_reporte($_GET["filtro_anio"], $_GET["filtro_mes"], $_GET["cant_mes"], $_GET["filtro_trabajador"]);
           echo json_encode( $rspta, true) ;
-        break;        
+        break;     
+        
+        case 'select2_filtro_anio_contable':
+
+          $rspta = $escritorio->select2_filtro_anio_contable();        
+          $data = "";
+          if ($rspta['status'] == true) {
+            foreach ($rspta['data'] as $key => $value) {             
+              $data .= '<option  value="' . $value['anio_contable']  . '">' . $value['anio_contable'].  '</option>';
+            }
+  
+            $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
+            echo json_encode($retorno, true);
+          } else {
+            echo json_encode($rspta, true);
+          }
+  
+        break; 
+        
+        case 'select2_filtro_trabajador':
+
+          $rspta = $escritorio->select2_filtro_trabajador();        
+          $data = "";
+          if ($rspta['status'] == true) {
+            foreach ($rspta['data'] as $key => $value) {
+              $cant_cliente   = $value['cant_cliente'];
+              $data .= '<option  value="' . $value['idpersona_trabajador']  . '">' . $value['idtrabajador']. ' '.  $value['nombre_razonsocial'] . ' ('.$cant_cliente.')' . '</option>';
+            }
+  
+            $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data,  );
+            echo json_encode($retorno, true);
+          } else {
+            echo json_encode($rspta, true);
+          }
+  
+        break; 
 
         default: 
           $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 

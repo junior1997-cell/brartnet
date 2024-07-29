@@ -1,12 +1,22 @@
 var chart_objetivo;
 var chart_dia_semana;
 var card_chart_factura;
+var card_chart_boleta;
+var card_chart_ticket;
+var card_chart_total;
 var chart_line_comprobante;
 var chart_pastel_tecnico; var chart_pastel_tecnico_data = [];
 
-function init_b() {
+function init_b() {  
 
-  reporte();
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+  lista_select2("../ajax/escritorio.php?op=select2_filtro_anio_contable", '#filtro_anio_contable', moment().year(), '.charge_filtro_anio_contable');
+  lista_select2("../ajax/escritorio.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador');
+
+
+  // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
+ 
+
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -71,13 +81,27 @@ function tabla_principal_bancos() {
 }
 
 
-function reporte() {
+function reporte(filtro_anio, filtro_mes, filtro_trabajador) {
 
   $(".tooltip").remove();
 
   $("#modal-agregar-bancos").modal("show");
 
-  $.getJSON("../ajax/escritorio.php?op=ver_reporte", function (e, textStatus, jqXHR) {
+  $('.card-cantidad-factura').html( 0); 
+  $('.card-cantidad-boleta').html( 0 ); 
+  $('.card-cantidad-ticket').html( 0 );
+
+  var cant_mes = filtro_mes == '' ? '' : cant_dias_mes(filtro_anio, moment(`${filtro_mes}-01`).format('MM'), true );
+
+  if (chart_objetivo) { chart_objetivo.destroy(); } 
+  if (chart_dia_semana) { chart_dia_semana.destroy(); } 
+  if (card_chart_factura) { card_chart_factura.destroy(); } 
+  if (card_chart_boleta) { card_chart_boleta.destroy(); } 
+  if (card_chart_ticket) { card_chart_ticket.destroy(); } 
+  if (card_chart_total) { card_chart_total.destroy(); } 
+  if (chart_line_comprobante) { chart_line_comprobante.destroy(); } 
+
+  $.getJSON("../ajax/escritorio.php?op=ver_reporte", {filtro_anio:filtro_anio, filtro_mes:filtro_mes, cant_mes: JSON.stringify(cant_mes) , filtro_trabajador:filtro_trabajador}, function (e, textStatus, jqXHR) {
 
     if (e.status == true) {
 
@@ -117,7 +141,7 @@ function reporte() {
                 </span>
               </div>
               <div class="flex-fill">
-                <p class="fw-semibold mb-0 fs-11">${val.cliente_nombre_completo}</p>
+                <p class="fw-semibold mb-0 fs-11">${val.cliente_nombre_recortado}</p>
                 <span class="text-muted fs-10">Cel: <a href="tel:+51${val.celular}">${val.celular}</a></span>
               </div>
               <div class="fw-semibold fs-13 text-success">${ formato_miles(val.total_cobrado) }</div>
@@ -205,8 +229,8 @@ function reporte() {
         // title: { text: 'Últimos 30 días.', align: 'left', style: { fontSize: '.8125rem', fontWeight: 'semibold', color: '#8c9097' }, },
       }
       document.getElementById('crm-total-revenue').innerHTML = '';
-      var crm2 = new ApexCharts(document.querySelector("#crm-total-revenue"), crm2);
-      crm2.render();      
+      card_chart_boleta = new ApexCharts(document.querySelector("#crm-total-revenue"), crm2);
+      card_chart_boleta.render();      
 
       /* Total chart - ticket */
       var crm3 = {
@@ -220,8 +244,8 @@ function reporte() {
         colors: ["rgb(38, 191, 148)"],
       }
       document.getElementById('crm-conversion-ratio').innerHTML = '';
-      var crm3 = new ApexCharts(document.querySelector("#crm-conversion-ratio"), crm3);
-      crm3.render();      
+      card_chart_ticket = new ApexCharts(document.querySelector("#crm-conversion-ratio"), crm3);
+      card_chart_ticket.render();      
 
       /* Total chart  */
       var crm4 = {
@@ -235,8 +259,8 @@ function reporte() {
         colors: ["rgb(245, 184, 73)"],
       }
       document.getElementById('crm-total-deals').innerHTML = '';
-      var crm4 = new ApexCharts(document.querySelector("#crm-total-deals"), crm4);
-      crm4.render();
+      card_chart_total = new ApexCharts(document.querySelector("#crm-total-deals"), crm4);
+      card_chart_total.render();
       
       // ::::::::::::::::::::::::::::  CHART LINE   P O R   C O M P R O B A N T E :::::::::::::::::::::::::::::
       /* Revenue Analytics Chart */
@@ -480,3 +504,22 @@ function ver_imagen_banco(file, nombre) {
 $(document).ready(function () {
   init_b();
 });
+
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+
+function reload_filtro_periodo(){ $('#filtro_periodo').val("").trigger("change") } 
+function reload_filtro_anio_contable(){ lista_select2("../ajax/escritorio.php?op=select2_filtro_anio_contable", '#filtro_anio_contable', moment().year(), '.charge_filtro_anio_contable'); } 
+function reload_filtro_trabajador(){ lista_select2("../ajax/escritorio.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador'); } 
+
+
+function filtros() {  
+
+  var filtro_anio    = $("#filtro_anio_contable").val() == '' || $("#filtro_anio_contable").val() == null ? '' : $("#filtro_anio_contable").val();
+  var filtro_mes    = $("#filtro_mes_contable").val() == '' || $("#filtro_mes_contable").val() == null ? '' : $("#filtro_mes_contable").val();
+  var filtro_trabajador = $("#filtro_trabajador").val() == '' || $("#filtro_trabajador").val() == null ? '' : $("#filtro_trabajador").val() ;
+  
+  // $('.buscando_tabla').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${filtro_periodo} ${nombre_filtro_cliente}...`);
+
+  reporte( filtro_anio, filtro_mes, filtro_trabajador);
+}

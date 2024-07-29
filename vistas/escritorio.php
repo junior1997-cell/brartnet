@@ -53,6 +53,50 @@
 
               <!-- Start::row-1 -->
               <div class="row">
+                <div class="col-sm-12">
+                
+                    <div class="card custom-card">
+                      <div class="card-body">
+                        <div class="row">
+
+                          <!-- ::::::::::::::::::::: FILTRO AÑO FACTURADO :::::::::::::::::::::: -->
+                          <div class="col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2">
+                            <div class="form-group">
+                              <label for="filtro_anio_contable" class="form-label">                         
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_anio_contable();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                Año Contable
+                                <span class="charge_filtro_anio_contable"></span>
+                              </label>
+                              <select class="form-control form-control-sm form-control-primary text-primary" id="filtro_anio_contable" onchange="delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                            </div>
+                          </div>
+                          
+                          <!-- ::::::::::::::::::::: FILTRO MES FACTURADO :::::::::::::::::::::: -->
+                          <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 col-xxl-3">
+                            <div class="form-group">
+                              <label for="filtro_mes_contable" class="form-label">
+                              <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_mes_contable();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
+                                Mes Contable</label>
+                              <input type="month" class="form-control form-control-sm form-control-primary" id="filtro_mes_contable" value="<?php echo date('Y-m'); ?>" onchange="delay(function(){filtros()}, 50 );">                        
+                            </div>
+                          </div>  
+                          <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
+                          <div class="col-sm-6 col-md-6 col-lg-3 col-xl-4 col-xxl-4" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? 'style="display: none;"' : '' ; ?> >
+                            <div class="form-group">
+                              <label for="filtro_trabajador" class="form-label">                         
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_trabajador();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                Trabajador
+                                <span class="charge_filtro_trabajador"></span>
+                              </label>
+                              <select class="form-control form-control-sm form-control-primary text-primary" id="filtro_trabajador" onchange="delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                            </div>
+                          </div>
+                          
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 <div class="col-xxl-9 col-xl-12">
                   <div class="row">
                     <div class="col-xl-4">
@@ -169,7 +213,7 @@
                               <div class="d-flex align-items-top justify-content-between">
                                 <div>
                                   <span class="avatar avatar-md avatar-rounded bg-success">
-                                    <i class="ti ti-file-stack fs-16" ></i>
+                                    <i class="ti ti-file-check fs-16"></i> 
                                   </span>
                                 </div>
                                 <div class="flex-fill ms-3">
@@ -200,7 +244,7 @@
                               <div class="d-flex align-items-top justify-content-between">
                                 <div>
                                   <span class="avatar avatar-md avatar-rounded bg-warning">
-                                    <i class="ti ti-wave-square fs-16"></i>
+                                    <i class="bi bi-ticket-perforated fs-16"></i>
                                   </span>
                                 </div>
                                 <div class="flex-fill ms-3">
@@ -455,7 +499,7 @@
         <!-- Chartjs Chart JS -->
         <script src="../assets/libs/chart.js/chart.min.js"></script>  
 
-        <script src="scripts/escritorio.js?version_jdl=1.26"></script>
+        <script src="scripts/escritorio.js?version_jdl=1.27"></script>
                 
         <?php include("template/custom_switcherjs.php"); ?>
 

@@ -14,11 +14,14 @@ Class Escritorio
 	}
 
   //Implementamos un método para insertar registros
-	public function ver_reporte(){
+	public function ver_reporte($anio, $mes, $cant_mes, $trabajador){
 
-    $filtro_id_trabajador  = ''; 
-    if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {  $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";    }    
+    $filtro_anio  = '';   $filtro_mes  = '';  $filtro_trabajador  = '';
 
+    if ( empty($anio) )       { } else {  $filtro_anio = "AND YEAR(pco.periodo_format) = '$anio'";    }    
+    if ( empty($mes) )        { } else {  $filtro_mes = "AND pco.periodo = '$mes'";    }    
+    if ( empty($trabajador) ) { } else {  $filtro_trabajador = "AND pc.idpersona_trabajador = '$trabajador'";    }    
+    
     /*
     ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
     ║                                                                                                                                                       ║
@@ -34,7 +37,8 @@ Class Escritorio
     ) * 100 AS porcentaje_este_mes
     FROM persona_cliente AS pc
     LEFT JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente 
-    WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') $filtro_id_trabajador ;";
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
+    WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') $filtro_trabajador $filtro_anio $filtro_mes ;";
     $objetivo = ejecutarConsultaSimpleFila($sql_01); if ($objetivo['status'] == false) { return $objetivo;}  
 
     /*
@@ -47,16 +51,30 @@ Class Escritorio
     
     $sql_02 = "SELECT v.idpersona_cliente, SUM(v.venta_total) AS total_cobrado,
     CASE 
+      WHEN p.tipo_persona_sunat = 'NATURAL' THEN 
+        CASE 
+          WHEN LENGTH(  CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial)  ) <= 27 THEN  CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
+          ELSE CONCAT( LEFT(CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial ), 27) , '...')
+        END         
+      WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN 
+        CASE 
+          WHEN LENGTH(  p.nombre_razonsocial  ) <= 27 THEN  p.nombre_razonsocial 
+          ELSE CONCAT(LEFT( p.nombre_razonsocial, 27) , '...')
+        END
+      ELSE '-'
+    END AS cliente_nombre_recortado,
+    CASE 
       WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
       WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
       ELSE '-'
     END AS cliente_nombre_completo,
     sdi.abreviatura as nombre_tipo_documento, p.*
     FROM venta as v
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
     INNER JOIN persona AS p ON p.idpersona = pc.idpersona
     INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
-    WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') $filtro_id_trabajador
+    WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY v.idpersona_cliente
     ORDER BY SUM(v.venta_total) DESC
     LIMIT 5; ";
@@ -72,22 +90,25 @@ Class Escritorio
 
     $sql_031 = "SELECT CASE DAYOFWEEK(v.fecha_emision) WHEN 1 THEN 'Do'  WHEN 2 THEN 'Lu' WHEN 3 THEN 'Ma' WHEN 4 THEN 'Mi' WHEN 5 THEN 'Ju'  WHEN 6 THEN 'Vi' WHEN 7 THEN 'Sa' END AS DiaSemana, DAYOFWEEK(v.fecha_emision) AS dia, SUM(venta_total) AS VentasDia
     FROM venta as v
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
-    where tipo_comprobante = '01' and v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' $filtro_id_trabajador
+    where tipo_comprobante = '01' and v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY DAYOFWEEK(v.fecha_emision) ORDER BY DAYOFWEEK(v.fecha_emision);";
     $dia_semana_f = ejecutarConsultaArray($sql_031); if ($dia_semana_f['status'] == false) { return $dia_semana_f;}  
 
     $sql_032 = "SELECT CASE DAYOFWEEK(v.fecha_emision) WHEN 1 THEN 'Do'  WHEN 2 THEN 'Lu' WHEN 3 THEN 'Ma' WHEN 4 THEN 'Mi' WHEN 5 THEN 'Ju'  WHEN 6 THEN 'Vi' WHEN 7 THEN 'Sa' END AS DiaSemana, DAYOFWEEK(v.fecha_emision) AS dia, SUM(venta_total) AS VentasDia
     FROM venta as v
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
-    where tipo_comprobante = '03' and v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' $filtro_id_trabajador
+    where tipo_comprobante = '03' and v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY DAYOFWEEK(v.fecha_emision) ORDER BY DAYOFWEEK(v.fecha_emision);";
     $dia_semana_b = ejecutarConsultaArray($sql_032); if ($dia_semana_b['status'] == false) { return $dia_semana_b;}  
 
     $sql_033 = "SELECT CASE DAYOFWEEK(v.fecha_emision) WHEN 1 THEN 'Do'  WHEN 2 THEN 'Lu' WHEN 3 THEN 'Ma' WHEN 4 THEN 'Mi' WHEN 5 THEN 'Ju'  WHEN 6 THEN 'Vi' WHEN 7 THEN 'Sa' END AS DiaSemana, DAYOFWEEK(v.fecha_emision) AS dia, SUM(venta_total) AS VentasDia
     FROM venta as v
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
-    where tipo_comprobante = '12' and v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' $filtro_id_trabajador
+    where tipo_comprobante = '12' and v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY DAYOFWEEK(v.fecha_emision) ORDER BY DAYOFWEEK(v.fecha_emision);";
     $dia_semana_t = ejecutarConsultaArray($sql_033); if ($dia_semana_t['status'] == false) { return $dia_semana_t;}  
 
@@ -106,51 +127,62 @@ Class Escritorio
 
     $sql_04 ="SELECT v.tipo_comprobante, COUNT( v.idventa ) as cantidad, sum(v.venta_total) as venta_total
     FROM venta as v
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-    WHERE v.sunat_estado = 'ACEPTADA' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador
+    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado = '1' AND v.estado_delete = '1' $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY v.tipo_comprobante;";
     $card_coun_comprobante = ejecutarConsultaArray($sql_04); if ($card_coun_comprobante['status'] == false) {return $card_coun_comprobante; }
 
     $sql_041 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total FROM venta as v 
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '01' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador;";
+    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '01' AND v.estado = '1' AND v.estado_delete = '1' $filtro_trabajador $filtro_anio $filtro_mes;";
     $card_factura = ejecutarConsultaSimpleFila($sql_041); if ($card_factura['status'] == false) {return $card_factura; }
 
     $sql_042 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total FROM venta as v 
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '03' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador;";
+    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '03' AND v.estado = '1' AND v.estado_delete = '1' $filtro_trabajador $filtro_anio $filtro_mes;";
     $card_boleta = ejecutarConsultaSimpleFila($sql_042); if ($card_boleta['status'] == false) {return $card_boleta; }
     
     $sql_043 = "SELECT IFNULL( SUM( v.venta_total), 0 ) as venta_total FROM venta as v 
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '12' AND v.estado = '1' AND v.estado_delete = '1' $filtro_id_trabajador;";
+    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '12' AND v.estado = '1' AND v.estado_delete = '1' $filtro_trabajador $filtro_anio $filtro_mes;";
     $card_ticket = ejecutarConsultaSimpleFila($sql_043); if ($card_ticket['status'] == false) {return $card_ticket; }
     
     $f_chart = []; $fm_chart = []; $b_chart = []; $bm_chart = []; $t_chart = []; $tm_chart = []; $fbt_chart = []; $fbtm_chart = [];
     $sql_044 = "SELECT CONCAT( DATE_FORMAT(v.fecha_emision, '%d'), ' - ', LEFT(v.name_month, 3) ) AS mes, IFNULL( SUM( v.venta_total), 0 ) as venta_total 
     FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '01' AND v.estado = '1' AND v.estado_delete = '1' AND v.fecha_emision >= (CURDATE() - INTERVAL 30 DAY) $filtro_id_trabajador
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
+    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '01' AND v.estado = '1' AND v.estado_delete = '1' AND v.fecha_emision >= (CURDATE() - INTERVAL 30 DAY) $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY DATE(v.fecha_emision)
     order by v.fecha_emision DESC;";
     $card_factura_chart = ejecutarConsultaArray($sql_044); if ($card_factura_chart['status'] == false) {return $card_factura_chart; }
 
     $sql_045 = "SELECT CONCAT( DATE_FORMAT(v.fecha_emision, '%d'), ' - ', LEFT(v.name_month, 3) ) AS mes, IFNULL( SUM( v.venta_total), 0 ) as venta_total 
-    FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '03' AND v.estado = '1' AND v.estado_delete = '1' AND v.fecha_emision >= (CURDATE() - INTERVAL 30 DAY) $filtro_id_trabajador
+    FROM venta as v 
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
+    INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '03' AND v.estado = '1' AND v.estado_delete = '1' AND v.fecha_emision >= (CURDATE() - INTERVAL 30 DAY) $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY DATE(v.fecha_emision)
     order by v.fecha_emision DESC;";
     $card_boleta_chart = ejecutarConsultaArray($sql_045); if ($card_boleta_chart['status'] == false) {return $card_boleta_chart; }
 
     $sql_046 = "SELECT CONCAT( DATE_FORMAT(v.fecha_emision, '%d'), ' - ', LEFT(v.name_month, 3) ) AS mes, IFNULL( SUM( v.venta_total), 0 ) as venta_total 
-    FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '12' AND v.estado = '1' AND v.estado_delete = '1' AND v.fecha_emision >= (CURDATE() - INTERVAL 30 DAY) $filtro_id_trabajador
+    FROM venta as v 
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
+    INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante = '12' AND v.estado = '1' AND v.estado_delete = '1' AND v.fecha_emision >= (CURDATE() - INTERVAL 30 DAY) $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY DATE(v.fecha_emision)
     order by v.fecha_emision DESC;";
     $card_ticket_chart = ejecutarConsultaArray($sql_046); if ($card_ticket_chart['status'] == false) {return $card_ticket_chart; }
 
     $sql_046 = "SELECT CONCAT( DATE_FORMAT(v.fecha_emision, '%d'), ' - ', LEFT(v.name_month, 3) ) AS mes, IFNULL( SUM( v.venta_total), 0 ) as venta_total 
-    FROM venta as v INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado = '1' AND v.estado_delete = '1' AND v.fecha_emision >= (CURDATE() - INTERVAL 30 DAY) $filtro_id_trabajador
+    FROM venta as v 
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
+    INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+    WHERE v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado = '1' AND v.estado_delete = '1' AND v.fecha_emision >= (CURDATE() - INTERVAL 30 DAY) $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY DATE(v.fecha_emision), v.name_month
     order by v.fecha_emision DESC;";
     $card_fbt_chart = ejecutarConsultaArray($sql_046); if ($card_fbt_chart['status'] == false) {return $card_fbt_chart; }
@@ -169,13 +201,17 @@ Class Escritorio
     */
 
 
-    $chart_line_f = []; $chart_line_b = []; $chart_line_t = []; $chart_line_fbt = [];  $chart_line_mes = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic', ];
-    for ($i=1; $i <= 12 ; $i++) { 
+    $chart_line_f = []; $chart_line_b = []; $chart_line_t = []; $chart_line_fbt = [];  $chart_line_mes = empty($filtro_mes) ? ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic', ] : json_decode($cant_mes, true) ;
+    $sql_dia_o_mes = empty($filtro_mes) ? "MONTH(v.fecha_emision)" : "DAY(v.fecha_emision)";
+
+    for ($i=1; $i <= count($chart_line_mes) ; $i++) { 
 
       # :::::::::::: FACTURA ::::::::::::
       $sql_51 = "SELECT IFNULL( SUM(v.venta_total), 0) as venta_total, MAX( LEFT(v.name_month, 3) ) AS name_month
-      FROM venta as v  INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-      WHERE MONTH(v.fecha_emision)='$i' AND v.tipo_comprobante = '01' AND v.sunat_estado = 'ACEPTADA' AND v.estado='1' AND v.estado_delete='1' $filtro_id_trabajador;";
+      FROM venta as v  
+      INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      WHERE $sql_dia_o_mes ='$i' AND v.tipo_comprobante = '01' AND v.sunat_estado = 'ACEPTADA' AND v.estado='1' AND v.estado_delete='1' $filtro_trabajador $filtro_anio $filtro_mes;";
       $chart_line_factura = ejecutarConsultaSimpleFila($sql_51); if ($chart_line_factura['status'] == false) { return $chart_line_factura; }
 
       $chart_line_f[] = [
@@ -185,8 +221,10 @@ Class Escritorio
 
       # :::::::::::: BOLETA ::::::::::::
       $sql_52 = "SELECT IFNULL( SUM(v.venta_total), 0) as venta_total, MAX( LEFT(v.name_month, 3) ) AS name_month
-      FROM venta as v  INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-      WHERE MONTH(v.fecha_emision)='$i' AND v.tipo_comprobante = '03' AND v.sunat_estado = 'ACEPTADA' AND v.estado='1' AND v.estado_delete='1' $filtro_id_trabajador;";
+      FROM venta as v  
+      INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      WHERE $sql_dia_o_mes ='$i' AND v.tipo_comprobante = '03' AND v.sunat_estado = 'ACEPTADA' AND v.estado='1' AND v.estado_delete='1' $filtro_trabajador $filtro_anio $filtro_mes;";
       $chart_line_boleta = ejecutarConsultaSimpleFila($sql_52); if ($chart_line_boleta['status'] == false) { return $chart_line_boleta; }
 
       $chart_line_b[] = [
@@ -196,8 +234,10 @@ Class Escritorio
 
       # :::::::::::: TICKET ::::::::::::
       $sql_53 = "SELECT IFNULL( SUM(v.venta_total), 0) as venta_total, MAX( LEFT(v.name_month, 3) ) AS name_month
-      FROM venta as v  INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-      WHERE MONTH(v.fecha_emision)='$i' AND v.tipo_comprobante = '12' AND v.sunat_estado = 'ACEPTADA' AND v.estado='1' AND v.estado_delete='1' $filtro_id_trabajador;";
+      FROM venta as v  
+      INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      WHERE $sql_dia_o_mes ='$i' AND v.tipo_comprobante = '12' AND v.sunat_estado = 'ACEPTADA' AND v.estado='1' AND v.estado_delete='1' $filtro_trabajador $filtro_anio $filtro_mes;";
       $chart_line_ticket = ejecutarConsultaSimpleFila($sql_53); if ($chart_line_ticket['status'] == false) { return $chart_line_ticket; }
 
       $chart_line_t[] = [
@@ -207,8 +247,10 @@ Class Escritorio
       
       # :::::::::::: TOTAL ::::::::::::
       $sql_53 = "SELECT IFNULL( SUM(v.venta_total), 0) as venta_total, MAX( LEFT(v.name_month, 3) ) AS name_month
-      FROM venta as v  INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
-      WHERE MONTH(v.fecha_emision)='$i' AND v.tipo_comprobante in ('01','03','12')  AND v.sunat_estado = 'ACEPTADA' AND v.estado='1' AND v.estado_delete='1' $filtro_id_trabajador;";
+      FROM venta as v  
+      INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
+      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente 
+      WHERE $sql_dia_o_mes ='$i' AND v.tipo_comprobante in ('01','03','12')  AND v.sunat_estado = 'ACEPTADA' AND v.estado='1' AND v.estado_delete='1' $filtro_trabajador $filtro_anio $filtro_mes;";
       $chart_line_total = ejecutarConsultaSimpleFila($sql_53); if ($chart_line_total['status'] == false) { return $chart_line_total; }
 
       $chart_line_fbt[] = [
@@ -228,11 +270,12 @@ Class Escritorio
 
     $sql_06 = "SELECT vd.idproducto, p.nombre as nombre_producto, p.imagen, p.precio_venta, c.nombre as nombre_categoria, SUM(vd.cantidad) AS cantidad, SUM(vd.subtotal) AS subtotal
     FROM venta as v
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
     INNER JOIN producto as p ON p.idproducto = vd.idproducto
     INNER JOIN categoria as c ON c.idcategoria = p.idcategoria
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente    
-    WHERE v.sunat_estado = 'ACEPTADA' AND v.estado = '1' AND v.estado_delete = '1'  AND v.tipo_comprobante in ('01','03','12') $filtro_id_trabajador
+    WHERE v.sunat_estado = 'ACEPTADA' AND v.estado = '1' AND v.estado_delete = '1'  AND v.tipo_comprobante in ('01','03','12') $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY vd.idproducto, p.nombre, c.nombre
     ORDER BY SUM(vd.subtotal) DESC
     LIMIT 5; ";
@@ -248,11 +291,12 @@ Class Escritorio
     
     $sql_07 = "SELECT v.user_created, pu.nombre_razonsocial, SUM(v.venta_total) AS total_cobrado      
     FROM venta as v
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
     INNER JOIN usuario as u on v.user_created = u.idusuario
 		INNER JOIN persona as pu on u.idpersona = pu.idpersona
     INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = pu.tipo_documento
-    WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') $filtro_id_trabajador
+    WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') $filtro_trabajador $filtro_anio $filtro_mes
     GROUP BY v.user_created, pu.nombre_razonsocial
     ORDER BY SUM(v.venta_total) DESC
     LIMIT 5; ";
@@ -271,10 +315,11 @@ Class Escritorio
     
     $sql_08 = "SELECT cp.nombre as nombre_centro_poblado, SUM(v.venta_total) AS total_cobrado      
     FROM venta as v
+    INNER JOIN periodo_contable AS pco ON pco.idperiodo_contable = v.idperiodo_contable 
     INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente    
 		INNER JOIN persona as p on p.idpersona = pc.idpersona
     INNER JOIN centro_poblado as cp ON cp.idcentro_poblado = pc.idcentro_poblado
-    WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') $filtro_id_trabajador
+    WHERE v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in ('01','03','12') $filtro_trabajador
     GROUP BY cp.nombre
     ORDER BY SUM(v.venta_total) DESC
     LIMIT 5; ";
@@ -340,5 +385,26 @@ Class Escritorio
     );
 
 	}
+
+  public function select2_filtro_anio_contable()	{   
+   
+    $sql = "SELECT year(periodo_format) as anio_contable FROM periodo_contable GROUP BY year(periodo_format) ORDER BY year(periodo_format) desc;";
+    return ejecutarConsultaArray($sql);
+  }
+
+  public function select2_filtro_trabajador()	{
+    $filtro_id_trabajador  = '';
+    // if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
+    //   $filtro_id_trabajador = "WHERE pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+    // } 
+    $sql = "SELECT LPAD(pt.idpersona_trabajador, 5, '0') as idtrabajador, pt.idpersona_trabajador, pt.idpersona,  per_t.nombre_razonsocial, COUNT(pc.idpersona_cliente) AS cant_cliente
+    FROM persona_cliente as pc
+    INNER JOIN persona_trabajador as pt ON pt.idpersona_trabajador = pc.idpersona_trabajador
+    INNER JOIN persona as per_t ON per_t.idpersona = pt.idpersona
+    $filtro_id_trabajador
+    GROUP BY pc.idpersona_trabajador
+    ORDER BY  COUNT(pc.idpersona_cliente) desc, per_t.nombre_razonsocial asc;";
+    return ejecutarConsultaArray($sql);
+  }
 
 }
