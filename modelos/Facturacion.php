@@ -126,7 +126,7 @@
 
         $i = 0;
         $detalle_new = "";
-
+       
         if ( !empty($newdata['data']) ) {      
           while ($i < count($idproducto)) {
 

@@ -56,6 +56,9 @@ function agregarDetalleComprobante(idproducto, individual) {
             <td class="py-1 text-nowrap">         
               <input type="hidden" name="idproducto[]" value="${e.data.idproducto}">
 
+              <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]"  value="">
+              <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="NO">  
+
               <div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(e.data.nombre)}')"> </span></div>
                 <div>
@@ -182,6 +185,9 @@ function listar_producto_x_codigo() {
             </td>
             <td class="py-1">         
               <input type="hidden" name="idproducto[]" value="${e.data.idproducto}">
+
+              <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]"  value="">
+              <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="NO">  
 
               <div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(e.data.nombre)}')"> </span></div>
@@ -311,6 +317,9 @@ function ver_editar_venta(idventa) {
 
               <td class="py-1">         
                 <input type="hidden" name="idproducto[]" value="${val1.idproducto}">
+
+                <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]"  value="">
+                <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="NO">  
 
                 <div class="d-flex flex-fill align-items-center">
                   <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(val1.nombre_producto)}')"> </span></div>
