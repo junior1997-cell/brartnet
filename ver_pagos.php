@@ -926,7 +926,7 @@
         <script src="assets/js/sticky.js"></script>
 
         <!-- Internal Landing JS -->
-        <script src="assets/js/landing_pagos.js?version_jdl=1.28"></script>
+        <script src="assets/js/landing_pagos.js?version_jdl=1.29"></script>
 
       </body>
 

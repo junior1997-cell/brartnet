@@ -1138,8 +1138,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Dropzone JS -->
     <script src="../assets/libs/dropzone/dropzone-min.js"></script>
 
-    <script src="scripts/persona_cliente.js?version_jdl=1.28"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.28"></script>
+    <script src="scripts/persona_cliente.js?version_jdl=1.29"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.29"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

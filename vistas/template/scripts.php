@@ -52,8 +52,8 @@
 <!-- JQuery ZOOM imagen -->
 <script type="text/javascript" src="../assets/libs/jquery-zoom/jquery.zoom.js"></script>
 <!-- Funciones Crud y Generales -->
-<script type="text/javascript" src="../assets/js/funcion_crud.js?version_jdl=1.28"></script>
-<script type="text/javascript" src="../assets/js/funcion_general.js?version_jdl=1.28"></script>
+<script type="text/javascript" src="../assets/js/funcion_crud.js?version_jdl=1.29"></script>
+<script type="text/javascript" src="../assets/js/funcion_general.js?version_jdl=1.29"></script>
 
 <!-- Data Table -->
 <script src="../assets/libs/data-table/datatables.js"></script>
