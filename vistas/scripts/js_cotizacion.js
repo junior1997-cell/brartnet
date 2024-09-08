@@ -58,12 +58,14 @@ function agregarDetalleComprobante(idproducto, individual) {
 
               <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]"  value="">
               <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="NO">  
+              <input type="hidden" name="pr_marca[]" value="${e.data.marca}">
+              <input type="hidden" name="pr_categoria[]" value="${e.data.categoria}">
 
               <div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(e.data.nombre)}')"> </span></div>
-                <div>
-                  <span class="d-block fs-11 fw-semibold text-nowrap text-primary">${e.data.nombre}</span>
-                  <span class="d-block fs-10 text-muted">M: <b>${e.data.marca}</b> | C: <b>${e.data.categoria}</b></span> 
+                <div>                  
+                  <textarea name="pr_nombre[]" class="form-control text-primary" rows="2" placeholder="ejemp: INTERNET ESTANDAR.">${e.data.nombre}</textarea>
+                  <span class="d-block fs-10 text-muted">M: <b>${e.data.marca}</b> | C: <b>${e.data.categoria}</b></span>                   
                 </div>
               </div>
             </td>
@@ -187,12 +189,15 @@ function listar_producto_x_codigo() {
               <input type="hidden" name="idproducto[]" value="${e.data.idproducto}">
 
               <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]"  value="">
-              <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="NO">  
+              <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="NO"> 
+              <input type="hidden" name="pr_marca[]" value="${e.data.marca}">
+              <input type="hidden" name="pr_categoria[]" value="${e.data.categoria}"> 
 
               <div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(e.data.nombre)}')"> </span></div>
                 <div>
                   <span class="d-block fs-11 fw-semibold text-nowrap text-primary">${e.data.nombre}</span>
+                  <textarea name="pr_nombre[]" class="form-control text-primary" rows="2" placeholder="ejemp: INTERNET ESTANDAR.">${e.data.nombre}</textarea>
                   <span class="d-block fs-10 text-muted">M: <b>${e.data.marca}</b> | C: <b>${e.data.categoria}</b></span> 
                 </div>
               </div>

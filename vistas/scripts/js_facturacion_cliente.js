@@ -56,6 +56,10 @@ function agregarDetalleComprobante(idproducto, tipo_producto, individual) {
             <td class="py-1 text-nowrap">         
               <input type="hidden" name="idproducto[]" value="${e.data.idproducto}">
 
+              <input type="hidden" name="pr_marca[]" value="${e.data.marca}">
+              <input type="hidden" name="pr_categoria[]" value="${e.data.categoria}">
+              <input type="hidden" name="pr_nombre[]" value="${e.data.nombre}">
+
               <div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(e.data.nombre)}')"> </span></div>
                 <div>
@@ -195,6 +199,10 @@ function listar_producto_x_codigo() {
             <td class="py-1">         
               <input type="hidden" name="idproducto[]" value="${e.data.idproducto}">
 
+              <input type="hidden" name="pr_marca[]" value="${e.data.marca}">
+              <input type="hidden" name="pr_categoria[]" value="${e.data.categoria}">
+              <input type="hidden" name="pr_nombre[]" value="${e.data.nombre}">
+
               <div class="d-flex flex-fill align-items-center">
                 <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(e.data.nombre)}')"> </span></div>
                 <div>
@@ -325,6 +333,10 @@ function mostrar_para_nota_credito(input) {
               <td class="py-1">         
                 <input type="hidden" name="idproducto[]" value="${val1.idproducto}">
 
+                <input type="hidden" name="pr_marca[]" value="${e.data.marca}">
+                <input type="hidden" name="pr_categoria[]" value="${e.data.categoria}">
+                <input type="hidden" name="pr_nombre[]" value="${e.data.nombre}">
+
                 <div class="d-flex flex-fill align-items-center">
                   <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(val1.nombre_producto)}')"> </span></div>
                   <div>
@@ -432,6 +444,10 @@ function listar_producto_x_precio(precio) {
           </td>
           <td class="py-1">         
             <input type="hidden" name="idproducto[]" value="${e.data.idproducto}">
+
+            <input type="hidden" name="pr_marca[]" value="${e.data.marca}">
+            <input type="hidden" name="pr_categoria[]" value="${e.data.categoria}">
+            <input type="hidden" name="pr_nombre[]" value="${e.data.nombre}">
 
             <div class="d-flex flex-fill align-items-center">
               <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(e.data.nombre)}')"> </span></div>
