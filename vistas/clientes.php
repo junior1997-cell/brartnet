@@ -51,6 +51,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="d-md-flex d-block align-items-center ">
                 <button class="btn-modal-effect btn btn-primary label-btn btn-agregar m-r-10px" onclick="wiev_tabla_formulario(2); limpiar_cliente();"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar</button>
                 <button class="btn-modal-effect btn btn-info label-btn btn-pagos-all m-r-10px" onclick="cargar_fltros_pagos_all_cliente();"><i class="ti ti-currency-dollar label-btn-icon me-2"></i>Pagos</button>
+                <button class="btn-modal-effect btn btn-teal label-btn btn-pagos-all m-r-10px" onclick="toastr_info('En desarrolo', 'Estamos por terminar esta opcion, sea paciente porfavor.');"><i class="bi bi-file-earmark-post label-btn-icon me-2"></i> Recibos</button>
                 <button type="button" class="btn btn-danger btn-cancelar btn-regresar m-r-10px" onclick="wiev_tabla_formulario(1);" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                 <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"> <i class="ri-save-2-line label-btn-icon me-2"></i> Guardar </button>
                 <button class="btn-modal-effect btn btn-success label-btn btn-guardar-cobro m-r-10px" style="display: none;"> <i class="ri-save-2-line label-btn-icon me-2"></i> Guardar </button>
@@ -126,67 +127,188 @@ if (!isset($_SESSION["user_nombre"])) {
                   </div>
                     
                 </div>
-                <div class="card-body">
-                  <div  class="table-responsive">
-                    <table id="tabla-cliente" class="table table-bordered w-100" style="width: 100%;">
-                      <thead class="buscando_tabla">
-                        <tr id="id_buscando_tabla"> 
-                          <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
-                        </tr>
-                        <tr>
-                          <th class="text-center">#</th>
-                          <th class="text-center">Acciones</th>
-                          <th>Cliente</th>
-                          <th>Lugar/Direccion</th>
-                          <th>Falta</th>
-                          <th>Cancelación</th>
-                          <th>Zona/Plan</th>
-                          <th>IP</th>
-                          <th>Trabajador</th>                                
-                          <th class="text-center">Observación.</th>
+                <div class="card-body">                      
+                      
+                  <nav class="nav bg-light border-2 p-2 nav-style-6 nav-pills mb-3 nav-justified d-sm-flex d-block" role="tablist">
+                    <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page" href="#nav-products-justified" aria-selected="false">Deudores <span class="cant-span-deudor badge bg-danger-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
+                    <a class="nav-link " data-bs-toggle="tab" role="tab" href="#nav-cart-justified" aria-selected="false">Sin Deuda <span class="cant-span-no-deuda badge bg-info-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
+                    <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-orders-justified" aria-selected="false">Sin Servicio <span class="cant-span-no-servicio badge bg-info-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
+                    <a class="nav-link active" data-bs-toggle="tab" role="tab" href="#nav-offers-justified" aria-selected="true">Todos <span class="cant-span-total badge bg-info-transparent ms-1 border border-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
+                  </nav>
+                  <div class="tab-content">
+                    <div class="tab-pane text-muted " id="nav-products-justified" role="tabpanel">
+                      <div class="row">
+                        <div class="col-4">                        
+                          <div class="card border-0">
+                            <div class="alert alert-danger border border-danger mb-0 p-2">
+                              <div class="d-flex align-items-start">
+                                <div class="me-2">
+                                  <svg class="flex-shrink-0 svg-danger" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000">
+                                    <g>
+                                      <rect fill="none" height="24" width="24"></rect>
+                                    </g>
+                                    <g>
+                                      <g>
+                                        <g>
+                                          <path d="M15.73,3H8.27L3,8.27v7.46L8.27,21h7.46L21,15.73V8.27L15.73,3z M19,14.9L14.9,19H9.1L5,14.9V9.1L9.1,5h5.8L19,9.1V14.9z"></path>
+                                          <rect height="6" width="2" x="11" y="7"></rect>
+                                          <rect height="2" width="2" x="11" y="15"></rect>
+                                        </g>
+                                      </g>
+                                    </g>
+                                  </svg>
+                                </div>
+                                <div class="text-danger w-100">
+                                  <div class="fw-semibold d-flex justify-content-between">Estamos en Desarrollo!!<button type="button" class="btn-close p-0" data-bs-dismiss="alert" aria-label="Close"><i class="bi bi-x"></i></button></div>
+                                  <div class="fs-12 op-8 mb-1">Esta sección del módulo aún está en desarrollo. Algunas funcionalidades pueden no estar disponibles o funcionar de manera inesperada. Agradecemos tu comprensión y paciencia.</div>
+                                  <div class="fs-12 d-inline-flex">
+                                    <a href="javascript:void(0);" class="text-info fw-semibold me-2 d-inline-block">cancel</a>
+                                    <a href="javascript:void(0);" class="text-danger fw-semibold">open</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane  text-muted" id="nav-cart-justified" role="tabpanel">
+                      <div class="row">
+                        <div class="col-4">                        
+                          <div class="card border-0">
+                            <div class="alert alert-danger border border-danger mb-0 p-2">
+                              <div class="d-flex align-items-start">
+                                <div class="me-2">
+                                  <svg class="flex-shrink-0 svg-danger" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000">
+                                    <g>
+                                      <rect fill="none" height="24" width="24"></rect>
+                                    </g>
+                                    <g>
+                                      <g>
+                                        <g>
+                                          <path d="M15.73,3H8.27L3,8.27v7.46L8.27,21h7.46L21,15.73V8.27L15.73,3z M19,14.9L14.9,19H9.1L5,14.9V9.1L9.1,5h5.8L19,9.1V14.9z"></path>
+                                          <rect height="6" width="2" x="11" y="7"></rect>
+                                          <rect height="2" width="2" x="11" y="15"></rect>
+                                        </g>
+                                      </g>
+                                    </g>
+                                  </svg>
+                                </div>
+                                <div class="text-danger w-100">
+                                  <div class="fw-semibold d-flex justify-content-between">Estamos en Desarrollo!!<button type="button" class="btn-close p-0" data-bs-dismiss="alert" aria-label="Close"><i class="bi bi-x"></i></button></div>
+                                  <div class="fs-12 op-8 mb-1">Esta sección del módulo aún está en desarrollo. Algunas funcionalidades pueden no estar disponibles o funcionar de manera inesperada. Agradecemos tu comprensión y paciencia.</div>
+                                  <div class="fs-12 d-inline-flex">
+                                    <a href="javascript:void(0);" class="text-info fw-semibold me-2 d-inline-block">cancel</a>
+                                    <a href="javascript:void(0);" class="text-danger fw-semibold">open</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane text-muted" id="nav-orders-justified" role="tabpanel">
+                      <div class="row">
+                        <div class="col-4">                        
+                          <div class="card border-0">
+                            <div class="alert alert-danger border border-danger mb-0 p-2">
+                              <div class="d-flex align-items-start">
+                                <div class="me-2">
+                                  <svg class="flex-shrink-0 svg-danger" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000">
+                                    <g>
+                                      <rect fill="none" height="24" width="24"></rect>
+                                    </g>
+                                    <g>
+                                      <g>
+                                        <g>
+                                          <path d="M15.73,3H8.27L3,8.27v7.46L8.27,21h7.46L21,15.73V8.27L15.73,3z M19,14.9L14.9,19H9.1L5,14.9V9.1L9.1,5h5.8L19,9.1V14.9z"></path>
+                                          <rect height="6" width="2" x="11" y="7"></rect>
+                                          <rect height="2" width="2" x="11" y="15"></rect>
+                                        </g>
+                                      </g>
+                                    </g>
+                                  </svg>
+                                </div>
+                                <div class="text-danger w-100">
+                                  <div class="fw-semibold d-flex justify-content-between">Estamos en Desarrollo!!<button type="button" class="btn-close p-0" data-bs-dismiss="alert" aria-label="Close"><i class="bi bi-x"></i></button></div>
+                                  <div class="fs-12 op-8 mb-1">Esta sección del módulo aún está en desarrollo. Algunas funcionalidades pueden no estar disponibles o funcionar de manera inesperada. Agradecemos tu comprensión y paciencia.</div>
+                                  <div class="fs-12 d-inline-flex">
+                                    <a href="javascript:void(0);" class="text-info fw-semibold me-2 d-inline-block">cancel</a>
+                                    <a href="javascript:void(0);" class="text-danger fw-semibold">open</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane show active text-muted" id="nav-offers-justified" role="tabpanel">
+                      <div  class="table-responsive">
+                        <table id="tabla-cliente" class="table table-bordered w-100" style="width: 100%;">
+                          <thead class="buscando_tabla">
+                            <tr id="id_buscando_tabla"> 
+                              <th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                            </tr>
+                            <tr>
+                              <th class="text-center">#</th>
+                              <th class="text-center">Acciones</th>
+                              <th>Cliente</th>
+                              <th>Lugar/Direccion</th>
+                              <th>Falta</th>
+                              <th>Cancelación</th>
+                              <th>Zona/Plan</th>
+                              <th>IP</th>
+                              <th>Trabajador</th>                                
+                              <th class="text-center">Observación.</th>
 
-                          <th class="text-center">Nombres</th>
-                          <th class="text-center">Tipo Documento</th>
-                          <th class="text-center">Número Documento</th>
-                          <th class="text-center">Centro Poblado</th>
-                          <th class="text-center">Dirección</th>
-                          <th class="text-center">Plan</th>
-                          <th class="text-center">Costo Plan</th>
-                          <th class="text-center">Nombre Zona</th>
-                          <th class="text-center">Siguiente Pago</th>
-                          <th class="text-center">Ip Antena</th>
+                              <th class="text-center">Nombres</th>
+                              <th class="text-center">Tipo Documento</th>
+                              <th class="text-center">Número Documento</th>
+                              <th class="text-center">Centro Poblado</th>
+                              <th class="text-center">Dirección</th>
+                              <th class="text-center">Plan</th>
+                              <th class="text-center">Costo Plan</th>
+                              <th class="text-center">Nombre Zona</th>
+                              <th class="text-center">Siguiente Pago</th>
+                              <th class="text-center">Ip Antena</th>
 
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                      <tfoot>
-                        <tr>
-                          <th class="text-center">#</th>
-                          <th class="text-center">Acciones</th>
-                          <th>Cliente</th>
-                          <th>Direccion</th>
-                          <th>Falta</th>
-                          <th>Cancelación</th>
-                          <th>Zona/Plan</th>
-                          <th>IP</th>
-                          <th>Trabajador</th>
-                          <th class="text-center">Observación.</th>
+                            </tr>
+                          </thead>
+                          <tbody></tbody>
+                          <tfoot>
+                            <tr>
+                              <th class="text-center">#</th>
+                              <th class="text-center">Acciones</th>
+                              <th>Cliente</th>
+                              <th>Direccion</th>
+                              <th>Falta</th>
+                              <th>Cancelación</th>
+                              <th>Zona/Plan</th>
+                              <th>IP</th>
+                              <th>Trabajador</th>
+                              <th class="text-center">Observación.</th>
 
-                          <th class="text-center">Nombres</th>
-                          <th class="text-center">Tipo Documento</th>
-                          <th class="text-center">Número Documento</th>
-                          <th class="text-center">Centro Poblado</th>
-                          <th class="text-center">Dirección</th>
-                          <th class="text-center">Plan</th>
-                          <th class="text-center">Costo Plan</th>
-                          <th class="text-center">Nombre Zona</th>
-                          <th class="text-center">Siguiente Pago</th>
-                          <th class="text-center">Ip Antena</th>
+                              <th class="text-center">Nombres</th>
+                              <th class="text-center">Tipo Documento</th>
+                              <th class="text-center">Número Documento</th>
+                              <th class="text-center">Centro Poblado</th>
+                              <th class="text-center">Dirección</th>
+                              <th class="text-center">Plan</th>
+                              <th class="text-center">Costo Plan</th>
+                              <th class="text-center">Nombre Zona</th>
+                              <th class="text-center">Siguiente Pago</th>
+                              <th class="text-center">Ip Antena</th>
 
-                        </tr>
-                      </tfoot>
-                    </table>
-                  </div>                   
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>    
+                    </div>
+                  </div>                    
+                 
+                                 
                 </div>
                 <div class="card-footer border-top-0">
                   <button type="button" class="btn btn-danger btn-cancelar" onclick="wiev_tabla_formulario(1);" style="display: none;"><i class="las la-times fs-lg"></i> Cancelar</button>
@@ -863,18 +985,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <div class="form-group">
                                   <label for="f_metodo_pago" class="form-label">Método de pago</label>
                                   <select class="form-control" name="f_metodo_pago" id="f_metodo_pago" onchange="capturar_pago_venta();">
-                                    <option value="EFECTIVO" selected >EFECTIVO</option>
-                                    <option value="MIXTO">MIXTO</option>
-                                    <option value="CAJA HUANCAYO">CAJA HUANCAYO</option>
-                                    <option value="CAJA PIURA">CAJA PIURA</option>
-                                    <option value="BANCO DE LA NACIÓN">BANCO DE LA NACIÓN</option>
-                                    <option value="COOPACT">COOPACT</option>
-                                    <option value="BBVA CONTINENTAL">BBVA CONTINENTAL</option>
-                                    <option value="YAPE">YAPE</option>
-                                    <option value="PLIN">PLIN</option>
-                                    <option value="CULQI">CULQI</option>                                                      
-                                    <option value="LUKITA">LUKITA</option>                                                      
-                                    <option value="TUNKI">TUNKI</option>                                
+                                    <option selected >CARGANDO...</option>                                                            
                                   </select>                              
                                 </div>
                               </div> 
@@ -1138,8 +1249,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Dropzone JS -->
     <script src="../assets/libs/dropzone/dropzone-min.js"></script>
 
-    <script src="scripts/persona_cliente.js?version_jdl=1.29"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.29"></script>
+    <script src="scripts/persona_cliente.js?version_jdl=1.31"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.31"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

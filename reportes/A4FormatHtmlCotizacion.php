@@ -71,6 +71,8 @@ if (!isset($_SESSION["user_nombre"])) {
     $c_tipo_documento     = $venta_f['data']['venta']['tipo_documento'];
     $c_tipo_documento_name= $venta_f['data']['venta']['nombre_tipo_documento'];
     $c_numero_documento   = $venta_f['data']['venta']['numero_documento'];
+    $c_celular            = mb_convert_encoding($venta_f['data']['venta']['celular'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['celular'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $c_correo             = mb_convert_encoding($venta_f['data']['venta']['correo'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['correo'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     $c_direccion          = mb_convert_encoding($venta_f['data']['venta']['direccion'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['direccion'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     $c_nc_serie_y_numero  = mb_convert_encoding($venta_f['data']['venta']['nc_serie_y_numero'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['nc_serie_y_numero'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     
@@ -340,6 +342,8 @@ if (!isset($_SESSION["user_nombre"])) {
               </tr>               
               <tr><td><b>RUC:</b> <?php echo $e_numero_documento;?></td></tr>
               <tr><td><b>E-MAIL:</b> <?php echo $e_correo;?></td></tr>
+              <tr><td style="padding: 10px;"></td></tr>
+              <tr><td></td></tr>
             </tbody>
           </table>
         </div>
@@ -353,10 +357,13 @@ if (!isset($_SESSION["user_nombre"])) {
                 <td width="30%"><strong><?php echo $c_tipo_documento_name;?></strong></td> <td style="width: 1rem; text-align: right;">:</td> <td><span><?php echo $c_numero_documento;?></span></td>
               </tr>
               <tr>
-                <td width="30%"><strong>E-MAIL:</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_direccion;?></td>
-              </tr>               
+                <td width="30%"><strong>E-MAIL:</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_correo;?></td>
+              </tr>  
               <tr>
-                <td width="30%"><strong>TELEFONO:</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_nc_serie_y_numero;?></td>
+                <td width="30%"><strong>DIRECC:</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_direccion;?></td>
+              </tr>             
+              <tr>
+                <td width="30%"><strong>TELEFONO:</strong></td> <td style="width: 1rem; text-align: right;">:</td> <td> <?php echo $c_celular;?></td>
               </tr>               
             </tbody>
           </table>

@@ -1028,3 +1028,5 @@ function ver_comprobante_pago(id_venta) {
   }).fail( function(e) { ver_errores(e); } );
   
 }
+
+

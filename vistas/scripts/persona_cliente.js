@@ -20,6 +20,8 @@ function init() {
   lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan", '#filtro_plan', null, '.charge_filtro_plan');
   lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena", '#filtro_zona_antena', null, '.charge_filtro_zona_antena');
 
+  lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago', null, 'charge_f_metodo_pago');
+
   lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
   lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
 
@@ -50,7 +52,7 @@ function init() {
   $("#tipo_persona_sunat").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#idselec_centroProbl").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
-  $("#f_metodo_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#f_metodo_pago").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 }
 
 function templateDistrito (state) {
@@ -59,6 +61,15 @@ function templateDistrito (state) {
   var $state = $(`<span class="fs-11" > ${state.text}</span><span class="fs-9" > (${state.title})</span>`);
   return $state;
 }
+
+function templateBanco (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../assets/modulo/bancos/${state.title}`: '../assets/modulo/bancos/logo-sin-banco.svg'; 
+  var onerror = `onerror="this.src='../assets/modulo/bancos/logo-sin-banco.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
 
 //Función limpiar
 function limpiar_cliente() {
@@ -201,6 +212,16 @@ $('#tipo_documento').change(function () {
   $("#form-agregar-cliente").valid();
 
 });
+
+function cant_tab_cliente() {
+  $.getJSON(`../ajax/persona_cliente.php?op=cant_tab_cliente`,   function (e, textStatus, jqXHR) {
+    $('.cant-span-deudor').html(0);
+    $('.cant-span-no-deuda').html(0);
+    $('.cant-span-no-servicio').html(0);
+    $('.cant-span-total').html(e.data.count_total);
+      
+  });
+}
 
 function llenar_dep_prov_ubig(input) {
 
@@ -1252,8 +1273,10 @@ function filtros() {
 
   $('#id_buscando_tabla').html(`<th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_trabajador} ${nombre_dia_pago} ${nombre_plan}...</th>`);
   //console.log(filtro_categoria, fecha_2, filtro_plan, comprobante);
-
+  
+  cant_tab_cliente();
   tabla_principal_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
+  
 }
 
 function cargando_search_pago_all() {
