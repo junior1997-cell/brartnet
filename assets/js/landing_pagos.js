@@ -90,7 +90,7 @@ nanoButtons[0].click();
 /* for theme primary */
 
 /* footer year */
-document.getElementById("year").innerHTML = new Date().getFullYear();
+//document.getElementById("year").innerHTML = new Date().getFullYear();
 /* footer year */
 
 let mainContent;
