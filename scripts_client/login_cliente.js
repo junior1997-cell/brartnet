@@ -12,7 +12,7 @@ $(function () {
     btnIngresar.prop("disabled", true).html(`<i class="bx bx-loader-circle bx-spin font-size-15px" ></i> Validando datos<span class="bx-burst">...</span>`).removeClass('btn-primary').addClass('btn-outline-dark');
 
     
-    $.post( "ajax/usuario_cliente.php?op=verificarC", { "loginc": loginc, "clavec": clavec, "st": st },  function (e) {
+    $.post( "ajax_client/usuario_cliente.php?op=verificarC", { "loginc": loginc, "clavec": clavec, "st": st },  function (e) {
 			try {
 				e = JSON.parse(e); //console.log(e);				
 				setTimeout(validar_response(e), 1000);
@@ -35,7 +35,9 @@ $(function () {
 });
 
 function validar_response(e) {
+
 	if (e.status == true) {
+
 		if (e.data == null) {
 			// const dangert = document.getElementById('user-incorrecto'); 
 			// const toast = new bootstrap.Toast(dangert); toast.show();
@@ -52,7 +54,11 @@ function validar_response(e) {
 			$('.login-btn').html('Iniciar sesion').prop("disabled", false).removeClass('disabled btn-outline-dark').addClass('btn-primary');
 			localStorage.setItem('nube_id_usuario', e.data.usuario_cliente.idpersona_cliente);
 
-			if (redirecinando.file == '' || redirecinando.file == null) {	$(location).attr("href", "ver_pagos.php");	} else { $(location).attr("href", redirecinando.file); }			      
+			//console.log(redirecinando.file);
+			
+			if (redirecinando.file == '' || redirecinando.file == null) { //console.log(location);
+				$(location).attr("href", "ver_pagos.php");	
+				} else { $(location).attr("href", redirecinando.file); }			      
 		}
 
 	} else {
@@ -63,6 +69,7 @@ function validar_response(e) {
 
 function varaibles_get() {
 	var v_args = location.search.substring(1).split("&");
+	//console.log(v_args);
 	var param_values = [];
 	if (v_args != '' && v_args != 'undefined')
 		for (var i = 0; i < v_args.length; i++) {
@@ -71,6 +78,8 @@ function varaibles_get() {
 				param_values[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
 			}
 		}
+		
+		
 	return param_values;
 }
 
