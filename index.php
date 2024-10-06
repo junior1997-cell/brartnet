@@ -1060,7 +1060,7 @@
   <script src="assets/js/funcion_crud.js?version_jdl=1.31"></script>
 
   <script src="vistas/scripts/home.js?version_jdl=1.31"></script>
-  <script src="vistas/scripts/login_cliente.js?version_jdl=1.31"></script>
+  <script src="scripts_client/login_cliente.js?version_jdl=1.31"></script>
 
   <script>
     $(document).on('ready', function () {

@@ -344,7 +344,7 @@ if (!isset($_SESSION['cliente_nombre'])) {
               <div class="col-xxl-4 col-xl-3 col-lg-12 col-md-12 col-sm-12">
                 <div class="card custom-card">
                   <div class="card-header">
-                    <div class="card-title me-1">Filtro</div><span class="badge bg-primary-transparent rounded-pill">02</span>
+                    <div class="card-title me-1">Filtros</div><span class="badge bg-primary-transparent rounded-pill">02</span>
                   </div>
                   <div class="card-body p-0">
                     <div class="p-3 border-bottom border-block-end-dashed">
@@ -353,12 +353,6 @@ if (!isset($_SESSION['cliente_nombre'])) {
                       </div>
                     </div>
                     <div class="p-1 border-bottom border-block-end-dashed list_year">
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">2023</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">2024</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">2025</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">2026</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">2026</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">2026</button>
                     </div>
 
                     <div class="p-3 border-bottom border-block-end-dashed">
@@ -367,35 +361,12 @@ if (!isset($_SESSION['cliente_nombre'])) {
                       </div>
                     </div>
                     <div class="p-1 border-bottom border-block-end-dashed list_month">
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Enero</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Febrero</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Marzo</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Abril</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Mayo</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Junio</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Julio</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Agosto</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Setiembre</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Octubre</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Noviembre</button>
-                      <button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">Diciembre</button>
-                    </div>
-                    <div class="p-3 border-bottom border-block-end-dashed">
-                      <div class="d-flex align-items-center justify-content-between flex-wrap">
-                        <div class="text-primary fw-semibold">Pagos Pendientes </div>
-                        <div>
-                          <div class="toggle toggle-dark on">
-                            <span></span>
-                          </div>
-                        </div>
-
-                      </div>
                     </div>
 
                     <div class="p-3 border-bottom border-block-end-dashed">
 
                       <div class="d-grid gap-2 mb-4">
-                        <button class="btn btn-secondary btn-wave" type="button">Filtrar</button>
+                        <button class="btn btn-secondary btn-wave" type="button">Limpiar Filtro</button>
                       </div>
                     </div>
 
@@ -776,8 +747,8 @@ if (!isset($_SESSION['cliente_nombre'])) {
     <!-- Sticky JS -->
     <script src="assets/js/sticky.js"></script>
 
-    <!-- Internal Landing JS -->
-    <script src="assets/js/landing_pagos.js?version_jdl=1.31"></script>
+    <!-- Internal Landing JS-->
+    <script src="assets/js/landing_pagos.js?version_jdl=1.31"></script> 
 
     <script src="scripts_client/ver_pagos.js?version_jdl=1.31"></script>
 
