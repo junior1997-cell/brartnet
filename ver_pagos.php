@@ -393,10 +393,10 @@ if (!isset($_SESSION['cliente_nombre'])) {
                     </div>
 
                     <div class="p-3 border-bottom border-block-end-dashed">
-                      
+
                       <div class="d-grid gap-2 mb-4">
-                      <button class="btn btn-secondary btn-wave" type="button">Filtrar</button>
-                    </div>
+                        <button class="btn btn-secondary btn-wave" type="button">Filtrar</button>
+                      </div>
                     </div>
 
 
@@ -776,10 +776,10 @@ if (!isset($_SESSION['cliente_nombre'])) {
     <!-- Sticky JS -->
     <script src="assets/js/sticky.js"></script>
 
-        <!-- Internal Landing JS -->
-        <script src="assets/js/landing_pagos.js?version_jdl=1.31"></script>
+    <!-- Internal Landing JS -->
+    <script src="assets/js/landing_pagos.js?version_jdl=1.31"></script>
 
-    <script src="scripts_client/ver_pagos.js?version_jdl=1.29"></script>
+    <script src="scripts_client/ver_pagos.js?version_jdl=1.31"></script>
 
   </body>
 
