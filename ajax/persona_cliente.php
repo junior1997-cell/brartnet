@@ -210,6 +210,11 @@ if (!isset($_SESSION["user_nombre"])) {
         echo json_encode($rspta, true);
       break;
 
+      case 'cant_tab_cliente':
+        $rspta = $persona_cliente->cant_tab_cliente();
+        echo json_encode($rspta, true);
+      break;
+
       case 'tabla_principal_cliente':
         $rspta = $persona_cliente->tabla_principal_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
         //Vamos a declarar un array
@@ -696,6 +701,7 @@ if (!isset($_SESSION["user_nombre"])) {
         }
 
       break;
+
       case 'select2_filtro_plan':
 
         $rspta = $persona_cliente->select2_filtro_plan();        

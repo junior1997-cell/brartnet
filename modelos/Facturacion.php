@@ -225,7 +225,7 @@
         WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
         ELSE '-'
       END AS cliente_nombre_completo, 
-      p.tipo_documento, p.numero_documento, p.direccion, 
+      p.tipo_documento, p.numero_documento, p.direccion, p.celular, p.correo,
       tc.abreviatura as nombre_comprobante, sdi.abreviatura as nombre_tipo_documento,
       pu.nombre_razonsocial as user_en_atencion, IFNULL(cnc.nombre, '') as nc_nombre_motivo
       FROM venta AS v

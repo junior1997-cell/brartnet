@@ -65,6 +65,12 @@ function validar_response(e) {
 			localStorage.setItem('nube_id_persona', e.data.usuario.idpersona);
 			localStorage.setItem('nube_id_persona_trabajador', e.data.usuario.idpersona_trabajador);
 			localStorage.setItem('nube_cargo', e.data.usuario.cargo);
+
+			localStorage.setItem('nube_nombre_apellidos', e.data.usuario.nombre_razonsocial + ' ' + e.data.usuario.apellidos_nombrecomercial );
+			localStorage.setItem('nube_foto_perfil', e.data.usuario.foto_perfil);
+			localStorage.setItem('nube_login', e.data.usuario.login);
+			localStorage.setItem('nube_numero_documento', e.data.usuario.numero_documento);
+			localStorage.setItem('nube_tipo_documento', e.data.usuario.tipo_documento);
 			
 			if (e.data.sucursal == null) {
 				localStorage.setItem('nube_id_sucursal', 0);

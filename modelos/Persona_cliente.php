@@ -166,6 +166,25 @@ class Cliente
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
+	public function cant_tab_cliente()	{
+		$sql = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
+		FROM persona_cliente as pc 
+		INNER JOIN persona AS p on pc.idpersona=p.idpersona 
+		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador 
+		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona 
+		INNER JOIN plan as pl on pc.idplan=pl.idplan 
+		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena 
+		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat 
+		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado 
+		where pc.estado_delete='1';";
+
+		$count_total = ejecutarConsultaSimpleFila($sql);
+
+		return [
+			'status' => true, 'message' => 'Todo ok', 'data' => ['count_total' => floatval($count_total['data']['total'])  ]
+		];
+	}
+
 	//Implementar un método para listar los registros
 	public function tabla_principal_cliente($filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
 
