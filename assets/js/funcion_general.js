@@ -1388,6 +1388,14 @@ function replicar_value_input2(id, name_input, valor) {
   $(`${name_input}`).val(value).trigger("change");
 }
 
+function valor_is_checked(input, val_is_true, val_is_false) {
+  if ($(input).is(':checked')) {
+    $(input).val(val_is_true)
+  } else {
+    $(input).val(val_is_false)
+  }
+}
+
 /**
  * Funcion para agergar toltip personalizado:
  *

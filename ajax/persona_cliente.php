@@ -61,7 +61,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $f_idventa                = isset($_POST["f_idventa"]) ? limpiarCadena($_POST["f_idventa"]) : "";   
     $f_impuesto               = isset($_POST["f_impuesto"]) ? limpiarCadena($_POST["f_impuesto"]) : "";   
-    $f_crear_y_emitir         = isset($_POST["f_crear_y_emitir"]) ? ( empty($_POST["f_crear_y_emitir"]) ? 'NO' : 'SI' ) : ""; 
+    $f_crear_y_emitir         = isset($_POST["f_crear_y_emitir"]) ? limpiarCadena($_POST["f_crear_y_emitir"]) : "NO"; 
 
     $f_idsunat_c01            = isset($_POST["f_idsunat_c01"]) ? limpiarCadena($_POST["f_idsunat_c01"]) : "";    
     $f_tipo_comprobante       = isset($_POST["f_tipo_comprobante"]) ? limpiarCadena($_POST["f_tipo_comprobante"]) : "";    
@@ -211,7 +211,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'cant_tab_cliente':
-        $rspta = $persona_cliente->cant_tab_cliente();
+        $rspta = $persona_cliente->cant_tab_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
         echo json_encode($rspta, true);
       break;
 
@@ -241,7 +241,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   
                   <li><a class="dropdown-item" href="javascript:void(0);" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-coin"></i> Realizar Pago</a></li>
                   <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
-                  ( $value['estado'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
+                  ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
                   '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
                   ).
                 '</ul>
@@ -252,7 +252,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div>
                   <span class="d-block fw-semibold fs-12 text-primary">' . $value['cliente_nombre_completo'] . '</span>
-                  <span class="text-muted fs-10 text-nowrap">' . $value['tipo_doc'] . ' : ' . $value['numero_documento'] . '</span> |
+                  <span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> |
                   <span class="text-muted fs-10 text-nowrap">Cel.: ' . '<a href="tel:+51'.$value['celular'].'" data-bs-toggle="tooltip" title="Clic para hacer llamada">'.$value['celular'].'</a>' . '</span> |
                   <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-15"></i> ' . $value['idpersona_cliente_v2'] . '</span> 
                 </div>
@@ -262,15 +262,15 @@ if (!isset($_SESSION["user_nombre"])) {
               "5" => '<span class="badge '.$class_dia.'">'.  $value['proximo_pago']  .'</span>',
               "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '<br>' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "7" => '<div class="text-start" >
-                      <span class="d-block fs-10 text-primary fw-semibold text-nowrap"> <i class="bx bx-broadcast '.($value['estado'] == '1' ? 'bx-burst' : '').' fa-1x" ></i> ' . $value['ip_antena'] . '</span>
-                      <span class="d-block fs-10 text-muted text-nowrap"><i class="bx bx-wifi '.($value['estado'] == '1' ? 'bx-burst' : '').'" ></i> ' . $value['ip_personal'] . '</span>
+                      <span class="d-block fs-10 text-primary fw-semibold text-nowrap"> <i class="bx bx-broadcast '.($value['estado_pc'] == '1' ? 'bx-burst' : '').' fa-1x" ></i> ' . $value['ip_antena'] . '</span>
+                      <span class="d-block fs-10 text-muted text-nowrap"><i class="bx bx-wifi '.($value['estado_pc'] == '1' ? 'bx-burst' : '').'" ></i> ' . $value['ip_personal'] . '</span>
                       <span class="text-muted fs-10 text-nowrap"><i class="bx bx-user-pin fa-1x"></i> ' . $value['usuario_microtick'] . '</span>
                     </div>',
               "8" => '<span class="fs-10">' . $value['trabajador_nombre'] .'</span>',
               "9" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light " readonly="">' . $value['nota'] . '</textarea>',
               
               "10" => $value['cliente_nombre_completo'],
-              "11" => $value['tipo_doc'],
+              "11" => $value['tipo_documento_abrev_nombre'],
               "12" => $value['numero_documento'],
               "13" => $value['centro_poblado'],
               "14" => $value['direccion'],

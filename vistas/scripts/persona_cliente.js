@@ -213,11 +213,12 @@ $('#tipo_documento').change(function () {
 
 });
 
-function cant_tab_cliente() {
-  $.getJSON(`../ajax/persona_cliente.php?op=cant_tab_cliente`,   function (e, textStatus, jqXHR) {
-    $('.cant-span-deudor').html(0);
-    $('.cant-span-no-deuda').html(0);
-    $('.cant-span-no-servicio').html(0);
+function cant_tab_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+  $.getJSON(`../ajax/persona_cliente.php?op=cant_tab_cliente`, {'filtro_trabajador':filtro_trabajador, 'filtro_dia_pago':filtro_dia_pago , 'filtro_plan': filtro_plan, 'filtro_zona_antena': filtro_zona_antena}, function (e, textStatus, jqXHR) {
+    $('.cant-span-deudor').html(e.data.count_deudores);
+    $('.cant-span-no-deuda').html(e.data.count_no_deuda);
+    $('.cant-span-no-servicio').html(e.data.count_baja);
+    $('.cant-span-no-pago').html(e.data.count_no_pago);
     $('.cant-span-total').html(e.data.count_total);
       
   });
@@ -1011,7 +1012,7 @@ function es_valido_cliente() {
         confirmButtonColor: "#3085d6",        
         confirmButtonText: "Ok"
       }).then((result) => {               
-        $('#f_tipo_comprobante12').prop('checked', true).focus(); 
+        $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
         setTimeout(function() {
           $("#form-facturacion").valid();  
           $('#f_tipo_comprobante12').focus(); 
@@ -1062,7 +1063,7 @@ function guardar_editar_facturacion(e) {
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, Guardar!",
     preConfirm: (input) => {
-      return fetch("../ajax/persona_cliente.php?op=guardar_editar_facturacion", {
+      return fetch("../ajax/facturacion.php?op=guardar_editar_facturacion", {
         method: 'POST', // or 'PUT'
         body: formData, // data can be `string` or {object}!        
       }).then(response => {
@@ -1274,8 +1275,12 @@ function filtros() {
   $('#id_buscando_tabla').html(`<th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_trabajador} ${nombre_dia_pago} ${nombre_plan}...</th>`);
   //console.log(filtro_categoria, fecha_2, filtro_plan, comprobante);
   
-  cant_tab_cliente();
+  cant_tab_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
   tabla_principal_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
+  
+}
+
+function filtrar_grupo(tabla) {
   
 }
 

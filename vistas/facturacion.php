@@ -122,6 +122,8 @@ if (!isset($_SESSION["user_nombre"])) {
                         <i class="ti ti-dots-vertical"></i>
                       </button>
                       <ul class="dropdown-menu otros-filtros">                        
+                        <li><a class="dropdown-item o-f-poren" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('POR ENVIAR', '.o-f-poren')" ><i class="ri-check-fill align-middle me-1"></i> Por enviar</a></li>
+                        <li><a class="dropdown-item o-f-noen" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('NO ENVIADO', '.o-f-noen')" ><i class="ri-check-fill align-middle me-1"></i> No enviado</a></li>
                         <li><a class="dropdown-item o-f-ac" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ACEPTADA', '.o-f-ac')" ><i class="ri-check-fill align-middle me-1"></i> Solo aceptados</a></li>
                         <li><a class="dropdown-item o-f-an" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('ANULADO', '.o-f-an')" ><i class="ri-close-fill align-middle me-1"></i> Solo anulados</a></li>
                         <li><a class="dropdown-item o-f-to active" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat('', '.o-f-to')" ><i class="bi bi-border-all align-middle me-1"></i> Todos</a></li>
@@ -399,7 +401,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!-- ENVIO AUTOMATICO -->
                           <div class="col-md-12 col-lg-4 col-xl-5 col-xxl-5 px-0">
                             <div class="custom-toggle-switch d-flex align-items-center mb-1">
-                              <input id="f_crear_y_emitir" name="f_crear_y_emitir" type="checkbox" checked="" value="SI">
+                              <input id="f_crear_y_emitir" name="f_crear_y_emitir" type="checkbox" checked="" value="SI" onchange="valor_is_checked('#f_crear_y_emitir','SI', 'NO' );">
                               <label for="f_crear_y_emitir" class="label-warning"></label><span class="ms-3 fs-11">SUNAT</span>
                             </div>
                           </div>
@@ -549,7 +551,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="font-size-11px py-1">Cod</th> 
                                 <th class="font-size-11px py-1">Producto</th>
                                 <th class="font-size-11px py-1">Unidad</th>
-                                <th class="font-size-11px py-1">Periodo</th>
+                                <th class="font-size-11px py-1">Periodo <small>(Mes y Año)</small></th>
                                 <th class="font-size-11px py-1">Cantidad</th>                                        
                                 <th class="font-size-11px py-1" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
                                 <th class="font-size-11px py-1">Descuento</th>
@@ -794,7 +796,9 @@ if (!isset($_SESSION["user_nombre"])) {
                       <button class="btn btn-icon btn-secondary-light btn-sm btn-wave waves-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="ti ti-dots-vertical"></i>
                       </button>
-                      <ul class="dropdown-menu md-otros-filtros">                        
+                      <ul class="dropdown-menu md-otros-filtros">    
+                        <li><a class="dropdown-item o-f-poren" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat_md('POR ENVIAR', '.o-f-poren')" ><i class="ri-check-fill align-middle me-1"></i> Por enviar</a></li>
+                        <li><a class="dropdown-item o-f-noen" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat_md('NO ENVIADO', '.o-f-noen')" ><i class="ri-check-fill align-middle me-1"></i> No enviado</a></li>                    
                         <li><a class="dropdown-item md-o-f-ac" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat_md('ACEPTADA', '.md-o-f-ac')" ><i class="ri-check-fill align-middle me-1"></i> Solo aceptados</a></li>
                         <li><a class="dropdown-item md-o-f-an" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat_md('ANULADO', '.md-o-f-an')" ><i class="ri-close-fill align-middle me-1"></i> Solo anulados</a></li>
                         <li><a class="dropdown-item md-o-f-to active" href="javascript:void(0);" onclick="filtrar_solo_estado_sunat_md('', '.md-o-f-to')" ><i class="bi bi-border-all align-middle me-1"></i> Todos</a></li>                        

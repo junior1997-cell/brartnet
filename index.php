@@ -894,7 +894,7 @@
                     <a href="javascript:void(0);" class="text-fixed-white op-6"><i class="ri-home-4-line me-1 align-middle"></i> San Martín, Tarapoto, Jr. alfonso Ugarte 1909</a>
                   </li>
                   <li>
-                    <a href="javascript:void(0);" class="text-fixed-white op-6"><i class="ri-mail-line me-1 align-middle"></i> brartnet@gmail.com</a>
+                    <a href="javascript:void(0);" class="text-fixed-white op-6"><i class="ri-mail-line me-1 align-middle"></i> pasioncenter@gmail.com</a>
                   </li>
                   <li>
                     <a href="javascript:void(0);" class="text-fixed-white op-6"><i class="ri-phone-line me-1 align-middle"></i> +(51) 999 777 444</a>

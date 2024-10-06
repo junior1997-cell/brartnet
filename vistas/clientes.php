@@ -130,13 +130,14 @@ if (!isset($_SESSION["user_nombre"])) {
                 <div class="card-body">                      
                       
                   <nav class="nav bg-light border-2 p-2 nav-style-6 nav-pills mb-3 nav-justified d-sm-flex d-block" role="tablist">
-                    <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page" href="#nav-products-justified" aria-selected="false">Deudores <span class="cant-span-deudor badge bg-danger-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
-                    <a class="nav-link " data-bs-toggle="tab" role="tab" href="#nav-cart-justified" aria-selected="false">Sin Deuda <span class="cant-span-no-deuda badge bg-info-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
-                    <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-orders-justified" aria-selected="false">Sin Servicio <span class="cant-span-no-servicio badge bg-info-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
-                    <a class="nav-link active" data-bs-toggle="tab" role="tab" href="#nav-offers-justified" aria-selected="true">Todos <span class="cant-span-total badge bg-info-transparent ms-1 border border-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
+                    <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page" href="#nav-deudores" aria-selected="false" onclick="filtrar_grupo('tabla_deudores');" >Deudores <span class="cant-span-deudor badge bg-danger-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
+                    <a class="nav-link " data-bs-toggle="tab" role="tab" href="#nav-sin-deuda" aria-selected="false" onclick="filtrar_grupo('tabla_no_deuda');">Sin Deuda <span class="cant-span-no-deuda badge bg-info-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
+                    <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-sin-servicio" aria-selected="false" onclick="filtrar_grupo('tabla_no_servicio');">Sin Servicio <span class="cant-span-no-servicio badge bg-info-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
+                    <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-sin-pago" aria-selected="false" onclick="filtrar_grupo('tabla_no_pago');">Sin Pagos <span class="cant-span-no-pago badge bg-info-transparent border border-1 ms-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
+                    <a class="nav-link active" data-bs-toggle="tab" role="tab" href="#nav-todos" aria-selected="true" onclick="filtrar_grupo('tabla_todos');">Todos <span class="cant-span-total badge bg-info-transparent ms-1 border border-1"><div class="spinner-border spinner-border-sm" role="status"></div></span></a>
                   </nav>
                   <div class="tab-content">
-                    <div class="tab-pane text-muted " id="nav-products-justified" role="tabpanel">
+                    <div class="tab-pane text-muted " id="nav-deudores" role="tabpanel">
                       <div class="row">
                         <div class="col-4">                        
                           <div class="card border-0">
@@ -172,7 +173,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                     </div>
-                    <div class="tab-pane  text-muted" id="nav-cart-justified" role="tabpanel">
+                    <div class="tab-pane  text-muted" id="nav-sin-deuda" role="tabpanel">
                       <div class="row">
                         <div class="col-4">                        
                           <div class="card border-0">
@@ -208,7 +209,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                     </div>
-                    <div class="tab-pane text-muted" id="nav-orders-justified" role="tabpanel">
+                    <div class="tab-pane text-muted" id="nav-sin-servicio" role="tabpanel">
                       <div class="row">
                         <div class="col-4">                        
                           <div class="card border-0">
@@ -244,7 +245,43 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                     </div>
-                    <div class="tab-pane show active text-muted" id="nav-offers-justified" role="tabpanel">
+                    <div class="tab-pane text-muted" id="nav-sin-pago" role="tabpanel">
+                      <div class="row">
+                        <div class="col-4">                        
+                          <div class="card border-0">
+                            <div class="alert alert-danger border border-danger mb-0 p-2">
+                              <div class="d-flex align-items-start">
+                                <div class="me-2">
+                                  <svg class="flex-shrink-0 svg-danger" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000">
+                                    <g>
+                                      <rect fill="none" height="24" width="24"></rect>
+                                    </g>
+                                    <g>
+                                      <g>
+                                        <g>
+                                          <path d="M15.73,3H8.27L3,8.27v7.46L8.27,21h7.46L21,15.73V8.27L15.73,3z M19,14.9L14.9,19H9.1L5,14.9V9.1L9.1,5h5.8L19,9.1V14.9z"></path>
+                                          <rect height="6" width="2" x="11" y="7"></rect>
+                                          <rect height="2" width="2" x="11" y="15"></rect>
+                                        </g>
+                                      </g>
+                                    </g>
+                                  </svg>
+                                </div>
+                                <div class="text-danger w-100">
+                                  <div class="fw-semibold d-flex justify-content-between">Estamos en Desarrollo!!<button type="button" class="btn-close p-0" data-bs-dismiss="alert" aria-label="Close"><i class="bi bi-x"></i></button></div>
+                                  <div class="fs-12 op-8 mb-1">Esta sección del módulo aún está en desarrollo. Algunas funcionalidades pueden no estar disponibles o funcionar de manera inesperada. Agradecemos tu comprensión y paciencia.</div>
+                                  <div class="fs-12 d-inline-flex">
+                                    <a href="javascript:void(0);" class="text-info fw-semibold me-2 d-inline-block">cancel</a>
+                                    <a href="javascript:void(0);" class="text-danger fw-semibold">open</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane show active text-muted" id="nav-todos" role="tabpanel">
                       <div  class="table-responsive">
                         <table id="tabla-cliente" class="table table-bordered w-100" style="width: 100%;">
                           <thead class="buscando_tabla">
@@ -850,7 +887,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!-- ENVIO AUTOMATICO -->
                           <div class="col-md-12 col-lg-6 col-xl-5 col-xxl-4 px-0">
                             <div class="custom-toggle-switch d-flex align-items-center mb-1">
-                              <input id="f_crear_y_emitir" name="f_crear_y_emitir" type="checkbox" checked="" value="SI">
+                              <input id="f_crear_y_emitir" name="f_crear_y_emitir" type="checkbox" checked="" value="SI" onchange="valor_is_checked('#f_crear_y_emitir','SI', 'NO' );">
                               <label for="f_crear_y_emitir" class="label-warning"></label><span class="ms-3 fs-11">SUNAT</span>
                             </div>
                           </div>
@@ -932,7 +969,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <th class="fs-11 py-1">Cod</th> 
                                 <th class="fs-11 py-1">Producto</th>
                                 <th class="fs-11 py-1">Unidad</th>
-                                <th class="font-size-11px py-1">Periodo</th>
+                                <th class="font-size-11px py-1">Periodo <small>(Mes y Año)</small></th>
                                 <th class="fs-11 py-1">Cantidad</th>                                        
                                 <th class="fs-11 py-1" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
                                 <th class="fs-11 py-1">Descuento</th>

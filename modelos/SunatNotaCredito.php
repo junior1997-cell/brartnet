@@ -195,7 +195,7 @@ if (empty($venta_f['data']['venta'])) {
     if ($code === 0) {
       $sunat_estado = 'ACEPTADA' ;
       if (count($cdr->getNotes()) > 0) {
-        $sunat_estado = 'OBSERVACIONES' . PHP_EOL;
+        $sunat_estado = 'ACEPTADA' ;  // Es aceptado por sunat, pero corrgir en la siguientes emisiones
         // $sunat_observacion = $cdr->getNotes(); # Corregir estas observaciones en siguientes emisiones. var_dump()
         foreach ($cdr->getNotes() as $key => $val) {
           $sunat_observacion .= $val . "<br>";

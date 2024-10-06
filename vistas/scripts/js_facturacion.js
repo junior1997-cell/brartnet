@@ -97,7 +97,7 @@ function agregarDetalleComprobante(idproducto, tipo_producto, individual) {
 
             <td class="py-1 form-group">
               <input type="number" class="w-100px form-control form-control-sm valid_descuento" name="valid_descuento_${cont}" value="0" min="0.00" required onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
-              <input type="hidden" class="descuento_${cont}" name="descuento[]" value="0" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+              <input type="hidden" class="descuento_${cont}" name="f_descuento[]" value="0" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
               <input type="hidden" class="descuento_porcentaje_${cont}" name="descuento_porcentaje[]" value="0" >
             </td>
 
@@ -239,7 +239,7 @@ function listar_producto_x_codigo() {
 
             <td class="py-1 form-group">
               <input type="number" class="w-100px form-control form-control-sm valid_descuento" name="valid_descuento_${cont}" value="0" min="0.00" required  onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
-              <input type="hidden" class="descuento_${cont}" name="descuento[]" value="0" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+              <input type="hidden" class="descuento_${cont}" name="f_descuento[]" value="0" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
               <input type="hidden" class="descuento_porcentaje_${cont}" name="descuento_porcentaje[]" value="0" >
             </td>
 
@@ -332,9 +332,9 @@ function mostrar_para_nota_credito(input) {
               <td class="py-1">         
                 <input type="hidden" name="idproducto[]" value="${val1.idproducto}">
 
-                <input type="hidden" name="pr_marca[]" value="${e.data.marca}">
-                <input type="hidden" name="pr_categoria[]" value="${e.data.categoria}">
-                <input type="hidden" name="pr_nombre[]" value="${e.data.nombre}">
+                <input type="hidden" name="pr_marca[]" value="${val1.marca}">
+                <input type="hidden" name="pr_categoria[]" value="${val1.categoria}">
+                <input type="hidden" name="pr_nombre[]" value="${val1.nombre_producto}">
 
                 <div class="d-flex flex-fill align-items-center">
                   <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(val1.nombre_producto)}')"> </span></div>
@@ -373,7 +373,7 @@ function mostrar_para_nota_credito(input) {
 
               <td class="py-1 form-group">
                 <input type="number" class="w-100px form-control form-control-sm valid_descuento" name="valid_descuento_${cont}" value="${val1.descuento}" min="0.00" required readonly onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
-                <input type="hidden" class="descuento_${cont}" name="descuento[]" value="${val1.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+                <input type="hidden" class="descuento_${cont}" name="f_descuento[]" value="${val1.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
                 <input type="hidden" class="descuento_porcentaje_${cont}" name="descuento_porcentaje[]" value="${val1.descuento_porcentaje}" >
               </td>
 
@@ -523,7 +523,7 @@ function ver_editar_venta(idventa) {
 
               <td class="py-1 form-group">
                 <input type="number" class="w-100px form-control form-control-sm valid_descuento" name="valid_descuento_${cont}" value="${val1.descuento}" min="0.00" required readonly onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
-                <input type="hidden" class="descuento_${cont}" name="descuento[]" value="${val1.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+                <input type="hidden" class="descuento_${cont}" name="f_descuento[]" value="${val1.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
                 <input type="hidden" class="descuento_porcentaje_${cont}" name="descuento_porcentaje[]" value="${val1.descuento_porcentaje}" >
               </td>
 

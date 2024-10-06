@@ -426,6 +426,33 @@ function guardar_editar_facturacion(e) {
         limpiar_form_venta(); show_hide_form(1); reload_f_nc_serie_y_numero(); ver_errores(result.value);
       } else if ( result.value.status == 'error_usuario'){    
         ver_errores(result.value);
+
+      } else if ( result.value.status == 'no_conexion_sunat'){    
+        Swal.fire({
+          title: result.value.titulo,
+          icon: 'info',
+          html: result.value.message,
+          showCloseButton: true,
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonText: '<i class="fas fa-sign-out-alt"></i> Salir!',
+          confirmButtonAriaLabel: 'Enviar más tarde.',
+          cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+          cancelButtonAriaLabel: 'Dejar como esta.'
+        }).then((result) => {
+          if (result.isConfirmed) {
+           
+            $.getJSON(`../ajax/facturacion.php?op=cambiar_a_por_enviar&idventa=${result.value.id_tabla}`, data, function (e, textStatus, jqXHR) {
+              if (e.status == true) {
+                sw_success('Cambiado!!', "Tu registro ha actualizado." );   
+              } else {
+                ver_errores(e);
+              }
+            }).fail( function(e) { ver_errores(e); } );
+          } else {
+                  
+          }
+        });
       } else {
         ver_errores(result.value);
       }      
@@ -455,7 +482,7 @@ function eliminar_papelera_venta(idventa, nombre){
     "../ajax/facturacion.php?op=eliminar", 
     idventa, 
     "!Elija una opción¡", 
-    `<b class="text-danger"><del>venta: ${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    `Comnprobante: <b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
     function(){ tabla_principal_facturacion.ajax.reload(null, false); },
@@ -464,6 +491,24 @@ function eliminar_papelera_venta(idventa, nombre){
     false,
     false
   );
+}
+
+function cambiar_a_por_enviar(idventa, nombre) {
+
+  crud_simple_alerta(
+    `../ajax/facturacion.php?op=cambiar_a_por_enviar&idventa=${idventa}`,
+    '', 
+    "Está Seguro?", 
+    `Se cambiara el estado de: <b class="text-danger">${nombre}</b> <br> al hacerlo le permitirá crear mas Boletas o Facturas, en caso contrario desactive el envio a a SUNAT!`, 
+    'Si, Cambiar',
+    function(){ sw_success('Cambiado!!', "Tu registro ha actualizado." ) }, 
+    function(){ tabla_principal_facturacion.ajax.reload(null, false); },
+    false, 
+    false, 
+    false,
+    false
+  );
+
 }
 
 

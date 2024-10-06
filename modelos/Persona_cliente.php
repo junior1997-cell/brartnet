@@ -166,22 +166,52 @@ class Cliente
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function cant_tab_cliente()	{
-		$sql = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
-		FROM persona_cliente as pc 
-		INNER JOIN persona AS p on pc.idpersona=p.idpersona 
-		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador 
-		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona 
-		INNER JOIN plan as pl on pc.idplan=pl.idplan 
-		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena 
-		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat 
-		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado 
-		where pc.estado_delete='1';";
+	public function cant_tab_cliente($filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{ 
 
-		$count_total = ejecutarConsultaSimpleFila($sql);
+		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'"; }
+
+		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND pc.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(pc.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}		
+
+		$sql= "SELECT COUNT( pc.idpersona_cliente) AS total
+		FROM vw_retraso_cobro_cliente as pc 
+		where pc.estado_deuda COLLATE utf8mb4_unicode_ci = 'DEUDA' and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		$count_deudor = ejecutarConsultaSimpleFila($sql);
+
+		$sql1= "SELECT COUNT( pc.idpersona_cliente) AS total
+		FROM vw_retraso_cobro_cliente as pc 
+		where pc.estado_deuda COLLATE utf8mb4_unicode_ci in ( 'DEUDA', 'ADELANTO') and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		$count_no_deuda = ejecutarConsultaSimpleFila($sql1);
+
+		$sql2 = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
+		FROM persona_cliente as pc
+		where pc.estado='0' and pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za;";
+		$count_baja = ejecutarConsultaSimpleFila($sql2);
+
+		$sql3= "SELECT COUNT( pc.idpersona_cliente) AS total
+		FROM persona_cliente as pc
+		LEFT JOIN venta v ON v.idpersona_cliente = pc.idpersona_cliente
+		WHERE v.idpersona_cliente IS NULL and pc.estado = '1' AND pc.estado_delete = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		$count_no_pago = ejecutarConsultaSimpleFila($sql3);
+
+		$sq4 = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
+		FROM persona_cliente as pc 		
+		where pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		$count_total = ejecutarConsultaSimpleFila($sq4);
 
 		return [
-			'status' => true, 'message' => 'Todo ok', 'data' => ['count_total' => floatval($count_total['data']['total'])  ]
+			'status' => true, 'message' => 'Todo ok', 
+			'data' => [
+				'count_deudores'=> floatval($count_deudor['data']['total']),
+				'count_no_deuda'=> floatval($count_no_deuda['data']['total']),
+				'count_baja' 		=> floatval($count_baja['data']['total']),
+				'count_no_pago'	=> floatval($count_no_pago['data']['total']),
+				'count_total' 	=> floatval($count_total['data']['total']),					
+			]
 		];
 	}
 
@@ -190,53 +220,20 @@ class Cliente
 
 		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
 
-		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND vw_c.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
 
-		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND pt.idpersona_trabajador = '$filtro_trabajador'";	}
-		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(pc.fecha_cancelacion)  = '$filtro_dia_pago'";	}
-		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
-		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
+		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
 		
-		$sql = "SELECT LPAD(pc.idpersona_cliente, 5, '0') as idpersona_cliente_v2, pc.idpersona_cliente, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan , pc.ip_personal, DAY(pc.fecha_cancelacion) AS dia_cancelacion, 
-		pc.fecha_cancelacion,	pc.fecha_afiliacion,
-		IF(fecha_cancelacion > CURDATE(),
-			DATEDIFF(fecha_cancelacion, CURDATE()),
-			DATEDIFF(
-				IF(DAY(fecha_cancelacion) >= DAY(CURDATE()),
-					DATE_ADD(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), INTERVAL DAY(fecha_cancelacion) DAY),
-					DATE_ADD(LAST_DAY(CURDATE()), INTERVAL DAY(fecha_cancelacion) DAY)
-				),
-				CURDATE()
-			) 
-		) AS dias_para_proximo_pago,
-		IF(fecha_cancelacion > CURDATE(),
-			DATE_FORMAT(fecha_cancelacion, '%d/%m/%Y'),
-			DATE_FORMAT(
-				IF(DAY(fecha_cancelacion) >= DAY(CURDATE()),
-					DATE_ADD(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), INTERVAL DAY(fecha_cancelacion) DAY),
-					DATE_ADD(LAST_DAY(CURDATE()), INTERVAL DAY(fecha_cancelacion) DAY)				
-				),
-			'%d/%m/%Y'
-			)
-		)	AS proximo_pago,
-		pc.descuento,pc.estado_descuento,cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
-		CASE 
-			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
-			ELSE '-'
-		END AS cliente_nombre_completo, 
-		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,pl.costo,za.nombre as zona, 
-		za.ip_antena,pc.estado, i.abreviatura as tipo_doc
-		FROM persona_cliente as pc
-		INNER JOIN persona AS p on pc.idpersona=p.idpersona
-		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador
-		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
-		INNER JOIN plan as pl on pc.idplan=pl.idplan
-		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
-		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
-		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado  
-		where pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
-		ORDER BY pc.idpersona_cliente DESC";
+		$sql = "SELECT 
+		
+		vw_c.*
+		
+		FROM vw_cliente_all as vw_c		
+		where  vw_c.estado_delete_pc='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		ORDER BY vw_c.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
@@ -452,13 +449,13 @@ class Cliente
 	public function select2_filtro_trabajador()	{
 		$filtro_id_trabajador  = '';
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {
-			$filtro_id_trabajador = "WHERE pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
+			$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";
 		} 
 		$sql = "SELECT LPAD(pt.idpersona_trabajador, 5, '0') as idtrabajador, pt.idpersona_trabajador, pt.idpersona,  per_t.nombre_razonsocial, COUNT(pc.idpersona_cliente) AS cant_cliente
 		FROM persona_cliente as pc
 		INNER JOIN persona_trabajador as pt ON pt.idpersona_trabajador = pc.idpersona_trabajador
 		INNER JOIN persona as per_t ON per_t.idpersona = pt.idpersona
-		$filtro_id_trabajador
+		WHERE pc.estado_delete = '1' $filtro_id_trabajador
 		GROUP BY pc.idpersona_trabajador
 		ORDER BY  COUNT(pc.idpersona_cliente) desc, per_t.nombre_razonsocial asc;";
 		return ejecutarConsulta($sql);
