@@ -209,7 +209,7 @@ if (empty($venta_f['data']['venta'])) {
       $sunat_estado = 'Excepción: ' . $code;
     }
     $sunat_code = $code;
-    $sunat_mensaje = $cdr->getDescription() . PHP_EOL;
+    $sunat_mensaje = limpiarCadena($cdr->getDescription());
 
     /* 
     * ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
