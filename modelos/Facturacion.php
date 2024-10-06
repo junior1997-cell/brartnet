@@ -182,13 +182,10 @@
     }   
 
     public function actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error) {
-
-
-      
+      //echo json_encode( [$idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error]); die();
       $sql_1 = "UPDATE venta SET sunat_estado='$sunat_estado',sunat_observacion='$sunat_observacion',sunat_code='$sunat_code',
       sunat_hash='$sunat_hash',sunat_mensaje='$sunat_mensaje', sunat_error = '$sunat_error' WHERE idventa = '$idventa';";
-      return ejecutarConsulta($sql_1);     
-
+      return ejecutarConsulta($sql_1);
     } 
 
     public function actualizar_doc_anulado_x_nota_credito( $idventa) {

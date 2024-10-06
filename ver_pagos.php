@@ -747,10 +747,10 @@ if (!isset($_SESSION['cliente_nombre'])) {
     <!-- Sticky JS -->
     <script src="assets/js/sticky.js"></script>
 
-    <!-- Internal Landing JS-->
-    <script src="assets/js/landing_pagos.js?version_jdl=1.31"></script> 
+    <!-- Internal Landing JS -->
+    <script src="assets/js/landing_pagos.js?version_jdl=1.32"></script>
 
-    <script src="scripts_client/ver_pagos.js?version_jdl=1.31"></script>
+    <script src="scripts_client/ver_pagos.js?version_jdl=1.32"></script>
 
   </body>
 

@@ -280,7 +280,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
     <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>    
     
-    <script src="scripts/avance_cobro.js?version_jdl=1.31"></script>
+    <script src="scripts/avance_cobro.js?version_jdl=1.32"></script>
     
     <script>
       $(function() {
