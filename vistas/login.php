@@ -289,10 +289,10 @@
   <!-- Toastr -->
   <script src="../assets/libs/toastr/toastr.min.js"></script>
 
-  <script src="../assets/js/funcion_general.js?version_jdl=1.32"></script>
-  <script src="../assets/js/funcion_crud.js?version_jdl=1.32"></script>  
+  <script src="../assets/js/funcion_general.js?version_jdl=1.33"></script>
+  <script src="../assets/js/funcion_crud.js?version_jdl=1.33"></script>  
 
-  <script src="scripts/login.js?version_jdl=1.32"></script>  
+  <script src="scripts/login.js?version_jdl=1.33"></script>  
 
   <!-- IE Support -->
   <script>

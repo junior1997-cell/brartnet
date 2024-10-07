@@ -877,8 +877,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/cotizacion.js?version_jdl=1.32"></script>
-    <script src="scripts/js_cotizacion.js?version_jdl=1.32"></script>
+    <script src="scripts/cotizacion.js?version_jdl=1.33"></script>
+    <script src="scripts/js_cotizacion.js?version_jdl=1.33"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

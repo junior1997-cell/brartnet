@@ -101,6 +101,16 @@ Class Ajax_general
 		return ejecutarConsultaArray($sql);   
 	}
 
+  /* ══════════════════════════════════════ C L I E N T E   ══════════════════════════════════════ */
+  public function update_nro_documento_cliente($idpersona_cliente, $numero_documento )	{
+    // $data = [];
+		$sql="UPDATE persona p
+    JOIN persona_cliente pc ON p.idpersona = pc.idpersona
+    SET p.numero_documento = '$numero_documento'
+    WHERE pc.idpersona_cliente = '$idpersona_cliente';";
+		return ejecutarConsulta($sql);   
+	}
+
   // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
 	public function select2_usuario_trabajador($id)	{
     // $data = [];

@@ -205,6 +205,12 @@ if (!isset($_SESSION["user_nombre"])) {
       echo json_encode($rspta, true);
     break;
 
+    // ══════════════════════════════════════ C L I E N T E  ══════════════════════════════════════
+    case 'update_nro_documento_cliente':
+      $rspta = $ajax_general->update_nro_documento_cliente($_GET['idpersona_cliente'], $_GET['numero_documento']);
+      echo json_encode($rspta, true);
+    break;
+
     // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
     case 'select2_usuario_trabajador':
       $rspta = $ajax_general->select2_usuario_trabajador($_GET['id']);
