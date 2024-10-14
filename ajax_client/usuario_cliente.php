@@ -18,7 +18,7 @@ switch ($_GET["op"]) {
 
     $clavehash = hash("SHA256", $clavec);
 
-    $rspta  = $usuarioC->verificar($loginc, $clavec); 
+    $rspta  = $usuarioC->verificar($loginc, $clavehash); 
 
     if (!empty($rspta['data']['usuario_cliente'])) {
 

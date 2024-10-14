@@ -273,6 +273,7 @@ function limpiar_form_venta(){
   $("#f_idventa").val('');
   $("#f_nc_idventa").val('0');
 
+  $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
   $("#f_idpersona_cliente").val('').trigger('change'); 
   $("#f_metodo_pago").val('').trigger('change'); 
   $("#f_observacion_documento").val(''); 
