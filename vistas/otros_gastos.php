@@ -13,7 +13,7 @@
 
         <head>
           
-          <?php $title_page = "Gastos"; include("template/head.php"); ?>    
+          <?php $title_page = "Otros Gastos"; include("template/head.php"); ?>    
 
         </head> 
 
@@ -39,8 +39,8 @@
                       <button type="button" class="btn btn-danger btn-cancelar m-r-10px" onclick="show_hide_form(1);limpiar_form();" style="display: none;"><i class="ri-arrow-left-line"></i></button>
                       <button class="btn-modal-effect btn btn-success label-btn btn-guardar m-r-10px" style="display: none;"  > <i class="ri-save-2-line label-btn-icon me-2" ></i> Guardar </button>
                     <div>
-                        <p class="fw-semibold fs-18 mb-0">Gastos del Trabajador</p>
-                        <span class="fs-semibold text-muted">Administra los gastos del trabajador.</span>
+                        <p class="fw-semibold fs-18 mb-0">Otros Gastos Internos</p>
+                        <span class="fs-semibold text-muted">Administra los gastos de la empresa.</span>
                       </div>                
                     </div>
                   </div>
@@ -48,7 +48,7 @@
                   <div class="btn-list mt-md-0 mt-2">              
                     <nav>
                       <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Trabajadores</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Gastos</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Administracion</li>
                       </ol>
                     </nav>
@@ -70,22 +70,22 @@
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
                                   <th>Fecha</th>
-                                  <th>Trabajador</th>
+                                  <th>Proveedor</th>
+                                  <th >Categoría</th>
                                   <th >Comprobante</th>
                                   <th >Total</th>
                                   <th>Descripción</th>
                                   <th>CFDI</th>
                                   
-                                  <th>Trabajador</th>
+                                  <th>Proveedor</th>
                                   <th>Tipo Doc.</th>
                                   <th>Nro. Doc.</th>
-                                  <th>Proveedor</th>
                                   <th>Dia</th>
                                   <th>Mes</th>
+                                  <th>Tipo Comprobante</th>
+                                  <th>Serie Comprobante</th>
                                   <th>Subtotal</th>
                                   <th>IGV</th>
-                                  <th>Descripción de Gasto</th>
-                                  <th>Descripción Comprobante</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -94,22 +94,22 @@
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
                                   <th>Fecha</th>
-                                  <th>Trabajador</th>
+                                  <th>Proveedor</th>
+                                  <th >Categoría</th>
                                   <th >Comprobante</th>
                                   <th class="bg-light">Total</th>
                                   <th>Descripción</th>
                                   <th>CFDI</th>
                                   
-                                  <th>Trabajador</th>
+                                  <th>Proveedor</th>
                                   <th>Tipo Doc.</th>
                                   <th>Nro. Doc.</th>
-                                  <th>Proveedor</th>
                                   <th>Dia</th>
                                   <th>Mes</th>
+                                  <th>Tipo Comprobante</th>
+                                  <th>Serie Comprobante</th>
                                   <th>Subtotal</th>
                                   <th>IGV</th>
-                                  <th>Descripción de Gasto</th>
-                                  <th>Descripción Comprobante</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -122,24 +122,31 @@
                               <!-- :::::::::::::: DATOS GENERALES ::::::::::::::::: -->
                               <div class="row gy-2" id="cargando-1-formulario">
                                 <!-- -------------- ID ------------- -->
-                                <input type="hidden" name="idgasto_de_trabajador" id="idgasto_de_trabajador"/>
+                                <input type="hidden" name="idotros_gastos" id="idotros_gastos"/>
 
-                                <!-- ------------ TRABAJADOR --------- -->
+                                <!-- ----------------- PROVEEDOR --------------- -->
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
-                                    <label for="idtrabajador" class="form-label">
-                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idtrabajador();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                      Nombre del Trabajador(*)
-                                      <span class="charge_idtrabajador"></span>
+                                    <label for="idproveedor" class="form-label">
+                                      <span class="badge bg-success m-r-4px cursor-pointer"  onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span>
+                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idproveedor();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                      Proveedor
+                                      <span class="charge_idproveedor"></span>
                                     </label>
-                                    <select class="form-select form-select-lg" name="idtrabajador" id="idtrabajador" ><!-- List de trabajadores --></select>
+                                    <select class="form-select" name="idproveedor" id="idproveedor"></select>
                                   </div>
                                 </div>
-                                <!-- --------- DESCRIPCION GASTO ------ -->
+
+                                <!-- --------- CATEGORIA GASTO ------ -->
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
-                                    <label for="descr_gastos" class="form-label">Descripción de Gastos(*)</label>
-                                    <textarea class="form-control" name="descr_gastos" id="descr_gastos" rows="1" placeholder="ejemp: Por reparación de una torre." ></textarea>
+                                    <label for="idotros_gastos_categoria" class="form-label">
+                                      <span class="badge bg-success m-r-4px cursor-pointer"  onclick="modal_add_categoria(); limpiar_categoria();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span>
+                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idotros_gastos_categoria();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                      Categoria Gasto
+                                      <span class="charge_idotros_gastos_categoria"></span>
+                                    </label>
+                                    <select class="form-select" name="idotros_gastos_categoria" id="idotros_gastos_categoria"></select>
                                   </div>
                                 </div>
                                 <!-- ----------------- TIPO COMPROBANTE --------------- -->
@@ -168,53 +175,49 @@
                                     <input type="date" class="form-control" name="fecha" id="fecha" max="<?php echo date('Y-m-d');?>" />
                                   </div>
                                 </div>
+
+                                <div class="col-lg-12">                               
                               
-                                <!-- ----------------- PROVEEDOR --------------- -->
-                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
-                                  <div class="form-group">
-                                    <label for="idproveedor" class="form-label">
-                                      <span class="badge bg-success m-r-4px cursor-pointer"  onclick=" modal_add_trabajador(); limpiar_proveedor();" data-bs-toggle="tooltip" title="Agregar"><i class="las la-plus"></i></span>
-                                      <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_idproveedor();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                      Proveedor
-                                      <span class="charge_idproveedor"></span>
-                                    </label>
-                                    <select class="form-select" name="idproveedor" id="idproveedor"></select>
-                                  </div>
-                                </div>
-                              
-                                <!-- ----------------- SUB TOTAL --------------- -->
-                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
-                                  <div class="form-group">
-                                    <label for="precio_sin_igv" class="form-label">Sub Total <small class="text-info" >(no editable)</small></label>
-                                    <input type="number" class="form-control" name="precio_sin_igv" id="precio_sin_igv" readonly/>
-                                  </div>
-                                </div>
-                                <!-- ----------------- IGV --------------- -->
-                                <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-2">
-                                  <div class="form-group">
-                                    <label for="igv" class="form-label">IGV <small class="text-info" >(no editable)</small></label>
-                                    <input type="number" class="form-control" name="igv" id="igv" placeholder="" value="0.00" readonly />
-                                  </div>
-                                </div>
-                                <!-- -------------- VALOR IGV ------------- -->
-                                <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-2">
-                                  <div class="form-group">
-                                    <label for="val_igv" class="form-label">Val. IGV</label>
-                                    <input type="number" class="form-control" name="val_igv" id="val_igv" value="0.00" onkeyup="calculandototales_fact();" />
-                                  </div>
-                                </div>
-                                <!-- ----------------- TOTAL --------------- -->
-                                <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
-                                  <div class="form-group">
-                                    <label for="precio_con_igv" class="form-label">Total(*)</label>
-                                    <input type="number" class="form-control" name="precio_con_igv" id="precio_con_igv" onkeyup="comprob_factura();"  onchange="comprob_factura();"/>
+                                  <div class="row">                
+                                
+                                    <!-- ----------------- SUB TOTAL --------------- -->
+                                    <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                      <div class="form-group">
+                                        <label for="precio_sin_igv" class="form-label">Sub Total <small class="text-info" >(no editable)</small></label>
+                                        <input type="number" class="form-control" name="precio_sin_igv" id="precio_sin_igv" readonly/>
+                                      </div>
+                                    </div>
+                                    <!-- ----------------- IGV --------------- -->
+                                    <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-2">
+                                      <div class="form-group">
+                                        <label for="igv" class="form-label">IGV <small class="text-info" >(no editable)</small></label>
+                                        <input type="number" class="form-control" name="igv" id="igv" placeholder="" value="0.00" readonly />
+                                      </div>
+                                    </div>
+                                    <!-- -------------- VALOR IGV ------------- -->
+                                    <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-2">
+                                      <div class="form-group">
+                                        <label for="val_igv" class="form-label">Val. IGV</label>
+                                        <input type="number" class="form-control" name="val_igv" id="val_igv" value="0.00" onkeyup="calculandototales_fact();" />
+                                      </div>
+                                    </div>
+                                    <!-- ----------------- TOTAL --------------- -->
+                                    <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                      <div class="form-group">
+                                        <label for="precio_con_igv" class="form-label">Total(*)</label>
+                                        <input type="number" class="form-control" name="precio_con_igv" id="precio_con_igv" onkeyup="comprob_factura();"  onchange="comprob_factura();"/>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                                 <!-- --------- DESCRIPCION COMPROBANTE ------ -->
                                 <div class="col-md-6 col-lg-4 col-xl-12 col-xxl-12">
                                   <div class="form-group">
                                     <label for="descr_comprobante" class="form-label">Descripción del Comprobante</label>
-                                    <textarea class="form-control" name="descr_comprobante" id="descr_comprobante" rows="1" placeholder="ejemp: Menu Ají de gallina, Gaseoa, Galletas." ></textarea>
+                                    <textarea class="form-control" name="descr_comprobante" id="descr_comprobante" rows="3" placeholder="ejemp: 
+                                    - pago de energia --> 50.00
+                                    - pago de agua --> 30.00." 
+                                    style="white-space: pre-line;" ></textarea>
                                   </div>
                                 </div>
                               
@@ -294,7 +297,7 @@
                 </div>
               </div>
             </div> 
-            <!-- End::Modal-Comprobante -->
+            <!-- End::Modal -->
 
             <!-- MODAL - VER DETALLE -->
             <div class="modal fade modal-effect" id="modal-ver-detalle" tabindex="-1" aria-labelledby="modal-ver-detalleLabel" aria-hidden="true">
@@ -314,7 +317,7 @@
                 </div>
               </div>
             </div> 
-            <!-- End::Modal-VerDetalles -->
+            <!-- End::Modal -->
 
             <!-- MODAL - AGREGAR TRABAJADOR - charge 3 -->
             <div class="modal fade modal-effect" id="modal-agregar-proveedor" tabindex="-1" aria-labelledby="Modal-agregar-proveedorLabel" aria-hidden="true">
@@ -424,7 +427,7 @@
                                 <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-6 mt-3">
                                   <div class="form-group">
                                     <label for="distrito" class="form-label">Distrito: </label>
-                                    <select name="distrito" id="distrito" class="form-select" onchange="llenar_dep_prov_ubig(this)">
+                                    <select name="distrito" id="distrito" class="form-select" onchange="llenar_dep_prov_ubig(this)" >
                                       
                                     </select>
                                   </div>                                         
@@ -541,10 +544,71 @@
                 </div>
               </div>
             </div> 
-            <!-- End::Modal-Agregar-Proveedor -->
+            <!-- End::Modal-Agregar -->
+
+            <!-- MODAL - AGREGAR CATEGORIA - charge 5 -->
+            <div class="modal fade modal-effect" id="modal-agregar-categoria-otros-gastos" tabindex="-1" aria-labelledby="modal-agregar-categoria-otros-gastosLabel" aria-hidden="true">
+              <div class="modal-dialog modal-md modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h6 class="modal-title title-modal-img" id="modal-agregar-categoria-otros-gastosLabel1">Agregar Categoria</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body px-4">
+                                       
+                      <form name="form-agregar-categoria-otros-gastos" id="form-agregar-categoria-otros-gastos" method="POST" class="needs-validation" novalidate>
+                              
+                        <div class="row" id="cargando-5-fomulario">
+                          <!-- idotros_gastos_categoria -->
+                          <input type="hidden" name="idotros_gastos_categoria" id="idotros_gastos_categoria" />                             
+
+                          <!-- Nombres -->
+                          <div class="mb-1 col-md-12 col-lg-12 col-xl-4 col-xxl-12">
+                            <div class="form-group">
+                              <label for="nombre_categoria_otros_gastos" class="form-label">Nombres </label>
+                              <input type="text" class="form-control" name="nombre_categoria_otros_gastos" id="nombre_categoria_otros_gastos" >
+                            </div>                                         
+                          </div>
+
+                          <!-- Descripción -->
+                          <div class="mb-1 col-md-12 col-lg-12 col-xl-4 col-xxl-12 ">
+                            <div class="form-group">
+                              <label for="descripcion_categoria_otros_gastos" class="form-label">Descripción:</label>                              
+                              <textarea class="form-control" name="descripcion_categoria_otros_gastos" id="descripcion_categoria_otros_gastos" rows="2"></textarea>
+                            </div>                                         
+                          </div>
+
+                        </div> <!-- /.row -->
+
+                        <div class="row" id="cargando-6-fomulario" style="display: none;" >
+                          <div class="col-lg-12 text-center">                         
+                            <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
+                            <h4 class="bx-flashing">Cargando...</h4>
+                          </div>
+                        </div>  <!-- /.row -->                                   
+                        
+                        <!-- Chargue -->
+                        <div class="p-l-25px col-lg-12" id="barra_progress_categoria_div" style="display: none;" >
+                          <div  class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 
+                            <div id="barra_progress_categoria" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div> 
+                          </div>
+                        </div>
+                        <!-- Submit -->
+                        <button type="submit" style="display: none;" id="submit-form-categoria">Submit</button>
+                      </form>
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-danger"  data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
+                    <button type="button" class="btn btn-sm btn-success label-btn" id="guardar_registro_categoria"><i class="bx bx-save bx-tada"></i> Guardar</button>
+                  </div>
+                </div>
+              </div>
+            </div> 
+            <!-- End::Modal-Agregar -->
 
             <!-- MODAL - VER IMAGEN -->
-            <div class="modal fade modal-effect" id="modal-ver-img" tabindex="-1" aria-labelledby="modal-agregar-usuarioLabel" aria-hidden="true">
+            <div class="modal fade modal-effect bg-color-02020280" id="modal-ver-img" tabindex="-1" aria-labelledby="modal-agregar-usuarioLabel" aria-hidden="true">
               <div class="modal-dialog modal-md modal-dialog-scrollable">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -570,7 +634,7 @@
           <?php include("template/scripts.php"); ?>
           <?php include("template/custom_switcherjs.php"); ?> 
 
-          <script src="scripts/gasto_de_trabajador.js?version_jdl=1.33"></script>
+          <script src="scripts/otros_gastos.js?version_jdl=1.33"></script>
           <script> $(function () { $('[data-bs-toggle="tooltip"]').tooltip(); }); </script>
 
         

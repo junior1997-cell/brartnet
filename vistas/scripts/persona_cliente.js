@@ -6,6 +6,8 @@ var array_data_venta = [];
 var cambio_de_tipo_comprobante ;
 var file_pond_mp_comprobante;
 
+var filtro_trabajador_r = '', filtro_dia_pago_r = '', filtro_plan_r = '', filtro_zona_antena_r = '';
+
 //Función que se ejecuta al inicio
 function init() {
 
@@ -84,7 +86,7 @@ function limpiar_cliente() {
   $("#fecha_nacimiento").val("");
   $("#celular").val("");
   $("#direccion").val("");
-  $("#distrito").val('TOCACHE').trigger("change");;
+  $("#distrito").val('TOCACHE').trigger("change");
 
   $("#correo").val("");
 
@@ -267,7 +269,9 @@ function funtion_switch() {
 }
 
 //Función Listar
-function tabla_principal_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+function tabla_principal_cliente(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+
+  filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
   tabla_cliente = $('#tabla-cliente').dataTable({
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
@@ -1332,11 +1336,11 @@ function filtros() {
   //console.log(filtro_categoria, fecha_2, filtro_plan, comprobante);
   
   cant_tab_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
-  tabla_principal_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
+  tabla_principal_cliente('tabla_todos', filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
   
 }
 
-function filtrar_grupo(tabla) {
+function filtrar_grupo(opcion) {
   
 }
 

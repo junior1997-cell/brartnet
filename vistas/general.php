@@ -318,7 +318,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div>
                         </div>
                       </div>
-                      <!-- :::::::::::::::: C A T INCIDENCIAS :::::::::::::::: -->
+                      <!-- :::::::::::::::: C A T   I N C I D E N C I A S :::::::::::::::: -->
                       <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
                         <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
                           <div>
@@ -357,6 +357,54 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <th class="text-center">#</th>
                                   <th class="text-center">Acciones</th>
                                   <th>Nombre</th>
+                                  <th class="text-center">Estado</th>
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- :::::::::::::::: C A T   O T R O S   G A S T O S :::::::::::::::: -->
+                      <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 col-xxl-6">
+                        <div class="d-md-flex d-block align-items-center justify-content-between mb-4 mt-2 page-header-breadcrumb">
+                          <div>
+                            <div class="d-md-flex d-block align-items-center ">
+                              <button class="btn-modal-effect btn btn-primary label-btn m-r-10px" onclick="limpiar_form_categoria_otros_gastos();" data-bs-effect="effect-super-scaled" data-bs-toggle="modal" data-bs-target="#modal-agregar-categoria-otros-gastos"> <i class="ri-user-add-line label-btn-icon me-2"></i>Agregar </button>
+                              <div>
+                                <p class="fw-semibold fs-18 mb-0">Categorías Otros Gastos</p>
+                                <span class="fs-semibold text-muted">Administra de manera eficiente tus Categorias.</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="btn-list mt-md-0 mt-2">
+                            <nav>
+                              <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Categorías</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Home</li>
+                              </ol>
+                            </nav>
+                          </div>
+                        </div>
+                        <div class="card custom-card">
+                          <div class="card-body table-responsive">
+                            <table id="tabla-categoria-otros-gastos" class="table table-bordered w-100" style="width: 100%;">
+                              <thead>
+                                <tr>
+                                  <th class="text-center">#</th>
+                                  <th class="text-center">Acciones</th>
+                                  <th>Nombre</th>
+                                  <th>Descripción</th>
+                                  <th class="text-center">Estado</th>
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="text-center">#</th>
+                                  <th class="text-center">Acciones</th>
+                                  <th>Nombre</th>
+                                  <th>Descripción</th>
                                   <th class="text-center">Estado</th>
                                 </tr>
                               </tfoot>
@@ -657,7 +705,7 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
             <!-- End::modal-registrar-cargo-trabajador -->
 
-            <!-- MODAL:: REGISTRAR CARGO TRABAJADOR- charge 1 -->
+            <!-- MODAL:: CATEGORIA INCIDENCIA - charge 11 -->
             <div class="modal fade modal-effect" id="modal-agregar-cat-inc" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-cat-tLabel" aria-hidden="true">
               <div class="modal-dialog modal-md modal-dialog-scrollabel">
                 <div class="modal-content">
@@ -695,7 +743,49 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
             <!-- End::modal-categoria_incidencia -->
 
+            <!-- MODAL:: CATEGORIA OTROS GASTOS - charge 13 -->
+            <div class="modal fade modal-effect" id="modal-agregar-categoria-otros-gastos" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-categoria-otros-gastosLabel" aria-hidden="true">
+              <div class="modal-dialog modal-md modal-agregar-categoria-otros-gastoslabel">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h6 class="modal-title">Categoría Otros Gastos</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form name="form-agregar-categoria-otros-gastos" id="form-agregar-categoria-otros-gastos" method="POST" class="needs-validation" novalidate>
+                      <div class="row gy-2" id="cargando-13-fomulario">
+                        <input type="hidden" name="idotros_gastos_categoria" id="idotros_gastos_categoria">
 
+                        <div class="col-md-12">
+                          <div class="form-label">
+                            <label for="nombre_categoria_otros_gastos" class="form-label">Nombre:</label>
+                            <input class="form-control" name="nombre_categoria_otros_gastos" id="nombre_categoria_otros_gastos" onkeyup="mayus(this);" />
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-label">
+                            <label for="descripcion_categoria_otros_gastos" class="form-label">Descripcion:</label>
+                            <textarea  class="form-control" name="descripcion_categoria_otros_gastos" id="descripcion_categoria_otros_gastos"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" id="cargando-14-fomulario" style="display: none;">
+                        <div class="col-lg-12 text-center">
+                          <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                          <h4 class="bx-flashing">Cargando...</h4>
+                        </div>
+                      </div>
+                      <button type="submit" style="display: none;" id="submit-form-categoria-otros-gastos">Submit</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_form_categoria_otros_gastos();"><i class="las la-times"></i> Close</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="guardar_registro_categoria_otros_gastos"><i class="bx bx-save bx-tada"></i> Guardar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End::modal-categoria_incidencia -->
 
           </div>
         </div>
@@ -721,6 +811,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="scripts/bancos.js?version_jdl=1.33"></script>
     <script src="scripts/cargo_trabajador.js?version_jdl=1.33"></script>
     <script src="scripts/categoria_incidencia.js?version_jdl=1.33"></script>
+    <script src="scripts/categoria_otros_gastos.js?version_jdl=1.33"></script>
 
 
 

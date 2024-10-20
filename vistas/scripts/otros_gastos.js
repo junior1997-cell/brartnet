@@ -2,7 +2,6 @@ var tabla;
 
 // var select_idbanco = new Choices('#idbanco', { allowHTML: true,  removeItemButton: true, });
 
-
 // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T C H O I C E ══════════════════════════════════════
 
 const choice_distrito       = new Choices('#distrito',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
@@ -16,17 +15,20 @@ function init() {
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $(".btn-guardar").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-gasto").submit(); } });
   $("#guardar_registro_proveedor").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-proveedor").submit(); } });
+  $("#guardar_registro_categoria").on("click", function (e) { if ( $(this).hasClass('send-data')==false) { $("#submit-form-categoria").submit(); }  });
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/gasto_de_trabajador.php?op=listar_trabajador", '#idtrabajador', null);
-  lista_select2("../ajax/gasto_de_trabajador.php?op=listar_proveedor", '#idproveedor', null);  
+  lista_select2("../ajax/otros_gastos.php?op=listar_proveedor", '#idproveedor', null);  
+
+  lista_select2("../ajax/ajax_general.php?op=select2_categoria_otros_gastos", '#idotros_gastos_categoria', null, '.charge_idotros_gastos_categoria');  
 
   lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_distrito", choice_distrito, null);
   lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_tipo_documento", choice_tipo_documento, null);  
   lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", choice_idbanco, null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
-  $("#idtrabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+
+  $("#idotros_gastos_categoria").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
@@ -43,11 +45,12 @@ function doc1_eliminar() {
 }
 
 function limpiar_form() {
-  $("#idgasto_de_trabajador").val("");
-  $("#idtrabajador").val(null).trigger("change"); 
+  $("#idotros_gastos").val("");
+
   $("#idproveedor").val(null).trigger("change"); 
 
   $("#descr_gastos").val("");
+  $("#idotros_gastos_categoria").val("").trigger("change");  
   $("#tipo_comprobante").val("NINGUNO").trigger("change");  
   $("#serie_comprobante").val("");
   $("#fecha").val("");
@@ -89,7 +92,7 @@ function show_hide_form(flag) {
 function guardar_editar(e) {
   var formData = new FormData($("#formulario-gasto")[0]);
   $.ajax({
-    url: "../ajax/gasto_de_trabajador.php?op=guardar_editar",
+    url: "../ajax/otros_gastos.php?op=guardar_editar",
     type: "POST",
     data: formData,
     contentType: false,
@@ -131,13 +134,14 @@ function listar_tabla() {
     dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla) { tabla.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0,8,9,10,11,2,12,13,4,14,15,5,16,17], }, title:'', text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
-      { extend: 'excel', exportOptions: { columns: [0,8,9,10,11,2,12,13,4,14,15,5,16,17], }, title: 'Lista de gasto', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
-      { extend: 'pdf', exportOptions: { columns: [0,8,9,10,11,2,12,13,4,14,15,5,16,17], }, title: 'Lista de gasto', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
+      { extend: 'copy', exportOptions: { columns: [0,2,12,13,9,10,11,4,14,15,16,17,6,7], }, title:'', text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
+      { extend: 'excel', exportOptions: { columns: [0,2,12,13,9,10,11,4,14,15,16,17,6,7], }, title: 'Lista de gasto', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
+      { extend: 'pdf', exportOptions: { columns: [0,2,12,13,9,10,11,4,14,15,16,17,6,7], }, title: 'Lista de gasto', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
+    colReorder: true, // Activar el reordenamiento de columnas
     "ajax": {
-      url: '../ajax/gasto_de_trabajador.php?op=listar_tabla',
+      url: '../ajax/otros_gastos.php?op=listar_tabla',
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -161,27 +165,27 @@ function listar_tabla() {
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     footerCallback: function( tfoot, data, start, end, display ) {
-      var api1 = this.api(); var total1 = api1.column( 5 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
-      $( api1.column( 5 ).footer() ).html( `S/ ${formato_miles(total1)}` );       
+      var api1 = this.api(); var total1 = api1.column( 6 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      $( api1.column( 6 ).footer() ).html( `S/ ${formato_miles(total1)}` );       
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
     "order": [[0, "asc"]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17], visible: false, searchable: false, }, 
+      { targets: [ 9, 10, 11, 12, 13, 14, 15, 16, 17], visible: false, searchable: false, }, 
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
+      { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
 
     ],
   }).DataTable();
 }
 
-function eliminar_gasto(idgasto_de_trabajador, nombre_razonsocial) {
+function eliminar_gasto(idotros_gastos, nombre_razonsocial) {
 
   crud_eliminar_papelera(
-    "../ajax/gasto_de_trabajador.php?op=desactivar",
-    "../ajax/gasto_de_trabajador.php?op=eliminar",
-    idgasto_de_trabajador,
+    "../ajax/otros_gastos.php?op=desactivar",
+    "../ajax/otros_gastos.php?op=eliminar",
+    idotros_gastos,
     "!Elija una opción¡",
     `<b class="text-danger"><del> ${nombre_razonsocial} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
     function () { sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado.") },
@@ -195,19 +199,19 @@ function eliminar_gasto(idgasto_de_trabajador, nombre_razonsocial) {
 }
 
 //liStamos datos para EDITAR
-function mostrar_editar_gdt(idgasto_de_trabajador) {
+function mostrar_editar(idotros_gastos) {
   show_hide_form(2);
   $('#cargando-1-fomulario').hide();	
   $('#cargando-2-fomulario').show();
   limpiar_form();
-  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_editar_gdt", { idgasto_de_trabajador: idgasto_de_trabajador }, function (e, status) {
+  $.post("../ajax/otros_gastos.php?op=mostrar_editar", { idotros_gastos: idotros_gastos }, function (e, status) {
     e = JSON.parse(e);
     if (e.status == true) {
-      $("#idgasto_de_trabajador").val(e.data.idgasto_de_trabajador);
-      $("#idtrabajador").val(e.data.idpersona_trabajador).trigger("change");
-      $("#idproveedor").val(e.data.idproveedor).trigger("change");
+      $("#idotros_gastos").val(e.data.idotros_gastos);
 
-      $("#descr_gastos").val(e.data.descripcion_gasto);
+      $("#idproveedor").val(e.data.idproveedor).trigger("change");
+      $("#idotros_gastos_categoria").val(e.data.idotros_gastos_categoria).trigger("change");
+      
       $("#tipo_comprobante").val(e.data.tipo_comprobante);
       $("#serie_comprobante").val(e.data.serie_comprobante);
       $("#fecha").val(e.data.fecha_ingreso);
@@ -223,7 +227,7 @@ function mostrar_editar_gdt(idgasto_de_trabajador) {
         $("#doc_old_1").val(e.data.comprobante);
         $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>imagen.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
         // cargamos la imagen adecuada par el archivo
-        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/gasto_de_trabajador', '50%', '110'));   //ruta imagen          
+        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/otros_gastos', '50%', '110'));   //ruta imagen          
       }
       $('#cargando-1-fomulario').show();	
       $('#cargando-2-fomulario').hide();
@@ -235,15 +239,15 @@ function mostrar_editar_gdt(idgasto_de_trabajador) {
 }
 
 //listamos los datos para MOSTRAR TODO
-function mostrar_detalles_gasto(idgasto_de_trabajador) {
+function mostrar_detalles_gasto(idotros_gastos) {
   $("#modal-ver-detalle").modal('show');
   $("#html-detalle-comprobante").html('');
-  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_detalle_gasto", { idgasto_de_trabajador: idgasto_de_trabajador }, function (e, status) {
+  $.post("../ajax/otros_gastos.php?op=mostrar_detalle_gasto", { idotros_gastos: idotros_gastos }, function (e, status) {
     e = JSON.parse(e);
     if (e.status == true) {
      
       $("#html-detalle-compra").html(e.data);
-      $("#html-detalle-comprobante").html(doc_view_download_expand(e.comprobante, 'assets/modulo/gasto_de_trabajador/', e.nombre_doc, '100%', '400px'));
+      $("#html-detalle-comprobante").html(doc_view_download_expand(e.comprobante, 'assets/modulo/otros_gastos/', e.nombre_doc, '100%', '400px'));
       
     }else{
       ver_errores(e);
@@ -251,19 +255,19 @@ function mostrar_detalles_gasto(idgasto_de_trabajador) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function mostrar_comprobante(idgasto_de_trabajador) {
+function mostrar_comprobante(idotros_gastos) {
   $('#modal-ver-comprobante').modal('show');
   $("#comprobante-container").html(`<div class="row" > <div class="col-lg-12 text-center"> <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div> </div>`);
 
-  $.post("../ajax/gasto_de_trabajador.php?op=mostrar_editar_gdt", { idgasto_de_trabajador: idgasto_de_trabajador },  function (e, status) {
+  $.post("../ajax/otros_gastos.php?op=mostrar_editar", { idotros_gastos: idotros_gastos },  function (e, status) {
 
     e = JSON.parse(e);
     if (e.status == true) {
       if (e.data.comprobante == "" || e.data.comprobante == null) { } else {
-        // $("#comprobante-container").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/gasto_de_trabajador', '100%', '100%'));
+        // $("#comprobante-container").html(doc_view_extencion(e.data.comprobante, 'assets/modulo/otros_gastos', '100%', '100%'));
         var nombre_comprobante = `${e.data.tipo_comprobante} ${e.data.serie_comprobante}`;
         $('.title-modal-comprobante').html(nombre_comprobante);
-        $("#comprobante-container").html(doc_view_download_expand(e.data.comprobante, 'assets/modulo/gasto_de_trabajador',nombre_comprobante , '100%', '400px'));
+        $("#comprobante-container").html(doc_view_download_expand(e.data.comprobante, 'assets/modulo/otros_gastos',nombre_comprobante , '100%', '400px'));
         $('.jq_image_zoom').zoom({ on: 'grab' });
       }
     } else { ver_errores(e); }
@@ -534,7 +538,7 @@ function guardar_proveedor(e) {
         if (e.status == true) {	
 					sw_success('Exito', 'proveedor guardado correctamente.');
           $("#modal-agregar-proveedor").modal('hide'); limpiar_proveedor();
-          lista_select2("../ajax/compras.php?op=listar_proveedor", '#idproveedor', e.data, '.charge_idproveedor');
+          lista_select2("../ajax/otros_gastos.php?op=listar_proveedor", '#idproveedor', e.data, '.charge_idproveedor');  
 				} else {
 					ver_errores(e);
 				}				
@@ -606,6 +610,48 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	});
 });
+
+// .....::::::::::::::::::::::::::::::::::::::::::  CATEGORIA :::::::::::::::::::::::::::::::::::::::::::..
+function modal_add_categoria() {
+  $("#modal-agregar-categoria-otros-gastos").modal('show');
+}
+
+function limpiar_form_categoria_otros_gastos() {
+
+	$('#idotros_gastos_categoria').val('');
+  $('#nombre_categoria_otros_gastos').val('');
+  $('#descripcion_categoria_otros_gastos').val('');
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+}
+
+function guardar_y_editar_categoria_otros_gastos(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-agregar-categoria-otros-gastos")[0]);
+ 
+  $.ajax({
+    url: "../ajax/categoria_otros_gastos.php?op=guardar_y_editar",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      e = JSON.parse(e);  console.log(e);  
+      if (e.status == true) {
+        Swal.fire("Correcto!", "Plan registrado correctamente.", "success");	        
+				limpiar_form_categoria_otros_gastos();
+        $("#modal-agregar-categoria-otros-gastos").modal("hide");        
+        lista_select2("../ajax/ajax_general.php?op=select2_categoria_otros_gastos", '#idotros_gastos_categoria', e.data, '.charge_idotros_gastos_categoria');
+			}else{
+				ver_errores(e);
+			}
+      $("#guardar_registro_categoria_otros_gastos").html('<i class="bx bx-save bx-tada"></i> Guardar').removeClass('disabled send-data');
+    }
+  });
+}
 
 $(function () {
   $('#distrito').on('change', function() { $(this).trigger('blur'); });
@@ -679,22 +725,24 @@ $(function () {
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  T R A B A J A D O R    :::::::::::::::::::::::::::::::::::::::..
 $(function () {
   $("#formulario-gasto").validate({
-    rules: {
-      idtrabajador:     { required: true },
-      descr_gastos:     { required: true, minlength: 2, maxlength: 500 },
+    rules: {     
+      idproveedor:              { required: true },
+      idotros_gastos_categoria: { required: true },
       fecha:            { required: true },
-      precio_con_igv:      { required: true, min: 1, },
+      precio_con_igv:   { required: true, min: 1, },
+      val_igv:          { required: true, minlength: 1, maxlength: 100 },
       val_igv:          { required: true, minlength: 1, maxlength: 100 },
       serie_comprobante:{
         required: function (element) {
           return $("#tipo_comprobante").val() !== "NINGUNO";
         }
-      }
+      },
+      descr_comprobante: {minlength: 4,}
     },
 
     messages: {
-      idtrabajador:     { required: "Campo requerido" },
-      descr_gastos:     { required: "Campo requerido" },
+
+     
       serie_comprobante:{ required: "Campo requerido" },
       fecha:            { required: "Campo requerido" },
       precio_con_igv:      { required: "Campo requerido" },
@@ -721,6 +769,37 @@ $(function () {
       guardar_editar(e);
     },
   });
+
+  $("#form-agregar-categoria-otros-gastos").validate({
+    rules: {
+      nombre_categoria_otros_gastos: { required: true,  minlength: 4,  maxlength: 100,  } ,     // terms: { required: true },
+      descripcion_categoria_otros_gastos: { minlength: 4}      // terms: { required: true },
+    },
+    messages: {
+      nombre_categoria: {  required: "Campo requerido.", },
+      descripcion_categoria_otros_gastos: {  required: "Campo requerido.", },
+    },
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");   
+    },
+    submitHandler: function (e) { 
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_categoria_otros_gastos(e);      
+    },
+
+  });
 });
 
 $(document).ready(function () {
@@ -733,5 +812,12 @@ function mayus(e) {
   e.value = e.value.toUpperCase();
 }
 
-function reload_idtrabajador(){ lista_select2("../ajax/gasto_de_trabajador.php?op=listar_trabajador", '#idtrabajador', null, '.charge_idtrabajador'); }
-function reload_idproveedor(){ lista_select2("../ajax/gasto_de_trabajador.php?op=listar_proveedor", '#idproveedor', null, '.charge_idproveedor'); }
+function reload_idproveedor(){ lista_select2("../ajax/otros_gastos.php?op=listar_proveedor", '#idproveedor', null, '.charge_idproveedor'); }
+function reload_idotros_gastos_categoria(){ lista_select2("../ajax/ajax_general.php?op=select2_categoria_otros_gastos", '#idotros_gastos_categoria', null, '.charge_idotros_gastos_categoria'); }
+  
+function ver_img(img, nombre) {
+	$(".title-modal-img").html(`-${nombre}`);
+  $('#modal-ver-img').modal("show");
+  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
+  $(`.jq_image_zoom`).zoom({ on:'grab' });
+}

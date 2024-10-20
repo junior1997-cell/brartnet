@@ -118,7 +118,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <!-- ----------------- SERIE --------------- -->
                           <div class="col-md-6 col-lg-4 col-xl-3 col-xxl-3">
                             <div class="form-group">
-                              <label for="serie" class="form-label">Serie</label>
+                              <label for="serie" class="form-label">Numero-Serie</label>
                               <input class="form-control" name="serie" id="serie" onkeyup="mayus(this);" />
                             </div>
                           </div>

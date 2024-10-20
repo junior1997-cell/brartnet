@@ -47,11 +47,13 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[]=[
               "0" => $count++,
               "1" =>  '<div class="hstack gap-2 fs-15">' .
-                        '<button class="btn btn-icon btn-sm btn-warning-light" onclick="mostrar_proveedor('.($value['idpersona']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
-                        '<button  class="btn btn-icon btn-sm btn-danger-light product-btn" onclick="eliminar_papelera_proveedor('.$value['idpersona'].'.,\''.$value['nombre_razonsocial'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'.
-                      '</div>',
+                        ($value['idpersona'] == 2 ? '<i class="bi bi-exclamation-triangle text-danger fs-6"></i>' : 
+                        '<button class="btn btn-icon btn-sm border-light btn-warning-light" onclick="mostrar_proveedor('.($value['idpersona']).')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>'.
+                        '<button  class="btn btn-icon btn-sm border-danger btn-danger-light product-btn" onclick="eliminar_papelera_proveedor('.$value['idpersona'].'.,\''.$value['nombre_razonsocial'].'\')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>'
+                        ) .
+                        '</div>',
               "2" =>  '<div class="d-flex flex-fill align-items-center">
-                        <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/proveedor/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml(($value['nombre_razonsocial']) .' '. ($value['apellidos_nombrecomercial'])) . '\')"> </span></div>
+                        <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img src="../assets/modulo/persona/perfil/' . $img . '" alt="" onclick="ver_img(\'' . $img . '\', \'' . encodeCadenaHtml(($value['nombre_razonsocial']) .' '. ($value['apellidos_nombrecomercial'])) . '\')"> </span></div>
                         <div>
                           <span class="d-block fw-semibold text-primary">'.$value['nombre_razonsocial'] .' '. $value['apellidos_nombrecomercial'].'</span>
                           <span class="text-muted"><b>'.$value['tipo_documento'] .'</b>: '. $value['numero_documento'].'</span>
@@ -110,7 +112,7 @@ if (!isset($_SESSION["user_nombre"])) {
           $ext1 = explode(".", $_FILES["imagen"]["name"]);
           $flat_img1 = true;
           $img_perfil = $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
-          move_uploaded_file($_FILES["imagen"]["tmp_name"], "../assets/modulo/proveedor/" . $img_perfil);          
+          move_uploaded_file($_FILES["imagen"]["tmp_name"], "../assets/modulo/persona/perfil/" . $img_perfil);          
         }        
 
         if ( empty($idpersona) ) { #Creamos el registro
@@ -125,7 +127,7 @@ if (!isset($_SESSION["user_nombre"])) {
           if ($flat_img1 == true || empty($img_perfil)) {
             $datos_f1 = $proveedores->mostrar($idpersona);
             $img1_ant = $datos_f1['data']['foto_perfil'];
-            if (!empty($img1_ant)) { unlink("../assets/modulo/proveedor/" . $img1_ant); }         
+            if (!empty($img1_ant)) { unlink("../assets/modulo/persona/perfil/" . $img1_ant); }         
           }  
         
           $rspta = $proveedores->editar($idpersona, $tipo_persona_sunat, $idtipo_persona, $tipo_documento, $numero_documento,

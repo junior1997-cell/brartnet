@@ -105,8 +105,11 @@
     }
 
     function listar_proveedor(){
-      $sql = "SELECT idpersona, nombre_razonsocial AS nombre, apellidos_nombrecomercial AS apellido, numero_documento
-      FROM persona WHERE idtipo_persona = 3  AND estado_delete = 1 AND idpersona > 2;";
+      $sql = "SELECT p.idpersona, p.nombre_razonsocial AS nombre, p.apellidos_nombrecomercial AS apellido, p.numero_documento, tp.nombre as tipo_persona
+      FROM persona as p
+      INNER JOIN tipo_persona as tp on tp.idtipo_persona = p.idtipo_persona 
+      WHERE p.idtipo_persona in ( 3 ,4 ) AND p.estado_delete = 1 AND p.idpersona > 2 
+      ORDER BY tp.nombre DESC, p.nombre_razonsocial ASC";
       return ejecutarConsultaArray($sql);
     }
 

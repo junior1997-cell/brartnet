@@ -251,7 +251,7 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta = $gasto_trab->listar_proveedor(); $cont = 1; $data = "";
         if($rspta['status'] == true){
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option  value=' . $value['idpersona']  . '>' . $value['nombre'] . ' '. $value['apellido'] . ' - '. $value['numero_documento'] . '</option>';
+            $data .= '<option  value=' . $value['idpersona']  . '>' . $value['tipo_persona'] . ': ' . $value['nombre'] . ' '. $value['apellido'] . ' - '. $value['numero_documento'] . '</option>';
           }
 
           $retorno = array(

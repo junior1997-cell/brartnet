@@ -165,6 +165,16 @@
         </li>
         <?php } ?>
         <!-- End::slide --> 
+
+        <!-- Start::slide -->
+        <?php  if ($_SESSION['gastos_trabajador'] == '1') { ?>
+        <li class="slide">
+          <a href="otros_gastos.php" class="side-menu__item">
+            <i class='bx bx-dollar-circle side-menu__icon' ></i><span class="side-menu__label"> Otros Gastos</span>
+          </a>          
+        </li>
+        <?php } ?>
+        <!-- End::slide --> 
         
         <!-- Start::slide -->        
         <li class="slide">         

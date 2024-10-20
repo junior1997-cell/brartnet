@@ -162,6 +162,13 @@ Class Ajax_general
 		return ejecutarConsultaArray($sql);   
 	}
 
+  // ══════════════════════════════════════ C A T E G O R I A   O T R O S   G A S T O S - S E L E C T 2  ══════════════════════════════════════
+	public function select2_categoria_otros_gastos()	{
+    // $data = [];
+		$sql="SELECT * FROM otros_gastos_categoria WHERE estado='1' AND estado_delete = '1'";
+		return ejecutarConsultaArray($sql);   
+	}
+
   // ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════
 
   public function create_code_producto($pre_codigo)	{
