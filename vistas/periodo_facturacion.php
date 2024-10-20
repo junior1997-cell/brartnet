@@ -503,7 +503,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
     <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>     
     
-    <script src="scripts/periodo_facturacion.js?version_jdl=1.33"></script>
+    <script src="scripts/periodo_facturacion.js?version_jdl=1.34"></script>
     
     <script>
       $(function() {
