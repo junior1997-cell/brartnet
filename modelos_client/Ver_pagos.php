@@ -142,7 +142,6 @@ class Ver_pagos
     if ($month['status'] == false) {
       return $month;
     }
-
     
     foreach ($month['data'] as $key => $val) {
       $data_month .= '<button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">'. $val['name_month'] .'</button>';
