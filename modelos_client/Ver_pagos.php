@@ -100,51 +100,7 @@ class Ver_pagos
                 </div>
               </li>';
 
-      /**
-       *                       <li style="padding:0px">
-                        <div class="timeline-time text-end">
-                          <span class="date">2024</span>
-                          <span class="time d-inline-block" style=" font-size: small; ">Setiembre</span>
-                        </div>
-                        <div class="timeline-icon">
-                          <a href="javascript:void(0);"></a>
-                        </div>
-                        <div class="timeline-body mb-6">
-                          <div class="d-flex align-items-top timeline-main-content flex-wrap mt-0">
-                            <div class="avatar avatar-md online me-3 mt-sm-0 mt-4">
-                              <img alt="avatar" src="assets/icons_pgos_c/triste.png">
-                            </div>
-                            <div class="flex-fill">
-                              <div class="d-flex">
-                                <div class="mt-sm-0 mt-2">
-                                  <p class="mb-0 fs-14 fw-semibold" style="text-align: left;">Sin Facturar</p>
-                                  <p class="mb-0 text-muted" style="text-align: left;">Tipo Servicio : Basico</p>
-                                </div>
-                                <div class="ms-auto">
-                                  <div class="card custom-card shadow-none bg-light">
-                                    <div class="card-body p-2">
-                                      <a href="javascript:void(0);">
-                                        <div class="d-flex justify-content-between flex-wrap">
-                                          <div class="file-format-icon mt-2">
-                                            <i class="fa-solid fa-download fa-2xl" style="color: #f04747;"></i>
-                                          </div>
-                                          <div>
-                                            <span class="fw-semibold mb-1"> Descargar </span>
-                                            <span class="fs-8 d-block text-muted text-end">
-                                              - - - - - - - -
-                                            </span>
-                                          </div>
-                                        </div>
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-       */
+ 
     };
     //$data_p $data_pagos['data']
     return $return = ['status' => true, 'message' => 'todo okey', 'data' => $data_p];

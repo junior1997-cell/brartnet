@@ -365,8 +365,9 @@ if (!isset($_SESSION['cliente_nombre'])) {
 
                     <div class="p-3 border-bottom border-block-end-dashed">
 
-                      <div class="d-grid gap-2 mb-4">
-                        <button class="btn btn-secondary btn-wave" type="button">Limpiar Filtro</button>
+                      <div class="gap-2 mb-4">
+                        <button class="btn btn-secondary btn-wave" type="button">Filtrar</button>
+                        <button class="btn btn-secondary btn-wave" type="button">Limpiar</button>
                       </div>
                     </div>
 
