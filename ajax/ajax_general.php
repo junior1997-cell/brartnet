@@ -170,7 +170,12 @@ if (!isset($_SESSION["user_nombre"])) {
 
         foreach ($rspta['data'] as $key => $value) {
           $data[] = [
-            'value' => $value['nombre'], 'label' => $value['nombre'], 'disabled'  => false, 'selected'  => false, 
+            'value' => $value['nombre'], 'label' => $value['nombre'], 'disabled'  => false, 'selected'  =>  false , 
+            'customProperties' => [
+              'idubigeo_distrito' => $value['idubigeo_distrito'],
+              'idubigeo_provincia' => $value['idubigeo_provincia'],
+              'idubigeo_departamento' => $value['idubigeo_departamento']
+            ]
           ];
         }
 
@@ -202,6 +207,12 @@ if (!isset($_SESSION["user_nombre"])) {
 
     case 'select2_distrito_id':
       $rspta = $_ubigeo->select2_distrito_id($_GET['id']);
+      echo json_encode($rspta, true);
+    break;
+
+    // ══════════════════════════════════════ C L I E N T E  ══════════════════════════════════════
+    case 'update_nro_documento_cliente':
+      $rspta = $ajax_general->update_nro_documento_cliente($_GET['idpersona_cliente'], $_GET['numero_documento']);
       echo json_encode($rspta, true);
     break;
 
@@ -282,6 +293,30 @@ if (!isset($_SESSION["user_nombre"])) {
 
         foreach ($rspta['data'] as $key => $value) {
           $data[] = ['value' => $value['idbancos'], 'label' => $value['nombre'], 'disabled'  => false, 'selected'  => false,];
+        }
+
+        $retorno = array(
+          'status' => true,
+          'message' => 'Salió todo ok',
+          'data' => $data,
+        );
+
+        echo json_encode($retorno, true);
+      } else {
+        echo json_encode($rspta, true);
+      }
+    break;
+
+    // ══════════════════════════════════════ C A T E G O R I A   O T R O S   G A S T O S - S E L E C T 2  ══════════════════════════════════════
+    case 'select2_categoria_otros_gastos':
+      $rspta = $ajax_general->select2_categoria_otros_gastos();
+      // echo json_encode($rspta, true); die;
+      $data = "";
+
+      if ($rspta['status']) {
+
+        foreach ($rspta['data'] as $key => $value) {
+          $data  .= '<option value="' . $value['idotros_gastos_categoria'] . '"  >' . $value['nombre']  . '</option>';
         }
 
         $retorno = array(

@@ -2,6 +2,13 @@ var tabla;
 
 // var select_idbanco = new Choices('#idbanco', { allowHTML: true,  removeItemButton: true, });
 
+
+// ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T C H O I C E ══════════════════════════════════════
+
+const choice_distrito       = new Choices('#distrito',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+const choice_tipo_documento = new Choices('#tipo_documento',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+const choice_idbanco        = new Choices('#idbanco',  {  removeItemButton: true,noResultsText: 'No hay resultados.', } );
+
 function init() {
 
   listar_tabla();
@@ -14,9 +21,9 @@ function init() {
   lista_select2("../ajax/gasto_de_trabajador.php?op=listar_trabajador", '#idtrabajador', null);
   lista_select2("../ajax/gasto_de_trabajador.php?op=listar_proveedor", '#idproveedor', null);  
 
-  lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);  
-  lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);  
-  lista_select2("../ajax/ajax_general.php?op=select2_banco", '#idbanco', null);  
+  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_distrito", choice_distrito, null);
+  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_tipo_documento", choice_tipo_documento, null);  
+  lista_selectChoice("../ajax/ajax_general.php?op=selectChoice_banco", choice_idbanco, null);
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#idtrabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -451,13 +458,45 @@ function modal_add_trabajador() {
   $("#modal-agregar-proveedor").modal('show');
 }
 
+function llenar_dep_prov_ubig(input) {
+
+  $(".chargue-pro").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-dep").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+  $(".chargue-ubi").html(`<div class="spinner-border spinner-border-sm" role="status" ></div>`); 
+
+  // if ($(input).select2("val") == null || $(input).select2("val") == '') { 
+  if ($('#distrito').val() == null || $('#distrito').val() == '') { 
+    $("#departamento").val(""); 
+    $("#provincia").val(""); 
+    $("#ubigeo").val(""); 
+
+    $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+  } else {
+    // var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
+    var iddistrito = choice_distrito.getValue().customProperties.idubigeo_distrito;
+    $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
+      e = JSON.parse(e); console.log(e);
+      if (e.status == true) {
+        $("#departamento").val(e.data.departamento); 
+        $("#provincia").val(e.data.provincia); 
+        $("#ubigeo").val(e.data.ubigeo_inei);       
+      } else {
+        ver_errores(e);
+      }
+      $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
+      $("#form-agregar-proveedor").valid();
+      
+    });
+  }  
+}
+
 function limpiar_proveedor() {
 
 	$('#idpersona').val('');
   $('#tipo_persona_sunat').val('NATURAL');
   $('#idtipo_persona').val('4');
 
-  $('#tipo_documento').val(null).trigger("change");
+  choice_tipo_documento.setChoiceByValue('1');
   $('#numero_documento').val('');
   $('#nombre_razonsocial').val('');
   $('#apellidos_nombrecomercial').val('');
@@ -465,11 +504,11 @@ function limpiar_proveedor() {
   $('#celular').val('');
   
   $('#direccion').val('');
-  $('#distrito').val('').trigger("change");
+  choice_distrito.setChoiceByValue('TOCACHE').passedElement.element.dispatchEvent(new Event('change'));
   $('#departamento').val('');
   $('#provincia').val('');
   $('#ubigeo').val('');
-  $('#idbanco').val(null).trigger("change")
+  choice_idbanco.setChoiceByValue('1');
   $('#cuenta_bancaria').val('');
   $('#cci').val(''); 
 
@@ -495,6 +534,7 @@ function guardar_proveedor(e) {
         if (e.status == true) {	
 					sw_success('Exito', 'proveedor guardado correctamente.');
           $("#modal-agregar-proveedor").modal('hide'); limpiar_proveedor();
+          lista_select2("../ajax/compras.php?op=listar_proveedor", '#idproveedor', e.data, '.charge_idproveedor');
 				} else {
 					ver_errores(e);
 				}				

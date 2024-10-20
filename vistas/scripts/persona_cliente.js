@@ -6,6 +6,8 @@ var array_data_venta = [];
 var cambio_de_tipo_comprobante ;
 var file_pond_mp_comprobante;
 
+var filtro_trabajador_r = '', filtro_dia_pago_r = '', filtro_plan_r = '', filtro_zona_antena_r = '';
+
 //Función que se ejecuta al inicio
 function init() {
 
@@ -84,7 +86,7 @@ function limpiar_cliente() {
   $("#fecha_nacimiento").val("");
   $("#celular").val("");
   $("#direccion").val("");
-  $("#distrito").val('TOCACHE').trigger("change");;
+  $("#distrito").val('TOCACHE').trigger("change");
 
   $("#correo").val("");
 
@@ -267,7 +269,9 @@ function funtion_switch() {
 }
 
 //Función Listar
-function tabla_principal_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+function tabla_principal_cliente(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+
+  filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
   tabla_cliente = $('#tabla-cliente').dataTable({
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
@@ -790,7 +794,8 @@ function limpiar_form_venta(){
 
   array_data_venta = [];
   $("#f_idventa").val('');
-
+  
+  $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
   $("#f_idpersona_cliente").val('').trigger('change'); 
   $("#f_metodo_pago").val('').trigger('change'); 
   $("#f_observacion_documento").val(''); 
@@ -1001,23 +1006,78 @@ function es_valido_cliente() {
     if (es_valido == true) {
      
     } else {
+
       $('#f_tipo_comprobante12').prop('checked', false)
       $('#f_tipo_comprobante03').prop('checked', false)
       $('#f_tipo_comprobante01').prop('checked', false)
-      // sw_cancelar('Cliente no permitido', `El cliente no cumple con los siguientes requsitos:  <ul class="pt-3 text-left font-size-13px"> ${campos_requeridos} </ul>`, 10000);      
-      Swal.fire({
-        title: "Cliente no permitido",
-        html: `El cliente no cumple con los siguientes requsitos:  <ul class="pt-3 text-left font-size-13px"> ${campos_requeridos} </ul>`,
-        icon: "info",       
-        confirmButtonColor: "#3085d6",        
-        confirmButtonText: "Ok"
-      }).then((result) => {               
-        $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
-        setTimeout(function() {
-          $("#form-facturacion").valid();  
-          $('#f_tipo_comprobante12').focus(); 
-        }, 500); // 3000 milisegundos = 3 segundos        
-      });      
+
+      if (tipo_comprobante == '03' && tipo_documento == '0' ) {
+        Swal.fire({
+          title: "Desea emitir Boleta?",
+          html: "Si deseas emitir Boleta sin DNI, actualiza el numero con 8 ceros: 00000000, o ingrese el DNI correcto del cliente.",
+          input: "text",
+          inputValue: '00000000',
+          inputAttributes: { autocapitalize: "off" },
+          showCancelButton: true,
+          confirmButtonText: "Actualizar DNI",
+          showLoaderOnConfirm: true,
+          preConfirm: async (numero_documento) => {
+            try {              
+              const UrlUpdate_client = `../ajax/ajax_general.php?op=update_nro_documento_cliente&idpersona_cliente=${id_cliente}&numero_documento=${numero_documento}`;
+              const response = await fetch(UrlUpdate_client);
+              if (!response.ok) {
+                return Swal.showValidationMessage(` ${JSON.stringify(await response.json())} `);
+              }
+              return response.json();
+            } catch (error) {
+              Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`);
+            }
+          },
+          allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+          if (result.isConfirmed) {    
+            $.getJSON(`../ajax/persona_cliente.php?op=mostrar_datos_cliente`, {idpersona_cliente: id_cliente}, function (e, textStatus, jqXHR) {
+
+              $('.title-body-pagina').html(e.data.cliente_nombre_completo);
+              $('#f_tipo_documento').val(e.data.tipo_documento);
+              $('#f_numero_documento').val(e.data.numero_documento);
+              $('#f_direccion').val(e.data.direccion); 
+              $('#f_dia_cancelacion').val(e.data.dia_cancelacion_v2);  
+
+              $('#f_tipo_comprobante03').prop('checked', true).focus().trigger('change');    
+              setTimeout(function() {
+                $("#form-facturacion").valid();  
+                $('#f_tipo_comprobante03').focus(); 
+              }, 500); // 3000 milisegundos = 3 segundos         
+              sw_success('Datos Actualizado!!', 'Se actualizado el Nro Documento correctamente');
+
+            });
+           
+          }else{
+            $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
+            setTimeout(function() {
+              $("#form-facturacion").valid();  
+              $('#f_tipo_comprobante12').focus(); 
+            }, 500); // 3000 milisegundos = 3 segundos 
+          }
+        });        
+      } else {
+
+        // sw_cancelar('Cliente no permitido', `El cliente no cumple con los siguientes requsitos:  <ul class="pt-3 text-left font-size-13px"> ${campos_requeridos} </ul>`, 10000);      
+        Swal.fire({
+          title: "Cliente no permitido",
+          html: `El cliente no cumple con los siguientes requsitos:  <ul class="pt-3 text-left font-size-13px"> ${campos_requeridos} </ul>`,
+          icon: "info",       
+          confirmButtonColor: "#3085d6",        
+          confirmButtonText: "Ok"
+        }).then((result) => {               
+          $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
+          setTimeout(function() {
+            $("#form-facturacion").valid();  
+            $('#f_tipo_comprobante12').focus(); 
+          }, 500); // 3000 milisegundos = 3 segundos        
+        });   
+      }   
     }   
     
     console.log(tipo_comprobante, tipo_documento, numero_documento, direccion, es_valido);
@@ -1276,11 +1336,11 @@ function filtros() {
   //console.log(filtro_categoria, fecha_2, filtro_plan, comprobante);
   
   cant_tab_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
-  tabla_principal_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
+  tabla_principal_cliente('tabla_todos', filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
   
 }
 
-function filtrar_grupo(tabla) {
+function filtrar_grupo(opcion) {
   
 }
 

@@ -536,7 +536,7 @@ function limpiar_proveedor() {
   $('#tipo_persona_sunat').val('NATURAL');
   $('#idtipo_persona').val('4');
 
-  $('#tipo_documento').val(null).trigger("change");
+  choice_tipo_documento.setChoiceByValue('1');
   $('#numero_documento').val('');
   $('#nombre_razonsocial').val('');
   $('#apellidos_nombrecomercial').val('');
@@ -544,11 +544,11 @@ function limpiar_proveedor() {
   $('#celular').val('');
   
   $('#direccion').val('');
-  $('#distrito').val('').trigger("change");
+  choice_distrito.setChoiceByValue('TOCACHE').passedElement.element.dispatchEvent(new Event('change'));
   $('#departamento').val('');
   $('#provincia').val('');
   $('#ubigeo').val('');
-  $('#idbanco').val(null).trigger("change")
+  choice_idbanco.setChoiceByValue('1');
   $('#cuenta_bancaria').val('');
   $('#cci').val(''); 
 
@@ -670,7 +670,7 @@ function llenar_dep_prov_ubig(input) {
     $(".chargue-pro").html(''); $(".chargue-dep").html(''); $(".chargue-ubi").html('');
   } else {
     // var iddistrito =  $(input).select2('data')[0].element.attributes.iddistrito.value;
-    var iddistrito = $('#distrito').val();
+    var iddistrito = choice_distrito.getValue().customProperties.idubigeo_distrito;
     $.post(`../ajax/ajax_general.php?op=select2_distrito_id&id=${iddistrito}`, function (e) {   
       e = JSON.parse(e); console.log(e);
       if (e.status == true) {

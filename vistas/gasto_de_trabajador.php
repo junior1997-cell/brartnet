@@ -185,14 +185,14 @@
                                 <!-- ----------------- SUB TOTAL --------------- -->
                                 <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
                                   <div class="form-group">
-                                    <label for="precio_sin_igv" class="form-label">Sub Total</label>
+                                    <label for="precio_sin_igv" class="form-label">Sub Total <small class="text-info" >(no editable)</small></label>
                                     <input type="number" class="form-control" name="precio_sin_igv" id="precio_sin_igv" readonly/>
                                   </div>
                                 </div>
                                 <!-- ----------------- IGV --------------- -->
                                 <div class="col-md-6 col-lg-4 col-xl-2 col-xxl-2">
                                   <div class="form-group">
-                                    <label for="igv" class="form-label">IGV</label>
+                                    <label for="igv" class="form-label">IGV <small class="text-info" >(no editable)</small></label>
                                     <input type="number" class="form-control" name="igv" id="igv" placeholder="" value="0.00" readonly />
                                   </div>
                                 </div>
@@ -424,7 +424,7 @@
                                 <div class="mb-1 col-md-3 col-lg-6 col-xl-6 col-xxl-6 mt-3">
                                   <div class="form-group">
                                     <label for="distrito" class="form-label">Distrito: </label>
-                                    <select name="distrito" id="distrito" class="form-select" >
+                                    <select name="distrito" id="distrito" class="form-select" onchange="llenar_dep_prov_ubig(this)">
                                       
                                     </select>
                                   </div>                                         
@@ -570,7 +570,7 @@
           <?php include("template/scripts.php"); ?>
           <?php include("template/custom_switcherjs.php"); ?> 
 
-          <script src="scripts/gasto_de_trabajador.js?version_jdl=1.32"></script>
+          <script src="scripts/gasto_de_trabajador.js?version_jdl=1.34"></script>
           <script> $(function () { $('[data-bs-toggle="tooltip"]').tooltip(); }); </script>
 
         

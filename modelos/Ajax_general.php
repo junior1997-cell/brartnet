@@ -101,6 +101,16 @@ Class Ajax_general
 		return ejecutarConsultaArray($sql);   
 	}
 
+  /* ══════════════════════════════════════ C L I E N T E   ══════════════════════════════════════ */
+  public function update_nro_documento_cliente($idpersona_cliente, $numero_documento )	{
+    // $data = [];
+		$sql="UPDATE persona p
+    JOIN persona_cliente pc ON p.idpersona = pc.idpersona
+    SET p.numero_documento = '$numero_documento'
+    WHERE pc.idpersona_cliente = '$idpersona_cliente';";
+		return ejecutarConsulta($sql);   
+	}
+
   // ══════════════════════════════════════ U S U A R I O - S E L E C T 2  ══════════════════════════════════════
 	public function select2_usuario_trabajador($id)	{
     // $data = [];
@@ -149,6 +159,13 @@ Class Ajax_general
 	public function select2_banco()	{
     // $data = [];
 		$sql="SELECT * FROM bancos WHERE estado='1' AND estado_delete = '1'";
+		return ejecutarConsultaArray($sql);   
+	}
+
+  // ══════════════════════════════════════ C A T E G O R I A   O T R O S   G A S T O S - S E L E C T 2  ══════════════════════════════════════
+	public function select2_categoria_otros_gastos()	{
+    // $data = [];
+		$sql="SELECT * FROM otros_gastos_categoria WHERE estado='1' AND estado_delete = '1'";
 		return ejecutarConsultaArray($sql);   
 	}
 

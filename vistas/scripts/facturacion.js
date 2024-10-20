@@ -273,6 +273,7 @@ function limpiar_form_venta(){
   $("#f_idventa").val('');
   $("#f_nc_idventa").val('0');
 
+  $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
   $("#f_idpersona_cliente").val('').trigger('change'); 
   $("#f_metodo_pago").val('').trigger('change'); 
   $("#f_observacion_documento").val(''); 
@@ -674,9 +675,47 @@ function es_valido_cliente() {
     if (es_valido == true) {
      
     } else {
-      sw_cancelar('Cliente no permitido', `El cliente no cumple con los siguientes requsitos:  <ul class="pt-3 text-left font-size-13px"> ${campos_requeridos} </ul>`, 10000);
-      $("#f_idpersona_cliente").val('').trigger('change'); 
-      $(".span_dia_cancelacion").html(``);
+
+      if (tipo_comprobante == '03' && tipo_documento == '0' ) {
+        Swal.fire({
+          title: "Desea emitir Boleta?",
+          html: "Si deseas emitir Boleta sin DNI, actualiza el numero con 8 ceros: 00000000, o ingrese el DNI correcto del cliente.",
+          input: "text",
+          inputValue: '00000000',
+          inputAttributes: { autocapitalize: "off" },
+          showCancelButton: true,
+          confirmButtonText: "Actualizar DNI",
+          showLoaderOnConfirm: true,
+          preConfirm: async (numero_documento) => {
+            try {
+              var id_cliente = $("#f_idpersona_cliente").select2('val') == null ? '' : $("#f_idpersona_cliente").select2('val');
+              const UrlUpdate_client = `../ajax/ajax_general.php?op=update_nro_documento_cliente&idpersona_cliente=${id_cliente}&numero_documento=${numero_documento}`;
+              const response = await fetch(UrlUpdate_client);
+              if (!response.ok) {
+                return Swal.showValidationMessage(` ${JSON.stringify(await response.json())} `);
+              }
+              return response.json();
+            } catch (error) {
+              Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`);
+            }
+          },
+          allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+          if (result.isConfirmed) {
+            var id_cliente = $("#f_idpersona_cliente").select2('val') == null ? '' : $("#f_idpersona_cliente").select2('val');
+            lista_select2("../ajax/facturacion.php?op=select2_cliente", '#f_idpersona_cliente', id_cliente);
+            sw_success('Datos Actualizado!!', 'Se actualizado el Nro Documento correctamente');
+          }else{
+            $("#f_idpersona_cliente").val('').trigger('change'); 
+            $(".span_dia_cancelacion").html(``);
+          }
+        });
+      } else {
+        sw_cancelar('Cliente no permitido', `El cliente no cumple con los siguientes requsitos:  <ul class="pt-3 text-left font-size-13px"> ${campos_requeridos} </ul>`, 10000);
+        $("#f_idpersona_cliente").val('').trigger('change'); 
+        $(".span_dia_cancelacion").html(``);
+      }
+      
     }   
     
     console.log(tipo_comprobante, tipo_documento, numero_documento, direccion, es_valido);

@@ -29,9 +29,9 @@
       $nombre_razonsocial, $apellidos_nombrecomercial, $correo, $celular, $direccion, $distrito, 
       $departamento, $provincia, $ubigeo, $idbanco, $cuenta_bancaria, $cci, $img_perfil)	{
       
-      $sql_0 = "SELECT p.*, sdi.nombre as nombre_tipo_documento
+      $sql_0 = "SELECT p.*, sc06.nombre as nombre_tipo_documento, sc06.abreviatura
       FROM persona AS p
-      INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
+      INNER JOIN sunat_c06_doc_identidad as sc06 ON sc06.code_sunat = p.tipo_documento
       WHERE p.tipo_documento = '$tipo_documento' AND p.numero_documento = '$numero_documento';";
       $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
       
@@ -50,7 +50,7 @@
   
         foreach ($existe['data'] as $key => $value) {
           $info_repetida .= '<li class="text-left font-size-13px">
-            <span class="font-size-15px text-danger"><b>'.$value['nombre_tipo_documento'].': </b>'.$value['numero_documento'].'</span><br>
+            <span class="font-size-15px text-danger"><b>'.$value['abreviatura'].': </b>'.$value['numero_documento'].'</span><br>
             <b>Nombre: </b>'.$value['nombre_razonsocial'].' '.$value['apellidos_nombrecomercial'].'<br>
             <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
             <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>

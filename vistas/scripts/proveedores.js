@@ -31,9 +31,9 @@ function limpiar_form() {
   $('#celular').val('');
   
   $('#direccion').val('');
-  $('#distrito').val('').trigger("change");
+  $("#distrito").val('TOCACHE').trigger("change");
   $('#departamento').val('');
-  $('#provincia').val('');
+  $('#provincia').val(''); 
   $('#ubigeo').val('');
   $('#idbanco').val(null).trigger("change")
   $('#cuenta_bancaria').val('');
@@ -196,7 +196,7 @@ function mostrar_proveedor(idpersona){
     $('#cci').val(e.data.cci);
 
     $("#imagenmuestra").show();
-		$("#imagenmuestra").attr("src", "../assets/modulo/proveedor/" + e.data.foto_perfil);
+		$("#imagenmuestra").attr("src", "../assets/modulo/persona/perfil/" + e.data.foto_perfil);
 		$("#imagenactual").val(e.data.foto_perfil);
 
     $('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function ver_img(img, nombre) {
 	$(".title-modal-img").html(`-${nombre}`);
   $('#modal-ver-img').modal("show");
-  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/proveedor', '100%', '550'));
+  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/persona/perfil', '100%', '550'));
   $(`.jq_image_zoom`).zoom({ on:'grab' });
 }
 
