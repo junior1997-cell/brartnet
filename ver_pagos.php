@@ -328,8 +328,6 @@ if (!isset($_SESSION['cliente_nombre'])) {
         </div>
         <!-- End:: Section-1 -->
 
-
-
         <!-- Start:: Section-3 -->
         <section class="section bg-light " id="mis_pagos">
           <div class="container text-center">
@@ -343,38 +341,56 @@ if (!isset($_SESSION['cliente_nombre'])) {
             <div class="row">
               <div class="col-xxl-4 col-xl-3 col-lg-12 col-md-12 col-sm-12">
                 <div class="card custom-card">
-                  <div class="card-header">
-                    <div class="card-title me-1">Filtros</div><span class="badge bg-primary-transparent rounded-pill">02</span>
-                  </div>
-                  <div class="card-body p-0">
-                    <div class="p-3 border-bottom border-block-end-dashed">
-                      <div class="d-flex align-items-center justify-content-between flex-wrap">
-                        <div class="text-primary fw-semibold">Año</div>
+                  <div class="card-body">
+                    <nav class="nav nav-style-6 nav-pills mb-3 nav-justified d-sm-flex d-block" role="tablist">
+                      <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-current="page" href="#nav-datos_cliente-justified" aria-selected="false">Cliente</a>
+                      <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-filtro-justified" aria-selected="true">Filtros </a>
+                    </nav>
+                    <div class="tab-content">
+                      <div class="tab-pane show active text-muted" id="nav-datos_cliente-justified" role="tabpanel">
+                        <div class="p-3 border-bottom border-block-end-dashed">
+                          <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <div class="text-primary fw-semibold">Datos Generales</div>
+                          </div>
+                        </div>
+                        <div class="p-1 border-bottom fs-12" style="text-align: left;">
+                          <p class="text-primary fw-semibold">Nombres: <span class="text-secondary">JUAN LEONARDO ARENAS</span> </p>
+                          <p class="text-primary fw-semibold">DNI/RUC: <span class="text-secondary">00962352</span> </p>
+                          <p class="text-primary fw-semibold">Dir: <span class="text-secondary">C/P NVO. BAMBAMARCA S/N</span> </p>
+                          <p class="text-primary fw-semibold">Plan: <span class="text-secondary"> INTERNET BASICO</span> </p>
+                          <p class="text-primary fw-semibold">Fecha Afiliación: <span class="text-secondary"> 04/08/2024</span> </p>
+                          <p class="text-primary fw-semibold">Fecha de Pago: <span class="text-secondary"> 10/08/2024</span> </p>
+                        </div>
+                      </div>
+                      <div class="tab-pane  text-muted" id="nav-filtro-justified" role="tabpanel">
+                        <div class="p-3 border-bottom border-block-end-dashed">
+                          <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <div class="text-primary fw-semibold">Año</div>
+                          </div>
+                        </div>
+                        <div class="p-1 border-bottom border-block-end-dashed list_year">
+                        </div>
+
+                        <div class="p-3 border-bottom border-block-end-dashed">
+                          <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <div class="text-primary fw-semibold">Mes</div>
+                          </div>
+                        </div>
+                        <div class="p-1 border-bottom border-block-end-dashed list_month">
+                        </div>
+
+                        <div class="p-3 border-bottom border-block-end-dashed">
+
+                          <div class="gap-2 mb-4">
+                            <button class="btn btn-secondary btn-wave" type="button">Filtrar</button>
+                            <button class="btn btn-secondary btn-wave" type="button">Limpiar</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="p-1 border-bottom border-block-end-dashed list_year">
-                    </div>
-
-                    <div class="p-3 border-bottom border-block-end-dashed">
-                      <div class="d-flex align-items-center justify-content-between flex-wrap">
-                        <div class="text-primary fw-semibold">Mes</div>
-                      </div>
-                    </div>
-                    <div class="p-1 border-bottom border-block-end-dashed list_month">
-                    </div>
-
-                    <div class="p-3 border-bottom border-block-end-dashed">
-
-                      <div class="gap-2 mb-4">
-                        <button class="btn btn-secondary btn-wave" type="button">Filtrar</button>
-                        <button class="btn btn-secondary btn-wave" type="button">Limpiar</button>
-                      </div>
-                    </div>
-
-
-
                   </div>
                 </div>
+
               </div>
               <div class="col-xxl-8 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                 <div class="card custom-card">
@@ -686,7 +702,6 @@ if (!isset($_SESSION['cliente_nombre'])) {
         </section>
         <!-- End:: Section-9 -->
 
-
         <!-- Start:: Footer -->
         <div class="landing-main-footer py-3">
           <div class="container">
@@ -712,6 +727,41 @@ if (!isset($_SESSION['cliente_nombre'])) {
           </div>
         </div>
         <!-- End:: Footer -->
+
+        <!-- Start::modal-imprimir_ticket -->
+        <div class="modal fade" id="modal_ver_comprobante">
+          <div class="modal-dialog modal-md modal-dialog-centered text-center" role="document">
+            <div class="modal-content modal-content-demo">
+              <div class="modal-body text-start">
+                <div class="card custom-card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      N° de tu comprobrante <strong class="serie_comp"></strong>.
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <nav class="nav nav-style-6 nav-pills mb-3 nav-justified d-sm-flex d-block" role="tablist">
+                      <a class="nav-link active btn_formato_ticket" data-bs-toggle="tab" role="tab" aria-current="page" href="#nav-products-justified" aria-selected="false">Formato Ticket</a>
+                      <a class="nav-link btn_formato_a4" data-bs-toggle="tab" role="tab" href="#nav-cart-justified" aria-selected="true">Formato A4 </a>
+                    </nav>
+                    <div class="tab-content">
+                      <div class="tab-pane show active text-muted formato_ticket" id="nav-products-justified" role="tabpanel">
+                      </div>
+                      <div class="tab-pane  text-muted formato_a4" id="nav-cart-justified" role="tabpanel">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END::modal-imprimir_ticket -->
+
 
       </div>
       <!-- End::app-content -->

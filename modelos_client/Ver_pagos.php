@@ -51,9 +51,11 @@ class Ver_pagos
     foreach ($data_pagos['data'] as $key => $value) {
       $src = !empty($value['idventa']) ? "assets/icons_pgos_c/alegre.png" : "assets/icons_pgos_c/triste.png";
       $icon_download = !empty($value['idventa']) ? "#1de125;" : "#f04747;";
-      $tipo_servicio = !empty($value['idventa']) ? $value['tipo'] : "Por Asignar";
-      $name_comprobante = !empty($value['idventa']) ? $value['pr_nombre'] : "Por Asignar";
+      $tipo_servicio = !empty($value['idventa']) ? $value['tipo'] : "Por Pagar";
+      $name_comprobante = !empty($value['idventa']) ? $value['pr_nombre'] : "Por Pagar";
+      $descr_donl = !empty($value['idventa']) ? "Ver Comprobante" : "Sin Comprobante";
       $num_comprobante = !empty($value['idventa']) ? $value['serie_comprobante'] . '- ' . $value['numero_comprobante'] : "- - - - - - - -";
+      $onclick = !empty($value['idventa']) ? 'onclick="ver_comprobante( \'' . $value['idventa'] . '\', \'' . $value['tipo_comprobante'] . '\',\'' .$num_comprobante. '\');"' : "";
 
       $data_p .= '<li style="padding:0px">
                 <div class="timeline-time text-end">
@@ -78,13 +80,13 @@ class Ver_pagos
                         <div class="ms-auto">
                           <div class="card custom-card shadow-none bg-light">
                             <div class="card-body p-2">
-                              <a href="javascript:void(0);">
+                              <a  '.$onclick.' >
                                 <div class="d-flex justify-content-between flex-wrap">
                                   <div class="file-format-icon mt-2">
                                     <i class="fa-solid fa-download fa-2xl" style="color: ' . $icon_download . '"></i>
                                   </div>
                                   <div>
-                                    <span class="fw-semibold mb-1"> Descargar </span>
+                                    <span class="fw-semibold mb-1"> '.$descr_donl.' </span>
                                     <span class="fs-8 d-block text-muted text-end">
                                       ' . $num_comprobante . '
                                     </span>
