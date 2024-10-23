@@ -347,19 +347,19 @@ if (!isset($_SESSION['cliente_nombre'])) {
                       <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-filtro-justified" aria-selected="true">Filtros </a>
                     </nav>
                     <div class="tab-content">
-                      <div class="tab-pane show active text-muted" id="nav-datos_cliente-justified" role="tabpanel">
+                      <div class="tab-pane show active text-muted p-2" id="nav-datos_cliente-justified" role="tabpanel">
                         <div class="p-3 border-bottom border-block-end-dashed">
                           <div class="d-flex align-items-center justify-content-between flex-wrap">
                             <div class="text-primary fw-semibold">Datos Generales</div>
                           </div>
                         </div>
                         <div class="p-1 border-bottom fs-12" style="text-align: left;">
-                          <p class="text-primary fw-semibold">Nombres: <span class="text-secondary">JUAN LEONARDO ARENAS</span> </p>
-                          <p class="text-primary fw-semibold">DNI/RUC: <span class="text-secondary">00962352</span> </p>
-                          <p class="text-primary fw-semibold">Dir: <span class="text-secondary">C/P NVO. BAMBAMARCA S/N</span> </p>
-                          <p class="text-primary fw-semibold">Plan: <span class="text-secondary"> INTERNET BASICO</span> </p>
-                          <p class="text-primary fw-semibold">Fecha Afiliación: <span class="text-secondary"> 04/08/2024</span> </p>
-                          <p class="text-primary fw-semibold">Fecha de Pago: <span class="text-secondary"> 10/08/2024</span> </p>
+                          <div class="text-primary fw-semibold">Nombres:  <span class="text-secondary cliente_nombre"><div class="spinner-border spinner-border-sm" role="status" ></div></span> </div>
+                          <div class="text-primary fw-semibold">DNI/RUC:  <span class="text-secondary cliente_dni"><div class="spinner-border spinner-border-sm" role="status" ></div></span> </div>
+                          <div class="text-primary fw-semibold">Dir:      <span class="text-secondary cliente_direccion"><div class="spinner-border spinner-border-sm" role="status" ></div></span> </div>
+                          <div class="text-primary fw-semibold">Plan:     <span class="text-secondary cliente_plan"> <div class="spinner-border spinner-border-sm" role="status" ></div></span> </div>
+                          <div class="text-primary fw-semibold">Fecha Afiliación: <span class="text-secondary cliente_f_afiliacion"> <div class="spinner-border spinner-border-sm" role="status" ></div></span> </div>
+                          <div class="text-primary fw-semibold">Fecha de Pago:    <span class="text-secondary cliente_f_pago"><div class="spinner-border spinner-border-sm" role="status" ></div></span> </div>
                         </div>
                       </div>
                       <div class="tab-pane  text-muted" id="nav-filtro-justified" role="tabpanel">
@@ -799,10 +799,14 @@ if (!isset($_SESSION['cliente_nombre'])) {
     <!-- Sticky JS -->
     <script src="assets/js/sticky.js"></script>
 
-    <!-- Internal Landing JS -->
-    <script src="assets/js/landing_pagos.js?version_jdl=1.34"></script>
+    <!-- Funciones Alternas -->
+    <script src="assets/js/funcion_crud.js"></script>
+    <script src="assets/js/funcion_general.js"></script>
 
-    <script src="scripts_client/ver_pagos.js?version_jdl=1.34"></script>
+    <!-- Internal Landing JS -->
+    <script src="assets/js/landing_pagos.js?version_jdl=1.35"></script>
+
+    <script src="scripts_client/ver_pagos.js?version_jdl=1.35"></script>
 
   </body>
 

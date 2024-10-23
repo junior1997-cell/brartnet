@@ -805,13 +805,13 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>
 
-    <script src="scripts/plan.js?version_jdl=1.34"></script>
-    <script src="scripts/zona.js?version_jdl=1.34"></script>
-    <script src="scripts/centro_poblado.js?version_jdl=1.34"></script>
-    <script src="scripts/bancos.js?version_jdl=1.34"></script>
-    <script src="scripts/cargo_trabajador.js?version_jdl=1.34"></script>
-    <script src="scripts/categoria_incidencia.js?version_jdl=1.34"></script>
-    <script src="scripts/categoria_otros_gastos.js?version_jdl=1.34"></script>
+    <script src="scripts/plan.js?version_jdl=1.35"></script>
+    <script src="scripts/zona.js?version_jdl=1.35"></script>
+    <script src="scripts/centro_poblado.js?version_jdl=1.35"></script>
+    <script src="scripts/bancos.js?version_jdl=1.35"></script>
+    <script src="scripts/cargo_trabajador.js?version_jdl=1.35"></script>
+    <script src="scripts/categoria_incidencia.js?version_jdl=1.35"></script>
+    <script src="scripts/categoria_otros_gastos.js?version_jdl=1.35"></script>
 
 
 

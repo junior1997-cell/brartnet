@@ -101,21 +101,21 @@ function cantidad_dias_mes(year, month) {
 }
 
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-function format_d_m_a(fecha) {
+function format_d_m_a(fecha, style = '-') {
   var format = "";
   if (fecha == '' || fecha == null || fecha == '0000-00-00') { format = "-"; } else {
     let splits = fecha.split("-"); //console.log(splits);
-    format = `${splits[2]}-${splits[1]}-${splits[0]}`;
+    format = `${splits[2]}${style}${splits[1]}${style}${splits[0]}`;
   } 
   return format;
 }
 
 // convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
-function format_a_m_d(fecha) {
+function format_a_m_d(fecha, style = '-') {
   var format = "";
   if (fecha == '' || fecha == null || fecha == '00-00-0000') { format = "-"; } else {
     let splits = fecha.split("-"); //console.log(splits);
-    format = `${splits[2]}-${splits[1]}-${splits[0]}`;
+    format = `${splits[2]}${style}${splits[1]}${style}${splits[0]}`;
   } 
   return format;
 }

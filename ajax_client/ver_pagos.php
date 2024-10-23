@@ -19,6 +19,13 @@ switch ($_GET["op"]) {
 
   break;
 
+  case 'mostrar_datos_cliente':
+    
+    $rspta  = $ver_pagos->mostrar_datos_cliente(); 
+    echo json_encode($rspta, true);
+    
+  break ;
+
   case 'filtro_pagos_year':
     
     $rspta  = $ver_pagos->filtro_pagos_year(); 
@@ -34,6 +41,8 @@ switch ($_GET["op"]) {
     echo json_encode($rspta, true);
     
   break ;
+
+  
 
 }
 

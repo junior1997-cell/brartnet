@@ -3,7 +3,7 @@
 var estado =""
 var anio ="";
 $(function () {
-
+  mostrar_datos_cliente();
   all_pagos(estado, anio)
   filtro_pagos_year ();
 
@@ -12,7 +12,7 @@ $(function () {
 function all_pagos(estado, anio){
   $.post( "ajax_client/ver_pagos.php?op=ver_pagos_cliente", {estado:estado, anio:anio},  function (e) {
     e = JSON.parse(e); console.log(e);			
-    if (e.status) {
+    if (e.status == true) {
      	
       $('.list_data_pagos').html(e.data);
       
@@ -23,13 +23,30 @@ function all_pagos(estado, anio){
   }).fail( function(e) { ver_errores(e);  }); 
 }
 
+function mostrar_datos_cliente() {
+ 
+  $.getJSON( "ajax_client/ver_pagos.php?op=mostrar_datos_cliente", function (e, textStatus, jqXHR) {
+    
+    if (e.status == true) {     	
+      $('.cliente_nombre').html(e.data.cliente_nombre_completo);      
+      $('.cliente_dni').html(e.data.numero_documento);      
+      $('.cliente_direccion').html(e.data.direccion);      
+      $('.cliente_plan').html(`${e.data.nombre_plan} - S/. ${e.data.costo}`);      
+      $('.cliente_f_afiliacion').html( format_d_m_a(e.data.fecha_afiliacion,'/'));      
+      $('.cliente_f_pago').html(e.data.dia_cancelacion_v2);      
+    } else {
+      ver_errores(e);
+    }
+    
+  }).fail( function(e) { ver_errores(e);  }); 
+}
+
 function filtro_pagos_year (){
   $.post( "ajax_client/ver_pagos.php?op=filtro_pagos_year", {},  function (e) {
     e = JSON.parse(e); console.log(e);	
-    if (e.status) {
-    			
-      $('.list_year').html(e.data);
-      
+
+    if (e.status == true) {    			
+      $('.list_year').html(e.data);      
     } else {
       ver_errores(e);
     }
@@ -42,12 +59,11 @@ function filtro_pagos_year (){
 
 function filtro_pagos_month (){
 
-    $.post( "ajax_client/ver_pagos.php?op=filtro_pagos_month", {},  function (e) {
-      e = JSON.parse(e); console.log(e);	
-      if (e.status) {
-      			
-      $('.list_month').html(e.data);
-      
+  $.post( "ajax_client/ver_pagos.php?op=filtro_pagos_month", {},  function (e) {
+    e = JSON.parse(e); console.log(e);	
+
+    if (e.status == true) {      			
+      $('.list_month').html(e.data);      
     } else {
       ver_errores(e);
     }

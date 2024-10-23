@@ -114,6 +114,13 @@ class Ver_pagos
     return $return = ['status' => true, 'message' => 'todo okey', 'data' => $data_p];
   }
 
+  public function mostrar_datos_cliente() {    
+
+    $sql = "SELECT * FROM vw_cliente_all where idpersona_cliente = $this->id_usr_sesion_client ;";
+    return ejecutarConsultaSimpleFila($sql);
+
+  }
+
   public function filtro_pagos_year()
   {
     $data_year='';

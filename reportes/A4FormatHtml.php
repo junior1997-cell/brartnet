@@ -74,6 +74,9 @@ if (!isset($_SESSION["user_nombre"])) {
     $c_direccion          = mb_convert_encoding($venta_f['data']['venta']['direccion'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['direccion'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     $c_nc_serie_y_numero  = mb_convert_encoding($venta_f['data']['venta']['nc_serie_y_numero'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['nc_serie_y_numero'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     
+    $c_landing_user       = mb_convert_encoding($venta_f['data']['venta']['landing_user'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['landing_user'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $c_idventa_v2         = $venta_f['data']['venta']['idventa_v2'];
+
     // Data comprobante ================================================================================
     $metodo_pago          = mb_convert_encoding($venta_f['data']['venta']['metodo_pago'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['metodo_pago'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     $mp_serie_comprobante = $venta_f['data']['venta']['mp_serie_comprobante'] == null || $venta_f['data']['venta']['mp_serie_comprobante'] == '' ? '-': mb_convert_encoding($venta_f['data']['venta']['mp_serie_comprobante'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['mp_serie_comprobante'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
@@ -415,7 +418,8 @@ if (!isset($_SESSION["user_nombre"])) {
       </div> <!---->
       <div style="margin-top: 15px;">
         <div style="border: 1px solid gray; padding: 7px; font-size: 12px; border-radius: 7px;">
-          <strong>OBSERVACIONES</strong>: <br> <span style="white-space: pre-wrap;"><?php echo $observacion_documento;?></span><br></div> <!---->
+          <strong>OBSERVACIONES</strong>: <br> <span style="white-space: pre-wrap;"><?php echo $observacion_documento;?></span><br>
+        </div> <!---->
         <div style="border: 1px solid gray; padding: 7px; font-size: 12px; border-radius: 7px; margin-top: 15px;">
           <div>
             <strong>FORMA DE PAGO: </strong> <span>Contado</span> 
@@ -423,6 +427,13 @@ if (!isset($_SESSION["user_nombre"])) {
             <strong><span><?php echo $metodo_pago;?>:</strong> <span><?php echo $total_recibido;?></span> |
             <strong>VUELTO:</strong> <span><?php echo $total_vuelto;?></span>
             <?php }?>
+          </div> <!---->
+        </div> <!---->
+
+        <div style="border: 1px solid gray; padding: 7px; font-size: 12px; border-radius: 7px; margin-top: 3px;">
+          <div>
+            <strong>Nro. Operación: </strong> <span><?php echo $c_idventa_v2;?></span>  |            
+            <strong>Codigo Usuario: </strong> <span><?php echo $c_landing_user;?></span>            
           </div> <!---->
         </div> <!---->
         <div style="text-align: center; font-size: 11px; margin-top: 15px;">
