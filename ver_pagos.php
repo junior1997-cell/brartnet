@@ -373,17 +373,18 @@ if (!isset($_SESSION['cliente_nombre'])) {
 
                         <div class="p-3 border-bottom border-block-end-dashed">
                           <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <div class="text-primary fw-semibold">Mes</div>
+                            <div class="text-primary fw-semibold">Estado</div>
                           </div>
                         </div>
-                        <div class="p-1 border-bottom border-block-end-dashed list_month">
+                        <div class="p-1 border-bottom border-block-end-dashed mb-3">
+                          <span class="badge rounded-pill bg-secondary-transparent p-2 fs-12 class_btn_pagado" onclick="stado('pagado');" style="cursor:pointer">Pagado</span>
+                          <span class="badge rounded-pill bg-secondary-transparent p-2 fs-12 class_btn_por_pagado"  onclick="stado('por_pagar');" style="cursor:pointer">Por Pagar</span>
                         </div>
 
                         <div class="p-3 border-bottom border-block-end-dashed">
 
-                          <div class="gap-2 mb-4">
-                            <button class="btn btn-secondary btn-wave" type="button">Filtrar</button>
-                            <button class="btn btn-secondary btn-wave" type="button">Limpiar</button>
+                          <div class="d-grid gap-2 mb-4">
+                            <button class="btn btn-secondary btn-wave" type="button" onclick="limpiar_filtros();" >Limpiar</button>
                           </div>
                         </div>
                       </div>
@@ -395,7 +396,7 @@ if (!isset($_SESSION['cliente_nombre'])) {
               <div class="col-xxl-8 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                 <div class="card custom-card">
                   <div class="card-header">
-                    <div class="card-title me-1">Mis Comprobantes</div><span class="badge bg-primary-transparent rounded-pill">02</span>
+                    <div class="card-title me-1">Mis Comprobantes</div>
                   </div>
                   <div class="card-body p-0 " style="max-height: 600px; overflow-y: auto;">
                     <ul class="timeline list-unstyled list_data_pagos">

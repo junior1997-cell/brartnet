@@ -13,7 +13,7 @@ switch ($_GET["op"]) {
   // ══════════════════════════════════════ VALIDAR SESION CLIENTE ══════════════════════════════════════
   case 'ver_pagos_cliente':
 
-    $rspta  = $ver_pagos->ver_pagos(); 
+    $rspta  = $ver_pagos->ver_pagos( $_POST['estado'], $_POST['anio'] ); 
 
     echo json_encode($rspta, true);
 

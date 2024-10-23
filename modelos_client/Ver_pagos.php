@@ -16,11 +16,16 @@ class Ver_pagos
   }
 
   // validar inicio de sesión del usuario cliente
-  public function ver_pagos()
+  public function ver_pagos($estado, $anio)
   {
+    $filtro = "";
+    $est = (!empty($estado)) ? ($estado == 'pagado' ? "lvd.idventa IS NOT NULL" : "lvd.idventa IS NULL") : "";
+    $an = !empty($anio) ? "mes_c.name_year='$anio'" : "";
+    
+    if (!empty($est) || !empty($an)) {
+        $filtro = "WHERE " . trim("$est AND $an", " AND ");
+    }
 
-    // echo json_encode($this->id_usr_sesion_client, true); die();
-    //var_dump('hhhh '.$_SESSION['idpersona_cliente']);die();
     $data_p = "";
 
     $sql = "SELECT mes_c.*, lvd.idventa, lvd.idventa_detalle, lvd.subtotal,
@@ -33,16 +38,17 @@ class Ver_pagos
                 END AS min_date
             FROM persona_cliente AS pc
             WHERE pc.idpersona_cliente = '$this->id_usr_sesion_client'
-            ) AND(NOW())) AS mes_c
+            ) AND(NOW()) ) AS mes_c
             LEFT JOIN( SELECT vd.*, v.tipo_comprobante, v.serie_comprobante, v.numero_comprobante
                 FROM venta_detalle AS vd
                 INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = '$this->id_usr_sesion_client'
                 WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND
                 v.tipo_comprobante IN ('01','03','12')
-            ) AS lvd ON    mes_c.year_month = lvd.periodo_pago 
+            ) AS lvd ON    mes_c.year_month = lvd.periodo_pago
+            $filtro
             ORDER by mes_c.year_month DESC;";
 
-
+//var_dump($sql);die();
     $data_pagos = ejecutarConsultaArray($sql);
     if ($data_pagos['status'] == false) {
       return $data_pagos;
@@ -77,7 +83,7 @@ class Ver_pagos
                           <p class="mb-0 text-muted" style="text-align: left;">Tipo Servicio :' . $name_comprobante . '</p>
 
                         </div>
-                        <div class="ms-auto">
+                        <div class="ms-auto" style="cursor:pointer">
                           <div class="card custom-card shadow-none bg-light">
                             <div class="card-body p-2">
                               <a  '.$onclick.' >
@@ -123,7 +129,7 @@ class Ver_pagos
     }
    
     foreach ($year['data'] as $key => $value) {
-      $data_year .= '<button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1">'. $value['name_year'] .'</button>';
+      $data_year .= '<button type="button" class="btn btn-secondary-light rounded-pill btn-wave btn-sm m-1 class_data_anio" onclick="year_a('. $value['name_year'] .');">'. $value['name_year'] .'</button>';
     };
 
     return $return = ['status' => true, 'message' => 'todo okey', 'data' => $data_year];

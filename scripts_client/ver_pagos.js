@@ -1,8 +1,16 @@
 
+
+var estado =""
+var anio ="";
 $(function () {
 
+  all_pagos(estado, anio)
+  filtro_pagos_year ();
 
-  $.post( "ajax_client/ver_pagos.php?op=ver_pagos_cliente", {},  function (e) {
+});
+
+function all_pagos(estado, anio){
+  $.post( "ajax_client/ver_pagos.php?op=ver_pagos_cliente", {estado:estado, anio:anio},  function (e) {
     e = JSON.parse(e); console.log(e);			
     if (e.status) {
      	
@@ -13,11 +21,7 @@ $(function () {
     }
     
   }).fail( function(e) { ver_errores(e);  }); 
-
-  filtro_pagos_year ();
-  filtro_pagos_month ();
-
-});
+}
 
 function filtro_pagos_year (){
   $.post( "ajax_client/ver_pagos.php?op=filtro_pagos_year", {},  function (e) {
@@ -118,3 +122,24 @@ function ver_formato_a4_completo(idventa, tipo_comprobante) {
   }
   
 }
+
+
+//::::::::::::::::::::::::::::::filtros ::::::::::::::::::::::::::::.
+function year_a(d_anio) {  anio = d_anio;  all_pagos(estado, d_anio);};
+function stado(d_estado) {  
+  estado = d_estado; all_pagos(d_estado, anio);
+
+
+};
+
+function limpiar_filtros() { all_pagos("", ""); 
+  // Remover las clases de pintado de ambos botones
+  $('.class_btn_pagado, .class_btn_por_pagado').removeClass('bg-secondary').addClass('bg-secondary-transparent'); };
+
+$('.class_btn_pagado, .class_btn_por_pagado').click(function() {
+  // Remover las clases de pintado de ambos botones
+  $('.class_btn_pagado, .class_btn_por_pagado').removeClass('bg-secondary').addClass('bg-secondary-transparent');
+
+  // Añadir la clase de pintado solo al botón que fue clickeado
+  $(this).removeClass('bg-secondary-transparent').addClass('bg-secondary');
+});
