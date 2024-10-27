@@ -141,16 +141,22 @@ function ver_formato_a4_completo(idventa, tipo_comprobante) {
 
 
 //::::::::::::::::::::::::::::::filtros ::::::::::::::::::::::::::::.
-function year_a(d_anio) {  anio = d_anio;  all_pagos(estado, d_anio);};
-function stado(d_estado) {  
-  estado = d_estado; all_pagos(d_estado, anio);
+function year_a(d_anio) {  anio = d_anio;  all_pagos(estado, d_anio);
 
+  // Remueve la clase "selected" de todos los botones
+  $('.btn_year').removeClass('bg-secondary').addClass('bg-secondary-transparent');
+  
+  // Agrega la clase "selected" al botón que fue clicado
+  $('.class_year' + d_anio).addClass('bg-secondary').removeClass('bg-secondary-transparent');
 
 };
 
+function stado(d_estado) { estado = d_estado; all_pagos(d_estado, anio); };
+
 function limpiar_filtros() { all_pagos("", ""); 
   // Remover las clases de pintado de ambos botones
-  $('.class_btn_pagado, .class_btn_por_pagado').removeClass('bg-secondary').addClass('bg-secondary-transparent'); };
+  $('.class_btn_pagado, .class_btn_por_pagado').removeClass('bg-secondary').addClass('bg-secondary-transparent'); 
+};
 
 $('.class_btn_pagado, .class_btn_por_pagado').click(function() {
   // Remover las clases de pintado de ambos botones
@@ -158,4 +164,6 @@ $('.class_btn_pagado, .class_btn_por_pagado').click(function() {
 
   // Añadir la clase de pintado solo al botón que fue clickeado
   $(this).removeClass('bg-secondary-transparent').addClass('bg-secondary');
+  //limpiamos los btn de year
+  $('.btn_year').removeClass('bg-secondary').addClass('bg-secondary-transparent');
 });

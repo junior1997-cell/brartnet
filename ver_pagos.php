@@ -280,7 +280,7 @@ if (!isset($_SESSION['cliente_nombre'])) {
                 </svg></div>
               <div class="d-lg-flex d-none">
                 <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
-                  <a href="sign-up-basic.html" class="btn btn-wave btn-primary">
+                  <a href="sign-up-basic.html" class="btn btn-wave btn-primary" style="display: none;">
                     <i class="ti ti-user"></i> Mis Datos
                   </a>
 
