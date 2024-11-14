@@ -226,7 +226,7 @@
           <div class="header-element align-items-center">
             <!-- Start::header-link|switcher-icon -->
             <div class="btn-list d-lg-none d-block">
-              <a href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-primary-light"> <i class="ti ti-brand-whatsapp"></i>Soy Cliente</a>
+              <button type="button" class="btn btn-wave btn-primary" data-bs-toggle="modal" data-bs-target="#login-cliente"><i class="ti ti-user"></i> Soy cliente</button>
               <a href="https://api.whatsapp.com/send?phone=+51929676935&text=*Hola buenos dias, vengo de tu pagina web!!*" class="btn btn-primary-light"> <i class="ti ti-brand-whatsapp"></i></a>
               <button class="btn btn-icon btn-success switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                 <i class="ri-settings-3-line"></i>
