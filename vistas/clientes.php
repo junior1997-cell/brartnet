@@ -139,37 +139,743 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="tab-content">
                     <div class="tab-pane text-muted " id="nav-deudores" role="tabpanel">
                       <div class="row">
-                        <div class="col-4">                        
-                          <div class="card border-0">
-                            <div class="alert alert-danger border border-danger mb-0 p-2">
-                              <div class="d-flex align-items-start">
-                                <div class="me-2">
-                                  <svg class="flex-shrink-0 svg-danger" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000">
-                                    <g>
-                                      <rect fill="none" height="24" width="24"></rect>
-                                    </g>
-                                    <g>
-                                      <g>
-                                        <g>
-                                          <path d="M15.73,3H8.27L3,8.27v7.46L8.27,21h7.46L21,15.73V8.27L15.73,3z M19,14.9L14.9,19H9.1L5,14.9V9.1L9.1,5h5.8L19,9.1V14.9z"></path>
-                                          <rect height="6" width="2" x="11" y="7"></rect>
-                                          <rect height="2" width="2" x="11" y="15"></rect>
-                                        </g>
-                                      </g>
-                                    </g>
-                                  </svg>
-                                </div>
-                                <div class="text-danger w-100">
-                                  <div class="fw-semibold d-flex justify-content-between">Estamos en Desarrollo!!<button type="button" class="btn-close p-0" data-bs-dismiss="alert" aria-label="Close"><i class="bi bi-x"></i></button></div>
-                                  <div class="fs-12 op-8 mb-1">Esta sección del módulo aún está en desarrollo. Algunas funcionalidades pueden no estar disponibles o funcionar de manera inesperada. Agradecemos tu comprensión y paciencia.</div>
-                                  <div class="fs-12 d-inline-flex">
-                                    <a href="javascript:void(0);" class="text-info fw-semibold me-2 d-inline-block">cancel</a>
-                                    <a href="javascript:void(0);" class="text-danger fw-semibold">open</a>
+                        <div class="col-lg-4">                        
+                          <div  class="table-responsive">
+                            <table id="tabla-cliente-deudor" class="table table-bordered w-100" style="width: 100%;">
+                              <thead >                                
+                                <tr>
+                                  <th class="text-center">#</th>                                 
+                                  <th>Cliente</th>                                                        
+                                  <th>Deuda</th>                                                        
+                                  <th>Trabajador</th>                                  
+                                  <th class="text-center">Acciones</th>
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="text-center">#</th>                                 
+                                  <th>Cliente</th>                                                        
+                                  <th>Deuda</th>                                                        
+                                  <th>Trabajador</th>                                  
+                                  <th class="text-center">Acciones</th>
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>   
+                        </div>
+                        <div class="col-lg-8">
+                          <!-- Start::row-1 -->
+                          <div class="row">
+                            <div class="col-xxl-5 col-xl-5">
+                              <div class="card custom-card overflow-hidden">
+                                <div class="card-body p-0">
+                                  <div class="d-sm-flex align-items-top p-4 border-bottom-0 main-profile-cover">
+                                    <div>
+                                      <span class="avatar avatar-xxl avatar-rounded online me-3">
+                                        <img src="../assets/images/faces/9.jpg" alt="">
+                                      </span>
+                                    </div>
+                                    <div class="flex-fill main-profile-info">
+                                      <div class="d-flex align-items-center justify-content-between">
+                                        <h6 class="fw-semibold mb-1 text-fixed-white">Json Taylor</h6>
+                                        <button class="btn btn-light btn-wave"><i class="ri-add-line me-1 align-middle d-inline-block"></i>Editar</button>
+                                      </div>
+                                      <p class="mb-1 text-muted text-fixed-white op-7">Chief Executive Officer (C.E.O)</p>
+                                      <p class="fs-12 text-fixed-white mb-4 op-5">
+                                        <span class="me-3"><i class="ri-building-line me-1 align-middle"></i>Georgia</span>
+                                        <span><i class="ri-map-pin-line me-1 align-middle"></i>Washington D.C</span>
+                                      </p>
+                                      <div class="d-flex mb-0">
+                                        <div class="me-4 text-center">
+                                          <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">6</p>
+                                          <p class="mb-0 fs-11 op-5 text-fixed-white">Total mes</p>
+                                        </div>
+                                        <div class="me-4 text-center">
+                                          <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">2</p>
+                                          <p class="mb-0 fs-11 op-5 text-fixed-white">Pagado</p>
+                                        </div>
+                                        <div class="me-4 text-center">
+                                          <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">4</p>
+                                          <p class="mb-0 fs-11 op-5 text-fixed-white">No Pagado</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="p-4 border-bottom border-block-end-dashed">
+                                    <div class="mb-4">
+                                      <p class="fs-15 mb-2 fw-semibold">Observacion:</p>
+                                      <p class="fs-12 text-muted op-7 mb-0">
+                                        FAlto de pago de los mese anteriores por no tener yape.
+                                      </p>
+                                    </div>
+                                    <!-- <div class="mb-0">
+                                      <p class="fs-15 mb-2 fw-semibold">Links :</p>
+                                      <div class="mb-0">
+                                        <p class="mb-1">
+                                          <a href="https://www.spruko.com/" class="text-primary"><u>https://www.spruko.com/</u></a>
+                                        </p>
+                                        <p class="mb-0">
+                                          <a href="https://themeforest.net/user/spruko/portfolio" class="text-primary"><u>https://themeforest.net/user/spruko/portfolio</u></a>
+                                        </p>
+                                      </div>
+                                    </div> -->
+                                  </div>
+                                  <div class="p-4 border-bottom border-block-end-dashed">
+                                    <p class="fs-15 mb-2 me-4 fw-semibold">Information:</p>
+                                    <div class="text-muted">
+                                      <p class="mb-2">
+                                        <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
+                                          <i class="ri-mail-line align-middle fs-14"></i>
+                                        </span>
+                                        sonyataylor2531@gmail.com
+                                      </p>
+                                      <p class="mb-2">
+                                        <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
+                                          <i class="ri-phone-line align-middle fs-14"></i>
+                                        </span>
+                                        +(555) 555-1234
+                                      </p>
+                                      <p class="mb-0">
+                                        <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted">
+                                          <i class="ri-map-pin-line align-middle fs-14"></i>
+                                        </span>
+                                        MIG-1-11, Monroe Street, Georgetown, Washington D.C, USA,20071
+                                      </p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="p-4 border-bottom border-block-end-dashed">
+                                    <p class="fs-15 mb-2 me-4 fw-semibold">Pagados:</p>
+                                    <div>
+                                      <a href="javascript:void(0);">
+                                        <span class="badge bg-light text-muted m-1">Julio-2024</span>
+                                      </a>
+                                      <a href="javascript:void(0);">
+                                        <span class="badge bg-light text-muted m-1">Agosto-2024</span>
+                                      </a>
+                                      <a href="javascript:void(0);">
+                                        <span class="badge bg-light text-muted m-1">Setiembre-2024</span>
+                                      </a>
+                                      <a href="javascript:void(0);">
+                                        <span class="badge bg-light text-muted m-1">Octubre-2024</span>
+                                      </a>                                      
+                                    </div>
+                                    <p class="fs-15 mb-2 me-4 fw-semibold mt-3">No pagados:</p>
+                                    <div>
+                                      <a href="javascript:void(0);">
+                                        <span class="badge bg-light text-muted m-1">Julio-2024</span>
+                                      </a>
+                                      <a href="javascript:void(0);">
+                                        <span class="badge bg-light text-muted m-1">Agosto-2024</span>
+                                      </a>
+                                      <a href="javascript:void(0);">
+                                        <span class="badge bg-light text-muted m-1">Setiembre-2024</span>
+                                      </a>
+                                      <a href="javascript:void(0);">
+                                        <span class="badge bg-light text-muted m-1">Octubre-2024</span>
+                                      </a>                                      
+                                    </div>
+                                  </div>
+                                  <div class="p-4">
+                                    <p class="fs-15 mb-2 me-4 fw-semibold">Técnico Asignado:</p>
+                                    <ul class="list-group">
+                                      <li class="list-group-item">
+                                        <div class="d-sm-flex align-items-top">
+                                          <span class="avatar avatar-sm">
+                                            <img src="../assets/images/faces/1.jpg" alt="img">
+                                          </span>
+                                          <div class="ms-sm-2 ms-0 mt-sm-0 mt-1 fw-semibold flex-fill">
+                                            <p class="mb-0 lh-1">Alicia Sierra</p>
+                                            <span class="fs-11 text-muted op-7">aliciasierra389@gmail.com</span>
+                                          </div>
+                                          <button class="btn btn-light btn-wave btn-sm">Follow</button>
+                                        </div>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-center">
+                                    <p class="fs-15 mb-2 me-4 fw-semibold">Social Networks :</p>
+                                    <div class="btn-list mb-0">
+                                      <button class="btn btn-sm btn-icon btn-primary-light btn-wave waves-effect waves-light"><i class="ri-facebook-line fw-semibold"></i></button>
+                                      <button class="btn btn-sm btn-icon btn-secondary-light btn-wave waves-effect waves-light"><i class="ri-twitter-line fw-semibold"></i></button>
+                                      <button class="btn btn-sm btn-icon btn-warning-light btn-wave waves-effect waves-light"><i class="ri-instagram-line fw-semibold"></i></button>
+                                      <button class="btn btn-sm btn-icon btn-success-light btn-wave waves-effect waves-light"><i class="ri-github-line fw-semibold"></i></button>
+                                      <button class="btn btn-sm btn-icon btn-danger-light btn-wave waves-effect waves-light"><i class="ri-youtube-line fw-semibold"></i></button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
+                            <div class="col-xxl-7 col-xl-7">
+                              <div class="row">
+                                <div class="col-xl-12">
+                                  <div class="card custom-card">
+                                    <div class="card-body p-0 rounded border border-block-end-dashed">
+                                      <div class="py-3 p-r-1rem border-bottom border-block-end-dashed d-flex align-items-center justify-content-between">
+                                        <div>
+                                          <ul class="nav nav-tabs mb-0 tab-style-6 justify-content-start" id="myTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                              <button class="nav-link active" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity-tab-pane" type="button" role="tab" aria-controls="activity-tab-pane" aria-selected="true"><i class="ri-gift-line me-1 align-middle d-inline-block"></i>Pagos</button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                              <button class="nav-link" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts-tab-pane" type="button" role="tab" aria-controls="posts-tab-pane" aria-selected="false"><i class="ri-bill-line me-1 align-middle d-inline-block"></i>Ubicacion</button>
+                                            </li>                                            
+                                          </ul>
+                                        </div>
+                                        <div>
+                                          <p class="fw-semibold mb-2">Completado 80.5% - <a href="javascript:void(0);" class="text-primary fs-12">(6/8)</a></p>
+                                          <div class="progress progress-xs progress-animate">
+                                            <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%"></div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="py-3 p-r-1rem">
+                                        <div class="tab-content" id="myTabContent">
+                                          <div class="tab-pane show active fade p-0 border-0" id="activity-tab-pane" role="tabpanel" aria-labelledby="activity-tab" tabindex="0">
+                                            <ul class="list-unstyled profile-timeline" id="profile-posts-scroll">
+                                              <li>
+                                                <div>
+                                                  <span class="avatar avatar-sm bg-primary-transparent avatar-rounded profile-timeline-avatar">E</span>
+                                                  <p class="mb-2">
+                                                    <b>Tito Arteaga</b> - Periodo:  <a class="text-secondary" href="javascript:void(0);"><u>Enero-2024</u></a>.<span class="float-end fs-11 text-muted">24,Dec 2022 - 14:34</span>
+                                                  </p>
+                                                  <p class="profile-activity-media mb-0" style="display: flex; align-items: center;">
+                                                    <a href="javascript:void(0);" style="margin-right: 5px;">
+                                                      <!-- <img src="../assets/images/media/file-manager/3.png" alt=""> -->
+                                                       <span class="avatar avatar-md p-2  bg-secondary-transparent">
+
+                                                       
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="svg-info secondary" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                                                        <path d="M0,0h24v24H0V0z" fill="none" />
+                                                        <g>
+                                                          <path
+                                                            d="M19.5,3.5L18,2l-1.5,1.5L15,2l-1.5,1.5L12,2l-1.5,1.5L9,2L7.5,3.5L6,2v14H3v3c0,1.66,1.34,3,3,3h12c1.66,0,3-1.34,3-3V2 L19.5,3.5z M15,20H6c-0.55,0-1-0.45-1-1v-1h10V20z M19,19c0,0.55-0.45,1-1,1s-1-0.45-1-1v-3H8V5h11V19z" />
+                                                          <rect height="2" width="6" x="9" y="7" />
+                                                          <rect height="2" width="2" x="16" y="7" />
+                                                          <rect height="2" width="6" x="9" y="10" />
+                                                          <rect height="2" width="2" x="16" y="10" />
+                                                        </g>
+                                                      </svg>
+                                                      </span>
+                                                    </a>
+                                                    <span style="display: flex; flex-direction: column;">
+                                                      <span class="fs-11 text-muted">FACTURA ELECTRONICA - F001-3435</span> 
+                                                      <span class="fs-11 text-muted">432.87KB</span>
+                                                    </span>                                                    
+                                                  </p>
+                                                </div>
+                                              </li>
+                                              <li>
+                                                <div>
+                                                  <span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
+                                                    <img src="../assets/images/faces/11.jpg" alt="">
+                                                  </span>
+                                                  <p class="text-muted mb-2">
+                                                    <span class="text-default"><b>Tito Arteaga</b> - Periodo:  <a class="text-secondary" href="javascript:void(0);"><u>Febrero-2024</u></a>.</span> <span class="float-end fs-11 text-muted">18,Dec 2022 - 12:16</span>
+                                                  </p>
+                                                  <p class="profile-activity-media mb-0" style="display: flex; align-items: center;">
+                                                    <a href="javascript:void(0);" style="margin-right: 5px;">
+                                                      <img src="../assets/images/media/file-manager/3.png" alt="">
+                                                    </a>
+                                                    <span style="display: flex; flex-direction: column;">
+                                                      <span class="fs-11 text-muted">FACTURA ELECTRONICA - F001-3435</span> 
+                                                      <span class="fs-11 text-muted">432.87KB</span>
+                                                    </span>                                                    
+                                                  </p>
+                                                </div>
+                                              </li>
+                                              <li>
+                                                <div>
+                                                  <span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
+                                                    <img src="../assets/images/faces/4.jpg" alt="">
+                                                  </span>
+                                                  <p class="text-muted mb-2">
+                                                    <span class="text-default"><b>Tito Arteaga</b> - Periodo:  <a class="text-secondary" href="javascript:void(0);"><u>Marzo-2024</u></a>.</span> <span class="float-end fs-11 text-muted">21,Dec 2022 - 15:32</span>
+                                                  </p>
+                                                  <p class="profile-activity-media mb-0" style="display: flex; align-items: center;">
+                                                    <a href="javascript:void(0);" style="margin-right: 5px;">
+                                                      <img src="../assets/images/media/file-manager/3.png" alt="">
+                                                    </a>
+                                                    <span style="display: flex; flex-direction: column;">
+                                                      <span class="fs-11 text-muted">FACTURA ELECTRONICA - F001-3435</span> 
+                                                      <span class="fs-11 text-muted">432.87KB</span>
+                                                    </span>                                                    
+                                                  </p>
+                                                </div>
+                                              </li>
+                                              <li>
+                                                <div>
+                                                  <span class="avatar avatar-sm bg-success-transparent avatar-rounded profile-timeline-avatar">
+                                                    P
+                                                  </span>
+                                                  <p class="text-muted mb-2">
+                                                    <span class="text-default"><b>Tito Arteaga</b> - Periodo:  <a class="text-secondary" href="javascript:void(0);"><u>Abril-2024</u></a>.</span> <span class="float-end fs-11 text-muted">21,Dec 2022 - 15:32</span>
+                                                  </p>
+                                                  <p class="profile-activity-media mb-0" style="display: flex; align-items: center;">
+                                                    <a href="javascript:void(0);" style="margin-right: 5px;">
+                                                      <img src="../assets/images/media/file-manager/3.png" alt="">
+                                                    </a>
+                                                    <span style="display: flex; flex-direction: column;">
+                                                      <span class="fs-11 text-muted">FACTURA ELECTRONICA - F001-3435</span> 
+                                                      <span class="fs-11 text-muted">432.87KB</span>
+                                                    </span>                                                    
+                                                  </p>
+                                                  
+                                                </div>
+                                              </li>  
+                                              
+                                              
+                                             
+                                            </ul>
+                                          </div>
+                                          <div class="tab-pane fade p-0 border-0" id="posts-tab-pane" role="tabpanel" aria-labelledby="posts-tab" tabindex="0">
+                                            <ul class="list-group">
+                                              <li class="list-group-item">
+                                                <div class="d-sm-flex align-items-center lh-1">
+                                                  <div class="me-3">
+                                                    <span class="avatar avatar-md avatar-rounded">
+                                                      <img src="../assets/images/faces/9.jpg" alt="">
+                                                    </span>
+                                                  </div>
+                                                  <div class="flex-fill me-sm-2 mt-1 mt-sm-0">
+                                                    <div class="input-group">
+                                                      <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username with two button addons">
+                                                      <button class="btn btn-light btn-wave d-none d-sm-block" type="button"><i class="bi bi-emoji-smile"></i></button>
+                                                      <button class="btn btn-light btn-wave" type="button"><i class="bi bi-paperclip"></i></button>
+                                                      <button class="btn btn-light btn-wave" type="button"><i class="bi bi-camera"></i></button>
+                                                      <button class="btn btn-primary btn-wave" type="button">Post</button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </li>
+                                              <li class="list-group-item" >
+                                                <div class="row gy-3">
+                                                  <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="rounded border">
+                                                      <div class="p-3 d-flex align-items-top flex-wrap">
+                                                        <div class="me-2">
+                                                          <span class="avatar avatar-sm avatar-rounded">
+                                                            <img src="../assets/images/faces/9.jpg" alt="">
+                                                          </span>
+                                                        </div>
+                                                        <div class="flex-fill">
+                                                          <p class="mb-1 fw-semibold lh-1">You</p>
+                                                          <p class="fs-11 mb-2 text-muted">24, Dec - 04:32PM</p>
+                                                          <p class="fs-12 text-muted mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                                          <p class="fs-12 text-muted mb-3">As opposed to using 'Content here &#128076;</p>
+                                                          <div class="d-flex align-items-center justify-content-between mb-md-0 mb-2">
+                                                            <div>
+                                                              <div class="btn-list">
+                                                                <button class="btn btn-primary-light btn-sm btn-wave">
+                                                                  Comment
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-success-light btn-wave">
+                                                                  <i class="ri-thumb-up-line"></i>
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-danger-light btn-wave">
+                                                                  <i class="ri-share-line"></i>
+                                                                </button>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="d-flex align-items-top">
+                                                          <div>
+                                                            <span class="badge bg-primary-transparent me-2">Fashion</span>
+                                                          </div>
+                                                          <div class="dropdown">
+                                                            <button class="btn btn-sm btn-icon btn-light btn-wave" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                              <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Hide</a></li>
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
+                                                            </ul>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="rounded border">
+                                                      <div class="p-3 d-flex align-items-top flex-wrap">
+                                                        <div class="me-2">
+                                                          <span class="avatar avatar-sm avatar-rounded">
+                                                            <img src="../assets/images/faces/9.jpg" alt="">
+                                                          </span>
+                                                        </div>
+                                                        <div class="flex-fill">
+                                                          <p class="mb-1 fw-semibold lh-1">You</p>
+                                                          <p class="fs-11 mb-2 text-muted">26, Dec - 12:45PM</p>
+                                                          <p class="fs-12 text-muted mb-1">Shared pictures with 4 of friends <span>Hiren,Sasha,Biden,Thara</span>.</p>
+                                                          <div class="d-flex lh-1 justify-content-between mb-3">
+                                                            <div>
+                                                              <a href="javascript:void(0);">
+                                                                <span class="avatar avatar-md me-1">
+                                                                  <img src="../assets/images/media/media-52.jpg" alt="">
+                                                                </span>
+                                                              </a>
+                                                              <a href="javascript:void(0);">
+                                                                <span class="avatar avatar-md me-1">
+                                                                  <img src="../assets/images/media/media-56.jpg" alt="">
+                                                                </span>
+                                                              </a>
+                                                            </div>
+                                                          </div>
+                                                          <div class="d-flex align-items-center justify-content-between mb-md-0 mb-2">
+                                                            <div>
+                                                              <div class="btn-list">
+                                                                <button class="btn btn-primary-light btn-sm btn-wave">
+                                                                  Comment
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-success-light btn-wave">
+                                                                  <i class="ri-thumb-up-line"></i>
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-danger-light btn-wave">
+                                                                  <i class="ri-share-line"></i>
+                                                                </button>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div>
+                                                          <div class="d-flex align-items-top">
+                                                            <div>
+                                                              <span class="badge bg-success-transparent me-2">Nature</span>
+                                                            </div>
+                                                            <div class="dropdown">
+                                                              <button class="btn btn-sm btn-icon btn-light btn-wave" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                              </button>
+                                                              <ul class="dropdown-menu">
+                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                                                                <li><a class="dropdown-item" href="javascript:void(0);">Hide</a></li>
+                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
+                                                              </ul>
+                                                            </div>
+                                                          </div>
+                                                          <div class="avatar-list-stacked d-block mt-4 text-end">
+                                                            <span class="avatar avatar-xs avatar-rounded">
+                                                              <img src="../assets/images/faces/2.jpg" alt="img">
+                                                            </span>
+                                                            <span class="avatar avatar-xs avatar-rounded">
+                                                              <img src="../assets/images/faces/8.jpg" alt="img">
+                                                            </span>
+                                                            <span class="avatar avatar-xs avatar-rounded">
+                                                              <img src="../assets/images/faces/2.jpg" alt="img">
+                                                            </span>
+                                                            <span class="avatar avatar-xs avatar-rounded">
+                                                              <img src="../assets/images/faces/10.jpg" alt="img">
+                                                            </span>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="rounded border">
+                                                      <div class="p-3 d-flex align-items-top flex-wrap">
+                                                        <div class="me-2">
+                                                          <span class="avatar avatar-sm avatar-rounded">
+                                                            <img src="../assets/images/faces/9.jpg" alt="">
+                                                          </span>
+                                                        </div>
+                                                        <div class="flex-fill">
+                                                          <p class="mb-1 fw-semibold lh-1">You</p>
+                                                          <p class="fs-11 mb-2 text-muted">29, Dec - 09:53AM</p>
+                                                          <p class="fs-12 text-muted mb-1">Sharing an article that excites me about nature more than what i thought.</p>
+                                                          <p class="mb-3 profile-post-link">
+                                                            <a href="javascript:void(0);" class="fs-12 text-primary">
+                                                              <u>https://www.discovery.com/nature/caring-for-coral</u>
+                                                            </a>
+                                                          </p>
+                                                          <div class="d-flex align-items-center justify-content-between mb-md-0 mb-2">
+                                                            <div>
+                                                              <div class="btn-list">
+                                                                <button class="btn btn-primary-light btn-sm btn-wave">
+                                                                  Comment
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-success-light btn-wave">
+                                                                  <i class="ri-thumb-up-line"></i>
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-danger-light btn-wave">
+                                                                  <i class="ri-share-line"></i>
+                                                                </button>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="d-flex align-items-top">
+                                                          <div>
+                                                            <span class="badge bg-secondary-transparent me-2">Travel</span>
+                                                          </div>
+                                                          <div class="dropdown">
+                                                            <button class="btn btn-sm btn-icon btn-light btn-wave" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                              <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Hide</a></li>
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
+                                                            </ul>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="rounded border">
+                                                      <div class="p-3 d-flex align-items-top flex-wrap">
+                                                        <div class="me-2">
+                                                          <span class="avatar avatar-sm avatar-rounded">
+                                                            <img src="../assets/images/faces/9.jpg" alt="">
+                                                          </span>
+                                                        </div>
+                                                        <div class="flex-fill">
+                                                          <p class="mb-1 fw-semibold lh-1">You</p>
+                                                          <p class="fs-11 mb-2 text-muted">22, Dec - 11:22PM</p>
+                                                          <p class="fs-12 text-muted mb-1">Shared pictures with 3 of your friends <span>Maya,Jacob,Amanda</span>.</p>
+                                                          <div class="d-flex lh-1 justify-content-between mb-3">
+                                                            <div>
+                                                              <a href="javascript:void(0);">
+                                                                <span class="avatar avatar-md me-1">
+                                                                  <img src="../assets/images/media/media-40.jpg" alt="">
+                                                                </span>
+                                                              </a>
+                                                              <a href="javascript:void(0);">
+                                                                <span class="avatar avatar-md me-1">
+                                                                  <img src="../assets/images/media/media-45.jpg" alt="">
+                                                                </span>
+                                                              </a>
+                                                            </div>
+                                                          </div>
+                                                          <div class="d-flex align-items-center justify-content-between mb-md-0 mb-2">
+                                                            <div>
+                                                              <div class="btn-list">
+                                                                <button class="btn btn-primary-light btn-sm btn-wave">
+                                                                  Comment
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-success-light btn-wave">
+                                                                  <i class="ri-thumb-up-line"></i>
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-danger-light btn-wave">
+                                                                  <i class="ri-share-line"></i>
+                                                                </button>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div>
+                                                          <div class="d-flex align-items-top">
+                                                            <div>
+                                                              <span class="badge bg-success-transparent me-2">Nature</span>
+                                                            </div>
+                                                            <div class="dropdown">
+                                                              <button class="btn btn-sm btn-icon btn-light btn-wave" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                              </button>
+                                                              <ul class="dropdown-menu">
+                                                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                                                                <li><a class="dropdown-item" href="javascript:void(0);">Hide</a></li>
+                                                                <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
+                                                              </ul>
+                                                            </div>
+                                                          </div>
+                                                          <div class="avatar-list-stacked d-block mt-4 text-end">
+                                                            <span class="avatar avatar-xs avatar-rounded">
+                                                              <img src="../assets/images/faces/1.jpg" alt="img">
+                                                            </span>
+                                                            <span class="avatar avatar-xs avatar-rounded">
+                                                              <img src="../assets/images/faces/5.jpg" alt="img">
+                                                            </span>
+                                                            <span class="avatar avatar-xs avatar-rounded">
+                                                              <img src="../assets/images/faces/16.jpg" alt="img">
+                                                            </span>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="rounded border">
+                                                      <div class="p-3 d-flex align-items-top flex-wrap">
+                                                        <div class="me-2">
+                                                          <span class="avatar avatar-sm avatar-rounded">
+                                                            <img src="../assets/images/faces/9.jpg" alt="">
+                                                          </span>
+                                                        </div>
+                                                        <div class="flex-fill">
+                                                          <p class="mb-1 fw-semibold lh-1">You</p>
+                                                          <p class="fs-11 mb-2 text-muted">18, Dec - 12:28PM</p>
+                                                          <p class="fs-12 text-muted mb-1">Followed this author for top class themes with best code you can get in the market.</p>
+                                                          <p class="mb-3 profile-post-link">
+                                                            <a href="https://themeforest.net/user/spruko/portfolio" target="_blank" class="fs-12 text-primary">
+                                                              <u>https://themeforest.net/user/spruko/portfolio</u>
+                                                            </a>
+                                                          </p>
+                                                          <div class="d-flex align-items-center justify-content-between mb-md-0 mb-2">
+                                                            <div>
+                                                              <div class="btn-list">
+                                                                <button class="btn btn-primary-light btn-sm btn-wave">
+                                                                  Comment
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-success-light btn-wave">
+                                                                  <i class="ri-thumb-up-line"></i>
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-danger-light btn-wave">
+                                                                  <i class="ri-share-line"></i>
+                                                                </button>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="d-flex align-items-top">
+                                                          <div>
+                                                            <span class="badge bg-secondary-transparent me-2">Travel</span>
+                                                          </div>
+                                                          <div class="dropdown">
+                                                            <button class="btn btn-sm btn-icon btn-light btn-wave" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                              <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Hide</a></li>
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
+                                                            </ul>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                    <div class="rounded border">
+                                                      <div class="p-3 d-flex align-items-top flex-wrap">
+                                                        <div class="me-2">
+                                                          <span class="avatar avatar-sm avatar-rounded">
+                                                            <img src="../assets/images/faces/9.jpg" alt="">
+                                                          </span>
+                                                        </div>
+                                                        <div class="flex-fill">
+                                                          <p class="mb-1 fw-semibold lh-1">You</p>
+                                                          <p class="fs-11 mb-2 text-muted">02, Dec - 06:32AM</p>
+                                                          <p class="fs-12 text-muted mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                                          <p class="fs-12 text-muted mb-3">There are many variations of passages &#128079;&#128525;</p>
+                                                          <div class="d-flex align-items-center justify-content-between mb-md-0 mb-2">
+                                                            <div>
+                                                              <div class="btn-list">
+                                                                <button class="btn btn-primary-light btn-sm btn-wave">
+                                                                  Comment
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-success-light btn-wave">
+                                                                  <i class="ri-thumb-up-line"></i>
+                                                                </button>
+                                                                <button class="btn btn-icon btn-sm btn-danger-light btn-wave">
+                                                                  <i class="ri-share-line"></i>
+                                                                </button>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="d-flex align-items-top">
+                                                          <div>
+                                                            <span class="badge bg-primary-transparent me-2">Fashion</span>
+                                                          </div>
+                                                          <div class="dropdown">
+                                                            <button class="btn btn-sm btn-icon btn-light btn-wave" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                              <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Hide</a></li>
+                                                              <li><a class="dropdown-item" href="javascript:void(0);">Edit</a></li>
+                                                            </ul>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </li>
+                                              <li class="list-group-item">
+                                                <div class="text-center">
+                                                  <button class="btn btn-primary-light btn-wave">Show All</button>
+                                                </div>
+                                              </li>
+                                            </ul>
+                                          </div>                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-xl-12 col-xl-12">
+                                  <div class="card custom-card">
+                                    <div class="card-header">
+                                      <div class="card-title">
+                                        Información Adicional:
+                                      </div>
+                                    </div>
+                                    <div class="card-body">
+                                      <ul class="list-group">
+                                        <li class="list-group-item">
+                                          <div class="d-flex flex-wrap align-items-center">
+                                            <div class="me-2 fw-semibold">
+                                              Name :
+                                            </div>
+                                            <span class="fs-12 text-muted">Sonya Taylor</span>
+                                          </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                          <div class="d-flex flex-wrap align-items-center">
+                                            <div class="me-2 fw-semibold">
+                                              Email :
+                                            </div>
+                                            <span class="fs-12 text-muted">sonyataylor231@gmail.com</span>
+                                          </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                          <div class="d-flex flex-wrap align-items-center">
+                                            <div class="me-2 fw-semibold">
+                                              Phone :
+                                            </div>
+                                            <span class="fs-12 text-muted">+(555) 555-1234</span>
+                                          </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                          <div class="d-flex flex-wrap align-items-center">
+                                            <div class="me-2 fw-semibold">
+                                              Designation :
+                                            </div>
+                                            <span class="fs-12 text-muted">C.E.O</span>
+                                          </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                          <div class="d-flex flex-wrap align-items-center">
+                                            <div class="me-2 fw-semibold">
+                                              Age :
+                                            </div>
+                                            <span class="fs-12 text-muted">28</span>
+                                          </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                          <div class="d-flex flex-wrap align-items-center">
+                                            <div class="me-2 fw-semibold">
+                                              Experience :
+                                            </div>
+                                            <span class="fs-12 text-muted">10 Years</span>
+                                          </div>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                              </div>
+                            </div>
                           </div>
+                          <!--End::row-1 -->
                         </div>
                       </div>
                     </div>
@@ -465,6 +1171,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th class="font-size-11px text-nowrap" >OBSERVACIONES</th>  
                           <th class="font-size-11px text-nowrap" >ID</th>
                           <th class="font-size-11px text-nowrap" >PERIODO</th>          
+                          <th class="font-size-11px text-nowrap" >TRABAJADOR</th>          
                         </tr>
                       </thead>
                       <tbody>
@@ -552,8 +1259,8 @@ if (!isset($_SESSION["user_nombre"])) {
                             <!-- Nombre -->
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mt-2" >
                               <div class="form-group">
-                                <label class="form-label nombre_razon" for="nombre_razonsocial">Nombre <sup class="text-danger">*</sup></label>
-                                <input type="text" name="nombre_razonsocial" class="form-control inpur_edit" id="nombre_razonsocial" />
+                                <label class="form-label nombre_razon" for="nombre_razonsocial">Nombres <sup class="text-danger">*</sup></label>
+                                <textarea name="nombre_razonsocial" class="form-control inpur_edit" id="nombre_razonsocial" rows="2" ></textarea>                                
                               </div>
                             </div>
 
@@ -561,7 +1268,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mt-2" >
                               <div class="form-group">
                                 <label class="form-label apellidos_nombrecomer" for="apellidos_nombrecomercial">Apellidos <sup class="text-danger">*</sup></label>
-                                <input type="text" name="apellidos_nombrecomercial" class="form-control inpur_edit" id="apellidos_nombrecomercial" />
+                                <textarea name="apellidos_nombrecomercial" class="form-control inpur_edit" id="apellidos_nombrecomercial" rows="2"></textarea>
                               </div>
                             </div>
                             <!-- Fecha cumpleaño -->
@@ -619,7 +1326,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12" style="margin-bottom: 20px;">
                               <div class="form-group">
                                 <label class="form-label" for="direccion">Dirección: <sup class="text-danger">*</sup></label>
-                                <input type="text" name="direccion" class="form-control inpur_edit" id="direccion" placeholder="ejemp: Jr las flores - Al costado del colegio" />
+                                <textarea name="direccion" class="form-control inpur_edit" id="direccion" placeholder="ejemp: Jr las flores - Al costado del colegio" rows="3"></textarea>
                               </div>
                             </div>
 

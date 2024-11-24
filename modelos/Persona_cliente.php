@@ -179,12 +179,12 @@ class Cliente
 
 		$sql= "SELECT COUNT( pc.idpersona_cliente) AS total
 		FROM vw_retraso_cobro_cliente as pc 
-		where pc.estado_deuda COLLATE utf8mb4_unicode_ci = 'DEUDA' and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		where pc.estado_deuda = 'DEUDA' and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
 		$count_deudor = ejecutarConsultaSimpleFila($sql);
 
 		$sql1= "SELECT COUNT( pc.idpersona_cliente) AS total
 		FROM vw_retraso_cobro_cliente as pc 
-		where pc.estado_deuda COLLATE utf8mb4_unicode_ci in ( 'DEUDA', 'ADELANTO') and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		where pc.estado_deuda in ( 'SIN DEUDA', 'ADELANTO') and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
 		$count_no_deuda = ejecutarConsultaSimpleFila($sql1);
 
 		$sql2 = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
@@ -193,9 +193,8 @@ class Cliente
 		$count_baja = ejecutarConsultaSimpleFila($sql2);
 
 		$sql3= "SELECT COUNT( pc.idpersona_cliente) AS total
-		FROM persona_cliente as pc
-		LEFT JOIN venta v ON v.idpersona_cliente = pc.idpersona_cliente
-		WHERE v.idpersona_cliente IS NULL and pc.estado = '1' AND pc.estado_delete = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		from vw_retraso_cobro_cliente as pc where pc.mes_inicio is null and pc.estado_pc = '1' AND pc.estado_delete_pc = '1'
+		$filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
 		$count_no_pago = ejecutarConsultaSimpleFila($sql3);
 
 		$sq4 = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
@@ -236,6 +235,28 @@ class Cliente
 		ORDER BY vw_c.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
+
+	public function tabla_principal_cliente_deuda($filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
+
+		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND vw_c.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
+
+		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
+		
+		$sql = "SELECT 
+		
+		vw_c.*
+		
+		FROM vw_cliente_all as vw_c		
+		where  vw_c.estado_delete_pc='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		ORDER BY vw_c.idpersona_cliente DESC";
+		return ejecutarConsulta($sql);
+	}
+
 
 	// ══════════════════════════════════════  PAGOS POR CLIENTES ══════════════════════════════════════
 
@@ -301,56 +322,45 @@ class Cliente
 
 		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_ap = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
 
-		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND pt.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND vw_c.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
 
-		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND pt.idpersona_trabajador = '$filtro_trabajador'";	}
-		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(pc.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
 		if ( empty($filtro_anio_pago) 	|| $filtro_anio_pago    == 'TODOS' ) { } else{ 	$filtro_sql_ap 		= "AND YEAR(vd.periodo_pago_format)  = '$filtro_anio_pago'";	}
-		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
-		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}
+		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
 		
-		$sql = "SELECT pc.idpersona_cliente, LPAD(pc.idpersona_cliente, 5, '0') as idcliente, pc.idpersona_trabajador, pc.idzona_antena, pc.ip_personal, 
-		DAY(pc.fecha_cancelacion) AS dia_cancelacion, pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, 	
-		pc.fecha_afiliacion, pc.descuento,pc.estado_descuento, cp.nombre as centro_poblado, pc.nota, pc.usuario_microtick,
-		CASE 
-			WHEN pc.fecha_cancelacion  > CURDATE() THEN DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y')
-			ELSE CONCAT( DATE_FORMAT(pc.fecha_cancelacion, '%d'), ' de cada mes' )
-		END AS dia_cancelacion_v2,
-		CASE 
-			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-			WHEN p.tipo_persona_sunat = 'NINGUNO' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-			WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
-			ELSE '-'
-		END AS cliente_nombre_completo, 
-		p.tipo_documento, p.numero_documento, p.celular, p.foto_perfil, p.direccion,p.distrito,p1.nombre_razonsocial AS trabajador_nombre, pl.nombre as nombre_plan,
-		pl.costo,za.nombre as zona, za.ip_antena,pc.estado, i.abreviatura as tipo_doc, vd.periodo_pago_year, vd.periodo_pago,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Enero'  AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_enero,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Febrero' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_febrero,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Marzo' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_marzo,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Abril' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_abril,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Mayo' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_mayo,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Junio' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_junio,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Julio' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_julio,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Agosto' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_agosto,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Septiembre' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_septiembre,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Octubre' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_octubre,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Noviembre' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_noviembre,
-		SUM(CASE WHEN vd.periodo_pago_month = 'Diciembre' AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_diciembre
+		$sql = "SELECT vw_c.idpersona_cliente, vw_c.idpersona_cliente_v2, vw_c.idpersona_trabajador, vw_c.idzona_antena, vw_c.ip_personal, vw_c.dia_cancelacion, 
+		vw_c.fecha_cancelacion, vw_c.fecha_cancelacion_format, vw_c.fecha_afiliacion, vw_c.descuento,vw_c.estado_descuento, vw_c.centro_poblado, vw_c.nota, 
+		vw_c.usuario_microtick,	vw_c.dia_cancelacion_v2, vw_c.cliente_nombre_completo, vw_c.tipo_documento, vw_c.numero_documento, vw_c.celular, vw_c.foto_perfil, 
+		vw_c.direccion,vw_c.distrito,	vw_c.trabajador_nombre, vw_c.nombre_plan,	vw_c.costo,vw_c.zona, vw_c.ip_antena,vw_c.estado_pc, vw_c.tipo_documento_abrev_nombre, 
+		vw_c.cliente_primera_letra, vw_c.cliente_tiene_pefil,
+		ven.periodo_pago_year, ven.periodo_pago,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Enero'  AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_enero,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Febrero' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_febrero,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Marzo' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_marzo,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Abril' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_abril,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Mayo' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_mayo,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Junio' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_junio,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Julio' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_julio,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Agosto' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_agosto,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Septiembre' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_septiembre,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Octubre' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_octubre,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Noviembre' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_noviembre,
+		SUM(CASE WHEN ven.periodo_pago_month = 'Diciembre' AND ven.es_cobro = 'SI' THEN ven.subtotal ELSE null END) AS venta_diciembre
 			
-		FROM persona_cliente AS pc
-		INNER JOIN persona AS p on pc.idpersona=p.idpersona
-		INNER JOIN persona_trabajador AS pt on pc.idpersona_trabajador= pt.idpersona_trabajador
-		INNER JOIN persona as p1 on pt.idpersona=p1.idpersona
-		INNER JOIN plan as pl on pc.idplan=pl.idplan
-		INNER JOIN zona_antena as za on pc.idzona_antena=za.idzona_antena
-		INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
-		INNER JOIN centro_poblado as cp on pc.idcentro_poblado=cp.idcentro_poblado        
-		LEFT JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente
-		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
-		WHERE v.sunat_estado='ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado_delete='1' AND v.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_ap $filtro_sql_p $filtro_sql_za
-		GROUP BY pc.idpersona_cliente
-		ORDER BY pc.idpersona_cliente DESC";
+		FROM vw_cliente_all AS vw_c		
+		LEFT JOIN (
+			SELECT v.idpersona_cliente, vd.periodo_pago, vd.periodo_pago_format, vd.periodo_pago_year, vd.periodo_pago_month, vd.subtotal, vd.es_cobro
+			FROM venta AS v 
+			INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
+			WHERE v.sunat_estado='ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado_delete='1' AND v.estado_delete='1' $filtro_sql_ap
+		) as ven on ven.idpersona_cliente = vw_c.idpersona_cliente
+		WHERE vw_c.estado_delete_pc='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		GROUP BY vw_c.idpersona_cliente
+		ORDER BY vw_c.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
+		// return $sql;
 	}
 
 	// ══════════════════════════════════════  PAGOS POR MES  ══════════════════════════════════════

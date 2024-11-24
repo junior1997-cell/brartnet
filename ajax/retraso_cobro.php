@@ -41,7 +41,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "0" => $count++,
               "1" =>  $value['mes_inicio'] .'<br> <i class="">'. $value['dia_cancelacion'] . '</i>' ,
               "2" => '<span class="fs-11 text-primary">'.$value['cliente_nombre_completo'].'</span> <br>' . 
-              '<span class="fs-11">'.$value['tipo_doc'] .': '.$value['numero_documento'] .'</span> | '.
+              '<span class="fs-11">'.$value['tipo_documento_abrev_nombre'] .': '.$value['numero_documento'] .'</span> | '.
               '<span class="fs-11"><i class="ti ti-fingerprint fs-15"></i> '.$value['idpersona_cliente_v2'] .'</span>' ,              
               "3" => $value['cant_cobrado'] .'/'.  $value['cant_total']  ,
               "4" => $value['estado_deuda'] == 'SIN DEUDA' ? '<button type="button" class="btn btn-sm btn-outline-success my-1 me-2" data-bs-toggle="tooltip" title="Ver cobros" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" >'.$value['estado_deuda'].' <span class="badge ms-2 fs-11">'.$value['avance_v2'].'</span></button>' : 

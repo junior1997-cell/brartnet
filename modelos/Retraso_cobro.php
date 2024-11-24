@@ -18,66 +18,12 @@
 
     public function listar_tabla_principal(  $periodo,  $trabajador ) {    
       
-      $filtro_periodo = ""; $filtro_trabajador_1 = ""; $filtro_trabajador_2 = "";    
+      $filtro_periodo = ''; $filtro_trabajador_1 = ''; $filtro_trabajador_2 = 'null';    
       
-      if ( empty($periodo) )    { } else { $filtro_periodo = "AND DATE_FORMAT( vd.periodo_pago_format, '%Y') = '$periodo'"; } 
-      if ( empty($trabajador) ) { } else { $filtro_trabajador_1 = "WHERE pc.idpersona_trabajador = '$trabajador'"; } 
-      if ( empty($trabajador) ) { } else { $filtro_trabajador_2 = "AND pc.idpersona_trabajador = '$trabajador'"; } 
+      if ( empty($periodo) )    { $filtro_periodo = 'null'; } else { $filtro_periodo = $periodo; } 
+      if ( empty($trabajador) ) { $filtro_trabajador_1 = 'null'; } else { $filtro_trabajador_1 = $trabajador; } 
 
-      $sql = "SELECT LPAD(pco.idpersona_cliente, 5, '0') as idpersona_cliente_v2, pco.idpersona_cliente,  pco.cliente_nombre_completo, pco.dia_cancelacion,
-      CONCAT( YEAR(pco.primera_venta), '-', UPPER( LEFT(MONTHNAME(pco.primera_venta),1)),SUBSTR(MONTHNAME(pco.primera_venta),2)) as mes_inicio,
-      ROUND( COALESCE( (pco.cant_total_mes - co.cant_cobrado) , 0) , 2) as avance, COALESCE(co.cant_cobrado,0) as cant_cobrado, pco.cant_total_mes as cant_total,
-      CASE  
-        WHEN (pco.cant_total_mes - co.cant_cobrado) = 0 THEN 'SIN DEUDA' 
-        WHEN (pco.cant_total_mes - co.cant_cobrado) > 0 THEN 'DEUDA' 
-        WHEN (pco.cant_total_mes - co.cant_cobrado) < 0 THEN 'ADELANTO'
-        ELSE '-'
-      END AS estado_deuda,
-      CASE  
-        WHEN (pco.cant_total_mes - co.cant_cobrado) < 0 THEN ABS((pco.cant_total_mes - co.cant_cobrado))
-        ELSE (pco.cant_total_mes - co.cant_cobrado)
-      END AS avance_v2,
-      pco.tipo_doc, pco.numero_documento
-      FROM 
-      (SELECT pc.idpersona_cliente , MIN(vd.periodo_pago_format) AS primera_venta, 
-      CASE 
-        WHEN pc.fecha_cancelacion  > CURDATE() THEN DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y')
-        ELSE CONCAT( DATE_FORMAT(pc.fecha_cancelacion, '%d'), ' de cada mes' )
-      END AS dia_cancelacion,      
-      CASE 
-        WHEN pc.fecha_cancelacion  > CURDATE() THEN TIMESTAMPDIFF(MONTH, MIN(vd.periodo_pago_format), CURDATE()) 
-        ELSE 
-          CASE 
-            WHEN DATE_FORMAT(CURDATE(), '%d') > DATE_FORMAT(pc.fecha_cancelacion, '%d') THEN TIMESTAMPDIFF(MONTH, MIN(vd.periodo_pago_format), CURDATE()) +1
-            ELSE TIMESTAMPDIFF(MONTH, MIN(vd.periodo_pago_format), CURDATE())
-          END
-      END AS cant_total_mes,
-      CASE 
-        WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
-        WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
-        ELSE '-'
-      END AS cliente_nombre_completo,i.abreviatura as tipo_doc, p.numero_documento
-      FROM persona_cliente as pc
-      INNER JOIN persona AS p ON p.idpersona = pc.idpersona
-      INNER JOIN sunat_c06_doc_identidad as i on p.tipo_documento=i.code_sunat  
-      INNER JOIN venta v ON v.idpersona_cliente = pc.idpersona_cliente
-      INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
-      WHERE vd.es_cobro = 'SI' and v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' ) 
-      $filtro_trabajador_2 $filtro_periodo
-      GROUP BY pc.idpersona_cliente
-      ORDER BY pc.idpersona_cliente, cant_total_mes) AS pco 
-
-      LEFT JOIN
-
-      (SELECT pc.idpersona_cliente,  COUNT(v.idventa) as cant_cobrado 
-      FROM venta as v
-      INNER JOIN venta_detalle as vd ON vd.idventa = v.idventa
-      INNER JOIN persona_cliente as pc ON pc.idpersona_cliente = v.idpersona_cliente
-      WHERE vd.es_cobro = 'SI' and v.estado = 1 AND v.estado_delete = 1 and v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante in( '01', '03', '12' )  
-      $filtro_periodo $filtro_trabajador_2
-      GROUP BY pc.idpersona_cliente
-      order by COUNT(v.idventa) DESC) as co ON pco.idpersona_cliente = co.idpersona_cliente
-      ORDER BY avance DESC;"; #return $sql;
+      $sql = "CALL sp_retraso_cobro_cliente( $filtro_trabajador_1, $filtro_periodo, '1', '1');"; #return $sql;
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
 
       return $venta;

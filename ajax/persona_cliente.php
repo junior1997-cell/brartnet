@@ -247,9 +247,12 @@ if (!isset($_SESSION["user_nombre"])) {
                 '</ul>
               </div>',
               "2" => '<div class="d-flex flex-fill align-items-center">
-                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                  <span class="avatar"> <img class="w-35px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"> </span>
-                </div>
+                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">'.
+                  ($value['cliente_tiene_pefil'] == 'SI' ? 
+                  '<span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"> </span>':
+                  '<span class="avatar avatar-sm bg-primary-transparent profile-timeline-avatar">' . $value['cliente_primera_letra'] . '</span>'
+                  ).
+                '</div>
                 <div>
                   <span class="d-block fw-semibold fs-12 text-primary">' . $value['cliente_nombre_completo'] . '</span>
                   <span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> |
@@ -279,6 +282,53 @@ if (!isset($_SESSION["user_nombre"])) {
               "17" => $value['zona'],
               "18" => $value['proximo_pago'] ,
               "19" => $value['ip_antena']
+
+            );
+          }
+          $results = [
+            'status'=> true,
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode($results, true);
+        } else {
+          echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
+        }
+
+      break;
+
+      case 'tabla_deudores':
+        $rspta = $persona_cliente->tabla_principal_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        //Vamos a declarar un array
+        $data = [];
+        $cont = 1;         
+        $class_dia = "";        
+
+        if ($rspta['status'] == true) {
+          
+          foreach ($rspta['data'] as $key => $value) {           
+            
+            $imagen_perfil = empty($value['foto_perfil']) ? 'no-perfil.jpg' :   $value['foto_perfil'];
+
+            $data[] = array(
+              "0" => $cont++,
+              "1" =>  $value['cliente_nombre_completo'] .'<br>'. '<span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> ',             
+              "2" => '<span class="badge bg-outline-danger">'. 5 .'</span>',              
+              "3" => '<span class="fs-10">' . $value['trabajador_nombre'] .'</span>',
+              "4" => '<button class="btn btn-icon btn-sm border-warning btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>                
+              <div class="btn-group ">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
+                <ul class="dropdown-menu">
+                  
+                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-coin"></i> Realizar Pago</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
+                  ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
+                  '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
+                  ).
+                '</ul>
+              </div>',
 
             );
           }
@@ -393,9 +443,12 @@ if (!isset($_SESSION["user_nombre"])) {
             <th class="py-0 '.$bg_light.' text-center">'.($key + 1).'</th>
             <td class="py-0 '.$bg_light.' text-nowrap">
               <div class="d-flex flex-fill align-items-center">
-                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                  <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($val['cliente_nombre_completo']) . '\')"> </span>
-                </div>
+                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">'.
+                  ($val['cliente_tiene_pefil'] == 'SI' ? 
+                  '<span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($val['cliente_nombre_completo']) . '\')"> </span>':
+                  '<span class="avatar avatar-sm bg-primary-transparent profile-timeline-avatar">' . $val['cliente_primera_letra'] . '</span>'
+                  ).
+                '</div>
                 <div>
                   <span class="d-block fs-11 fw-semibold text-primary">' . $val['cliente_nombre_completo'] . '</span>
                   <span class="text-muted fs-10 text-nowrap">' . $val['tipo_doc'] . ' : ' . $val['numero_documento'] . '</span> |
@@ -428,7 +481,7 @@ if (!isset($_SESSION["user_nombre"])) {
       
       case 'ver_pagos_all_cliente_v2':
         $rspta = $persona_cliente->ver_pagos_all_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_anio_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
-        
+        // echo $rspta; die();
         //Vamos a declarar un array
         $data = [];
         $cont = 1; 
@@ -438,18 +491,22 @@ if (!isset($_SESSION["user_nombre"])) {
           foreach ($rspta['data'] as $key => $val) {  
             
             $imagen_perfil = empty($val['foto_perfil']) ? 'no-perfil.jpg' :   $val['foto_perfil'];
-            $bg_light = $val['estado'] == 1 ? '' : 'bg-danger-transparent';
+            $bg_light = $val['estado_pc'] == 1 ? '' : 'bg-danger-transparent';
 
             $data[] = array(
               "0" => $cont++,
               "1" => '<div class="d-flex flex-fill align-items-center">
-                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">
-                  <span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($val['cliente_nombre_completo']) . '\')"> </span>
-                </div>
+                <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen">'.
+                  ($val['cliente_tiene_pefil'] == 'SI' ? 
+                  '<span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/' . $imagen_perfil . '" alt="" onclick="ver_img(\'' . $imagen_perfil . '\', \'' . encodeCadenaHtml($val['cliente_nombre_completo']) . '\')"> </span>':
+                  '<span class="avatar avatar-sm bg-primary-transparent profile-timeline-avatar">' . $val['cliente_primera_letra'] . '</span>'
+                  ).
+                '</div>
                 <div>
                   <span class="d-block fs-11 fw-semibold text-nowrap text-primary">' . $val['cliente_nombre_completo'] . '</span>
-                  <span class="text-muted fs-10 text-nowrap">' . $val['tipo_doc'] . ' : ' . $val['numero_documento'] . '</span> |
-                  <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $val['idcliente'] . '</span>
+                  <span class="text-muted fs-10 text-nowrap">' . $val['tipo_documento_abrev_nombre'] . ' : ' . $val['numero_documento'] . '</span> |
+                  <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-12"></i> '. $val['idpersona_cliente_v2'] . '</span>|
+                  <span class="text-muted fs-10 text-nowrap"><i class="ti ti-calendar-event fs-12"></i> '. $val['fecha_cancelacion_format'] . '</span>
                 </div>
               </div>',
               "2" => $val['dia_cancelacion_v2'],
@@ -471,6 +528,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
               "18" => $val['idpersona_cliente'] ,
               "19" => $val['periodo_pago_year'] ,
+              "20" => $val['cliente_nombre_completo'] ,
 
             );
           }

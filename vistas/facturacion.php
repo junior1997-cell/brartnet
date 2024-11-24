@@ -176,7 +176,7 @@ if (!isset($_SESSION["user_nombre"])) {
             <!-- REPORTE- MINI -->
             <div class="col-xl-3" id="div-mini-reporte"  >
 
-              <div class="" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? ''  : 'style="display: none;"' ; ?>>
+              <div class="" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' || $_SESSION['user_cargo'] == 'PUNTO DE COBRO'  ? ''  : 'style="display: none;"' ; ?>>
                 
                 <div class="row">
 
@@ -187,7 +187,7 @@ if (!isset($_SESSION["user_nombre"])) {
                     </div>     
                   </div>                  
 
-                  <div class="col-lg-6" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? 'style="display: none;"' : '' ; ?>>
+                  <div class="col-lg-6" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' || $_SESSION['user_cargo'] == 'PUNTO DE COBRO' ? 'style="display: none;"' : '' ; ?>>
                     <div class="form-group">
                       <label for="filtro-trabajador" class="fs-10">Trabajador</label>
                       <select class="form-select form-control-primary text-primary form-select-sm mb-3" aria-label=".form-select-sm example" id="filtro-trabajador" onchange=" mini_reporte_v2()">
@@ -268,7 +268,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>                
               </div>
 
-              <div class="card custom-card" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' ? 'style="display: none;"' : '' ; ?>>
+              <div class="card custom-card" <?php echo $_SESSION['user_cargo'] == 'TÉCNICO DE RED' || $_SESSION['user_cargo'] == 'PUNTO DE COBRO' ? 'style="display: none;"' : '' ; ?>>
                 <div class="card-body p-0">
 
                   <div class="px-2 pt-2 border-bottom border-block-end-dashed">

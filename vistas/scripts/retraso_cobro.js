@@ -28,7 +28,7 @@ async function init(){
 
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
  
-  $("#filtro_periodo_anio").select2({ theme: "bootstrap4", placeholder: "Seleccione" });
+  $("#filtro_periodo_anio").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione" });
 
   await activar_btn_agregar(); // Esperamos a al carga total de los datos para poder: CREAR
