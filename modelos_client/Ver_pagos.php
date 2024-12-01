@@ -28,28 +28,31 @@ class Ver_pagos
 
     $data_p = "";
 
-    $sql = "SELECT mes_c.*, lvd.idventa, lvd.idventa_detalle, lvd.subtotal,
-                lvd.tipo, lvd.pr_nombre, lvd.tipo_comprobante, lvd.serie_comprobante, 
-                lvd.numero_comprobante
-            FROM ( SELECT mc.* FROM
-                    mes_calendario AS mc
-                WHERE year_month_date BETWEEN(
-                    SELECT CASE WHEN pc.fecha_afiliacion < '2024-05-01' THEN '2024-05-01' ELSE pc.fecha_afiliacion
-                END AS min_date
-            FROM persona_cliente AS pc
-            WHERE pc.idpersona_cliente = '$this->id_usr_sesion_client'
-            ) AND(SELECT MAX(vd.periodo_pago_format)
-                FROM venta_detalle AS vd
-                INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = '$this->id_usr_sesion_client'
-                WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12')) ) AS mes_c
-            LEFT JOIN( SELECT vd.*, v.tipo_comprobante, v.serie_comprobante, v.numero_comprobante
-                FROM venta_detalle AS vd
-                INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = '$this->id_usr_sesion_client'
-                WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND
-                v.tipo_comprobante IN ('01','03','12')
-            ) AS lvd ON    mes_c.year_month = lvd.periodo_pago
-            $filtro
-            ORDER by mes_c.year_month DESC;";
+    $sql = "SELECT mes_c.*, lvd.idventa, lvd.idventa_detalle, lvd.subtotal, lvd.tipo, lvd.pr_nombre, lvd.tipo_comprobante, lvd.serie_comprobante, lvd.numero_comprobante
+    FROM ( 
+      SELECT mc.* 
+      FROM mes_calendario AS mc
+      WHERE year_month_date 
+      BETWEEN( 
+        SELECT CASE WHEN pc.fecha_afiliacion < '2024-05-01' THEN '2024-05-01' ELSE pc.fecha_afiliacion END AS min_date
+        FROM persona_cliente AS pc
+        WHERE pc.idpersona_cliente = '$this->id_usr_sesion_client'
+      ) AND 
+      (
+        SELECT MAX(vd.periodo_pago_format)
+        FROM venta_detalle AS vd
+        INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = '$this->id_usr_sesion_client'
+        WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12')
+      ) 
+    ) AS mes_c
+    LEFT JOIN( 
+      SELECT vd.*, v.tipo_comprobante, v.serie_comprobante, v.numero_comprobante
+      FROM venta_detalle AS vd
+      INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = '$this->id_usr_sesion_client'
+      WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND
+      v.tipo_comprobante IN ('01','03','12')
+    ) AS lvd ON mes_c.year_month = lvd.periodo_pago $filtro
+    ORDER by mes_c.year_month DESC;";
 
 //var_dump($sql);die();
     $data_pagos = ejecutarConsultaArray($sql);

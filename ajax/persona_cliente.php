@@ -254,7 +254,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   ).
                 '</div>
                 <div>
-                  <span class="d-block fw-semibold fs-12 text-primary">' . $value['cliente_nombre_completo'] . '</span>
+                  <span class="d-block fw-semibold fs-12 text-primary">' . DB_HOST. $value['cliente_nombre_completo'] . '</span>
                   <span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> |
                   <span class="text-muted fs-10 text-nowrap">Cel.: ' . '<a href="tel:+51'.$value['celular'].'" data-bs-toggle="tooltip" title="Clic para hacer llamada">'.$value['celular'].'</a>' . '</span> |
                   <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-15"></i> ' . $value['idpersona_cliente_v2'] . '</span> 
@@ -300,7 +300,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'tabla_deudores':
-        $rspta = $persona_cliente->tabla_principal_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        $rspta = $persona_cliente->tabla_principal_cliente_deuda($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
         //Vamos a declarar un array
         $data = [];
         $cont = 1;         
@@ -314,21 +314,23 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = array(
               "0" => $cont++,
-              "1" =>  $value['cliente_nombre_completo'] .'<br>'. '<span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> ',             
-              "2" => '<span class="badge bg-outline-danger">'. 5 .'</span>',              
-              "3" => '<span class="fs-10">' . $value['trabajador_nombre'] .'</span>',
-              "4" => '<button class="btn btn-icon btn-sm border-warning btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>                
-              <div class="btn-group ">
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
-                <ul class="dropdown-menu">
-                  
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-coin"></i> Realizar Pago</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
-                  ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
-                  '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
-                  ).
-                '</ul>
+              "1" =>  $value['cliente_nombre_completo_recorte'] .'<br>'. '<span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> ',             
+              "2" => '<span class="badge bg-outline-danger fs-12">'. $value['avance'] .'</span>',              
+             
+              "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="detalle_cliente_deudor(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle"><i class="ri-eye-line"></i></button>                
+                <div class="btn-group ">
+                  <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
+                  <ul class="dropdown-menu">
+                    
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-edit"></i> Editar</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-coin"></i> Realizar Pago</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
+                    ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
+                    '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
+                    ).
+                  '</ul>
               </div>',
+              "4" => '<span class="fs-10">' . $value['trabajador_nombre'] .'</span>',
 
             );
           }
@@ -346,6 +348,286 @@ if (!isset($_SESSION["user_nombre"])) {
 
       break;
 
+      // ══════════════════════════════════════   DETALLE CLIENTE DEUDOR   ══════════════════════════════════════ 
+      case 'detalle_cliente_deudor':
+        $rspta = $persona_cliente->detalle_cliente_deudor($_GET["idpersona_cliente"]);
+        $porcentaje_avance = number_format( (($rspta['data']['cliente']['cant_cobrado'] / $rspta['data']['cliente']['cant_total']) * 100), 1, '.', ',' );
+        echo'
+          <div class="col-xxl-5 col-xl-5 ">
+            <div class="card custom-card overflow-hidden rounded border">
+              <div class="card-body p-0">
+                <div class="d-sm-flex align-items-top p-4 border-bottom-0 main-profile-cover">
+                  <div>
+                    <span class="avatar avatar-xxl avatar-rounded online me-3">
+                      <img src="../assets/images/faces/9.jpg" alt="">
+                    </span>
+                  </div>
+                  <div class="flex-fill main-profile-info">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <h6 class="fw-semibold mb-1 text-fixed-white">'.$rspta['data']['cliente']['cliente_nombre_completo'].'</h6>
+                      <button class="btn btn-light btn-wave px-2" onclick="mostrar_cliente(' . $rspta['data']['cliente']['idpersona_cliente'] . ')"><i class="ri-edit-2-line me-1 align-middle d-inline-block"></i></button>
+                    </div>
+                    <p class="mb-1 text-muted text-fixed-white op-7"></p>
+                    <p class="fs-12 text-fixed-white mb-4 op-5">
+                      <span class="me-3"><i class="ri-building-line me-1 align-middle"></i>'.$rspta['data']['cliente']['centro_poblado'].'</span>
+                      <span><i class="ri-map-pin-line me-1 align-middle"></i>'.$rspta['data']['cliente']['distrito'].'</span>
+                    </p>
+                    <div class="d-flex mb-0">
+                      <div class="me-4 text-center">
+                        <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">'.$rspta['data']['cliente']['cant_total'].'</p>
+                        <p class="mb-0 fs-11 op-5 text-fixed-white">Total mes</p>
+                      </div>
+                      <div class="me-4 text-center">
+                        <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">'.$rspta['data']['cliente']['cant_cobrado'].'</p>
+                        <p class="mb-0 fs-11 op-5 text-fixed-white">Pagado</p>
+                      </div>
+                      <div class="me-4 text-center">
+                        <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">'.$rspta['data']['cliente']['avance'].'</p>
+                        <p class="mb-0 fs-11 op-5 text-fixed-white">No Pagado</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-light px-4 py-2 border-bottom border-block-end-dashed d-flex align-items-center border-dark">
+                  <p class="fs-15 mb-0 me-4 fw-semibold">Fecha Pago:</p>
+                  <span class="fs-14">'.$rspta['data']['cliente']['dia_cancelacion_v2'].'</span> 
+                </div>
+                <div class="bg-light p-4 border-bottom border-block-end-dashed border-dark">
+                  <div class="">
+                    <p class="fs-15 mb-2 fw-semibold">Observacion:</p>
+                    <p class="fs-12 text-muted op-7 mb-0"> '.$rspta['data']['cliente']['nota'].'</p>
+                  </div>
+                  <!-- <div class="mb-0">
+                    <p class="fs-15 mb-2 fw-semibold">Links :</p>
+                    <div class="mb-0">
+                      <p class="mb-1">
+                        <a href="https://www.spruko.com/" class="text-primary"><u>https://www.spruko.com/</u></a>
+                      </p>
+                      <p class="mb-0">
+                        <a href="https://themeforest.net/user/spruko/portfolio" class="text-primary"><u>https://themeforest.net/user/spruko/portfolio</u></a>
+                      </p>
+                    </div>
+                  </div> -->
+                </div>
+                
+                
+                <div class="bg-light p-4 border-bottom border-block-end-dashed border-dark">
+                  <p class="fs-15 mb-2 me-4 fw-semibold">Pagados:</p>
+                  <div>
+                    <a href="javascript:void(0);">
+                      <span class="badge bg-success m-1">Julio-2024</span>
+                    </a>
+                    <a href="javascript:void(0);">
+                      <span class="badge bg-success m-1">Agosto-2024</span>
+                    </a>
+                    <a href="javascript:void(0);">
+                      <span class="badge bg-success m-1">Setiembre-2024</span>
+                    </a>
+                    <a href="javascript:void(0);">
+                      <span class="badge bg-success m-1">Octubre-2024</span>
+                    </a>                                      
+                  </div>
+                  <p class="fs-15 mb-2 me-4 fw-semibold mt-3">No pagados:</p>
+                  <div>
+                    <a href="javascript:void(0);">
+                      <span class="badge bg-danger m-1">Julio-2024</span>
+                    </a>
+                    <a href="javascript:void(0);">
+                      <span class="badge bg-danger m-1">Agosto-2024</span>
+                    </a>
+                    <a href="javascript:void(0);">
+                      <span class="badge bg-danger m-1">Setiembre-2024</span>
+                    </a>
+                    <a href="javascript:void(0);">
+                      <span class="badge bg-danger m-1">Octubre-2024</span>
+                    </a>                                      
+                  </div>
+                </div>
+                <div class="bg-light p-4 border-bottom border-block-end-dashed border-dark">
+                  <p class="fs-15 mb-2 me-4 fw-semibold">Mese cortados:</p>
+                  <div class="text-muted">
+                   
+                    <p class="mb-0">    </p>
+                  </div>
+                </div>
+                <div class="bg-light p-4">
+                  <p class="fs-15 mb-2 me-4 fw-semibold">Técnico Asignado:</p>
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      <div class="d-sm-flex align-items-top">
+                        <span class="avatar avatar-sm">
+                          <img src="../assets/images/faces/1.jpg" alt="img">
+                        </span>
+                        <div class="ms-sm-2 ms-0 mt-sm-0 mt-1 fw-semibold flex-fill">
+                          <p class="mb-0 lh-1">Alicia Sierra</p>
+                          <span class="fs-11 text-muted op-7">aliciasierra389@gmail.com</span>
+                        </div>
+                        <button class="btn btn-light btn-wave btn-sm">Follow</button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="bg-light p-4 border-bottom border-block-end-dashed d-flex align-items-center">
+                  <p class="fs-15 mb-2 me-4 fw-semibold">Social Networks :</p>
+                  <div class="btn-list mb-0">
+                    <button class="btn btn-sm btn-icon btn-primary-light btn-wave waves-effect waves-light"><i class="ri-facebook-line fw-semibold"></i></button>
+                    <button class="btn btn-sm btn-icon btn-secondary-light btn-wave waves-effect waves-light"><i class="ri-twitter-line fw-semibold"></i></button>
+                    <button class="btn btn-sm btn-icon btn-warning-light btn-wave waves-effect waves-light"><i class="ri-instagram-line fw-semibold"></i></button>
+                    <button class="btn btn-sm btn-icon btn-success-light btn-wave waves-effect waves-light"><i class="ri-github-line fw-semibold"></i></button>
+                    <button class="btn btn-sm btn-icon btn-danger-light btn-wave waves-effect waves-light"><i class="ri-youtube-line fw-semibold"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xxl-7 col-xl-7">
+            <div class="row" >
+              <div class="col-xl-12">
+                <div class="card custom-card">
+                  <div class="card-body p-0 rounded border border-block-end-dashed">
+                    <div class="py-3 p-r-1rem border-bottom border-block-end-dashed d-flex align-items-center justify-content-between">
+                      <div>
+                        <ul class="nav nav-tabs mb-0 tab-style-6 justify-content-start" id="myTab" role="tablist">
+                          <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity-tab-pane" type="button" role="tab" aria-controls="activity-tab-pane" aria-selected="true"><i class="ri-gift-line me-1 align-middle d-inline-block"></i>Pagos</button>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                            <button class="nav-link" onclick="reset_ubicacion_cliente(000, 0000);" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts-tab-pane" type="button" role="tab" aria-controls="posts-tab-pane" aria-selected="false"><i class="ri-bill-line me-1 align-middle d-inline-block"></i>Ubicacion</button>
+                          </li>                                            
+                        </ul>
+                      </div>
+                      <div>
+                        <p class="fw-semibold mb-2">Completado '.$porcentaje_avance.'% - <a href="javascript:void(0);" class="text-primary fs-12">('.$rspta['data']['cliente']['cant_cobrado'].'/'.$rspta['data']['cliente']['cant_total'].')</a></p>
+                        <div class="progress progress-xs progress-animate">
+                          <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '.$porcentaje_avance.'%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="py-2 px-2">
+                      <div class="tab-content bg-light" id="myTabContent">
+                        <div class="tab-pane show active fade p-0 border-0 " id="activity-tab-pane" role="tabpanel" aria-labelledby="activity-tab" tabindex="0">
+                          <ul class="list-unstyled profile-timeline" id="profile-posts-scroll">';
+                            foreach ($rspta['data']['cliente_mes'] as $key => $val) {
+                              
+                            echo '<li>
+                                <div class="mt-3 me-1">'.
+                                  ($val['estado_pagado'] == 'NO DEUDA' ?
+                                  '<span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
+                                    <img src="../assets/modulo/persona/perfil/'.$val['foto_perfil_tecnico'].'" alt="">
+                                  </span>':
+                                  '<span class="avatar avatar-sm bg-primary-transparent avatar-rounded profile-timeline-avatar"><i class="bi bi-emoji-frown fs-15"></i></span>'
+                                  ).
+                                  '<p class="mb-2">
+                                    <b class="'.($val['estado_pagado'] == 'DEUDA' ? 'text-danger':'').'" >'.$val['tecnico_asociado'].'</b> - Mes:  <a class="text-secondary" href="javascript:void(0);"><u>'.$val['nombre_mes_recortado'].'-'.$val['name_year'].'</u></a>.<span class="float-end fs-10 text-muted">'.$val['fecha_emision_format'].'</span>
+                                  </p>
+                                  <p class="profile-activity-media mb-0" style="display: flex; align-items: center;">'.
+                                    ($val['estado_pagado'] == 'DEUDA' ?
+                                    '<span class="fs-11 text-muted">Le recordamos que su pago correspondiente a este mes está pendiente.</span>':
+                                    '<a href="javascript:void(0);" class="btn btn-primary-light rounded zoom-width-27px-svg" style="margin-right: 5px;" onclick="ver_comprobante_emitido('.$val['idventa'].',\''.$val['tipo_comprobante'].'\')">                                                             
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="svg-info secondary " enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                                        <path d="M0,0h24v24H0V0z" fill="none" />
+                                        <g>
+                                          <path d="M19.5,3.5L18,2l-1.5,1.5L15,2l-1.5,1.5L12,2l-1.5,1.5L9,2L7.5,3.5L6,2v14H3v3c0,1.66,1.34,3,3,3h12c1.66,0,3-1.34,3-3V2 L19.5,3.5z M15,20H6c-0.55,0-1-0.45-1-1v-1h10V20z M19,19c0,0.55-0.45,1-1,1s-1-0.45-1-1v-3H8V5h11V19z" />
+                                          <rect height="2" width="6" x="9" y="7" /><rect height="2" width="2" x="16" y="7" /><rect height="2" width="6" x="9" y="10" /><rect height="2" width="2" x="16" y="10" />
+                                        </g>
+                                      </svg>                                      
+                                    </a>
+                                    <span style="display: flex; flex-direction: column;">
+                                      <span href="javascript:void(0);" class="fs-11 text-muted cursor-pointer zoom-text-12px" onclick="ver_comprobante_emitido('.$val['idventa'].',\''.$val['tipo_comprobante'].'\')">'.$val['tipo_comprobante_v2'].' ELECTRONICA - '.$val['serie_comprobante'].'-'.$val['numero_comprobante'].'</span> 
+                                      <span class="fs-11 text-muted">432.87KB</span>
+                                    </span>').
+                                  '</p>
+                                </div>
+                              </li>';
+                            }
+                         echo '                                        
+                          </ul>
+                        </div>
+                        <div class="tab-pane fade p-0 border-0" id="posts-tab-pane" role="tabpanel" aria-labelledby="posts-tab" tabindex="0">
+                          <div class="card custom-card">                                              
+                            <div class="card-body">
+                              <div id="map-markers"></div>
+                            </div>
+                          </div>
+                        </div>                                          
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-12 col-xl-12">
+                <div class="card custom-card ">
+                  <div class="card-header">
+                    <div class="card-title">
+                      Información Adicional:
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-group">
+                      <li class="list-group-item">
+                        <div class="d-flex flex-wrap align-items-center">
+                          <div class="me-2 fw-semibold">Plan:</div>
+                          <span class="fs-12 text-muted">'.$rspta['data']['cliente']['nombre_plan'] . ' S/. ' . $rspta['data']['cliente']['costo'] .'</span> 
+                          
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="d-flex flex-wrap align-items-center">
+                          <div class="me-2 fw-semibold">Codigo:</div>
+                          <span class="fs-12 text-muted m-r-5px">'.$rspta['data']['cliente']['idpersona_cliente_v2'].'</span> | 
+                          <div class="me-2 fw-semibold m-l-5px">Usuario cliente:</div>
+                          <span class="fs-12 text-muted">'.$rspta['data']['cliente']['landing_user'].'</span>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="d-flex flex-wrap align-items-center">
+                          <div class="me-2 fw-semibold">
+                            <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted"><i class="ri-mail-line align-middle fs-14"></i></span>Email :
+                          </div>
+                          <span class="fs-12 text-muted">'.$rspta['data']['cliente']['correo'].'</span>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="d-flex flex-wrap align-items-center">
+                          <div class="me-2 fw-semibold">
+                            <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted"> <i class="ri-phone-line align-middle fs-14"></i> </span>Phone :
+                          </div>
+                          <span class="fs-12 text-muted">'.$rspta['data']['cliente']['celular'].'</span>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="d-flex flex-wrap align-items-center">
+                          <div class="me-2 fw-semibold">
+                            <span class="avatar avatar-sm avatar-rounded me-2 bg-light text-muted"> <i class="ri-map-pin-line align-middle fs-14"></i> </span>Direccion :
+                          </div>
+                          <span class="fs-12 text-muted">'.$rspta['data']['cliente']['direccion'].'</span>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="d-flex flex-wrap align-items-center">
+                          <div class="me-2 fw-semibold">Usuario Microtick:</div>
+                          <span class="fs-12 text-muted">'.$rspta['data']['cliente']['usuario_microtick'].'</span>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="d-flex flex-wrap align-items-center">
+                          <div class="me-2 fw-semibold">
+                            Zona:
+                          </div>
+                          <span class="fs-12 text-muted">'.$rspta['data']['cliente']['zona'] . ' | '.$rspta['data']['cliente']['ip_antena'].'</span>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+         
+        ';
+        
+
+      break;
       // ══════════════════════════════════════   PAGOS ALL CLIENTES   ══════════════════════════════════════ 
       case 'ver_pagos_x_cliente':
         $rspta = $persona_cliente->ver_pagos_x_cliente($_GET["idcliente"]);

@@ -30,6 +30,7 @@ SELECT
 	ven.periodo_pago_format_min, 
 	case when per.foto_perfil is null then LEFT(per.nombre_razonsocial, 1) when per.foto_perfil = '' then LEFT(per.nombre_razonsocial, 1) else null end cliente_primera_letra,
 	case when per.foto_perfil is null then 'NO' when per.foto_perfil = '' then 'NO' else 'SI' end cliente_tiene_pefil,
+	per.landing_user, per.landing_descripcion, per.landing_puntuacion, per.landing_fecha, per.landing_estado,
 	-- ::::::::::::::: DATOS TECNICO (TRABAJADOR A CARGO) ::::::::::::::: 
  	per.idpersona_trabajador,	per.trabajador_nombre,
 	-- ::::::::::::::: DATOS PLAN ::::::::::::::: 
@@ -53,6 +54,7 @@ FROM
 			cp.nombre as centro_poblado,
 			pc.nota,
 			pc.usuario_microtick,
+			pc.landing_user, pc.landing_descripcion, pc.landing_puntuacion, pc.landing_fecha, pc.landing_estado, 
 			pc.estado as estado_pc,	pc.estado_delete as estado_delete_pc,
 			CASE
 				WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT (p.nombre_razonsocial,' ',p.apellidos_nombrecomercial	)

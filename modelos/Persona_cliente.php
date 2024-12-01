@@ -180,27 +180,27 @@ class Cliente
 		$sql= "SELECT COUNT( pc.idpersona_cliente) AS total
 		FROM vw_retraso_cobro_cliente as pc 
 		where pc.estado_deuda = 'DEUDA' and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
-		$count_deudor = ejecutarConsultaSimpleFila($sql);
+		$count_deudor = ejecutarConsultaSimpleFila($sql); if ($count_deudor['status'] == false) {return $count_deudor; }
 
 		$sql1= "SELECT COUNT( pc.idpersona_cliente) AS total
 		FROM vw_retraso_cobro_cliente as pc 
 		where pc.estado_deuda in ( 'SIN DEUDA', 'ADELANTO') and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
-		$count_no_deuda = ejecutarConsultaSimpleFila($sql1);
+		$count_no_deuda = ejecutarConsultaSimpleFila($sql1); if ($count_no_deuda['status'] == false) {return $count_no_deuda; }
 
 		$sql2 = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
 		FROM persona_cliente as pc
 		where pc.estado='0' and pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za;";
-		$count_baja = ejecutarConsultaSimpleFila($sql2);
+		$count_baja = ejecutarConsultaSimpleFila($sql2); if ($count_baja['status'] == false) {return $count_baja; }
 
 		$sql3= "SELECT COUNT( pc.idpersona_cliente) AS total
 		from vw_retraso_cobro_cliente as pc where pc.mes_inicio is null and pc.estado_pc = '1' AND pc.estado_delete_pc = '1'
 		$filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
-		$count_no_pago = ejecutarConsultaSimpleFila($sql3);
+		$count_no_pago = ejecutarConsultaSimpleFila($sql3); if ($count_no_pago['status'] == false) {return $count_no_pago; }
 
 		$sq4 = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
 		FROM persona_cliente as pc 		
 		where pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
-		$count_total = ejecutarConsultaSimpleFila($sq4);
+		$count_total = ejecutarConsultaSimpleFila($sq4); if ($count_total['status'] == false) {return $count_total; }
 
 		return [
 			'status' => true, 'message' => 'Todo ok', 
@@ -247,16 +247,38 @@ class Cliente
 		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
 		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
 		
-		$sql = "SELECT 
-		
-		vw_c.*
-		
+		$sql = "SELECT 	 vw_rc.avance, vw_rc.avance_v2, vw_rc.cant_cobrado, vw_rc.cant_total, vw_c.*,
+		CASE WHEN LENGTH(  vw_c.cliente_nombre_completo  ) <= 22 THEN  vw_c.cliente_nombre_completo ELSE CONCAT(  LEFT(vw_c.cliente_nombre_completo, 22) , '...') END  as cliente_nombre_completo_recorte
 		FROM vw_cliente_all as vw_c		
-		where  vw_c.estado_delete_pc='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
-		ORDER BY vw_c.idpersona_cliente DESC";
+		inner join vw_retraso_cobro_cliente as vw_rc on vw_rc.idpersona_cliente = vw_c.idpersona_cliente
+		where vw_c.estado_pc = '1' and vw_c.estado_delete_pc='1' and vw_rc.estado_deuda = 'DEUDA'  
+		$filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		ORDER BY vw_rc.avance DESC, vw_c.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
+	// ══════════════════════════════════════   DETALLE CLIENTE DEUDOR   ══════════════════════════════════════ 
+	public function detalle_cliente_deudor( $idpersona_cliente )	{
+		
+		
+		$sql = "SELECT 	 vw_rc.avance, vw_rc.avance_v2, vw_rc.cant_cobrado, vw_rc.cant_total, vw_c.*,
+		CASE WHEN LENGTH(  vw_c.cliente_nombre_completo  ) <= 22 THEN  vw_c.cliente_nombre_completo ELSE CONCAT(  LEFT(vw_c.cliente_nombre_completo, 22) , '...') END  as cliente_nombre_completo_recorte
+		FROM vw_cliente_all as vw_c		
+		inner join vw_retraso_cobro_cliente as vw_rc on vw_rc.idpersona_cliente = vw_c.idpersona_cliente
+		where vw_c.idpersona_cliente = '$idpersona_cliente'";
+		$cliente = ejecutarConsultaSimpleFila($sql); if ($cliente['status'] == false) {return $cliente; }
+
+		$sql2 = "call sp_mes_cobrado_cliente($idpersona_cliente)";
+		$cliente_mes = ejecutarConsultaArray($sql2); if ($cliente_mes['status'] == false) {return $cliente_mes; }
+
+		return [
+			'status' => true, 'message' => 'Todo ok', 
+			'data' => [
+				'cliente'=> $cliente['data'],
+				'cliente_mes'=> $cliente_mes['data'],				
+			]
+		];
+	}
 
 	// ══════════════════════════════════════  PAGOS POR CLIENTES ══════════════════════════════════════
 
@@ -288,7 +310,7 @@ class Cliente
 		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
 		where pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
 		ORDER BY pc.idpersona_cliente DESC";
-		$cliente = ejecutarConsultaSimpleFila($sql_0);
+		$cliente = ejecutarConsultaSimpleFila($sql_0); if ($cliente['status'] == false) {return $cliente; }
 
 		$sql_1 = "SELECT pc.idpersona_cliente, vd.periodo_pago_year,
 		SUM(CASE WHEN vd.periodo_pago_month = 'Enero'  AND vd.es_cobro = 'SI' THEN vd.subtotal ELSE null END) AS venta_enero,
@@ -310,7 +332,7 @@ class Cliente
 		where v.sunat_estado='ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado_delete='1' AND v.estado_delete='1' and pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
 		GROUP BY vd.periodo_pago_year
 		ORDER BY vd.periodo_pago_year DESC";
-		$pagos = ejecutarConsulta($sql_1);
+		$pagos = ejecutarConsulta($sql_1); if ($pagos['status'] == false) {return $pagos; }
 
 
 		return ['status' => true, 'message' => 'Todo ok', 'data' => ['cliente' => $cliente['data'], 'pagos' => $pagos['data']]];

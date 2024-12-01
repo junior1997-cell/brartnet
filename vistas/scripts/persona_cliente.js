@@ -6,7 +6,9 @@ var array_data_venta = [];
 var cambio_de_tipo_comprobante ;
 var file_pond_mp_comprobante;
 
-var filtro_trabajador_r = '', filtro_dia_pago_r = '', filtro_plan_r = '', filtro_zona_antena_r = '';
+var ubicacion_cliente;
+
+var opcion_r = 'tabla_todos', filtro_trabajador_r = '', filtro_dia_pago_r = '', filtro_plan_r = '', filtro_zona_antena_r = '';
 
 //Función que se ejecuta al inicio
 function init() {
@@ -270,6 +272,7 @@ function funtion_switch() {
 
 //Función Listar
 function tabla_principal_cliente(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+console.log(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
 
   filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
@@ -342,7 +345,7 @@ function tabla_principal_cliente(opcion, filtro_trabajador, filtro_dia_pago, fil
 
 //Función Listar
 function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
-
+  console.log(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
   filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
   tabla_cliente = $('#tabla-cliente-deudor').dataTable({
@@ -381,10 +384,14 @@ function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_dia_pa
       // columna: Acciones
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: Cliente
-      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap text-center"); }
+      // columna: Cliente
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+      // columna: Cliente
+      if (data[4] != '') { $("td", row).eq(4).addClass("text-nowrap"); }
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "_MENU_", search: "", info: "",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
@@ -396,6 +403,45 @@ function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_dia_pa
       // { targets: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], visible: false, searchable: false, },
     ],
   }).DataTable();
+}
+
+function detalle_cliente_deudor(idpersona_cliente) {  
+ 
+  $('#detalle-cliente-deudor').html(`<div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div><h4 class="bx-flashing">Cargando...</h4></div>`); 
+
+  $.get(`../ajax/persona_cliente.php?op=detalle_cliente_deudor`, {idpersona_cliente:idpersona_cliente},  function (e, textStatus, jqXHR) {
+    $('#detalle-cliente-deudor').html(e);
+
+    
+
+    var myElement1 = document.getElementById('profile-posts-scroll');
+    new SimpleBar(myElement1, { autoHide: true });
+
+  });  
+
+}
+
+function reset_ubicacion_cliente(latitud, longitud) {
+  // Restablecer el mapa eliminando los marcadores existentes
+  if (ubicacion_cliente) { ubicacion_cliente.removeMarkers(); }
+
+  // Volver a instanciar el mapa
+  ubicacion_cliente = new GMaps({ 
+    el: '#map-markers', 
+    lat: -8.141857, 
+    lng: -76.590359, 
+    mapType: 'satellite',
+    zoom: 18.5
+  });
+
+  // Añadir de nuevo el marcador inicial
+  ubicacion_cliente.addMarker({ 
+    lat: -8.141857, 
+    lng: -76.590359, 
+    title: 'Click para ver detalles.', 
+    infoWindow: { title: 'Ubicacion', content: '<p class="text-light" >HTML Content</p>' } 
+  });
+
 }
 
 //Función para guardar o editar
@@ -1220,9 +1266,7 @@ function guardar_editar_facturacion(e) {
   :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
 
-$(document).ready(function () {
-  var myElement1 = document.getElementById('profile-posts-scroll');
-  new SimpleBar(myElement1, { autoHide: true });
+$(document).ready(function () { 
 
   init();
 });
@@ -1395,22 +1439,22 @@ function filtros() {
 
   $('#id_buscando_tabla').html(`<th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_trabajador} ${nombre_dia_pago} ${nombre_plan}...</th>`);
   //console.log(filtro_categoria, fecha_2, filtro_plan, comprobante);
-  
-  cant_tab_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
-  tabla_principal_cliente('tabla_todos', filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
-  
+
+  filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
+  cant_tab_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);  
+  filtrar_grupo(opcion_r);
 }
 
-function filtrar_grupo(opcion) {
-
-  if (opcion = 'tabla_deudores') {
-    
-    tabla_principal_cliente_deudor(filtro_trabajador_r, filtro_dia_pago_r, filtro_plan_r, filtro_zona_antena_r);
-  } else if (opcion = 'tabla_no_deuda'){
-  } else if (opcion = 'tabla_no_servicio'){
-  } else if (opcion = 'tabla_no_pago'){
-  } else if (opcion = 'tabla_todos'){
-
+function filtrar_grupo(opcion ) {
+  opcion_r = opcion; console.log(opcion);
+  
+  if (opcion == 'tabla_deudores') {    
+    tabla_principal_cliente_deudor(opcion, filtro_trabajador_r, filtro_dia_pago_r, filtro_plan_r, filtro_zona_antena_r);
+  } else if (opcion == 'tabla_no_deuda'){
+  } else if (opcion == 'tabla_no_servicio'){
+  } else if (opcion == 'tabla_no_pago'){
+  } else if (opcion == 'tabla_todos'){
+    tabla_principal_cliente(opcion, filtro_trabajador_r, filtro_dia_pago_r, filtro_plan_r, filtro_zona_antena_r);
   }  
 }
 
@@ -1582,3 +1626,67 @@ function printIframe(id) {
 
 })();
 
+function ver_comprobante_emitido(idventa, tipo_comprobante, num_comprobante) { 
+
+  $("#modal_ver_comprobante_deudor").modal("show");
+  $(".btn_formato_ticket").attr("onclick",`ver_formato_ticket(${idventa}, ${tipo_comprobante})`);
+  $(".btn_formato_a4").attr("onclick",`ver_formato_a4_completo(${idventa}, ${tipo_comprobante})`);
+
+  $(".btn_formato_ticket").click();
+  //$(".btn_formato_a4").click();
+
+  $(".serie_comp").text(num_comprobante);
+  
+}
+
+// ::::::::::::::::::::::::::::::::::::::::::::: FORMATOS DE IMPRESION :::::::::::::::::::::::::::::::::::::::::::::
+
+function ver_formato_ticket(idventa, tipo_comprobante) {
+  $("#modal_ver_comprobante_deudor .modal-dialog").removeClass("modal-sm modal-lg modal-xl modal-xxl").addClass("modal-md");
+  
+  if (tipo_comprobante == '01') {
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
+    $(".formato_ticket").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+
+  } else if (tipo_comprobante == '03') {
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
+    $(".formato_ticket").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+
+  } else if (tipo_comprobante == '07') {
+    var rutacarpeta = "../reportes/TicketNotaCredito.php?id=" + idventa;
+  $(".formato_ticket").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+
+  } else if (tipo_comprobante == '12') {
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
+     $(".formato_ticket").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+
+  } else  {
+    // toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+    toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
+  }
+}
+
+function ver_formato_a4_completo(idventa, tipo_comprobante) {  
+  $("#modal_ver_comprobante_deudor .modal-dialog").removeClass("modal-sm modal-md modal-lg modal-xxl").addClass("modal-xl");
+  if (tipo_comprobante == '01') {
+    var rutacarpeta = "../reportes/A4FormatHtml.php?id=" + idventa;
+     $(".formato_a4").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+   
+  } else if (tipo_comprobante == '03') {
+    var rutacarpeta = "../reportes/A4FormatHtml.php?id=" + idventa;
+     $(".formato_a4").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+   
+  } else if (tipo_comprobante == '07') {
+    var rutacarpeta = "../reportes/A4FormatHtml.php?id=" + idventa;
+     $(".formato_a4").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+   
+  } else if (tipo_comprobante == '12') {
+    var rutacarpeta = "../reportes/A4FormatHtml.php?id=" + idventa;
+    $(".formato_a4").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+
+  } else  {
+    // toastr_warning('No Disponible', 'Tenga paciencia el formato de impresión estara listo pronto.');
+    toastr_error('No Existe!!', 'Este tipo de documeno no existe en mi registro.');
+  }
+  
+}

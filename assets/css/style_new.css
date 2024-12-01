@@ -738,6 +738,95 @@ table th { vertical-align: top !important; }
 .font-size-29px{ font-size: 29px !important; }
 .font-size-30px{ font-size: 30px !important; }
 
+/*  ══════════════════════════════════════════ - W I D T H   Z O O M - ══════════════════════════════════════════ */
+.zoom-width-15px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-15px:hover { width: 15px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-16px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-16px:hover { width: 16px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-17px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-17px:hover { width: 17px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-18px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-18px:hover { width: 18px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-19px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-19px:hover { width: 19px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-20px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-20px:hover { width: 20px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-21px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-21px:hover { width: 21px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-22px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-22px:hover { width: 22px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-23px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-23px:hover { width: 23px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-24px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-24px:hover { width: 24px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-25px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-25px:hover { width: 25px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-26px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-26px:hover { width: 26px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-27px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-27px:hover { width: 27px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-28px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-28px:hover { width: 28px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-29px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-29px:hover { width: 29px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-30px { transition: width 0.3s ease;   } /* Transición suave */
+.zoom-width-30px:hover { width: 30px !important;  } /* Ajusta este valor para el efecto de zoom deseado */
+
+/*  ══════════════════════════════════════════ - W I D T H   Z O O M  E Q U I T A T I V O - ══════════════════════════════════════════ */
+
+.zoom-width-30px-e { transition: width 0.3s ease, height 0.3s ease ;   }        /* Transición suave */
+.zoom-width-30px-e:hover { width: 30px !important; height: 30px !important;  }  /* Ajusta este valor para el efecto de zoom deseado */
+
+.zoom-width-35px-e { transition: width 0.3s ease, height 0.3s ease ;   }        /* Transición suave */
+.zoom-width-35px-e:hover { width: 35px !important; height: 35px !important;  }  /* Ajusta este valor para el efecto de zoom deseado */
+
+/*  ══════════════════════════════════════════ - W I D T H   Z O O M  E Q U I T A T I V O  - SVG  - ══════════════════════════════════════════ */
+
+.zoom-width-27px-svg svg, .zoom-width-27px-svg svg {  transition: width 0.3s ease, height 0.3s ease ;   }  /* Transición suave */
+.zoom-width-27px-svg:hover svg, .zoom-width-27px-svg:hover svg { width: 27px !important; height: 27px !important;  }
+
+.zoom-width-30px-svg svg, .zoom-width-30px-svg svg {  transition: width 0.3s ease, height 0.3s ease ;   }  /* Transición suave */
+.zoom-width-30px-svg:hover svg, .zoom-width-30px-svg:hover svg { width: 30px !important; height: 30px !important;  }
+
+
+/*  ══════════════════════════════════════════ - T E X T   Z O O M - ══════════════════════════════════════════ */
+
+.zoom-text-10px { transition: font-size 0.3s ease;  } /* Transición suave */
+.zoom-text-10px:hover { font-size: 10px !important;  } /* Ajusta el tamaño para el efecto de zoom */
+
+.zoom-text-11px { transition: font-size 0.3s ease;  } /* Transición suave */
+.zoom-text-11px:hover { font-size: 11px !important;  } /* Ajusta el tamaño para el efecto de zoom */
+
+.zoom-text-12px { transition: font-size 0.3s ease;  } /* Transición suave */
+.zoom-text-12px:hover { font-size: 12px !important;  } /* Ajusta el tamaño para el efecto de zoom */
+
+.zoom-text-13px { transition: font-size 0.3s ease;  } /* Transición suave */
+.zoom-text-13px:hover { font-size: 13px !important;  } /* Ajusta el tamaño para el efecto de zoom */
+
+.zoom-text-14px { transition: font-size 0.3s ease;  } /* Transición suave */
+.zoom-text-14px:hover { font-size: 14px !important;  } /* Ajusta el tamaño para el efecto de zoom */
+
+.zoom-text-15px { transition: font-size 0.3s ease;  } /* Transición suave */
+.zoom-text-15px:hover { font-size: 15px !important;  } /* Ajusta el tamaño para el efecto de zoom */
+
+.zoom-text-1rem { transition: font-size 0.3s ease;  } /* Transición suave */
+.zoom-text-1rem:hover { font-size: 1rem !important;  } /* Ajusta el tamaño para el efecto de zoom */
+
 /*  ══════════════════════════════════════════ - B O R D E R   R A D I U S - ══════════════════════════════════════════ */
 .b-radio-0px{ border-radius: 0px !important; }
 .b-radio-1px{ border-radius: 1px !important; }
