@@ -8,7 +8,7 @@ var file_pond_mp_comprobante;
 
 var ubicacion_cliente;
 
-var opcion_r = 'tabla_todos', filtro_trabajador_r = '', filtro_dia_pago_r = '', filtro_plan_r = '', filtro_zona_antena_r = '';
+var opcion_r = 'tabla_deudores', filtro_trabajador_r = '', filtro_dia_pago_r = '', filtro_plan_r = '', filtro_zona_antena_r = '';
 
 //Función que se ejecuta al inicio
 function init() {
@@ -345,7 +345,7 @@ console.log(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona
 
 //Función Listar
 function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
-  console.log(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
+
   filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
   tabla_cliente = $('#tabla-cliente-deudor').dataTable({
@@ -405,14 +405,78 @@ function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_dia_pa
   }).DataTable();
 }
 
-function detalle_cliente_deudor(idpersona_cliente) {  
+function tabla_principal_cliente_no_deudor(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+
+  filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
+
+  tabla_cliente = $('#tabla-cliente-no-deudor').dataTable({
+    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
+    buttons: [
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_cliente) { tabla_cliente.ajax.reload(null, false); } } },
+      // { extend: 'copy', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
+      { extend: 'excel', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
+      // { extend: 'pdf', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
+      // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
+    ],
+    ajax: {
+      url: `../ajax/persona_cliente.php?op=tabla_no_deudores&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+      complete: function () {
+        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');
+        $(".buttons-copy").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Copiar');
+        $(".buttons-excel").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Excel');
+        $(".buttons-pdf").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'PDF');
+        $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
+        $('[data-bs-toggle="tooltip"]').tooltip();
+        $('#id_buscando_tabla').remove();
+      },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: Acciones
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      // columna: Cliente
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap text-center"); }
+      // columna: Cliente
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+      // columna: Cliente
+      if (data[4] != '') { $("td", row).eq(4).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "_MENU_", search: "", info: "",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    "bDestroy": true,
+    "iDisplayLength": 10,//Paginación
+    "order": [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [      
+      // { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      // { targets: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], visible: false, searchable: false, },
+    ],
+  }).DataTable();
+}
+
+
+function detalle_tab_cliente( id_html, idpersona_cliente) {  
  
-  $('#detalle-cliente-deudor').html(`<div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div><h4 class="bx-flashing">Cargando...</h4></div>`); 
+  $(`#${id_html}`).html(`<div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div><h4 class="bx-flashing">Cargando...</h4></div>`); 
 
   $.get(`../ajax/persona_cliente.php?op=detalle_cliente_deudor`, {idpersona_cliente:idpersona_cliente},  function (e, textStatus, jqXHR) {
-    $('#detalle-cliente-deudor').html(e);
-
     
+    $(`#detalle-cliente-deudor`).html(''); 
+    $(`#detalle-cliente-no-deudor`).html(''); 
+
+    $(`#${id_html}`).html(e);   
 
     var myElement1 = document.getElementById('profile-posts-scroll');
     new SimpleBar(myElement1, { autoHide: true });
@@ -1451,6 +1515,7 @@ function filtrar_grupo(opcion ) {
   if (opcion == 'tabla_deudores') {    
     tabla_principal_cliente_deudor(opcion, filtro_trabajador_r, filtro_dia_pago_r, filtro_plan_r, filtro_zona_antena_r);
   } else if (opcion == 'tabla_no_deuda'){
+    tabla_principal_cliente_no_deudor(opcion, filtro_trabajador_r, filtro_dia_pago_r, filtro_plan_r, filtro_zona_antena_r);
   } else if (opcion == 'tabla_no_servicio'){
   } else if (opcion == 'tabla_no_pago'){
   } else if (opcion == 'tabla_todos'){

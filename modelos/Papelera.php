@@ -17,6 +17,28 @@ class Papelera{
 
     $data = [];
 
+    $sql_1 = "SELECT * FROM venta WHERE estado = 0 AND estado_delete = 1 and tipo_comprobante = '12';";
+    $ventas = ejecutarConsultaArray($sql_1); if ($ventas['status'] == false) { return $ventas; }
+
+    if (!empty($banco['data'])) {
+      foreach($ventas['data'] as $value1){
+        $data[] = [
+          'nombre_tabla'    => 'venta',
+          'nombre_id_tabla' => 'idventa',
+          'id_tabla'        => $value1['idventa'],
+          'modulo'          => 'FACTURACION',
+          'nombre_archivo'  => '<b>Doc: </b>'.$value1['serie_comprobante'].'-'.$value1['numero_comprobante '].'<br>'.     
+          '<b>Fecha emision: </b>'.$value1['fecha_emision '].'<br>'. 
+          '<b>Total venta: </b>'.$value1['venta_total'].'<br>'. 
+          '<b>Metodo Pago: </b>'.$value1['metodo_pago '].'<br>' ,
+          'descripcion'     => $value1['observacion_documento '], 
+          'created_at'      => $value1['created_at'],
+          'updated_at'      => $value1['updated_at'],
+          'list_archivo'     => $value1['serie_comprobante'].'-'.$value1['numero_comprobante '],
+        ];
+      }
+    }
+
     $sql_1 = "SELECT * FROM bancos WHERE estado = 0 AND estado_delete = 1;";
     $bancos = ejecutarConsultaArray($sql_1); if ($bancos['status'] == false) { return $bancos; }
 

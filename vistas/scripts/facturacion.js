@@ -316,6 +316,54 @@ function limpiar_form_venta(){
 
 }
 
+function limpiar_form_venta_nc(){
+
+  array_data_venta = [];
+  $("#f_idventa").val('');
+  $("#f_nc_idventa").val('0');
+  
+  $("#f_idpersona_cliente").val('').trigger('change'); 
+  $("#f_metodo_pago").val('').trigger('change'); 
+  $("#f_observacion_documento").val(''); 
+  $("#f_periodo_pago").val('');
+  $("#codigob").val('');  
+  
+  $("#f_total_recibido").val(0);
+  $("#f_mp_monto").val(0);
+  $("#f_total_vuelto").val(0);
+  $("#f_ua_monto_usado").val('');
+  $("#f_mp_serie_comprobante").val('');
+  file_pond_mp_comprobante.removeFiles();
+  $("#f_mp_comprobante_old").val('');
+
+  $(".span_dia_cancelacion").html(``);
+
+  $("#f_venta_total").val("");     
+  $(".f_venta_total").html("0");
+
+  $(".f_venta_subtotal").html("<span>S/</span> 0.00");
+  $("#f_venta_subtotal").val("");
+
+  $(".f_venta_descuento").html("<span>S/</span> 0.00");
+  $("#f_venta_descuento").val("");
+
+  $(".f_venta_igv").html("<span>S/</span> 0.00");
+  $("#f_venta_igv").val("");
+
+  $(".f_venta_total").html("<span>S/</span> 0.00");
+  $("#f_venta_total").val("");
+
+  $(".filas").remove();
+
+  cont = 0;
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+
+}
+
 function listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente, filtro_comprobante, filtro_estado_sunat){
   
   tabla_principal_facturacion = $("#tabla-ventas").dataTable({
@@ -512,16 +560,27 @@ function cambiar_a_por_enviar(idventa, nombre) {
 
 }
 
+function ver_meses_cobrado(idcont) {
+  console.log(idcont);
+  $("#modal-ver-meses-cobrados").modal("show");
+  var id_cliente = $("#f_idpersona_cliente").val() == null || $("#f_idpersona_cliente").val() == '' ? 0 : $("#f_idpersona_cliente").val();
+  $.get(`../ajax/facturacion.php?op=ver_meses_cobrado`, {idcliente:id_cliente}, function (e, textStatus, jqXHR) {
+    $('#ver-meses-cobrados').html(e);
+      
+  });
+}
+
 
 // ::::::::::::::::::::::::::::::::::::::::::::: MOSTRAR SERIES :::::::::::::::::::::::::::::::::::::::::::::
 
 function ver_series_comprobante(input) {
-  if (cambio_de_tipo_comprobante == '07') { limpiar_form_venta(); } // Limpiamos si el comprobante anterior era: Nota de Credito
+  
+  if (cambio_de_tipo_comprobante == '07') { limpiar_form_venta_nc(); } // Limpiamos si el comprobante anterior era: Nota de Credito
 
   $("#f_serie_comprobante").html('');
   $(".f_charge_serie_comprobante").html(`<div class="spinner-border spinner-border-sm" role="status"></div>`);
 
-  var tipo_comprobante = $(input).val() == ''  || $(input).val() == null ? '' : $(input).val();
+  var tipo_comprobante = $(input).val() == ''  || $(input).val() == null ? '' : $(input).val(); console.log(tipo_comprobante);  
   var nc_tp = ""; // En caso de ser Nota de Credito
   $('#f_tipo_comprobante_hidden').val(tipo_comprobante);
 

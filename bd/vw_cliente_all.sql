@@ -32,7 +32,7 @@ SELECT
 	case when per.foto_perfil is null then 'NO' when per.foto_perfil = '' then 'NO' else 'SI' end cliente_tiene_pefil,
 	per.landing_user, per.landing_descripcion, per.landing_puntuacion, per.landing_fecha, per.landing_estado,
 	-- ::::::::::::::: DATOS TECNICO (TRABAJADOR A CARGO) ::::::::::::::: 
- 	per.idpersona_trabajador,	per.trabajador_nombre,
+ 	per.idpersona_trabajador, per.trabajador_foto_perfil, per.trabajador_celular,	per.trabajador_nombre, per.trabajador_1_nombre, per.trabajador_1_apellido, per.trabajador_numero_documento, per.trabajador_tipo_documento,
 	-- ::::::::::::::: DATOS PLAN ::::::::::::::: 
 	per.idplan,	per.nombre_plan,	per.costo,
 	-- ::::::::::::::: DATOS ZONA ANTENA ::::::::::::::: 
@@ -64,7 +64,9 @@ FROM
 			p.idpersona, p.idtipo_persona, p.idbancos, p.idcargo_trabajador, p.tipo_persona_sunat, p.nombre_razonsocial, p.apellidos_nombrecomercial, 
 			p.tipo_documento, p.numero_documento, p.fecha_nacimiento, p.celular, p.direccion, p.departamento, p.provincia, p.distrito, p.cod_ubigeo, p.correo, 
 			p.cuenta_bancaria, p.cci, p.titular_cuenta, p.foto_perfil, p.estado as estado_p, p.estado_delete as estado_delete_p,
-			pt.idpersona_trabajador,	p1.nombre_razonsocial AS trabajador_nombre,
+			pt.idpersona_trabajador, p1.foto_perfil as trabajador_foto_perfil, p1.celular as trabajador_celular,	p1.nombre_razonsocial AS trabajador_nombre, p1.apellidos_nombrecomercial as trabajador_apellido,
+			SUBSTRING_INDEX(p1.nombre_razonsocial, ' ', 1) AS trabajador_1_nombre ,SUBSTRING_INDEX(p1.apellidos_nombrecomercial, ' ', 1) as trabajador_1_apellido,
+			p1.numero_documento as trabajador_numero_documento , CASE p1.tipo_documento WHEN '0' THEN 'NINGUNO' WHEN '1' THEN 'DNI' WHEN '4' THEN 'CE' WHEN '6' THEN 'RUC' ELSE '' END AS  trabajador_tipo_documento ,
 			pl.idplan,	pl.nombre as nombre_plan,	pl.costo,
 			za.idzona_antena,za.nombre as zona,za.ip_antena,
 			sc06.abreviatura as tipo_documento_abrev_nombre

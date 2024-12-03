@@ -236,7 +236,7 @@ class Cliente
 		return ejecutarConsulta($sql);
 	}
 
-	public function tabla_principal_cliente_deuda($filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
+	public function tabla_principal_cliente_deuda( $filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
 
 		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
 
@@ -254,6 +254,27 @@ class Cliente
 		where vw_c.estado_pc = '1' and vw_c.estado_delete_pc='1' and vw_rc.estado_deuda = 'DEUDA'  
 		$filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
 		ORDER BY vw_rc.avance DESC, vw_c.idpersona_cliente DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function tabla_principal_cliente_no_deuda( $filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
+
+		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND vw_c.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
+
+		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
+		
+		$sql = "SELECT 	 vw_rc.avance, vw_rc.avance_v2, vw_rc.cant_cobrado, vw_rc.cant_total, vw_c.*,
+		CASE WHEN LENGTH(  vw_c.cliente_nombre_completo  ) <= 22 THEN  vw_c.cliente_nombre_completo ELSE CONCAT(  LEFT(vw_c.cliente_nombre_completo, 22) , '...') END  as cliente_nombre_completo_recorte
+		FROM vw_cliente_all as vw_c		
+		inner join vw_retraso_cobro_cliente as vw_rc on vw_rc.idpersona_cliente = vw_c.idpersona_cliente
+		where vw_c.estado_pc = '1' and vw_c.estado_delete_pc='1' and vw_rc.estado_deuda in ('SIN DEUDA', 'ADELANTO')
+		$filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		ORDER BY vw_rc.avance , vw_c.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 

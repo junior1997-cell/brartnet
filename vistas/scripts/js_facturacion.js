@@ -75,7 +75,7 @@ function agregarDetalleComprobante(idproducto, tipo_producto, individual) {
               <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${e.data.um_abreviatura}">
             </td>   
             
-            <td class="py-1">       
+            <td class="py-1 form-group">       
               <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(tipo_producto == 'PR' ? 'NO' : 'SI' )}">  
               <input type="${(tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
               <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
@@ -130,7 +130,21 @@ function agregarDetalleComprobante(idproducto, tipo_producto, individual) {
             $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
           });
           if (tipo_producto == 'SR') {
-            $(`#valid_periodo_pago_${cont}`).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(`#valid_periodo_pago_${cont}`).rules('add', { 
+              required: true, 
+              remote: {
+                url: "../ajax/facturacion.php?op=validar_mes_cobrado",
+                type: "get",
+                data: {
+                  periodo_pago: function () { return $(`#valid_periodo_pago_${cont}`).val(); },
+                  idcliente: function () { return $("#f_idpersona_cliente").val(); }
+                },
+                dataFilter: function(response) {
+                    return response; // Procesa cualquier respuesta adicional si es necesario
+                }
+              },
+              messages: { required: 'Campo requerido', remote: `Mes pagado, elija otro mes. <br> <a href="#" class="link-underline-danger" onclick="ver_meses_cobrado(${cont})">Click para ver.</a>`  } 
+            }); 
           }else{
             $(`#valid_periodo_pago_${cont}`).rules('remove', 'required');
           }
@@ -293,7 +307,7 @@ function listar_producto_x_codigo() {
 
 function mostrar_para_nota_credito(input) {
 
-  limpiar_form_venta();
+  limpiar_form_venta_nc();
 
   var nc_serie_y_numero = $(input).val() == null || $(input).val() == '' ? '' : $(input).val() ;
 

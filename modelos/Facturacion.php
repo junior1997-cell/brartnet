@@ -445,6 +445,29 @@
       
     }
 
+    public function validar_mes_cobrado($idcliente, $periodo_pago){
+      $sql = "SELECT v.idventa, vd.idventa_detalle, v.serie_comprobante, v.numero_comprobante, v.tipo_comprobante, 
+      v.fecha_emision, vd.periodo_pago_format, vd.periodo_pago, vd.pr_nombre,  vd.cantidad, vd.subtotal
+      from venta as v
+      INNER JOIN venta_detalle as vd on vd.idventa = v.idventa
+      WHERE v.idpersona_cliente = $idcliente and vd.periodo_pago = '$periodo_pago' and vd.es_cobro='SI' AND v.estado_delete = 1 
+      AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12') ";
+      $buscando =  ejecutarConsultaArray($sql); if ( $buscando['status'] == false) {return $buscando; }
+
+      if (empty($buscando['data'])) { return true; }else { return false; }
+      
+    }
+
+    public function ver_meses_cobrado($idcliente){
+      $sql = "SELECT v.idventa, vd.idventa_detalle, v.serie_comprobante, v.numero_comprobante, v.tipo_comprobante, 
+      v.fecha_emision, vd.periodo_pago_format, vd.periodo_pago, vd.pr_nombre,  vd.cantidad, vd.subtotal
+      from venta as v
+      INNER JOIN venta_detalle as vd on vd.idventa = v.idventa
+      WHERE v.idpersona_cliente = $idcliente  and vd.es_cobro='SI' AND v.estado_delete = 1 
+      AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12') ";
+      return ejecutarConsultaArray($sql);       
+    }
+
     // ══════════════════════════════════════ C O M P R O B A N T E ══════════════════════════════════════
 
     public function datos_empresa(){

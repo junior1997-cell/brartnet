@@ -254,7 +254,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   ).
                 '</div>
                 <div>
-                  <span class="d-block fw-semibold fs-12 text-primary">' . DB_HOST. $value['cliente_nombre_completo'] . '</span>
+                  <span class="d-block fw-semibold fs-12 text-primary">' . $value['cliente_nombre_completo'] . '</span>
                   <span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> |
                   <span class="text-muted fs-10 text-nowrap">Cel.: ' . '<a href="tel:+51'.$value['celular'].'" data-bs-toggle="tooltip" title="Clic para hacer llamada">'.$value['celular'].'</a>' . '</span> |
                   <span class="text-muted fs-10 text-nowrap"><i class="ti ti-fingerprint fs-15"></i> ' . $value['idpersona_cliente_v2'] . '</span> 
@@ -300,7 +300,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'tabla_deudores':
-        $rspta = $persona_cliente->tabla_principal_cliente_deuda($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        $rspta = $persona_cliente->tabla_principal_cliente_deuda(  $_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
         //Vamos a declarar un array
         $data = [];
         $cont = 1;         
@@ -317,7 +317,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "1" =>  $value['cliente_nombre_completo_recorte'] .'<br>'. '<span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> ',             
               "2" => '<span class="badge bg-outline-danger fs-12">'. $value['avance'] .'</span>',              
              
-              "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="detalle_cliente_deudor(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle"><i class="ri-eye-line"></i></button>                
+              "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="detalle_tab_cliente(\'detalle-cliente-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle"><i class="ri-eye-line"></i></button>                
                 <div class="btn-group ">
                   <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
                   <ul class="dropdown-menu">
@@ -348,6 +348,56 @@ if (!isset($_SESSION["user_nombre"])) {
 
       break;
 
+      case 'tabla_no_deudores':
+        $rspta = $persona_cliente->tabla_principal_cliente_no_deuda(  $_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        //Vamos a declarar un array
+        $data = [];
+        $cont = 1;         
+        $class_dia = "";        
+
+        if ($rspta['status'] == true) {
+          
+          foreach ($rspta['data'] as $key => $value) {           
+            
+            $imagen_perfil = empty($value['foto_perfil']) ? 'no-perfil.jpg' :   $value['foto_perfil'];
+
+            $data[] = array(
+              "0" => $cont++,
+              "1" =>  $value['cliente_nombre_completo_recorte'] .'<br>'. '<span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> ',             
+              "2" => '<span class="badge bg-outline-success fs-12">'. $value['cant_cobrado'] .'</span>',              
+             
+              "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="detalle_tab_cliente(\'detalle-cliente-no-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle"><i class="ri-eye-line"></i></button>                
+                <div class="btn-group ">
+                  <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
+                  <ul class="dropdown-menu">
+                    
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-edit"></i> Editar</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-coin"></i> Realizar Pago</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
+                    ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
+                    '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
+                    ).
+                  '</ul>
+              </div>',
+              "4" => '<span class="fs-10">' . $value['trabajador_nombre'] .'</span>',
+
+            );
+          }
+          $results = [
+            'status'=> true,
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode($results, true);
+        } else {
+          echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
+        }
+
+      break;
+
+
       // ══════════════════════════════════════   DETALLE CLIENTE DEUDOR   ══════════════════════════════════════ 
       case 'detalle_cliente_deudor':
         $rspta = $persona_cliente->detalle_cliente_deudor($_GET["idpersona_cliente"]);
@@ -358,9 +408,14 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="card-body p-0">
                 <div class="d-sm-flex align-items-top p-4 border-bottom-0 main-profile-cover">
                   <div>
-                    <span class="avatar avatar-xxl avatar-rounded online me-3">
-                      <img src="../assets/images/faces/9.jpg" alt="">
-                    </span>
+                    <span class="avatar avatar-xxl avatar-rounded online me-3 bg-warning">';
+                      if ($rspta['data']['cliente']['cliente_tiene_pefil'] == 'SI') {
+                        echo '<img src="../assets/modulo/persona/perfil/' . $rspta['data']['cliente']['foto_perfil'] . '" alt="">';
+                      }else {
+                        echo $rspta['data']['cliente']['cliente_primera_letra'];
+                      }
+                      
+                    echo '</span>
                   </div>
                   <div class="flex-fill main-profile-info">
                     <div class="d-flex align-items-center justify-content-between">
@@ -382,8 +437,8 @@ if (!isset($_SESSION["user_nombre"])) {
                         <p class="mb-0 fs-11 op-5 text-fixed-white">Pagado</p>
                       </div>
                       <div class="me-4 text-center">
-                        <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">'.$rspta['data']['cliente']['avance'].'</p>
-                        <p class="mb-0 fs-11 op-5 text-fixed-white">No Pagado</p>
+                        <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">'.$rspta['data']['cliente']['avance_v2'].'</p>
+                        <p class="mb-0 fs-11 op-5 text-fixed-white"> '.($rspta['data']['cliente']['cant_cobrado']>$rspta['data']['cliente']['cant_total']?'Adelanto':($rspta['data']['cliente']['cant_cobrado']=$rspta['data']['cliente']['cant_total']? 'S' :'No Pagado')).'</p>
                       </div>
                     </div>
                   </div>
@@ -413,35 +468,26 @@ if (!isset($_SESSION["user_nombre"])) {
                 
                 <div class="bg-light p-4 border-bottom border-block-end-dashed border-dark">
                   <p class="fs-15 mb-2 me-4 fw-semibold">Pagados:</p>
-                  <div>
-                    <a href="javascript:void(0);">
-                      <span class="badge bg-success m-1">Julio-2024</span>
-                    </a>
-                    <a href="javascript:void(0);">
-                      <span class="badge bg-success m-1">Agosto-2024</span>
-                    </a>
-                    <a href="javascript:void(0);">
-                      <span class="badge bg-success m-1">Setiembre-2024</span>
-                    </a>
-                    <a href="javascript:void(0);">
-                      <span class="badge bg-success m-1">Octubre-2024</span>
-                    </a>                                      
-                  </div>
+                  <div>';
+                  foreach ($rspta['data']['cliente_mes'] as $key => $val) {
+                    if ($val['estado_pagado'] == 'NO DEUDA') {
+                      echo '<a href="javascript:void(0);">
+                        <span class="badge bg-success m-1" onclick="ver_comprobante_emitido('.$val['idventa'].',\''.$val['tipo_comprobante'].'\')">'.$val['nombre_mes_capitalize'].'-'.$val['name_year'].'</span>
+                      </a>';
+                    }                    
+                  }                                      
+                  echo '</div>
                   <p class="fs-15 mb-2 me-4 fw-semibold mt-3">No pagados:</p>
-                  <div>
-                    <a href="javascript:void(0);">
-                      <span class="badge bg-danger m-1">Julio-2024</span>
-                    </a>
-                    <a href="javascript:void(0);">
-                      <span class="badge bg-danger m-1">Agosto-2024</span>
-                    </a>
-                    <a href="javascript:void(0);">
-                      <span class="badge bg-danger m-1">Setiembre-2024</span>
-                    </a>
-                    <a href="javascript:void(0);">
-                      <span class="badge bg-danger m-1">Octubre-2024</span>
-                    </a>                                      
-                  </div>
+                  <div>';
+                  foreach ($rspta['data']['cliente_mes'] as $key => $val) {
+                    if ($val['estado_pagado'] == 'DEUDA') {
+                      echo '<a href="javascript:void(0);">
+                      <span class="badge bg-danger m-1">'.$val['nombre_mes_capitalize'].'-'.$val['name_year'].'</span>
+                    </a>';
+                    }                    
+                  }                   
+                                            
+                  echo '</div>
                 </div>
                 <div class="bg-light p-4 border-bottom border-block-end-dashed border-dark">
                   <p class="fs-15 mb-2 me-4 fw-semibold">Mese cortados:</p>
@@ -456,13 +502,13 @@ if (!isset($_SESSION["user_nombre"])) {
                     <li class="list-group-item">
                       <div class="d-sm-flex align-items-top">
                         <span class="avatar avatar-sm">
-                          <img src="../assets/images/faces/1.jpg" alt="img">
+                          <img src="../assets/modulo/persona/perfil/'.$rspta['data']['cliente']['trabajador_foto_perfil'] .'" alt="img">
                         </span>
                         <div class="ms-sm-2 ms-0 mt-sm-0 mt-1 fw-semibold flex-fill">
-                          <p class="mb-0 lh-1">Alicia Sierra</p>
-                          <span class="fs-11 text-muted op-7">aliciasierra389@gmail.com</span>
+                          <p class="mb-0 lh-1">'.$rspta['data']['cliente']['trabajador_1_nombre'] .' '. $rspta['data']['cliente']['trabajador_1_apellido'].'</p>
+                          <span class="fs-11 text-muted op-7">'.$rspta['data']['cliente']['trabajador_tipo_documento'] .': '. $rspta['data']['cliente']['trabajador_numero_documento'].'</span>
                         </div>
-                        <button class="btn btn-light btn-wave btn-sm">Follow</button>
+                        <a  class="btn btn-light btn-wave btn-sm d-flex justify-content-center align-items-center" href="https://wa.me/51'.$rspta['data']['cliente']['trabajador_celular'] .'" target="_blank"><i class="bi bi-whatsapp text-success fs-12"></i></a>
                       </div>
                     </li>
                   </ul>
@@ -510,15 +556,15 @@ if (!isset($_SESSION["user_nombre"])) {
                             foreach ($rspta['data']['cliente_mes'] as $key => $val) {
                               
                             echo '<li>
-                                <div class="mt-3 me-1">'.
+                                <div class="mt-3 me-1 mb-3">'.
                                   ($val['estado_pagado'] == 'NO DEUDA' ?
                                   '<span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                    <img src="../assets/modulo/persona/perfil/'.$val['foto_perfil_tecnico'].'" alt="">
+                                    <img src="../assets/modulo/persona/perfil/'.$val['foto_perfil_tecnico_cobro'].'" alt="">
                                   </span>':
                                   '<span class="avatar avatar-sm bg-primary-transparent avatar-rounded profile-timeline-avatar"><i class="bi bi-emoji-frown fs-15"></i></span>'
                                   ).
                                   '<p class="mb-2">
-                                    <b class="'.($val['estado_pagado'] == 'DEUDA' ? 'text-danger':'').'" >'.$val['tecnico_asociado'].'</b> - Mes:  <a class="text-secondary" href="javascript:void(0);"><u>'.$val['nombre_mes_recortado'].'-'.$val['name_year'].'</u></a>.<span class="float-end fs-10 text-muted">'.$val['fecha_emision_format'].'</span>
+                                    <b class="'.($val['estado_pagado'] == 'DEUDA' ? 'text-danger':'').'" >'.$val['tecnico_cobro'].'</b> - Mes:  <a class="text-secondary" href="javascript:void(0);"><u>'.$val['nombre_mes_recortado'].'-'.$val['name_year'].'</u></a>.<span class="float-end fs-10 text-muted">'.$val['fecha_emision_format'].'</span>
                                   </p>
                                   <p class="profile-activity-media mb-0" style="display: flex; align-items: center;">'.
                                     ($val['estado_pagado'] == 'DEUDA' ?

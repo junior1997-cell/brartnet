@@ -1127,7 +1127,29 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::Modal-Agregar-Producto -->
 
-         
+          <!-- MODAL - AGREGAR PRODUCTO - charge p1 -->
+          <div class="modal fade modal-effect" id="modal-ver-meses-cobrados" role="dialog" tabindex="-1" aria-labelledby="modal-ver-meses-cobradosLabel">
+            <div class="modal-dialog modal-md modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-ver-meses-cobradosLabel1">Meses Cobrados</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="ver-meses-cobrados">                  
+                  <div class="row" >
+                    <div class="col-lg-12 text-center">
+                      <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                      <h4 class="bx-flashing">Cargando...</h4>
+                    </div>
+                  </div>                  
+                </div>
+                <div class="modal-footer py-2">
+                  <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End::Modal-Agregar-Producto -->
 
         </div>
       </div>

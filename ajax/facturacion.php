@@ -492,6 +492,122 @@ if (!isset($_SESSION["user_nombre"])) {
         echo json_encode($rspta, true);
       break;
 
+      case 'validar_mes_cobrado':
+        
+        $periodo_pago = null;                                     // Inicializamos `periodo_pago` como vacío
+        
+        foreach ($_GET as $key => $value) {                       // Recorremos los parámetros GET para encontrar `valid_periodo_pago_X`
+          if (preg_match('/^valid_periodo_pago_\d+$/', $key)) {   // Si el nombre del parámetro coincide
+            $periodo_pago = $value;                               // Asignamos su valor a `periodo_pago`
+            break;                                                // Salimos del bucle después de encontrar el primero
+          }
+        }
+
+        $rspta=$facturacion->validar_mes_cobrado($_GET["idcliente"],$periodo_pago );
+        echo json_encode($rspta, true);
+      break;
+
+      case 'ver_meses_cobrado':
+        $rspta=$facturacion->ver_meses_cobrado($_GET["idcliente"]);
+        echo '<div class="card-body">
+          <ul class="list-unstyled timeline-widget mb-0 my-3">
+            <li class="timeline-widget-list">
+              <div class="d-flex align-items-top">
+                <div class="me-5 text-center">
+                  <span class="d-block fs-20 fw-semibold text-primary">Ene</span>
+                  <span class="d-block fs-12 text-muted">2024</span>
+                </div>
+                <div class="d-flex flex-wrap flex-fill align-items-top justify-content-between">
+                  <div>
+                    <p class="mb-1 text-truncate timeline-widget-content text-wrap">Gisela Arteaga - Boleta B001-453</p>                    
+                    <p class="mb-0 fs-10 lh-1 text-muted">24, oct 2024 10:00 am</p>
+                    <p class="mt-1 fs-12 lh-1 text-muted">Mensaje: <span class="badge bg-warning-transparent ms-2">Este mes estas deseando pagar</span></p>
+                  </div>
+                  <div class="dropdown">
+                    <a aria-label="anchor" href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
+                      <i class="fe fe-more-vertical"></i>
+                    </a>
+                    <ul class="dropdown-menu">                      
+                      <li><a class="dropdown-item" href="javascript:void(0);">Formato Tiket</a></li>
+                      <li><a class="dropdown-item" href="javascript:void(0);">Formato A4</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-widget-list">
+              <div class="d-flex align-items-top">
+                <div class="me-5 text-center">
+                  <span class="d-block fs-20 fw-semibold text-primary">Feb</span>
+                  <span class="d-block fs-12 text-muted">2024</span>
+                </div>
+                <div class="d-flex flex-wrap flex-fill align-items-top justify-content-between">
+                  <div>
+                    <p class="mb-1 text-truncate timeline-widget-content text-wrap">Gisela Arteaga - Boleta B001-453</p>
+                    <p class="mb-0 fs-10 lh-1 text-muted">24, oct 2024 10:00 am</p>
+                  </div>
+                  <div class="dropdown">
+                    <a aria-label="anchor" href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
+                      <i class="fe fe-more-vertical"></i>
+                    </a>
+                    <ul class="dropdown-menu">                      
+                      <li><a class="dropdown-item" href="javascript:void(0);">Formato Tiket</a></li>
+                      <li><a class="dropdown-item" href="javascript:void(0);">Formato A4</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-widget-list">
+              <div class="d-flex align-items-top">
+                <div class="me-5 text-center">
+                  <span class="d-block fs-20 fw-semibold text-primary">Mar</span>
+                  <span class="d-block fs-12 text-muted">2024</span>
+                </div>
+                <div class="d-flex flex-wrap flex-fill align-items-top justify-content-between">
+                  <div>
+                    <p class="mb-1 text-truncate timeline-widget-content text-wrap">Gisela Arteaga - Boleta B001-453</p>
+                    <p class="mb-4 fs-12 lh-1 text-muted">24, oct 2024 10:00 am</p>                    
+                  </div>
+                  <div class="dropdown">
+                    <a aria-label="anchor" href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
+                      <i class="fe fe-more-vertical"></i>
+                    </a>
+                    <ul class="dropdown-menu">                      
+                      <li><a class="dropdown-item" href="javascript:void(0);">Formato Tiket</a></li>
+                      <li><a class="dropdown-item" href="javascript:void(0);">Formato A4</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-widget-list">
+              <div class="d-flex align-items-top">
+                <div class="me-5 text-center">
+                  <span class="d-block fs-20 fw-semibold text-primary">Abr</span>
+                  <span class="d-block fs-12 text-muted">2024</span>
+                </div>
+                <div class="d-flex flex-wrap flex-fill align-items-top justify-content-between">
+                  <div>
+                    <p class="mb-1 text-truncate timeline-widget-content text-wrap">Gisela Arteaga - Boleta B001-453</p>
+                    <p class="mb-0 fs-10 lh-1 text-muted">24, oct 2024 10:00 am</p>
+                  </div>
+                  <div class="dropdown">
+                    <a aria-label="anchor" href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
+                      <i class="fe fe-more-vertical"></i>
+                    </a>
+                    <ul class="dropdown-menu">                      
+                      <li><a class="dropdown-item" href="javascript:void(0);">Formato Tiket</a></li>
+                      <li><a class="dropdown-item" href="javascript:void(0);">Formato A4</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>';
+      break;
+
       case 'listar_tabla_producto':
           
         $rspta = $facturacion->listar_tabla_producto($_GET["tipo_producto"]); 
