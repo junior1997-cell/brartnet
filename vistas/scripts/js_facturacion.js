@@ -143,10 +143,10 @@ function agregarDetalleComprobante(idproducto, tipo_producto, individual) {
                     return response; // Procesa cualquier respuesta adicional si es necesario
                 }
               },
-              messages: { required: 'Campo requerido', remote: `Mes pagado, elija otro mes. <br> <a href="#" class="link-underline-danger" onclick="ver_meses_cobrado(${cont})">Click para ver.</a>`  } 
+              messages: { required: 'Campo requerido', remote: `Mes pagado, elija otro mes. <br> <a href="#" class="text-danger text-decoration-underline" onclick="ver_meses_cobrado(${cont})">Click para ver.</a>`  } 
             }); 
           }else{
-            $(`#valid_periodo_pago_${cont}`).rules('remove', 'required');
+            $(`#valid_periodo_pago_${cont}`).rules('remove', 'required remote');
           }
 
           cont++;   

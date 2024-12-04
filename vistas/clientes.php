@@ -1294,38 +1294,38 @@ if (!isset($_SESSION["user_nombre"])) {
 
 
           <!-- Start::modal-imprimir_ticket -->
-        <div class="modal fade" id="modal_ver_comprobante_deudor">
-          <div class="modal-dialog modal-md modal-dialog-centered text-center" role="document">
-            <div class="modal-content modal-content-demo">
-              <div class="modal-body text-start">
-                <div class="card custom-card">
-                  <div class="card-header">
-                    <div class="card-title">
-                      N° de tu comprobrante <strong class="serie_comp"></strong>.
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <nav class="nav nav-style-6 nav-pills mb-3 nav-justified d-sm-flex d-block" role="tablist">
-                      <a class="nav-link active btn_formato_ticket" data-bs-toggle="tab" role="tab" aria-current="page" href="#nav-products-justified" aria-selected="false">Formato Ticket</a>
-                      <a class="nav-link btn_formato_a4" data-bs-toggle="tab" role="tab" href="#nav-cart-justified" aria-selected="true">Formato A4 </a>
-                    </nav>
-                    <div class="tab-content">
-                      <div class="tab-pane show active text-muted formato_ticket" id="nav-products-justified" role="tabpanel">
+          <div class="modal fade" id="modal_ver_comprobante_deudor">
+            <div class="modal-dialog modal-md modal-dialog-centered text-center" role="document">
+              <div class="modal-content modal-content-demo">
+                <div class="modal-body text-start">
+                  <div class="card custom-card">
+                    <div class="card-header">
+                      <div class="card-title">
+                        N° de tu comprobrante <strong class="serie_comp"></strong>.
                       </div>
-                      <div class="tab-pane  text-muted formato_a4" id="nav-cart-justified" role="tabpanel">
+                    </div>
+                    <div class="card-body">
+                      <nav class="nav nav-style-6 nav-pills mb-3 nav-justified d-sm-flex d-block" role="tablist">
+                        <a class="nav-link active btn_formato_ticket" data-bs-toggle="tab" role="tab" aria-current="page" href="#nav-products-justified" aria-selected="false">Formato Ticket</a>
+                        <a class="nav-link btn_formato_a4" data-bs-toggle="tab" role="tab" href="#nav-cart-justified" aria-selected="true">Formato A4 </a>
+                      </nav>
+                      <div class="tab-content">
+                        <div class="tab-pane show active text-muted formato_ticket" id="nav-products-justified" role="tabpanel">
+                        </div>
+                        <div class="tab-pane  text-muted formato_a4" id="nav-cart-justified" role="tabpanel">
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                  data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Close</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <!-- END::modal-imprimir_ticket -->
+          <!-- END::modal-imprimir_ticket -->
 
         </div>
       </div>
@@ -1363,8 +1363,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Google Maps JS -->
     <script src="../assets/libs/gmaps/gmaps.min.js"></script>
 
-    <script src="scripts/persona_cliente.js?version_jdl=1.35"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.35"></script>
+    <script src="scripts/persona_cliente.js?version_jdl=1.36"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.36"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

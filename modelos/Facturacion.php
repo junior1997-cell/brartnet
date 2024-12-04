@@ -459,12 +459,10 @@
     }
 
     public function ver_meses_cobrado($idcliente){
-      $sql = "SELECT v.idventa, vd.idventa_detalle, v.serie_comprobante, v.numero_comprobante, v.tipo_comprobante, 
-      v.fecha_emision, vd.periodo_pago_format, vd.periodo_pago, vd.pr_nombre,  vd.cantidad, vd.subtotal
-      from venta as v
-      INNER JOIN venta_detalle as vd on vd.idventa = v.idventa
-      WHERE v.idpersona_cliente = $idcliente  and vd.es_cobro='SI' AND v.estado_delete = 1 
-      AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12') ";
+      $sql = "SELECT vw_f.*
+      from vw_facturacion_detalle as vw_f
+      WHERE vw_f.idpersona_cliente = $idcliente  and vw_f.es_cobro='SI' AND vw_f.estado_delete_v = 1 AND vw_f.estado_v='1' 
+      AND  vw_f.sunat_estado = 'ACEPTADA' AND vw_f.tipo_comprobante IN ('01','03','12') ";
       return ejecutarConsultaArray($sql);       
     }
 

@@ -499,7 +499,7 @@
         <!-- Chartjs Chart JS -->
         <script src="../assets/libs/chart.js/chart.min.js"></script>  
 
-        <script src="scripts/escritorio.js?version_jdl=1.35"></script>
+        <script src="scripts/escritorio.js?version_jdl=1.36"></script>
                 
         <?php include("template/custom_switcherjs.php"); ?>
 

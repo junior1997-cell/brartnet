@@ -857,6 +857,30 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::row-1 -->
 
+          <!-- MODAL - VER MESES COBRADOS -->
+          <div class="modal fade modal-effect" id="modal-ver-meses-cobrados" role="dialog" tabindex="-1" aria-labelledby="modal-ver-meses-cobradosLabel">
+            <div class="modal-dialog modal-md modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-ver-meses-cobradosLabel1">Meses Cobrados</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="ver-meses-cobrados">                  
+                  <div class="row" >
+                    <div class="col-lg-12 text-center">
+                      <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                      <h4 class="bx-flashing">Cargando...</h4>
+                    </div>
+                  </div>                  
+                </div>
+                <div class="modal-footer py-2">
+                  <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End::Modal -->
+
           <!-- MODAL - IMPRIMIR -->
           <div class="modal fade modal-effect" id="modal-imprimir-comprobante" tabindex="-1" aria-labelledby="modal-imprimir-comprobante-label" aria-hidden="true">
             <div class="modal-dialog modal-md">
@@ -936,7 +960,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
           </div>
-          <!-- End::Modal-Producto -->
+          <!-- End::Modal -->
 
           <!-- MODAL - DETALLE venta -->
           <div class="modal fade modal-effect" id="modal-detalle-venta" tabindex="-1" aria-labelledby="modal-detalle-ventaLabel" aria-hidden="true">
@@ -970,7 +994,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
           </div> 
-          <!-- End::Modal-Detalle-venta -->          
+          <!-- End::Modal -->          
           
           <!-- MODAL - AGREGAR PRODUCTO - charge p1 -->
           <div class="modal fade modal-effect" id="modal-agregar-producto" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-productoLabel">
@@ -1125,31 +1149,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
           </div>
-          <!-- End::Modal-Agregar-Producto -->
-
-          <!-- MODAL - AGREGAR PRODUCTO - charge p1 -->
-          <div class="modal fade modal-effect" id="modal-ver-meses-cobrados" role="dialog" tabindex="-1" aria-labelledby="modal-ver-meses-cobradosLabel">
-            <div class="modal-dialog modal-md modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h6 class="modal-title" id="modal-ver-meses-cobradosLabel1">Meses Cobrados</h6>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="ver-meses-cobrados">                  
-                  <div class="row" >
-                    <div class="col-lg-12 text-center">
-                      <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
-                      <h4 class="bx-flashing">Cargando...</h4>
-                    </div>
-                  </div>                  
-                </div>
-                <div class="modal-footer py-2">
-                  <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- End::Modal-Agregar-Producto -->
+          <!-- End::Modal -->          
 
         </div>
       </div>
@@ -1187,8 +1187,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
     
-    <script src="scripts/facturacion.js?version_jdl=1.35"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.35"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.36"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.36"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

@@ -287,7 +287,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
     <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>    
     
-    <script src="scripts/retraso_cobro.js?version_jdl=1.35"></script>
+    <script src="scripts/retraso_cobro.js?version_jdl=1.36"></script>
     
     <script>
       $(function() {

@@ -564,7 +564,8 @@ function ver_meses_cobrado(idcont) {
   console.log(idcont);
   $("#modal-ver-meses-cobrados").modal("show");
   var id_cliente = $("#f_idpersona_cliente").val() == null || $("#f_idpersona_cliente").val() == '' ? 0 : $("#f_idpersona_cliente").val();
-  $.get(`../ajax/facturacion.php?op=ver_meses_cobrado`, {idcliente:id_cliente}, function (e, textStatus, jqXHR) {
+  var id_periodo = $(`#valid_periodo_pago_${idcont}`).val() == null || $(`#valid_periodo_pago_${idcont}`).val() == '' ? 0 : $(`#valid_periodo_pago_${idcont}`).val();
+  $.get(`../ajax/facturacion.php?op=ver_meses_cobrado`, {idcliente:id_cliente, id_periodo: id_periodo}, function (e, textStatus, jqXHR) {
     $('#ver-meses-cobrados').html(e);
       
   });

@@ -510,101 +510,35 @@ if (!isset($_SESSION["user_nombre"])) {
       case 'ver_meses_cobrado':
         $rspta=$facturacion->ver_meses_cobrado($_GET["idcliente"]);
         echo '<div class="card-body">
-          <ul class="list-unstyled timeline-widget mb-0 my-3">
-            <li class="timeline-widget-list">
-              <div class="d-flex align-items-top">
-                <div class="me-5 text-center">
-                  <span class="d-block fs-20 fw-semibold text-primary">Ene</span>
-                  <span class="d-block fs-12 text-muted">2024</span>
-                </div>
-                <div class="d-flex flex-wrap flex-fill align-items-top justify-content-between">
-                  <div>
-                    <p class="mb-1 text-truncate timeline-widget-content text-wrap">Gisela Arteaga - Boleta B001-453</p>                    
-                    <p class="mb-0 fs-10 lh-1 text-muted">24, oct 2024 10:00 am</p>
-                    <p class="mt-1 fs-12 lh-1 text-muted">Mensaje: <span class="badge bg-warning-transparent ms-2">Este mes estas deseando pagar</span></p>
+          <ul class="list-unstyled timeline-widget mb-0 my-3">';
+            foreach ($rspta['data'] as $key => $val) {               
+              echo '<li class="timeline-widget-list">
+                <div class="d-flex align-items-top">
+                  <div class="me-5 text-center">
+                    <span class="d-block fs-20 fw-semibold text-primary">'.$val['periodo_pago_month_recorte'].'</span>
+                    <span class="d-block fs-12 text-muted">'.$val['periodo_pago_year'].'</span>
                   </div>
-                  <div class="dropdown">
-                    <a aria-label="anchor" href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
-                      <i class="fe fe-more-vertical"></i>
-                    </a>
-                    <ul class="dropdown-menu">                      
-                      <li><a class="dropdown-item" href="javascript:void(0);">Formato Tiket</a></li>
-                      <li><a class="dropdown-item" href="javascript:void(0);">Formato A4</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="timeline-widget-list">
-              <div class="d-flex align-items-top">
-                <div class="me-5 text-center">
-                  <span class="d-block fs-20 fw-semibold text-primary">Feb</span>
-                  <span class="d-block fs-12 text-muted">2024</span>
-                </div>
-                <div class="d-flex flex-wrap flex-fill align-items-top justify-content-between">
-                  <div>
-                    <p class="mb-1 text-truncate timeline-widget-content text-wrap">Gisela Arteaga - Boleta B001-453</p>
-                    <p class="mb-0 fs-10 lh-1 text-muted">24, oct 2024 10:00 am</p>
-                  </div>
-                  <div class="dropdown">
-                    <a aria-label="anchor" href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
-                      <i class="fe fe-more-vertical"></i>
-                    </a>
-                    <ul class="dropdown-menu">                      
-                      <li><a class="dropdown-item" href="javascript:void(0);">Formato Tiket</a></li>
-                      <li><a class="dropdown-item" href="javascript:void(0);">Formato A4</a></li>
-                    </ul>
+                  <div class="d-flex flex-wrap flex-fill align-items-top justify-content-between">
+                    <div>
+                      <p class="mb-1 text-truncate timeline-widget-content text-wrap">'.$val['user_en_atencion'].' - '.$val['tipo_comprobante_v2'].' <span class="badge bg-success-transparent fs-12">'.$val['serie_comprobante'].'-'.$val['numero_comprobante'].'</span></p>                    
+                      <p class="mb-0 fs-10 lh-1 text-muted">'.$val['fecha_emision_format_v2'].'</p>'.
+                      ($_GET["id_periodo"] == $val['periodo_pago'] ? '<p class="mt-1 fs-12 lh-1 text-muted">Mensaje: <span class="badge bg-warning-transparent ms-2">Este mes estas deseando pagar</span></p>' : '').
+                    '</div>
+                    <div class="dropdown">
+                      <a aria-label="anchor" href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
+                        <i class="fe fe-more-vertical"></i>
+                      </a>
+                      <ul class="dropdown-menu">                      
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_ticket(' . $val['idventa'] .', \''.$val['tipo_comprobante'] . '\');"><i class="ti ti-checkup-list"></i> Formato Tiket</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_formato_a4_completo(' . $val['idventa'] .', \''.$val['tipo_comprobante'] . '\');"><i class="ti ti-checkup-list"></i> Formato A4</a></li>
+                        '.( $val['tipo_comprobante'] == '12' ? '<li><a class="dropdown-item text-danger text-nowrap" href="javascript:void(0);" onclick="eliminar_papelera_venta(' . $val['idventa'] .', \''. '<b>'.$val['tipo_comprobante_v2'].' </b>' .  $val['serie_comprobante'] . '-' . $val['numero_comprobante'] . '\');" ><i class="bx bx-trash"></i> Eliminar o papelera </a></li>' : '').'  
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
-            <li class="timeline-widget-list">
-              <div class="d-flex align-items-top">
-                <div class="me-5 text-center">
-                  <span class="d-block fs-20 fw-semibold text-primary">Mar</span>
-                  <span class="d-block fs-12 text-muted">2024</span>
-                </div>
-                <div class="d-flex flex-wrap flex-fill align-items-top justify-content-between">
-                  <div>
-                    <p class="mb-1 text-truncate timeline-widget-content text-wrap">Gisela Arteaga - Boleta B001-453</p>
-                    <p class="mb-4 fs-12 lh-1 text-muted">24, oct 2024 10:00 am</p>                    
-                  </div>
-                  <div class="dropdown">
-                    <a aria-label="anchor" href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
-                      <i class="fe fe-more-vertical"></i>
-                    </a>
-                    <ul class="dropdown-menu">                      
-                      <li><a class="dropdown-item" href="javascript:void(0);">Formato Tiket</a></li>
-                      <li><a class="dropdown-item" href="javascript:void(0);">Formato A4</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="timeline-widget-list">
-              <div class="d-flex align-items-top">
-                <div class="me-5 text-center">
-                  <span class="d-block fs-20 fw-semibold text-primary">Abr</span>
-                  <span class="d-block fs-12 text-muted">2024</span>
-                </div>
-                <div class="d-flex flex-wrap flex-fill align-items-top justify-content-between">
-                  <div>
-                    <p class="mb-1 text-truncate timeline-widget-content text-wrap">Gisela Arteaga - Boleta B001-453</p>
-                    <p class="mb-0 fs-10 lh-1 text-muted">24, oct 2024 10:00 am</p>
-                  </div>
-                  <div class="dropdown">
-                    <a aria-label="anchor" href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
-                      <i class="fe fe-more-vertical"></i>
-                    </a>
-                    <ul class="dropdown-menu">                      
-                      <li><a class="dropdown-item" href="javascript:void(0);">Formato Tiket</a></li>
-                      <li><a class="dropdown-item" href="javascript:void(0);">Formato A4</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
+              </li>';
+            }              
+          echo'</ul>
         </div>';
       break;
 
