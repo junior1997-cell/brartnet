@@ -152,7 +152,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <?php include("template/scripts.php"); ?>
     <?php include("template/custom_switcherjs.php"); ?>
 
-    <script src="scripts/documento_de_identidad.js?version_jdl=1.36"></script>
+    <script src="scripts/documento_de_identidad.js?version_jdl=1.37"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

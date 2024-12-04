@@ -231,7 +231,7 @@ function listar_producto_x_codigo() {
               <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${e.data.um_abreviatura}">
             </td>
 
-            <td class="py-1">       
+            <td class="py-1 form-group">       
               <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(e.data.tipo == 'PR' ? 'NO' : 'SI' )}">  
               <input type="${(e.data.tipo == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
               <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
@@ -286,9 +286,21 @@ function listar_producto_x_codigo() {
           });
 
           if (e.data.tipo == 'SR') {
-            $(`#valid_periodo_pago_${cont}`).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(`#valid_periodo_pago_${cont}`).rules('add', { required: true, 
+              remote: {
+                url: "../ajax/facturacion.php?op=validar_mes_cobrado",
+                type: "get",
+                data: {
+                  periodo_pago: function () { return $(`#valid_periodo_pago_${cont}`).val(); },
+                  idcliente: function () { return $("#f_idpersona_cliente").val(); }
+                },
+                dataFilter: function(response) {
+                    return response; // Procesa cualquier respuesta adicional si es necesario
+                }
+              },
+              messages: { required: 'Campo requerido', remote: `Mes pagado, elija otro mes. <br> <a href="#" class="text-danger text-decoration-underline" onclick="ver_meses_cobrado(${cont})">Click para ver.</a>`  }  }); 
           }else{
-            $(`#valid_periodo_pago_${cont}`).rules('remove', 'required');
+            $(`#valid_periodo_pago_${cont}`).rules('remove', 'required remote');
           }
 
           cont++;  

@@ -315,7 +315,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[] = array(
               "0" => $cont++,
               "1" =>  $value['cliente_nombre_completo_recorte'] .'<br>'. '<span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> ',             
-              "2" => '<span class="badge bg-outline-danger fs-12">'. $value['avance'] .'</span>',              
+              "2" => '<button class="btn btn-icon btn-sm border-danger btn-danger-light fs-12" onclick="detalle_tab_cliente(\'detalle-cliente-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle">'. $value['avance'] .'</button>',              
              
               "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="detalle_tab_cliente(\'detalle-cliente-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle"><i class="ri-eye-line"></i></button>                
                 <div class="btn-group ">
@@ -364,7 +364,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[] = array(
               "0" => $cont++,
               "1" =>  $value['cliente_nombre_completo_recorte'] .'<br>'. '<span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> ',             
-              "2" => '<span class="badge bg-outline-success fs-12">'. $value['cant_cobrado'] .'</span>',              
+              "2" => '<button class="btn btn-icon btn-sm border-success btn-success-light fs-12" onclick="detalle_tab_cliente(\'detalle-cliente-no-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle">'. $value['cant_cobrado'] .'</button>',              
              
               "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="detalle_tab_cliente(\'detalle-cliente-no-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle"><i class="ri-eye-line"></i></button>                
                 <div class="btn-group ">

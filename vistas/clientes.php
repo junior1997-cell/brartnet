@@ -1213,6 +1213,30 @@ if (!isset($_SESSION["user_nombre"])) {
           </div>
           <!-- End::Modal-pago-cliente-x-mes -->
 
+          <!-- MODAL - VER MESES COBRADOS -->
+          <div class="modal fade modal-effect" id="modal-ver-meses-cobrados" role="dialog" tabindex="-1" aria-labelledby="modal-ver-meses-cobradosLabel">
+            <div class="modal-dialog modal-md modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="modal-ver-meses-cobradosLabel1">Meses Cobrados</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="ver-meses-cobrados">                  
+                  <div class="row" >
+                    <div class="col-lg-12 text-center">
+                      <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                      <h4 class="bx-flashing">Cargando...</h4>
+                    </div>
+                  </div>                  
+                </div>
+                <div class="modal-footer py-2">
+                  <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End::Modal -->
+
           <!-- Start::modal-imprimir_ticket -->
           <div class="modal fade" id="modal-imprimir-comprobante" tabindex="-1" aria-labelledby="modal-imprimir-comprobante-Label" aria-hidden="true">
             <div class="modal-dialog modal-md" >
@@ -1292,8 +1316,7 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
           </div> 
 
-
-          <!-- Start::modal-imprimir_ticket -->
+          <!-- MODAL - VER DETALLE COMPROBANTE -->
           <div class="modal fade" id="modal_ver_comprobante_deudor">
             <div class="modal-dialog modal-md modal-dialog-centered text-center" role="document">
               <div class="modal-content modal-content-demo">
@@ -1301,7 +1324,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="card custom-card">
                     <div class="card-header">
                       <div class="card-title">
-                        N° de tu comprobrante <strong class="serie_comp"></strong>.
+                        Formatos de Comprobante <strong class="serie_comp"></strong>.
                       </div>
                     </div>
                     <div class="card-body">
@@ -1325,7 +1348,7 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>
             </div>
           </div>
-          <!-- END::modal-imprimir_ticket -->
+          <!-- END::modal -->
 
         </div>
       </div>
@@ -1363,8 +1386,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Google Maps JS -->
     <script src="../assets/libs/gmaps/gmaps.min.js"></script>
 
-    <script src="scripts/persona_cliente.js?version_jdl=1.36"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.36"></script>
+    <script src="scripts/persona_cliente.js?version_jdl=1.37"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.37"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();
