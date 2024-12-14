@@ -1696,6 +1696,21 @@ function printIframe(id) {
       
   );
 
+  // Configura opciones globales para FilePond
+  FilePond.setOptions({
+    allowMultiple: true, // Permitir subir múltiples archivos
+    maxFiles: 6, // Máximo número de archivos permitidos
+    maxFileSize: '3MB', // Tamaño máximo por archivo
+    acceptedFileTypes: ['image/*', 'application/pdf'], // Tipos permitidos
+    // server: {
+    //     process: '/ruta-del-servidor', // URL donde se enviarán los archivos
+    //     revert: null, // URL para revertir la subida (opcional)
+    //     headers: {
+    //         'X-CSRF-TOKEN': csrfToken // Si usas CSRF, asegúrate de pasar el token aquí
+    //     }
+    // }
+  });
+
   /* multiple upload */
   const MultipleElement = document.querySelector('.multiple-filepond');
   file_pond_mp_comprobante = FilePond.create(MultipleElement, FilePond_Facturacion_LabelsES );

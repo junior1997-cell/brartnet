@@ -1141,7 +1141,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <!-- Baucher -->
                               <div class="col-sm-6 col-lg-6 col-xl-6 pt-3" >
                                 <div class="form-group">                              
-                                  <input type="file" class="multiple-filepond" name="f_mp_comprobante" id="f_mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" accept="image/*, application/pdf" >                             
+                                  <input type="file" class="multiple-filepond" name="f_mp_comprobante[]" id="f_mp_comprobante" data-allow-reorder="true" data-max-file-size="3MB" data-max-files="6" accept="image/*, application/pdf" >                             
                                   <input type="hidden" name="f_mp_comprobante_old" id="f_mp_comprobante_old">
                                 </div>
                               </div>

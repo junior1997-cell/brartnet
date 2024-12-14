@@ -92,7 +92,7 @@
         $tipo_v = "TICKET";
       }else if ($tipo_comprobante == '07') {
         $tipo_v = "NOTA DE CRÉDITO";         
-        $metodo_pago= ""; $total_recibido= ""; $mp_monto= ""; $total_vuelto= ""; $mp_serie_comprobante = "";$mp_comprobante = "";
+        $metodo_pago= ""; $total_recibido= ""; $mp_monto= ""; $total_vuelto= ""; $mp_serie_comprobante = "";$mp_comprobante = [];
         $usar_anticipo= "NO"; $ua_monto_disponible= ""; $ua_monto_usado= "";        
       }else if ($tipo_comprobante == '03') {
         $tipo_v = "BOLETA";
@@ -120,7 +120,7 @@
         venta_subtotal, venta_descuento, venta_igv, venta_total, metodo_pago, mp_serie_comprobante, mp_comprobante, mp_monto, venta_credito, vc_numero_operacion, 
         vc_fecha_proximo_pago, total_recibido, total_vuelto, usar_anticipo, ua_monto_disponible, ua_monto_usado, nc_motivo_nota, nc_tipo_comprobante, nc_serie_y_numero, cot_tiempo_entrega, cot_validez, cot_estado, observacion_documento) 
         VALUES ('$idpersona_cliente', '$idperiodo_contable', '$nc_idventa', '$crear_y_emitir', '$idsunat_c01', '$tipo_comprobante', '$serie_comprobante', '$impuesto', '$venta_subtotal', '$venta_descuento',
-        '$venta_igv','$venta_total','$metodo_pago','$mp_serie_comprobante','$mp_comprobante','$mp_monto','','',CURRENT_TIMESTAMP, '$total_recibido', '$total_vuelto',
+        '$venta_igv','$venta_total','$metodo_pago','$mp_serie_comprobante','','$mp_monto','','',CURRENT_TIMESTAMP, '$total_recibido', '$total_vuelto',
         '$usar_anticipo','$ua_monto_disponible','$ua_monto_usado', '$nc_motivo_anulacion', '$nc_tipo_comprobante', '$nc_serie_y_numero', '$tiempo_entrega', '$validez_cotizacion', '$cot_estado', '$observacion_documento')"; 
         $newdata = ejecutarConsulta_retornarID($sql_1, 'C'); if ($newdata['status'] == false) { return  $newdata;}
         $id = $newdata['data'];
@@ -138,6 +138,15 @@
             $i = $i + 1;
           }
         }
+
+        if ( !empty($mp_comprobante) ) {
+          foreach ($mp_comprobante as $key => $val) {
+            $sql_3 = "INSERT INTO venta_metodo_pago(idventa, metodo_pago, monto, vuelto, codigo_voucher, comprobante)
+            VALUES ('$id', '', 0, 0, '', '$val');";
+            $comprobante_new =  ejecutarConsulta_retornarID($sql_3, 'C'); if ($comprobante_new['status'] == false) { return  $comprobante_new;}    
+          }
+        }   
+
         return $newdata;
       } else {
 
@@ -198,6 +207,11 @@
 
     public function mostrar_venta($id){
       $sql = "SELECT * FROM venta WHERE idventa = '$id'";
+      return ejecutarConsultaSimpleFila($sql);
+    }
+
+    public function mostrar_metodo_pago($id){
+      $sql = "SELECT * FROM venta_metodo_pago WHERE idventa = '$id'";
       return ejecutarConsultaSimpleFila($sql);
     }
 

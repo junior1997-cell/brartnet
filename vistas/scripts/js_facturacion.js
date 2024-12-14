@@ -468,7 +468,7 @@ function ver_editar_venta(idventa) {
 
         $("#f_total_recibido").val(e.data.venta.total_recibido);
         $("#f_metodo_pago").val(e.data.venta.metodo_pago).trigger('change');     
-        $("#f_mp_monto").val(e.data.venta.mp_monto);    
+        
         $("#f_mp_serie_comprobante").val(e.data.venta.mp_serie_comprobante);  
 
         if (e.data.venta.mp_comprobante == null || e.data.venta.mp_comprobante == '') {   } else {          
@@ -953,47 +953,37 @@ function update_price() {
   toastr_success("Actualizado!!",`Precio Actualizado.`, 700);
 }
 
-function capturar_pago_venta() {   
+// .....::::::::::::::::::::::::::::::::::::: S E C C I O N   M E T O D O   D E   P A G O   :::::::::::::::::::::::::::::::::::::::..
+
+function capturar_pago_venta(id) {   
   
-  var metodo_pago = $("#f_metodo_pago").val() == null || $("#f_metodo_pago").val() == "" ? "" : $("#f_metodo_pago").val() ;
-  $(".span-code-baucher-pago").html(`(${metodo_pago == null ? 'Seleccione metodo pago' : metodo_pago })`);
-  $(".span-tipo-pago").html(`(${metodo_pago == null ? 'Seleccione' : metodo_pago })`);
-  $("#f_mp_monto").val(0);
+  var metodo_pago = $(`#f_metodo_pago_${id}`).val() == null || $(`#f_metodo_pago_${id}`).val() == "" ? "" : $(`#f_metodo_pago_${id}`).val() ;
+  $(`.span-code-baucher-pago-${id}`).html(`(${metodo_pago == null ? 'Seleccione metodo pago' : metodo_pago })`);  
+  
   if (metodo_pago == null || metodo_pago == '' || metodo_pago == "EFECTIVO" || metodo_pago == "CREDITO") {
-    $("#content-metodo-pago").hide();
-    $("#content-mp-monto").hide();  
-    if (form_validate_facturacion) { $("#f_mp_monto").rules('remove', 'required'); }    
+    $(`#content-metodo-pago-${id}`).hide();    
   } else if ( metodo_pago == "MIXTO" ) {
-    $("#content-metodo-pago").show();
-    if (detalles > 0) { $("#content-mp-monto").show(); }   
-    if (form_validate_facturacion) { $("#f_mp_monto").rules('add', { required: true, messages: {  required: "Campo requerido" } }); }         
+    $(`#content-metodo-pago-${id}`).show();       
   } else {    
-    $("#content-metodo-pago").show();      
-    $("#content-mp-monto").hide();
-    if (form_validate_facturacion) { $("#f_mp_monto").rules('remove', 'required'); }
+    $(`#content-metodo-pago-${id}`).show();    
   }  
   calcular_vuelto();
   if (form_validate_facturacion) { $("#form-facturacion").valid();}
 }
 
-function calcular_vuelto() {
-  var contado     = $('#f_total_recibido').val()  == null || $('#f_total_recibido').val() == '' ? 0 : parseFloat($('#f_total_recibido').val());  
-  var mixto       = $('#f_mp_monto').val()        == null || $('#f_mp_monto').val()       == '' ? 0 : parseFloat($('#f_mp_monto').val());
+function calcular_vuelto(id) {
+  var contado     = $(`#f_total_recibido_${id}`).val()  == null || $(`#f_total_recibido_${id}`).val() == '' ? 0 : parseFloat($(`#f_total_recibido_${id}`).val());   
   var venta_total = $('#f_venta_total').val()     == null || $('#f_venta_total').val()    == '' ? 0 : parseFloat($('#f_venta_total').val());
   
-  if ($('#f_total_recibido').val() != '' || $('#f_mp_monto').val() != '' ) { 
-    if ($("#f_metodo_pago").val() == "MIXTO") {    
-      var vuelto_1 = redondearExp(( ( contado + mixto ) - venta_total ), 2); 
+  if ($(`#f_total_recibido_${id}`).val() != '' ) { 
+    if ($(`#f_metodo_pago_${id}`).val() == "MIXTO") {    
       
-      $('#f_total_vuelto').val(vuelto_1);
-      vuelto_1 < 0 ? $('.f_total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.f_total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
-      vuelto_1 < 0 ? $('.falta_o_completo').html('(falta)').addClass('text-danger').removeClass('text-success') : $('.falta_o_completo').html('(completo)').addClass('text-success').removeClass('text-danger') ;
     } else {    
       var vuelto_2 = redondearExp((contado - venta_total), 2) ; 
       
-      $('#f_total_vuelto').val(vuelto_2);
-      vuelto_2 < 0 ? $('.f_total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.f_total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
-      vuelto_2 < 0 ? $('.falta_o_completo').html('(falta)').addClass('text-danger').removeClass('text-success') : $('.falta_o_completo').html('(completo)').addClass('text-success').removeClass('text-danger') ;
+      $(`#f_total_vuelto_${id}`).val(vuelto_2);
+      vuelto_2 < 0 ? $(`.f_total_vuelto_${id}`).addClass('bg-danger').removeClass('bg-success') : $(`.f_total_vuelto_${id}`).addClass('bg-success').removeClass('bg-danger') ;
+      vuelto_2 < 0 ? $(`.falta_o_completo_${id}`).html('(falta)').addClass('text-danger').removeClass('text-success') : $(`.falta_o_completo_${id}`).html('(completo)').addClass('text-success').removeClass('text-danger') ;
     } 
   }  
   if (form_validate_facturacion) { $("#form-facturacion").valid();}
@@ -1001,7 +991,92 @@ function calcular_vuelto() {
 
 function pago_rapido(val) {
   var pago_monto = $(val).text(); console.log(pago_monto);
-  $('#f_total_recibido').val(pago_monto);
-  calcular_vuelto();
+  $('#f_total_recibido_1').val(pago_monto);
+  calcular_vuelto(1);
   $("#form-facturacion").valid();
+}
+
+var count_mp = 2;
+function agregar_new_mp() {
+
+  $('#html-metodos-de-pagos').append(`
+    <div class="col-lg-12 htlm-mp-lista-${count_mp}">
+      <div class="row">
+        <div class="col-lg-12 text-center pt-1">
+          <button type="button" class="btn btn-danger-light label-btn btn-sm rounded-pill btn-wave" onclick="eliminar_mp(${count_mp})"> <i class="bi bi-trash3 label-btn-icon me-2"></i> <span class="ms-4">Eliminar</span>  </button>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+          <div class="form-group">
+            <label for="f_metodo_pago_${count_mp}" class="form-label">
+              <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_f_metodo_pago(${count_mp});" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+              Método de pago
+              <span class="charge_f_metodo_pago_${count_mp}"></span>
+            </label>
+            <select class="form-control form-control-sm" name="f_metodo_pago[]" id="f_metodo_pago_${count_mp}" onchange="capturar_pago_venta(${count_mp});">
+              <!-- Aqui se listara las opciones -->
+            </select>
+          </div>
+        </div>                                 
+
+        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+          <div class="form-group">
+            <label for="f_total_recibido_${count_mp}" class="form-label">Monto a pagar</label>
+            <input type="number" name="f_total_recibido[]" id="f_total_recibido_${count_mp}" class="form-control form-control-sm" onClick="this.select();" onchange="calcular_vuelto(${count_mp});" onkeyup="calcular_vuelto(${count_mp});" placeholder="Ingrese monto a pagar.">
+          </div>
+        </div>                                    
+
+        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+          <div class="form-group">
+            <label for="f_total_vuelto_${count_mp}" class="form-label">Vuelto <small class="falta_o_completo_${count_mp}"></small></label>
+            <input type="number" name="f_total_vuelto[]" id="f_total_vuelto_${count_mp}" class="form-control-plaintext form-control-sm px-2 f_total_vuelto" readonly placeholder="Ingrese monto a pagar.">
+          </div>
+        </div>
+
+        <div class="col-12" id="content-metodo-pago-2">
+          <div class="row">
+            <!-- Código de Baucher -->
+            <div class="col-sm-6 col-lg-6 col-xl-6 pt-3">
+              <div class="form-group">
+                <label for="f_mp_serie_comprobante_${count_mp}">Código de Baucher <span class="span-code-baucher-pago-2"></span> </label>
+                <input type="text" name="f_mp_serie_comprobante[]" id="f_mp_serie_comprobante_${count_mp}" class="form-control" onClick="this.select();" placeholder="Codigo de baucher" />
+              </div>
+            </div>
+            <!-- Baucher -->
+            <div class="col-sm-6 col-lg-6 col-xl-6 pt-3">
+              <div class="form-group">
+                <input type="file" class="multiple-filepond" multiple name="f_mp_comprobante[]" id="f_mp_comprobante_${count_mp}" data-allow-reorder="true" data-max-file-size="3MB" accept="image/*, application/pdf">
+                <input type="hidden" name="f_mp_comprobante_old_${count_mp}" id="f_mp_comprobante_old_${count_mp}">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12"> <div class="border-bottom border-block-end-dashed py-2"></div></div>
+      </div>                                  
+    </div>
+  `);
+
+  lista_select2("../ajax/facturacion.php?op=select2_banco", `#f_metodo_pago_${count_mp}`, null, `charge_f_metodo_pago_${count_mp}`);  
+  $(`#f_metodo_pago_${count_mp}`).select2({  templateResult: templateBanco, templateSelection: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  
+
+  const MultipleElement = document.querySelector(`#f_mp_comprobante_${count_mp}`);
+  file_pond_mp_comprobante = FilePond.create(MultipleElement, FilePond_Facturacion_LabelsES );
+
+  count_mp++;
+}
+
+function eliminar_mp(id) {
+  $(`.htlm-mp-lista-${id}`).css({
+    transition: 'transform 0.5s ease, opacity 0.5s ease',   // Transición suave para el cambio de tamaño y opacidad
+    opacity: 0,                                            // Reduce la opacidad para desaparecer
+    transform: 'scale(0.1)',                                 // Reduce el tamaño uniformemente en ambas direcciones (X y Y)
+    transformOrigin: 'bottom'                               // El punto de escala es desde la parte inferior
+  });
+
+  setTimeout(function () {
+    $(`.htlm-mp-lista-${id}`).remove();                     // Elimina el elemento después de la animación
+  }, 500);                                                   // Tiempo de espera igual al de la animación
+
+
 }

@@ -39,7 +39,7 @@ async function init(){
 
   lista_select2("../ajax/facturacion.php?op=select2_cliente", '#f_idpersona_cliente', null);
   lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#f_nc_motivo_anulacion', '01');  
-  lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago', null, 'charge_f_metodo_pago');  
+  lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago_1', null, 'charge_f_metodo_pago_1');  
 
   lista_select2("../ajax/facturacion.php?op=select2_periodo_contable", '#filtro-periodo-facturado', moment().format('YYYY-MM'));  
 
@@ -59,7 +59,8 @@ async function init(){
   $("#f_nc_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#f_nc_serie_y_numero").select2({ templateResult: templateSerieNumero, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#f_nc_motivo_anulacion").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
-  $("#f_metodo_pago").select2({  templateResult: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#f_metodo_pago_1").select2({  templateResult: templateBanco, templateSelection: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  
 
   $("#filtro_cliente").select2({ templateResult: templateCliente, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_comprobante").select2({ templateResult: templateComprobante, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -275,13 +276,12 @@ function limpiar_form_venta(){
 
   $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
   $("#f_idpersona_cliente").val('').trigger('change'); 
-  $("#f_metodo_pago").val('').trigger('change'); 
+  $("#f_metodo_pago_1").val('').trigger('change'); 
   $("#f_observacion_documento").val(''); 
   $("#f_periodo_pago").val('');
   $("#codigob").val('');  
   
   $("#f_total_recibido").val(0);
-  $("#f_mp_monto").val(0);
   $("#f_total_vuelto").val(0);
   $("#f_ua_monto_usado").val('');
   $("#f_mp_serie_comprobante").val('');
@@ -323,13 +323,12 @@ function limpiar_form_venta_nc(){
   $("#f_nc_idventa").val('0');
   
   $("#f_idpersona_cliente").val('').trigger('change'); 
-  $("#f_metodo_pago").val('').trigger('change'); 
+  $("#f_metodo_pago_1").val('').trigger('change'); 
   $("#f_observacion_documento").val(''); 
   $("#f_periodo_pago").val('');
   $("#codigob").val('');  
   
   $("#f_total_recibido").val(0);
-  $("#f_mp_monto").val(0);
   $("#f_total_vuelto").val(0);
   $("#f_ua_monto_usado").val('');
   $("#f_mp_serie_comprobante").val('');
@@ -437,6 +436,11 @@ function listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente
 
 function guardar_editar_facturacion(e) {
   var formData = new FormData($("#form-facturacion")[0]);  
+
+  // Verificar qué datos se enviarán
+  // for (let [key, value] of formData.entries()) {
+  //   console.log(`${key}: ${value}`);
+  // }
 
   Swal.fire({
     title: "¿Está seguro que deseas guardar esta Venta?",
@@ -1253,8 +1257,7 @@ $(function(){
       f_serie_comprobante:      { required: true, },
       f_observacion_documento:  { minlength: 4 },      
       f_metodo_pago:            { required: true},
-      f_total_recibido:         { required: true, min: 0, step: 0.01},      
-      f_mp_monto:               { required: true, min: 0, step: 0.01},
+      f_total_recibido:         { required: true, min: 0, step: 0.01},           
       f_total_vuelto:           { required: true, step: 0.01},
       f_ua_monto_usado:         { required: true, min: 1, step: 0.01},
       f_mp_serie_comprobante:   { minlength: 4},
@@ -1266,8 +1269,7 @@ $(function(){
       f_serie_comprobante:      { required: "Campo requerido", },
       f_observacion_documento:  { minlength: "Minimo {0} caracteres", },
       // mp_comprobante:         { extension: "Ingrese imagenes validas ( {0} )", },
-      f_total_recibido:         { step: "Solo 2 decimales."},      
-      f_mp_monto:               { step: "Solo 2 decimales."},
+      f_total_recibido:         { step: "Solo 2 decimales."},       
       f_total_vuelto:           { step: "Solo 2 decimales."},
       f_ua_monto_usado:         { step: "Solo 2 decimales."},
     },
@@ -1448,7 +1450,7 @@ function filtrar_solo_estado_sunat(estado, etiqueta) {
 function reload_f_idpersona_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_cliente", '#f_idpersona_cliente', null, '.charge_f_idpersona_cliente'); }
 function reload_f_nc_serie_y_numero(){ buscar_comprobante_anular() }
 function reload_f_nc_motivo_anulacion(){ lista_select2("../ajax/facturacion.php?op=select2_codigo_x_anulacion_comprobante", '#f_nc_motivo_anulacion', '01', '.charge_f_nc_motivo_anulacion'); }
-function reload_f_metodo_pago(){ lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago', null, 'charge_f_metodo_pago');   }
+function reload_f_metodo_pago(id){ lista_select2("../ajax/facturacion.php?op=select2_banco", `#f_metodo_pago_${id}`, null, `charge_f_metodo_pago_${id}`);   }
 
 function reload_filtro_fecha_i(){ $('#filtro_fecha_i').val("").trigger("change") } 
 function reload_filtro_fecha_f(){ $('#filtro_fecha_f').val("").trigger("change") } 
@@ -1489,16 +1491,18 @@ function ver_comprobante_pago(id_venta) {
   $('#modal-ver-imgenes').modal('show');
   $(".html_modal_ver_imgenes").html(`<div class="row" > <div class="col-lg-12 text-center"> <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div> </div>`);
 
-  $.post("../ajax/facturacion.php?op=mostrar_venta", { idventa: id_venta },  function (e, status) {
-    e = JSON.parse(e);
+  $.getJSON("../ajax/facturacion.php?op=mostrar_metodo_pago", { idventa: id_venta },  function (e, status) {
+   
     if (e.status == true) {
-      if (e.data.mp_comprobante == "" || e.data.mp_comprobante == null) { } else {
-        var nombre_comprobante = `${e.data.metodo_pago} - ${e.data.mp_serie_comprobante}`;
-        var file_comprobante = e.data.mp_comprobante ==''||  e.data.mp_comprobante == null ? '' : e.data.mp_comprobante;
-        $('.title-ver-imgenes').html(nombre_comprobante);
-        $(".html_modal_ver_imgenes").html(doc_view_download_expand(file_comprobante, 'assets/modulo/facturacion/ticket',nombre_comprobante , '100%', '400px'));
-        $('.jq_image_zoom').zoom({ on: 'grab' });
-      }
+      e.data.forEach((val, key) => {
+        if (val.comprobante == "" || val.comprobante == null) { } else {
+          var nombre_comprobante = `${val.metodo_pago} - ${val.mp_serie_comprobante}`;
+          var file_comprobante = val.comprobante ==''||  val.comprobante == null ? '' : val.comprobante;
+          $('.title-ver-imgenes').html(nombre_comprobante);
+          $(".html_modal_ver_imgenes").html(doc_view_download_expand(file_comprobante, 'assets/modulo/facturacion/ticket',nombre_comprobante , '100%', '400px'));
+          $('.jq_image_zoom').zoom({ on: 'grab' });
+        }
+      });      
     } else { ver_errores(e); }
   }).fail( function(e) { ver_errores(e); } );
   
@@ -1523,19 +1527,34 @@ function ver_comprobante_pago(id_venta) {
       
   );
 
+  // Configura opciones globales para FilePond
+  FilePond.setOptions({
+    allowMultiple: false, // Permitir subir múltiples archivos
+    maxFiles: 1, // Máximo número de archivos permitidos
+    maxFileSize: '3MB', // Tamaño máximo por archivo
+    acceptedFileTypes: ['image/*', 'application/pdf'], // Tipos permitidos
+    // server: {
+    //     process: '/ruta-del-servidor', // URL donde se enviarán los archivos
+    //     revert: null, // URL para revertir la subida (opcional)
+    //     headers: {
+    //         'X-CSRF-TOKEN': csrfToken // Si usas CSRF, asegúrate de pasar el token aquí
+    //     }
+    // }
+  });
+
   /* multiple upload */
   const MultipleElement = document.querySelector('.multiple-filepond');
   file_pond_mp_comprobante = FilePond.create(MultipleElement, FilePond_Facturacion_LabelsES );
 
   // Ensure mediumZoom is available before using it
-  document.addEventListener("DOMContentLoaded", function() {
-    file_pond_mp_comprobante.on('addfile', (error, file) => {
-      if (!error) {
-        setTimeout(() => {
-          mediumZoom('.filepond--image-preview');
-        }, 100); // Delay to ensure image is rendered
-      }
-    });
-  });
+  // document.addEventListener("DOMContentLoaded", function() {
+  //   file_pond_mp_comprobante.on('addfile', (error, file) => {
+  //     if (!error) {
+  //       setTimeout(() => {
+  //         mediumZoom('.filepond--image-preview');
+  //       }, 100); // Delay to ensure image is rendered
+  //     }
+  //   });
+  // });
 
 })();
