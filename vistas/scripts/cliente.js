@@ -1,10 +1,13 @@
-var tabla_cliente;
+var tabla_cliente_todos;
+var tabla_cliente_deudor;
+var tabla_cliente_no_deudor;
 var tabla_pagos_all_cliente;
 
 var form_validate_facturacion;
 var array_data_venta = [];
 var cambio_de_tipo_comprobante ;
 var file_pond_mp_comprobante;
+const filePondInstances = [];
 
 var ubicacion_cliente;
 
@@ -19,20 +22,20 @@ function init() {
   $(".btn-guardar-cobro").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-venta").submit(); } else { toastr_warning("Espera", "Procesando Datos", 3000); } });
 
   // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 
-  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', null, '.charge_filtro_trabajador');
-  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_dia_pago",   '#filtro_dia_pago',       null, '.charge_filtro_dia_pago');
-  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan", '#filtro_plan', null, '.charge_filtro_plan');
-  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena", '#filtro_zona_antena', null, '.charge_filtro_zona_antena');
+  lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', null, '.charge_filtro_trabajador');
+  lista_select2("../ajax/cliente.php?op=select2_filtro_dia_pago",   '#filtro_dia_pago',       null, '.charge_filtro_dia_pago');
+  lista_select2("../ajax/cliente.php?op=select2_filtro_plan", '#filtro_plan', null, '.charge_filtro_plan');
+  lista_select2("../ajax/cliente.php?op=select2_filtro_zona_antena", '#filtro_zona_antena', null, '.charge_filtro_zona_antena');
 
-  lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago', null, 'charge_f_metodo_pago');
+  lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago_1', null, 'charge_f_metodo_pago_1');
 
   lista_select2("../ajax/ajax_general.php?op=select2_tipo_documento", '#tipo_documento', null);
   lista_select2("../ajax/ajax_general.php?op=select2_distrito", '#distrito', null);
 
-  lista_select2("../ajax/persona_cliente.php?op=select2_plan", '#idplan', null);
-  lista_select2("../ajax/persona_cliente.php?op=select2_zona_antena", '#idzona_antena', null);
-  lista_select2("../ajax/persona_cliente.php?op=select2_trabajador", '#idpersona_trabajador', null);
-  lista_select2("../ajax/persona_cliente.php?op=selec_centroProbl", '#idselec_centroProbl', null);
+  lista_select2("../ajax/cliente.php?op=select2_plan", '#idplan', null);
+  lista_select2("../ajax/cliente.php?op=select2_zona_antena", '#idzona_antena', null);
+  lista_select2("../ajax/cliente.php?op=select2_trabajador", '#idpersona_trabajador', null);
+  lista_select2("../ajax/cliente.php?op=selec_centroProbl", '#idselec_centroProbl', null);
   
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#filtro_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -56,7 +59,7 @@ function init() {
   $("#tipo_persona_sunat").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#idselec_centroProbl").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
-  $("#f_metodo_pago").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#f_metodo_pago_1").select2({ templateResult: templateBanco, templateSelection: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 }
 
 function templateDistrito (state) {
@@ -124,7 +127,7 @@ function limpiar_cliente() {
 
 }
 
-function wiev_tabla_formulario(flag) {
+function show_hide_form(flag) {
 
   if (flag == 1) {                     // LISTA CLIENTES   
     $("#div-tabla-principal").show();
@@ -218,7 +221,7 @@ $('#tipo_documento').change(function () {
 });
 
 function cant_tab_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
-  $.getJSON(`../ajax/persona_cliente.php?op=cant_tab_cliente`, {'filtro_trabajador':filtro_trabajador, 'filtro_dia_pago':filtro_dia_pago , 'filtro_plan': filtro_plan, 'filtro_zona_antena': filtro_zona_antena}, function (e, textStatus, jqXHR) {
+  $.getJSON(`../ajax/cliente.php?op=cant_tab_cliente`, {'filtro_trabajador':filtro_trabajador, 'filtro_dia_pago':filtro_dia_pago , 'filtro_plan': filtro_plan, 'filtro_zona_antena': filtro_zona_antena}, function (e, textStatus, jqXHR) {
     $('.cant-span-deudor').html(e.data.count_deudores);
     $('.cant-span-no-deuda').html(e.data.count_no_deuda);
     $('.cant-span-no-servicio').html(e.data.count_baja);
@@ -272,24 +275,24 @@ function funtion_switch() {
 
 //Función Listar
 function tabla_principal_cliente(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
-console.log(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
+  // console.log(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
 
   filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
-  tabla_cliente = $('#tabla-cliente').dataTable({
+  tabla_cliente_todos = $('#tabla-cliente').dataTable({
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_cliente) { tabla_cliente.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_cliente_todos) { tabla_cliente_todos.ajax.reload(null, false); } } },
       { extend: 'copy', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
       { extend: 'excel', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
       { extend: 'pdf', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/persona_cliente.php?op=tabla_principal_cliente&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
+      url: `../ajax/cliente.php?op=tabla_principal_cliente&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -348,20 +351,20 @@ function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_dia_pa
 
   filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
-  tabla_cliente = $('#tabla-cliente-deudor').dataTable({
+  tabla_cliente_deudor = $('#tabla-cliente-deudor').dataTable({
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_cliente) { tabla_cliente.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_cliente_deudor) { tabla_cliente_deudor.ajax.reload(null, false); } } },
       // { extend: 'copy', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
       { extend: 'excel', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
       // { extend: 'pdf', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
       // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/persona_cliente.php?op=tabla_deudores&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
+      url: `../ajax/cliente.php?op=tabla_deudores&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -409,20 +412,20 @@ function tabla_principal_cliente_no_deudor(opcion, filtro_trabajador, filtro_dia
 
   filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
-  tabla_cliente = $('#tabla-cliente-no-deudor').dataTable({
+  tabla_cliente_no_deudor = $('#tabla-cliente-no-deudor').dataTable({
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_cliente) { tabla_cliente.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_cliente_no_deudor) { tabla_cliente_no_deudor.ajax.reload(null, false); } } },
       // { extend: 'copy', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
       { extend: 'excel', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
       // { extend: 'pdf', exportOptions: { columns: [0,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 8], }, title: 'Lista de Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
       // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/persona_cliente.php?op=tabla_no_deudores&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
+      url: `../ajax/cliente.php?op=tabla_no_deudores&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -471,7 +474,7 @@ function detalle_tab_cliente( id_html, idpersona_cliente) {
  
   $(`#${id_html}`).html(`<div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div><h4 class="bx-flashing">Cargando...</h4></div>`); 
 
-  $.get(`../ajax/persona_cliente.php?op=detalle_cliente_deudor`, {idpersona_cliente:idpersona_cliente},  function (e, textStatus, jqXHR) {
+  $.get(`../ajax/cliente.php?op=detalle_cliente_deudor`, {idpersona_cliente:idpersona_cliente},  function (e, textStatus, jqXHR) {
     
     $(`#detalle-cliente-deudor`).html(''); 
     $(`#detalle-cliente-no-deudor`).html(''); 
@@ -514,7 +517,7 @@ function guardar_y_editar_cliente(e) {
   var formData = new FormData($("#form-agregar-cliente")[0]);
 
   $.ajax({
-    url: "../ajax/persona_cliente.php?op=guardar_y_editar_cliente",
+    url: "../ajax/cliente.php?op=guardar_y_editar_cliente",
     type: "POST",
     data: formData,
     contentType: false,
@@ -524,9 +527,9 @@ function guardar_y_editar_cliente(e) {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {
           Swal.fire("Correcto!", "Color registrado correctamente.", "success");
-          tabla_cliente.ajax.reload(null, false);
+          tabla_cliente_todos.ajax.reload(null, false);
           limpiar_cliente();
-          wiev_tabla_formulario(1);
+          show_hide_form(1);
           $("#guardar_registro_cliente").html('Guardar Cambios').removeClass('disabled');
         } else {
           ver_errores(e);
@@ -567,9 +570,9 @@ function mostrar_cliente(idpersona_cliente) {
 
   limpiar_cliente();
 
-  wiev_tabla_formulario(2);
+  show_hide_form(2);
 
-  $.post("../ajax/persona_cliente.php?op=mostrar_cliente", { idpersona_cliente: idpersona_cliente }, function (e, status) {
+  $.post("../ajax/cliente.php?op=mostrar_cliente", { idpersona_cliente: idpersona_cliente }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);
 
@@ -643,13 +646,13 @@ function mostrar_cliente(idpersona_cliente) {
 //Función para activar registros
 function activar(idusuario, nombre) {
 	crud_simple_alerta(
-		`../ajax/persona_cliente.php?op=activar_cliente&descripcion=`,
+		`../ajax/cliente.php?op=activar_cliente&descripcion=`,
     idusuario, 
     "!Reactivar¡", 
     `<b class="text-success">${nombre}</b> <br> Se <b>eliminara</b> la NOTA que ha sido registrado!`, 
 		`Aceptar`,
     function(){ sw_success('Recuperado', "Tu cliente ha sido restaurado." ) }, 
-    function(){ tabla_cliente.ajax.reload(null, false); },
+    function(){ tabla_cliente_todos.ajax.reload(null, false); },
     false, 
     false, 
     false,
@@ -673,7 +676,7 @@ function eliminar_cliente(idtrabajador, nombre) {
     denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,    
     showLoaderOnDeny: true,
     preDeny: (input) => {       
-      return fetch(`../ajax/persona_cliente.php?op=eliminar_cliente&id_tabla=${idtrabajador}`).then(response => {
+      return fetch(`../ajax/cliente.php?op=eliminar_cliente&id_tabla=${idtrabajador}`).then(response => {
         console.log(response);
         if (!response.ok) { throw new Error(response.statusText) }
         return response.json();
@@ -701,7 +704,7 @@ function eliminar_cliente(idtrabajador, nombre) {
           if (!value) {
             Swal.showValidationMessage('La <i class="fw-bold">&nbsp;NOTA&nbsp;</i> es requerido.')
           }else{            
-            return fetch(`../ajax/persona_cliente.php?op=desactivar_cliente&id_tabla=${idtrabajador}&descripcion=${value}`).then(response => {
+            return fetch(`../ajax/cliente.php?op=desactivar_cliente&id_tabla=${idtrabajador}&descripcion=${value}`).then(response => {
               console.log(response);
               if (!response.ok) { throw new Error(response.statusText); }
               return response.json();
@@ -713,7 +716,7 @@ function eliminar_cliente(idtrabajador, nombre) {
         if (result.isConfirmed) {
           if (result.value.status) {
             Swal.fire("Expulsado!", "Tu trabajador ha sido expulsado.", "success");
-            tabla_cliente.ajax.reload(null, false); 
+            tabla_cliente_todos.ajax.reload(null, false); 
           }else{
             ver_errores(result.value);
           }     
@@ -724,7 +727,7 @@ function eliminar_cliente(idtrabajador, nombre) {
       //op=eliminar
       if (result.value.status) {
         Swal.fire("Eliminado!", "Tu trabajador ha sido Eliminado.", "success");
-        tabla_cliente.ajax.reload(null, false); 
+        tabla_cliente_todos.ajax.reload(null, false); 
       }else{
         ver_errores(result.value);
       }      
@@ -734,10 +737,10 @@ function eliminar_cliente(idtrabajador, nombre) {
 
 // .....::::::::::::::::::::::::::::::::::::: V E R   P A G O S  X  C L I E N T E   :::::::::::::::::::::::::::::::::::::::..
 function ver_pagos_x_cliente(idcliente) {
-  wiev_tabla_formulario(3);
+  show_hide_form(3);
   $('#div_tabla_x_cliente').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
   
-  $.get(`../ajax/persona_cliente.php?op=ver_pagos_x_cliente&idcliente=${idcliente}`,  function (e, textStatus, jqXHR) {
+  $.get(`../ajax/cliente.php?op=ver_pagos_x_cliente&idcliente=${idcliente}`,  function (e, textStatus, jqXHR) {
     $('#div_tabla_x_cliente').html(e);
     
     $('[data-bs-toggle="tooltip"]').tooltip();
@@ -749,13 +752,13 @@ function ver_pagos_x_cliente(idcliente) {
 var reload_filtro_pagos_all = false;
 
 function cargar_fltros_pagos_all_cliente() {
-  wiev_tabla_formulario(4);
+  show_hide_form(4);
   if (reload_filtro_pagos_all == false) {
-    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador",   '#filtro_p_all_trabajador',   null, '.charge_p_all_filtro_trabajador');
-    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_dia_pago",     '#filtro_p_all_dia_pago',     null, '.charge_filtro_p_all_dia_pago');
-    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_anio_pago",    '#filtro_p_all_anio_pago',    moment().format('YYYY'), '.charge_filtro_p_all_anio_pago');
-    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan",         '#filtro_p_all_plan',         null, '.charge_p_all_filtro_plan');
-    lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena",  '#filtro_p_all_zona_antena',  null, '.charge_p_all_filtro_zona_antena');
+    lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador",   '#filtro_p_all_trabajador',   null, '.charge_p_all_filtro_trabajador');
+    lista_select2("../ajax/cliente.php?op=select2_filtro_dia_pago",     '#filtro_p_all_dia_pago',     null, '.charge_filtro_p_all_dia_pago');
+    lista_select2("../ajax/cliente.php?op=select2_filtro_anio_pago",    '#filtro_p_all_anio_pago',    moment().format('YYYY'), '.charge_filtro_p_all_anio_pago');
+    lista_select2("../ajax/cliente.php?op=select2_filtro_plan",         '#filtro_p_all_plan',         null, '.charge_p_all_filtro_plan');
+    lista_select2("../ajax/cliente.php?op=select2_filtro_zona_antena",  '#filtro_p_all_zona_antena',  null, '.charge_p_all_filtro_zona_antena');
     reload_filtro_pagos_all = true;
   } else {
     filtros_pago_all();
@@ -766,7 +769,7 @@ function ver_pagos_all_cliente(filtro_trabajador ='', filtro_dia_pago ='', filtr
   
   // $('#div_tabla_all_pagos').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
   
-  // $.get(`../ajax/persona_cliente.php?op=ver_pagos_all_cliente&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_anio_pago=${filtro_anio_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,  function (e, textStatus, jqXHR) {
+  // $.get(`../ajax/cliente.php?op=ver_pagos_all_cliente&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_anio_pago=${filtro_anio_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,  function (e, textStatus, jqXHR) {
   //   $('#div_tabla_all_pagos').html(e);
   //   $('#id_buscando_tabla_pago_all').hide();
   //   $('[data-bs-toggle="tooltip"]').tooltip();
@@ -785,13 +788,13 @@ function ver_pagos_all_cliente(filtro_trabajador ='', filtro_dia_pago ='', filtr
     dom: "<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-5'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function (e, dt, node, config) { if (tabla_pagos_all_cliente) { tabla_pagos_all_cliente.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0,20,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
-      { extend: 'excel', exportOptions: { columns: [0,20,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
+      { extend: 'copy', exportOptions: { columns: [0,20,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,21,22], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true, },
+      { extend: 'excel', exportOptions: { columns: [0,20,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,21,22], }, title: 'Lista de Clientes', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true, },
       // { extend: 'pdf', exportOptions: { columns: [0,20,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17], }, title: 'Lista de Clientes', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL', },
       // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/persona_cliente.php?op=ver_pagos_all_cliente_v2&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_anio_pago=${filtro_anio_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
+      url: `../ajax/cliente.php?op=ver_pagos_all_cliente_v2&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_anio_pago=${filtro_anio_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -843,7 +846,7 @@ function ver_pagos_all_cliente(filtro_trabajador ='', filtro_dia_pago ='', filtr
     },
     columnDefs: [      
       // { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [ 18, 19,20], visible: false, searchable: false, },
+      { targets: [ 18, 19,20, 21, 22], visible: false, searchable: false, },
     ],
   });
  
@@ -876,7 +879,7 @@ function pagos_cliente_x_mes(idpersona_cliente, mes, anio){
   $("#pago-cliente-mes").modal("show");
   $('#div_tabla_pagos_Cx_mes').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
 
-  $.get(`../ajax/persona_cliente.php?op=pagos_cliente_x_mes&id=${idpersona_cliente}&mes=${mes}&filtroA=${filtroTrabajador}&filtroB=${filtroDiaPago}&filtroC=${filtroAnioPago}&filtroD=${filtroPlan}&filtroE=${filtroZonaAntena}`,  function (e, textStatus, jqXHR) {
+  $.get(`../ajax/cliente.php?op=pagos_cliente_x_mes&id=${idpersona_cliente}&mes=${mes}&filtroA=${filtroTrabajador}&filtroB=${filtroDiaPago}&filtroC=${filtroAnioPago}&filtroD=${filtroPlan}&filtroE=${filtroZonaAntena}`,  function (e, textStatus, jqXHR) {
     $('#div_tabla_pagos_Cx_mes').html(e);
     $('#id_buscando_tabla_pago_xmes').hide();
     $('[data-bs-toggle="tooltip"]').tooltip();
@@ -920,7 +923,7 @@ function TickcetPagoCliente(idventa, tipo_comprobante){
 
 function reload_pago_individual(id) {
   $('#div_tabla_x_cliente_pagar').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
-  $.get(`../ajax/persona_cliente.php?op=ver_pagos_x_cliente&idcliente=${id}`,  function (e, textStatus, jqXHR) {
+  $.get(`../ajax/cliente.php?op=ver_pagos_x_cliente&idcliente=${id}`,  function (e, textStatus, jqXHR) {
     $('#div_tabla_x_cliente_pagar').html(e);    
     $('[data-bs-toggle="tooltip"]').tooltip();
   });
@@ -931,7 +934,7 @@ function realizar_pago(id) {
   $("#cargando-3-formulario").hide();
   $("#cargando-4-formulario").show();
   
-  wiev_tabla_formulario(5);
+  show_hide_form(5);
   usar_anticipo_valid();
  
   $('.reload-reload-pago-individual').attr('onclick', `reload_pago_individual(${id})`);
@@ -940,11 +943,11 @@ function realizar_pago(id) {
   $('#f_idpersona_cliente').val(id)
 
   $('#div_tabla_x_cliente_pagar').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);  
-  $.get(`../ajax/persona_cliente.php?op=ver_pagos_x_cliente&idcliente=${id}`,  function (e, textStatus, jqXHR) {
+  $.get(`../ajax/cliente.php?op=ver_pagos_x_cliente&idcliente=${id}`,  function (e, textStatus, jqXHR) {
     $('#div_tabla_x_cliente_pagar').html(e);    
     $('[data-bs-toggle="tooltip"]').tooltip();
 
-    $.getJSON(`../ajax/persona_cliente.php?op=mostrar_datos_cliente`, {idpersona_cliente: id}, function (e, textStatus, jqXHR) {
+    $.getJSON(`../ajax/cliente.php?op=mostrar_datos_cliente`, {idpersona_cliente: id}, function (e, textStatus, jqXHR) {
 
       $('.title-body-pagina').html(e.data.cliente_nombre_completo);
       $('#f_tipo_documento').val(e.data.tipo_documento);
@@ -965,7 +968,7 @@ function limpiar_form_venta(){
   
   $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
   $("#f_idpersona_cliente").val('').trigger('change'); 
-  $("#f_metodo_pago").val('').trigger('change'); 
+  $("#f_metodo_pago_1").val('').trigger('change'); 
   $("#f_observacion_documento").val(''); 
   $("#f_periodo_pago").val('');
   $("#f_codigob").val('');  
@@ -1215,7 +1218,7 @@ function es_valido_cliente() {
           allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
           if (result.isConfirmed) {    
-            $.getJSON(`../ajax/persona_cliente.php?op=mostrar_datos_cliente`, {idpersona_cliente: id_cliente}, function (e, textStatus, jqXHR) {
+            $.getJSON(`../ajax/cliente.php?op=mostrar_datos_cliente`, {idpersona_cliente: id_cliente}, function (e, textStatus, jqXHR) {
 
               $('.title-body-pagina').html(e.data.cliente_nombre_completo);
               $('#f_tipo_documento').val(e.data.tipo_documento);
@@ -1291,7 +1294,50 @@ function usar_anticipo_valid() {
 // ::::::::::::::::::::::::::::::::::::::::::::: GUARDAR COBRO :::::::::::::::::::::::::::::::::::::::::::::
 
 function guardar_editar_facturacion(e) {
+
+  renombrarInputsArrayContenedor('.f_mp_comprobante_validar', 'name', 'f_mp_comprobante'); // Ajustamos la numeracion de Array en los inputs: File
+
   var formData = new FormData($("#form-facturacion")[0]);  
+
+ // Seleccionar los divs con la clase f_mp_comprobante_validar
+  const divs = document.querySelectorAll("div.f_mp_comprobante_validar");
+  const emptyFileKeys = [];
+
+  // Iterar sobre los divs para encontrar los inputs dentro
+  divs.forEach((div) => {
+    const input = div.querySelector("input[type='file']"); // Encontrar el input dentro del div
+
+    if (input == '' || input == null) { } else{
+      if (input.name == '' || input.name == null) { } else{
+        const inputName = input.name; // Obtener el nombre del input
+        const fileList = input.files; // Obtener los archivos seleccionados
+
+        // console.log(input);
+        // console.log(`Nombre: ${inputName}`);
+        // console.log(`Archivos:`, fileList);
+
+        // Verificar si no tiene archivos seleccionados
+        if (fileList.length === 0) {
+          emptyFileKeys.push(inputName); // Registrar el nombre para procesamiento
+        }
+      }       
+    }
+  });
+
+  console.log("Claves vacías:", emptyFileKeys);
+
+  // Eliminar y reemplazar entradas vacías en FormData
+  emptyFileKeys.forEach((key) => {
+    formData.delete(key); // Eliminar la entrada original
+    formData.append(key, ""); // Agregar un valor vacío como texto
+  });
+
+  // Verificar qué datos se enviarán
+  // for (let [key, value] of formData.entries()) {
+  //   if (key == 'f_mp_comprobante[]') {
+  //     console.log(`${key}: ${value}`);
+  //   }    
+  // }
 
   Swal.fire({
     title: "¿Está seguro que deseas guardar esta Venta?",
@@ -1302,7 +1348,7 @@ function guardar_editar_facturacion(e) {
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, Guardar!",
     preConfirm: (input) => {
-      return fetch("../ajax/facturacion.php?op=guardar_editar_facturacion", {
+      return fetch("../ajax/cliente.php?op=guardar_editar_facturacion", {
         method: 'POST', // or 'PUT'
         body: formData, // data can be `string` or {object}!        
       }).then(response => {
@@ -1316,8 +1362,10 @@ function guardar_editar_facturacion(e) {
     if (result.isConfirmed) {
       if (result.value.status == true){
         Swal.fire("Correcto!", "Venta guardada correctamente", "success");
-        tabla_cliente.ajax.reload(null, false);
-        limpiar_form_venta(); wiev_tabla_formulario(1); 
+        // if (tabla_cliente_todos)      { tabla_cliente_todos.ajax.reload(null, false);     }
+        if (tabla_cliente_deudor)     { tabla_cliente_deudor.ajax.reload(null, false);    } 
+        // if (tabla_cliente_no_deudor)  { tabla_cliente_no_deudor.ajax.reload(null, false); } 
+        limpiar_form_venta(); show_hide_form(1);
         if ($('#f_crear_y_mostrar').is(':checked')) {
           $("#modal-imprimir-comprobante .modal-dialog").removeClass("modal-sm modal-lg modal-xl modal-xxl").addClass("modal-md");          
           var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + result.value.data;
@@ -1326,15 +1374,45 @@ function guardar_editar_facturacion(e) {
           $("#modal-imprimir-comprobante").modal("show");
         }
       } else if ( result.value.status == 'error_personalizado'){        
-        tabla_cliente.ajax.reload(null, false);
-        limpiar_form_venta(); wiev_tabla_formulario(1); ver_errores(result.value);
+        // if (tabla_cliente_todos)      { tabla_cliente_todos.ajax.reload(null, false);     }
+        if (tabla_cliente_deudor)     { tabla_cliente_deudor.ajax.reload(null, false);    } 
+        // if (tabla_cliente_no_deudor)  { tabla_cliente_no_deudor.ajax.reload(null, false); } 
+        limpiar_form_venta(); show_hide_form(1); ver_errores(result.value);
+      } else if ( result.value.status == 'error_usuario'){    
+        ver_errores(result.value);
+
+      } else if ( result.value.status == 'no_conexion_sunat'){    
+        Swal.fire({
+          title: result.value.titulo,
+          icon: 'info',
+          html: result.value.message,
+          showCloseButton: true,
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonText: '<i class="fas fa-sign-out-alt"></i> Salir!',
+          confirmButtonAriaLabel: 'Enviar más tarde.',
+          cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+          cancelButtonAriaLabel: 'Dejar como esta.'
+        }).then((result) => {
+          if (result.isConfirmed) {
+           
+            $.getJSON(`../ajax/facturacion.php?op=cambiar_a_por_enviar&idventa=${result.value.id_tabla}`, data, function (e, textStatus, jqXHR) {
+              if (e.status == true) {
+                sw_success('Cambiado!!', "Tu registro ha actualizado." );   
+              } else {
+                ver_errores(e);
+              }
+            }).fail( function(e) { ver_errores(e); } );
+          } else {
+                  
+          }
+        });
       } else {
         ver_errores(result.value);
       }      
     }
   });  
 }
-
 
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   :::::                                         F I N   R E A L I Z A R   P A G O 
@@ -1432,11 +1510,8 @@ $(function () {
       f_idpersona_cliente:      { required: true },
       f_tipo_comprobante:       { required: true },
       f_serie_comprobante:      { required: true, },
-      f_observacion_documento:  { minlength: 4 },
-      f_periodo_pago:           { required: true},
-      f_metodo_pago:            { required: true},
-      f_total_recibido:         { required: true, min: 0, step: 0.01},      
-      f_mp_monto:               { required: true, min: 0, step: 0.01},
+      f_observacion_documento:  { minlength: 4 },            
+      f_total_recibido:         { required: true, min: 0, step: 0.01},           
       f_total_vuelto:           { required: true, step: 0.01},
       f_ua_monto_usado:         { required: true, min: 1, step: 0.01},
       f_mp_serie_comprobante:   { minlength: 4},
@@ -1444,13 +1519,11 @@ $(function () {
     },
     messages: {
       f_idpersona_cliente:      { required: "Campo requerido", },
-      f_tipo_comprobante:       { required: "Campo requerido", },
-      f_periodo_pago:           { required: "Campo requerido", },
+      f_tipo_comprobante:       { required: "Campo requerido", },      
       f_serie_comprobante:      { required: "Campo requerido", },
       f_observacion_documento:  { minlength: "Minimo {0} caracteres", },
       // mp_comprobante:         { extension: "Ingrese imagenes validas ( {0} )", },
-      f_total_recibido:         { step: "Solo 2 decimales."},      
-      f_mp_monto:               { step: "Solo 2 decimales."},
+      f_total_recibido:         { step: "Solo 2 decimales."},       
       f_total_vuelto:           { step: "Solo 2 decimales."},
       f_ua_monto_usado:         { step: "Solo 2 decimales."},
     },
@@ -1474,6 +1547,7 @@ $(function () {
       guardar_editar_facturacion(form);
     },
   }); 
+  $('#f_metodo_pago_1').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 
   $('#tipo_persona_sunat').rules('add', { required: true, messages: { required: "Campo requerido" } });
   $('#tipo_documento').rules('add', { required: true, messages: { required: "Campo requerido" } });
@@ -1609,45 +1683,45 @@ function reload_select(r_text) {
 
   switch (r_text) {
     case 'filtro_trabajador':
-      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador',     null, '.charge_filtro_trabajador');
+      lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador',     null, '.charge_filtro_trabajador');
     break;   
     case 'filtro_dia':
-      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_dia_pago",   '#filtro_dia_pago',       null, '.charge_filtro_dia_pago');
+      lista_select2("../ajax/cliente.php?op=select2_filtro_dia_pago",   '#filtro_dia_pago',       null, '.charge_filtro_dia_pago');
     break;
     case 'filtro_plan':
-      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan",       '#filtro_plan',           null, '.charge_filtro_plan');
+      lista_select2("../ajax/cliente.php?op=select2_filtro_plan",       '#filtro_plan',           null, '.charge_filtro_plan');
     break;
     case 'filtro_zona_antena':
-      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena",'#filtro_zona_antena',    null, '.charge_filtro_zona_antena');
+      lista_select2("../ajax/cliente.php?op=select2_filtro_zona_antena",'#filtro_zona_antena',    null, '.charge_filtro_zona_antena');
     break;   
 
     case 'filtro_p_all_trabajador':
-      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_p_all_trabajador', null, '.charge_filtro_p_all_trabajador');
+      lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador", '#filtro_p_all_trabajador', null, '.charge_filtro_p_all_trabajador');
     break;
     case 'filtro_dia_pago':
-      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_dia_pago",   '#filtro_p_all_dia_pago',   null, '.charge_filtro_p_all_dia_pago');
+      lista_select2("../ajax/cliente.php?op=select2_filtro_dia_pago",   '#filtro_p_all_dia_pago',   null, '.charge_filtro_p_all_dia_pago');
     break;
     case 'filtro_anio_pago':
-      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_anio_pago",  '#filtro_p_all_anio_pago',  moment().format('YYYY'), '.charge_filtro_p_all_anio_pago');
+      lista_select2("../ajax/cliente.php?op=select2_filtro_anio_pago",  '#filtro_p_all_anio_pago',  moment().format('YYYY'), '.charge_filtro_p_all_anio_pago');
     break;    
     case 'filtro_p_all_plan':
-      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_plan",       '#filtro_p_all_plan',       null, '.charge_filtro_p_all_plan');
+      lista_select2("../ajax/cliente.php?op=select2_filtro_plan",       '#filtro_p_all_plan',       null, '.charge_filtro_p_all_plan');
     break;
     case 'filtro_p_all_zona_antena':
-      lista_select2("../ajax/persona_cliente.php?op=select2_filtro_zona_antena",'#filtro_p_all_zona_antena',null, '.charge_filtro_p_all_zona_antena');
+      lista_select2("../ajax/cliente.php?op=select2_filtro_zona_antena",'#filtro_p_all_zona_antena',null, '.charge_filtro_p_all_zona_antena');
     break;   
 
     case 'trab':
-      lista_select2("../ajax/persona_cliente.php?op=select2_trabajador", '#idpersona_trabajador', null, '.charge_idtrabaj');
+      lista_select2("../ajax/cliente.php?op=select2_trabajador", '#idpersona_trabajador', null, '.charge_idtrabaj');
     break;
     case 'zona':
-      lista_select2("../ajax/persona_cliente.php?op=select2_zona_antena", '#idzona_antena', null, '.charge_idzona');
+      lista_select2("../ajax/cliente.php?op=select2_zona_antena", '#idzona_antena', null, '.charge_idzona');
     break;
     case 'centroPbl':
-      lista_select2("../ajax/persona_cliente.php?op=selec_centroProbl", '#idselec_centroProbl', null, '.charge_idctroPbl');
+      lista_select2("../ajax/cliente.php?op=selec_centroProbl", '#idselec_centroProbl', null, '.charge_idctroPbl');
     break;
     case 'plan':
-      lista_select2("../ajax/persona_cliente.php?op=select2_plan", '#idplan', null, '.charge_idplan');
+      lista_select2("../ajax/cliente.php?op=select2_plan", '#idplan', null, '.charge_idplan');
     break;
     default:
       console.log('Caso no encontrado.');
@@ -1714,6 +1788,7 @@ function printIframe(id) {
   /* multiple upload */
   const MultipleElement = document.querySelector('.multiple-filepond');
   file_pond_mp_comprobante = FilePond.create(MultipleElement, FilePond_Facturacion_LabelsES );
+  filePondInstances.push(file_pond_mp_comprobante); // Guarda la instancia en el arreglo
 
 })();
 

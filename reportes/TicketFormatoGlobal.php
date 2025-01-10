@@ -36,6 +36,7 @@ if (!isset($_SESSION["user_nombre"])) {
     
     $empresa_f        = $facturacion->datos_empresa();    
     $venta_f          = $facturacion->mostrar_detalle_venta($_GET["id"]);   
+    $metodo_pago_f    = $facturacion->datos_metodo_pago_venta($_GET["id"]);   
 
     if ( empty($venta_f['data']['venta']) ) { echo "Comprobante no existe"; die();  }
 
@@ -70,8 +71,8 @@ if (!isset($_SESSION["user_nombre"])) {
 
     
     // Data comprobante ================================================================================
-    $metodo_pago          = mb_convert_encoding($venta_f['data']['venta']['metodo_pago'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['metodo_pago'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
-    $mp_serie_comprobante = $venta_f['data']['venta']['mp_serie_comprobante'] == null || $venta_f['data']['venta']['mp_serie_comprobante'] == '' ? '-': mb_convert_encoding($venta_f['data']['venta']['mp_serie_comprobante'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['mp_serie_comprobante'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    //$metodo_pago          = mb_convert_encoding($venta_f['data']['venta']['metodo_pago'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['metodo_pago'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    //$mp_serie_comprobante = $venta_f['data']['venta']['mp_serie_comprobante'] == null || $venta_f['data']['venta']['mp_serie_comprobante'] == '' ? '-': mb_convert_encoding($venta_f['data']['venta']['mp_serie_comprobante'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['mp_serie_comprobante'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
     $user_en_atencion     = mb_convert_encoding($venta_f['data']['venta']['user_en_atencion'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['user_en_atencion'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
@@ -99,7 +100,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $exonerado            = number_format( floatval($venta_f['data']['venta']['venta_subtotal']), 2, '.', ',' );  
 
     $observacion_documento= mb_convert_encoding($venta_f['data']['venta']['observacion_documento'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['observacion_documento'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
-    $sunat_hash           = mb_convert_encoding($venta_f['data']['venta']['sunat_hash'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['sunat_hash'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $sunat_hash           = mb_convert_encoding($venta_f['data']['venta']['sunat_hash'] ?? '', 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['sunat_hash'] ?? '', "UTF-8, ISO-8859-1, ISO-8859-15", true) ?: 'UTF-8');
 
 
     // detalle x producto ================================================================================
@@ -249,9 +250,14 @@ if (!isset($_SESSION["user_nombre"])) {
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
           <tr><td colspan="3"><b>Son: </b> <?php echo $total_en_letra; ?> </td></tr>
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
-          <tr><td >           <b><?php echo $metodo_pago; ?></b></td>   <td>:</td> <td> <?php echo $total_recibido; ?> </td></tr>
+          <?php foreach ($metodo_pago_f['data'] as $key => $val) { ?>
+          <tr><td >           <b><?php echo $val['metodo_pago']; ?></b></td>   <td>:</td> <td> <?php echo $val['monto']; ?> </td></tr>         
+          <?php if($val['metodo_pago'] != 'EFECTIVO'){?>
+          <tr><td >           <b> Nro. Baucher </b>                      <td>:</td> <td> <?php echo $val['codigo_voucher']; ?></td> </td></tr>
+          <?php }?>
+          <tr><td colspan="3"><div style=" margin-bottom: 5px;" ></div></td></tr>
+          <?php }?>
           <tr><td >           <b>VUELTO</b></td>                        <td>:</td> <td> <?php echo $total_vuelto; ?> </td></tr>  
-          <tr><td >           <b>Nro. Baucher</b>                      <td>:</td> <td> <?php echo $mp_serie_comprobante; ?></td> </td></tr>
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>   
           <tr><td >           <b>Nro. Operación</b>                      <td>:</td> <td> <?php echo $c_idventa_v2; ?></td> </td></tr>
           <tr><td >           <b>Codigo Usuario</b>                      <td>:</td> <td> <?php echo $c_landing_user; ?></td> </td></tr>   

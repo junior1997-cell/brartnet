@@ -77,7 +77,7 @@ function agregarDetalleComprobante(idproducto, tipo_producto, individual) {
             
             <td class="py-1 form-group">       
               <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(tipo_producto == 'PR' ? 'NO' : 'SI' )}">  
-              <input type="${(tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+              <input type="${(tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value="" min="2023-01"  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
               <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
             </td>  
 
@@ -233,7 +233,7 @@ function listar_producto_x_codigo() {
 
             <td class="py-1 form-group">       
               <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(e.data.tipo == 'PR' ? 'NO' : 'SI' )}">  
-              <input type="${(e.data.tipo == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+              <input type="${(e.data.tipo == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value="" min="2023-01" onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
               <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
             </td> 
 
@@ -379,7 +379,7 @@ function mostrar_para_nota_credito(input) {
 
               <td class="py-1">       
                 <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(val1.tipo_producto == 'PR' ? 'NO' : 'SI' )}">  
-                <input type="${(val1.tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value="${val1.periodo_pago}" readonly  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+                <input type="${(val1.tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value="${val1.periodo_pago}" min="2023-01" readonly  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
                 <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="${val1.periodo_pago}">
               </td> 
 
@@ -447,7 +447,7 @@ function mostrar_para_nota_credito(input) {
 }
 
 function listar_producto_x_precio(precio) {
-  $.post("../ajax/persona_cliente.php?op=listar_producto_x_precio", { precio: precio }, function (e, status) {
+  $.post("../ajax/cliente.php?op=listar_producto_x_precio", { precio: precio }, function (e, status) {
     e = JSON.parse(e); console.log(e);
     if (e.status == true) {         
       if (e.data == null) {
@@ -491,13 +491,13 @@ function listar_producto_x_precio(precio) {
 
           <td class="py-1 form-group">       
             <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(e.data.tipo == 'PR' ? 'NO' : 'SI' )}">  
-            <input type="${(e.data.tipo == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value=""  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+            <input type="${(e.data.tipo == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value="" min="2023-01" onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
             <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="">
           </td> 
 
           <td class="py-1 form-group">
             <input type="number" class="w-100px valid_cantidad form-control form-control-sm producto_${e.data.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="1" min="0.01" required onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
-            <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="1" min="0.01" required  >            
+            <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="1" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()" >            
           </td> 
 
           <td class="py-1 form-group">
@@ -525,7 +525,8 @@ function listar_producto_x_precio(precio) {
 
         detalles = detalles + 1;
         $("#tabla-productos-seleccionados tbody").append(fila);
-        array_data_venta.push({ id_cont: cont });
+        array_data_venta.push({ id_cont: cont }); console.log(1);
+        
         modificarSubtotales();        
         toastr_success("Agregado!!",`Producto: ${e.data.nombre} agregado !!`, 700);
 
@@ -555,7 +556,7 @@ function listar_producto_x_precio(precio) {
                 return response; // Procesa cualquier respuesta adicional si es necesario
             }
           },
-          messages: { required: 'Campo requerido', remote: `Mes pagado, elija otro mes. <br> <a href="#" class="text-danger text-decoration-underline" onclick="ver_meses_cobrado(${cont})">Click para ver.</a>`  } 
+          messages: { required: 'Campo requerido', min: 'Fecha minima: Ene-2023', remote: `Mes pagado, elija otro mes. <br> <a href="#" class="text-danger text-decoration-underline" onclick="ver_meses_cobrado(${cont})">Click para ver.</a>`  } 
         }); 
         }else{
           $(`#valid_periodo_pago_${cont}`).rules('remove', 'required remote');
@@ -926,55 +927,153 @@ function update_price() {
   toastr_success("Actualizado!!",`Precio Actualizado.`, 700);
 }
 
-function capturar_pago_venta() {   
+// .....::::::::::::::::::::::::::::::::::::: S E C C I O N   M E T O D O   D E   P A G O   :::::::::::::::::::::::::::::::::::::::..
+
+
+function capturar_pago_venta(id) {   
   
-  var metodo_pago = $("#f_metodo_pago").val() == null || $("#f_metodo_pago").val() == "" ? "" : $("#f_metodo_pago").val() ;
-  $(".span-code-baucher-pago").html(`(${metodo_pago == null ? 'Seleccione metodo pago' : metodo_pago })`);
-  $(".span-tipo-pago").html(`(${metodo_pago == null ? 'Seleccione' : metodo_pago })`);
-  $("#f_mp_monto").val(0);
+  var metodo_pago = $(`#f_metodo_pago_${id}`).val() == null || $(`#f_metodo_pago_${id}`).val() == "" ? "" : $(`#f_metodo_pago_${id}`).val() ; //console.log(metodo_pago);
+  
+  $(`.span-code-baucher-pago-${id}`).html(`(${metodo_pago == null ? 'Seleccione metodo pago' : metodo_pago })`);  
+  
   if (metodo_pago == null || metodo_pago == '' || metodo_pago == "EFECTIVO" || metodo_pago == "CREDITO") {
-    $("#content-metodo-pago").hide();
-    $("#content-mp-monto").hide();  
-    if (form_validate_facturacion) { $("#f_mp_monto").rules('remove', 'required'); }    
+    $(`#content-metodo-pago-${id}`).hide();    
   } else if ( metodo_pago == "MIXTO" ) {
-    $("#content-metodo-pago").show();
-    if (detalles > 0) { $("#content-mp-monto").show(); }   
-    if (form_validate_facturacion) { $("#f_mp_monto").rules('add', { required: true, messages: {  required: "Campo requerido" } }); }         
+    $(`#content-metodo-pago-${id}`).show();       
   } else {    
-    $("#content-metodo-pago").show();      
-    $("#content-mp-monto").hide();
-    if (form_validate_facturacion) { $("#f_mp_monto").rules('remove', 'required'); }
+    $(`#content-metodo-pago-${id}`).show();    
   }  
   calcular_vuelto();
   if (form_validate_facturacion) { $("#form-facturacion").valid();}
 }
 
-function calcular_vuelto() {
-  var contado     = $('#f_total_recibido').val()  == null || $('#f_total_recibido').val() == '' ? 0 : parseFloat($('#f_total_recibido').val());  
-  var mixto       = $('#f_mp_monto').val()        == null || $('#f_mp_monto').val()       == '' ? 0 : parseFloat($('#f_mp_monto').val());
-  var f_venta_total = $('#f_venta_total').val()     == null || $('#f_venta_total').val()    == '' ? 0 : parseFloat($('#f_venta_total').val());
+function calcular_vuelto(id) {
+
+  var venta_total = $('#f_venta_total').val()     == null || $('#f_venta_total').val()    == '' ? 0 : parseFloat($('#f_venta_total').val()); 
+  let contado = 0;
+
+  // Recorrer cada input con el selector proporcionado
+  $(`input.f_total_recibido_validar`).each(function () {
+    const valor = parseFloat($(this).val()) || 0; // Convertir el valor a número o usar 0 si está vacío
+    contado += valor; // Sumar al contado
+  });
+
+  var vuelto_2 = redondearExp((contado - venta_total), 2) ; 
+
+  if ( contado == 0 ) { 
+      
+    $(`#f_total_vuelto`).val(vuelto_2);
+    vuelto_2 < 0 ? $(`.f_total_vuelto`).addClass('bg-danger').removeClass('bg-success') : $(`.f_total_vuelto`).addClass('bg-success').removeClass('bg-danger') ;
+    vuelto_2 < 0 ? $(`.falta_o_completo_${id}`).html('(falta)').addClass('text-danger').removeClass('text-success') : $(`.falta_o_completo_${id}`).html('(completo)').addClass('text-success').removeClass('text-danger') ;
   
-  if ($('#f_total_recibido').val() != '' || $('#f_mp_monto').val() != '' ) { 
-    if ($("#f_metodo_pago").val() == "MIXTO") {    
-      var vuelto_1 = redondearExp(( ( contado + mixto ) - f_venta_total ), 2); 
-      
-      $('#f_total_vuelto').val(vuelto_1);
-      vuelto_1 < 0 ? $('.f_total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.f_total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
-      vuelto_1 < 0 ? $('.falta_o_completo').html('(falta)').addClass('text-danger').removeClass('text-success') : $('.falta_o_completo').html('(completo)').addClass('text-success').removeClass('text-danger') ;
-    } else {    
-      var vuelto_2 = redondearExp((contado - f_venta_total), 2) ; 
-      
-      $('#f_total_vuelto').val(vuelto_2);
-      vuelto_2 < 0 ? $('.f_total_vuelto').addClass('bg-danger').removeClass('bg-success') : $('.f_total_vuelto').addClass('bg-success').removeClass('bg-danger') ;
-      vuelto_2 < 0 ? $('.falta_o_completo').html('(falta)').addClass('text-danger').removeClass('text-success') : $('.falta_o_completo').html('(completo)').addClass('text-success').removeClass('text-danger') ;
-    } 
-  }  
+  } else {
+    $(`#f_total_vuelto`).val(vuelto_2);
+    vuelto_2 < 0 ? $(`.f_total_vuelto`).addClass('bg-danger').removeClass('bg-success') : $(`.f_total_vuelto`).addClass('bg-success').removeClass('bg-danger') ;
+    vuelto_2 < 0 ? $(`.falta_o_completo_${id}`).html('(falta)').addClass('text-danger').removeClass('text-success') : $(`.falta_o_completo_${id}`).html('(completo)').addClass('text-success').removeClass('text-danger') ;
+  }
   if (form_validate_facturacion) { $("#form-facturacion").valid();}
 }
 
 function pago_rapido(val) {
-  var pago_monto = $(val).text(); console.log(pago_monto);
-  $('#f_total_recibido').val(pago_monto);
-  calcular_vuelto();
+  var pago_monto = $(val).text(); //console.log(pago_monto);
+  $('#f_total_recibido_1').val(pago_monto);
+  calcular_vuelto(1);
   $("#form-facturacion").valid();
+}
+
+function pago_rapido_moneda(moneda) {
+  $('#f_total_recibido_1').val(moneda);
+  calcular_vuelto(1);
+  $("#form-facturacion").valid();
+}
+
+var count_mp = 2;
+function agregar_new_mp() {
+  var id_cant = contarDivsArray('.f_metodo_pago_validar', 1);
+  $('#html-metodos-de-pagos').append(`
+    <div class="col-lg-12 htlm-mp-lista-${count_mp}">
+      <div class="row">
+        <div class="col-lg-12 text-center pt-1">
+          <button type="button" class="btn btn-danger-light label-btn btn-sm rounded-pill btn-wave" onclick="eliminar_mp(${count_mp})"> <i class="bi bi-trash3 label-btn-icon me-2"></i> <span class="ms-4">Eliminar</span>  </button>
+        </div>
+       
+        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+          <div class="form-group">
+            <label for="f_metodo_pago_${count_mp}" class="form-label">
+              <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_f_metodo_pago(${count_mp});" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+              Método de pago
+              <span class="charge_f_metodo_pago_${count_mp}"></span>
+            </label>
+            <select class="form-control form-control-sm f_metodo_pago_validar" name="f_metodo_pago[${id_cant}]" id="f_metodo_pago_${count_mp}" onchange="capturar_pago_venta(${count_mp});">
+              <!-- Aqui se listara las opciones -->
+            </select>
+          </div>
+        </div>                                 
+
+        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+          <div class="form-group">
+            <label for="f_total_recibido_${count_mp}" class="form-label">Monto a pagar</label>
+            <input type="number" name="f_total_recibido[${id_cant}]" id="f_total_recibido_${count_mp}" class="form-control form-control-sm f_total_recibido_validar" onClick="this.select();" onchange="calcular_vuelto(${count_mp});" onkeyup="calcular_vuelto(${count_mp});" placeholder="Ingrese monto a pagar.">
+          </div>
+        </div>        
+
+        <div class="col-12" id="content-metodo-pago-${count_mp}">
+          <div class="row">
+            <!-- Código de Baucher -->
+            <div class="col-sm-6 col-lg-6 col-xl-6 pt-3">
+              <div class="form-group">
+                <label for="f_mp_serie_comprobante_${count_mp}">Código de Baucher <span class="span-code-baucher-pago-${count_mp}"></span> </label>
+                <input type="text" name="f_mp_serie_comprobante[]" id="f_mp_serie_comprobante_${count_mp}" class="form-control" onClick="this.select();" placeholder="Codigo de baucher" />
+              </div>
+            </div>
+            <!-- Baucher -->
+            <div class="col-sm-6 col-lg-6 col-xl-6 pt-3">
+              <div class="form-group">
+                <input type="file" class="multiple-filepond f_mp_comprobante_validar" name="f_mp_comprobante[${id_cant}]" id="f_mp_comprobante_${count_mp}" data-allow-reorder="true" data-max-file-size="3MB" accept="image/*, application/pdf">
+                <input type="hidden" name="f_mp_comprobante_old_${count_mp}" id="f_mp_comprobante_old_${count_mp}">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12"> <div class="border-bottom border-block-end-dashed py-2"></div></div>
+      </div>                                  
+    </div>
+  `);
+
+  lista_select2("../ajax/facturacion.php?op=select2_banco", `#f_metodo_pago_${count_mp}`, null, `charge_f_metodo_pago_${count_mp}`);  
+  $(`#f_metodo_pago_${count_mp}`).select2({  templateResult: templateBanco, templateSelection: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });  
+
+  // reglas de validación     
+  $(`.f_metodo_pago_validar`).each(function(e) { $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } });  });
+  $(`.f_total_recibido_validar`).each(function(e) { $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } });  });
+
+  const MultipleElement = document.querySelector(`#f_mp_comprobante_${count_mp}`);
+  file_pond_mp_comprobante = FilePond.create(MultipleElement, FilePond_Facturacion_LabelsES );
+  filePondInstances.push(file_pond_mp_comprobante); // Guarda la instancia en el arreglo
+  
+  count_mp++;
+
+  if (form_validate_facturacion) { $("#form-facturacion").valid();}
+}
+
+function eliminar_mp(id) {
+  $(`.htlm-mp-lista-${id}`).css({
+    transition: 'transform 0.5s ease, opacity 0.5s ease',   // Transición suave para el cambio de tamaño y opacidad
+    opacity: 0,                                            // Reduce la opacidad para desaparecer
+    transform: 'scale(0.1)',                                 // Reduce el tamaño uniformemente en ambas direcciones (X y Y)
+    transformOrigin: 'bottom'                               // El punto de escala es desde la parte inferior
+  });
+
+  setTimeout(function () {
+    $(`.htlm-mp-lista-${id}`).remove();                     // Elimina el elemento después de la animación
+    
+    // Volvemos a renombrar los select
+    renombrarInputsArray('.f_metodo_pago_validar', 'name', 'f_metodo_pago');
+    renombrarInputsArray('.f_total_recibido_validar', 'name', 'f_total_recibido');
+    renombrarInputsArrayContenedor('.f_mp_comprobante_validar', 'name', 'f_mp_comprobante');
+    
+  }, 500);                                                   // Tiempo de espera igual al de la animación
+
+  
 }

@@ -87,3 +87,9 @@ ORDER BY v.fecha_emision DESC, p1.nombre_razonsocial ASC;
 SELECT vd.* FROM venta_detalle AS vd inner 
 JOIN venta as v ON v.idventa = vd.idventa AND v.estado = '1' AND v.sunat_estado = 'ACEPTADA' 
 where vd.es_cobro = 'SI' AND vd.cantidad > 1 ORDER BY vd.idventa ASC;
+
+::::::::::::: ACTUALIZAR DATA EN: venta_metodo_pago :::::::::::::::::::::::::
+INSERT INTO venta_metodo_pago (idventa, metodo_pago,  codigo_voucher, comprobante, monto )
+SELECT idventa, metodo_pago, mp_serie_comprobante, mp_comprobante, mp_monto
+FROM venta
+WHERE metodo_pago IS NOT NULL and metodo_pago <> '';

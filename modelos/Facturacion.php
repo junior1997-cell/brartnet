@@ -57,9 +57,11 @@
         WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
         ELSE '-'
       END AS cliente_nombre_completo, pu.nombre_razonsocial as user_en_atencion, LPAD(v.user_created, 3, '0') AS user_created_v2,
-      GROUP_CONCAT( CASE vd.es_cobro WHEN 'SI' THEN CONCAT( LEFT(vd.periodo_pago_month, 3), '-',  vd.periodo_pago_year, ',<br>') ELSE '' END SEPARATOR ' ') AS periodo_pago_mes_anio
+      GROUP_CONCAT( CASE vd.es_cobro WHEN 'SI' THEN CONCAT( LEFT(vd.periodo_pago_month, 3), '-',  vd.periodo_pago_year, ',<br>') ELSE '' END SEPARATOR ' ') AS periodo_pago_mes_anio,
+      vmp.cantidad_mp
       FROM venta AS v
       INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
+      LEFT JOIN (select v.idventa, COALESCE(count(vmp.idventa_metodo_pago), 0) as cantidad_mp from venta_metodo_pago as vmp inner join venta as v on v.idventa = vmp.idventa group by v.idventa) AS vmp on vmp.idventa = v.idventa
       INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN persona AS p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
@@ -77,8 +79,8 @@
     public function insertar(
       // DATOS TABLA venta
       $impuesto, $crear_y_emitir, $idsunat_c01 , $tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento,
-      $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,
-      $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
+      $metodo_pago, $total_recibido,  $total_vuelto, $mp_serie_comprobante,$file_nombre_new, $file_nombre_old, $file_size, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,
+       $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
       $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion, $tiempo_entrega, $validez_cotizacion,
       //DATOS TABLA venta DETALLE
       $idproducto, $pr_marca, $pr_categoria,$pr_nombre, $um_nombre, $um_abreviatura, $es_cobro, $periodo_pago, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $precio_venta_descuento, $descuento, $descuento_porcentaje, 
@@ -92,7 +94,7 @@
         $tipo_v = "TICKET";
       }else if ($tipo_comprobante == '07') {
         $tipo_v = "NOTA DE CRÉDITO";         
-        $metodo_pago= ""; $total_recibido= ""; $mp_monto= ""; $total_vuelto= ""; $mp_serie_comprobante = "";$mp_comprobante = [];
+        $metodo_pago= []; $total_recibido= [];  $total_vuelto= ''; $mp_serie_comprobante = [];$file_nombre_new = [];
         $usar_anticipo= "NO"; $ua_monto_disponible= ""; $ua_monto_usado= "";        
       }else if ($tipo_comprobante == '03') {
         $tipo_v = "BOLETA";
@@ -117,16 +119,17 @@
 
       if ( empty( $buscando_error['data'] ) ) {
         $sql_1 = "INSERT INTO venta(idpersona_cliente, idperiodo_contable, iddocumento_relacionado, crear_enviar_sunat, idsunat_c01, tipo_comprobante, serie_comprobante,  impuesto, 
-        venta_subtotal, venta_descuento, venta_igv, venta_total, metodo_pago, mp_serie_comprobante, mp_comprobante, mp_monto, venta_credito, vc_numero_operacion, 
-        vc_fecha_proximo_pago, total_recibido, total_vuelto, usar_anticipo, ua_monto_disponible, ua_monto_usado, nc_motivo_nota, nc_tipo_comprobante, nc_serie_y_numero, cot_tiempo_entrega, cot_validez, cot_estado, observacion_documento) 
+        venta_subtotal, venta_descuento, venta_igv, venta_total, venta_credito, vc_numero_operacion, vc_fecha_proximo_pago,  usar_anticipo, 
+        ua_monto_disponible, ua_monto_usado, nc_motivo_nota, nc_tipo_comprobante, nc_serie_y_numero, cot_tiempo_entrega, cot_validez, cot_estado, observacion_documento) 
         VALUES ('$idpersona_cliente', '$idperiodo_contable', '$nc_idventa', '$crear_y_emitir', '$idsunat_c01', '$tipo_comprobante', '$serie_comprobante', '$impuesto', '$venta_subtotal', '$venta_descuento',
-        '$venta_igv','$venta_total','$metodo_pago','$mp_serie_comprobante','','$mp_monto','','',CURRENT_TIMESTAMP, '$total_recibido', '$total_vuelto',
+        '$venta_igv','$venta_total','','',CURRENT_TIMESTAMP, 
         '$usar_anticipo','$ua_monto_disponible','$ua_monto_usado', '$nc_motivo_anulacion', '$nc_tipo_comprobante', '$nc_serie_y_numero', '$tiempo_entrega', '$validez_cotizacion', '$cot_estado', '$observacion_documento')"; 
         $newdata = ejecutarConsulta_retornarID($sql_1, 'C'); if ($newdata['status'] == false) { return  $newdata;}
         $id = $newdata['data'];
 
         $i = 0;
         $detalle_new = "";
+        $monto_recibido = 0;  
        
         if ( !empty($newdata['data']) ) {      
           while ($i < count($idproducto)) {
@@ -139,13 +142,20 @@
           }
         }
 
-        if ( !empty($mp_comprobante) ) {
-          foreach ($mp_comprobante as $key => $val) {
-            $sql_3 = "INSERT INTO venta_metodo_pago(idventa, metodo_pago, monto, vuelto, codigo_voucher, comprobante)
-            VALUES ('$id', '', 0, 0, '', '$val');";
-            $comprobante_new =  ejecutarConsulta_retornarID($sql_3, 'C'); if ($comprobante_new['status'] == false) { return  $comprobante_new;}    
+        if ( !empty($file_nombre_new) ) {
+          foreach ($file_nombre_new as $key => $val) {
+            $monto_recibido += empty($total_recibido[$key]) ? 0 : floatval($total_recibido[$key]) ;
+            $sql_3 = "INSERT INTO venta_metodo_pago(idventa, metodo_pago, monto,  codigo_voucher, comprobante, comprobante_size_bytes, comprobante_nombre_original)
+            VALUES ('$id', '$metodo_pago[$key]', '$total_recibido[$key]', '$mp_serie_comprobante[$key]', '$val', '$file_size[$key]', '$file_nombre_old[$key]');";
+            $comprobante_new =  ejecutarConsulta_retornarID($sql_3, 'C'); if ($comprobante_new['status'] == false) { return  $comprobante_new;}  
+            //return  $sql_3;
           }
         }   
+
+        // Actualizamos: total recibido y vuelto
+        $monto_vuelto = $monto_recibido - $venta_total;
+        $sql_4 = "UPDATE venta SET total_recibido = '$monto_recibido', total_vuelto = '$monto_vuelto' WHERE idventa = '$id';";
+        $actulizando_vuelto = ejecutarConsulta($sql_4); if ($actulizando_vuelto['status'] == false) { return  $actulizando_vuelto;} 
 
         return $newdata;
       } else {
@@ -212,7 +222,7 @@
 
     public function mostrar_metodo_pago($id){
       $sql = "SELECT * FROM venta_metodo_pago WHERE idventa = '$id'";
-      return ejecutarConsultaSimpleFila($sql);
+      return ejecutarConsultaArray($sql);
     }
 
     public function mostrar_cliente($id){
@@ -485,6 +495,11 @@
     public function datos_empresa(){
       $sql = "SELECT * FROM empresa;";
       return ejecutarConsultaSimpleFila($sql);      
+    }
+
+    public function datos_metodo_pago_venta($id){
+      $sql = "SELECT * FROM venta_metodo_pago where idventa = $id;";
+      return ejecutarConsultaArray($sql);      
     }
 
     // ══════════════════════════════════════ U S A R   A N T I C I P O ══════════════════════════════════════

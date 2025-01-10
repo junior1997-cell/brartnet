@@ -20,7 +20,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <link rel="stylesheet" href="../assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css">
     <link rel="stylesheet" href="../assets/libs/filepond-plugin-image-edit/filepond-plugin-image-edit.min.css">
     <link rel="stylesheet" href="../assets/libs/dropzone/dropzone.css">
-
+    <!-- GLightbox CSS -->
+    <link rel="stylesheet" href="../assets/libs/glightbox/css/glightbox.min.css">
     <style>
       #tabla-facturacion-detalle td {
         vertical-align: middle !important;
@@ -37,7 +38,33 @@ if (!isset($_SESSION["user_nombre"])) {
         width: 100% !important;
       }
 
-      
+      .imagen-metodo-pago img {
+        /*width: 100% !important;  Ajusta el ancho al contenedor */
+        /*height: auto !important;  Mantén la proporción de aspecto */
+        width: 140px !important;
+        /* Máximo ancho permitido */
+        height: 130px !important;
+        /* Máximo alto permitido */
+        object-fit: contain !important;
+        /* Asegura que la imagen no se deforme */
+        border: 1px solid #ddd !important;
+        /* Opcional: agrega un borde para resaltar el contenedor */
+        box-sizing: border-box !important;
+      }
+
+      .div_pago_rapido img {
+        width: 60px; /* Ajusta el tamaño de las imágenes */
+        height: 100%;
+        cursor: pointer;
+        border: 3px solid #ccc;
+        border-radius: 5px;
+        transition: border-color 0.3s ease; /* Suaviza la transición */
+      }
+
+      .div_pago_rapido img:hover {
+        border-color: #007bff;
+        /* Cambia el borde al pasar el ratón */
+      }
     </style>
   </head>
 
@@ -591,7 +618,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <th class="font-size-11px py-1">Cod</th>
                                   <th class="font-size-11px py-1">Producto</th>
                                   <th class="font-size-11px py-1">Unidad</th>
-                                  <th class="font-size-11px py-1">Periodo <small>(Mes y Año)</small></th>
+                                  <th class="font-size-11px py-1 text-nowrap">Periodo <small>(Mes y Año)</small></th>
                                   <th class="font-size-11px py-1">Cantidad</th>
                                   <th class="font-size-11px py-1" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
                                   <th class="font-size-11px py-1">Descuento</th>
@@ -629,12 +656,12 @@ if (!isset($_SESSION["user_nombre"])) {
                             </div>
 
                             <div class="col-12 pt-3 div_pago_rapido">
-                              <button type="button" class="btn btn-primary btn-sm pago_rapido" onclick="pago_rapido(this)">0</button>
-                              <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)">10</button>
-                              <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)">20</button>
-                              <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)">50</button>
-                              <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)">100</button>
-                              <button type="button" class="btn btn-info btn-sm" onclick="pago_rapido(this)">200</button>
+                              <button type="button" class="btn btn-primary btn-sm pago_rapido" onclick="pago_rapido(this)" data-bs-toggle="tooltip" title="Click para agregar monto!">0</button>
+                              <img src="../assets/images/monedas/10-soles.webp" alt="10" onclick="pago_rapido_moneda(10)" data-bs-toggle="tooltip" title="Click para agregar monto!" >
+                              <img src="../assets/images/monedas/20-soles.webp" alt="20" onclick="pago_rapido_moneda(20)" data-bs-toggle="tooltip" title="Click para agregar monto!" >
+                              <img src="../assets/images/monedas/50-soles.webp" alt="50" onclick="pago_rapido_moneda(50)" data-bs-toggle="tooltip" title="Click para agregar monto!" >
+                              <img src="../assets/images/monedas/100-soles.webp" alt="100" onclick="pago_rapido_moneda(100)" data-bs-toggle="tooltip" title="Click para agregar monto!" >
+                              <img src="../assets/images/monedas/200-soles.webp" alt="200" onclick="pago_rapido_moneda(200)" data-bs-toggle="tooltip" title="Click para agregar monto!" >                              
                             </div>
 
                             <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12 div_m_pagos">
@@ -645,13 +672,13 @@ if (!isset($_SESSION["user_nombre"])) {
                                       <span class="avatar avatar-sm text-primary border bg-light"><i class="ti ti-layout-grid-add fs-15"></i></span>
                                     </div>
                                     <div class="flex-fill">
-                                      <p class="fw-semibold fs-14 mb-0">Agregar <i class="bi bi-exclamation-circle" data-bs-toggle="tooltip" title="Haz clic para agregar diferentes métodos de pago y sus respectivos comprobantes."></i>  </p>                                      
+                                      <p class="fw-semibold fs-14 mb-0">Agregar <i class="bi bi-exclamation-circle" data-bs-toggle="tooltip" title="Haz clic para agregar diferentes métodos de pago y sus respectivos comprobantes."></i> </p>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div class="row" id="html-metodos-de-pagos">   
-                                
+                              <div class="row">
+
                                 <div class="col-lg-12">
                                   <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
@@ -661,23 +688,23 @@ if (!isset($_SESSION["user_nombre"])) {
                                           Método de pago
                                           <span class="charge_f_metodo_pago_1"></span>
                                         </label>
-                                        <select class="form-control form-control-sm " name="f_metodo_pago[]" id="f_metodo_pago_1" onchange="capturar_pago_venta(1);">
+                                        <select class="form-control form-control-sm f_metodo_pago_validar" name="f_metodo_pago[0]" id="f_metodo_pago_1" onchange="capturar_pago_venta(1);">
                                           <!-- Aqui se listara las opciones -->
                                         </select>
-                                      </div>
-                                    </div>                                 
-
-                                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
-                                      <div class="form-group">
-                                        <label for="f_total_recibido_1" class="form-label">Monto a pagar</label>
-                                        <input type="number" name="f_total_recibido[]" id="f_total_recibido_1" class="form-control form-control-sm" onClick="this.select();" onchange="calcular_vuelto(1);" onkeyup="calcular_vuelto(1);" placeholder="Ingrese monto a pagar.">
                                       </div>
                                     </div>
 
                                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
                                       <div class="form-group">
-                                        <label for="f_total_vuelto_1" class="form-label">Vuelto <small class="falta_o_completo_1"></small></label>
-                                        <input type="number" name="f_total_vuelto[]" id="f_total_vuelto_1" class="form-control-plaintext form-control-sm px-2 f_total_vuelto_1" readonly placeholder="Ingrese monto a pagar.">
+                                        <label for="f_total_recibido_1" class="form-label">Monto a pagar</label>
+                                        <input type="number" name="f_total_recibido[0]" id="f_total_recibido_1" class="form-control form-control-sm f_total_recibido_validar" required onClick="this.select();" onchange="calcular_vuelto(1);" onkeyup="calcular_vuelto(1);" placeholder="Ingrese monto a pagar.">
+                                      </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
+                                      <div class="form-group">
+                                        <label for="f_total_vuelto" class="form-label">Vuelto <small class="falta_o_completo_1"></small></label>
+                                        <input type="number" name="f_total_vuelto" id="f_total_vuelto" class="form-control-plaintext form-control-sm px-2 f_total_vuelto" readonly placeholder="Ingrese monto a pagar.">
                                       </div>
                                     </div>
 
@@ -693,19 +720,23 @@ if (!isset($_SESSION["user_nombre"])) {
                                         <!-- Baucher -->
                                         <div class="col-sm-6 col-lg-6 col-xl-6 pt-3">
                                           <div class="form-group">
-                                            <input type="file" class="multiple-filepond" multiple name="f_mp_comprobante[]" id="f_mp_comprobante_1" data-allow-reorder="true" data-max-file-size="3MB" accept="image/*, application/pdf">
+                                            <input type="file" class="multiple-filepond f_mp_comprobante_validar" multiple name="f_mp_comprobante[0]" id="f_mp_comprobante_1" data-allow-reorder="true" data-max-file-size="3MB" accept="image/*, application/pdf">
                                             <input type="hidden" name="f_mp_comprobante_old_1" id="f_mp_comprobante_old_1">
                                           </div>
                                         </div>
                                       </div>
                                     </div>
 
-                                    <div class="col-12"> <div class="border-bottom border-block-end-dashed py-2"></div></div>
+                                    <div class="col-12">
+                                      <div class="border-bottom border-block-end-dashed py-2"></div>
+                                    </div>
                                   </div>
-                                </div> 
+                                </div>
 
                               </div>
-                            </div>                           
+                              <div class="row" id="html-metodos-de-pagos">
+                              </div>
+                            </div>
 
                             <!-- USAR SALDO -->
                             <div class="col-md-12 col-lg-3 col-xl-3 col-xxl-3 pt-3 div_usar_anticipo">
@@ -1004,14 +1035,17 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="modal-dialog modal-md modal-dialog-scrollable">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h6 class="modal-title title-ver-metodo-pago" id="modal-ver-metodo-pagoLabel1">Imagen</h6>
+                    <h6 class="modal-title title-ver-metodo-pago" id="modal-ver-metodo-pagoLabel1">Doc:</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <div class="modal-body html_modal_ver_metodo-pago">
+                  <div class="modal-body">
+                    <div class="row" id="html-ver-metodo-pago">
+
+                    </div>
 
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="las la-times fs-lg"></i> Close</button>
+                  <div class="modal-footer p-1">
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal"><i class="las la-times fs-lg"></i> Close</button>
                   </div>
                 </div>
               </div>
@@ -1273,12 +1307,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
     <!-- Dropzone JS -->
     <script src="../assets/libs/dropzone/dropzone-min.js"></script>
+    <!-- Gallery JS -->
+    <script src="../assets/libs/glightbox/js/glightbox.min.js"></script>
 
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
 
-    <script src="scripts/facturacion.js?version_jdl=1.37"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.37"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.38"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.38"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();
@@ -1286,7 +1322,7 @@ if (!isset($_SESSION["user_nombre"])) {
       });
     </script>
 
-   
+
 
 
   </body>

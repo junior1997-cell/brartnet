@@ -304,7 +304,7 @@ function ver_pagos_x_cliente(idcliente) {
   $('#modal-ver-detalle-cobro').modal('show');
   $('#html-detalle-cobro').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
   
-  $.get(`../ajax/persona_cliente.php?op=ver_pagos_x_cliente&idcliente=${idcliente}`,  function (e, textStatus, jqXHR) {
+  $.get(`../ajax/cliente.php?op=ver_pagos_x_cliente&idcliente=${idcliente}`,  function (e, textStatus, jqXHR) {
     $('#html-detalle-cobro').html(e);
     
     $('[data-bs-toggle="tooltip"]').tooltip();
@@ -318,7 +318,7 @@ function pagos_cliente_x_mes(idpersona_cliente, mes, anio){
   $("#pago-cliente-mes").modal("show");
   $('#div_tabla_pagos_Cx_mes').html(`<div class="pt-5" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4></div></div>`);
 
-  $.get(`../ajax/persona_cliente.php?op=pagos_cliente_x_mes&id=${idpersona_cliente}&mes=${mes}&filtroA=&filtroB=&filtroC=&filtroD=&filtroE=`,  function (e, textStatus, jqXHR) {
+  $.get(`../ajax/cliente.php?op=pagos_cliente_x_mes&id=${idpersona_cliente}&mes=${mes}&filtroA=&filtroB=&filtroC=&filtroD=&filtroE=`,  function (e, textStatus, jqXHR) {
     $('#div_tabla_pagos_Cx_mes').html(e);
     $('#id_buscando_tabla_pago_xmes').hide();
     $('[data-bs-toggle="tooltip"]').tooltip();

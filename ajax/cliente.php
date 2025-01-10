@@ -11,7 +11,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
   if ($_SESSION['cliente'] == 1) {
 
-    require_once "../modelos/Persona_cliente.php";
+    require_once "../modelos/Cliente.php";
 
     require_once "../modelos/Facturacion.php";
     require '../vendor/autoload.php';                   // CONEXION A COMPOSER
@@ -68,19 +68,10 @@ if (!isset($_SESSION["user_nombre"])) {
     $f_serie_comprobante      = isset($_POST["f_serie_comprobante"]) ? limpiarCadena($_POST["f_serie_comprobante"]) : "";    
     $f_idpersona_cliente      = isset($_POST["f_idpersona_cliente"]) ? limpiarCadena($_POST["f_idpersona_cliente"]) : "";         
     $f_observacion_documento  = isset($_POST["f_observacion_documento"]) ? limpiarCadena($_POST["f_observacion_documento"]) : "";    
-    $f_es_cobro               = isset($_POST["f_es_cobro_inp"]) ? limpiarCadena($_POST["f_es_cobro_inp"]) : "";    
-    $f_periodo_pago           = isset($_POST["f_periodo_pago"]) ? limpiarCadena($_POST["f_periodo_pago"]) : "";    
-    
-    $f_metodo_pago            = isset($_POST["f_metodo_pago"]) ? limpiarCadena($_POST["f_metodo_pago"]) : "";  
-    $f_total_recibido         = isset($_POST["f_total_recibido"]) ? limpiarCadena($_POST["f_total_recibido"]) : "";  
-    $f_mp_monto               = isset($_POST["f_mp_monto"]) ? limpiarCadena($_POST["f_mp_monto"]) : "";  
-    $f_total_vuelto           = isset($_POST["f_total_vuelto"]) ? limpiarCadena($_POST["f_total_vuelto"]) : "";  
 
     $f_usar_anticipo          = isset($_POST["f_usar_anticipo"]) ? limpiarCadena($_POST["f_usar_anticipo"]) : "";  
     $f_ua_monto_disponible    = isset($_POST["f_ua_monto_disponible"]) ? limpiarCadena($_POST["f_ua_monto_disponible"]) : "";  
     $f_ua_monto_usado         = isset($_POST["f_ua_monto_usado"]) ? limpiarCadena($_POST["f_ua_monto_usado"]) : "";  
-
-    $f_mp_serie_comprobante   = isset($_POST["f_mp_serie_comprobante"]) ? limpiarCadena($_POST["f_mp_serie_comprobante"]) : "";       
 
     $f_venta_subtotal         = isset($_POST["f_venta_subtotal"]) ? limpiarCadena($_POST["f_venta_subtotal"]) : "";    
     $f_tipo_gravada           = isset($_POST["f_tipo_gravada"]) ? limpiarCadena($_POST["f_tipo_gravada"]) : "";
@@ -94,13 +85,8 @@ if (!isset($_SESSION["user_nombre"])) {
     $f_nc_motivo_anulacion    = isset($_POST["f_nc_motivo_anulacion"]) ? limpiarCadena($_POST["f_nc_motivo_anulacion"]) : "";    
 
     $f_tiempo_entrega         = isset($_POST["f_tiempo_entrega"]) ? limpiarCadena($_POST["f_tiempo_entrega"]) : "";    
-    $f_validez_cotizacion     = isset($_POST["f_validez_cotizacion"]) ? limpiarCadena($_POST["f_validez_cotizacion"]) : "";    
-     
-    $f_mp_comprobante_old     = isset($_POST["f_mp_comprobante_old"]) ? limpiarCadena($_POST["f_mp_comprobante_old"]) : ""; 
+    $f_validez_cotizacion     = isset($_POST["f_validez_cotizacion"]) ? limpiarCadena($_POST["f_validez_cotizacion"]) : "";   
 
-    
-    // $idpersona_cliente, $idzona_antena, $idplan, $id_tecnico, $ip_personal, $fecha_afiliacion, $nota, $descuento, $estado_descuento
-    //`idpersona_cliente`, `idzona_antena`, `idplan`, `id_tecnico`, `ip_personal`, `ip_antena`, `fecha_afiliacion`, `nota`, `descuento`, `estado_descuento`
     //---id cliente no va 
     switch ($_GET["op"]) {
 
@@ -234,12 +220,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
             $data[] = array(
               "0" => $cont++,
-              "1" => '<button class="btn btn-icon btn-sm border-warning btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>                
+              "1" => '<button class="btn btn-icon btn-sm border-warning btn-warning-light" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>
+              <button class="btn btn-icon btn-sm border-success btn-success-light" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" data-bs-toggle="tooltip" title="Realizar Pago"> <i class="ti ti-coin font-size-18px"></i> </button>                
               <div class="btn-group ">
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1 px-2" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
                 <ul class="dropdown-menu">
-                  
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-coin"></i> Realizar Pago</a></li>
                   <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
                   ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
                   '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
@@ -317,13 +302,12 @@ if (!isset($_SESSION["user_nombre"])) {
               "1" =>  $value['cliente_nombre_completo_recorte'] .'<br>'. '<span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> ',             
               "2" => '<button class="btn btn-icon btn-sm border-danger btn-danger-light fs-12" onclick="detalle_tab_cliente(\'detalle-cliente-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle">'. $value['avance'] .'</button>',              
              
-              "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="detalle_tab_cliente(\'detalle-cliente-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle"><i class="ri-eye-line"></i></button>                
+              "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" data-bs-toggle="tooltip" title="Realizar Pagos"><i class="ti ti-coin font-size-18px"></i></button>                
                 <div class="btn-group ">
-                  <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
+                  <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1 px-2" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
                   <ul class="dropdown-menu">
                     
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-edit"></i> Editar</a></li>
-                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-coin"></i> Realizar Pago</a></li>
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
                     ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
                     '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
@@ -366,13 +350,12 @@ if (!isset($_SESSION["user_nombre"])) {
               "1" =>  $value['cliente_nombre_completo_recorte'] .'<br>'. '<span class="text-muted fs-10 text-nowrap">' . $value['tipo_documento_abrev_nombre'] . ' : ' . $value['numero_documento'] . '</span> ',             
               "2" => '<button class="btn btn-icon btn-sm border-success btn-success-light fs-12" onclick="detalle_tab_cliente(\'detalle-cliente-no-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle">'. $value['cant_cobrado'] .'</button>',              
              
-              "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="detalle_tab_cliente(\'detalle-cliente-no-deudor\',' . $value['idpersona_cliente'] . ')" data-bs-toggle="tooltip" title="Ver Detalle"><i class="ri-eye-line"></i></button>                
+              "3" => '<button class="btn btn-icon btn-sm border-info btn-info-light" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" data-bs-toggle="tooltip" title="Realizar Pago"><i class="ti ti-coin font-size-18px"></i></button>                
                 <div class="btn-group ">
-                  <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
+                  <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1 px-2" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
                   <ul class="dropdown-menu">
                     
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-edit"></i> Editar</a></li>
-                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="realizar_pago(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-coin"></i> Realizar Pago</a></li>
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
                     ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
                     '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
@@ -857,6 +840,8 @@ if (!isset($_SESSION["user_nombre"])) {
               "18" => $val['idpersona_cliente'] ,
               "19" => $val['periodo_pago_year'] ,
               "20" => $val['cliente_nombre_completo'] ,
+              "21" => $val['zona'] ,
+              "22" => $val['centro_poblado'] .': '. $val['direccion'] ,
 
             );
           }
@@ -930,84 +915,135 @@ if (!isset($_SESSION["user_nombre"])) {
           # code...
         } else {
           # code...
-        }        
+        }            
 
-        if ($f_metodo_pago == 'EFECTIVO' ) {
-          # code...
-        } else {
+        $file_nombre_new = [];                        // Amacenar los nombres de los documentos             
+        $file_nombre_old = [];                        // Amacenar los nombres de los documentos             
+        $file_size = [];                        // Amacenar los nombres de los documentos             
+        
+        $comprobantes = $_POST["f_mp_comprobante"]; // Recibe el array de archivos
+        $resultados = [];                           // Almacenar resultados para cada archivo       
+        ksort($comprobantes);                       // Reorganizar el orden de indices
+        //echo json_encode($comprobantes, true); die();
+        foreach ($comprobantes as $key => $comprobante) {
+          $mp_comprobante = json_decode($comprobante, true);
+      
+          if (!$mp_comprobante || empty($mp_comprobante['data'])) {
+            $resultados[] = [  'index' => $key,  'status' => 'error',  'message' => 'El archivo no tiene datos válidos.'  ]; $file_nombre_new[] = ''; $file_nombre_old[] = ''; $file_size[] = '';  continue; // Saltar al siguiente archivo
+          }
+      
+          $decoded_data = base64_decode($mp_comprobante['data']); // Decodificar el archivo base64
+      
+          if ($decoded_data === false) {
+            $resultados[] = [ 'index' => $key, 'status' => 'error', 'message' => 'Error al decodificar el archivo base64.'  ]; $file_nombre_new[] = ''; $file_nombre_old[] = ''; $file_size[] = ''; continue; // Saltar al siguiente archivo
+          }
+      
+          // Validar extensión del archivo
+          $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tiff', 'tif', 'svg', 'ico', 'pdf']; $file_info = pathinfo($mp_comprobante['name']);  $ext = strtolower($file_info['extension']);
+      
+          if (!in_array($ext, $allowed_extensions)) {
+            $resultados[] = [   'index' => $key, 'status' => 'error',  'message' => 'Extensión de archivo no permitida.'  ]; $file_nombre_new[] = ''; $file_nombre_old[] = ''; $file_size[] = ''; continue; // Saltar al siguiente archivo
+          }
+      
+          // Generar un nombre único para el archivo
+          $mp_comprobante_name =$_POST["f_metodo_pago"][$key] . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . $ext;
+      
+          // Ruta de destino
+          $ruta_destino = realpath(dirname(__FILE__)) . '/../assets/modulo/facturacion/ticket/' . $mp_comprobante_name;
+      
+          // Guardar el archivo en el servidor
+          if (file_put_contents($ruta_destino, $decoded_data) !== false) {
+            $file_nombre_new[] =  $mp_comprobante_name   ;
+            $file_nombre_old[] = limpiarCadena($mp_comprobante['name']);
+            $file_size[] = $mp_comprobante['size'];
+          } 
+        }
+        //echo json_encode($_POST["f_metodo_pago"], true); die();
+        if (empty($f_idventa)) {
           
-          if ( empty($_POST["f_mp_comprobante"]) || isset($_FILES['f_mp_comprobante']) && $_FILES['f_mp_comprobante']['name'] ) {
-            # code...
-          } else {          
-            $mp_comprobante = json_decode($_POST["f_mp_comprobante"], true);
-            $decoded_data = base64_decode($mp_comprobante['data']);  // Decodificar el archivo base64
-            $ext = explode(".", $mp_comprobante["name"]);          
-            $mp_comprobante = $f_metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);          
-            $ruta_destino = '../assets/modulo/facturacion/ticket/'.$mp_comprobante; // Ruta donde deseas guardar el archivo en el servidor
-            
-            if (file_put_contents($ruta_destino, $decoded_data) !== false) { // Guardar el archivo decodificado en el servidor
-              # El archivo se ha guardado correctamente en el servidor
-            } else {
-              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Archivo no aceptado!!', 'message' => 'El archivo de baucher de pago esta corroido, porfavor cambie de archivo', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
-              echo json_encode($retorno, true); die();
-            }
-          }      
-        }          
-
-        if (empty($idventa)) {
-          
-          $rspta = $facturacion->insertar( $f_impuesto, $f_crear_y_emitir,$f_idsunat_c01  ,$f_tipo_comprobante, $f_serie_comprobante, $f_idpersona_cliente, $f_observacion_documento, 
-          $f_metodo_pago, $f_total_recibido, $f_mp_monto, $f_total_vuelto, $f_usar_anticipo, $f_ua_monto_disponible, $f_ua_monto_usado,  $f_mp_serie_comprobante,$mp_comprobante, $f_venta_subtotal, $f_tipo_gravada, $f_venta_descuento, $f_venta_igv, $f_venta_total,
+          $rspta = $facturacion->insertar( $f_impuesto, $f_crear_y_emitir,$f_idsunat_c01  ,$f_tipo_comprobante, $f_serie_comprobante, $f_idpersona_cliente, $f_observacion_documento,
+          $_POST["f_metodo_pago"],  $_POST["f_total_recibido"],  $_POST["f_total_vuelto"],  $_POST["f_mp_serie_comprobante"], $file_nombre_new, $file_nombre_old, $file_size, $f_usar_anticipo, $f_ua_monto_disponible, $f_ua_monto_usado,   $f_venta_subtotal, $f_tipo_gravada, $f_venta_descuento, $f_venta_igv, $f_venta_total,
           $f_nc_idventa, $f_nc_tipo_comprobante, $f_nc_serie_y_numero, $f_nc_motivo_anulacion, $f_tiempo_entrega, $f_validez_cotizacion,
-          $_POST["idproducto"], $_POST["pr_marca"], $_POST["pr_categoria"],$_POST["pr_nombre"], $_POST["um_nombre"],$_POST["um_abreviatura"],  $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
+          $_POST["idproducto"], $_POST["pr_marca"], $_POST["pr_categoria"],$_POST["pr_nombre"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
           $_POST["f_descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 
+          //echo json_encode($rspta, true); die();
+          $f_idventa = $rspta['id_tabla'];
 
-          $idventa = $rspta['id_tabla'];
-
-          if ($rspta['status'] == true) {             // validacion de creacion de documento
+          if ($rspta['status'] == true) {             // validacion de creacion de documento                         
         
             if ($f_tipo_comprobante == '12') {          // SUNAT TICKET     
-              $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, 'ACEPTADA' , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+              $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, 'ACEPTADA' , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
               echo json_encode($rspta, true);             
 
-            } else if ($f_tipo_comprobante == '01') {   // SUNAT FACTURA
-              
-              include( '../modelos/SunatFactura.php');
-              $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);            
-              if ( empty($sunat_observacion) && empty($sunat_error) ) {
-                echo json_encode($rspta, true); 
-              } else {              
-                $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
-                echo json_encode($retorno, true); 
-              }                
-              
-            } else if ($f_tipo_comprobante == '03') {   // SUNAT BOLETA 
-              
-              include( '../modelos/SunatBoleta.php');
-              $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
-              if ( empty($sunat_observacion) && empty($sunat_error) ) {
-                echo json_encode($rspta, true); 
-              } else {              
-                $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
-                echo json_encode($retorno, true);
-              } 
-              
-            } else if ($f_tipo_comprobante == '07') {   // SUNAT NOTA DE CREDITO 
-              
-              include( '../modelos/SunatNotaCredito.php');
-              $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
-              if ( empty($sunat_observacion) && empty($sunat_error) ) {
-                $update_sunat = $facturacion->actualizar_doc_anulado_x_nota_credito( $nc_idventa); // CAMBIAMOS DE ESTADO EL DOC ANULADO
-                echo json_encode($rspta, true); 
-              } else {              
-                $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
-                echo json_encode($retorno, true);
-              }
-                  
             } else {
-              $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'SUNAT en mantenimiento!!', 'message' => 'El sistema de sunat esta mantenimiento, esperamos su comprención, sea paciente', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
-              echo json_encode($retorno, true);
-            }
+              if ($f_crear_y_emitir == 'SI') {           // NO ENVIAR A SUNAT
+                if ($f_tipo_comprobante == '01') {   // SUNAT FACTURA
+                  
+                  include( '../modelos/SunatFactura.php');
+                  $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);            
+                  if ( empty($sunat_observacion) && empty($sunat_error) ) {
+                    echo json_encode($rspta, true); 
+                  } else {   
+                    if ($sunat_estado == 111  ) {       // ENCASO DE HABR CONEXION SON SUNAT
+                      $retorno = array( 'status' => 'no_conexion_sunat', 'titulo' => 'SUNAT en mantenimiento.', 'message' => 'No hay conexión a SUNAT, para seguir emitiendo dar click en: Enviar más tarde. De lo contrario tendra que pedir a su administrador para corregir el error.', 'user' =>  $_SESSION['user_nombre'], 'data' => 'Actual', 'id_tabla' => $f_idventa );
+                      echo json_encode($retorno, true);
+                    } else {           
+                      $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+                      echo json_encode($retorno, true); 
+                    }
+                  }                
+                  
+                } else if ($f_tipo_comprobante == '03') {   // SUNAT BOLETA 
+                  
+                  include( '../modelos/SunatBoleta.php');
+                  $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+                  if ( empty($sunat_observacion) && empty($sunat_error) ) {
+                    echo json_encode($rspta, true); 
+                  } else {    
+                    if ($sunat_estado == 111  ) {       // ENCASO DE HABR CONEXION SON SUNAT
+                      $retorno = array( 'status' => 'no_conexion_sunat', 'titulo' => 'SUNAT en mantenimiento.', 'message' => 'No hay conexión a SUNAT, para seguir emitiendo dar click en: Enviar más tarde. De lo contrario tendra que pedir a su administrador para corregir el error.', 'user' =>  $_SESSION['user_nombre'], 'data' => 'Actual', 'id_tabla' => $f_idventa );
+                      echo json_encode($retorno, true);
+                    } else {
+                      $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+                      echo json_encode($retorno, true);
+                    }                  
+                  } 
+                  
+                } else if ($f_tipo_comprobante == '07') {   // SUNAT NOTA DE CREDITO 
+                  
+                  include( '../modelos/SunatNotaCredito.php');
+                  $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+                  
+                  if ( empty($sunat_observacion) && empty($sunat_error) ) {
+                    $update_sunat = $facturacion->actualizar_doc_anulado_x_nota_credito( $nc_idventa); // CAMBIAMOS DE ESTADO EL DOC ANULADO
+                    echo json_encode($rspta, true); 
+                  } else {     
+                    if ($sunat_estado == 111  ) {       // ENCASO DE HABR CONEXION SON SUNAT
+                      $retorno = array( 'status' => 'no_conexion_sunat', 'titulo' => 'SUNAT en mantenimiento.', 'message' => 'No hay conexión a SUNAT, para seguir emitiendo dar click en: Enviar más tarde. De lo contrario tendra que pedir a su administrador para corregir el error.', 'user' =>  $_SESSION['user_nombre'], 'data' => 'Actual', 'id_tabla' => $f_idventa );
+                      echo json_encode($retorno, true);
+                    } else {         
+                      $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+                      echo json_encode($retorno, true);
+                    }
+                  }
+                      
+                } else {
+                  $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'SUNAT en mantenimiento!!', 'message' => 'El sistema de sunat esta mantenimiento, esperamos su comprención, sea paciente', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
+                  echo json_encode($retorno, true);
+                }
+              } else {
+                $sunat_estado = "POR ENVIAR"; $sunat_observacion= ""; $sunat_code= ""; $sunat_hash= ""; $sunat_mensaje= ""; $sunat_error= ""; 
+                $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);              
+                
+                if ($update_sunat['status'] == false ) { 
+                  echo json_encode($update_sunat, true);
+                } else {
+                  echo json_encode($rspta, true); 
+                }
+                
+              }
+            }               
+            
           } else{
             echo json_encode($rspta, true);
           }

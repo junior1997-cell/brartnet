@@ -1421,3 +1421,70 @@ function get_uid() {
       return v.toString(16);
   });
 }
+
+/**
+ * Funcion para agergar toltip personalizado:
+ *
+ * @param {text} clase_id     Nombre de la clase o id a usar.
+ * @param {number} cant    Cantidad a aumentar.
+*/
+function contarDivs(clase_id, cant = 0) {
+  return $(`${clase_id}`).length + cant;
+}
+
+/**
+ * Funcion para agergar toltip personalizado:
+ *
+ * @param {text} clase_id     Nombre de la clase o id a usar.
+*/
+function contarDivsArray(clase_id) {
+  return $(`${clase_id}`).length ;
+}
+
+/**
+ * Funcion para agergar toltip personalizado:
+ *
+ * @param {text} clase_id  Nombre de la clase o ID a usar.
+ * @param {text} atributo  Nombre de la Atributo a usar.
+ * @param {text} prefijo   Nombre de la prefijo que esta dentro del atributo a usar.
+*/
+function renombrarInputsArray(clase_id, atributo, prefijo) {
+  $(`${clase_id}`).each((index, element) => {
+    $(element).attr(atributo, `${prefijo}[${index}]`);
+  });
+}
+
+/**
+ * Funcion para agergar toltip personalizado:
+ *
+ * @param {text} clase_id  Nombre de la clase o ID a usar.
+ * @param {text} atributo  Nombre de la Atributo a usar.
+ * @param {text} prefijo   Nombre de la prefijo que esta dentro del atributo a usar.
+*/
+function renombrarInputsArrayContenedor(clase_id, atributo, prefijo) {  
+  $(`${clase_id}`).each((index, div) => {                               // Seleccionar todos los divs con la clase especificada
+    let input;    
+    const fieldset = $(div).find("fieldset");
+    if (fieldset.length && fieldset.find("input").length) {             // Verificar si existe un fieldset dentro del div      
+      input = fieldset.find("input");                                   // Si el fieldset existe y contiene un input, buscar el input dentro del fieldset
+    } else {      
+      input = $(div).find("input");                                     // Si no existe fieldset o no tiene inputs, buscar el input directamente en el div
+    }    
+    if (input.length) { input.attr(atributo, `${prefijo}[${index}]`); } // Renombrar el atributo del input si existe
+  });
+}
+
+/**
+ * Funcion para agergar toltip personalizado:
+ *
+ * @param {text} bytes  Tamaño en Bytes para calcular.
+*/
+function formatFileSize(bytes) {
+  if (bytes === 0) return "0 Bytes";
+
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024)); // Determina el índice basado en el tamaño
+  const size = bytes / Math.pow(1024, i); // Calcula el tamaño en la unidad adecuada
+
+  return `${size.toFixed(2)} ${sizes[i]}`; // Retorna el tamaño con dos decimales
+}

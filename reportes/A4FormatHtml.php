@@ -40,6 +40,7 @@ if (!isset($_SESSION["user_nombre"])) {
     
     $empresa_f        = $facturacion->datos_empresa();    
     $venta_f          = $facturacion->mostrar_detalle_venta($_GET["id"]);   
+    $metodo_pago_f    = $facturacion->datos_metodo_pago_venta($_GET["id"]); 
 
     if ( empty($venta_f['data']['venta']) ) { echo "Comprobante no existe"; die();  }
 
@@ -78,8 +79,8 @@ if (!isset($_SESSION["user_nombre"])) {
     $c_idventa_v2         = $venta_f['data']['venta']['idventa_v2'];
 
     // Data comprobante ================================================================================
-    $metodo_pago          = mb_convert_encoding($venta_f['data']['venta']['metodo_pago'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['metodo_pago'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
-    $mp_serie_comprobante = $venta_f['data']['venta']['mp_serie_comprobante'] == null || $venta_f['data']['venta']['mp_serie_comprobante'] == '' ? '-': mb_convert_encoding($venta_f['data']['venta']['mp_serie_comprobante'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['mp_serie_comprobante'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    //$metodo_pago          = mb_convert_encoding($venta_f['data']['venta']['metodo_pago'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['metodo_pago'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    //$mp_serie_comprobante = $venta_f['data']['venta']['mp_serie_comprobante'] == null || $venta_f['data']['venta']['mp_serie_comprobante'] == '' ? '-': mb_convert_encoding($venta_f['data']['venta']['mp_serie_comprobante'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['mp_serie_comprobante'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
     $user_en_atencion     = mb_convert_encoding($venta_f['data']['venta']['user_en_atencion'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['user_en_atencion'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
@@ -106,7 +107,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $exonerado            = number_format( floatval($venta_f['data']['venta']['venta_subtotal']), 2, '.', ',' );  
 
     $observacion_documento= mb_convert_encoding($venta_f['data']['venta']['observacion_documento'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['observacion_documento'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
-    $sunat_hash           = mb_convert_encoding($venta_f['data']['venta']['sunat_hash'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['sunat_hash'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $sunat_hash           = mb_convert_encoding($venta_f['data']['venta']['sunat_hash'] ?? '', 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['sunat_hash'] ?? '', "UTF-8, ISO-8859-1, ISO-8859-15", true) ?: 'UTF-8');
 
 
     // detalle x producto ================================================================================
@@ -424,7 +425,9 @@ if (!isset($_SESSION["user_nombre"])) {
           <div>
             <strong>FORMA DE PAGO: </strong> <span>Contado</span> 
             <?php if ($tipo_comprobante != '07') {?> | 
-            <strong><span><?php echo $metodo_pago;?>:</strong> <span><?php echo $total_recibido;?></span> |
+            <?php foreach ($metodo_pago_f['data'] as $key => $val) { ?>
+            <strong><span><?php echo $val['metodo_pago']; ?>:</strong> <span><?php echo $val['monto'];?></span> |
+            <?php }?>
             <strong>VUELTO:</strong> <span><?php echo $total_vuelto;?></span>
             <?php }?>
           </div> <!---->

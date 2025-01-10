@@ -20,7 +20,7 @@ async function init(){
   $("#guardar_registro_cambio_periodo").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-cambio-periodo").submit(); } });
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador');
+  lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador');
 
   // lista_select2("../ajax/avance_cobro.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_md_comprobante', null, '.charge_filtro_md_comprobante');
   // lista_select2("../ajax/avance_cobro.php?op=select2_filtro_cliente", '#filtro_md_cliente', null, '.charge_filtro_md_cliente');
@@ -360,7 +360,7 @@ function filtros() {
 }
 
 function reload_filtro_periodo(){ $('#filtro_periodo').val("").trigger("change") } 
-function reload_filtro_trabajador(){ lista_select2("../ajax/persona_cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador'); } 
+function reload_filtro_trabajador(){ lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador'); } 
 
 
 

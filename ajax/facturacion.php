@@ -28,44 +28,35 @@ if (!isset($_SESSION["user_nombre"])) {
 
     // ══════════════════════════════════════  DATOS DE FACTURACION ══════════════════════════════════════
 
-    $idventa                = isset($_POST["f_idventa"]) ? limpiarCadena($_POST["f_idventa"]) : "";   
-    $impuesto               = isset($_POST["f_impuesto"]) ? limpiarCadena($_POST["f_impuesto"]) : "";   
-    $crear_y_emitir         = isset($_POST["f_crear_y_emitir"]) ? limpiarCadena($_POST["f_crear_y_emitir"]) : "NO"; 
+    $f_idventa                = isset($_POST["f_idventa"]) ? limpiarCadena($_POST["f_idventa"]) : "";   
+    $f_impuesto               = isset($_POST["f_impuesto"]) ? limpiarCadena($_POST["f_impuesto"]) : "";   
+    $f_crear_y_emitir         = isset($_POST["f_crear_y_emitir"]) ? limpiarCadena($_POST["f_crear_y_emitir"]) : "NO"; 
 
-    $idsunat_c01            = isset($_POST["f_idsunat_c01"]) ? limpiarCadena($_POST["f_idsunat_c01"]) : "";    
-    $tipo_comprobante       = isset($_POST["f_tipo_comprobante"]) ? limpiarCadena($_POST["f_tipo_comprobante"]) : "";    
-    $serie_comprobante      = isset($_POST["f_serie_comprobante"]) ? limpiarCadena($_POST["f_serie_comprobante"]) : "";    
-    $idpersona_cliente      = isset($_POST["f_idpersona_cliente"]) ? limpiarCadena($_POST["f_idpersona_cliente"]) : "";         
-    $observacion_documento  = isset($_POST["f_observacion_documento"]) ? limpiarCadena($_POST["f_observacion_documento"]) : "";    
-    // $es_cobro               = isset($_POST["f_es_cobro_inp"]) ? limpiarCadena($_POST["f_es_cobro_inp"]) : "";    
-    // $periodo_pago           = isset($_POST["f_periodo_pago"]) ? limpiarCadena($_POST["f_periodo_pago"]) : "";    
-    
-    $metodo_pago            = isset($_POST["f_metodo_pago"]) ? limpiarCadena($_POST["f_metodo_pago"]) : "";  
-    $total_recibido         = isset($_POST["f_total_recibido"]) ? limpiarCadena($_POST["f_total_recibido"]) : "";  
-    $mp_monto               = isset($_POST["f_mp_monto"]) ? limpiarCadena($_POST["f_mp_monto"]) : "";  
-    $total_vuelto           = isset($_POST["f_total_vuelto"]) ? limpiarCadena($_POST["f_total_vuelto"]) : "";  
+    $f_idsunat_c01            = isset($_POST["f_idsunat_c01"]) ? limpiarCadena($_POST["f_idsunat_c01"]) : "";    
+    $f_tipo_comprobante       = isset($_POST["f_tipo_comprobante"]) ? limpiarCadena($_POST["f_tipo_comprobante"]) : "";    
+    $f_serie_comprobante      = isset($_POST["f_serie_comprobante"]) ? limpiarCadena($_POST["f_serie_comprobante"]) : "";    
+    $f_idpersona_cliente      = isset($_POST["f_idpersona_cliente"]) ? limpiarCadena($_POST["f_idpersona_cliente"]) : "";         
+    $f_observacion_documento  = isset($_POST["f_observacion_documento"]) ? limpiarCadena($_POST["f_observacion_documento"]) : "";    
 
-    $usar_anticipo          = isset($_POST["f_usar_anticipo"]) ? limpiarCadena($_POST["f_usar_anticipo"]) : "";  
-    $ua_monto_disponible    = isset($_POST["f_ua_monto_disponible"]) ? limpiarCadena($_POST["f_ua_monto_disponible"]) : "";  
-    $ua_monto_usado         = isset($_POST["f_ua_monto_usado"]) ? limpiarCadena($_POST["f_ua_monto_usado"]) : "";  
+    $f_usar_anticipo          = isset($_POST["f_usar_anticipo"]) ? limpiarCadena($_POST["f_usar_anticipo"]) : "";  
+    $f_ua_monto_disponible    = isset($_POST["f_ua_monto_disponible"]) ? limpiarCadena($_POST["f_ua_monto_disponible"]) : "";  
+    $f_ua_monto_usado         = isset($_POST["f_ua_monto_usado"]) ? limpiarCadena($_POST["f_ua_monto_usado"]) : "";  
 
-    $mp_serie_comprobante   = isset($_POST["f_mp_serie_comprobante"]) ? limpiarCadena($_POST["f_mp_serie_comprobante"]) : "";       
+    $f_venta_subtotal         = isset($_POST["f_venta_subtotal"]) ? limpiarCadena($_POST["f_venta_subtotal"]) : "";    
+    $f_tipo_gravada           = isset($_POST["f_tipo_gravada"]) ? limpiarCadena($_POST["f_tipo_gravada"]) : "";
+    $f_venta_descuento        = isset($_POST["f_venta_descuento"]) ? limpiarCadena($_POST["f_venta_descuento"]) : "";    
+    $f_venta_igv              = isset($_POST["f_venta_igv"]) ? limpiarCadena($_POST["f_venta_igv"]) : "";            
+    $f_venta_total            = isset($_POST["f_venta_total"]) ? limpiarCadena($_POST["f_venta_total"]) : "";   
 
-    $venta_subtotal         = isset($_POST["f_venta_subtotal"]) ? limpiarCadena($_POST["f_venta_subtotal"]) : "";    
-    $tipo_gravada           = isset($_POST["f_tipo_gravada"]) ? limpiarCadena($_POST["f_tipo_gravada"]) : "";
-    $venta_descuento        = isset($_POST["f_venta_descuento"]) ? limpiarCadena($_POST["f_venta_descuento"]) : "";    
-    $venta_igv              = isset($_POST["f_venta_igv"]) ? limpiarCadena($_POST["f_venta_igv"]) : "";            
-    $venta_total            = isset($_POST["f_venta_total"]) ? limpiarCadena($_POST["f_venta_total"]) : "";   
+    $f_nc_idventa             = isset($_POST["f_nc_idventa"]) ? limpiarCadena($_POST["f_nc_idventa"]) : "";    
+    $f_nc_tipo_comprobante    = isset($_POST["f_nc_tipo_comprobante"]) ? limpiarCadena($_POST["f_nc_tipo_comprobante"]) : "";    
+    $f_nc_serie_y_numero      = isset($_POST["f_nc_serie_y_numero"]) ? limpiarCadena($_POST["f_nc_serie_y_numero"]) : "";    
+    $f_nc_motivo_anulacion    = isset($_POST["f_nc_motivo_anulacion"]) ? limpiarCadena($_POST["f_nc_motivo_anulacion"]) : "";    
 
-    $nc_idventa             = isset($_POST["f_nc_idventa"]) ? limpiarCadena($_POST["f_nc_idventa"]) : "";    
-    $nc_tipo_comprobante    = isset($_POST["f_nc_tipo_comprobante"]) ? limpiarCadena($_POST["f_nc_tipo_comprobante"]) : "";    
-    $nc_serie_y_numero      = isset($_POST["f_nc_serie_y_numero"]) ? limpiarCadena($_POST["f_nc_serie_y_numero"]) : "";    
-    $nc_motivo_anulacion    = isset($_POST["f_nc_motivo_anulacion"]) ? limpiarCadena($_POST["f_nc_motivo_anulacion"]) : "";    
-
-    $tiempo_entrega         = isset($_POST["f_tiempo_entrega"]) ? limpiarCadena($_POST["f_tiempo_entrega"]) : "";    
-    $validez_cotizacion     = isset($_POST["f_validez_cotizacion"]) ? limpiarCadena($_POST["f_validez_cotizacion"]) : "";    
+    $f_tiempo_entrega         = isset($_POST["f_tiempo_entrega"]) ? limpiarCadena($_POST["f_tiempo_entrega"]) : "";    
+    $f_validez_cotizacion     = isset($_POST["f_validez_cotizacion"]) ? limpiarCadena($_POST["f_validez_cotizacion"]) : "";    
      
-    $mp_comprobante_old     = isset($_POST["f_mp_comprobante_old"]) ? limpiarCadena($_POST["f_mp_comprobante_old"]) : "";     
+    // $mp_comprobante_old     = isset($_POST["f_mp_comprobante_old"]) ? limpiarCadena($_POST["f_mp_comprobante_old"]) : "";     
 
     switch ($_GET["op"]){
 
@@ -76,88 +67,81 @@ if (!isset($_SESSION["user_nombre"])) {
         $rspta = ""; $mp_comprobante = ""; 
         $sunat_estado = ""; $sunat_observacion= ""; $sunat_code= ""; $sunat_hash= ""; $sunat_mensaje= ""; $sunat_error= ""; 
 
-        if ( floatval($venta_total) > 699 ) {
+        if ( floatval($f_venta_total) > 699 ) {
           # code...
         } else {
           # code...
-        }        
+        }            
 
-        if ($metodo_pago == 'EFECTIVO' ) {
-          # code...
-        } else {
-
-          // if ( empty($_POST["mp_comprobante"]) || isset($_FILES['mp_comprobante']) && $_FILES['mp_comprobante']['name'] ) {
-          //   # code...
-          // } else {          
-          //   $mp_comprobante = json_decode($_POST["mp_comprobante"], true);
-          //   $decoded_data = base64_decode($mp_comprobante['data']);  // Decodificar el archivo base64
-          //   $ext = explode(".", $mp_comprobante["name"]);          
-          //   $mp_comprobante = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext);          
-          //   $ruta_destino = '../assets/modulo/facturacion/ticket/'.$mp_comprobante; // Ruta donde deseas guardar el archivo en el servidor
-
-          //   if (file_put_contents($ruta_destino, $decoded_data) !== false) { // Guardar el archivo decodificado en el servidor
-          //     # El archivo se ha guardado correctamente en el servidor
-          //   } else {
-          //     $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Archivo no aceptado!!', 'message' => 'El archivo de baucher de pago esta corroido, porfavor cambie de archivo', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
-          //     echo json_encode($retorno, true); die();
-          //   }
-          // }    
-
-          $rutas_destino = [];                                                    // Amacenar los nombres de los documentos
-
-          if (!empty($_POST['f_mp_comprobante'])) {
-            $archivos = $_POST['f_mp_comprobante'];                               // Array de archivos codificados en Base64 
-            foreach ($archivos as $archivo_base64) {                              // Recorremos el array
-              $archivo = json_decode(html_entity_decode($archivo_base64), true);  // Decodifica los datos JSON correctamente
-              if (isset($archivo['name'], $archivo['data'])) {                    // Validamos los datos del archivos
-                $decoded_data = base64_decode($archivo['data']);                  // Decodificamos para guardar
-                $ext = pathinfo($archivo['name'], PATHINFO_EXTENSION);            // Optener la Extencion
-                $mp_comprobante = $metodo_pago . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . $ext;
-
-                $ruta_destino = '../assets/modulo/facturacion/ticket/' . $mp_comprobante; // Ubicaion de guardado
-
-                if (file_put_contents($ruta_destino, $decoded_data) !== false) {  // Mueve los archivos y devuelve true de exito
-                  $rutas_destino[] = $mp_comprobante;                             // insertamos las imagenes movidas
-                } else {
-                  echo json_encode(['status' => 'error_usuario', 'titulo' => 'Archivo no aceptado!!', 'message' => 'Error al guardar ' . $archivo['name']]);
-                  die();
-                }
-              }
-            }            
-          } else {
-            echo json_encode(['status' => 'error_usuario', 'titulo' => 'Archivo no aceptado!!', 'message' => 'Porfavor agregue los Vaucher segun el metodo de pago', 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '']);
-            die();
-          }       
+        $file_nombre_new = [];                        // Amacenar los nombres de los documentos             
+        $file_nombre_old = [];                        // Amacenar los nombres de los documentos             
+        $file_size = [];                        // Amacenar los nombres de los documentos             
+        
+        $comprobantes = $_POST["f_mp_comprobante"]; // Recibe el array de archivos
+        $resultados = [];                           // Almacenar resultados para cada archivo       
+        ksort($comprobantes);                       // Reorganizar el orden de indices
+        //echo json_encode($comprobantes, true); die();
+        foreach ($comprobantes as $key => $comprobante) {
+          $mp_comprobante = json_decode($comprobante, true);
+      
+          if (!$mp_comprobante || empty($mp_comprobante['data'])) {
+            $resultados[] = [  'index' => $key,  'status' => 'error',  'message' => 'El archivo no tiene datos válidos.'  ]; $file_nombre_new[] = ''; $file_nombre_old[] = ''; $file_size[] = '';  continue; // Saltar al siguiente archivo
+          }
+      
+          $decoded_data = base64_decode($mp_comprobante['data']); // Decodificar el archivo base64
+      
+          if ($decoded_data === false) {
+            $resultados[] = [ 'index' => $key, 'status' => 'error', 'message' => 'Error al decodificar el archivo base64.'  ]; $file_nombre_new[] = ''; $file_nombre_old[] = ''; $file_size[] = ''; continue; // Saltar al siguiente archivo
+          }
+      
+          // Validar extensión del archivo
+          $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tiff', 'tif', 'svg', 'ico', 'pdf']; $file_info = pathinfo($mp_comprobante['name']);  $ext = strtolower($file_info['extension']);
+      
+          if (!in_array($ext, $allowed_extensions)) {
+            $resultados[] = [   'index' => $key, 'status' => 'error',  'message' => 'Extensión de archivo no permitida.'  ]; $file_nombre_new[] = ''; $file_nombre_old[] = ''; $file_size[] = ''; continue; // Saltar al siguiente archivo
+          }
+      
+          // Generar un nombre único para el archivo
+          $mp_comprobante_name =$_POST["f_metodo_pago"][$key] . '__' . $date_now . '__' . random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . $ext;
+      
+          // Ruta de destino
+          $ruta_destino = realpath(dirname(__FILE__)) . '/../assets/modulo/facturacion/ticket/' . $mp_comprobante_name;
+      
+          // Guardar el archivo en el servidor
+          if (file_put_contents($ruta_destino, $decoded_data) !== false) {
+            $file_nombre_new[] =  $mp_comprobante_name   ;
+            $file_nombre_old[] = limpiarCadena($mp_comprobante['name']);
+            $file_size[] = $mp_comprobante['size'];
+          } 
+        }
+        //echo json_encode($_POST["f_metodo_pago"], true); die();
+        if (empty($f_idventa)) {
           
-        } 
-
-        if (empty($idventa)) {
-          
-          $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$idsunat_c01  ,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento,
-          $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,  $mp_serie_comprobante,$rutas_destino, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
-          $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion, $tiempo_entrega, $validez_cotizacion,
+          $rspta = $facturacion->insertar( $f_impuesto, $f_crear_y_emitir,$f_idsunat_c01  ,$f_tipo_comprobante, $f_serie_comprobante, $f_idpersona_cliente, $f_observacion_documento,
+          $_POST["f_metodo_pago"],  $_POST["f_total_recibido"],  $_POST["f_total_vuelto"],  $_POST["f_mp_serie_comprobante"], $file_nombre_new, $file_nombre_old, $file_size, $f_usar_anticipo, $f_ua_monto_disponible, $f_ua_monto_usado,   $f_venta_subtotal, $f_tipo_gravada, $f_venta_descuento, $f_venta_igv, $f_venta_total,
+          $f_nc_idventa, $f_nc_tipo_comprobante, $f_nc_serie_y_numero, $f_nc_motivo_anulacion, $f_tiempo_entrega, $f_validez_cotizacion,
           $_POST["idproducto"], $_POST["pr_marca"], $_POST["pr_categoria"],$_POST["pr_nombre"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
           $_POST["f_descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 
-          // echo json_encode($rspta, true); die();
-          $idventa = $rspta['id_tabla'];
+          //echo json_encode($rspta, true); die();
+          $f_idventa = $rspta['id_tabla'];
 
           if ($rspta['status'] == true) {             // validacion de creacion de documento                         
         
-            if ($tipo_comprobante == '12') {          // SUNAT TICKET     
-              $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, 'ACEPTADA' , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            if ($f_tipo_comprobante == '12') {          // SUNAT TICKET     
+              $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, 'ACEPTADA' , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
               echo json_encode($rspta, true);             
 
             } else {
-              if ($crear_y_emitir == 'SI') {           // NO ENVIAR A SUNAT
-                if ($tipo_comprobante == '01') {   // SUNAT FACTURA
+              if ($f_crear_y_emitir == 'SI') {           // NO ENVIAR A SUNAT
+                if ($f_tipo_comprobante == '01') {   // SUNAT FACTURA
                   
                   include( '../modelos/SunatFactura.php');
-                  $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);            
+                  $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);            
                   if ( empty($sunat_observacion) && empty($sunat_error) ) {
                     echo json_encode($rspta, true); 
                   } else {   
                     if ($sunat_estado == 111  ) {       // ENCASO DE HABR CONEXION SON SUNAT
-                      $retorno = array( 'status' => 'no_conexion_sunat', 'titulo' => 'SUNAT en mantenimiento.', 'message' => 'No hay conexión a SUNAT, para seguir emitiendo dar click en: Enviar más tarde. De lo contrario tendra que pedir a su administrador para corregir el error.', 'user' =>  $_SESSION['user_nombre'], 'data' => 'Actual', 'id_tabla' => $idventa );
+                      $retorno = array( 'status' => 'no_conexion_sunat', 'titulo' => 'SUNAT en mantenimiento.', 'message' => 'No hay conexión a SUNAT, para seguir emitiendo dar click en: Enviar más tarde. De lo contrario tendra que pedir a su administrador para corregir el error.', 'user' =>  $_SESSION['user_nombre'], 'data' => 'Actual', 'id_tabla' => $f_idventa );
                       echo json_encode($retorno, true);
                     } else {           
                       $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
@@ -165,15 +149,15 @@ if (!isset($_SESSION["user_nombre"])) {
                     }
                   }                
                   
-                } else if ($tipo_comprobante == '03') {   // SUNAT BOLETA 
+                } else if ($f_tipo_comprobante == '03') {   // SUNAT BOLETA 
                   
                   include( '../modelos/SunatBoleta.php');
-                  $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+                  $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
                   if ( empty($sunat_observacion) && empty($sunat_error) ) {
                     echo json_encode($rspta, true); 
                   } else {    
                     if ($sunat_estado == 111  ) {       // ENCASO DE HABR CONEXION SON SUNAT
-                      $retorno = array( 'status' => 'no_conexion_sunat', 'titulo' => 'SUNAT en mantenimiento.', 'message' => 'No hay conexión a SUNAT, para seguir emitiendo dar click en: Enviar más tarde. De lo contrario tendra que pedir a su administrador para corregir el error.', 'user' =>  $_SESSION['user_nombre'], 'data' => 'Actual', 'id_tabla' => $idventa );
+                      $retorno = array( 'status' => 'no_conexion_sunat', 'titulo' => 'SUNAT en mantenimiento.', 'message' => 'No hay conexión a SUNAT, para seguir emitiendo dar click en: Enviar más tarde. De lo contrario tendra que pedir a su administrador para corregir el error.', 'user' =>  $_SESSION['user_nombre'], 'data' => 'Actual', 'id_tabla' => $f_idventa );
                       echo json_encode($retorno, true);
                     } else {
                       $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
@@ -181,17 +165,17 @@ if (!isset($_SESSION["user_nombre"])) {
                     }                  
                   } 
                   
-                } else if ($tipo_comprobante == '07') {   // SUNAT NOTA DE CREDITO 
+                } else if ($f_tipo_comprobante == '07') {   // SUNAT NOTA DE CREDITO 
                   
                   include( '../modelos/SunatNotaCredito.php');
-                  $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+                  $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
                   
                   if ( empty($sunat_observacion) && empty($sunat_error) ) {
                     $update_sunat = $facturacion->actualizar_doc_anulado_x_nota_credito( $nc_idventa); // CAMBIAMOS DE ESTADO EL DOC ANULADO
                     echo json_encode($rspta, true); 
                   } else {     
                     if ($sunat_estado == 111  ) {       // ENCASO DE HABR CONEXION SON SUNAT
-                      $retorno = array( 'status' => 'no_conexion_sunat', 'titulo' => 'SUNAT en mantenimiento.', 'message' => 'No hay conexión a SUNAT, para seguir emitiendo dar click en: Enviar más tarde. De lo contrario tendra que pedir a su administrador para corregir el error.', 'user' =>  $_SESSION['user_nombre'], 'data' => 'Actual', 'id_tabla' => $idventa );
+                      $retorno = array( 'status' => 'no_conexion_sunat', 'titulo' => 'SUNAT en mantenimiento.', 'message' => 'No hay conexión a SUNAT, para seguir emitiendo dar click en: Enviar más tarde. De lo contrario tendra que pedir a su administrador para corregir el error.', 'user' =>  $_SESSION['user_nombre'], 'data' => 'Actual', 'id_tabla' => $f_idventa );
                       echo json_encode($retorno, true);
                     } else {         
                       $retorno = array( 'status' => 'error_personalizado', 'titulo' => 'Hubo un error en la emisión', 'message' => $sunat_error . '<br>' . $sunat_observacion, 'user' =>  $_SESSION['user_nombre'], 'data' => [], 'id_tabla' => '' );
@@ -205,7 +189,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 }
               } else {
                 $sunat_estado = "POR ENVIAR"; $sunat_observacion= ""; $sunat_code= ""; $sunat_hash= ""; $sunat_mensaje= ""; $sunat_error= ""; 
-                $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);              
+                $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);              
                 
                 if ($update_sunat['status'] == false ) { 
                   echo json_encode($update_sunat, true);
@@ -348,9 +332,15 @@ if (!isset($_SESSION["user_nombre"])) {
                   )
                 )
                 : '' , 
-              "9" => empty($value['mp_comprobante']) ? '' :  '<center><div class="svg-icon-background bg-warning-transparent cursor-pointer" onclick="ver_comprobante_pago('. $value['idventa'] .');" data-bs-toggle="tooltip" title="Baucher: '. $value['metodo_pago'] .'">                      
+              "9" => $value['cantidad_mp'] == 0 ? '' :  '<center><div class="svg-icon-background bg-warning-transparent cursor-pointer" onclick="ver_comprobante_pago('. $value['idventa'] .',\'&lt;b&gt;'.$value['tp_comprobante_v2'].'&lt;/b&gt; ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'].'\');" data-bs-toggle="tooltip" title="Baucher: '. $value['metodo_pago'] .'">                      
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-warning">
-                  <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v5a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h6a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Zm13.71,6.29a1,1,0,0,0-1.42,0l-3.29,3.3-1.29-1.3a1,1,0,0,0-1.42,1.42l2,2a1,1,0,0,0,1.42,0l4-4A1,1,0,0,0,21.21,16.29Z" />
+                  <!-- Documento -->
+                  <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v3a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h5a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Z" />
+
+                  <!-- Texto dinámico para el número -->
+                  <text x="16" y="23" font-size="10" text-anchor="middle" fill="black" id="dynamic-number" class="svg-dark">
+                    '.$value['cantidad_mp'].'
+                  </text>
                 </svg>
               </div></center>' , 
               "10" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
