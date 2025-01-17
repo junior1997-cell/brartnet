@@ -30,7 +30,7 @@
       
       if ( empty($cliente) ) { } else {  $filtro_cliente = "AND v.idpersona_cliente = '$cliente'"; } 
       if ( empty($comprobante) ) { } else {  $filtro_comprobante = "AND v.idsunat_c01 = '$comprobante'"; } 
-      if ( empty($estado_sunat) ) { } else if ( $estado_sunat == 'NO ENVIADO') { $filtro_estado_sunat = "AND (v.sunat_estado <> 'ACEPTADA' AND v.sunat_estado <> 'POR ENVIAR' AND v.sunat_estado <> 'ANULADO')"; } 
+      if ( empty($estado_sunat) ) { } else if ( $estado_sunat == 'NO ENVIADO') { $filtro_estado_sunat = "AND ( v.sunat_estado is null or v.sunat_estado = '' or v.sunat_estado IN ('RECHAZADA') )"; } 
       else {  $filtro_estado_sunat = "AND v.sunat_estado = '$estado_sunat'"; } 
 
       $sql = "SELECT v.*, LPAD(v.idventa, 5, '0') AS idventa_v2, CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END AS venta_total_v2, 
@@ -207,6 +207,12 @@
       return ejecutarConsulta($sql_1);
     } 
 
+    public function crear_bitacora_reenvio_sunat( $idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error) {
+      $sql_1 = "INSERT INTO  bitacora_reenvio_sunat (  idventa, observacion_de_ejecucion, sunat_estado, sunat_observacion, sunat_code, sunat_mensaje, sunat_hash, sunat_error  )
+      values ( $idventa, '$observacion_ejecucion', '$sunat_estado' , '$sunat_observacion', '$sunat_code', '$sunat_mensaje', '$sunat_hash',  '$sunat_error' );";
+      return ejecutarConsulta($sql_1);
+    } 
+
     public function actualizar_doc_anulado_x_nota_credito( $idventa) {
       
       $sql_1 = "UPDATE venta SET sunat_estado='ANULADO' WHERE idventa = '$idventa';";
@@ -219,6 +225,11 @@
       $sql = "SELECT * FROM venta WHERE idventa = '$id'";
       return ejecutarConsultaSimpleFila($sql);
     }
+
+    public function comprobantes_no_enviado_a_sunat(){
+      $sql = "SELECT  * FROM venta where tipo_comprobante in ('01', '03') and ( sunat_estado is null or sunat_estado = '' or sunat_estado IN ('RECHAZADA', 'POR ENVIAR', 'NULL', 'null' ))";
+      return ejecutarConsultaArray($sql);
+    }      
 
     public function mostrar_metodo_pago($id){
       $sql = "SELECT * FROM venta_metodo_pago WHERE idventa = '$id'";
@@ -474,7 +485,7 @@
       v.fecha_emision, vd.periodo_pago_format, vd.periodo_pago, vd.pr_nombre,  vd.cantidad, vd.subtotal
       from venta as v
       INNER JOIN venta_detalle as vd on vd.idventa = v.idventa
-      WHERE v.idpersona_cliente = $idcliente and vd.periodo_pago = '$periodo_pago' and vd.es_cobro='SI' AND v.estado_delete = 1 
+      WHERE v.idpersona_cliente = '$idcliente' and vd.periodo_pago = '$periodo_pago' and vd.es_cobro='SI' AND v.estado_delete = 1 
       AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12') ";
       $buscando =  ejecutarConsultaArray($sql); if ( $buscando['status'] == false) {return $buscando; }
 

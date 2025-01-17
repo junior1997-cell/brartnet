@@ -93,3 +93,8 @@ INSERT INTO venta_metodo_pago (idventa, metodo_pago,  codigo_voucher, comprobant
 SELECT idventa, metodo_pago, mp_serie_comprobante, mp_comprobante, mp_monto
 FROM venta
 WHERE metodo_pago IS NOT NULL and metodo_pago <> '';
+
+::::::::::::: ACTUALIZAR DATA EN: mes de pago :::::::::::::::::::::::::
+UPDATE venta_detalle
+SET periodo_pago_format = DATE_FORMAT(periodo_pago_format, '2024-%m-%d'), periodo_pago = DATE_FORMAT(periodo_pago_format, '2024-%m'), periodo_pago_year = '2024'
+WHERE  idventa =  2233
