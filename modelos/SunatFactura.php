@@ -18,7 +18,7 @@ require "../config/Conexion_v2.php";
 $numero_a_letra = new NumeroALetras();
 
 $empresa_f  = $facturacion->datos_empresa();
-$venta_f    = $facturacion->mostrar_detalle_venta($idventa); ##echo $rspta['id_tabla']; echo  json_encode($venta_f , true);  die();
+$venta_f    = $facturacion->mostrar_detalle_venta($f_idventa); ##echo $rspta['id_tabla']; echo  json_encode($venta_f , true);  die();
 
 if (empty($venta_f['data']['venta'])) {
   # code...

@@ -18,7 +18,7 @@ require "../config/Conexion_v2.php";
 $numero_a_letra = new NumeroALetras();
 
 $empresa_f  = $facturacion->datos_empresa();
-$venta_f    = $facturacion->mostrar_detalle_venta( $idventa );  # echo  json_encode($venta_f );  die();
+$venta_f    = $facturacion->mostrar_detalle_venta( $f_idventa );  # echo  json_encode($venta_f );  die();
 
 if (empty($venta_f['data']['venta'])) {
   # code...

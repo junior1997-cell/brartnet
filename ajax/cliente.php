@@ -967,7 +967,7 @@ if (!isset($_SESSION["user_nombre"])) {
           $_POST["idproducto"], $_POST["pr_marca"], $_POST["pr_categoria"],$_POST["pr_nombre"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
           $_POST["f_descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 
           //echo json_encode($rspta, true); die();
-          $f_idventa = $rspta['id_tabla'];
+          $f_idventa = $rspta['id_tabla']; //echo json_encode($f_idventa, true); die();
 
           if ($rspta['status'] == true) {             // validacion de creacion de documento                         
         
