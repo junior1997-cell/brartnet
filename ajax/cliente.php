@@ -225,7 +225,8 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="btn-group ">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1 px-2" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
+                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="resumen_producto_comprado(' . $value['idpersona_cliente'] . ');" ><i class="bi bi-cart4"></i> Productos vendidos</a></li> '.
                   ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
                   '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
                   ).
@@ -308,13 +309,16 @@ if (!isset($_SESSION["user_nombre"])) {
                   <ul class="dropdown-menu">
                     
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-edit"></i> Editar</a></li>
-                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> 
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="resumen_producto_comprado(' . $value['idpersona_cliente'] . ');" ><i class="bi bi-cart4"></i> Productos vendidos</a></li> '.
                     ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
                     '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
                     ).
                   '</ul>
               </div>',
-              "4" => '<span class="fs-10">' . $value['trabajador_nombre'] .'</span>',
+              "4" => '<textarea cols="30" rows="2" class="textarea_datatable bg-light fs-10" readonly="">' . $value['centro_poblado'] . ' : ' . $value['direccion'] . '</textarea>',
+              "5" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' ,
+              "6" => '<span class="fs-10">' . $value['trabajador_nombre'] .'</span>',
 
             );
           }
@@ -356,7 +360,8 @@ if (!isset($_SESSION["user_nombre"])) {
                   <ul class="dropdown-menu">
                     
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-edit"></i> Editar</a></li>
-                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> '.
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> 
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="resumen_producto_comprado(' . $value['idpersona_cliente'] . ');" ><i class="bi bi-cart4"></i> Productos vendidos</a></li> '.
                     ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
                     '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
                     ).
@@ -1067,6 +1072,73 @@ if (!isset($_SESSION["user_nombre"])) {
         echo json_encode($rspta, true);
       break;
 
+      // ══════════════════════════════════════ R E S U M E N   P R O D U C T O   C O M P R A  ══════════════════════════════════════ 
+      case 'tabla_resumen_producto_venta':
+        $rspta = $persona_cliente->resumen_producto_venta(  $_GET["id_cliente"] );
+        //Vamos a declarar un array
+        $data = [];
+        $cont = 1;             
+
+        if ($rspta['status'] == true) {
+          
+          foreach ($rspta['data'] as $key => $value) { 
+
+            $data[] = array(
+              "0" => $cont++,
+              "1" =>   $value['pr_nombre'],             
+              "2" =>  $value['precio_venta_promedio'],             
+              "3" =>   $value['cant_vendida'],
+              // "4" => '<span class="fs-10">' . $value['trabajador_nombre'] .'</span>',
+
+            );
+          }
+          $results = [
+            'status'=> true,
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode($results, true);
+        } else {
+          echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
+        }
+
+      break;
+
+      case 'tabla_todos_producto_venta':
+        $rspta = $persona_cliente->resumen_producto_venta_todos(  $_GET["id_cliente"] );
+        //Vamos a declarar un array
+        $data = [];
+        $cont = 1;             
+
+        if ($rspta['status'] == true) {
+          
+          foreach ($rspta['data'] as $key => $value) { 
+
+            $data[] = array(
+              "0" => $cont++,
+              "1" =>  $value['pr_nombre'],             
+              "2" =>  $value['precio_venta'],             
+              "3" =>  $value['cantidad'],
+              "4" => '<span class="fs-11">' . '<b>'.$value['tp_comprobante_v2'].'</b>' . ' ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'].'</span>',
+              "5" =>   $value['fecha_emision_format'] ,
+
+            );
+          }
+          $results = [
+            'status'=> true,
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode($results, true);
+        } else {
+          echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
+        }
+
+      break;
 
       // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 
 

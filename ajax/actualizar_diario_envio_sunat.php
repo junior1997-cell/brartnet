@@ -39,7 +39,7 @@ ob_start();
 
       foreach ($data_no_enviada['data'] as $key => $val) {      
 
-        $idventa          = $val["idventa"];
+        $f_idventa          = $val["idventa"];
         $tipo_comprobante = $val["tipo_comprobante"];
         $nc_idventa       = $val["iddocumento_relacionado"];
 
@@ -48,30 +48,30 @@ ob_start();
 
         if ($tipo_comprobante == '12') {          // SUNAT TICKET     
           $observacion_ejecucion= "Documento que se queria actualizar es una 12-TIKET, lo cual no procede.";
-          $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+          $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $f_idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
         } else if ($tipo_comprobante == '01') {   // SUNAT FACTURA         
 
           include( '../modelos/SunatFactura.php');
-          $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+          $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           
           if ( empty($sunat_observacion) && empty($sunat_error) ) {
             $observacion_ejecucion= "No hubo errores en el envio a sunat.";
-            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $f_idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           } else {    
             $observacion_ejecucion= "Error en la insercion de los datos.";          
-            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $f_idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           }              
           
         } else if ($tipo_comprobante == '03') {   // SUNAT BOLETA 
           
           include( '../modelos/SunatBoleta.php');
-          $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+          $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           if ( empty($sunat_observacion) && empty($sunat_error) ) {
             $observacion_ejecucion= "No hubo errores en el envio a sunat.";
-            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $f_idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           } else {      
             $observacion_ejecucion= "Error en la insercion de los datos.";        
-            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $f_idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           }            
           
         } else if ($tipo_comprobante == '07') {   // SUNAT NOTA DE CREDITO 
@@ -80,14 +80,14 @@ ob_start();
           if ( empty($sunat_observacion) && empty($sunat_error)  ) {
             $observacion_ejecucion= "No hubo errores en el envio a sunat.";
             $update_sunat = $facturacion->actualizar_doc_anulado_x_nota_credito( $nc_idventa); // CAMBIAMOS DE ESTADO EL DOC ANULADO
-            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $f_idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           } else {      
             $observacion_ejecucion= "Error en la insercion de los datos.";        
-            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+            $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $f_idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           }
         } else {
           $observacion_ejecucion= "Tipo de Documeneto no especificado, porfavor tener encuenta.";
-          $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+          $update_sunat = $facturacion->crear_bitacora_reenvio_sunat( $f_idventa, $observacion_ejecucion, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
          
         }
       }

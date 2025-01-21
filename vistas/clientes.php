@@ -163,6 +163,8 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <th>Cliente</th>                                                        
                                   <th>Deuda</th>                                                               
                                   <th class="text-center">Acciones</th>
+                                  <th>Lugar/Direccion</th>
+                                  <th>Zona</th>
                                   <th>Trabajador</th>     
                                 </tr>
                               </thead>
@@ -173,6 +175,8 @@ if (!isset($_SESSION["user_nombre"])) {
                                   <th>Cliente</th>                                                        
                                   <th>Deuda</th>                                                               
                                   <th class="text-center">Acciones</th>
+                                  <th>Lugar/Direccion</th>
+                                  <th>Zona</th>
                                   <th>Trabajador</th>   
                                 </tr>
                               </tfoot>
@@ -1382,6 +1386,61 @@ if (!isset($_SESSION["user_nombre"])) {
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary"
                     data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END::modal -->
+
+          <!-- MODAL - VER RESUMEN DE PRODUCTOS VENDIDO -->
+          <div class="modal fade" id="modal_ver_productos_vendidos">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content modal-content-demo">
+                <div class="modal-body text-start">
+                  <div class="card custom-card">
+                    <div class="card-header">
+                      <div class="card-title"> Productos y Servicios Vendidos .</div>
+                    </div>
+                    <div class="card-body">
+                      <nav class="nav nav-style-6 nav-pills mb-3 nav-venta d-sm-flex d-block" role="tablist">
+                        <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-current="page" href="#nav-resumen-venta" aria-selected="false">Resumen</a>
+                        <a class="nav-link" data-bs-toggle="tab" role="tab" href="#nav-todos-venta" aria-selected="true">Todos <small>(Detallado)</small></a>
+                      </nav>
+                      <div class="tab-content">
+                        <div class="tab-pane show active text-muted" id="nav-resumen-venta" role="tabpanel">
+                          <div class="table-responsive">
+                            <table id="tabla-resumen-producto-venta" class="table table-bordered w-100">
+                              <thead class="text-nowrap">
+                                <th>#</th>
+                                <th>Nombre Producto</th>                              
+                                <th>P/U. <small>(Promedio)</small> </th>
+                                <th>Cant.</th>
+                              </thead>
+                              <tbody></tbody>
+                            </table>                            
+                          </div>
+                        </div>
+                        <div class="tab-pane  text-muted" id="nav-todos-venta" role="tabpanel">
+                          <div class="table-responsive">
+                            <table id="tabla-todos-producto-venta" class="table table-bordered w-100">
+                              <thead class="text-nowrap">
+                                <th>#</th>
+                                <th>Nombre Producto</th>                              
+                                <th>P/Unit.</th>
+                                <th>Cant.</th>
+                                <th>Comprobante</th>
+                                <th>Emisión.</th>
+                              </thead>
+                              <tbody></tbody>
+                            </table>                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer py-2">
+                  <button type="button" class="btn btn-sm btn-secondary"   data-bs-dismiss="modal">Close</button>
                 </div>
               </div>
             </div>

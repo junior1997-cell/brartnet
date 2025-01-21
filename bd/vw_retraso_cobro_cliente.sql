@@ -1,5 +1,5 @@
 SELECT
-  pco.idpersona_cliente_v2, pco.idpersona, pco.idpersona_cliente, pco.cliente_nombre_completo, pco.dia_cancelacion,
+  pco.idpersona_cliente_v2, pco.idpersona, pco.idpersona_cliente, pco.cliente_nombre_completo, pco.dia_cancelacion, pco.fecha_cancelacion,
   CONCAT( YEAR(pco.primera_venta), '-',  UPPER( LEFT(MONTHNAME(pco.primera_venta), 1) ), SUBSTR(MONTHNAME(pco.primera_venta), 2) ) AS mes_inicio,
   ROUND( COALESCE( ( pco.cant_total_mes - co.cant_cobrado ), 0 ),  2 ) AS avance,
   COALESCE(co.cant_cobrado, 0) AS cant_cobrado,
@@ -34,7 +34,7 @@ FROM
           ELSE TIMESTAMPDIFF (MONTH, MIN(ven.periodo_pago_format), CURDATE())
         END
       END, 
-    0 ) AS cant_total_mes,
+    0 ) AS cant_total_mes, per.fecha_cancelacion,
     per.idpersona, per.idpersona_cliente_v2, per.idpersona_cliente, per.cliente_nombre_completo, per.numero_documento, per.estado_pc, per.estado_delete_pc, per.estado_p,
     per.estado_delete_p, per.tipo_documento_abrev_nombre, per.idpersona_trabajador, per.trabajador_nombre
   FROM

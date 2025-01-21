@@ -493,8 +493,27 @@ class Cliente
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
+	// ══════════════════════════════════════ RESUMEN VENTA PRODUCTO  ══════════════════════════════════════ 
 
+	public function resumen_producto_venta($id_cliente){
+		$sql = "SELECT  vd.pr_nombre, SUM(vd.cantidad) as cant_vendida, AVG(vd.precio_venta) as precio_venta_promedio
+		FROM venta_detalle as vd 
+		INNER JOIN venta as v on v.idventa = vd.idventa 
+		INNER JOIN sunat_c01_tipo_comprobante AS sc01 ON sc01.idtipo_comprobante = v.idsunat_c01
+		WHERE  v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado IN ( 'ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante in( '01', '03', '12' ) and v.idpersona_cliente = '$id_cliente'
+		GROUP BY vd.pr_nombre";
+		return ejecutarConsultaArray($sql);
+	}
 
+	public function resumen_producto_venta_todos($id_cliente){
+		$sql = "SELECT CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE sc01.abreviatura END AS tp_comprobante_v2, v.serie_comprobante, v.numero_comprobante,
+		DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') as fecha_emision_format,  vd.* FROM venta_detalle as vd 
+		INNER JOIN venta as v on v.idventa = vd.idventa 
+		INNER JOIN sunat_c01_tipo_comprobante AS sc01 ON sc01.idtipo_comprobante = v.idsunat_c01
+		WHERE  v.estado = '1' AND v.estado_delete = '1' AND v.sunat_estado IN ( 'ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante in( '01', '03', '12' ) and v.idpersona_cliente = '$id_cliente'
+		ORDER BY vd.pr_nombre";
+		return ejecutarConsultaArray($sql);
+	}
 
 
 

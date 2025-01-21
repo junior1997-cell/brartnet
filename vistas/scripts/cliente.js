@@ -2,6 +2,8 @@ var tabla_cliente_todos;
 var tabla_cliente_deudor;
 var tabla_cliente_no_deudor;
 var tabla_pagos_all_cliente;
+var tabla_resumen_producto_venta;
+var tabla_todos_producto_venta;
 
 var form_validate_facturacion;
 var array_data_venta = [];
@@ -1418,6 +1420,109 @@ function guardar_editar_facturacion(e) {
   :::::                                         F I N   R E A L I Z A R   P A G O 
   :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
+
+
+/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  :::::                                         R E S U M E N   D E   P R O D U C T O S   V E N D I D O S
+  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+*/
+
+function resumen_producto_comprado(id_cliente) {
+  $('#modal_ver_productos_vendidos').modal('show');
+
+  tabla_resumen_producto_venta = $("#tabla-resumen-producto-venta").dataTable({
+    responsive: false, 
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
+    buttons: [  
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_resumen_producto_venta) { tabla_resumen_producto_venta.ajax.reload(null, false); } } },
+    ],
+    ajax: {
+      url: `../ajax/cliente.php?op=tabla_resumen_producto_venta&id_cliente=${id_cliente}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+      complete: function () {
+        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');
+        $('[data-bs-toggle="tooltip"]').tooltip();
+      },
+		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-nowrap text-center"); }
+      // columna: #
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap") }
+      // columna: #
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: #
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+      
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    "bDestroy": true,
+    "iDisplayLength": 10,
+    "order": [[0, "asc"]],
+    columnDefs: [      
+      // { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      // { targets: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], visible: false, searchable: false, },
+    ],
+  }).DataTable();
+
+  tabla_todos_producto_venta = $("#tabla-todos-producto-venta").dataTable({
+    responsive: false, 
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
+    buttons: [  
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_todos_producto_venta) { tabla_todos_producto_venta.ajax.reload(null, false); } } },
+    ],
+    ajax: {
+      url: `../ajax/cliente.php?op=tabla_todos_producto_venta&id_cliente=${id_cliente}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+      complete: function () {
+        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');
+        $('[data-bs-toggle="tooltip"]').tooltip();
+      },
+		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-nowrap text-center"); }
+      // columna: #
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap") }
+      // columna: #
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: #
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+      
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    "bDestroy": true,
+    "iDisplayLength": 10,
+    "order": [[0, "asc"]],
+    columnDefs: [      
+      { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [2], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-start">S/</span> <span class="float-end ${color} "> ${number} </span>`; } return number; }, },      
+
+    ],
+  }).DataTable();
+}
 
 $(document).ready(function () { 
 
