@@ -82,7 +82,7 @@ FROM
 	LEFT JOIN ( 
 		SELECT MIN(vd.periodo_pago_format) as periodo_pago_format_min, v.idpersona_cliente FROM venta v 
 		INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
-		WHERE  vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01', '03', '12')
+		WHERE  vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01', '03', '12')
 		GROUP BY v.idpersona_cliente
   ) AS ven ON ven.idpersona_cliente = per.idpersona_cliente 
 ORDER BY	per.idpersona_cliente DESC

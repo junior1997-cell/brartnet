@@ -42,14 +42,14 @@ class Ver_pagos
         SELECT MAX(vd.periodo_pago_format)
         FROM venta_detalle AS vd
         INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = '$this->id_usr_sesion_client'
-        WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12')
+        WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01','03','12')
       ) 
     ) AS mes_c
     LEFT JOIN( 
       SELECT vd.*, v.tipo_comprobante, v.serie_comprobante, v.numero_comprobante
       FROM venta_detalle AS vd
       INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = '$this->id_usr_sesion_client'
-      WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND
+      WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND
       v.tipo_comprobante IN ('01','03','12')
     ) AS lvd ON mes_c.year_month = lvd.periodo_pago $filtro
     ORDER by mes_c.year_month DESC;";
@@ -161,7 +161,7 @@ class Ver_pagos
     (SELECT MAX(vd.periodo_pago_format)
                 FROM venta_detalle AS vd
                 INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = '$this->id_usr_sesion_client'
-                WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12')) ) AS mes_c
+                WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01','03','12')) ) AS mes_c
     ORDER by mes_c.year_month DESC;";
 
     $year = ejecutarConsultaArray($sql_year);

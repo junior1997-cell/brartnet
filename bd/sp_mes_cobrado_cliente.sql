@@ -18,7 +18,7 @@ BEGIN
         SELECT MIN(vd.periodo_pago_format) as fecha_minima_cobro, v.idpersona_cliente 
         FROM venta_detalle AS vd
         INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = idcliente
-        WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12')
+        WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01','03','12')
       ) AS vd on vd.idpersona_cliente = pc.idpersona_cliente
       WHERE pc.idpersona_cliente = idcliente
     ) AND 
@@ -38,7 +38,7 @@ BEGIN
         SELECT MAX(vd.periodo_pago_format) as fecha_maxima_cobro, v.idpersona_cliente
         FROM venta_detalle AS vd
         INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = idcliente
-        WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01','03','12')
+        WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01','03','12')
       ) AS vd on vd.idpersona_cliente = pc.idpersona_cliente
       WHERE pc.idpersona_cliente = idcliente
     ) 
@@ -57,7 +57,7 @@ BEGIN
     LEFT JOIN usuario as u ON u.idusuario = v.user_created                                      -- Datos del Tecnico que cobro
     LEFT JOIN persona as pu ON pu.idpersona = u.idpersona                                       -- Datos del Tecnico que cobro
     INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = v.idsunat_c01        -- Tipo de comprobane emitido
-    WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado = 'ACEPTADA' AND
+    WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND
     v.tipo_comprobante IN ('01','03','12')
   ) AS lvd ON mes_c.year_month = lvd.periodo_pago 
   ORDER by mes_c.year_month DESC;

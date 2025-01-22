@@ -64,7 +64,7 @@ BEGIN
     LEFT JOIN ( 
       SELECT vd.periodo_pago_format, v.idpersona_cliente FROM venta v 
       INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
-      WHERE  vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01', '03', '12') 
+      WHERE  vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01', '03', '12') 
       -- Filtros
       and year(vd.periodo_pago_format) = COALESCE(anio_pago, year(vd.periodo_pago_format)) 
     ) AS ven ON ven.idpersona_cliente = per.idpersona_cliente 
@@ -76,7 +76,7 @@ BEGIN
     FROM venta AS v
     INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
     INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
-    WHERE vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN('01', '03', '12')
+    WHERE vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN('01', '03', '12')
     -- Filtros
     and pc.idpersona_trabajador = COALESCE(idtrabajador, year(pc.idpersona_trabajador)) and year(vd.periodo_pago_format) = COALESCE(anio_pago, year(vd.periodo_pago_format))  
     GROUP BY pc.idpersona_cliente

@@ -275,6 +275,7 @@ function limpiar_form_venta(){
   $("#f_idventa").val('');
   $("#f_nc_idventa").val('0');
 
+  $('#f_crear_y_emitir').prop('checked', false)
   $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
   $("#f_idpersona_cliente").val('').trigger('change'); 
   $("#f_metodo_pago_1").val('').trigger('change'); 
@@ -648,11 +649,13 @@ function ver_series_comprobante(input) {
     if ( tipo_comprobante == '01') {   
       $("#f_idsunat_c01").val(2); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
       $("#f_periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-      $("#f_metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } });       
+      $("#f_metodo_pago_1").rules('add', { required: true, messages: { required: 'Campo requerido' } });       
+      $("#f_total_recibido_1").rules('add', { required: true, messages: { required: 'Campo requerido' } });       
     } else if ( tipo_comprobante == '03') {
       $("#f_idsunat_c01").val(3); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante
       $("#f_periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-      $("#f_metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#f_metodo_pago_1").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#f_total_recibido_1").rules('add', { required: true, messages: { required: 'Campo requerido' } });
     } else if ( tipo_comprobante == '07') {
       var nc_tipo_comprobante = $('#f_nc_tipo_comprobante').val() == '' || $('#f_nc_tipo_comprobante').val() == null ? '' : $('#f_nc_tipo_comprobante').val();
       if (nc_tipo_comprobante == '01') {
@@ -663,7 +666,8 @@ function ver_series_comprobante(input) {
       
       var nc_tp = $('#f_nc_tipo_comprobante').val() == ''  || $('#f_nc_tipo_comprobante').val() == null ? '' : $('#f_nc_tipo_comprobante').val();
       $("#f_periodo_pago").rules('remove', 'required');
-      $("#f_metodo_pago").rules('remove', 'required');
+      $("#f_metodo_pago_1").rules('remove', 'required');
+      $("#f_total_recibido_1").rules('remove', 'required');
       $('#f_es_cobro_inp').val('NO'); $('#f_usar_anticipo').val('NO');
 
       $(".div_idpersona_cliente").hide();
@@ -680,7 +684,8 @@ function ver_series_comprobante(input) {
     } else if ( tipo_comprobante == '12') {
       $("#f_idsunat_c01").val(12); // Asginamos el ID manualmente de: sunat_c01_tipo_comprobante      
       $("#f_periodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
-      $("#f_metodo_pago").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#f_metodo_pago_1").rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+      $("#f_total_recibido_1").rules('add', { required: true, messages: { required: 'Campo requerido' } });
     }
   }
 
@@ -842,7 +847,7 @@ function ver_formato_ticket(idventa, tipo_comprobante) {
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
   } else if (tipo_comprobante == '07') {
-    var rutacarpeta = "../reportes/TicketNotaCredito.php?id=" + idventa;
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
     $("#modal-imprimir-comprobante-label").html(`<button type="button" class="btn btn-icon btn-sm btn-primary btn-wave" data-bs-toggle="tooltip" title="Imprimir Ticket" onclick="printIframe('iframe_format_ticket')"><i class="ri-printer-fill"></i></button> FORMATO TICKET - NOTA CREDITO`);
     $("#html-imprimir-comprobante").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
     $("#modal-imprimir-comprobante").modal("show");
@@ -1601,11 +1606,12 @@ function ver_comprobante_pago(id_venta, nombre_doc) {
       });
 
       // Deshabilitar el cierre de GLightbox cuando está en zoom
-document.addEventListener('click', (e) => {
-  if (e.target.closest('.disable-close')) {
-    e.stopPropagation(); // Prevenir el cierre
-  }
-});
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.disable-close')) {
+          e.stopPropagation(); // Prevenir el cierre
+        }
+      });
+
     } else { ver_errores(e); }
   }).fail( function(e) { ver_errores(e); } );
   

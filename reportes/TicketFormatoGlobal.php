@@ -249,6 +249,9 @@ if (!isset($_SESSION["user_nombre"])) {
         <table border='0' align="center" width='300px' style='font-size: 12px' >                
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
           <tr><td colspan="3"><b>Son: </b> <?php echo $total_en_letra; ?> </td></tr>
+          <?php if( $venta_f['data']['venta']['tipo_comprobante'] == '07' ) { ?>
+           <!-- No nmostramos metodos de pagos -->
+          <?php }else{?>          
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
           <?php foreach ($metodo_pago_f['data'] as $key => $val) { ?>
           <tr><td >           <b><?php echo $val['metodo_pago']; ?></b></td>   <td>:</td> <td> <?php echo $val['monto']; ?> </td></tr>         
@@ -258,6 +261,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <tr><td colspan="3"><div style=" margin-bottom: 5px;" ></div></td></tr>
           <?php }?>
           <tr><td >           <b>VUELTO</b></td>                        <td>:</td> <td> <?php echo $total_vuelto; ?> </td></tr>  
+          <?php }?>
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>   
           <tr><td >           <b>Nro. Operación</b>                      <td>:</td> <td> <?php echo $c_idventa_v2; ?></td> </td></tr>
           <tr><td >           <b>Codigo Usuario</b>                      <td>:</td> <td> <?php echo $c_landing_user; ?></td> </td></tr>   

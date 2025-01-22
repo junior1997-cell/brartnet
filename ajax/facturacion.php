@@ -56,7 +56,10 @@ if (!isset($_SESSION["user_nombre"])) {
     $f_tiempo_entrega         = isset($_POST["f_tiempo_entrega"]) ? limpiarCadena($_POST["f_tiempo_entrega"]) : "";    
     $f_validez_cotizacion     = isset($_POST["f_validez_cotizacion"]) ? limpiarCadena($_POST["f_validez_cotizacion"]) : "";    
      
-    // $mp_comprobante_old     = isset($_POST["f_mp_comprobante_old"]) ? limpiarCadena($_POST["f_mp_comprobante_old"]) : "";     
+    // $mp_comprobante_old     = isset($_POST["f_mp_comprobante_old"]) ? limpiarCadena($_POST["f_mp_comprobante_old"]) : ""; 
+    
+    $f_metodo_pago            = isset($_POST["f_metodo_pago"]) ? $_POST["f_metodo_pago"] : [];   
+    $f_total_recibido         = isset($_POST["f_total_recibido"]) ? $_POST["f_total_recibido"] : [];   
 
     switch ($_GET["op"]){
 
@@ -118,7 +121,7 @@ if (!isset($_SESSION["user_nombre"])) {
         if (empty($f_idventa)) {
           
           $rspta = $facturacion->insertar( $f_impuesto, $f_crear_y_emitir,$f_idsunat_c01  ,$f_tipo_comprobante, $f_serie_comprobante, $f_idpersona_cliente, $f_observacion_documento,
-          $_POST["f_metodo_pago"],  $_POST["f_total_recibido"],  $_POST["f_total_vuelto"],  $_POST["f_mp_serie_comprobante"], $file_nombre_new, $file_nombre_old, $file_size, $f_usar_anticipo, $f_ua_monto_disponible, $f_ua_monto_usado,   $f_venta_subtotal, $f_tipo_gravada, $f_venta_descuento, $f_venta_igv, $f_venta_total,
+          $f_metodo_pago,  $f_total_recibido,  $_POST["f_total_vuelto"],  $_POST["f_mp_serie_comprobante"], $file_nombre_new, $file_nombre_old, $file_size, $f_usar_anticipo, $f_ua_monto_disponible, $f_ua_monto_usado,   $f_venta_subtotal, $f_tipo_gravada, $f_venta_descuento, $f_venta_igv, $f_venta_total,
           $f_nc_idventa, $f_nc_tipo_comprobante, $f_nc_serie_y_numero, $f_nc_motivo_anulacion, $f_tiempo_entrega, $f_validez_cotizacion,
           $_POST["idproducto"], $_POST["pr_marca"], $_POST["pr_categoria"],$_POST["pr_nombre"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
           $_POST["f_descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 

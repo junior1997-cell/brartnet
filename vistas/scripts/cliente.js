@@ -936,6 +936,7 @@ function realizar_pago(id) {
   $("#cargando-3-formulario").hide();
   $("#cargando-4-formulario").show();
   
+  $('#f_crear_y_emitir').prop('checked', false)
   show_hide_form(5);
   usar_anticipo_valid();
  
@@ -968,6 +969,7 @@ function limpiar_form_venta(){
   array_data_venta = [];
   $("#f_idventa").val('');
   
+  $('#f_crear_y_emitir').prop('checked', false)
   $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
   $("#f_idpersona_cliente").val('').trigger('change'); 
   $("#f_metodo_pago_1").val('').trigger('change'); 
@@ -1924,8 +1926,8 @@ function ver_formato_ticket(idventa, tipo_comprobante) {
     $(".formato_ticket").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
 
   } else if (tipo_comprobante == '07') {
-    var rutacarpeta = "../reportes/TicketNotaCredito.php?id=" + idventa;
-  $(".formato_ticket").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
+    var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;
+    $(".formato_ticket").html(`<iframe name="iframe_format_ticket" id="iframe_format_ticket" src="${rutacarpeta}" border="0" frameborder="0" width="100%" style="height: 450px;" marginwidth="1" src=""> </iframe>`);
 
   } else if (tipo_comprobante == '12') {
     var rutacarpeta = "../reportes/TicketFormatoGlobal.php?id=" + idventa;

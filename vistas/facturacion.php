@@ -468,7 +468,7 @@ if (!isset($_SESSION["user_nombre"])) {
                             <!-- ENVIO AUTOMATICO -->
                             <div class="col-md-12 col-lg-4 col-xl-5 col-xxl-5 px-0">
                               <div class="custom-toggle-switch d-flex align-items-center mb-1">
-                                <input id="f_crear_y_emitir" name="f_crear_y_emitir" type="checkbox" checked="" value="SI" onchange="valor_is_checked('#f_crear_y_emitir','SI', 'NO' );">
+                                <input id="f_crear_y_emitir" name="f_crear_y_emitir" type="checkbox" checked="false" value="SI" onchange="valor_is_checked('#f_crear_y_emitir','SI', 'NO' );">
                                 <label for="f_crear_y_emitir" class="label-warning"></label><span class="ms-3 fs-11">SUNAT <i class="bi bi-exclamation-circle" data-bs-toggle="tooltip" title="Esta opción debe estar siempre ACTIVA para BOLETA, Factura o Nota Cred. de lo contrario no se enviara a SUNAT el Documento emitido."></i></span>
                               </div>
                             </div>
@@ -697,7 +697,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
                                       <div class="form-group">
                                         <label for="f_total_recibido_1" class="form-label">Monto a pagar</label>
-                                        <input type="number" name="f_total_recibido[0]" id="f_total_recibido_1" class="form-control form-control-sm f_total_recibido_validar" required onClick="this.select();" onchange="calcular_vuelto(1);" onkeyup="calcular_vuelto(1);" placeholder="Ingrese monto a pagar.">
+                                        <input type="number" name="f_total_recibido[0]" id="f_total_recibido_1" class="form-control form-control-sm f_total_recibido_validar"  onClick="this.select();" onchange="calcular_vuelto(1);" onkeyup="calcular_vuelto(1);" placeholder="Ingrese monto a pagar.">
                                       </div>
                                     </div>
 

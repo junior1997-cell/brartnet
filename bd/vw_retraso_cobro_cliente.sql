@@ -56,7 +56,7 @@ FROM
   LEFT JOIN ( 
     SELECT vd.periodo_pago_format, v.idpersona_cliente FROM venta v 
     INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
-    WHERE  vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN ('01', '03', '12')
+    WHERE  vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01', '03', '12')
   ) AS ven ON ven.idpersona_cliente = per.idpersona_cliente 
   GROUP BY per.idpersona, per.idpersona_cliente
   ORDER BY per.idpersona_cliente, cant_total_mes
@@ -66,7 +66,7 @@ LEFT JOIN(
   FROM venta AS v
   INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
   INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
-  WHERE vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado = 'ACEPTADA' AND v.tipo_comprobante IN('01', '03', '12')
+  WHERE vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN('01', '03', '12')
   GROUP BY pc.idpersona_cliente
   ORDER BY COUNT(v.idventa) DESC
 ) AS co ON pco.idpersona_cliente = co.idpersona_cliente

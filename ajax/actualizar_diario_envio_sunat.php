@@ -76,7 +76,7 @@ ob_start();
           
         } else if ($tipo_comprobante == '07') {   // SUNAT NOTA DE CREDITO 
           include( '../modelos/SunatNotaCredito.php');
-          $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+          $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           if ( empty($sunat_observacion) && empty($sunat_error)  ) {
             $observacion_ejecucion= "No hubo errores en el envio a sunat.";
             $update_sunat = $facturacion->actualizar_doc_anulado_x_nota_credito( $nc_idventa); // CAMBIAMOS DE ESTADO EL DOC ANULADO
