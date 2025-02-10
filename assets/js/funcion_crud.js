@@ -550,9 +550,9 @@ function ver_errores(e) {
   }else if (e.status == 'nopermiso') {
     console.warn('--- Tu no tienes permiso!!');
     Swal.fire({
-      title: '<strong>No tienes permiso!!</strong>',
+      title: '<strong>Ingresar a otros modulos!!</strong>',
       icon: 'info',
-      html: `Puedes pedir a tu administrador que de acceso o regresa al </b>, <a href="escritorio.php">Escritorio</a>`,
+      html: e.message,
       showCloseButton: true,
       showCancelButton: true,
       focusConfirm: false,

@@ -9,7 +9,7 @@ if (!isset($_SESSION["user_nombre"])) {
   echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 
-  if ($_SESSION['facturacion'] == 1) {
+  if ($_SESSION['periodo_facturado'] == 1) {
 
     require_once "../modelos/Periodo_facturacion.php";
 

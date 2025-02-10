@@ -668,7 +668,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <div class="row">
                                 <div class="col-lg-12 mt-3">
                                   <div class="flex-fill d-flex align-items-top border-bottom">
-                                    <div class="me-2 cursor-pointer mb-1" data-bs-toggle="tooltip" title="Click para agregar!" onclick="agregar_new_mp();">
+                                    <div class="me-2 cursor-pointer mb-1" data-bs-toggle="tooltip" title="Click para agregar!" onclick="agregar_new_mp(false);">
                                       <span class="avatar avatar-sm text-primary border bg-light"><i class="ti ti-layout-grid-add fs-15"></i></span>
                                     </div>
                                     <div class="flex-fill">
@@ -1280,7 +1280,7 @@ if (!isset($_SESSION["user_nombre"])) {
         include("403_error.php");
       } ?>
 
-      <?php include("template/search_modal.php"); ?>
+      <?php include("template/search_modal.php"); ?> 
       <?php include("template/footer.php"); ?>
     </div>
 
@@ -1313,8 +1313,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
 
-    <script src="scripts/facturacion.js?version_jdl=1.38"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.38"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.40"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.40"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

@@ -178,26 +178,78 @@
       }      
     }
 
-    public function editar( $idventa, $idpersona_cliente,  $tipo_comprobante, $serie, $impuesto, $descripcion, $venta_subtotal, $tipo_gravada, $venta_igv, $venta_total, $fecha_venta, $img_comprob,        
-    $idproducto, $unidad_medida, $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv,  $descuento, $subtotal_producto) {
+    public function editar( 
+      // DATOS TABLA venta
+      $idventa, $impuesto, $crear_y_emitir, $idsunat_c01 , $tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento,
+      $metodo_pago, $total_recibido,  $total_vuelto, $mp_serie_comprobante,$file_nombre_new, $file_nombre_old, $file_size, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,
+       $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
+      $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion, $tiempo_entrega, $validez_cotizacion,
+      //DATOS TABLA venta DETALLE
+      $idproducto, $pr_marca, $pr_categoria,$pr_nombre, $um_nombre, $um_abreviatura, $es_cobro, $periodo_pago, $cantidad, $precio_compra, $precio_sin_igv, $precio_igv, $precio_con_igv, $precio_venta_descuento, $descuento, $descuento_porcentaje, 
+      $subtotal_producto, $subtotal_no_descuento    
+    ) {
 
-      $sql_1 = "UPDATE venta SET idpersona_cliente = '$idpersona_cliente', fecha_venta = '$fecha_venta', tipo_comprobante = '$tipo_comprobante', serie_comprobante = '$serie', 
-      val_igv = '$impuesto', descripcion = '$descripcion', subtotal = '$venta_subtotal', igv = '$venta_igv', total = '$venta_total', comprobante = '$img_comprob'
+      $tipo_v = ""; $cot_estado = ""; $fecha_actual_amd = date('Y-m-d');
+      if ($tipo_comprobante == '100') {
+        $tipo_v = "COTIZACIÓN";
+        $cot_estado = "PENDIENTE";
+      }else if ($tipo_comprobante == '12') {
+        $tipo_v = "TICKET";
+      }else if ($tipo_comprobante == '07') {
+        $tipo_v = "NOTA DE CRÉDITO";         
+        $metodo_pago= []; $total_recibido= [];  $total_vuelto= ''; $mp_serie_comprobante = [];$file_nombre_new = [];
+        $usar_anticipo= "NO"; $ua_monto_disponible= ""; $ua_monto_usado= "";        
+      }else if ($tipo_comprobante == '03') {
+        $tipo_v = "BOLETA";
+      }else if ($tipo_comprobante == '01') {
+        $tipo_v = "FACTURA";
+      }     
+
+      $sql_1 = "UPDATE venta SET idpersona_cliente = '$idpersona_cliente', iddocumento_relacionado = '$nc_idventa', crear_enviar_sunat = '$crear_y_emitir', 
+      
+      impuesto = '$impuesto', venta_subtotal = '$venta_subtotal', venta_descuento = '$venta_descuento', venta_igv = '$venta_igv', 
+      venta_total = '$venta_total', usar_anticipo = '$usar_anticipo', ua_monto_disponible = '$ua_monto_disponible', nc_motivo_nota = '$nc_motivo_anulacion', 
+      nc_tipo_comprobante = '$nc_tipo_comprobante', nc_serie_y_numero = '$nc_serie_y_numero', cot_tiempo_entrega = '$tiempo_entrega', 
+      cot_validez = '$validez_cotizacion', cot_estado = '$cot_estado', observacion_documento = '$observacion_documento'     
       WHERE idventa = '$idventa'";
-      $result_sql_1 = ejecutarConsulta($sql_1, 'U');if ($result_sql_1['status'] == false) { return $result_sql_1; }
+      $actualizar_venta = ejecutarConsulta($sql_1, 'U');if ($actualizar_venta['status'] == false) { return $actualizar_venta; }
 
       // Eliminamos los productos
-      $sql_del = "DELETE FROM venta_detalle WHERE idventa = '$idventa'";
-      ejecutarConsulta($sql_del);
+      $sql_del1 = "DELETE FROM venta_detalle WHERE idventa = '$idventa'"; ejecutarConsulta($sql_del1);
+      $sql_del2 = "DELETE FROM venta_metodo_pago WHERE idventa = '$idventa'"; ejecutarConsulta($sql_del2);
 
-      // Creamos los productos
-      foreach ($idproducto as $ii => $producto) {
-        $sql_2 = "INSERT INTO venta_detalle(idproducto, idventa, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal)
-        VALUES ('$idproducto[$ii]', '$idventa', '$cantidad[$ii]', '$precio_sin_igv[$ii]', '$precio_igv[$ii]', '$precio_con_igv[$ii]', '$descuento[$ii]', '$subtotal_producto[$ii]');";
-        $detalle_new =  ejecutarConsulta_retornarID($sql_2, 'C'); if ($detalle_new['status'] == false) { return  $detalle_new;}        
-      }  
+      $i = 0;
+      $detalle_new = "";
+      $monto_recibido = 0;  
       
-      return array('status' => true, 'message' => 'Datos actualizados correctamente.');
+      
+      while ($i < count($idproducto)) {
+
+        $sql_2 = "INSERT INTO venta_detalle( idventa, idproducto, pr_nombre, pr_marca, pr_categoria, pr_unidad_medida, tipo, cantidad, precio_compra, precio_venta, precio_venta_descuento, descuento, descuento_porcentaje, subtotal, subtotal_no_descuento, um_nombre, um_abreviatura, es_cobro, periodo_pago)
+        VALUES ('$idventa', '$idproducto[$i]', '$pr_nombre[$i]', '$pr_marca[$i]', '$pr_categoria[$i]', '$um_nombre[$i]', '$tipo_v', '$cantidad[$i]', '$precio_compra[$i]',  '$precio_con_igv[$i]', '$precio_venta_descuento[$i]', '$descuento[$i]', '$descuento_porcentaje[$i]', '$subtotal_producto[$i]', '$subtotal_no_descuento[$i]', '$um_nombre[$i]', '$um_abreviatura[$i]','$es_cobro[$i]', '$periodo_pago[$i]');";
+        $detalle_new =  ejecutarConsulta_retornarID($sql_2, 'C'); if ($detalle_new['status'] == false) { return  $detalle_new;}          
+        $id_d = $detalle_new['data'];
+        $i = $i + 1;
+      }
+      
+
+      if ( !empty($file_nombre_new) ) {
+        foreach ($file_nombre_new as $key => $val) {
+          $monto_recibido += empty($total_recibido[$key]) ? 0 : floatval($total_recibido[$key]) ;
+          $sql_3 = "INSERT INTO venta_metodo_pago(idventa, metodo_pago, monto,  codigo_voucher, comprobante, comprobante_size_bytes, comprobante_nombre_original)
+          VALUES ('$idventa', '$metodo_pago[$key]', '$total_recibido[$key]', '$mp_serie_comprobante[$key]', '$val', '$file_size[$key]', '$file_nombre_old[$key]');";
+          $comprobante_new =  ejecutarConsulta_retornarID($sql_3, 'C'); if ($comprobante_new['status'] == false) { return  $comprobante_new;}  
+          
+        }
+      }   
+
+      // Actualizamos: total recibido y vuelto
+      $monto_vuelto = $monto_recibido - $venta_total;
+      $sql_4 = "UPDATE venta SET total_recibido = '$monto_recibido', total_vuelto = '$monto_vuelto' WHERE idventa = '$idventa';";
+      $actulizando_vuelto = ejecutarConsulta($sql_4); if ($actulizando_vuelto['status'] == false) { return  $actulizando_vuelto;} 
+
+      return $datos = ['status' => true, 'message' => 'Todo ok', 'data' => $idventa, 'id_tabla' => $idventa,  ];
+
     }   
 
     public function actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error) {
@@ -220,7 +272,6 @@
 
     } 
 
-
     public function mostrar_venta($id){
       $sql = "SELECT * FROM venta WHERE idventa = '$id'";
       return ejecutarConsultaSimpleFila($sql);
@@ -232,7 +283,13 @@
     }      
 
     public function mostrar_metodo_pago($id){
-      $sql = "SELECT * FROM venta_metodo_pago WHERE idventa = '$id'";
+      $sql = "SELECT vmp.*,
+      CASE 
+          WHEN vmp.metodo_pago = 'EFECTIVO' THEN 'icono-efectivo.jpg'
+          WHEN vmp.comprobante IS NULL OR vmp.comprobante = '' THEN 'img_mp.png'
+          ELSE vmp.comprobante
+      END AS comprobante_v2
+      FROM venta_metodo_pago AS vmp WHERE vmp.idventa = '$id'";
       return ejecutarConsultaArray($sql);
     }
 
@@ -286,7 +343,16 @@
       WHERE vc.idventa = '$idventa';";
       $detalle = ejecutarConsultaArray($sql_2); if ($detalle['status'] == false) {return $detalle; }
 
-      return $datos = ['status' => true, 'message' => 'Todo ok', 'data' => ['venta' => $venta['data'], 'detalle' => $detalle['data']]];
+      $sql_3 = "SELECT vmp.*,
+      CASE 
+          WHEN vmp.metodo_pago = 'EFECTIVO' THEN 'icono-efectivo.jpg'
+          WHEN vmp.comprobante IS NULL OR vmp.comprobante = '' THEN 'img_mp.png'
+          ELSE vmp.comprobante
+      END AS comprobante_v2
+      FROM venta_metodo_pago AS vmp WHERE vmp.idventa = '$idventa';";
+      $vmp = ejecutarConsultaArray($sql_3); if ($vmp['status'] == false) {return $vmp; }
+
+      return $datos = ['status' => true, 'message' => 'Todo ok', 'data' => ['venta' => $venta['data'], 'detalle' => $detalle['data'], 'metodo_pago' => $vmp['data'], ]];
 
     }
 
@@ -480,13 +546,13 @@
       
     }
 
-    public function validar_mes_cobrado($idcliente, $periodo_pago){
+    public function validar_mes_cobrado($idcliente, $periodo_pago, $idventa_detalle){
       $sql = "SELECT v.idventa, vd.idventa_detalle, v.serie_comprobante, v.numero_comprobante, v.tipo_comprobante, 
       v.fecha_emision, vd.periodo_pago_format, vd.periodo_pago, vd.pr_nombre,  vd.cantidad, vd.subtotal
       from venta as v
       INNER JOIN venta_detalle as vd on vd.idventa = v.idventa
       WHERE v.idpersona_cliente = '$idcliente' and vd.periodo_pago = '$periodo_pago' and vd.es_cobro='SI' AND v.estado_delete = 1 
-      AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01','03','12') ";
+      AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01','03','12') AND idventa_detalle <> '$idventa_detalle'";
       $buscando =  ejecutarConsultaArray($sql); if ( $buscando['status'] == false) {return $buscando; }
 
       if (empty($buscando['data'])) { return true; }else { return false; }

@@ -350,7 +350,7 @@ class Cliente
 		FROM persona_cliente as pc
 		INNER JOIN venta AS v ON pc.idpersona_cliente = v.idpersona_cliente 
 		INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
-		where v.sunat_estado='ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado_delete='1' AND v.estado_delete='1' and pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
+		where v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante in ('01','03','12') AND v.estado_delete='1' AND v.estado_delete='1' and pc.estado_delete='1' AND pc.idpersona_cliente = '$idcliente'
 		GROUP BY vd.periodo_pago_year
 		ORDER BY vd.periodo_pago_year DESC";
 		$pagos = ejecutarConsulta($sql_1); if ($pagos['status'] == false) {return $pagos; }
@@ -397,7 +397,7 @@ class Cliente
 			SELECT v.idpersona_cliente, vd.periodo_pago, vd.periodo_pago_format, vd.periodo_pago_year, vd.periodo_pago_month, vd.subtotal, vd.es_cobro
 			FROM venta AS v 
 			INNER JOIN venta_detalle AS vd ON v.idventa = vd.idventa
-			WHERE v.sunat_estado='ACEPTADA' AND v.tipo_comprobante in ('01','03','12') AND v.estado_delete='1' AND v.estado_delete='1' $filtro_sql_ap
+			WHERE v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante in ('01','03','12') AND v.estado_delete='1' AND v.estado_delete='1' $filtro_sql_ap
 		) as ven on ven.idpersona_cliente = vw_c.idpersona_cliente
 		WHERE vw_c.estado_delete_pc='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
 		GROUP BY vw_c.idpersona_cliente

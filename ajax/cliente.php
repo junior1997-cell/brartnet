@@ -389,7 +389,7 @@ if (!isset($_SESSION["user_nombre"])) {
       // ══════════════════════════════════════   DETALLE CLIENTE DEUDOR   ══════════════════════════════════════ 
       case 'detalle_cliente_deudor':
         $rspta = $persona_cliente->detalle_cliente_deudor($_GET["idpersona_cliente"]);
-        $porcentaje_avance = number_format( (($rspta['data']['cliente']['cant_cobrado'] / $rspta['data']['cliente']['cant_total']) * 100), 1, '.', ',' );
+        $porcentaje_avance = empty($rspta['data']['cliente']['cant_total']) || $rspta['data']['cliente']['cant_total'] == 0 ? 0 : number_format( (($rspta['data']['cliente']['cant_cobrado'] / $rspta['data']['cliente']['cant_total']) * 100), 1, '.', ',' );
         echo'
           <div class="col-xxl-5 col-xl-5 ">
             <div class="card custom-card overflow-hidden rounded border">
@@ -426,7 +426,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       </div>
                       <div class="me-4 text-center">
                         <p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">'.$rspta['data']['cliente']['avance_v2'].'</p>
-                        <p class="mb-0 fs-11 op-5 text-fixed-white"> '.($rspta['data']['cliente']['cant_cobrado']>$rspta['data']['cliente']['cant_total']?'Adelanto':($rspta['data']['cliente']['cant_cobrado']=$rspta['data']['cliente']['cant_total']? 'S' :'No Pagado')).'</p>
+                        <p class="mb-0 fs-11 op-5 text-fixed-white"> '.($rspta['data']['cliente']['cant_cobrado']>$rspta['data']['cliente']['cant_total']?'Adelanto':($rspta['data']['cliente']['cant_cobrado']==$rspta['data']['cliente']['cant_total']? 'Ok!' :'No Pagado')).'</p>
                       </div>
                     </div>
                   </div>

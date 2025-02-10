@@ -27,6 +27,8 @@
           <?php include("template/header.php") ?>
           <?php include("template/sidebar.php") ?>
 
+          <?php if ($_SESSION['dashboard'] == 1) { ?>
+
           <!-- Start::app-content -->
           <div class="main-content app-content">
             <div class="container-fluid">
@@ -57,19 +59,7 @@
                 
                     <div class="card custom-card">
                       <div class="card-body">
-                        <div class="row">
-
-                          <!-- ::::::::::::::::::::: FILTRO AÑO FACTURADO :::::::::::::::::::::: -->
-                          <div class="col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2">
-                            <div class="form-group">
-                              <label for="filtro_anio_contable" class="form-label">                         
-                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_anio_contable();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                Año Contable
-                                <span class="charge_filtro_anio_contable"></span>
-                              </label>
-                              <select class="form-control form-control-sm form-control-primary text-primary" id="filtro_anio_contable" onchange="delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
-                            </div>
-                          </div>
+                        <div class="row">                          
                           
                           <!-- ::::::::::::::::::::: FILTRO MES FACTURADO :::::::::::::::::::::: -->
                           <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 col-xxl-3">
@@ -477,7 +467,16 @@
 
             </div>
           </div>
-          <!-- End::app-content -->
+          <!-- End::app-content --> 
+
+          
+
+          <?php } else {
+            $title_submodulo = 'Escritorio';
+            $descripcion = 'Reporte general!';
+            $title_modulo = 'Escritorio';
+            include("403_error.php");
+          } ?>
 
           <?php include("template/search_modal.php"); ?>
           <?php include("template/footer.php"); ?>
@@ -499,7 +498,7 @@
         <!-- Chartjs Chart JS -->
         <script src="../assets/libs/chart.js/chart.min.js"></script>  
 
-        <script src="scripts/escritorio.js?version_jdl=1.38"></script>
+        <script src="scripts/escritorio.js?version_jdl=1.40"></script>
                 
         <?php include("template/custom_switcherjs.php"); ?>
 

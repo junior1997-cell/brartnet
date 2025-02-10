@@ -5,6 +5,7 @@ var tabla_ver_mas_detalle_facturacion;
 
 var array_data_venta = [];
 var file_pond_mp_comprobante;
+var file_pond_mp_comprobante_2mas;
 var cambio_de_tipo_comprobante ;
 const filePondInstances = [];
 
@@ -288,7 +289,17 @@ function limpiar_form_venta(){
   $("#f_total_vuelto").val(0);
   $("#f_ua_monto_usado").val('');
   $("#f_mp_serie_comprobante").val('');
-  file_pond_mp_comprobante.removeFiles();
+
+  if (file_pond_mp_comprobante) {
+    if (typeof file_pond_mp_comprobante.removeFiles === 'function') { // Si el método removeFiles existe, lo usamos        
+      file_pond_mp_comprobante.removeFiles();
+    } else { // Si no existe, manejamos el error o reiniciamos FilePond       
+      console.warn('El método removeFiles no está disponible.');// Opcional: Reiniciar FilePond manualmente      
+      file_pond_mp_comprobante.destroy(); // Destruye la instancia actual
+      file_pond_mp_comprobante = FilePond.create( document.querySelector('#f_mp_comprobante_1'), FilePond_Facturacion_LabelsES );
+    }
+  }
+  
   $("#f_mp_comprobante_old").val('');
 
   $(".span_dia_cancelacion").html(``);
@@ -335,8 +346,18 @@ function limpiar_form_venta_nc(){
   $("#f_total_recibido").val(0);
   $("#f_total_vuelto").val(0);
   $("#f_ua_monto_usado").val('');
-  $("#f_mp_serie_comprobante").val('');
-  file_pond_mp_comprobante.removeFiles();
+  $("#f_mp_serie_comprobante").val('');  
+
+  if (file_pond_mp_comprobante) {
+    if (typeof file_pond_mp_comprobante.removeFiles === 'function') { // Si el método removeFiles existe, lo usamos        
+      file_pond_mp_comprobante.removeFiles();
+    } else { // Si no existe, manejamos el error o reiniciamos FilePond       
+      console.warn('El método removeFiles no está disponible.');// Opcional: Reiniciar FilePond manualmente      
+      file_pond_mp_comprobante.destroy(); // Destruye la instancia actual
+      file_pond_mp_comprobante = FilePond.create( document.querySelector('#f_mp_comprobante_1'), FilePond_Facturacion_LabelsES );
+    }
+  }
+  
   $("#f_mp_comprobante_old").val('');
 
   $(".span_dia_cancelacion").html(``);
@@ -1543,25 +1564,26 @@ function ver_comprobante_pago(id_venta, nombre_doc) {
     if (e.status == true) {
 
       e.data.forEach((val, key) => {
-        if ( val.comprobante != '' && val.comprobante != null && DocExist(`assets/modulo/facturacion/ticket/${val.comprobante}`) == 200) {
-          const isPDF = val.comprobante.endsWith('.pdf'); // Validar si es un archivo PDF
-          const href = `../assets/modulo/facturacion/ticket/${val.comprobante}`;
-          const galleryType = isPDF ? 'iframe' : 'image'; // Tipo de contenido según sea PDF o imagen
+        var img_mp = DocExist(`assets/modulo/facturacion/ticket/${val.comprobante_v2}`) == 200 ? val.comprobante_v2 : 'img_mp.png'  ;
+        
+        const isPDF = img_mp.endsWith('.pdf'); // Validar si es un archivo PDF
+        const href = `../assets/modulo/facturacion/ticket/${img_mp}`;
+        const galleryType = isPDF ? 'iframe' : 'image'; // Tipo de contenido según sea PDF o imagen
 
-          $('#html-ver-metodo-pago').append(`<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 text-center mb-3">
-            <center>
-            <a href="${href}" class="glightbox imagen-metodo-pago" data-gallery="gallery1" >
-              ${isPDF 
-                ? '<img src="../assets/images/company-logos/logo-pdf.jpg" class="card mb-2" alt="PDF">' 
-                : `<img src="${href}" class="card mb-2" alt="image">`}
-            </a> 
-            </center>
-            <span class="fs-11">${val.metodo_pago}</span> | <span class="fs-11">S/. ${formato_miles(val.monto)}</span> <br>
-            <a class="badge bg-outline-secondary custom-badge fs-11 d-inline-flex align-items-center cursor-pointer" 
-              download="${removeCaracterEspecial(nombre_doc)}" href="${href}">
-              <i class="ti ti-cloud-download fs-13 me-1"></i>${formatFileSize(val.comprobante_size_bytes)}</a>           
-          </div>`);
-        }        
+        $('#html-ver-metodo-pago').append(`<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 text-center mb-3">
+          <center>
+          <a href="${href}" class="glightbox imagen-metodo-pago" data-gallery="gallery1" >
+            ${isPDF 
+              ? '<img src="../assets/images/company-logos/logo-pdf.jpg" class="card mb-2" alt="PDF">' 
+              : `<img src="${href}" class="card mb-2" alt="image">`}
+          </a> 
+          </center>
+          <span class="fs-11">${val.metodo_pago}</span> | <span class="fs-11">S/. ${formato_miles(val.monto)}</span> <br>
+          <a class="badge bg-outline-secondary custom-badge fs-11 d-inline-flex align-items-center cursor-pointer" 
+            download="${removeCaracterEspecial(nombre_doc)}" href="${href}">
+            <i class="ti ti-cloud-download fs-13 me-1"></i>${ val.comprobante_size_bytes == null || val.comprobante_size_bytes == '' ? '0 Mb' : formatFileSize( parseFloat(val.comprobante_size_bytes))}</a>           
+        </div>`);
+               
       }); 
 
       var lightboxVideo = GLightbox({
@@ -1655,7 +1677,7 @@ function ver_comprobante_pago(id_venta, nombre_doc) {
   /* multiple upload */
   const MultipleElement = document.querySelector('.multiple-filepond');
   file_pond_mp_comprobante = FilePond.create(MultipleElement, FilePond_Facturacion_LabelsES );
-  filePondInstances.push(file_pond_mp_comprobante); // Guarda la instancia en el arreglo
+  //filePondInstances.push(file_pond_mp_comprobante); // Guarda la instancia en el arreglo
   // Ensure mediumZoom is available before using it
   // document.addEventListener("DOMContentLoaded", function() {
   //   file_pond_mp_comprobante.on('addfile', (error, file) => {
@@ -1668,3 +1690,5 @@ function ver_comprobante_pago(id_venta, nombre_doc) {
   // });
 
 })();
+
+var hola = [ 'hola1', 'hola2', 'hola3', 'hola4','hola5']

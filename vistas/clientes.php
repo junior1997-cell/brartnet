@@ -931,8 +931,7 @@ if (!isset($_SESSION["user_nombre"])) {
                       <input type="hidden" class="form-control" name="f_nc_idventa" id="f_nc_idventa" value="0">                    
                       
                       <!-- ID CLIENTE -->
-                      <input type="hidden" class="form-control" name="f_idpersona_cliente" id="f_idpersona_cliente" value="">                          
-                      <input type="hidden" class="form-control" name="f_tipo_documento" id="f_tipo_documento" value="">
+                      <input type="hidden" class="form-control" name="f_idpersona_cliente" id="f_idpersona_cliente" value="">
                       <input type="hidden" class="form-control" name="f_numero_documento" id="f_numero_documento" value="">
                       <input type="hidden" class="form-control" name="f_direccion" id="f_direccion" value="">
                       <input type="hidden" class="form-control" name="f_dia_cancelacion" id="f_dia_cancelacion" value="">
@@ -1483,8 +1482,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Google Maps JS -->
     <script src="../assets/libs/gmaps/gmaps.min.js"></script>
 
-    <script src="scripts/cliente.js?version_jdl=1.38"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.38"></script>
+    <script src="scripts/cliente.js?version_jdl=1.40"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.40"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

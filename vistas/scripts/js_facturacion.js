@@ -137,7 +137,8 @@ function agregarDetalleComprobante(idproducto, tipo_producto, individual) {
                 type: "get",
                 data: {
                   periodo_pago: function () { return $(`#valid_periodo_pago_${cont}`).val(); },
-                  idcliente: function () { return $("#f_idpersona_cliente").val(); }
+                  idcliente: function () { return $("#f_idpersona_cliente").val(); },
+                  idventa_detalle: 0
                 },
                 dataFilter: function(response) {
                     return response; // Procesa cualquier respuesta adicional si es necesario
@@ -292,7 +293,8 @@ function listar_producto_x_codigo() {
                 type: "get",
                 data: {
                   periodo_pago: function () { return $(`#valid_periodo_pago_${cont}`).val(); },
-                  idcliente: function () { return $("#f_idpersona_cliente").val(); }
+                  idcliente: function () { return $("#f_idpersona_cliente").val(); },
+                  idventa_detalle: 0
                 },
                 dataFilter: function(response) {
                     return response; // Procesa cualquier respuesta adicional si es necesario
@@ -446,13 +448,14 @@ function mostrar_para_nota_credito(input) {
   }
 }
 
-function ver_editar_venta(idventa) {
-  show_hide_form(2);
-  limpiar_form_venta();  
+function ver_venta(idventa) {
+  
 
   if (idventa == '') {
-    
-  } else {         
+    toastr_info('No Encontrado!!','Documento no encontrado, porfavor valide nuevamente los datos.');
+  } else {     
+    show_hide_form(2);
+    limpiar_form_venta();      
 
     $("#cargando-1-formulario").hide();
     $("#cargando-2-fomulario").show();    
@@ -464,22 +467,7 @@ function ver_editar_venta(idventa) {
 
         $("#f_idpersona_cliente").val(e.data.venta.idpersona_cliente).trigger('change');             
         $("#f_observacion_documento").val(e.data.venta.observacion_documento); 
-        $("#f_periodo_pago").val(e.data.venta.periodo_pago); 
 
-        $("#f_total_recibido").val(e.data.venta.total_recibido);
-        $("#f_metodo_pago").val(e.data.venta.metodo_pago).trigger('change');     
-        
-        $("#f_mp_serie_comprobante").val(e.data.venta.mp_serie_comprobante);  
-
-        if (e.data.venta.mp_comprobante == null || e.data.venta.mp_comprobante == '') {   } else {          
-          if (UrlExists(`../assets/modulo/facturacion/ticket/${e.data.venta.mp_comprobante}`) == 200) {
-            file_pond_mp_comprobante.addFile(`../assets/modulo/facturacion/ticket/${e.data.venta.mp_comprobante}`, { index: 0 });
-          } else {
-            toastr_error('Erro de carga!!',`Hubo un error en la carga de tu comprobante de pago. <br> ${e.data.venta.metodo_pago}: ${e.data.venta.mp_serie_comprobante}`);
-          }          
-        }  
-        
-        
         if (e.data.venta.tipo_comprobante == '01') {
           $("#f_tipo_comprobante01").prop("checked", true);
         } else if (e.data.venta.tipo_comprobante == '03') {
@@ -587,6 +575,21 @@ function ver_editar_venta(idventa) {
           
         });
 
+        $.each(e.data.metodo_pago, function (index, val2) { 
+
+          var img_mp = 'img_mp.png';
+          if(DocExist(`assets/modulo/facturacion/ticket/${val2.comprobante_v2}`) == 200) { img_mp = val2.comprobante_v2 } else { toastr_error('Erro de carga!!',`Hubo un error en la carga de tu comprobante de pago. <br> ${val2.metodo_pago}: ${val2.codigo_voucher}`); } ;
+          if (index == 0) {
+            $("#f_metodo_pago_1").val(val2.metodo_pago).trigger('change');            
+            $("#f_total_recibido_1").val(val2.monto);            
+            $("#f_mp_serie_comprobante_1").val(val2.codigo_voucher);             
+            file_pond_mp_comprobante.addFile(`../assets/modulo/facturacion/ticket/${img_mp}`, { index: 0 });            
+          } else {
+            agregar_new_mp( true, val2.metodo_pago, val2.monto, val2.codigo_voucher, img_mp);
+          }
+          
+        });        
+
         $(".btn-guardar").hide();
         $("#form-facturacion").valid();
 
@@ -597,6 +600,179 @@ function ver_editar_venta(idventa) {
     }).fail( function(e) { ver_errores(e); } );
 
   }
+}
+
+function ver_editar_venta(idventa) {
+
+  if (idventa == '') {
+    toastr_info('No Encontrado!!','Documento no encontrado, porfavor valide nuevamente los datos.');
+  } else {
+    show_hide_form(2);
+    limpiar_form_venta();  
+
+    $("#cargando-1-formulario").hide();
+    $("#cargando-2-fomulario").show();    
+
+    $.post("../ajax/facturacion.php?op=mostrar_editar_detalles_venta", {'idventa': idventa }, function (e, status) {
+
+      e = JSON.parse(e); //console.log(e);
+      if (e.status == true) {    
+        $("#f_idventa").val(e.data.venta.idventa);
+        $("#f_impuesto").val(e.data.venta.impuesto);
+        $("#f_nc_idventa").val(e.data.venta.iddocumento_relacionado);
+
+        $("#f_idpersona_cliente").val(e.data.venta.idpersona_cliente).trigger('change');             
+        $("#f_observacion_documento").val(e.data.venta.observacion_documento); 
+        $("#f_periodo_pago").val(e.data.venta.periodo_pago);         
+        
+        if (e.data.venta.tipo_comprobante == '01') {
+          $("#f_tipo_comprobante01").prop("checked", true).trigger('change');;
+        } else if (e.data.venta.tipo_comprobante == '03') {
+          $("#f_tipo_comprobante03").prop("checked", true).trigger('change');;
+        } else if (e.data.venta.tipo_comprobante == '07') {
+          $("#f_tipo_comprobante07").prop("checked", true).trigger('change');;
+        } else if (e.data.venta.tipo_comprobante == '12') {
+          $("#f_tipo_comprobante12").prop("checked", true).trigger('change');;
+        }
+
+        $.each(e.data.detalle, function(index, val1) {
+          var img = val1.imagen == "" || val1.imagen == null ?img = `../assets/modulo/productos/no-producto.png` : `../assets/modulo/productos/${val1.imagen}` ;          
+
+          var fila = `
+            <tr class="filas" id="fila${cont}"> 
+
+              <td class="py-1">
+                <!--  <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_productos(${val1.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button> -->
+                <button type="button" class="btn btn-danger btn-sm btn-file-delete-${cont}" onclick="eliminarDetalle(${val1.idproducto}, ${cont});"><i class="fas fa-times"></i></button>
+              </td>
+
+              <td class="py-1 text-nowrap">
+                <span class="fs-11" ><i class="bi bi-upc"></i> ${val1.codigo} <br> <i class="bi bi-person"></i> ${val1.codigo_alterno}</span>                
+              </td>
+
+              <td class="py-1">         
+                <input type="hidden" name="idproducto[]" value="${val1.idproducto}">
+
+                <input type="hidden" name="pr_marca[]" value="${val1.marca}">
+                <input type="hidden" name="pr_categoria[]" value="${val1.categoria}">
+                <input type="hidden" name="pr_nombre[]" value="${val1.nombre}">
+
+                <div class="d-flex flex-fill align-items-center">
+                  <div class="me-2 cursor-pointer" data-bs-toggle="tooltip" title="Ver imagen"><span class="avatar"> <img class="w-35px h-auto" src="${img}" alt="" onclick="ver_img('${img}', '${encodeHtml(val1.nombre_producto)}')"> </span></div>
+                  <div>
+                    <span class="d-block fs-11 fw-semibold text-nowrap text-primary">${val1.nombre_producto}</span>
+                    <span class="d-block fs-10 text-muted">M: <b>${val1.marca}</b> | C: <b>${val1.categoria}</b></span> 
+                  </div>
+                </div>
+              </td>
+
+              <td class="py-1">
+                <span class="fs-11 um_nombre_${cont}">${val1.um_abreviatura}</span> 
+                <input type="hidden" class="um_nombre_${cont}" name="um_nombre[]" id="um_nombre[]" value="${val1.um_nombre}">
+                <input type="hidden" class="um_abreviatura_${cont}" name="um_abreviatura[]" id="um_abreviatura[]" value="${val1.um_abreviatura}">
+              </td>
+
+              <td class="py-1 form-group">       
+                <input type="hidden"  name="es_cobro[]" id="es_cobro[]" value="${(val1.tipo_producto == 'PR' ? 'NO' : 'SI' )}">  
+                <input type="${(val1.tipo_producto == 'PR' ? 'hidden' : 'month' )}" class="form-control form-control-sm" name="valid_periodo_pago_${cont}" id="valid_periodo_pago_${cont}" value="${val1.periodo_pago}" min="2023-01"  onkeyup="replicar_value_input(this, '#periodo_pago_${cont}'); " onchange="replicar_value_input( this, '#periodo_pago_${cont}'); ">     
+                <input type="hidden" class="form-control form-control-sm" name="periodo_pago[]" id="periodo_pago_${cont}" value="${val1.periodo_pago}">
+              </td> 
+
+              <td class="py-1 form-group">
+                <input type="number" class="w-100px valid_cantidad form-control-sm form-control producto_${val1.idproducto} producto_selecionado" name="valid_cantidad[${cont}]" id="valid_cantidad_${cont}" value="${val1.cantidad}" min="0.01" required readonly onkeyup="replicar_value_input(this, '#cantidad_${cont}'); update_price(); " onchange="replicar_value_input(this, '#cantidad_${cont}'); update_price(); ">
+                <input type="hidden" class="cantidad_${cont}" name="cantidad[]" id="cantidad_${cont}" value="${val1.cantidad}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();" >            
+              </td> 
+
+              <td class="py-1 form-group">
+                <input type="number" class="w-135px form-control form-control-sm valid_precio_con_igv" name="valid_precio_con_igv[${cont}]" id="valid_precio_con_igv_${cont}" value="${val1.precio_venta}" min="0.01" required readonly onkeyup="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); " onchange="replicar_value_input(this, '#precio_con_igv_${cont}'); update_price(); ">
+                <input type="hidden" class="precio_con_igv_${cont}" name="precio_con_igv[]" id="precio_con_igv_${cont}" value="${val1.precio_venta}" onkeyup="modificarSubtotales();" onchange="modificarSubtotales();">              
+                <input type="hidden" class="precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="0" min="0" >
+                <input type="hidden" class="precio_igv_${cont}" name="precio_igv[]" id="precio_igv[]" value="0"  >
+                <input type="hidden" class="precio_compra_${cont}" name="precio_compra[]" value="${val1.precio_compra}"  >
+                <input type="hidden" class="precio_venta_descuento_${cont}" name="precio_venta_descuento[]" value="${val1.precio_venta_descuento}"  >
+              </td> 
+
+              <td class="py-1 form-group">
+                <input type="number" class="w-100px form-control form-control-sm valid_descuento" name="valid_descuento_${cont}" value="${val1.descuento}" min="0.00" required readonly onkeyup="replicar_value_input(this, '.descuento_${cont}' ); update_price(); " onchange="replicar_value_input( this, '.descuento_${cont}'); update_price(); ">
+                <input type="hidden" class="descuento_${cont}" name="f_descuento[]" value="${val1.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()">
+                <input type="hidden" class="descuento_porcentaje_${cont}" name="descuento_porcentaje[]" value="${val1.descuento_porcentaje}" >
+              </td>
+
+              <td class="py-1 text-right">
+                <span class="text-right fs-11 subtotal_producto_${cont}" id="subtotal_producto">${val1.subtotal}</span> 
+                <input type="hidden" name="subtotal_producto[]" id="subtotal_producto_${cont}" value="${val1.subtotal}" >
+                <input type="hidden" name="subtotal_no_descuento_producto[]" id="subtotal_no_descuento_producto_${cont}" value="${val1.subtotal_no_descuento}" > 
+              </td>
+              <td class="py-1"><button type="button" onclick="modificarSubtotales();" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+              
+            </tr>`;
+
+          detalles = detalles + 1;
+          $("#tabla-productos-seleccionados tbody").append(fila);
+          array_data_venta.push({ id_cont: cont });
+          modificarSubtotales();        
+          
+          // reglas de validación     
+          $('.valid_precio_con_igv').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
+          });
+          $('.valid_cantidad').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
+          });
+          $('.valid_descuento').each(function(e) { 
+            $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } }); 
+            $(this).rules('add', { min:0, messages: { min:"Mínimo {0}" } }); 
+          });
+
+          if (val1.tipo_producto == 'SR') {
+            $(`#valid_periodo_pago_${cont}`).rules('add', { required: true, 
+              remote: {
+                url: "../ajax/facturacion.php?op=validar_mes_cobrado",
+                type: "get",
+                data: {
+                  periodo_pago: function () { return $(`#valid_periodo_pago_${cont}`).val(); },
+                  idcliente: function () { return $("#f_idpersona_cliente").val(); },
+                  idventa_detalle: val1.idventa_detalle
+                },
+                dataFilter: function(response) {
+                    return response; // Procesa cualquier respuesta adicional si es necesario
+                }
+              },
+              messages: { required: 'Campo requerido', remote: `Mes pagado, elija otro mes. <br> <a href="#" class="text-danger text-decoration-underline" onclick="ver_meses_cobrado(${cont})">Click para ver.</a>`  }  
+            }); 
+          }else{
+            $(`#valid_periodo_pago_${cont}`).rules('remove', 'required remote');
+          }
+
+          cont++;
+          evaluar();
+          
+        });
+
+        $.each(e.data.metodo_pago, function (index, val2) { 
+          var img_mp = 'img_mp.png';
+          if(DocExist(`assets/modulo/facturacion/ticket/${val2.comprobante_v2}`) == 200) { img_mp = val2.comprobante_v2 } else { toastr_error('Erro de carga!!',`Hubo un error en la carga de tu comprobante de pago. <br> ${val2.metodo_pago}: ${val2.codigo_voucher}`); } ;
+          if (index == 0) {
+            $("#f_metodo_pago_1").val(val2.metodo_pago).trigger('change');            
+            $("#f_total_recibido_1").val(val2.monto);            
+            $("#f_mp_serie_comprobante_1").val(val2.codigo_voucher);             
+            file_pond_mp_comprobante.addFile(`../assets/modulo/facturacion/ticket/${img_mp}`, { index: 0 });             
+          } else {
+            agregar_new_mp( true, val2.metodo_pago, val2.monto, val2.codigo_voucher, img_mp);
+          }
+        });
+        
+        $("#form-facturacion").valid();
+
+        $("#cargando-1-formulario").show();
+        $("#cargando-2-fomulario").hide();
+      } else{ ver_errores(e); }
+      
+    }).fail( function(e) { ver_errores(e); } );
+  }
+  
 }
 
 function evaluar() {
@@ -1013,7 +1189,7 @@ function pago_rapido_moneda(moneda) {
 }
 
 var count_mp = 2;
-function agregar_new_mp() {
+function agregar_new_mp( es_editar = false, metodo_pago = null, monto = '', cod_baucher = '', img_baucher = ' ' ) {
   var id_cant = contarDivsArray('.f_metodo_pago_validar', 1);
   $('#html-metodos-de-pagos').append(`
     <div class="col-lg-12 htlm-mp-lista-${count_mp}">
@@ -1038,7 +1214,7 @@ function agregar_new_mp() {
         <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3 pt-3">
           <div class="form-group">
             <label for="f_total_recibido_${count_mp}" class="form-label">Monto a pagar</label>
-            <input type="number" name="f_total_recibido[${id_cant}]" id="f_total_recibido_${count_mp}" class="form-control form-control-sm f_total_recibido_validar" onClick="this.select();" onchange="calcular_vuelto(${count_mp});" onkeyup="calcular_vuelto(${count_mp});" placeholder="Ingrese monto a pagar.">
+            <input type="number" name="f_total_recibido[${id_cant}]" id="f_total_recibido_${count_mp}" class="form-control form-control-sm f_total_recibido_validar" value="${monto}" onClick="this.select();" onchange="calcular_vuelto(${count_mp});" onkeyup="calcular_vuelto(${count_mp});" placeholder="Ingrese monto a pagar.">
           </div>
         </div>        
 
@@ -1048,7 +1224,7 @@ function agregar_new_mp() {
             <div class="col-sm-6 col-lg-6 col-xl-6 pt-3">
               <div class="form-group">
                 <label for="f_mp_serie_comprobante_${count_mp}">Código de Baucher <span class="span-code-baucher-pago-${count_mp}"></span> </label>
-                <input type="text" name="f_mp_serie_comprobante[]" id="f_mp_serie_comprobante_${count_mp}" class="form-control" onClick="this.select();" placeholder="Codigo de baucher" />
+                <input type="text" name="f_mp_serie_comprobante[]" id="f_mp_serie_comprobante_${count_mp}" class="form-control" value="${cod_baucher}" onClick="this.select();" placeholder="Codigo de baucher" />
               </div>
             </div>
             <!-- Baucher -->
@@ -1066,16 +1242,20 @@ function agregar_new_mp() {
     </div>
   `);
 
-  lista_select2("../ajax/facturacion.php?op=select2_banco", `#f_metodo_pago_${count_mp}`, null, `charge_f_metodo_pago_${count_mp}`);  
+  lista_select2("../ajax/facturacion.php?op=select2_banco", `#f_metodo_pago_${count_mp}`, metodo_pago, `charge_f_metodo_pago_${count_mp}`);  
   $(`#f_metodo_pago_${count_mp}`).select2({  templateResult: templateBanco, templateSelection: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });  
 
   // reglas de validación     
   $(`.f_metodo_pago_validar`).each(function(e) { $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } });  });
   $(`.f_total_recibido_validar`).each(function(e) { $(this).rules('add', { required: true, messages: { required: 'Campo requerido' } });  });
-
-  const MultipleElement = document.querySelector(`#f_mp_comprobante_${count_mp}`);
-  file_pond_mp_comprobante = FilePond.create(MultipleElement, FilePond_Facturacion_LabelsES );
-  filePondInstances.push(file_pond_mp_comprobante); // Guarda la instancia en el arreglo
+  
+  if (es_editar == true) {
+    file_pond_mp_comprobante_2mas = FilePond.create(document.querySelector(`#f_mp_comprobante_${count_mp}`), FilePond_Facturacion_LabelsES ).addFile(`../assets/modulo/facturacion/ticket/${img_baucher}`, { index: 0 });;
+  }else{
+    file_pond_mp_comprobante_2mas = FilePond.create(document.querySelector(`#f_mp_comprobante_${count_mp}`), FilePond_Facturacion_LabelsES );
+  }
+  
+  filePondInstances.push(file_pond_mp_comprobante_2mas); // Guarda la instancia en el arreglo
   
   count_mp++;
 

@@ -10,7 +10,6 @@ var chart_pastel_tecnico; var chart_pastel_tecnico_data = [];
 function init_b() {  
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/escritorio.php?op=select2_filtro_anio_contable", '#filtro_anio_contable', moment().year(), '.charge_filtro_anio_contable');
   lista_select2("../ajax/escritorio.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador');
 
 
@@ -81,7 +80,7 @@ function tabla_principal_bancos() {
 }
 
 
-function reporte(filtro_anio, filtro_mes, filtro_trabajador) {
+function reporte( filtro_mes, filtro_trabajador) {
 
   $(".tooltip").remove();
 
@@ -91,7 +90,7 @@ function reporte(filtro_anio, filtro_mes, filtro_trabajador) {
   $('.card-cantidad-boleta').html( 0 ); 
   $('.card-cantidad-ticket').html( 0 );
 
-  var cant_mes = filtro_mes == '' ? '' : cant_dias_mes(filtro_anio, moment(`${filtro_mes}-01`).format('MM'), true );
+  var cant_mes = filtro_mes == '' ? '' : cant_dias_mes(filtro_mes.slice(0, 4), moment(`${filtro_mes}-01`).format('MM'), true );
 
   if (chart_objetivo) { chart_objetivo.destroy(); } 
   if (chart_dia_semana) { chart_dia_semana.destroy(); } 
@@ -101,7 +100,7 @@ function reporte(filtro_anio, filtro_mes, filtro_trabajador) {
   if (card_chart_total) { card_chart_total.destroy(); } 
   if (chart_line_comprobante) { chart_line_comprobante.destroy(); } 
 
-  $.getJSON("../ajax/escritorio.php?op=ver_reporte", {filtro_anio:filtro_anio, filtro_mes:filtro_mes, cant_mes: JSON.stringify(cant_mes) , filtro_trabajador:filtro_trabajador}, function (e, textStatus, jqXHR) {
+  $.getJSON("../ajax/escritorio.php?op=ver_reporte", { filtro_anio: filtro_mes.slice(0, 4), filtro_mes:filtro_mes, cant_mes: JSON.stringify(cant_mes) , filtro_trabajador:filtro_trabajador}, function (e, textStatus, jqXHR) {
 
     if (e.status == true) {
 
@@ -509,17 +508,15 @@ $(document).ready(function () {
 
 
 function reload_filtro_periodo(){ $('#filtro_periodo').val("").trigger("change") } 
-function reload_filtro_anio_contable(){ lista_select2("../ajax/escritorio.php?op=select2_filtro_anio_contable", '#filtro_anio_contable', moment().year(), '.charge_filtro_anio_contable'); } 
 function reload_filtro_trabajador(){ lista_select2("../ajax/escritorio.php?op=select2_filtro_trabajador", '#filtro_trabajador', localStorage.getItem('nube_id_persona_trabajador'), '.charge_filtro_trabajador'); } 
 
 
 function filtros() {  
 
-  var filtro_anio    = $("#filtro_anio_contable").val() == '' || $("#filtro_anio_contable").val() == null ? '' : $("#filtro_anio_contable").val();
   var filtro_mes    = $("#filtro_mes_contable").val() == '' || $("#filtro_mes_contable").val() == null ? '' : $("#filtro_mes_contable").val();
   var filtro_trabajador = $("#filtro_trabajador").val() == '' || $("#filtro_trabajador").val() == null ? '' : $("#filtro_trabajador").val() ;
   
   // $('.buscando_tabla').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${filtro_periodo} ${nombre_filtro_cliente}...`);
 
-  reporte( filtro_anio, filtro_mes, filtro_trabajador);
+  reporte(  filtro_mes, filtro_trabajador);
 }
