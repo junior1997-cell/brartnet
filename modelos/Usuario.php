@@ -216,7 +216,7 @@ class Usuario
 	public function verificar($login, $clave)	{
 
 		$sql = "SELECT u.idusuario, u.idpersona, u.estado_update_sistema, pt.idpersona_trabajador, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, p.numero_documento, 
-		p.celular, p.correo, ct.nombre as cargo, u.login, p.foto_perfil, p.tipo_documento
+		p.celular, p.correo, ct.nombre as cargo, u.login, IFNULL(p.foto_perfil, 'no-perfil.jpg') as foto_perfil, p.tipo_documento
 		FROM usuario as u
 		INNER JOIN persona as p ON p.idpersona = u.idpersona
 		INNER JOIN cargo_trabajador as ct ON ct.idcargo_trabajador = p.idcargo_trabajador

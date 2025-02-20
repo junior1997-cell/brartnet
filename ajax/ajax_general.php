@@ -8,7 +8,7 @@ if (strlen(session_id()) < 1) {
 if (!isset($_SESSION["user_nombre"])) {
 
   $retorno = ['status' => 'login', 'message' => 'Tu sesion a terminado pe, inicia nuevamente', 'data' => []];
-  echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
+  echo json_encode($retorno, true);  //Validamos el acceso solo a los usuarios logueados al sistema.
 
 } else {
 

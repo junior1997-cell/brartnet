@@ -35,6 +35,7 @@ async function init(){
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/facturacion.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_comprobante', null, '.charge_filtro_comprobante');
   lista_select2("../ajax/facturacion.php?op=select2_filtro_cliente", '#filtro_cliente', null, '.charge_filtro_cliente');
+  lista_select2("../ajax/facturacion.php?op=select2_banco", '#filtro_metodo_pago', null, '.charge_filtro_metodo_pago');
 
   lista_select2("../ajax/facturacion.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_md_comprobante', null, '.charge_filtro_md_comprobante');
   lista_select2("../ajax/facturacion.php?op=select2_filtro_cliente", '#filtro_md_cliente', null, '.charge_filtro_md_cliente');
@@ -66,6 +67,7 @@ async function init(){
 
   $("#filtro_cliente").select2({ templateResult: templateCliente, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_comprobante").select2({ templateResult: templateComprobante, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_metodo_pago").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
   $("#filtro_md_cliente").select2({ templateResult: templateCliente, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_md_comprobante").select2({ templateResult: templateComprobante, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -388,7 +390,7 @@ function limpiar_form_venta_nc(){
 
 }
 
-function listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente, filtro_comprobante, filtro_estado_sunat){
+function listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente, filtro_comprobante, filtro_metodo_pago, filtro_estado_sunat){
   
   tabla_principal_facturacion = $("#tabla-ventas").dataTable({
     // responsive: true, 
@@ -398,13 +400,13 @@ function listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
     buttons: [  
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_principal_facturacion) { tabla_principal_facturacion.ajax.reload(null, false); } } },
-      { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6,7,10], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6,7,10], }, title: 'Lista de ventas', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6,7,10], }, title: 'Lista de ventas', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6,7,8,11], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6,7,8,11], }, title: 'Lista de ventas', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
+      { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6,7,8,11], }, title: 'Lista de ventas', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/facturacion.php?op=listar_tabla_facturacion&filtro_fecha_i=${filtro_fecha_i}&filtro_fecha_f=${filtro_fecha_f}&filtro_cliente=${filtro_cliente}&filtro_comprobante=${filtro_comprobante}&filtro_estado_sunat=${filtro_estado_sunat}`,
+      url: `../ajax/facturacion.php?op=listar_tabla_facturacion&filtro_fecha_i=${filtro_fecha_i}&filtro_fecha_f=${filtro_fecha_f}&filtro_cliente=${filtro_cliente}&filtro_comprobante=${filtro_comprobante}&filtro_metodo_pago=${filtro_metodo_pago}&filtro_estado_sunat=${filtro_estado_sunat}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -434,9 +436,9 @@ function listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente
       // columna: Monto
       if (data[7] != '') { $("td", row).eq(7).addClass("text-nowrap"); }
       // columna: Monto
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-nowrap text-center"); }
-      // columna: Boucher
       if (data[9] != '') { $("td", row).eq(9).addClass("text-nowrap text-center"); }
+      // columna: Boucher
+      if (data[10] != '') { $("td", row).eq(10).addClass("text-nowrap text-center"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -1486,6 +1488,7 @@ function filtros() {
   var filtro_fecha_f      = $("#filtro_fecha_f").val();  
   var filtro_cliente      = $("#filtro_cliente").select2('val');
   var filtro_comprobante  = $("#filtro_comprobante").select2('val');
+  var filtro_metodo_pago  = $("#filtro_metodo_pago").select2('val');
   
   var nombre_filtro_fecha_i     = $('#filtro_fecha_i').val();
   var nombre_filtro_fecha_f     = ' ─ ' + $('#filtro_fecha_f').val();
@@ -1495,17 +1498,17 @@ function filtros() {
   // filtro de fechas
   if (filtro_fecha_i == '' || filtro_fecha_i == 0 || filtro_fecha_i == null) { filtro_fecha_i = ""; nombre_filtro_fecha_i = ""; }
   if (filtro_fecha_f == '' || filtro_fecha_f == 0 || filtro_fecha_f == null) { filtro_fecha_f = ""; nombre_filtro_fecha_f = ""; }
-
   // filtro de cliente
   if (filtro_cliente == '' || filtro_cliente == 0 || filtro_cliente == null) { filtro_cliente = ""; nombre_filtro_cliente = ""; }
-
   // filtro de comprobante
   if (filtro_comprobante == '' || filtro_comprobante == 0 || filtro_comprobante == null) { filtro_comprobante = ""; nombre_filtro_comprobante = ""; }
+  // filtro de metodo pago
+  if (filtro_metodo_pago == '' || filtro_metodo_pago == 0 || filtro_metodo_pago == null) { filtro_metodo_pago = ""; nombre_filtro_metodo_pago = ""; }
 
-  $('.buscando_tabla').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${filtro_fecha_i} ${filtro_fecha_f} ${nombre_filtro_cliente}...`);
+  $('.buscando_tabla').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_filtro_fecha_i} ${nombre_filtro_fecha_f} ${nombre_filtro_cliente}...`);
   //console.log(filtro_categoria, fecha_2, filtro_marca, comprobante);
 
-  listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente, filtro_comprobante, filtro_estado_sunat);
+  listar_tabla_facturacion(filtro_fecha_i, filtro_fecha_f, filtro_cliente, filtro_comprobante, filtro_metodo_pago, filtro_estado_sunat);
 }
 
 function filtrar_solo_estado_sunat(estado, etiqueta) {  
@@ -1523,6 +1526,7 @@ function reload_filtro_fecha_i(){ $('#filtro_fecha_i').val("").trigger("change")
 function reload_filtro_fecha_f(){ $('#filtro_fecha_f').val("").trigger("change") } 
 function reload_filtro_cliente(){ lista_select2("../ajax/facturacion.php?op=select2_filtro_cliente", '#filtro_cliente', null, '.charge_filtro_cliente'); } 
 function reload_filtro_comprobante(){ lista_select2("../ajax/facturacion.php?op=select2_filtro_tipo_comprobante&tipos='01','03','07','12'", '#filtro_comprobante', null, '.charge_filtro_comprobante'); }
+function reload_filtro_metodo_pago(){ lista_select2("../ajax/facturacion.php?op=select2_banco", '#filtro_metodo_pago', null, '.charge_filtro_metodo_pago');  }
 
 function reload_filtro_md_fecha_i(){ $('#filtro_md_fecha_i').val("").trigger("change") } 
 function reload_filtro_md_fecha_f(){ $('#filtro_md_fecha_f').val("").trigger("change") } 

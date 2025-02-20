@@ -66,6 +66,9 @@ if (!isset($_SESSION["user_nombre"])) {
     $c_numero_documento   = $venta_f['data']['venta']['numero_documento'];
     $c_direccion          = mb_convert_encoding($venta_f['data']['venta']['direccion'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['direccion'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
 
+    $c_nc_serie_y_numero  = mb_convert_encoding($venta_f['data']['venta']['nc_serie_y_numero'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['nc_serie_y_numero'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    $c_nc_nombre_motivo  = mb_convert_encoding($venta_f['data']['venta']['nc_nombre_motivo'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['nc_nombre_motivo'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
+    
     $c_landing_user       = mb_convert_encoding($venta_f['data']['venta']['landing_user'], 'UTF-8', mb_detect_encoding($venta_f['data']['venta']['landing_user'], "UTF-8, ISO-8859-1, ISO-8859-15", true));
     $c_idventa_v2         = $venta_f['data']['venta']['idventa_v2'];
 
@@ -210,6 +213,9 @@ if (!isset($_SESSION["user_nombre"])) {
             <tr ><td colspan="2"><strong>Cliente:</strong> <?php echo $c_nombre_completo ; ?> </td> </tr>
             <tr ><td colspan="2"><strong>DNI/RUC:</strong> <?php echo $c_numero_documento ; ?></td> </tr>
             <tr ><td colspan="2"><strong>Dir.:</strong> <?php echo $c_direccion ; ?></td></tr> 
+            <?php if( $venta_f['data']['venta']['tipo_comprobante'] == '07' ) { ?>
+            <tr ><td colspan="2"><strong>Doc. Baja:</strong> <?php echo $c_nc_serie_y_numero; ?> </td></tr>
+            <?php }?>
             <tr ><td colspan="2"><strong>Atención:</strong> <?php echo $user_en_atencion; ?> </td> </tr>            
             <tr ><td colspan="2"><strong>Observación:</strong> <?php echo $observacion_documento ; ?> </td></tr>
           </tbody>
@@ -251,6 +257,8 @@ if (!isset($_SESSION["user_nombre"])) {
           <tr><td colspan="3"><b>Son: </b> <?php echo $total_en_letra; ?> </td></tr>
           <?php if( $venta_f['data']['venta']['tipo_comprobante'] == '07' ) { ?>
            <!-- No nmostramos metodos de pagos -->
+          <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
+          <tr><td >           <b>MOTIVO</b></td>                        <td>:</td> <td> <?php echo $c_nc_nombre_motivo; ?> </td></tr>  
           <?php }else{?>          
           <tr><td colspan="3"><div style="border-bottom: 1px dotted black; margin-top: 8px; margin-bottom: 8px;" ></div></td></tr>
           <?php foreach ($metodo_pago_f['data'] as $key => $val) { ?>

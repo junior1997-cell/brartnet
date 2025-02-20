@@ -468,7 +468,7 @@
         <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
           <div class="d-flex align-items-center">
             <div class="me-sm-2 me-0">
-              <img src="../assets/modulo/persona/perfil/<?php echo $_SESSION['user_imagen']; ?>" alt="img" width="32" height="32" class="rounded-circle" onerror="this.src='../assets/modulo/usuario/perfil/no-perfil.jpg';" />
+              <img src="../assets/modulo/persona/perfil/<?php echo $_SESSION['user_imagen']; ?>" alt="img" width="32" height="32" class="rounded-circle" onerror="this.src='../assets/modulo/persona/perfil/no-perfil.jpg';" />
             </div>
             <div class="d-sm-block d-none">
               <p class="fw-semibold mb-0 lh-1"> <?php echo $_SESSION['user_nombre']; ?> </p>

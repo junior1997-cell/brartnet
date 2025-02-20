@@ -517,26 +517,85 @@ function ver_errores(e) {
 
   }else if (e.status == 'login') {
     console.warn('--- Tu sesion se ha terminado!!');
+    // Swal.fire({
+    //   title: '<strong>Tu sesion se ha terminado!!</strong>',
+    //   icon: 'info',
+    //   html: `Inicia <b>sesion</b> nuevamente , <a href="login.php">Salir.</a>`,
+    //   showCloseButton: true,
+    //   showCancelButton: true,
+    //   focusConfirm: false,
+    //   confirmButtonText: '<i class="fas fa-sign-out-alt"></i> Salir!',
+    //   confirmButtonAriaLabel: 'Thumbs up, great!',
+    //   cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+    //   cancelButtonAriaLabel: 'Thumbs down'
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     Swal.fire('Saliendo...', '<i class="fas fa-spinner fa-pulse"></i> Redireccionando...', 'success');
+    //     window.location.href = `${window.location.host =='localhost' || es_numero(parseFloat(window.location.host)) == true ?`${window.location.origin}/brartnet/`:window.location.origin}`;
+    //   } else {
+    //     Swal.fire('Cerrando sesion', '<i class="fas fa-spinner fa-pulse"></i> De igual manera vamos a cerrar la sesión, jijijiji...', 'success');
+    //     window.location.href = `${window.location.host =='localhost' || es_numero(parseFloat(window.location.host)) == true ?`${window.location.origin}/brartnet/`:window.location.origin}`;
+    //   }
+    // });
+    var foto_perfil_login =  DocExist(`assets/modulo/persona/perfil/${localStorage.getItem("nube_foto_perfil")}`) == 200 ? localStorage.getItem("nube_foto_perfil") : 'no-perfil.jpg' ;
     Swal.fire({
-      title: '<strong>Tu sesion se ha terminado!!</strong>',
-      icon: 'info',
-      html: `Inicia <b>sesion</b> nuevamente , <a href="login.php">Salir.</a>`,
+      title: '<strong>Tu sesión ha terminado!!</strong>',
+      imageUrl: `../assets/modulo/persona/perfil/${foto_perfil_login}`, // Reemplaza con la URL de tu imagen
+      imageWidth: 150,
+      imageHeight: 150,
+      html: `<p>Inicia <b>sesión</b> nuevamente</p><input type="password" id="password" class="swal2-input" placeholder="Ingresa tu clave">`,
       showCloseButton: true,
       showCancelButton: true,
       focusConfirm: false,
-      confirmButtonText: '<i class="fas fa-sign-out-alt"></i> Salir!',
-      confirmButtonAriaLabel: 'Thumbs up, great!',
-      cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
-      cancelButtonAriaLabel: 'Thumbs down'
+      confirmButtonText: 'Iniciar Sesión',
+      cancelButtonText: 'Cancelar',
+      showLoaderOnConfirm: true, // Muestra el loader mientras se valida la clave
+      preConfirm: () => {
+        const password = document.getElementById('password').value;
+        if (!password) { Swal.showValidationMessage('Por favor, ingresa tu clave');  return false; }// Detiene el flujo hasta que se ingrese una clave
+
+        // Enviar la clave al servidor
+        let formData = new FormData();
+        formData.append("logina", localStorage.getItem("nube_login")); // Asegúrate de que el backend reciba este parámetro
+        formData.append("clavea", password); // Asegúrate de que el backend reciba este parámetro
+        formData.append("st", 0); // Asegúrate de que el backend reciba este parámetro
+
+        return fetch("../ajax/usuario.php?op=verificar", { method: 'POST',  body: formData,  })
+        .then(response => {
+          if (!response.ok) {  throw new Error(`HTTP error! Status: ${response.status}`); }
+          return response.json(); // Convertir respuesta a JSON
+        })
+        .then(e => {
+          console.log(e);
+          if (e.status == true ) {
+            if (e.data.length === 0) { // Asegúrate de que el backend envíe un JSON con { success: true } si la clave es correcta
+              throw new Error( 'Clave incorrecta'); // Muestra el mensaje del backend si la clave es incorrecta
+            } else {
+              return e; // Devuelve los datos para que el `then` de `Swal.fire().then()` los reciba            
+            }
+          } else {
+            ver_errores(e);
+          }          
+        })
+        .catch(error => { Swal.showValidationMessage(`<b>Error:</b> ${error.message}`); });
+      }
     }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire('Saliendo...', '<i class="fas fa-spinner fa-pulse"></i> Redireccionando...', 'success');
-        window.location.href = `${window.location.host =='localhost' || es_numero(parseFloat(window.location.host)) == true ?`${window.location.origin}/brartnet/`:window.location.origin}`;
+      if (result.isConfirmed && result.value) {
+        Swal.fire({
+          title: '¡Bienvenido!',
+          html: '<i class="fas fa-spinner fa-pulse"></i> Actualizando...',
+          icon: 'success',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          didOpen: () => Swal.showLoading()
+        });
+        // Redirigir al usuario después de 2 segundos (simulación)
+        setTimeout(() => { location.reload(); }, 1000);// Recarga la página actual
       } else {
         Swal.fire('Cerrando sesion', '<i class="fas fa-spinner fa-pulse"></i> De igual manera vamos a cerrar la sesión, jijijiji...', 'success');
-        window.location.href = `${window.location.host =='localhost' || es_numero(parseFloat(window.location.host)) == true ?`${window.location.origin}/brartnet/`:window.location.origin}`;
+        window.location.href = `${window.location.host =='localhost' || es_numero(parseFloat(window.location.host)) == true ?`${window.location.origin}/brartnet/`:window.location.origin}`;    
       }
-    });
+    });  
 
   }else if (e.status == 'no_sucursal') {
     console.group("Error"); console.warn('No tiene sucursal -------------'); console.log(e); console.groupEnd();

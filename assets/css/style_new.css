@@ -198,6 +198,14 @@ table th { vertical-align: top !important; }
 .border-b-9px{ border-bottom: 9px !important; }
 .border-b-10px{ border-bottom: 10px !important; }
 
+.activar-scroll-x-auto{
+  max-width: 100%;
+  overflow-x: auto; /* Activa el scroll horizontal si es necesario */
+  white-space: nowrap; /* Evita que los elementos se vayan a la siguiente línea */
+  scrollbar-width: thin; /* Hace la barra más delgada en Firefox */
+  scrollbar-color: #c1c1c1 #f1f1f1; /* Color del scroll en Firefox */
+}
+
 /*  ══════════════════════════════════════════ - D I S E Ñ O   D E   S C R O L L - ══════════════════════════════════════════ */
 
   .disenio-scroll::-webkit-scrollbar {
@@ -207,34 +215,52 @@ table th { vertical-align: top !important; }
   }
 
   /* Ponemos un color de fondo y redondeamos las esquinas del thumb */
-  .disenio-scroll::-webkit-scrollbar-thumb {
-    background: #74d3e4;
-    border-radius: 4px;
-  }
+  .disenio-scroll::-webkit-scrollbar-thumb { background: #74d3e4; border-radius: 4px; }
 
   /* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
-  .disenio-scroll::-webkit-scrollbar-thumb:hover {
-    background: #74d3e4;
-    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
-  }
+  .disenio-scroll::-webkit-scrollbar-thumb:hover {  background: #74d3e4;  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);  }
 
   /* Cambiamos el fondo cuando esté en active */
-  .disenio-scroll::-webkit-scrollbar-thumb:active {
-    background-color: #18c0dd;
-  }
+  .disenio-scroll::-webkit-scrollbar-thumb:active { background-color: #18c0dd; }
 
   /* Ponemos un color de fondo y redondeamos las esquinas del track */
-  .disenio-scroll::-webkit-scrollbar-track {
-    background: #e1e1e1;
-    border-radius: 4px;
-  }
+  .disenio-scroll::-webkit-scrollbar-track { background: #e1e1e1; border-radius: 4px;}
 
   /* Cambiamos el fondo cuando esté en active o hover */
-  .disenio-scroll::-webkit-scrollbar-track:hover,
-  .disenio-scroll::-webkit-scrollbar-track:active {
-  background: #d4d4d4;
-  }
+  .disenio-scroll::-webkit-scrollbar-track:hover, .disenio-scroll::-webkit-scrollbar-track:active { background: #d4d4d4; }
 /* ::::::::::: END diseño del scroll ::::::::::: */
+
+/* :::::::: SCROLL DELGADO - SM ::::::::::::: */
+
+/* Para navegadores basados en WebKit (Chrome, Edge, Safari) */
+.scroll-sm::-webkit-scrollbar {  height: 6px; }/* Altura de la barra de desplazamiento horizontal */
+
+/* Cambiar el color del "track" (fondo del scroll) */
+.scroll-sm::-webkit-scrollbar-track {
+  background: #828385; /* Color de fondo */
+  border-radius: 10px;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+.scroll-sm::-webkit-scrollbar-thumb:hover {  background: #74d3e4;  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);}
+/* Cambiamos el fondo cuando esté en active */
+.scroll-sm::-webkit-scrollbar-thumb:active {  background-color: #18c0dd; }
+/* Cambiamos el fondo cuando esté en active o hover */
+.scroll-sm::-webkit-scrollbar-track:hover,.scroll-sm::-webkit-scrollbar-track:active { background: #931414; }
+
+/* Cambiar el color y grosor de la "thumb" (barra desplazable) */
+.scroll-sm::-webkit-scrollbar-thumb {
+  background: #111010; /* Color del scroll */
+  border-radius: 10px;
+}
+
+/* Para Firefox */
+.scroll-sm {
+  scrollbar-width: thin; /* Hace la barra más delgada */
+  scrollbar-color: #c1c1c1 #f1f1f1; /* (color del scroll, color de fondo) */
+}
+
+
 
 
 /*  ══════════════════════════════════════════ - P A D D I N G   S I Z E - ══════════════════════════════════════════ */
@@ -1136,7 +1162,9 @@ select[readonly].select2-hidden-accessible + .select2-container .select2-selecti
 
 /* max-width = como maximo  ────────| */
 @media (max-width:767.98px) {
-  
+  .min-width-auto{
+    min-width: 100% !important;
+  }
 }
 
 /* max-width = como maximo ────────| */

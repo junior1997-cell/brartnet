@@ -77,7 +77,11 @@ if (!isset($_SESSION["user_nombre"])) {
           # code...
         } else {
           # code...
-        }        
+        }      
+
+        $file_nombre_new = [];                        // Amacenar los nombres de los documentos             
+        $file_nombre_old = [];                        // Amacenar los nombres de los documentos             
+        $file_size = [];                        // Amacenar los nombres de los documentos       
 
         if ($metodo_pago == 'EFECTIVO' ) {
           # code...
@@ -103,8 +107,14 @@ if (!isset($_SESSION["user_nombre"])) {
 
         if (empty($idventa)) {
           
-          $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$idsunat_c01  ,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento,            
+          /*$rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$idsunat_c01  ,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento,            
           $metodo_pago, $total_recibido, $mp_monto, $total_vuelto, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,  $mp_serie_comprobante,$mp_comprobante, $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
+          $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion, $tiempo_entrega, $validez_cotizacion,
+          $_POST["idproducto"], $_POST["pr_marca"], $_POST["pr_categoria"],$_POST["pr_nombre"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
+          $_POST["descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 
+*/
+          $rspta = $facturacion->insertar( $impuesto, $crear_y_emitir,$idsunat_c01  ,$tipo_comprobante, $serie_comprobante, $idpersona_cliente, $observacion_documento,
+          $metodo_pago,  $total_recibido,  $_POST["total_vuelto"],  $_POST["mp_serie_comprobante"], $file_nombre_new, $file_nombre_old, $file_size, $usar_anticipo, $ua_monto_disponible, $ua_monto_usado,   $venta_subtotal, $tipo_gravada, $venta_descuento, $venta_igv, $venta_total,
           $nc_idventa, $nc_tipo_comprobante, $nc_serie_y_numero, $nc_motivo_anulacion, $tiempo_entrega, $validez_cotizacion,
           $_POST["idproducto"], $_POST["pr_marca"], $_POST["pr_categoria"],$_POST["pr_nombre"], $_POST["um_nombre"],$_POST["um_abreviatura"], $_POST["es_cobro"], $_POST["periodo_pago"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_sin_igv"], $_POST["precio_igv"], $_POST["precio_con_igv"],  $_POST["precio_venta_descuento"], 
           $_POST["descuento"], $_POST["descuento_porcentaje"], $_POST["subtotal_producto"], $_POST["subtotal_no_descuento_producto"]); 
@@ -136,7 +146,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'listar_tabla_facturacion':
 
-        $rspta = $cotizacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"], $_GET["filtro_estado_sunat"] );
+        $rspta = $cotizacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"],  $_GET["filtro_estado_sunat"] );
         $data = []; $count = 1; #echo json_encode($rspta); die();
 
         if($rspta['status'] == true){

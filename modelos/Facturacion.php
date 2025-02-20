@@ -16,10 +16,10 @@
       // $this->id_empresa_sesion = isset($_SESSION['idempresa']) ? $_SESSION["idempresa"] : 0;
     }
 
-    public function listar_tabla_facturacion( $fecha_i, $fecha_f, $cliente, $comprobante, $estado_sunat ) {    
+    public function listar_tabla_facturacion( $fecha_i, $fecha_f, $cliente, $comprobante, $metodo_pago, $estado_sunat ) {    
 
       $filtro_id_trabajador  = ''; $filtro_id_punto ='';
-      $filtro_fecha = ""; $filtro_cliente = ""; $filtro_comprobante = ""; $filtro_estado_sunat = "";
+      $filtro_fecha = ""; $filtro_cliente = ""; $filtro_comprobante = ""; $filtro_metodo_pago = ""; $filtro_estado_sunat = "";
 
       if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {  $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";    } 
       if ($_SESSION['user_cargo'] == 'PUNTO DE COBRO') { $filtro_id_punto = "AND (v.user_created = '$this->id_usr_sesion' OR pc.idpersona_trabajador = '$this->id_trabajador_sesion')";  } 
@@ -30,6 +30,7 @@
       
       if ( empty($cliente) ) { } else {  $filtro_cliente = "AND v.idpersona_cliente = '$cliente'"; } 
       if ( empty($comprobante) ) { } else {  $filtro_comprobante = "AND v.idsunat_c01 = '$comprobante'"; } 
+       if ( empty($metodo_pago) ) { } else { $filtro_metodo_pago = "AND vmp.metodos_pago_agrupado like '%$metodo_pago%'"; }
       if ( empty($estado_sunat) ) { } else if ( $estado_sunat == 'NO ENVIADO') { $filtro_estado_sunat = "AND ( v.sunat_estado is null or v.sunat_estado = '' or v.sunat_estado IN ('RECHAZADA') )"; } 
       else {  $filtro_estado_sunat = "AND v.sunat_estado = '$estado_sunat'"; } 
 
@@ -58,17 +59,17 @@
         ELSE '-'
       END AS cliente_nombre_completo, pu.nombre_razonsocial as user_en_atencion, LPAD(v.user_created, 3, '0') AS user_created_v2,
       GROUP_CONCAT( CASE vd.es_cobro WHEN 'SI' THEN CONCAT( LEFT(vd.periodo_pago_month, 3), '-',  vd.periodo_pago_year, ',<br>') ELSE '' END SEPARATOR ' ') AS periodo_pago_mes_anio,
-      vmp.cantidad_mp
+      vmp.cantidad_mp, vmp.metodos_pago_agrupado
       FROM venta AS v
-      INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
-      LEFT JOIN (select v.idventa, COALESCE(count(vmp.idventa_metodo_pago), 0) as cantidad_mp from venta_metodo_pago as vmp inner join venta as v on v.idventa = vmp.idventa group by v.idventa) AS vmp on vmp.idventa = v.idventa
+      LEFT JOIN venta_detalle AS vd ON vd.idventa = v.idventa
+      LEFT JOIN (select v.idventa, COALESCE(count(vmp.idventa_metodo_pago), 0) as cantidad_mp, GROUP_CONCAT(vmp.metodo_pago ORDER BY vmp.metodo_pago SEPARATOR ', ') AS metodos_pago_agrupado from venta_metodo_pago as vmp inner join venta as v on v.idventa = vmp.idventa group by v.idventa) AS vmp on vmp.idventa = v.idventa
       INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
       INNER JOIN persona AS p ON p.idpersona = pc.idpersona
       INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
       INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = v.idsunat_c01
       LEFT JOIN usuario as u ON u.idusuario = v.user_created
       LEFT JOIN persona as pu ON pu.idpersona = u.idpersona
-      WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante <> '100' $filtro_id_trabajador $filtro_id_punto $filtro_cliente $filtro_comprobante $filtro_estado_sunat $filtro_fecha
+      WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante <> '100' $filtro_id_trabajador $filtro_id_punto $filtro_cliente $filtro_comprobante $filtro_metodo_pago $filtro_estado_sunat $filtro_fecha
       GROUP BY v.idventa
       ORDER BY v.fecha_emision DESC, p.nombre_razonsocial ASC;"; #return $sql;
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }
@@ -102,12 +103,14 @@
         $tipo_v = "FACTURA";
       }
 
-      $sql = "SELECT v.*, CONCAT(v.serie_comprobante, '-', v.numero_comprobante) as serie_y_numero_comprobante, 
+      // BUSCAMOS EL ERROR ANTERIOR
+      $sql = "SELECT v.*, LPAD(v.idventa, 5, '0') AS idventa_v2, CONCAT(v.serie_comprobante, '-', v.numero_comprobante) as serie_y_numero_comprobante, 
       DATE_FORMAT(v.fecha_emision, '%d/%m/%Y %h:%i:%s %p') AS fecha_emision_format 
       FROM venta AS v 
       WHERE v.tipo_comprobante = '$tipo_comprobante' and ((v.sunat_error <> '' AND  v.sunat_error is not null  ) or (v.sunat_observacion <> '' AND  v.sunat_observacion is not null  ));";
       $buscando_error = ejecutarConsultaArray($sql); if ($buscando_error['status'] == false) {return $buscando_error; }
 
+      // VALIDAMOS EL PERIODO CONTABLE
       $sql_periodo = "SELECT idperiodo_contable FROM periodo_contable WHERE estado = '1' AND estado_delete = '1' AND '$fecha_actual_amd' BETWEEN fecha_inicio AND fecha_fin;";
       $buscando_periodo = ejecutarConsultaSimpleFila($sql_periodo); if ($buscando_periodo['status'] == false) {return $buscando_periodo; }
       $idperiodo_contable = empty($buscando_periodo['data']) ? '' : (empty($buscando_periodo['data']['idperiodo_contable']) ? '' : $buscando_periodo['data']['idperiodo_contable'] ) ;
@@ -167,6 +170,7 @@
             <span class="font-size-13px text-danger"><b>Fecha: </b>'.$val['fecha_emision_format'].'</span><br>
             <span class="font-size-13px text-danger"><b>Comprobante: </b>'.$val['serie_y_numero_comprobante'].'</span><br>
             <span class="font-size-13px text-danger"><b>Total: </b>'.$val['venta_total'].'</span><br>
+            <span class="font-size-13px text-danger"><b>ID: </b>'.$val['idventa_v2'].'</span><br>
             <span class="font-size-13px text-danger"><b>Error: </b>'.$val['sunat_error'].'</span><br>
             <span class="font-size-13px text-danger"><b>Observación: </b>'.$val['sunat_observacion'].'</span><br>            
             <hr class="m-t-2px m-b-2px">

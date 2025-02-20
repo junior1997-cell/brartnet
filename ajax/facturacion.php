@@ -222,7 +222,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'reenviar_sunat':
 
-        $idventa          = $_GET["idventa"];
+        $f_idventa          = $_GET["idventa"];
         $tipo_comprobante = $_GET["tipo_comprobante"];
         $sunat_estado = ""; $sunat_observacion= ""; $sunat_code= ""; $sunat_hash= ""; $sunat_mensaje= ""; $sunat_error= ""; 
 
@@ -232,7 +232,7 @@ if (!isset($_SESSION["user_nombre"])) {
         } else if ($tipo_comprobante == '01') {   // SUNAT FACTURA         
 
           include( '../modelos/SunatFactura.php');
-          $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+          $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           
           if ( empty($sunat_observacion) && empty($sunat_error) ) {
             echo json_encode($update_sunat, true); 
@@ -244,7 +244,7 @@ if (!isset($_SESSION["user_nombre"])) {
         } else if ($tipo_comprobante == '03') {   // SUNAT BOLETA 
           
           include( '../modelos/SunatBoleta.php');
-          $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+          $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           if ( empty($sunat_observacion) && empty($sunat_error) ) {
             echo json_encode($update_sunat, true); 
           } else {              
@@ -254,7 +254,7 @@ if (!isset($_SESSION["user_nombre"])) {
           
         } else if ($tipo_comprobante == '07') {   // SUNAT NOTA DE CREDITO 
           include( '../modelos/SunatNotaCredito.php');
-          $update_sunat = $facturacion->actualizar_respuesta_sunat( $idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
+          $update_sunat = $facturacion->actualizar_respuesta_sunat( $f_idventa, $sunat_estado , $sunat_observacion, $sunat_code, $sunat_hash, $sunat_mensaje, $sunat_error);
           if ( empty($sunat_observacion) && empty($sunat_error)  ) {
             $update_sunat = $facturacion->actualizar_doc_anulado_x_nota_credito( $nc_idventa); // CAMBIAMOS DE ESTADO EL DOC ANULADO
             echo json_encode($update_sunat, true); 
@@ -278,7 +278,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'listar_tabla_facturacion':
 
-        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"], $_GET["filtro_estado_sunat"] );
+        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"], $_GET["filtro_metodo_pago"], $_GET["filtro_estado_sunat"] );
         $data = []; $count = 1; #echo json_encode($rspta); die();
 
         if($rspta['status'] == true){
@@ -332,7 +332,8 @@ if (!isset($_SESSION["user_nombre"])) {
               </div>',
               "6" =>  '<b>'.$value['tp_comprobante_v2'].'</b>' . ' <br> ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'],
               "7" =>  $value['venta_total_v2'] , 
-              "8" => $value['tipo_comprobante'] == '01' || $value['tipo_comprobante'] == '03' || $value['tipo_comprobante'] == '07' ?
+              "8" =>  $value['user_en_atencion'],
+              "9" => $value['tipo_comprobante'] == '01' || $value['tipo_comprobante'] == '03' || $value['tipo_comprobante'] == '07' ?
                 (
                   $value['sunat_estado'] == 'ACEPTADA' ? 
                   '<a class="badge bg-outline-info fs-13 cursor-pointer m-r-5px" href="'.$url_xml.'" download data-bs-toggle="tooltip" title="Descargar XML" ><i class="bi bi-filetype-xml"></i></a>' . 
@@ -343,7 +344,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   )
                 )
                 : '' , 
-              "9" => $value['cantidad_mp'] == 0 ? '' :  '<center><div class="svg-icon-background bg-warning-transparent cursor-pointer" onclick="ver_comprobante_pago('. $value['idventa'] .',\'&lt;b&gt;'.$value['tp_comprobante_v2'].'&lt;/b&gt; ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'].'\');" data-bs-toggle="tooltip" title="Baucher: '. $value['metodo_pago'] .'">                      
+              "10" => $value['cantidad_mp'] == 0 ? '' :  '<center><div class="svg-icon-background bg-warning-transparent cursor-pointer" onclick="ver_comprobante_pago('. $value['idventa'] .',\'&lt;b&gt;'.$value['tp_comprobante_v2'].'&lt;/b&gt; ' . $value['serie_comprobante'] . '-' . $value['numero_comprobante'].'\');" data-bs-toggle="tooltip" title="Baucher: '. $value['metodos_pago_agrupado'] .'">                      
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-warning">
                   <!-- Documento -->
                   <path d="M11.5,20h-6a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h5V7a3,3,0,0,0,3,3h3v3a1,1,0,0,0,2,0V9s0,0,0-.06a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.29.29,0,0,0-.1,0A1.1,1.1,0,0,0,11.56,2H5.5a3,3,0,0,0-3,3V19a3,3,0,0,0,3,3h5a1,1,0,0,0,0-2Zm1-14.59L15.09,8H13.5a1,1,0,0,1-1-1ZM7.5,14h6a1,1,0,0,0,0-2h-6a1,1,0,0,0,0,2Zm4,2h-4a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm-4-6h1a1,1,0,0,0,0-2h-1a1,1,0,0,0,0,2Z" />
@@ -354,7 +355,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   </text>
                 </svg>
               </div></center>' , 
-              "10" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
+              "11" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
                 '<span class="badge bg-success-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-check-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' :  
                 ($value['sunat_estado'] == 'POR ENVIAR'     ?        
                 '<span class="badge bg-warning-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-close-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' : 
@@ -377,7 +378,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'listar_tabla_ver_mas_detalle_facturacion':
 
-        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"], $_GET["filtro_estado_sunat"] );
+        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"], null, $_GET["filtro_estado_sunat"] );
         $data = []; $count = 1; #echo json_encode($rspta); die();
 
         if($rspta['status'] == true){
@@ -388,7 +389,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "0" => '<span class="text-nowrap fs-11">'. $value['idventa_v2'].'</span>',
               "1" => '<span class="text-nowrap fs-11">'. $value['es_cobro'].'</span>',
               "2" =>  $value['fecha_emision_format'],
-              "3" => '<span class="text-nowrap fs-11">'. $value['periodo_pago_month_v2'] .'-'. $value['periodo_pago_year'].'</span>',
+              "3" => '<span class="text-nowrap fs-11">'. $value['periodo_pago_mes_anio'] .'</span>',
               "4" => '<span class="text-nowrap fs-11">'. $value['cliente_nombre_completo'].'</span>',
               "5" => '<span class="text-nowrap fs-11">'. $value['tipo_documento'] .'</span>',
               "6" => '<span class="text-nowrap fs-11">'. $value['numero_documento'].'</span>',
@@ -397,7 +398,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "9" =>  $value['venta_total_v2'] ,
               "10" =>  $value['total_recibido'] ,
               "11" =>  $value['total_vuelto'] ,
-              "12" => '<span class="text-nowrap fs-11">'. $value['metodo_pago'] .'</span>',
+              "12" => '<span class="text-nowrap fs-11">'. $value['metodos_pago_agrupado'] .'</span>',
               "13" => '<span class="text-nowrap fs-11">'. $value['user_created_v2'] .' '.$value['user_en_atencion'] .'</span>',
               "14" =>  ($value['sunat_estado'] == 'ACEPTADA' ? 
                 '<span class="badge bg-success-transparent cursor-pointer" onclick="ver_estado_documento('. $value['idventa'] .', \''. $value['tipo_comprobante'] .'\')" data-bs-toggle="tooltip" title="Ver estado"><i class="ri-check-fill align-middle me-1"></i>'.$value['sunat_estado'].'</span>' :                    
@@ -843,6 +844,12 @@ if (!isset($_SESSION["user_nombre"])) {
   
         } else { echo json_encode($rspta, true); }
       break;
+
+      case 'salir':     
+        session_unset();  //Limpiamos las variables de sesión  
+        session_destroy(); //Destruìmos la sesión
+        echo "<h5>Sesion cerrada con exito</h5>";        
+      break;    
 
       default: 
         $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
