@@ -1482,8 +1482,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Google Maps JS -->
     <script src="../assets/libs/gmaps/gmaps.min.js"></script>
 
-    <script src="scripts/cliente.js?version_jdl=1.41"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.41"></script>
+    <script src="scripts/cliente.js?version_jdl=1.42"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.42"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

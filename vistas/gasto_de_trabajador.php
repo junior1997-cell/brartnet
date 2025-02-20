@@ -570,7 +570,7 @@
           <?php include("template/scripts.php"); ?>
           <?php include("template/custom_switcherjs.php"); ?> 
 
-          <script src="scripts/gasto_de_trabajador.js?version_jdl=1.41"></script>
+          <script src="scripts/gasto_de_trabajador.js?version_jdl=1.42"></script>
           <script> $(function () { $('[data-bs-toggle="tooltip"]').tooltip(); }); </script>
 
         
