@@ -39,6 +39,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
     $celular                    = isset($_POST["celular"]) ? limpiarCadena($_POST["celular"]) : "";
     $direccion                  = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
+    $direccion_referencia       = isset($_POST["direccion_referencia"]) ? limpiarCadena($_POST["direccion_referencia"]) : "";
     $distrito                   = isset($_POST["distrito"]) ? limpiarCadena($_POST["distrito"]) : "";
     $departamento               = isset($_POST["departamento"]) ? limpiarCadena($_POST["departamento"]) : "";
     $provincia                  = isset($_POST["provincia"]) ? limpiarCadena($_POST["provincia"]) : "";
@@ -117,6 +118,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $fecha_nacimiento,
             $celular,
             $direccion,
+            $direccion_referencia,
             $distrito,
             $departamento,
             $provincia,
@@ -156,6 +158,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $fecha_nacimiento,
             $celular,
             $direccion,
+            $direccion_referencia,
             $distrito,
             $departamento,
             $provincia,
@@ -197,12 +200,12 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'cant_tab_cliente':
-        $rspta = $persona_cliente->cant_tab_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        $rspta = $persona_cliente->cant_tab_cliente($_GET["filtro_trabajador"],$_GET["filtro_tipo_persona"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"], $_GET["filtro_centro_poblado"],$_GET["filtro_zona_antena"]);
         echo json_encode($rspta, true);
       break;
 
       case 'tabla_principal_cliente':
-        $rspta = $persona_cliente->tabla_principal_cliente($_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        $rspta = $persona_cliente->tabla_principal_cliente($_GET["filtro_trabajador"],$_GET["filtro_tipo_persona"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"], $_GET["filtro_centro_poblado"],$_GET["filtro_zona_antena"]);
         //Vamos a declarar un array
         $data = [];
         $cont = 1;         
@@ -286,7 +289,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'tabla_deudores':
-        $rspta = $persona_cliente->tabla_principal_cliente_deuda(  $_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        $rspta = $persona_cliente->tabla_principal_cliente_deuda(  $_GET["filtro_trabajador"],$_GET["filtro_tipo_persona"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"], $_GET["filtro_centro_poblado"],$_GET["filtro_zona_antena"]);
         //Vamos a declarar un array
         $data = [];
         $cont = 1;         
@@ -337,7 +340,7 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       case 'tabla_no_deudores':
-        $rspta = $persona_cliente->tabla_principal_cliente_no_deuda(  $_GET["filtro_trabajador"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"],$_GET["filtro_zona_antena"]);
+        $rspta = $persona_cliente->tabla_principal_cliente_no_deuda(  $_GET["filtro_trabajador"],$_GET["filtro_tipo_persona"],$_GET["filtro_dia_pago"],$_GET["filtro_plan"], $_GET["filtro_centro_poblado"],$_GET["filtro_zona_antena"]);
         //Vamos a declarar un array
         $data = [];
         $cont = 1;         

@@ -278,7 +278,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'listar_tabla_facturacion':
 
-        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"], $_GET["filtro_metodo_pago"], $_GET["filtro_estado_sunat"] );
+        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_tipo_persona"], $_GET["filtro_comprobante"], $_GET["filtro_metodo_pago"], $_GET["filtro_centro_poblado"], $_GET["filtro_estado_sunat"] );
         $data = []; $count = 1; #echo json_encode($rspta); die();
 
         if($rspta['status'] == true){
@@ -378,7 +378,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
       case 'listar_tabla_ver_mas_detalle_facturacion':
 
-        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], $_GET["filtro_comprobante"], null, $_GET["filtro_estado_sunat"] );
+        $rspta = $facturacion->listar_tabla_facturacion($_GET["filtro_fecha_i"], $_GET["filtro_fecha_f"], $_GET["filtro_cliente"], null, $_GET["filtro_comprobante"], null, null, $_GET["filtro_estado_sunat"] );
         $data = []; $count = 1; #echo json_encode($rspta); die();
 
         if($rspta['status'] == true){

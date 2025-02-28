@@ -22,7 +22,7 @@ class Cliente
 
 	//Implementamos un método para insertar registros
 	public function insertar_cliente(	$idtipo_persona, $idbancos, $idcargo_trabajador, $tipo_persona_sunat, $tipo_documento, $numero_documento, $nombre_razonsocial, 
-	$apellidos_nombrecomercial,	$fecha_nacimiento, $celular, $direccion, $distrito, $departamento, $provincia, $ubigeo, $correo,	$idpersona_trabajador,
+	$apellidos_nombrecomercial,	$fecha_nacimiento, $celular, $direccion, $direccion_referencia, $distrito, $departamento, $provincia, $ubigeo, $correo,	$idpersona_trabajador,
 	$idzona_antena, $idselec_centroProbl, $idplan, $ip_personal, $fecha_afiliacion,  $fecha_cancelacion,	$usuario_microtick,$nota, 
 	$estado_descuento, $descuento,	$img_perfil	) {
 		
@@ -35,10 +35,10 @@ class Cliente
 
 		if ( empty($buscando['data']) || $tipo_documento == '0' ) {
 			$sql1 = "INSERT INTO persona(idtipo_persona, idbancos, idcargo_trabajador, tipo_persona_sunat, nombre_razonsocial, 
-			apellidos_nombrecomercial, tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, departamento, provincia, 
+			apellidos_nombrecomercial, tipo_documento, numero_documento, fecha_nacimiento, celular, direccion, direccion_referencia, departamento, provincia, 
 			distrito, cod_ubigeo, correo,foto_perfil) 
 			VALUES ( '$idtipo_persona', '$idbancos', '$idcargo_trabajador', '$tipo_persona_sunat', '$nombre_razonsocial', 
-			'$apellidos_nombrecomercial', '$tipo_documento', '$numero_documento', '$fecha_nacimiento', '$celular', '$direccion', '$departamento', '$provincia', 
+			'$apellidos_nombrecomercial', '$tipo_documento', '$numero_documento', '$fecha_nacimiento', '$celular', '$direccion', '$direccion_referencia', '$departamento', '$provincia', 
 			'$distrito', '$ubigeo', '$correo','$img_perfil')";
 			$inst_persona = ejecutarConsulta_retornarID($sql1, 'C');if ($inst_persona['status'] == false) {return $inst_persona;}
 
@@ -69,7 +69,7 @@ class Cliente
 
 	//Implementamos un método para editar registros
 	public function editar_cliente(	$idpersona,	$idtipo_persona,	$idbancos,	$idcargo_trabajador,	$idpersona_cliente,	$tipo_persona_sunat,	$tipo_documento,
-		$numero_documento,	$nombre_razonsocial,	$apellidos_nombrecomercial,	$fecha_nacimiento,	$celular,	$direccion,	$distrito, $departamento, $provincia, $ubigeo, 
+		$numero_documento,	$nombre_razonsocial,	$apellidos_nombrecomercial,	$fecha_nacimiento,	$celular,	$direccion, $direccion_referencia,	$distrito, $departamento, $provincia, $ubigeo, 
 		$correo, $idpersona_trabajador,	$idzona_antena,	$idselec_centroProbl,	$idplan, $ip_personal, $fecha_afiliacion, $fecha_cancelacion, $usuario_microtick,$nota,
 		$estado_descuento, $descuento,	$img_perfil	) {
 
@@ -85,6 +85,7 @@ class Cliente
 						fecha_nacimiento='$fecha_nacimiento',
 						celular='$celular',
 						direccion='$direccion',
+						direccion_referencia='$direccion_referencia',
 						departamento='$departamento',
 						provincia='$provincia',
 						distrito='$distrito',
@@ -166,40 +167,42 @@ class Cliente
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function cant_tab_cliente($filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{ 
+	public function cant_tab_cliente($filtro_trabajador, $filtro_tipo_persona, $filtro_dia_pago, $filtro_plan, $filtro_centro_poblado, $filtro_zona_antena)	{ 
 
-		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+		$filtro_sql_trab  = '';  $filtro_sql_tp  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_cp  = ''; $filtro_sql_za  = '';
 
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'"; }
 
-		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND pc.idpersona_trabajador = '$filtro_trabajador'";	}
-		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(pc.fecha_cancelacion)  = '$filtro_dia_pago'";	}
-		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
-		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}		
+		if ( empty($filtro_trabajador) 			|| $filtro_trabajador 		== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND pc.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_tipo_persona) 		|| $filtro_tipo_persona 	== 'TODOS' ) { } else{	$filtro_sql_tp		= "AND pc.tipo_persona_sunat = '$filtro_tipo_persona'";	}
+		if ( empty($filtro_dia_pago) 				|| $filtro_dia_pago 			== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(pc.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 						|| $filtro_plan 					== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND pc.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_centro_poblado)	|| $filtro_centro_poblado == 'TODOS' ) { } else{	$filtro_sql_cp 		= "AND pc.idcentro_poblado = '$filtro_centro_poblado'";	}
+		if ( empty($filtro_zona_antena) 		|| $filtro_zona_antena 		== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND pc.idzona_antena = '$filtro_zona_antena'";	}		
 
 		$sql= "SELECT COUNT( pc.idpersona_cliente) AS total
 		FROM vw_retraso_cobro_cliente as pc 
-		where pc.estado_deuda = 'DEUDA' and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		where pc.estado_deuda = 'DEUDA' and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za ;";
 		$count_deudor = ejecutarConsultaSimpleFila($sql); if ($count_deudor['status'] == false) {return $count_deudor; }
 
 		$sql1= "SELECT COUNT( pc.idpersona_cliente) AS total
 		FROM vw_retraso_cobro_cliente as pc 
-		where pc.estado_deuda in ( 'SIN DEUDA', 'ADELANTO') and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		where pc.estado_deuda in ( 'SIN DEUDA', 'ADELANTO') and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za ;";
 		$count_no_deuda = ejecutarConsultaSimpleFila($sql1); if ($count_no_deuda['status'] == false) {return $count_no_deuda; }
 
 		$sql2 = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
-		FROM persona_cliente as pc
-		where pc.estado='0' and pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za;";
+		FROM vw_cliente_all as pc
+		where pc.estado_pc='0' and pc.estado_delete_pc='1' $filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za;";
 		$count_baja = ejecutarConsultaSimpleFila($sql2); if ($count_baja['status'] == false) {return $count_baja; }
 
 		$sql3= "SELECT COUNT( pc.idpersona_cliente) AS total
 		from vw_retraso_cobro_cliente as pc where pc.mes_inicio is null and pc.estado_pc = '1' AND pc.estado_delete_pc = '1'
-		$filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		$filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za ;";
 		$count_no_pago = ejecutarConsultaSimpleFila($sql3); if ($count_no_pago['status'] == false) {return $count_no_pago; }
 
 		$sq4 = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
-		FROM persona_cliente as pc 		
-		where pc.estado_delete='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za ;";
+		FROM vw_cliente_all as pc 		
+		where pc.estado_delete_pc='1' $filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za ;";
 		$count_total = ejecutarConsultaSimpleFila($sq4); if ($count_total['status'] == false) {return $count_total; }
 
 		return [
@@ -215,65 +218,67 @@ class Cliente
 	}
 
 	//Implementar un método para listar los registros
-	public function tabla_principal_cliente($filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
+	public function tabla_principal_cliente($filtro_trabajador, $filtro_tipo_persona, $filtro_dia_pago, $filtro_plan, $filtro_centro_poblado, $filtro_zona_antena)	{
 
-		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+		$filtro_sql_trab  = '';  $filtro_sql_tp  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_cp  = ''; $filtro_sql_za  = '';
 
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND vw_c.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
 
-		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
-		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
-		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
-		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
+		if ( empty($filtro_trabajador) 		|| $filtro_trabajador 		== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_tipo_persona) 	|| $filtro_tipo_persona 	== 'TODOS' ) { } else{	$filtro_sql_tp		= "AND vw_c.tipo_persona_sunat = '$filtro_tipo_persona'";	}
+		if ( empty($filtro_dia_pago) 			|| $filtro_dia_pago 			== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 					|| $filtro_plan 					== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_centro_poblado)|| $filtro_centro_poblado == 'TODOS' ) { } else{	$filtro_sql_cp 		= "AND vw_c.idcentro_poblado = '$filtro_centro_poblado'";	}
+		if ( empty($filtro_zona_antena) 	|| $filtro_zona_antena 		== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
 		
-		$sql = "SELECT 
-		
-		vw_c.*
-		
-		FROM vw_cliente_all as vw_c		
-		where  vw_c.estado_delete_pc='1' $filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		$sql = "SELECT vw_c.*	FROM vw_cliente_all as vw_c		
+		where  vw_c.estado_delete_pc='1' $filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za
 		ORDER BY vw_c.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
-	public function tabla_principal_cliente_deuda( $filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
+	public function tabla_principal_cliente_deuda( $filtro_trabajador, $filtro_tipo_persona, $filtro_dia_pago, $filtro_plan, $filtro_centro_poblado, $filtro_zona_antena )	{
 
-		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+		$filtro_sql_trab  = '';  $filtro_sql_tp  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_cp  = ''; $filtro_sql_za  = '';
 
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND vw_c.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
 
-		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
-		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
-		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
-		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
+		if ( empty($filtro_trabajador) 		|| $filtro_trabajador 		== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_tipo_persona) 	|| $filtro_tipo_persona 	== 'TODOS' ) { } else{	$filtro_sql_tp		= "AND vw_c.tipo_persona_sunat = '$filtro_tipo_persona'";	}
+		if ( empty($filtro_dia_pago) 			|| $filtro_dia_pago 			== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 					|| $filtro_plan 					== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_centro_poblado)|| $filtro_centro_poblado == 'TODOS' ) { } else{	$filtro_sql_cp 		= "AND vw_c.idcentro_poblado = '$filtro_centro_poblado'";	}
+		if ( empty($filtro_zona_antena) 	|| $filtro_zona_antena 		== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
 		
 		$sql = "SELECT 	 vw_rc.avance, vw_rc.avance_v2, vw_rc.cant_cobrado, vw_rc.cant_total, vw_c.*,
 		CASE WHEN LENGTH(  vw_c.cliente_nombre_completo  ) <= 22 THEN  vw_c.cliente_nombre_completo ELSE CONCAT(  LEFT(vw_c.cliente_nombre_completo, 22) , '...') END  as cliente_nombre_completo_recorte
 		FROM vw_cliente_all as vw_c		
 		inner join vw_retraso_cobro_cliente as vw_rc on vw_rc.idpersona_cliente = vw_c.idpersona_cliente
 		where vw_c.estado_pc = '1' and vw_c.estado_delete_pc='1' and vw_rc.estado_deuda = 'DEUDA'  
-		$filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		$filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za
 		ORDER BY vw_rc.avance DESC, vw_c.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
-	public function tabla_principal_cliente_no_deuda( $filtro_trabajador, $filtro_dia_pago, $filtro_plan, $filtro_zona_antena)	{
+	public function tabla_principal_cliente_no_deuda( $filtro_trabajador, $filtro_tipo_persona, $filtro_dia_pago, $filtro_plan, $filtro_centro_poblado, $filtro_zona_antena )	{
 
-		$filtro_sql_trab  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_za  = '';
+		$filtro_sql_trab  = '';  $filtro_sql_tp  = ''; $filtro_sql_dp  = ''; $filtro_sql_p  = ''; $filtro_sql_cp  = ''; $filtro_sql_za  = '';
 
 		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') { $filtro_sql_trab = "AND vw_c.idpersona_trabajador = '$this->id_trabajador_sesion'";	}
 
-		if ( empty($filtro_trabajador) 	|| $filtro_trabajador 	== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
-		if ( empty($filtro_dia_pago) 		|| $filtro_dia_pago 		== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
-		if ( empty($filtro_plan) 				|| $filtro_plan 				== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
-		if ( empty($filtro_zona_antena) || $filtro_zona_antena 	== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
+		if ( empty($filtro_trabajador) 		|| $filtro_trabajador 		== 'TODOS' ) { } else{	$filtro_sql_trab	= "AND vw_c.idpersona_trabajador = '$filtro_trabajador'";	}
+		if ( empty($filtro_tipo_persona) 	|| $filtro_tipo_persona 	== 'TODOS' ) { } else{	$filtro_sql_tp		= "AND vw_c.tipo_persona_sunat = '$filtro_tipo_persona'";	}
+		if ( empty($filtro_dia_pago) 			|| $filtro_dia_pago 			== 'TODOS' ) { } else{ 	$filtro_sql_dp 		= "AND DAY(vw_c.fecha_cancelacion)  = '$filtro_dia_pago'";	}
+		if ( empty($filtro_plan) 					|| $filtro_plan 					== 'TODOS' ) { } else{	$filtro_sql_p 		= "AND vw_c.idplan = '$filtro_plan'";	}
+		if ( empty($filtro_centro_poblado)|| $filtro_centro_poblado == 'TODOS' ) { } else{	$filtro_sql_cp 		= "AND vw_c.idcentro_poblado = '$filtro_centro_poblado'";	}
+		if ( empty($filtro_zona_antena) 	|| $filtro_zona_antena 		== 'TODOS' ) { } else{	$filtro_sql_za 		= "AND vw_c.idzona_antena = '$filtro_zona_antena'";	}
 		
 		$sql = "SELECT 	 vw_rc.avance, vw_rc.avance_v2, vw_rc.cant_cobrado, vw_rc.cant_total, vw_c.*,
 		CASE WHEN LENGTH(  vw_c.cliente_nombre_completo  ) <= 22 THEN  vw_c.cliente_nombre_completo ELSE CONCAT(  LEFT(vw_c.cliente_nombre_completo, 22) , '...') END  as cliente_nombre_completo_recorte
 		FROM vw_cliente_all as vw_c		
 		inner join vw_retraso_cobro_cliente as vw_rc on vw_rc.idpersona_cliente = vw_c.idpersona_cliente
 		where vw_c.estado_pc = '1' and vw_c.estado_delete_pc='1' and vw_rc.estado_deuda in ('SIN DEUDA', 'ADELANTO')
-		$filtro_sql_trab $filtro_sql_dp $filtro_sql_p $filtro_sql_za
+		$filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za
 		ORDER BY vw_rc.avance , vw_c.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}

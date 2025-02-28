@@ -14,9 +14,11 @@ if (!isset($_SESSION["user_nombre"])) {
 
   require_once "../modelos/Ajax_general.php";
   require_once "../modelos/Ubigeo.php";
+  require_once "../modelos/Centro_poblado.php";
 
-  $ajax_general = new Ajax_general($_SESSION['idusuario']);
-  $_ubigeo       = new Ubigeo();
+  $ajax_general         = new Ajax_general($_SESSION['idusuario']);
+  $ajax_ubigeo          = new Ubigeo();
+  $ajax_centro_poblado  = new CentroPoblado();
 
   $scheme_host  =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/brartnet/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/');
   $imagen_error = "this.src='../dist/svg/404-v2.svg'";
@@ -111,40 +113,40 @@ if (!isset($_SESSION["user_nombre"])) {
 
     // ══════════════════════════════════════ U B I G E O - S E L E C T 2    D E P A R T A M E N T O ══════════════════════════════════════
     case 'select2_departamento':
-      $rspta = $_ubigeo->select2_departamento();
+      $rspta = $ajax_ubigeo->select2_departamento();
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value="' . $reg->nombre . '" iddepartamento = "' . $reg->iddepartamento . '" macroregion_minsa = "' . $reg->macroregion_minsa . '" iso_3166_2 = "' . $reg->iso_3166_2 . '" >' . $reg->nombre . '</option>';
       }
     break;
 
     case 'select2_departamento_id':
-      $rspta = $_ubigeo->select2_departamento_id($_GET['id']);
+      $rspta = $ajax_ubigeo->select2_departamento_id($_GET['id']);
       echo json_encode($rspta, true);
     break;
 
     // ══════════════════════════════════════ U B I G E O - S E L E C T 2    P R O V I N C I A ══════════════════════════════════════
     case 'select2_provincia':
-      $rspta = $_ubigeo->select2_provincia();
+      $rspta = $ajax_ubigeo->select2_provincia();
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value="' . $reg->nombre . '" idprovincia = "' . $reg->idprovincia . '" iddepartamento = "' . $reg->iddepartamento . '" >' . $reg->nombre . '</option>';
       }
     break;
 
     case 'select2_provincia_departamento':
-      $rspta = $_ubigeo->select2_provincia_departamento($_GET['id']);
+      $rspta = $ajax_ubigeo->select2_provincia_departamento($_GET['id']);
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value=' . $reg->nombre . ' idprovincia = "' . $reg->idprovincia . '" iddepartamento = "' . $reg->iddepartamento . '" >' . $reg->nombre . '</option>';
       }
     break;
 
     case 'select2_provincia_id':
-      $rspta = $_ubigeo->select2_provincia_id($_GET['id']);
+      $rspta = $ajax_ubigeo->select2_provincia_id($_GET['id']);
       echo json_encode($rspta, true);
     break;
 
     // ══════════════════════════════════════ U B I G E O - S E L E C T 2    D I S T R I T O ══════════════════════════════════════
     case 'select2_distrito':
-      $rspta = $_ubigeo->select2_distrito();
+      $rspta = $ajax_ubigeo->select2_distrito();
       $data = "";
       if ($rspta['status'] == true) {
         foreach ($rspta['data'] as $key => $reg) {
@@ -162,7 +164,7 @@ if (!isset($_SESSION["user_nombre"])) {
     break;
 
     case 'selectChoice_distrito':
-      $rspta = $_ubigeo->select2_distrito();
+      $rspta = $ajax_ubigeo->select2_distrito();
       
       $data = [];
 
@@ -192,22 +194,51 @@ if (!isset($_SESSION["user_nombre"])) {
     break;
 
     case 'select2_distrito_departamento':
-      $rspta = $_ubigeo->select2_distrito_departamento($_GET['id']);
+      $rspta = $ajax_ubigeo->select2_distrito_departamento($_GET['id']);
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value="' . $reg->nombre . '" iddistrito="' . $reg->iddistrito . '" iddepartamento= "' . $reg->iddepartamento . '" ubigeo_inei="' . $reg->ubigeo_inei . '" latitud="' . $reg->latitud . '" longitud="' . $reg->longitud . '" Frontera="' . $reg->Frontera . '" >' . $reg->nombre . '</option>';
       }
     break;
 
     case 'select2_distrito_provincia':
-      $rspta = $_ubigeo->select2_distrito_provincia($_GET['id']);
+      $rspta = $ajax_ubigeo->select2_distrito_provincia($_GET['id']);
       while ($reg = $rspta['data']->fetch_object()) {
         echo '<option value="' . $reg->nombre . '" iddistrito="' . $reg->iddistrito . '" iddepartamento= "' . $reg->iddepartamento . '" ubigeo_inei="' . $reg->ubigeo_inei . '" latitud="' . $reg->latitud . '" longitud="' . $reg->longitud . '" Frontera="' . $reg->Frontera . '" >' . $reg->nombre . '</option>';
       }
     break;
 
     case 'select2_distrito_id':
-      $rspta = $_ubigeo->select2_distrito_id($_GET['id']);
+      $rspta = $ajax_ubigeo->select2_distrito_id($_GET['id']);
       echo json_encode($rspta, true);
+    break;
+
+    // ══════════════════════════════════════ U B I G E O - S E L E C T 2   C E N T R O   P O B L A D O ══════════════════════════════════════
+    case 'select2_centro_poblado_cliente':
+      $rspta = $ajax_centro_poblado->select2_centro_poblado(); $data = "";
+      while ($reg = $rspta['data']->fetch_object()) {
+        $data .= '<option value="' . $reg->idcentro_poblado . '"   >' . $reg->nombre .'('.$reg->cant_cliente .')'. '</option>';
+      }
+
+      $retorno = array(
+        'status' => true,
+        'message' => 'Salió todo ok',
+        'data' => $data,
+      );
+      echo json_encode($retorno, true);
+    break;
+
+    case 'select2_centro_poblado_venta':
+      $rspta = $ajax_centro_poblado->select2_centro_poblado(); $data = "";
+      while ($reg = $rspta['data']->fetch_object()) {
+        $data .= '<option value="' . $reg->idcentro_poblado . '"   >' . $reg->nombre .'('.$reg->cant_venta .')'. '</option>';
+      }
+
+      $retorno = array(
+        'status' => true,
+        'message' => 'Salió todo ok',
+        'data' => $data,
+      );
+      echo json_encode($retorno, true);
     break;
 
     // ══════════════════════════════════════ C L I E N T E  ══════════════════════════════════════
@@ -330,6 +361,8 @@ if (!isset($_SESSION["user_nombre"])) {
         echo json_encode($rspta, true);
       }
     break;
+
+    // ══════════════════════════════════════ C A T E G O R I A   O T R O S   G A S T O S - S E L E C T 2  ══════════════════════════════════════
 
     // ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════
     case 'create_code_producto' :

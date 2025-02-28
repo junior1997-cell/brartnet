@@ -200,11 +200,18 @@ table th { vertical-align: top !important; }
 
 .activar-scroll-x-auto{
   max-width: 100%;
-  overflow-x: auto; /* Activa el scroll horizontal si es necesario */
-  white-space: nowrap; /* Evita que los elementos se vayan a la siguiente línea */
-  scrollbar-width: thin; /* Hace la barra más delgada en Firefox */
+  overflow-x: auto; /* Activa el scroll horizontal */
+  white-space: nowrap; /* Evita que los elementos bajen de línea */
+  scrollbar-width: thin; /* Scroll delgado en Firefox */
   scrollbar-color: #c1c1c1 #f1f1f1; /* Color del scroll en Firefox */
+  display: flex; /* Activa el comportamiento en fila */
+  flex-wrap: nowrap; /* Evita que los elementos se vayan a la siguiente línea */
+  gap: 10px; /* Espaciado entre elementos */
+  padding-bottom: 10px; /* Evita que el scroll tape los elementos */
+  position: relative; /* Evita problemas de desbordamiento */
 }
+
+
 
 /*  ══════════════════════════════════════════ - D I S E Ñ O   D E   S C R O L L - ══════════════════════════════════════════ */
 

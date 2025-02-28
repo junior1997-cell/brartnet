@@ -5,9 +5,14 @@ require "../config/Conexion_v2.php";
 Class CentroPoblado
 {
 	//Implementamos nuestro constructor
-	public function __construct()
+	public $id_usr_sesion; public $id_persona_sesion; public $id_trabajador_sesion;
+	// public $id_empresa_sesion;   
+	public function __construct( )
 	{
-
+		$this->id_usr_sesion        =  isset($_SESSION['idusuario']) ? $_SESSION["idusuario"] : 0;
+		$this->id_persona_sesion    = isset($_SESSION['idpersona']) ? $_SESSION["idpersona"] : 0;
+		$this->id_trabajador_sesion = isset($_SESSION['idpersona_trabajador']) ? $_SESSION["idpersona_trabajador"] : 0;
+		// $this->id_empresa_sesion = isset($_SESSION['idempresa']) ? $_SESSION["idempresa"] : 0;
 	}
 
 	//Implementamos un método para insertar registros
@@ -115,8 +120,14 @@ Class CentroPoblado
 	}
 
 	//Implementar un método para listar los registros y mostrar en el select
-	public function select() {
-		$sql="SELECT * FROM centro_poblado where estado=1";
+	public function select2_centro_poblado() {
+		$filtro_id_trabajador  = '';
+		if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {	$filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";	} 
+		if ($_SESSION['user_cargo'] == 'PUNTO DE COBRO') { $filtro_id_trabajador = "AND (v.user_created = '$this->id_usr_sesion' OR pc.idpersona_trabajador = '$this->id_trabajador_sesion')";  } 
+		$sql="SELECT COALESCE(cc.cant_cliente, 0) AS cant_cliente, COALESCE(cv.cant_venta, 0) AS cant_venta, cp.* FROM centro_poblado as cp
+		left join (SELECT pc.idcentro_poblado, cp.nombre, COUNT(pc.idpersona_cliente) as cant_cliente FROM persona_cliente as pc INNER JOIN centro_poblado as cp on cp.idcentro_poblado = pc.idcentro_poblado WHERE pc.estado_delete='1' GROUP BY pc.idcentro_poblado, cp.nombre) as cc on cc.idcentro_poblado = cp.idcentro_poblado
+		left join (SELECT pc.idcentro_poblado, cp.nombre, COUNT(v.idventa) as cant_venta FROM venta as v INNER JOIN persona_cliente as pc on pc.idpersona_cliente = v.idpersona_cliente INNER JOIN centro_poblado as cp on cp.idcentro_poblado = pc.idcentro_poblado WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante in ('01', '03', '07', '12')  $filtro_id_trabajador GROUP BY pc.idcentro_poblado, cp.nombre ) as cv on cv.idcentro_poblado = cp.idcentro_poblado
+		where cp.estado= '1' AND cp.estado_delete='1' ORDER BY cp.nombre;";
 		return ejecutarConsulta($sql);		
 	}
 }

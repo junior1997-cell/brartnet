@@ -1,5 +1,6 @@
+
 SELECT
-  pco.idpersona_cliente_v2, pco.idpersona, pco.idpersona_cliente, pco.cliente_nombre_completo, pco.dia_cancelacion, pco.fecha_cancelacion,
+  pco.idpersona_cliente_v2, pco.idpersona, pco.idpersona_cliente, pco.tipo_persona_sunat, pco.cliente_nombre_completo, pco.dia_cancelacion, pco.fecha_cancelacion,
   CONCAT( YEAR(pco.primera_venta), '-',  UPPER( LEFT(MONTHNAME(pco.primera_venta), 1) ), SUBSTR(MONTHNAME(pco.primera_venta), 2) ) AS mes_inicio,
   ROUND( COALESCE( ( pco.cant_total_mes - co.cant_cobrado ), 0 ),  2 ) AS avance,
   COALESCE(co.cant_cobrado, 0) AS cant_cobrado,
@@ -16,7 +17,7 @@ SELECT
 	pco.tipo_documento_abrev_nombre,
 	pco.numero_documento,
   pco.idpersona_trabajador,
-	pco.trabajador_nombre,
+	pco.trabajador_nombre, pco.idcentro_poblado, pco.centro_poblado,
   pco.estado_pc, pco.estado_delete_pc, pco.estado_p, pco.estado_delete_p
 FROM
 (
@@ -35,8 +36,8 @@ FROM
         END
       END, 
     0 ) AS cant_total_mes, per.fecha_cancelacion,
-    per.idpersona, per.idpersona_cliente_v2, per.idpersona_cliente, per.cliente_nombre_completo, per.numero_documento, per.estado_pc, per.estado_delete_pc, per.estado_p,
-    per.estado_delete_p, per.tipo_documento_abrev_nombre, per.idpersona_trabajador, per.trabajador_nombre
+    per.idpersona, per.idpersona_cliente_v2, per.idpersona_cliente, per.tipo_persona_sunat, per.cliente_nombre_completo, per.numero_documento, per.estado_pc, per.estado_delete_pc, per.estado_p,
+    per.estado_delete_p, per.tipo_documento_abrev_nombre, per.idpersona_trabajador, per.trabajador_nombre, per.idcentro_poblado, per.centro_poblado
   FROM
   (
     SELECT LPAD (pc.idpersona_cliente, 5, '0') AS idpersona_cliente_v2, p.idpersona, p.tipo_persona_sunat, p.nombre_razonsocial, p.apellidos_nombrecomercial, p.numero_documento, p.estado AS estado_p, 
@@ -46,11 +47,12 @@ FROM
       WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT ( p.nombre_razonsocial,' ', p.apellidos_nombrecomercial )
       WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial
       ELSE '-'
-    END AS cliente_nombre_completo
+    END AS cliente_nombre_completo, pc.idcentro_poblado, cp.nombre as centro_poblado
     FROM  persona_cliente AS pc
     INNER JOIN persona AS p ON p.idpersona = pc.idpersona
     INNER JOIN persona_trabajador AS pt ON pc.idpersona_trabajador = pt.idpersona_trabajador
     INNER JOIN persona AS p1 ON pt.idpersona = p1.idpersona
+    LEFT JOIN centro_poblado as cp on cp.idcentro_poblado = pc.idcentro_poblado
     INNER JOIN sunat_c06_doc_identidad AS sc06 ON p.tipo_documento = sc06.code_sunat
   ) as per
   LEFT JOIN ( 

@@ -83,6 +83,8 @@ Class Ubigeo
 		WHERE di.estado = '1' AND di.idubigeo_distrito = '$id';";
 		return ejecutarConsultaSimpleFila($sql);		
 	}
+
+	// ══════════════════════════════════════ S E L E C T 2    C E N T R O   P O B L A D O ══════════════════════════════════════
 }
 
 ?>

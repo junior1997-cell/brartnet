@@ -113,62 +113,83 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div class="p-3 " > 
                     <div class="row">
                       <div class="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-11">
-                        <div class="activar-scroll-x-auto scroll-sm">
-                          <div style="min-width: 1200px;" class="pb-2 min-width-auto">                      
-                            <div class="row">                    
-                              <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
-                              <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
-                                <div class="form-group">
-                                  <label for="filtro_fecha_i" class="form-label">
-                                    <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_fecha_i();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
-                                    Fecha Inicio</label>
-                                  <input type="date" class="form-control" name="filtro_fecha_i" id="filtro_fecha_i" value="<?php echo date("Y-m-d"); ?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">
-                                </div>
-                              </div>
-                              <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
-                              <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
-                                <div class="form-group">
-                                  <label for="filtro_fecha_f" class="form-label">
-                                    <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_fecha_f();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
-                                    Fecha Fin</label>
-                                  <input type="date" class="form-control" name="filtro_fecha_f" id="filtro_fecha_f" value="<?php echo date("Y-m-d"); ?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">
-                                </div>
-                              </div>
-                              <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
-                              <div class="col-md-3 col-lg-3 col-xl-4 col-xxl-4">
-                                <div class="form-group">
-                                  <label for="filtro_cliente" class="form-label">
-                                    <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_cliente();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                    Cliente
-                                    <span class="charge_filtro_cliente"></span>
-                                  </label>
-                                  <select class="form-control" name="filtro_cliente" id="filtro_cliente" onchange="cargando_search(); delay(function(){filtros()}, 50 );"> <!-- lista de categorias --> </select>
-                                </div>
-                              </div>
-                              <!-- ::::::::::::::::::::: FILTRO COMPROBANTE :::::::::::::::::::::: -->
-                              <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
-                                <div class="form-group">
-                                  <label for="filtro_comprobante" class="form-label">
-                                    <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_comprobante();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                    Comprobante
-                                    <span class="charge_filtro_comprobante"></span>
-                                  </label>
-                                  <select class="form-control" name="filtro_comprobante" id="filtro_comprobante" onchange="cargando_search(); delay(function(){filtros()}, 50 );"> <!-- lista de categorias --> </select>
-                                </div>
-                              </div>
-                              <!-- ::::::::::::::::::::: FILTRO METODO PAGO :::::::::::::::::::::: -->
-                              <div class="col-md-3 col-lg-3 col-xl-2 col-xxl-2">
-                                <div class="form-group">
-                                  <label for="filtro_metodo_pago" class="form-label">
-                                    <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_metodo_pago();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                                    Metodo de Pago
-                                    <span class="charge_filtro_metodo_pago"></span>
-                                  </label>
-                                  <select class="form-control" name="filtro_metodo_pago" id="filtro_metodo_pago" onchange="cargando_search(); delay(function(){filtros()}, 50 );"> <!-- lista de categorias --> </select>
-                                </div>
-                              </div>
+                        <div class="activar-scroll-x-auto scroll-sm">                                             
+                          <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
+                          <div style="width: 350px;  min-width: 200px;">
+                            <div class="form-group">
+                              <label for="filtro_fecha_i" class="form-label">
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_fecha_i();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
+                                Fecha Inicio</label>
+                              <input type="date" class="form-control" name="filtro_fecha_i" id="filtro_fecha_i" value="<?php echo date("Y-m-d"); ?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">
                             </div>
-                          </div>  
+                          </div>
+                          <!-- ::::::::::::::::::::: FILTRO FECHA :::::::::::::::::::::: -->
+                          <div style="width: 350px;  min-width: 200px;">
+                            <div class="form-group">
+                              <label for="filtro_fecha_f" class="form-label">
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_fecha_f();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
+                                Fecha Fin</label>
+                              <input type="date" class="form-control" name="filtro_fecha_f" id="filtro_fecha_f" value="<?php echo date("Y-m-d"); ?>" onchange="cargando_search(); delay(function(){filtros()}, 50 );">
+                            </div>
+                          </div>
+                          <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
+                          <div style="width: 450px;  min-width: 200px;">
+                            <div class="form-group">
+                              <label for="filtro_cliente" class="form-label">
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_cliente();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                Cliente
+                                <span class="charge_filtro_cliente"></span>
+                              </label>
+                              <select class="form-control" name="filtro_cliente" id="filtro_cliente" onchange="cargando_search(); delay(function(){filtros()}, 50 );"> <!-- lista de categorias --> </select>
+                            </div>
+                          </div>
+                          <!-- ::::::::::::::::::::: FILTRO TIPO DE PERSONA :::::::::::::::::::::: -->
+                          <div style="width: 150px;  min-width: 150px;">
+                            <div class="form-group">
+                              <label for="filtro_tipo_persona" class="form-label">                         
+                                <span class="badge bg-info m-r-4px cursor-pointer" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                Tipo Persona
+                                <span class="charge_filtro_tipo_persona"></span>
+                              </label>
+                              <select class="form-control" name="filtro_tipo_persona" id="filtro_tipo_persona" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > 
+                                <option value="NATURAL">NATURAL</option>
+                                <option value="JURÍDICA">JURÍDICA</option>
+                              </select>
+                            </div>
+                          </div>
+                          <!-- ::::::::::::::::::::: FILTRO COMPROBANTE :::::::::::::::::::::: -->
+                          <div style="width: 350px;  min-width: 200px;">
+                            <div class="form-group">
+                              <label for="filtro_comprobante" class="form-label">
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_comprobante();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                Comprobante
+                                <span class="charge_filtro_comprobante"></span>
+                              </label>
+                              <select class="form-control" name="filtro_comprobante" id="filtro_comprobante" onchange="cargando_search(); delay(function(){filtros()}, 50 );"> <!-- lista de categorias --> </select>
+                            </div>
+                          </div>
+                          <!-- ::::::::::::::::::::: FILTRO METODO PAGO :::::::::::::::::::::: -->
+                          <div style="width: 350px;  min-width: 200px;">
+                            <div class="form-group">
+                              <label for="filtro_metodo_pago" class="form-label">
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_metodo_pago();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                Metodo de Pago
+                                <span class="charge_filtro_metodo_pago"></span>
+                              </label>
+                              <select class="form-control" name="filtro_metodo_pago" id="filtro_metodo_pago" onchange="cargando_search(); delay(function(){filtros()}, 50 );"> <!-- lista de categorias --> </select>
+                            </div>
+                          </div> 
+                          <!-- ::::::::::::::::::::: FILTRO CENTRO POBLADO :::::::::::::::::::::: -->
+                          <div style="width: 250px;  min-width: 250px;">
+                            <div class="form-group">
+                              <label for="filtro_centro_poblado" class="form-label">                         
+                                <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_centro_poblado_venta();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                                Centro Poblado
+                                <span class="charge_filtro_centro_poblado"></span>
+                              </label> 
+                              <select class="form-control" name="filtro_centro_poblado" id="filtro_centro_poblado" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > </select>
+                            </div>
+                          </div>                          
                         </div> 
                       </div>
                       <div class="col-12 col-sm-12 col-md-12 col-lg-1 col-xl-1 text-center">
@@ -1337,8 +1358,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
 
-    <script src="scripts/facturacion.js?version_jdl=1.42"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.42"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.45"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.45"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

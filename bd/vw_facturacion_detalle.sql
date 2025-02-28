@@ -1,4 +1,5 @@
 
+
 SELECT 
 -- Datos venta cabecera
 v.idventa, LPAD(v.idventa, 5, '0') AS idventa_v2, v.idperiodo_contable,v.iddocumento_relacionado,v.crear_enviar_sunat,v.idsunat_c01,v.tipo_comprobante,v.serie_comprobante,
@@ -17,7 +18,7 @@ vd.idventa_detalle,vd.idproducto,vd.pr_nombre,vd.pr_marca,vd.pr_categoria,vd.pr_
 vd.precio_venta_descuento,vd.descuento,vd.descuento_porcentaje,vd.subtotal,vd.subtotal_no_descuento,vd.um_nombre,vd.um_abreviatura,vd.es_cobro,vd.periodo_pago,
 vd.periodo_pago_format,vd.periodo_pago_month,vd.periodo_pago_year, LEFT(vd.periodo_pago_month, 3) as periodo_pago_month_recorte, CONCAT( LEFT(vd.periodo_pago_month, 3), '-',  vd.periodo_pago_year) as periodo_pago_mes_anio,
 -- Datos Cliente
-pc.idpersona_cliente, p.idpersona, 
+pc.idpersona_cliente, p.idpersona, p.tipo_persona_sunat,
 p.nombre_razonsocial, p.apellidos_nombrecomercial, p.tipo_documento, 
 p.numero_documento, p.foto_perfil, 
 CASE 
@@ -32,12 +33,12 @@ CASE
       ELSE CONCAT(LEFT( p.nombre_razonsocial, 27) , '...')
     END
   ELSE '-'
-END AS cliente_nombre_recortado,
+END AS cliente_nombre_recortado, 
 CASE 
   WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
   WHEN p.tipo_persona_sunat = 'JURÍDICA' THEN p.nombre_razonsocial 
   ELSE '-'
-END AS cliente_nombre_completo, 
+END AS cliente_nombre_completo, pc.idcentro_poblado, cp.nombre as centro_poblado,
 -- Tipo de comprobante
 tc.abreviatura as tipo_comprobante_v1, 
 -- Tipo de documento cliente
@@ -50,6 +51,7 @@ LPAD(v.user_created, 3, '0') AS user_created_v2
 FROM venta AS v
 INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
 INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
+LEFT JOIN centro_poblado as cp on cp.idcentro_poblado = pc.idcentro_poblado
 INNER JOIN persona AS p ON p.idpersona = pc.idpersona
 INNER JOIN persona_trabajador as pt on pt.idpersona_trabajador = pc.idpersona_trabajador
 INNER JOIN persona as p2 on p2.idpersona = pt.idpersona

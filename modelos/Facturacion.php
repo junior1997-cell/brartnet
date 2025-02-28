@@ -16,10 +16,10 @@
       // $this->id_empresa_sesion = isset($_SESSION['idempresa']) ? $_SESSION["idempresa"] : 0;
     }
 
-    public function listar_tabla_facturacion( $fecha_i, $fecha_f, $cliente, $comprobante, $metodo_pago, $estado_sunat ) {    
+    public function listar_tabla_facturacion( $fecha_i, $fecha_f, $cliente, $tipo_persona, $comprobante, $metodo_pago, $centro_poblado, $estado_sunat ) {    
 
       $filtro_id_trabajador  = ''; $filtro_id_punto ='';
-      $filtro_fecha = ""; $filtro_cliente = ""; $filtro_comprobante = ""; $filtro_metodo_pago = ""; $filtro_estado_sunat = "";
+      $filtro_fecha = ""; $filtro_cliente = ""; $filtro_tipo_persona = ""; $filtro_comprobante = ""; $filtro_metodo_pago = ""; $filtro_centro_poblado = ""; $filtro_estado_sunat = "";
 
       if ($_SESSION['user_cargo'] == 'TÉCNICO DE RED') {  $filtro_id_trabajador = "AND pc.idpersona_trabajador = '$this->id_trabajador_sesion'";    } 
       if ($_SESSION['user_cargo'] == 'PUNTO DE COBRO') { $filtro_id_punto = "AND (v.user_created = '$this->id_usr_sesion' OR pc.idpersona_trabajador = '$this->id_trabajador_sesion')";  } 
@@ -29,10 +29,12 @@
       else if (!empty($fecha_f)) { $filtro_fecha = "AND DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') = '$fecha_f'"; }
       
       if ( empty($cliente) ) { } else {  $filtro_cliente = "AND v.idpersona_cliente = '$cliente'"; } 
+      if ( empty($tipo_persona) ) { } else {  $filtro_tipo_persona = "AND p.tipo_persona_sunat = '$tipo_persona'"; } 
       if ( empty($comprobante) ) { } else {  $filtro_comprobante = "AND v.idsunat_c01 = '$comprobante'"; } 
-       if ( empty($metodo_pago) ) { } else { $filtro_metodo_pago = "AND vmp.metodos_pago_agrupado like '%$metodo_pago%'"; }
+      if ( empty($metodo_pago) ) { } else { $filtro_metodo_pago = "AND vmp.metodos_pago_agrupado like '%$metodo_pago%'"; }
       if ( empty($estado_sunat) ) { } else if ( $estado_sunat == 'NO ENVIADO') { $filtro_estado_sunat = "AND ( v.sunat_estado is null or v.sunat_estado = '' or v.sunat_estado IN ('RECHAZADA') )"; } 
       else {  $filtro_estado_sunat = "AND v.sunat_estado = '$estado_sunat'"; } 
+      if ( empty($centro_poblado) ) { } else {  $filtro_centro_poblado = "AND pc.idcentro_poblado = '$centro_poblado'"; } 
 
       $sql = "SELECT v.*, LPAD(v.idventa, 5, '0') AS idventa_v2, CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END AS venta_total_v2, 
       CASE v.tipo_comprobante WHEN '03' THEN 'BOLETA' WHEN '07' THEN 'NOTA CRED.' ELSE tc.abreviatura END AS tp_comprobante_v2,
@@ -59,7 +61,9 @@
         ELSE '-'
       END AS cliente_nombre_completo, pu.nombre_razonsocial as user_en_atencion, LPAD(v.user_created, 3, '0') AS user_created_v2,
       GROUP_CONCAT( CASE vd.es_cobro WHEN 'SI' THEN CONCAT( LEFT(vd.periodo_pago_month, 3), '-',  vd.periodo_pago_year, ',<br>') ELSE '' END SEPARATOR ' ') AS periodo_pago_mes_anio,
-      vmp.cantidad_mp, vmp.metodos_pago_agrupado
+      vmp.cantidad_mp, vmp.metodos_pago_agrupado,
+      case when p.foto_perfil is null then LEFT(p.nombre_razonsocial, 1) when p.foto_perfil = '' then LEFT(p.nombre_razonsocial, 1) else null end cliente_primera_letra,
+	    case when p.foto_perfil is null then 'NO' when p.foto_perfil = '' then 'NO' else 'SI' end cliente_tiene_pefil
       FROM venta AS v
       LEFT JOIN venta_detalle AS vd ON vd.idventa = v.idventa
       LEFT JOIN (select v.idventa, COALESCE(count(vmp.idventa_metodo_pago), 0) as cantidad_mp, GROUP_CONCAT(vmp.metodo_pago ORDER BY vmp.metodo_pago SEPARATOR ', ') AS metodos_pago_agrupado from venta_metodo_pago as vmp inner join venta as v on v.idventa = vmp.idventa group by v.idventa) AS vmp on vmp.idventa = v.idventa
@@ -69,7 +73,7 @@
       INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = v.idsunat_c01
       LEFT JOIN usuario as u ON u.idusuario = v.user_created
       LEFT JOIN persona as pu ON pu.idpersona = u.idpersona
-      WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante <> '100' $filtro_id_trabajador $filtro_id_punto $filtro_cliente $filtro_comprobante $filtro_metodo_pago $filtro_estado_sunat $filtro_fecha
+      WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante in ('01', '03', '07', '12') $filtro_id_trabajador $filtro_id_punto $filtro_cliente $filtro_tipo_persona $filtro_comprobante $filtro_metodo_pago $filtro_centro_poblado $filtro_estado_sunat $filtro_fecha
       GROUP BY v.idventa
       ORDER BY v.fecha_emision DESC, p.nombre_razonsocial ASC;"; #return $sql;
       $venta = ejecutarConsulta($sql); if ($venta['status'] == false) {return $venta; }

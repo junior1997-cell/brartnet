@@ -1,7 +1,9 @@
+
+
 SELECT
 	-- ::::::::::::::: DATOS CLIENTE ::::::::::::::: 
 	per.idpersona_cliente_v2,	per.idpersona_cliente, per.ip_personal,	per.dia_cancelacion, per.dia_cancelacion_v2, per.fecha_cancelacion, per.fecha_cancelacion_format, 
-	per.fecha_afiliacion,	per.descuento, per.estado_descuento, per.centro_poblado, per.nota,	per.usuario_microtick,	per.estado_pc,	per.estado_delete_pc,
+	per.fecha_afiliacion,	per.descuento, per.estado_descuento, per.idcentro_poblado, per.centro_poblado, per.nota,	per.usuario_microtick,	per.estado_pc,	per.estado_delete_pc,
 	per.cliente_nombre_completo,
 	IF(per.fecha_cancelacion > CURDATE(),
 			DATEDIFF(per.fecha_cancelacion, CURDATE()),
@@ -51,7 +53,7 @@ FROM
 			pc.fecha_afiliacion,
 			pc.descuento,
 			pc.estado_descuento,
-			cp.nombre as centro_poblado,
+			pc.idcentro_poblado, cp.nombre as centro_poblado,
 			pc.nota,
 			pc.usuario_microtick,
 			pc.landing_user, pc.landing_descripcion, pc.landing_puntuacion, pc.landing_fecha, pc.landing_estado, 

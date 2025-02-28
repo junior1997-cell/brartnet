@@ -94,53 +94,80 @@ if (!isset($_SESSION["user_nombre"])) {
             <!-- ::::::::::::::::::: VER TABLA PRINCIPAL ::::::::::::::::::: -->
             <div class="col-xxl-12 col-xl-12 " id="div-tabla-principal">          
               <div class="card custom-card">
-                <div class="card-header row" style="gap: 0px !important;">
+                <div class="p-3" >
+                  <div class="activar-scroll-x-auto scroll-sm">                                       
                       
-                  <!-- ::::::::::::::::::::: FILTRO TRABAJADOR :::::::::::::::::::::: -->
-                  <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
-                    <div class="form-group">
-                      <label for="filtro_trabajador" class="form-label">                         
-                        <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_trabajador');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                        Trabajador
-                        <span class="charge_filtro_trabajador"></span>
-                      </label>
-                      <select class="form-control" name="filtro_trabajador" id="filtro_trabajador" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                    <!-- ::::::::::::::::::::: FILTRO TRABAJADOR :::::::::::::::::::::: -->
+                    <div style="width: 350px;  min-width: 200px;">
+                      <div class="form-group">
+                        <label for="filtro_trabajador" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_trabajador');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Trabajador
+                          <span class="charge_filtro_trabajador"></span>
+                        </label>
+                        <select class="form-control" name="filtro_trabajador" id="filtro_trabajador" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
                     </div>
-                  </div>
-                  <!-- ::::::::::::::::::::: FILTRO DIA DE PAGO :::::::::::::::::::::: -->
-                  <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
-                    <div class="form-group">
-                      <label for="filtro_dia_pago" class="form-label">                         
-                        <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_dia');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                        Día de Afiliación
-                        <span class="charge_filtro_dia_pago"></span>
-                      </label>
-                      <select class="form-control" name="filtro_dia_pago" id="filtro_dia_pago" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                    <!-- ::::::::::::::::::::: FILTRO TIPO DE PERSONA :::::::::::::::::::::: -->
+                    <div style="width: 150px;  min-width: 150px;">
+                      <div class="form-group">
+                        <label for="filtro_tipo_persona" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_tipo_persona');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Tipo Persona
+                          <span class="charge_filtro_tipo_persona"></span>
+                        </label>
+                        <select class="form-control" name="filtro_tipo_persona" id="filtro_tipo_persona" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > 
+                          <option value="NATURAL">NATURAL</option>
+                          <option value="JURÍDICA">JURÍDICA</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                  <!-- ::::::::::::::::::::: FILTRO PLAN :::::::::::::::::::::: -->
-                  <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
-                    <div class="form-group">
-                      <label for="filtro_plan" class="form-label">                         
-                        <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_plan');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                        Plan
-                        <span class="charge_filtro_plan"></span>
-                      </label> 
-                      <select class="form-control" name="filtro_plan" id="filtro_plan" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > </select>
+                    <!-- ::::::::::::::::::::: FILTRO DIA DE PAGO :::::::::::::::::::::: -->
+                    <div style="width: 150px;  min-width: 150px;">
+                      <div class="form-group">
+                        <label for="filtro_dia_pago" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_dia');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Día de Afiliación
+                          <span class="charge_filtro_dia_pago"></span>
+                        </label>
+                        <select class="form-control" name="filtro_dia_pago" id="filtro_dia_pago" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
                     </div>
-                  </div>
-                  <!-- ::::::::::::::::::::: FILTRO ZONA ANTENA :::::::::::::::::::::: -->
-                  <div class="col-md-3 col-lg-3 col-xl-3 col-xxl-3">
-                    <div class="form-group">
-                      <label for="filtro_zona_antena" class="form-label">                         
-                        <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_zona_antena');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
-                        Zona Antena
-                        <span class="charge_filtro_zona_antena"></span>
-                      </label>
-                      <select class="form-control" name="filtro_zona_antena" id="filtro_zona_antena" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                    <!-- ::::::::::::::::::::: FILTRO PLAN :::::::::::::::::::::: -->
+                    <div style="width: 250px;  min-width: 250px;">
+                      <div class="form-group">
+                        <label for="filtro_plan" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_plan');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Plan
+                          <span class="charge_filtro_plan"></span>
+                        </label> 
+                        <select class="form-control" name="filtro_plan" id="filtro_plan" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > </select>
+                      </div>
                     </div>
-                  </div>
+                    <!-- ::::::::::::::::::::: FILTRO CENTRO POBLADO :::::::::::::::::::::: -->
+                    <div style="width: 250px;  min-width: 250px;">
+                      <div class="form-group">
+                        <label for="filtro_centro_poblado" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_centro_poblado');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Centro Poblado
+                          <span class="charge_filtro_centro_poblado"></span>
+                        </label> 
+                        <select class="form-control" name="filtro_centro_poblado" id="filtro_centro_poblado" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > </select>
+                      </div>
+                    </div>
+                    <!-- ::::::::::::::::::::: FILTRO ZONA ANTENA :::::::::::::::::::::: -->
+                    <div style="width: 450px;  min-width: 250px;">
+                      <div class="form-group">
+                        <label for="filtro_zona_antena" class="form-label">                         
+                          <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_select('filtro_zona_antena');" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                          Zona Antena
+                          <span class="charge_filtro_zona_antena"></span>
+                        </label>
+                        <select class="form-control" name="filtro_zona_antena" id="filtro_zona_antena" onchange="cargando_search(); delay(function(){filtros()}, 50 );" > <!-- lista de categorias --> </select>
+                      </div>
+                    </div>                      
                     
+                  </div>
                 </div>
                 <div class="card-body">                      
                       
@@ -679,7 +706,15 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12" style="margin-bottom: 20px;">
                               <div class="form-group">
                                 <label class="form-label" for="direccion">Dirección: <sup class="text-danger">*</sup></label>
-                                <textarea name="direccion" class="form-control inpur_edit" id="direccion" placeholder="ejemp: Jr las flores - Al costado del colegio" rows="3"></textarea>
+                                <textarea name="direccion" class="form-control inpur_edit" id="direccion" placeholder="ejemp: Jr las flores" rows="2"></textarea>
+                              </div>
+                            </div>
+
+                            <!-- Dirección -->
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12" style="margin-bottom: 20px;">
+                              <div class="form-group">
+                                <label class="form-label" for="direccion_referencia">Referencia: <sup class="text-danger">*</sup></label>
+                                <textarea name="direccion_referencia" class="form-control inpur_edit" id="direccion_referencia" placeholder="ejemp: Al costado del colegio" rows="2"></textarea>
                               </div>
                             </div>
 
@@ -1482,8 +1517,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Google Maps JS -->
     <script src="../assets/libs/gmaps/gmaps.min.js"></script>
 
-    <script src="scripts/cliente.js?version_jdl=1.42"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.42"></script>
+    <script src="scripts/cliente.js?version_jdl=1.45"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.45"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

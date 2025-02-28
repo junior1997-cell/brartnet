@@ -13,7 +13,7 @@ const filePondInstances = [];
 
 var ubicacion_cliente;
 
-var opcion_r = 'tabla_deudores', filtro_trabajador_r = '', filtro_dia_pago_r = '', filtro_plan_r = '', filtro_zona_antena_r = '';
+var opcion_r = 'tabla_deudores', filtro_trabajador_r = '', filtro_tipo_persona_r =  '', filtro_dia_pago_r = '', filtro_plan_r = '', filtro_centro_poblado_r = '', filtro_zona_antena_r = '';
 
 //Función que se ejecuta al inicio
 function init() {
@@ -27,6 +27,7 @@ function init() {
   lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', null, '.charge_filtro_trabajador');
   lista_select2("../ajax/cliente.php?op=select2_filtro_dia_pago",   '#filtro_dia_pago',       null, '.charge_filtro_dia_pago');
   lista_select2("../ajax/cliente.php?op=select2_filtro_plan", '#filtro_plan', null, '.charge_filtro_plan');
+  lista_select2("../ajax/ajax_general.php?op=select2_centro_poblado_cliente", '#filtro_centro_poblado', null, '.charge_filtro_centro_poblado');
   lista_select2("../ajax/cliente.php?op=select2_filtro_zona_antena", '#filtro_zona_antena', null, '.charge_filtro_zona_antena');
 
   lista_select2("../ajax/facturacion.php?op=select2_banco", '#f_metodo_pago_1', null, 'charge_f_metodo_pago_1');
@@ -41,8 +42,10 @@ function init() {
   
   // ══════════════════════════════════════ I N I T I A L I Z E   S E L E C T 2 ══════════════════════════════════════  
   $("#filtro_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_tipo_persona").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, }); $("#filtro_tipo_persona").val('').trigger("change");
   $("#filtro_dia_pago").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_plan").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
+  $("#filtro_centro_poblado").select2({ templateResult:templateCentroPoblado, theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_zona_antena").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
   $("#filtro_p_all_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
@@ -68,6 +71,13 @@ function templateDistrito (state) {
   //console.log(state);
   if (!state.id) { return state.text; } 
   var $state = $(`<span class="fs-11" > ${state.text}</span><span class="fs-9" > (${state.title})</span>`);
+  return $state;
+}
+
+function templateCentroPoblado (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; } 
+  var $state = $(`<span class="fs-11" > <i class="bi bi-geo-alt"></i></span><span class="fs-11" > ${state.text}</span>`);
   return $state;
 }
 
@@ -222,8 +232,8 @@ $('#tipo_documento').change(function () {
 
 });
 
-function cant_tab_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
-  $.getJSON(`../ajax/cliente.php?op=cant_tab_cliente`, {'filtro_trabajador':filtro_trabajador, 'filtro_dia_pago':filtro_dia_pago , 'filtro_plan': filtro_plan, 'filtro_zona_antena': filtro_zona_antena}, function (e, textStatus, jqXHR) {
+function cant_tab_cliente(filtro_trabajador, filtro_tipo_persona, filtro_dia_pago, filtro_plan, filtro_centro_poblado, filtro_zona_antena) {
+  $.getJSON(`../ajax/cliente.php?op=cant_tab_cliente`, {'filtro_trabajador':filtro_trabajador, 'filtro_tipo_persona':filtro_tipo_persona, 'filtro_dia_pago':filtro_dia_pago , 'filtro_plan': filtro_plan, 'filtro_centro_poblado': filtro_centro_poblado, 'filtro_zona_antena': filtro_zona_antena}, function (e, textStatus, jqXHR) {
     $('.cant-span-deudor').html(e.data.count_deudores);
     $('.cant-span-no-deuda').html(e.data.count_no_deuda);
     $('.cant-span-no-servicio').html(e.data.count_baja);
@@ -276,7 +286,7 @@ function funtion_switch() {
 }
 
 //Función Listar
-function tabla_principal_cliente(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+function tabla_principal_cliente(opcion, filtro_trabajador, filtro_tipo_persona, filtro_dia_pago, filtro_plan, filtro_centro_poblado, filtro_zona_antena) {
   // console.log(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);
 
   filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
@@ -294,7 +304,7 @@ function tabla_principal_cliente(opcion, filtro_trabajador, filtro_dia_pago, fil
       { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/cliente.php?op=tabla_principal_cliente&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
+      url: `../ajax/cliente.php?op=tabla_principal_cliente&filtro_trabajador=${filtro_trabajador}&filtro_tipo_persona=${filtro_tipo_persona}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_centro_poblado=${filtro_centro_poblado}&filtro_zona_antena=${filtro_zona_antena}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -349,7 +359,7 @@ function tabla_principal_cliente(opcion, filtro_trabajador, filtro_dia_pago, fil
 }
 
 //Función Listar
-function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_tipo_persona, filtro_dia_pago, filtro_plan, filtro_centro_poblado, filtro_zona_antena) {
 
   filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
@@ -366,7 +376,7 @@ function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_dia_pa
       // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/cliente.php?op=tabla_deudores&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
+      url: `../ajax/cliente.php?op=tabla_deudores&filtro_trabajador=${filtro_trabajador}&filtro_tipo_persona=${filtro_tipo_persona}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_centro_poblado=${filtro_centro_poblado}&filtro_zona_antena=${filtro_zona_antena}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -410,7 +420,7 @@ function tabla_principal_cliente_deudor(opcion, filtro_trabajador, filtro_dia_pa
   }).DataTable();
 }
 
-function tabla_principal_cliente_no_deudor(opcion, filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena) {
+function tabla_principal_cliente_no_deudor(opcion, filtro_trabajador, filtro_tipo_persona, filtro_dia_pago, filtro_plan, filtro_centro_poblado, filtro_zona_antena) {
 
   filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
 
@@ -427,7 +437,7 @@ function tabla_principal_cliente_no_deudor(opcion, filtro_trabajador, filtro_dia
       // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "btn btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
-      url: `../ajax/cliente.php?op=tabla_no_deudores&filtro_trabajador=${filtro_trabajador}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_zona_antena=${filtro_zona_antena}`,
+      url: `../ajax/cliente.php?op=tabla_no_deudores&filtro_trabajador=${filtro_trabajador}&filtro_tipo_persona=${filtro_tipo_persona}&filtro_dia_pago=${filtro_dia_pago}&filtro_plan=${filtro_plan}&filtro_centro_poblado=${filtro_centro_poblado}&filtro_zona_antena=${filtro_zona_antena}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -529,7 +539,9 @@ function guardar_y_editar_cliente(e) {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {
           Swal.fire("Correcto!", "Color registrado correctamente.", "success");
-          tabla_cliente_todos.ajax.reload(null, false);
+          if (tabla_cliente_todos) { tabla_cliente_todos.ajax.reload(null, false); } 
+          if (tabla_cliente_deudor) { tabla_cliente_deudor.ajax.reload(null, false); } 
+          if (tabla_cliente_no_deudor) { tabla_cliente_no_deudor.ajax.reload(null, false); } 
           limpiar_cliente();
           show_hide_form(1);
           $("#guardar_registro_cliente").html('Guardar Cambios').removeClass('disabled');
@@ -595,6 +607,7 @@ function mostrar_cliente(idpersona_cliente) {
       $("#fecha_nacimiento").val(e.data.fecha_nacimiento);
       $("#celular").val(e.data.celular);
       $("#direccion").val(e.data.direccion);
+      $("#direccion_referencia").val(e.data.direccion_referencia);
       $("#distrito").val(e.data.distrito).trigger("change");
       $("#departamento").val(e.data.departamento);
       $("#provincia").val(e.data.provincia);
@@ -1554,6 +1567,7 @@ $(function () {
       fecha_nacimiento:    	{  },  
 
       direccion:    			  { minlength: 4, maxlength: 200, },
+      direccion_referencia: { minlength: 4, maxlength: 200, },
       distrito:             { required: true },
       departamento:         { required: true },
       provincia:            { required: true },
@@ -1677,27 +1691,32 @@ function cargando_search() {
 
 function filtros() {  
 
-  var filtro_trabajador   = $("#filtro_trabajador").select2('val');
-  var filtro_dia_pago     = $("#filtro_dia_pago").select2('val');  
-  var filtro_plan         = $("#filtro_plan").select2('val');
-  var filtro_zona_antena  = $("#filtro_zona_antena").select2('val');
+  var filtro_trabajador     = $("#filtro_trabajador").select2('val');
+  var filtro_tipo_persona   = $("#filtro_tipo_persona").select2('val');
+  var filtro_dia_pago       = $("#filtro_dia_pago").select2('val');   
+  var filtro_plan           = $("#filtro_plan").select2('val');
+  var filtro_centro_poblado = $("#filtro_centro_poblado").select2('val');
+  var filtro_zona_antena    = $("#filtro_zona_antena").select2('val');
   
-  var nombre_trabajador   = $('#filtro_trabajador').find(':selected').text();
-  var nombre_dia_pago     = ' ─ ' + $('#filtro_unidad_medida').find(':selected').text();
-  var nombre_plan         = ' ─ ' + $('#filtro_plan').find(':selected').text();
-  var nombre_zona_antena  = ' ─ ' + $('#filtro_zona_antena').find(':selected').text();
+  var nombre_trabajador     = $('#filtro_trabajador').find(':selected').text();
+  var nombre_dia_pago       = ' ─ ' + $('#filtro_unidad_medida').find(':selected').text();
+  var nombre_plan           = ' ─ ' + $('#filtro_plan').find(':selected').text();
+  var nombre_zona_antena    = ' ─ ' + $('#filtro_zona_antena').find(':selected').text();
 
   
   if (filtro_trabajador == '' || filtro_trabajador == 0 || filtro_trabajador == null) { filtro_trabajador = ""; nombre_trabajador = ""; }       // filtro de trabajador  
+  if (filtro_tipo_persona == '' || filtro_tipo_persona == 0 || filtro_tipo_persona == null) { filtro_tipo_persona = "";  }                 // filtro de dia pago  
   if (filtro_dia_pago == '' || filtro_dia_pago == 0 || filtro_dia_pago == null) { filtro_dia_pago = ""; nombre_dia_pago = ""; }                 // filtro de dia pago  
   if (filtro_plan == '' || filtro_plan == 0 || filtro_plan == null) { filtro_plan = ""; nombre_plan = ""; }                                     // filtro de plan
+  if (filtro_centro_poblado == '' || filtro_centro_poblado == 0 || filtro_centro_poblado == null) { filtro_centro_poblado = "";  }              // filtro de plan
   if (filtro_zona_antena == '' || filtro_zona_antena == 0 || filtro_zona_antena == null) { filtro_zona_antena = ""; nombre_zona_antena = ""; }  // filtro de zona antena
 
   $('#id_buscando_tabla').html(`<th colspan="20" class="bg-danger " style="text-align: center !important;"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_trabajador} ${nombre_dia_pago} ${nombre_plan}...</th>`);
   //console.log(filtro_categoria, fecha_2, filtro_plan, comprobante);
 
-  filtro_trabajador_r = filtro_trabajador; filtro_dia_pago_r = filtro_dia_pago; filtro_plan_r = filtro_plan; filtro_zona_antena_r = filtro_zona_antena;
-  cant_tab_cliente(filtro_trabajador, filtro_dia_pago, filtro_plan, filtro_zona_antena);  
+  filtro_trabajador_r = filtro_trabajador; filtro_tipo_persona_r = filtro_tipo_persona;  filtro_dia_pago_r = filtro_dia_pago; 
+  filtro_plan_r = filtro_plan; filtro_centro_poblado_r = filtro_centro_poblado; filtro_zona_antena_r = filtro_zona_antena;
+  cant_tab_cliente(filtro_trabajador, filtro_tipo_persona, filtro_dia_pago, filtro_plan, filtro_centro_poblado, filtro_zona_antena);  
   filtrar_grupo(opcion_r);
 }
 
@@ -1705,13 +1724,13 @@ function filtrar_grupo(opcion ) {
   opcion_r = opcion; console.log(opcion);
   
   if (opcion == 'tabla_deudores') {    
-    tabla_principal_cliente_deudor(opcion, filtro_trabajador_r, filtro_dia_pago_r, filtro_plan_r, filtro_zona_antena_r);
+    tabla_principal_cliente_deudor(opcion, filtro_trabajador_r, filtro_tipo_persona_r, filtro_dia_pago_r, filtro_plan_r, filtro_centro_poblado_r, filtro_zona_antena_r);
   } else if (opcion == 'tabla_no_deuda'){
-    tabla_principal_cliente_no_deudor(opcion, filtro_trabajador_r, filtro_dia_pago_r, filtro_plan_r, filtro_zona_antena_r);
+    tabla_principal_cliente_no_deudor(opcion, filtro_trabajador_r, filtro_tipo_persona_r, filtro_dia_pago_r, filtro_plan_r, filtro_centro_poblado_r, filtro_zona_antena_r);
   } else if (opcion == 'tabla_no_servicio'){
   } else if (opcion == 'tabla_no_pago'){
   } else if (opcion == 'tabla_todos'){
-    tabla_principal_cliente(opcion, filtro_trabajador_r, filtro_dia_pago_r, filtro_plan_r, filtro_zona_antena_r);
+    tabla_principal_cliente(opcion, filtro_trabajador_r, filtro_tipo_persona_r, filtro_dia_pago_r, filtro_plan_r, filtro_centro_poblado_r, filtro_zona_antena_r);
   }  
 }
 
@@ -1791,16 +1810,23 @@ function reload_select(r_text) {
   switch (r_text) {
     case 'filtro_trabajador':
       lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador',     null, '.charge_filtro_trabajador');
-    break;   
+    break;  
+    case 'filtro_tipo_persona':
+      
+    break; 
     case 'filtro_dia':
       lista_select2("../ajax/cliente.php?op=select2_filtro_dia_pago",   '#filtro_dia_pago',       null, '.charge_filtro_dia_pago');
     break;
     case 'filtro_plan':
       lista_select2("../ajax/cliente.php?op=select2_filtro_plan",       '#filtro_plan',           null, '.charge_filtro_plan');
     break;
+    case 'filtro_centro_poblado':
+      lista_select2("../ajax/ajax_general.php?op=select2_centro_poblado_cliente", '#filtro_centro_poblado', null, '.charge_filtro_centro_poblado');
+    break;
     case 'filtro_zona_antena':
       lista_select2("../ajax/cliente.php?op=select2_filtro_zona_antena",'#filtro_zona_antena',    null, '.charge_filtro_zona_antena');
-    break;   
+    break;    
+    
 
     case 'filtro_p_all_trabajador':
       lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador", '#filtro_p_all_trabajador', null, '.charge_filtro_p_all_trabajador');
