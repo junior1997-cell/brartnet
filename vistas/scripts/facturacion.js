@@ -24,7 +24,8 @@ new SimpleBar(myElement1, { autoHide: true });
 async function init(){
 
   // filtros(); // Listamos la tabla principal
-  $(".btn-tiket").click();   // Selecionamos la BOLETA
+  // $(".btn-tiket").click();   // Selecionamos la BOLETA
+  $(".btn-boleta").click();   // Selecionamos la BOLETA
   //mini_reporte();
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
@@ -289,7 +290,7 @@ function limpiar_form_venta(){
   $("#f_nc_idventa").val('0');
 
   $('#f_crear_y_emitir').prop('checked', false)
-  $('#f_tipo_comprobante12').prop('checked', true).focus().trigger('change'); 
+  $('#f_tipo_comprobante03').prop('checked', true).focus().trigger('change'); 
   $("#f_idpersona_cliente").val('').trigger('change'); 
   $("#f_metodo_pago_1").val('').trigger('change'); 
   $("#f_observacion_documento").val(''); 

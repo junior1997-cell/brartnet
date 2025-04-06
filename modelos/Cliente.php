@@ -23,7 +23,7 @@ class Cliente
 	//Implementamos un método para insertar registros
 	public function insertar_cliente(	$idtipo_persona, $idbancos, $idcargo_trabajador, $tipo_persona_sunat, $tipo_documento, $numero_documento, $nombre_razonsocial, 
 	$apellidos_nombrecomercial,	$fecha_nacimiento, $celular, $direccion, $direccion_referencia, $distrito, $departamento, $provincia, $ubigeo, $correo,	$idpersona_trabajador,
-	$idzona_antena, $idselec_centroProbl, $idplan, $ip_personal, $fecha_afiliacion,  $fecha_cancelacion,	$usuario_microtick,$nota, 
+	$idzona_antena, $idselec_centroProbl, $idplan, $ip_personal, $fecha_afiliacion,  $fecha_cancelacion,	$usuario_microtick,$mac_antena,$nota, 
 	$estado_descuento, $descuento,	$img_perfil	) {
 		
 		$sql_0 = "SELECT p.*, CASE 
@@ -44,8 +44,8 @@ class Cliente
 
 			$id = $inst_persona['data'];
 
-			$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador,idcentro_poblado, ip_personal, fecha_afiliacion, fecha_cancelacion,usuario_microtick,nota, descuento, estado_descuento) 
-			VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador','$idselec_centroProbl','$ip_personal', '$fecha_afiliacion', '$fecha_cancelacion', '$usuario_microtick','$nota', '$descuento', '$estado_descuento')";
+			$sql2 = "INSERT INTO persona_cliente(idpersona,idzona_antena, idplan, idpersona_trabajador,idcentro_poblado, ip_personal, fecha_afiliacion, fecha_cancelacion,usuario_microtick,mac_antena,nota, descuento, estado_descuento) 
+			VALUES ('$id','$idzona_antena', '$idplan', '$idpersona_trabajador','$idselec_centroProbl','$ip_personal', '$fecha_afiliacion', '$fecha_cancelacion', '$usuario_microtick','$mac_antena','$nota', '$descuento', '$estado_descuento')";
 			$insertar =  ejecutarConsulta($sql2, 'C');	if ($inst_persona['status'] == false) {	return $inst_persona;	}
 
 			return $insertar;
@@ -70,7 +70,7 @@ class Cliente
 	//Implementamos un método para editar registros
 	public function editar_cliente(	$idpersona,	$idtipo_persona,	$idbancos,	$idcargo_trabajador,	$idpersona_cliente,	$tipo_persona_sunat,	$tipo_documento,
 		$numero_documento,	$nombre_razonsocial,	$apellidos_nombrecomercial,	$fecha_nacimiento,	$celular,	$direccion, $direccion_referencia,	$distrito, $departamento, $provincia, $ubigeo, 
-		$correo, $idpersona_trabajador,	$idzona_antena,	$idselec_centroProbl,	$idplan, $ip_personal, $fecha_afiliacion, $fecha_cancelacion, $usuario_microtick,$nota,
+		$correo, $idpersona_trabajador,	$idzona_antena,	$idselec_centroProbl,	$idplan, $ip_personal, $fecha_afiliacion, $fecha_cancelacion, $usuario_microtick,$mac_antena,$nota,
 		$estado_descuento, $descuento,	$img_perfil	) {
 
 		$sql1 = "UPDATE persona SET 		
@@ -109,7 +109,7 @@ class Cliente
 		ip_personal='$ip_personal',
 		fecha_afiliacion='$fecha_afiliacion',
 		fecha_cancelacion='$fecha_cancelacion',
-		usuario_microtick='$usuario_microtick',
+		usuario_microtick='$usuario_microtick', mac_antena = '$mac_antena',
 		nota='$nota',
 		descuento='$descuento',
 		estado_descuento='$estado_descuento'
@@ -151,7 +151,7 @@ class Cliente
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar_cliente($idpersona_cliente)	{
 		$sql = "SELECT pc.idpersona_cliente, pc.idpersona, pc.idpersona_trabajador, pc.idzona_antena, pc.idplan, pc.ip_personal, pc.idcentro_poblado,
-		pc.fecha_afiliacion, pc.fecha_cancelacion, pc.nota, pc.usuario_microtick, pc.descuento, pc.estado_descuento, pc.estado, p.*,
+		pc.fecha_afiliacion, pc.fecha_cancelacion, pc.nota, pc.usuario_microtick, pc.mac_antena, pc.descuento, pc.estado_descuento, pc.estado, p.*,
 		CASE 
 			WHEN p.tipo_persona_sunat = 'NATURAL' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 
 			WHEN p.tipo_persona_sunat = 'NINGUNO' THEN CONCAT(p.nombre_razonsocial, ' ', p.apellidos_nombrecomercial) 

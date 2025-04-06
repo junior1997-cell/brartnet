@@ -34,13 +34,109 @@ if (!isset($_SESSION["user_nombre"])) {
       $rspta = $ajax_general->datos_reniec_jdl($dni);
       if ( isset($rspta['success']) ) {
         if ($rspta['success'] === true) {
-          echo json_encode($rspta);
+          $new_persona = [
+            "version"         => "v1",
+            "success"         => $rspta['success'],
+            "dni"             => $rspta['dni'],
+            "nombres"         => $rspta['nombres'],
+            "apellidoPaterno" => $rspta['apellidoPaterno'],
+            "apellidoMaterno" => $rspta['apellidoMaterno'],
+            "codVerifica"     => $rspta['codVerifica'],
+            "codVerificaLetra"=> $rspta['codVerificaLetra'],
+            "direccion"       => "",
+            "distrito"        => "",
+            "provincia"       => "",
+            "departamento"    => "",
+            "ubigeo"          => ""
+          ];
+          echo json_encode($new_persona);
         } else {
           $rspta = $ajax_general->datos_reniec_otro($dni);
-          echo json_encode($rspta);
+          if ( !empty($rspta) ) {
+            $new_persona = [
+              "version"         => "v2",
+              "success"         => true,
+              "dni"             => $rspta->numeroDocumento,
+              "nombres"         => $rspta->nombres,
+              "apellidoPaterno" => $rspta->apellidoPaterno,
+              "apellidoMaterno" => $rspta->apellidoMaterno,
+              "codVerifica"     => "",
+              "codVerificaLetra"=> "",
+              "direccion"       => $rspta->direccion,
+              "distrito"        => $rspta->distrito,
+              "provincia"       => $rspta->provincia,
+              "departamento"    => $rspta->departamento,
+              "ubigeo"          => $rspta->ubigeo
+            ];
+            echo json_encode($new_persona);
+          }else {
+            $rspta = $ajax_general->datos_reniec_cloud($dni);
+            if ( isset($rspta->success ) ) {
+              $new_persona = [
+                "version"         => "v3",
+                "success"         => true,
+                "dni"             => $rspta->datos->dni,
+                "nombres"         => $rspta->datos->nombres,
+                "apellidoPaterno" => $rspta->datos->ape_paterno,
+                "apellidoMaterno" => $rspta->datos->ape_materno,
+                "codVerifica"     => "",
+                "codVerificaLetra"=> "",
+                "direccion"       => $rspta->datos->domiciliado->direccion,
+                "distrito"        => $rspta->datos->domiciliado->distrito,
+                "provincia"       => $rspta->datos->domiciliado->provincia,
+                "departamento"    => $rspta->datos->domiciliado->departamento,
+                "ubigeo"          => $rspta->datos->domiciliado->ubigeo
+              ];
+              echo json_encode($new_persona);
+            }else{
+              $new_persona = [];
+              echo json_encode($new_persona);
+            }                      
+          }          
         }        
       }else{
-        echo json_encode($rspta);
+        $rspta = $ajax_general->datos_reniec_otro($dni);
+        if (!empty($rspta)) {
+          $new_persona = [
+            "version"         => "v2",
+            "success"         => true,
+            "dni"             => $rspta->numeroDocumento,
+            "nombres"         => $rspta->nombres,
+            "apellidoPaterno" => $rspta->apellidoPaterno,
+            "apellidoMaterno" => $rspta->apellidoMaterno,
+            "codVerifica"     => "",
+            "codVerificaLetra"=> "",
+            "direccion"       => $rspta->direccion,
+            "distrito"        => $rspta->distrito,
+            "provincia"       => $rspta->provincia,
+            "departamento"    => $rspta->departamento,
+            "ubigeo"          => $rspta->ubigeo
+          ];
+          echo json_encode($new_persona);
+        } else {
+          $rspta = $ajax_general->datos_reniec_cloud($dni);
+          if ( isset($rspta->success ) ) {
+            $new_persona = [
+              "version"         => "v3",
+              "success"         => true,
+              "dni"             => $rspta->datos->dni,
+              "nombres"         => $rspta->datos->nombres,
+              "apellidoPaterno" => $rspta->datos->ape_paterno,
+              "apellidoMaterno" => $rspta->datos->ape_materno,
+              "codVerifica"     => "",
+              "codVerificaLetra"=> "",
+              "direccion"       => $rspta->datos->domiciliado->direccion,
+              "distrito"        => $rspta->datos->domiciliado->distrito,
+              "provincia"       => $rspta->datos->domiciliado->provincia,
+              "departamento"    => $rspta->datos->domiciliado->departamento,
+              "ubigeo"          => $rspta->datos->domiciliado->ubigeo
+            ];
+            echo json_encode($new_persona);
+          }else{
+            $new_persona = [];
+            echo json_encode($new_persona);
+          }   
+        }        
       }
      
     break;

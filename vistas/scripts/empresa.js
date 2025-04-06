@@ -24,7 +24,7 @@ function init(){
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function () { $('#doc1').trigger('click'); });
-$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id"), null, null, null, true) });
+$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id"), null, '100%', null, true) });
 
 function doc1_eliminar() {
   $("#doc1").val("");

@@ -25,10 +25,11 @@
       if ( empty($cliente) )      { } else { $filtro_cliente = "AND v.idpersona_cliente = '$cliente'"; } 
       if ( empty($comprobante) )  { } else { $filtro_comprobante = "AND v.idsunat_c01 = '$comprobante'"; } 
 
-      $sql = "SELECT pco.*, LPAD(pco.idperiodo_contable, 5, '0') AS idventa_v2,
+      $sql = "SELECT pco.*, left(pco.periodo_month, 3) as periodo_month_r3, LPAD(pco.idperiodo_contable, 5, '0') AS idventa_v2,
       COALESCE(SUM(CASE v.tipo_comprobante WHEN '07' THEN v.venta_total * -1 ELSE v.venta_total END), 0) AS venta_total, count(v.idventa) as cantidad_comprobante
       FROM periodo_contable as pco
-      LEFT JOIN venta as v ON v.idperiodo_contable = pco.idperiodo_contable  and v.estado = '1' and v.estado_delete = '1' and v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante <> '100'
+      LEFT JOIN venta as v ON v.idperiodo_contable = pco.idperiodo_contable  and v.estado = '1' and v.estado_delete = '1' 
+      and v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante in ('01', '03', '07', '12')
       WHERE pco.estado = '1' and pco.estado_delete = '1' 
       $filtro_anio $filtro_cliente $filtro_comprobante $filtro_periodo    
       GROUP BY pco.periodo   
@@ -229,7 +230,7 @@
       $filtro_periodo = ""; $filtro_mes_emision = ""; $filtro_cliente = ""; $filtro_comprobante = "";       
       
       if ( empty($idperiodo) ) { } else {  $filtro_periodo = "AND v.idperiodo_contable = '$idperiodo'"; }
-      if ( empty($mes_emision) ) { } else {  $filtro_mes_emision = "AND DATE_FORMAT(v.fecha_emision, '%Y-%m') = '$mes_emision'"; }  
+      if ( empty($mes_emision) ) { } else {  $filtro_mes_emision = "AND DATE_FORMAT(v.fecha_emision, '%Y-%m-%d') = '$mes_emision'"; }  
       if ( empty($cliente) ) { } else {  $filtro_cliente = "AND v.idpersona_cliente = '$cliente'"; } 
       if ( empty($comprobante) ) { } else {  $filtro_comprobante = "AND v.idsunat_c01 = '$comprobante'"; } 
 
@@ -273,6 +274,69 @@
     }
 
 
+    // ══════════════════════════════════════ R E P O R T E   P O R   P E R I O D O  ══════════════════════════════════════
+    public function reporte_x_periodo($idperiodo,  $idtrabajador, $es_cobro){
+
+      $sql="SELECT vmp.metodo_pago, ROUND(SUM( (vw_fd.venta_total) * fraccion_vmp ), 2) AS venta_total,
+      SUM(case 
+          when vmp.monto > vw_fd.venta_total then  vw_fd.venta_total 
+          when vmp.monto < vw_fd.venta_total then  vmp.monto
+          else vmp.monto
+      END) as monto_vmp, 
+      ROUND((SUM((vw_fd.venta_total) * fraccion_vmp) - SUM(case 
+          when vmp.monto > vw_fd.venta_total then  vw_fd.venta_total 
+          when vmp.monto < vw_fd.venta_total then  vmp.monto
+          else vmp.monto
+      END)), 2) as dif 
+      FROM (
+          SELECT DISTINCT vw_fd.idventa, vw_fd.idperiodo_contable, vw_fd.venta_total, vw_fd.idpersona_trabajador 
+          FROM vw_facturacion_detalle as vw_fd WHERE vw_fd.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND vw_fd.tipo_comprobante in ('01', '03',  '12') 
+          ) as vw_fd 
+      LEFT JOIN ( 
+          select vmp2.monto_total_vmp, IFNULL(( ROUND(vmp1.monto/vmp2.monto_total_vmp, 2)), 1) as fraccion_vmp, vmp1.* from venta_metodo_pago as vmp1
+          INNER JOIN ( SELECT vmp.idventa, SUM( vmp.monto  ) as monto_total_vmp FROM venta_metodo_pago AS vmp GROUP BY vmp.idventa ) as vmp2 on vmp2.idventa = vmp1.idventa
+      ) as vmp on vmp.idventa = vw_fd.idventa
+      where vw_fd.idperiodo_contable = '$idperiodo'  
+      GROUP BY vmp.metodo_pago";
+      $resumen = ejecutarConsultaArray($sql); if ($resumen['status'] == false) {return $resumen; }
+
+      return ['status' => true, 'message' =>'todo okey', 
+      'data'=>[
+        'resumen'        => $resumen['data'],
+        #'coun_comprobante'  => $coun_comprobante['data'],
+        #'factura'           => floatval($factura['data']['venta_total']), 'factura_p' => floatval($factura_p['data']['porcentaje']) , 'factura_line'  => $mes_factura ,
+        #'boleta'            => floatval($boleta['data']['venta_total']), 'boleta_p'   => floatval($boleta_p['data']['porcentaje']) , 'boleta_line'    => $mes_boleta ,
+        #'ticket'            => floatval($ticket['data']['venta_total']), 'ticket_p'   => floatval($ticket_p['data']['porcentaje']) , 'ticket_line'    => $mes_ticket ,
+      ]
+      ];
+     
+    }
+
+    public function reporte_x_periodo_detalle($idperiodo,  $idtrabajador, $es_cobro){
+
+      $sql="SELECT vw_fd.idventa, vw_fd.idventa_v2, vw_fd.tipo_doc, vw_fd.serie_comprobante, vw_fd.numero_comprobante, vmp.metodo_pago, ROUND(( (vw_fd.venta_total) * fraccion_vmp ), 2) AS venta_total,
+      (case 
+          when vmp.monto > vw_fd.venta_total then  vw_fd.venta_total 
+          when vmp.monto < vw_fd.venta_total then  vmp.monto
+          else vmp.monto
+      END) as monto_vmp, 
+      ROUND((((vw_fd.venta_total) * fraccion_vmp) - (case 
+          when vmp.monto > vw_fd.venta_total then  vw_fd.venta_total 
+          when vmp.monto < vw_fd.venta_total then  vmp.monto
+          else vmp.monto
+      END)), 2) as dif 
+      FROM (
+          SELECT DISTINCT vw_fd.idventa, vw_fd.idventa_v2, vw_fd.serie_comprobante, vw_fd.numero_comprobante, case vw_fd.tipo_comprobante when '01' THEN 'FACTURA'  when '03' THEN 'BOLETA'  when '12' THEN 'TICKET' END AS tipo_doc,
+           vw_fd.idperiodo_contable, vw_fd.venta_total, vw_fd.idpersona_trabajador 
+          FROM vw_facturacion_detalle as vw_fd WHERE vw_fd.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND vw_fd.tipo_comprobante in ('01', '03',  '12') 
+          ) as vw_fd 
+      LEFT JOIN ( 
+          select vmp2.monto_total_vmp, IFNULL(( ROUND(vmp1.monto/vmp2.monto_total_vmp, 2)), 1) as fraccion_vmp, vmp1.* from venta_metodo_pago as vmp1
+          INNER JOIN ( SELECT vmp.idventa, SUM( vmp.monto  ) as monto_total_vmp FROM venta_metodo_pago AS vmp GROUP BY vmp.idventa ) as vmp2 on vmp2.idventa = vmp1.idventa
+      ) as vmp on vmp.idventa = vw_fd.idventa
+      where vw_fd.idperiodo_contable = '$idperiodo' ORDER BY 9 DESC, 4 asc ,5 asc ";
+      return ejecutarConsultaArray($sql);     
+    }
     // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
     
     public function select2_filtro_tipo_comprobante($tipos){

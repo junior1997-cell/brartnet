@@ -1,6 +1,8 @@
 var tbl_principal_periodo;
 var tabla_comprobante;
 
+var tbl_reporte_detalle;
+
 var array_data_venta = []; 
 var cambio_de_tipo_comprobante ;
 
@@ -50,6 +52,10 @@ async function init(){
   $("#filtro_t_cliente").select2({  theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
   $("#filtro_t_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccione", allowClear: true, });
 
+  $("#filtro_r_trabajador").select2({ theme: "bootstrap4", placeholder: "Seleccione Trabajador", allowClear: true, });
+  $("#filtro_r_es_cobro").select2({ theme: "bootstrap4", placeholder: "Es cobro?", allowClear: true, });
+
+  $("#filtro_r_es_cobro").val(null).trigger('change'); // Limpiamos aqui para no generar un bucle infinito
   $("#f_nc_tipo_comprobante").val(null).trigger('change'); // Limpiamos aqui para no generar un bucle infinito
 
   inp_fecha_inicio = flatpickr("#fecha_inicio", {
@@ -138,7 +144,18 @@ function show_hide_form(flag) {
 
 		$(".btn-agregar").hide();		
 		$(".btn-cancelar").show();
+	} else if (flag == 4) { // VER REPORTE
+		$("#div-tabla").hide();
+    $("#div-mini-reporte").hide();
+		$("#div-formulario").hide();
+		$("#div-tabla-mas-detalles").hide();
+    $("#div-reporte").show();
+
+		$(".btn-agregar").hide();		
+		$(".btn-cancelar").show();
 	}
+
+  
 }
 
 function mini_reporte(filtro_anio, filtro_periodo, filtro_cliente, filtro_comprobante) {
@@ -289,7 +306,7 @@ function listar_tabla_principal(filtro_anio, filtro_periodo, filtro_cliente, fil
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
     buttons: [  
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tbl_principal_periodo) { tbl_principal_periodo.ajax.reload(null, false); } } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tbl_principal_periodo) { tbl_principal_periodo.ajax.reload(null, false); toastr_success('Exito!!', 'Tabla actualizada correctamente'); } } },
       { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6], }, text: `<i class="fas fa-copy" ></i>`, className: "btn btn-outline-dark btn-wave ", footer: true,  }, 
       { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de ventas', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
       // { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de ventas', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "btn btn-outline-danger btn-wave ", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
@@ -509,12 +526,14 @@ function limpiar_form_reasignar() {
   $(".error.invalid-feedback").remove();
 }
 
-function reasignar_comprobante(idperiodo, periodo_actual) {
+function reasignar_comprobante(idperiodo, periodo_actual, fecha_min, fecha_max) {
   limpiar_form_reasignar();
   show_hide_form(2);
   $('#idperiodo_ver').val(idperiodo);
   $('#periodo-actual').html(periodo_actual);
   activar_filtro_reasignar = true;
+
+  $('#filtro_t_mes_emision').val('').attr('min', fecha_min).attr('max', fecha_max);
 
   tabla_detalle_comprobante(idperiodo, filtro_emision_mes, '', '');
 }
@@ -649,6 +668,112 @@ function guardar_editar_reasignar_periodo(e) {
   });  
 }
 
+
+
+// ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   R E P O R T E :::::::::::::::::::::::::::::::::::::::::::::
+function cabecera_reporte(monto, periodo) {
+  $('.rc_monto_total').html(formato_miles(monto));
+  $('.rc_periodo').html(periodo);
+}
+function ver_reporte(idperiodo, idtrabajador = null, es_cobro = 'SI') {
+  show_hide_form(4);
+  $('.tabla-mp-resumen tbody').html(`<tr> <td colspan="4" ><div class="row" ><div class="col-lg-12 text-center"><div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div><h6 class="bx-flashing">Cargando...</h6></div></div></td></tr>`);
+
+  $.getJSON(`../ajax/periodo_facturacion.php?op=reporte_x_periodo`, {filtro_idperiodo:idperiodo, filtro_idtrabajador:idtrabajador, filtro_es_cobro:es_cobro},  function (e, textStatus, jqXHR) {
+      
+    $('.tabla-mp-resumen tbody').html('');
+    var tbl_r_monto_mp = 0, tbl_r_monto_venta = 0, tbl_r_monto_dif = 0;
+    e.data.resumen.forEach((val, key) => {
+      tbl_r_monto_mp += parseFloat(val.monto_vmp); tbl_r_monto_venta += parseFloat(val.venta_total); tbl_r_monto_dif += parseFloat(val.dif);
+      $('.tabla-mp-resumen tbody').append(`<tr>
+        <td class="py-1" ><p class="mb-0">${ val.metodo_pago}</p></td>
+        <td class="py-1 text-right" ><p class="mb-0 fw-semibold">${formato_miles(val.monto_vmp)}</p></td>
+        <td class="py-1 text-right" ><p class="mb-0">${formato_miles(val.venta_total)}</p></td>                                 
+        <td class="py-1 text-right" ><p class="mb-0">${formato_miles(val.dif)}</p></td>                                 
+      </tr>`);
+    });
+    $('.tabla-mp-resumen tbody').append(`<tr class="bg-light">
+      <td class="py-1 bg-light" >TOTAL</td>
+      <td class="py-1 bg-light text-right" ><p class="mb-0">${formato_miles(tbl_r_monto_mp)}</p></td>
+      <td class="py-1 bg-light text-right" ><p class="mb-0">${formato_miles(tbl_r_monto_venta)}</p></td>                 
+      <td class="py-1 bg-light text-right" ><p class="mb-0">${formato_miles(tbl_r_monto_dif)}</p></td>                 
+    </tr>`);
+    ver_reporte_detalle(idperiodo, idtrabajador, es_cobro);
+  });
+}
+
+function ver_reporte_detalle(idperiodo, idtrabajador, es_cobro){
+  
+  tbl_reporte_detalle = $("#tabla-reporte-detalle").dataTable({
+    // responsive: true, 
+    lengthMenu: [[ -1, 5, 12, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
+    buttons: [  
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tbl_reporte_detalle) { tbl_reporte_detalle.ajax.reload(null, false); toastr_success('Exito!!', 'Tabla actualizada correctamente'); } } },
+      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de ventas', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
+    ],
+    ajax: {
+      url: `../ajax/periodo_facturacion.php?op=reporte_x_periodo_detalle&filtro_idperiodo=${idperiodo}&filtro_idtrabajador=${idtrabajador}&filtro_es_cobro=${es_cobro}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+      complete: function () {
+        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');
+        $(".buttons-copy").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Copiar');
+        $(".buttons-excel").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Excel');
+        $(".buttons-pdf").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'PDF');
+        $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
+        $('[data-bs-toggle="tooltip"]').tooltip();
+      },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
+		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: Opciones
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap text-center"); }
+      // columna: Cliente
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: Cliente
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+      // columna: Monto
+      if (data[4] != '') { $("td", row).eq(4).addClass("text-nowrap text-center"); }
+      // columna: Monto
+      if (data[5] != '') { $("td", row).eq(5).addClass("text-nowrap text-center"); }
+    },
+    language: {
+      lengthMenu: "_MENU_",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api1 = this.api(); var total1 = api1.column( 4 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      $( api1.column( 4 ).footer() ).html( `<span class="float-start">S/</span> <span class="float-end">${formato_miles(total1)}</span> ` );     
+      
+      var api2 = this.api(); var total2 = api2.column( 5 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      $( api2.column( 5 ).footer() ).html( `<span class="text-center">${formato_miles(total2)}</span> ` );
+
+      var api3 = this.api(); var total3 = api3.column( 6 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      $( api3.column( 6 ).footer() ).html( `<span class="text-center">${formato_miles(total3)}</span> ` );    
+    },
+    "bDestroy": true,
+    "iDisplayLength": 12,
+    "order": [[0, "asc"]],
+    columnDefs: [      
+      // { targets: [4, 5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [4,5,6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = ''; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-start">S/</span> <span class="float-end ${color} "> ${number} </span>`; } return number; }, },      
+
+      // { targets: [10, 11, 12, 14, 14, 15, 16, 17, 18, 19], visible: false, searchable: false, },
+    ],
+  }).DataTable();
+}
+
 $(document).ready(function () {
   init(); 
   filtros();
@@ -771,9 +896,15 @@ function filtros_2() {
   //console.log(filtro_categoria, fecha_2, filtro_marca, comprobante);
   if (activar_filtro_reasignar == true) {
     tabla_detalle_comprobante($('#idperiodo_ver').val(), filtro_emision_mes, filtro_cliente, filtro_comprobante);
+  }  
+}
 
-  }
+function filtros_3() {  
+
+  // var filtro_periodo      = $("#filtro_t_mes_emision").val() == '' || $("#filtro_t_mes_emision").val() == null ? '' : $("#filtro_t_mes_emision").val() ;
+  // var filtro_cliente      = $("#filtro_t_cliente").select2('val') == '' || $("#filtro_t_cliente").select2('val') == null ? '' : $("#filtro_t_cliente").select2('val') ;  
   
+  // tabla_detalle_comprobante($('#idperiodo_ver').val(), filtro_emision_mes, filtro_cliente, filtro_comprobante);    
 }
 
 function reload_filtro_anio(){ lista_select2("../ajax/periodo_facturacion.php?op=select2_filtro_anio", '#filtro_anio', null, '.charge_filtro_anio'); } 

@@ -53,6 +53,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $data[] = [
               "0" => $count++,
               "1" => '<button class="btn btn-icon btn-sm btn-warning-light border-warning" onclick="mostrar_detalle_periodo(' . $value['idperiodo_contable'] . ')" data-bs-toggle="tooltip" title="Editar"><i class="ri-edit-line"></i></button>
+              <button class="btn btn-icon btn-sm btn-info-light border-info" onclick="cabecera_reporte('.$value['venta_total'].', \''.$value['periodo_year'] . '-'.  $value['periodo_month_r3'].'\'); ver_reporte(' . $value['idperiodo_contable'] . ')" data-bs-toggle="tooltip" title="Ver reporte"><i class="bi bi-graph-up-arrow"></i></button>
               <button class="btn btn-icon btn-sm btn-danger-light border-danger" onclick="eliminar_papelera_periodo(' . $value['idperiodo_contable'] . ')" data-bs-toggle="tooltip" title="Eliminar"><i class="ri-delete-bin-line"></i></button>',
               "2" => $value['idventa_v2'] ,
               "3" => $value['periodo_year'] . '-'.  $value['periodo_month'],
@@ -61,7 +62,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "6" => $value['venta_total'] ,        
               "7" =>$value['cantidad_comprobante']     ,  
               "8" => '<!--<button class="btn btn-icon btn-sm btn-info-light border-info" onclick="asignar_nuevo_comprobante(' . $value['idperiodo_contable'] . ')" data-bs-toggle="tooltip" title="Detalle Factura"><i class="bi bi-list-ol"></i></button>-->
-              <button class="btn btn-icon btn-sm btn-info-light border-info" onclick="reasignar_comprobante(' . $value['idperiodo_contable'] .', \'' . $value['periodo_year'] . '-'.  $value['periodo_month'] . '\')" data-bs-toggle="tooltip" title="Reasignar Periodo"><i class="bi bi-arrow-left-right"></i></button>'
+              <button class="btn btn-icon btn-sm btn-info-light border-info" onclick="reasignar_comprobante(' . $value['idperiodo_contable'] .', \'' . $value['periodo_year'] . '-'.  $value['periodo_month'] . '\', \'' .$value['fecha_inicio']. '\', \'' .$value['fecha_fin']. '\')" data-bs-toggle="tooltip" title="Reasignar Periodo"><i class="bi bi-arrow-left-right"></i></button>'
             ];
           }
           $results =[
@@ -157,8 +158,43 @@ if (!isset($_SESSION["user_nombre"])) {
         } else { echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data']; }
       break;
 
-      // ══════════════════════════════════════ U S A R   A N T I C I P O S ══════════════════════════════════════
-     
+      // ══════════════════════════════════════ R E P O R T E ══════════════════════════════════════
+      case 'reporte_x_periodo':
+        $rspta=$periodo_facturacion->reporte_x_periodo($_GET["filtro_idperiodo"], $_GET["filtro_idtrabajador"], $_GET["filtro_es_cobro"]);
+        echo json_encode($rspta, true);
+      break;
+
+      case 'reporte_x_periodo_detalle':
+
+        $rspta = $periodo_facturacion->reporte_x_periodo_detalle( $_GET["filtro_idperiodo"], $_GET["filtro_idtrabajador"], $_GET["filtro_es_cobro"] );
+        $data = []; $count = 1; #echo json_encode($rspta); die();
+
+        if($rspta['status'] == true){
+
+          foreach($rspta['data'] as $key => $value){           
+
+            $data[] = [
+              "0" => $count++,
+              "1" => '<span class="text-nowrap fs-11">'. $value['idventa_v2'] .'</span>',
+              "2" =>  '<span class="text-nowrap fs-11">'. $value['tipo_doc'] .' '.$value['serie_comprobante'] .'-'. $value['numero_comprobante'] .'</span>'  ,
+              "3" => '<span class="text-nowrap fs-11">'. $value['metodo_pago'] .'</span>',
+              "4" =>  $value['monto_vmp'] ,
+              "5" =>   $value['venta_total']  ,               
+              "6" =>   $value['dif'] ,              
+            ];
+          }
+          $results =[
+            'status'=> true,
+            "sEcho" => 1,
+            "iTotalRecords" => count($data),
+            "iTotalDisplayRecords" => count($data),
+            "aaData" => $data
+          ];
+          echo json_encode($results);
+
+        } else { echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data']; }
+      break;
+
       // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════      
 
       case 'select2_filtro_tipo_comprobante':

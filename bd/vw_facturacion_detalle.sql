@@ -59,5 +59,5 @@ INNER JOIN sunat_c06_doc_identidad as sdi ON sdi.code_sunat = p.tipo_documento
 INNER JOIN sunat_c01_tipo_comprobante AS tc ON tc.idtipo_comprobante = v.idsunat_c01
 LEFT JOIN usuario as u ON u.idusuario = v.user_created
 LEFT JOIN persona as pu ON pu.idpersona = u.idpersona
-WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante <> '100'
+WHERE v.estado = 1 AND v.estado_delete = 1 AND v.tipo_comprobante IN( '01', '03', '12')
 ORDER BY v.fecha_emision DESC, p.nombre_razonsocial ASC;

@@ -52,6 +52,30 @@ Class Ajax_general
     return json_decode($response);
   }
 
+  // ══════════════════════════════════════ RENIEC CLOUD ══════════════════════════════════════
+  public function datos_reniec_cloud($dni)	{ 
+    $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxOTcsImV4cCI6MTc0MzQ2Mzc0N30.-oojENwNBpSBXREk-JoEXjyjBERkploTdx0dU-y20V0';    
+
+    // Iniciar llamada a API
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => 'https://miapi.cloud/v1/dni/' . $dni,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 0,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'GET',
+      CURLOPT_HTTPHEADER => array( 'Authorization: Bearer ' . $token ),
+    ));
+
+    $response = curl_exec($curl);
+    curl_close($curl);    
+    return json_decode($response);
+  }
+
   // ══════════════════════════════════════ SUNAT JDL ══════════════════════════════════════
   public function datos_sunat_jdl($ruc)	{ 
     $url = "https://dniruc.apisperu.com/api/v1/ruc/".$ruc."?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imp1bmlvcmNlcmNhZG9AdXBldS5lZHUucGUifQ.bzpY1fZ7YvpHU5T83b9PoDxHPaoDYxPuuqMqvCwYqsM";    

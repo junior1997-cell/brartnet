@@ -377,7 +377,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <th>Falta</th>
                               <th>Cancelación</th>
                               <th>Zona/Plan</th>
-                              <th>IP</th>
+                              <th>IP/MAC/Microtic</th>
                               <th>Trabajador</th>                                
                               <th class="text-center">Observación.</th>
 
@@ -404,7 +404,7 @@ if (!isset($_SESSION["user_nombre"])) {
                               <th>Falta</th>
                               <th>Cancelación</th>
                               <th>Zona/Plan</th>
-                              <th>IP</th>
+                              <th>IP/MAC/Microtic</th>
                               <th>Trabajador</th>
                               <th class="text-center">Observación.</th>
 
@@ -787,7 +787,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <select name="idzona_antena" id="idzona_antena" class="form-control" placeholder="Selec. Zona Antena"></select>
                               </div>
                             </div>
-                            <!-- Select Zona antena -->
+                            <!-- Select centro poblado -->
                             <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
                               <div class="form-group">
                                 <label class="form-label" for="idselec_centroProbl">
@@ -836,8 +836,15 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <input type="text" name="usuario_microtick"  id="usuario_microtick" class="form-control inpur_edit" />
                               </div>
                             </div>
+                            <!-- USUARIO MICROTICK -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 col-xxl-3" style="margin-bottom: 20px;">
+                              <div class="form-group">
+                                <label class="form-label" for="mac_antena">MAC Antena <sup class="text-danger">*</sup></label>
+                                <input type="text" name="mac_antena"  id="mac_antena" class="form-control " data-inputmask="'mask': '**:**:**:**:**:**', 'definitions': {'*': {'validator': '[0-9A-Fa-f]'}}" data-mask />
+                              </div>
+                            </div>
                             <!--NOTA -->
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-9 col-xxl-9" style="margin-bottom: 20px;">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-6 col-xxl-6" style="margin-bottom: 20px;">
                               <div class="form-group">
                                 <label class="form-label" for="nota">Nota </label>
                                 <textarea class="form-control inpur_edit" name="nota" id="nota" cols="30" rows="2" placeholder="ejemp: Se removio el servicio por deuda" ></textarea>
@@ -1517,8 +1524,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Google Maps JS -->
     <script src="../assets/libs/gmaps/gmaps.min.js"></script>
 
-    <script src="scripts/cliente.js?version_jdl=1.45"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.45"></script>
+    <script src="scripts/cliente.js?version_jdl=1.46"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.46"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

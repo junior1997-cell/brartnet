@@ -53,6 +53,7 @@ if (!isset($_SESSION["user_nombre"])) {
     $fecha_afiliacion           = isset($_POST["fecha_afiliacion"]) ? limpiarCadena($_POST["fecha_afiliacion"]) : "";
     $fecha_cancelacion          = isset($_POST["fecha_cancelacion"]) ? limpiarCadena($_POST["fecha_cancelacion"]) : "";
     $usuario_microtick          = isset($_POST["usuario_microtick"]) ? limpiarCadena($_POST["usuario_microtick"]) : "";
+    $mac_antena                 = isset($_POST["mac_antena"]) ? limpiarCadena($_POST["mac_antena"]) : "";
     $nota                       = isset($_POST["nota"]) ? limpiarCadena($_POST["nota"]) : "";
 
     $estado_descuento           = isset($_POST["estado_descuento"]) ? limpiarCadena($_POST["estado_descuento"]) : "";
@@ -129,7 +130,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $idselec_centroProbl,
             $idplan,
             $ip_personal,
-            $fecha_afiliacion, $fecha_cancelacion, $usuario_microtick,$nota,
+            $fecha_afiliacion, $fecha_cancelacion, $usuario_microtick,$mac_antena,$nota,
             $estado_descuento, 
             $descuento,            
             $img_perfil
@@ -169,7 +170,7 @@ if (!isset($_SESSION["user_nombre"])) {
             $idselec_centroProbl,
             $idplan,
             $ip_personal,
-            $fecha_afiliacion,$fecha_cancelacion, $usuario_microtick,$nota,
+            $fecha_afiliacion,$fecha_cancelacion, $usuario_microtick,$mac_antena,$nota,
             $estado_descuento,
             $descuento,            
             $img_perfil
@@ -255,7 +256,7 @@ if (!isset($_SESSION["user_nombre"])) {
               "6" => '<span class="badge bg-outline-success">' . $value['zona'] . '</span>' . '<br>' . '<span class="badge bg-outline-success">' . $value['nombre_plan'] . ' : ' . $value['costo'] . '</span>',
               "7" => '<div class="text-start" >
                       <span class="d-block fs-10 text-primary fw-semibold text-nowrap"> <i class="bx bx-broadcast '.($value['estado_pc'] == '1' ? 'bx-burst' : '').' fa-1x" ></i> ' . $value['ip_antena'] . '</span>
-                      <span class="d-block fs-10 text-muted text-nowrap"><i class="bx bx-wifi '.($value['estado_pc'] == '1' ? 'bx-burst' : '').'" ></i> ' . $value['ip_personal'] . '</span>
+                      <span class="d-block fs-10 text-muted text-nowrap"><i class="bi bi-globe " ></i> ' . $value['mac_antena'] . '</span>
                       <span class="text-muted fs-10 text-nowrap"><i class="bx bx-user-pin fa-1x"></i> ' . $value['usuario_microtick'] . '</span>
                     </div>',
               "8" => '<span class="fs-10">' . $value['trabajador_nombre'] .'</span>',

@@ -278,12 +278,13 @@ switch ($_GET["op"]) {
     $rspta  = $usuario->verificar($logina, $clavehash);    
     // $rspta2 = $usuario->onoffTempo($st);
     // $rspta3 = $usuario->consultatemporizador();    
+    // echo json_encode($rspta); var_dump($rspta);
 
     if (!empty($rspta['data']['usuario'])) {
 
       
       $rspta2 = $usuario->last_sesion($rspta['data']['usuario']['idusuario']); # Ultima sesion
-
+      // echo $rspta2; die();
       $empresa_f  = $facturacion->datos_empresa(); # Datos de empresa: para uso global del sistema
       
       $e_razon_social       = mb_convert_encoding($empresa_f['data']['nombre_razon_social'], 'UTF-8', mb_detect_encoding($empresa_f['data']['nombre_razon_social'], "UTF-8, ISO-8859-1, ISO-8859-15", true));

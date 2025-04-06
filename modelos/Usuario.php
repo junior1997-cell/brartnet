@@ -256,9 +256,10 @@ class Usuario
 
 	public function last_sesion($idusuario)	{
 		$sql = "UPDATE usuario SET last_sesion = CURRENT_TIMESTAMP WHERE  idusuario='$idusuario';";
-		 ejecutarConsulta($sql);
+		ejecutarConsulta($sql);
 		$sql1 = "INSERT INTO bitacora_sesion (idusuario) VALUES ('$idusuario')";
 		return ejecutarConsulta($sql1); 	
+		//  return $sql1; 	
 	}
 
 	public function historial_sesion($idusuario) {

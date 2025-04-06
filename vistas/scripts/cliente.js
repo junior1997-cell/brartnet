@@ -18,7 +18,8 @@ var opcion_r = 'tabla_deudores', filtro_trabajador_r = '', filtro_tipo_persona_r
 //Función que se ejecuta al inicio
 function init() {
 
-  $(".btn-tiket").click();   // Selecionamos la BOLETA
+  $(".btn-tiket").click();      // Selecionamos la BOLETA
+  $("[data-mask]").inputmask(); // Activamos la Mascara
 
   $(".btn-guardar").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-cliente").submit(); } else { toastr_warning("Espera", "Procesando Datos", 3000); } });
   $(".btn-guardar-cobro").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-venta").submit(); } else { toastr_warning("Espera", "Procesando Datos", 3000); } });
@@ -118,6 +119,7 @@ function limpiar_cliente() {
   $("#fecha_afiliacion").val("");
   $("#fecha_cancelacion").val("");
   $("#usuario_microtick").val("");
+  $("#mac_antena").val("");
   $("#nota").val("");
   // $("#estado_descuento").val("");
   // $("#descuento").val("");
@@ -622,6 +624,7 @@ function mostrar_cliente(idpersona_cliente) {
       $("#fecha_afiliacion").val(e.data.fecha_afiliacion);
       $("#fecha_cancelacion").val(e.data.fecha_cancelacion);
       $("#usuario_microtick").val(e.data.usuario_microtick);
+      $("#mac_antena").val(e.data.mac_antena);
       $("#nota").val(e.data.nota);
 
       $("#estado_descuento").val(e.data.estado_descuento);

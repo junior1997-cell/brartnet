@@ -986,7 +986,7 @@ function buscar_sunat_reniec(formulario= '', input='', tipo_documento, dniruc, n
 
           $(`#search${input}`).show(); $(`#charge${input}`).hide();
           $(nombre).val(''); $(apellido).val(''); $(titular).val('');          
-          toastr_error('Error!!', 'Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.', 700);
+          toastr_error('Error!!', 'El sistema de BUSQUEDA esta en mantenimiento.', 700);
           
         } else {
           if (data.success == false) {
@@ -1000,10 +1000,14 @@ function buscar_sunat_reniec(formulario= '', input='', tipo_documento, dniruc, n
 
             $(nombre).val(data.nombres );
             $(apellido).val( data.apellidoPaterno + " " + data.apellidoMaterno);
-            $(titular).val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
+            $(titular).val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);           
 
-            toastr_success('Éxito!!!', 'Persona encontrada!!!', 700);
-          }
+            if (data.direccion != '' && data.direccion != null) {   $(direccion).val(data.direccion); }
+            if (data.distrito != '' && data.distrito != null) {  $(distrito).val(data.distrito).trigger('change'); }
+           
+
+            toastr_success('Éxito!!!', `Persona encontrada!!!,  <span class="fs-11">${data.version}</span>`, 700);
+          } 
         }
         $(formulario).valid();
       });
@@ -1023,7 +1027,7 @@ function buscar_sunat_reniec(formulario= '', input='', tipo_documento, dniruc, n
 
         if (data == null) {
           $(`#search${input}`).show();  $(`#charge${input}`).hide();           
-          toastr_error('Error!!', 'Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.', 700);
+          toastr_error('Error!!', 'El sistema de BUSQUEDA esta en mantenimiento.', 700);
           
         } else {
 
@@ -1093,7 +1097,6 @@ function buscar_sunat_reniec(formulario= '', input='', tipo_documento, dniruc, n
     $(formulario).valid();
   }
 }
-
 /*  ══════════════════════════════════════════ - M E N S A J E S - ══════════════════════════════════════════ */
 
 function ok_dowload_doc() { toastr.success("El documento se descargara en breve!!"); }

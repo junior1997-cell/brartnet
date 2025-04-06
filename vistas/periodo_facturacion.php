@@ -148,7 +148,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           <th>Periodo</th>
                           <th>Inicio</th>
                           <th>Fin</th>                          
-                          <th>Total</th>    
+                          <th class="text-nowrap">Total <span style="color: transparent;">--------</span></th>    
                           <th>Cant</th>     
                           <th><center>Detalle</center></th>               
                         </tr>
@@ -352,8 +352,8 @@ if (!isset($_SESSION["user_nombre"])) {
                           <div class="form-group">
                             <label for="filtro_t_mes_emision" class="form-label">
                             <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_t_mes_emision();" data-bs-toggle="tooltip" title="Remover filtro"><i class="bi bi-trash3"></i></span>
-                              Emisión Mes</label>
-                            <input type="month" class="form-control" name="filtro_t_mes_emision" id="filtro_t_mes_emision" value="<?php echo date('Y-m')?>" onchange="delay(function(){filtros_2()}, 50 );">                        
+                              Fecha Emisión</label>
+                            <input type="date" class="form-control" name="filtro_t_mes_emision" id="filtro_t_mes_emision" value="<?php echo date('Y-m')?>" onchange="delay(function(){filtros_2()}, 50 );">                        
                           </div>
                         </div>                   
                         <!-- ::::::::::::::::::::: FILTRO CLIENTE :::::::::::::::::::::: -->
@@ -416,8 +416,184 @@ if (!isset($_SESSION["user_nombre"])) {
                   
                 </div> -->
               </div>              
-            </div>            
-
+            </div> 
+            
+            <div class="col-xl-12" id="div-reporte"  style="display: none;">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card custom-card ">
+                    <div class="card-body">
+                      <div class="row">   
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2 ">  
+                          <div class="bg-light b-radio-5px p-1">                            
+                            <div class="card custom-card bg-light m-0">
+                              <div class="card-body p-0">
+                                <div class="d-flex align-items-top">
+                                  <div class="me-3">
+                                    <span class="avatar avatar-md p-2 bg-secondary">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0"/>
+                                        <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195z"/>
+                                        <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083q.088-.517.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1z"/>
+                                        <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 6 6 0 0 1 3.13-1.567"/>
+                                      </svg>
+                                    </span>
+                                  </div>
+                                  <div class="flex-fill">
+                                    <div class="d-flex mb-1 align-items-top justify-content-between">
+                                      <h5 class="fw-semibold mb-0 lh-1 rc_monto_total">
+                                        <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+                                      </h5>                            
+                                    </div>
+                                    <p class="mb-0 fs-10 op-7 text-muted fw-semibold">Total Facturado</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>  
+                          </div>                         
+                        </div>         
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2 col-xxl-2 ">  
+                          <div class="bg-light b-radio-5px p-1">                            
+                            <div class="card custom-card bg-light m-0">
+                              <div class="card-body p-0">
+                                <div class="d-flex align-items-top">
+                                  <div class="me-3">
+                                    <span class="avatar avatar-md p-2 bg-secondary">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week" viewBox="0 0 16 16">
+                                        <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                      </svg>
+                                    </span>
+                                  </div>
+                                  <div class="flex-fill">
+                                    <div class="d-flex mb-1 align-items-top justify-content-between">
+                                      <h5 class="fw-semibold mb-0 lh-1 rc_periodo">
+                                        <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+                                      </h5>                            
+                                    </div>
+                                    <p class="mb-0 fs-10 op-7 text-muted fw-semibold">Periodo seleccionado</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>  
+                          </div>                         
+                        </div>                                                              
+                        <!-- ::::::::::::::::::::: FILTRO TRABAJADOR :::::::::::::::::::::: -->
+                        <div class="col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                          <div class="form-group">
+                            <!-- <label for="filtro_r_trabajador" class="form-label">                         
+                              <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_r_trabajador();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                              Cliente
+                              <span class="charge_filtro_r_trabajador"></span>
+                            </label> -->
+                            <select class="form-control" name="filtro_r_trabajador" id="filtro_r_trabajador" onchange="delay(function(){filtros_3()}, 50 );" > <!-- lista de categorias --> </select>
+                          </div>
+                        </div>
+                        <!-- ::::::::::::::::::::: FILTRO ES COBRO? :::::::::::::::::::::: -->
+                        <div class="col-md-6 col-lg-2 col-xl-2 col-xxl-2">
+                          <div class="form-group">
+                            <!-- <label for="filtro_r_es_cobro" class="form-label">                         
+                              <span class="badge bg-info m-r-4px cursor-pointer" onclick="reload_filtro_r_es_cobro();" data-bs-toggle="tooltip" title="Actualizar"><i class="las la-sync-alt"></i></span>
+                              Es cobro?
+                              <span class="charge_filtro_r_es_cobro"></span>
+                            </label> -->
+                            <select class="form-control" name="filtro_r_es_cobro" id="filtro_r_es_cobro" onchange="delay(function(){filtros_3()}, 50 );" > 
+                              <!-- <option value="SI">SI</option>
+                              <option value="NO">NO</option>
+                              <option value="TODOS">TODOS</option> -->
+                            </select>
+                          </div>
+                        </div> 
+                        <!-- End::col -->                        
+                      </div>
+                      <!-- End::row -->
+                    </div>
+                    <!-- End::card-body -->
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card custom-card">
+                    <div class="card-header justify-content-between d-sm-flex d-block">
+                      <div class="card-title text-hover-primary">Método Pago</div>
+                      <div>
+                        <ul class="nav nav-tabs justify-content-end nav-tabs-header mb-0 d-sm-flex d-block mt-sm-0 mt-2" role="tablist">
+                          <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-current="page" href="#active-orders" aria-selected="true">Resumen</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page" href="#completed-orders" aria-selected="true">Detalle</a>
+                          </li>                          
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="card-body p-0">
+                      <div class="tab-content">
+                        <div class="tab-pane show active text-muted border-0 p-0" id="active-orders" role="tabpanel">
+                          <div class="table-responsive">
+                            <table class="table card-table table-vcenter text-nowrap mb-0 tabla-mp-resumen">
+                              <thead>
+                                <tr>
+                                  <th class="py-2" ><p class="mb-0 text-center">Metodo</p></th>
+                                  <th class="py-2" ><p class="mb-0 text-center">Monto</p></th>
+                                  <th class="py-2" ><p class="mb-0 text-center text-nowrap">Monto Doc.</p></th>                                 
+                                  <th class="py-2" ><p class="mb-0 text-center text-nowrap">Dif. <span style="color: transparent;">--------</span></p></th>                                 
+                                </tr>
+                              </thead>
+                              <tbody class="active-tab">
+                                <tr>
+                                  <td colspan="4" >
+                                    <div class="row"  >
+                                      <div class="col-lg-12 text-center">
+                                        <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div><h6 class="bx-flashing">Cargando...</h6>
+                                      </div>
+                                    </div>
+                                  </td>                                                              
+                                </tr>                                
+                              </tbody>
+                              <tfoot>
+                                
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="tab-pane text-muted border-0 p-0" id="completed-orders" role="tabpanel">
+                          <div class="table-responsive mt-2">
+                            <table class="table table-bordered w-100" style="width: 100%;" id="tabla-reporte-detalle">
+                              <thead>
+                                <tr>
+                                  <th class="text-center"><center>#</center></th>
+                                  <th class="text-center"><center>ID Venta</center></th>
+                                  <th>Tipo/Nro/Serie</th>
+                                  <th>Metodo Pago</th>
+                                  <th class="text-nowrap">Monto <span style="color: transparent;">--------</span></th>
+                                  <th class="text-nowrap" >Monto Doc.</th>                          
+                                  <th class="text-nowrap" >Dif. <span style="color: transparent;">--------</span></th>                                                
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                              <tfoot>
+                                <tr>                                
+                                  <th class="text-center"><center>#</center></th>
+                                  <th class="text-center"><center>ID Venta</center></th>
+                                  <th>Tipo/Nro/Serie</th>
+                                  <th>Metodo Pago</th>
+                                  <th>Monto</th>
+                                  <th>Monto Doc.</th>                          
+                                  <th>Dif.</th>     
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              
+            </div>
+            <!-- End::col -->
           </div>
           <!-- End::row-1 -->         
         
@@ -503,7 +679,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
     <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>     
     
-    <script src="scripts/periodo_facturacion.js?version_jdl=1.45"></script>
+    <script src="scripts/periodo_facturacion.js?version_jdl=1.46"></script>
     
     <script>
       $(function() {
