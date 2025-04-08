@@ -712,7 +712,7 @@ function ver_reporte_detalle(idperiodo, idtrabajador, es_cobro){
     dom:"<'row'<'col-md-3'B><'col-md-3 float-left'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>", //Definimos los elementos del control de tabla
     buttons: [  
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tbl_reporte_detalle) { tbl_reporte_detalle.ajax.reload(null, false); toastr_success('Exito!!', 'Tabla actualizada correctamente'); } } },
-      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de ventas', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,1,2,3,4,5,6], }, title: 'Lista de ventas por metodo de pago', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "btn btn-outline-success btn-wave ", footer: true,  }, 
     ],
     ajax: {
       url: `../ajax/periodo_facturacion.php?op=reporte_x_periodo_detalle&filtro_idperiodo=${idperiodo}&filtro_idtrabajador=${idtrabajador}&filtro_es_cobro=${es_cobro}`,
@@ -757,10 +757,10 @@ function ver_reporte_detalle(idperiodo, idtrabajador, es_cobro){
       $( api1.column( 4 ).footer() ).html( `<span class="float-start">S/</span> <span class="float-end">${formato_miles(total1)}</span> ` );     
       
       var api2 = this.api(); var total2 = api2.column( 5 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
-      $( api2.column( 5 ).footer() ).html( `<span class="text-center">${formato_miles(total2)}</span> ` );
+      $( api2.column( 5 ).footer() ).html( `<span class="float-start">S/</span> <span class="float-end">${formato_miles(total2)}</span> ` );
 
       var api3 = this.api(); var total3 = api3.column( 6 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
-      $( api3.column( 6 ).footer() ).html( `<span class="text-center">${formato_miles(total3)}</span> ` );    
+      $( api3.column( 6 ).footer() ).html( `<span class="float-start">S/</span> <span class="float-end">${formato_miles(total3)}</span> ` );    
     },
     "bDestroy": true,
     "iDisplayLength": 12,
