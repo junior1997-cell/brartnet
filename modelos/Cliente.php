@@ -1,3 +1,4 @@
+                                                                       
 <?php
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion_v2.php";
@@ -520,7 +521,38 @@ class Cliente
 		return ejecutarConsultaArray($sql);
 	}
 
+	// ══════════════════════════════════════ M E S E S   C O R T A D O S  ══════════════════════════════════════ 
 
+	public function mc_cliente_detalle($id_cliente){
+		$sql = "SELECT * FROM vw_cliente_all where idpersona_cliente =  '$id_cliente';";
+		$cliente = ejecutarConsultaSimpleFila($sql);
+
+		$sql1 = " SELECT DISTINCT mc.name_year FROM mes_calendario AS mc WHERE year_month_date BETWEEN  
+		( SELECT  STR_TO_DATE(min_date, '%Y-%m-%d') as min_date FROM vw_cliente_fechas_min_max where idpersona_cliente = '$id_cliente' ) AND 
+		( SELECT  STR_TO_DATE(max_date, '%Y-%m-%d') as max_date FROM vw_cliente_fechas_min_max where idpersona_cliente = '$id_cliente' ) ORDER BY mc.name_year DESC; ";
+		$anio = ejecutarConsultaArray($sql1);		
+
+		return [
+			'status' => true, 'message' => 'Todo ok', 
+			'data' => [
+				'data_cliente'	=> $cliente['data'],
+				'data_anio'			=> $anio['data']				
+			]
+		];
+	}
+
+	public function mc_cliente_meses($id_cliente, $dia_cancelacion, $filtro_anio, $filtro_estado){
+		
+		$sql2 = "call sp_mes_cortado_cliente($id_cliente, $dia_cancelacion, '$filtro_anio', '$filtro_estado')";
+		$mes = ejecutarConsultaArray($sql2); if ($mes['status'] == false) {return $mes; }
+
+		return [
+			'status' => true, 'message' => 'Todo ok', 
+			'data' => [				
+				'data_meses' 		=> $mes['data'],					
+			]
+		];
+	}
 
 	// ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════
 	public function select2_filtro_trabajador()	{

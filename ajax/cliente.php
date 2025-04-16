@@ -229,6 +229,7 @@ if (!isset($_SESSION["user_nombre"])) {
               <div class="btn-group ">
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle py-1 px-2" data-bs-toggle="dropdown" aria-expanded="false"> <i class="ri-settings-4-line"></i></button>
                 <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="mc_cliente_detalle(' . $value['idpersona_cliente'] .', \''. $value['dia_cancelacion'] . '\');" ><i class="bi bi-calendar-week"></i> Meses Cortados</a></li>
                   <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li>
                   <li><a class="dropdown-item" href="javascript:void(0);" onclick="resumen_producto_comprado(' . $value['idpersona_cliente'] . ');" ><i class="bi bi-cart4"></i> Productos vendidos</a></li> '.
                   ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
@@ -313,7 +314,8 @@ if (!isset($_SESSION["user_nombre"])) {
                   <ul class="dropdown-menu">
                     
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-edit"></i> Editar</a></li>
-                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> 
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="mc_cliente_detalle(' . $value['idpersona_cliente'] .', \''. $value['dia_cancelacion'] . '\');" ><i class="bi bi-calendar-week"></i> Meses Cortados</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="bi bi-cash-coin"></i> Listar pagos</a></li> 
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="resumen_producto_comprado(' . $value['idpersona_cliente'] . ');" ><i class="bi bi-cart4"></i> Productos vendidos</a></li> '.
                     ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
                     '<li><a class="dropdown-item text-success" href="javascript:void(0);" onclick="activar(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-check-line"></i> Reactivar</a></li>'
@@ -364,6 +366,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   <ul class="dropdown-menu">
                     
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="mostrar_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-edit"></i> Editar</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="mc_cliente_detalle(' . $value['idpersona_cliente'] .', \''. $value['dia_cancelacion'] . '\');" ><i class="bi bi-calendar-week"></i> Meses Cortados</a></li>
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="ver_pagos_x_cliente(' . $value['idpersona_cliente'] . ');" ><i class="ti ti-checkup-list"></i> Listar pagos</a></li> 
                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="resumen_producto_comprado(' . $value['idpersona_cliente'] . ');" ><i class="bi bi-cart4"></i> Productos vendidos</a></li> '.
                     ( $value['estado_pc'] == '1' ? '<li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="eliminar_cliente(' . $value['idpersona_cliente'] . ', \'' . encodeCadenaHtml($value['cliente_nombre_completo']) . '\')"><i class="ri-delete-bin-line"></i> Dar de baja o Eliminar</a></li>': 
@@ -393,6 +396,7 @@ if (!isset($_SESSION["user_nombre"])) {
       // ══════════════════════════════════════   DETALLE CLIENTE DEUDOR   ══════════════════════════════════════ 
       case 'detalle_cliente_deudor':
         $rspta = $persona_cliente->detalle_cliente_deudor($_GET["idpersona_cliente"]);
+        // echo json_encode($rspta, true); die();
         $porcentaje_avance = empty($rspta['data']['cliente']['cant_total']) || $rspta['data']['cliente']['cant_total'] == 0 ? 0 : number_format( (($rspta['data']['cliente']['cant_cobrado'] / $rspta['data']['cliente']['cant_total']) * 100), 1, '.', ',' );
         echo'
           <div class="col-xxl-5 col-xl-5 ">
@@ -473,9 +477,7 @@ if (!isset($_SESSION["user_nombre"])) {
                   <div>';
                   foreach ($rspta['data']['cliente_mes'] as $key => $val) {
                     if ($val['estado_pagado'] == 'DEUDA') {
-                      echo '<a href="javascript:void(0);">
-                      <span class="badge bg-danger m-1">'.$val['nombre_mes_capitalize'].'-'.$val['name_year'].'</span>
-                    </a>';
+                      echo '<a href="javascript:void(0);">  <span class="badge bg-danger m-1">'.$val['nombre_mes_capitalize'].'-'.$val['name_year'].'</span> </a>';
                     }                    
                   }                   
                                             
@@ -483,10 +485,14 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="bg-light p-4 border-bottom border-block-end-dashed border-dark">
                   <p class="fs-15 mb-2 me-4 fw-semibold">Mese cortados:</p>
-                  <div class="text-muted">
-                   
-                    <p class="mb-0">    </p>
-                  </div>
+                  <div >';
+                  foreach ($rspta['data']['cliente_mes'] as $key => $val) {
+                    if ($val['estado_pagado'] == 'CORTADO') {
+                      echo '<a href="javascript:void(0);"><span class="badge bg-warning m-1">'.$val['nombre_mes_capitalize'].'-'.$val['name_year'].'</span></a>';
+                    }                    
+                  }    
+                    
+                 echo' </div>
                 </div>
                 <div class="bg-light p-4">
                   <p class="fs-15 mb-2 me-4 fw-semibold">Técnico Asignado:</p>
@@ -552,16 +558,12 @@ if (!isset($_SESSION["user_nombre"])) {
                                   ($val['estado_pagado'] == 'NO DEUDA' ?
                                   '<span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
                                     <img src="../assets/modulo/persona/perfil/'.$val['foto_perfil_tecnico_cobro'].'" alt="">
-                                  </span>':
-                                  '<span class="avatar avatar-sm bg-primary-transparent avatar-rounded profile-timeline-avatar"><i class="bi bi-emoji-frown fs-15"></i></span>'
-                                  ).
-                                  '<p class="mb-2">
-                                    <b class="'.($val['estado_pagado'] == 'DEUDA' ? 'text-danger':'').'" >'.$val['tecnico_cobro'].'</b> - Mes:  <a class="text-secondary" href="javascript:void(0);"><u>'.$val['nombre_mes_recortado'].'-'.$val['name_year'].'</u></a>.<span class="float-end fs-10 text-muted">'.$val['fecha_emision_format'].'</span>
+                                  </span>
+                                  <p class="mb-2">
+                                    <b class="text-success" >'.$val['tecnico_cobro'].'</b> - Mes:  <a class="text-secondary" href="javascript:void(0);"><u>'.$val['nombre_mes_recortado'].'-'.$val['name_year'].'</u></a>.<span class="float-end fs-10 text-muted">'.$val['fecha_emision_format'].'</span>
                                   </p>
-                                  <p class="profile-activity-media mb-0" style="display: flex; align-items: center;">'.
-                                    ($val['estado_pagado'] == 'DEUDA' ?
-                                    '<span class="fs-11 text-muted">Le recordamos que su pago correspondiente a este mes está pendiente.</span>':
-                                    '<a href="javascript:void(0);" class="btn btn-primary-light rounded zoom-width-27px-svg" style="margin-right: 5px;" onclick="ver_comprobante_emitido('.$val['idventa'].',\''.$val['tipo_comprobante'].'\')">                                                             
+                                  <p class="profile-activity-media mb-0" style="display: flex; align-items: center;">
+                                    <a href="javascript:void(0);" class="btn btn-primary-light rounded zoom-width-27px-svg" style="margin-right: 5px;" onclick="ver_comprobante_emitido('.$val['idventa'].',\''.$val['tipo_comprobante'].'\')">                                                             
                                       <svg xmlns="http://www.w3.org/2000/svg" class="svg-info secondary " enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
                                         <path d="M0,0h24v24H0V0z" fill="none" />
                                         <g>
@@ -573,9 +575,28 @@ if (!isset($_SESSION["user_nombre"])) {
                                     <span style="display: flex; flex-direction: column;">
                                       <span href="javascript:void(0);" class="fs-11 text-muted cursor-pointer zoom-text-12px" onclick="ver_comprobante_emitido('.$val['idventa'].',\''.$val['tipo_comprobante'].'\')">'.$val['tipo_comprobante_v2'].' ELECTRONICA - '.$val['serie_comprobante'].'-'.$val['numero_comprobante'].'</span> 
                                       <span class="fs-11 text-muted">432.87KB</span>
-                                    </span>').
-                                  '</p>
-                                </div>
+                                    </span>
+                                  </p>' :
+                                  (
+                                    $val['estado_pagado'] == 'DEUDA' ? 
+                                    '<span class="avatar avatar-sm bg-primary-transparent avatar-rounded profile-timeline-avatar"><i class="bi bi-emoji-frown fs-15 text-danger"></i></span>
+                                    <p class="mb-2">
+                                      <b class="text-danger" >NO PAGO</b> - Mes:  <a class="text-secondary" href="javascript:void(0);"><u>'.$val['nombre_mes_recortado'].'-'.$val['name_year'].'</u></a>.<span class="float-end fs-10 text-muted">'.$val['fecha_emision_format'].'</span>
+                                    </p>
+                                    <p class="profile-activity-media mb-0" style="display: flex; align-items: center;"><span class="fs-11 text-muted">Le recordamos que su pago correspondiente a este mes está pendiente.</span> </p>'
+                                    : 
+                                     (
+                                      $val['estado_pagado'] == 'CORTADO' ? 
+                                      '<span class="avatar avatar-sm bg-primary-transparent avatar-rounded profile-timeline-avatar"><i class="bi bi-emoji-frown fs-15 text-warning"></i></span>
+                                      <p class="mb-2">
+                                        <b class="text-warning" >'.$val['estado_pagado'].'</b> - Mes:  <a class="text-secondary" href="javascript:void(0);"><u>'.$val['nombre_mes_recortado'].'-'.$val['name_year'].'</u></a>.<span class="float-end fs-10 text-muted">'.$val['fecha_emision_format'].'</span>
+                                      </p>
+                                      <p class="profile-activity-media mb-0" style="display: flex; align-items: center;"><span class="fs-11 text-muted">Usuario: '.$val['tecnico_cobro'].', motivo: '.$val['mc_observacion'].'.</span> </p>'
+                                      : '--'
+                                     )
+                                  )                                 
+                                  ).
+                                '</div>
                               </li>';
                             }
                          echo '                                        
@@ -1143,6 +1164,21 @@ if (!isset($_SESSION["user_nombre"])) {
         }
 
       break;
+
+      // ══════════════════════════════════════  M E S E S   C O R T A D O S  ══════════════════════════════════════ 
+      case 'mc_cliente_detalle':
+        $rspta = $persona_cliente->mc_cliente_detalle( $_GET["id_cliente"] );
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+      break;
+
+      case 'mc_cliente_meses':
+        $rspta = $persona_cliente->mc_cliente_meses( $_GET["id_cliente"], $_GET["dia_cancelacion"], $_GET["filtro_anio"] , $_GET["filtro_estado"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+      break;
+
+
 
       // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 
 

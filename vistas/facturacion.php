@@ -529,8 +529,8 @@ if (!isset($_SESSION["user_nombre"])) {
                               <div class="mb-sm-0 mb-2">
                                 <p class="fs-14 mb-2 fw-semibold">Tipo de comprobante </p>
                                 <div class="mb-0 authentication-btn-group">
-                                  <input type="hidden" id="f_tipo_comprobante_hidden" value="12">
-                                  <input type="hidden" name="f_idsunat_c01" id="f_idsunat_c01" value="12">
+                                  <input type="hidden" id="f_tipo_comprobante_hidden" value="03">
+                                  <input type="hidden" name="f_idsunat_c01" id="f_idsunat_c01" value="03">
                                   <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
 
                                     <input type="radio" class="btn-check" name="f_tipo_comprobante" id="f_tipo_comprobante12" value="12" onchange="modificarSubtotales(); ver_series_comprobante('#f_tipo_comprobante12'); es_valido_cliente();">

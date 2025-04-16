@@ -1439,6 +1439,140 @@ function guardar_editar_facturacion(e) {
   :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 */
 
+/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  :::::                                         M E S E S   C O R T A D O S
+  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+*/
+var id_cliente_r = 0, dia_cancelacion_r = '';
+function mc_cliente_detalle(id_cliente, dia_cancelacion) {
+  id_cliente_r = id_cliente; dia_cancelacion_r = dia_cancelacion;
+  $('#modal-meses-cortados').modal('show');
+  $('.div_mc_anios').hide();
+  $('.div_mc_cliente').hide();
+  $('.div_mc_cargando').show();
+
+  $.getJSON(`../ajax/cliente.php?op=mc_cliente_detalle`, {id_cliente:id_cliente},  function (e, textStatus, jqXHR) {
+      
+    $('.mc_cliente_nombre').html(`${e.data.data_cliente.cliente_nombre_completo}<i class="bi bi-check-circle-fill text-success fs-16" data-bs-toggle="tooltip" title="Cliente Activo"></i>`);
+    $('.mc_cliente_tipo_y_numero_documento').html(`${e.data.data_cliente.tipo_documento_abrev_nombre}: ${e.data.data_cliente.numero_documento}`);
+    $('.mc_cliente_direccion').html(`<i class="bi bi-geo-alt fs-11"></i> ${e.data.data_cliente.centro_poblado}: ${e.data.data_cliente.direccion} `);
+    $('.mc_idcliente').html(`<i class="ti ti-fingerprint text-muted me-1"></i> ${e.data.data_cliente.idpersona_cliente_v2}`);
+    $('.mc_cliente_mac').html(`<i class="bi bi-globe text-muted me-1" ></i> ${e.data.data_cliente.mac_antena}`);
+    $('.mc_cliente_microtick').html(`<i class="bx bx-user-pin text-muted me-1"></i> ${e.data.data_cliente.usuario_microtick}`);
+    $('.mc_cliente_plan').html(`${e.data.data_cliente.nombre_plan} ${e.data.data_cliente.costo}`);
+    $('.mc_cliente_fecha_pago').html(`${e.data.data_cliente.dia_cancelacion_v2}`);
+
+    // visualziacion de años
+
+    const [html_anio_visible, html_anio_oculto] = e.data.data_anio.reduce((acc, val, key) => {
+      const htmlContent = `
+        <div class="form-check mb-2">
+          <input class="form-check-input mc-cehck-anio me-2" type="checkbox" value="${val.name_year}" id="mc-cehck-anio-${key}" ${(key == 0 ? 'checked' : '')} >
+          <label class="form-check-label" for="mc-cehck-anio-${key}">${val.name_year}</label>
+          <span class="badge bg-light text-default fw-500 float-end">2,712</span>
+        </div>
+      `;
+    
+      if (key > 3) {
+        acc[1].push(htmlContent); // Añadir a los ocultos
+      } else {
+        acc[0].push(htmlContent); // Añadir a los visibles
+      }
+    
+      return acc;
+    }, [[], []]);  // Iniciamos un array con dos sub-arrays para los visibles y ocultos
+    console.log(html_anio_oculto);
+    
+    // Actualizamos el HTML con los contenidos generados
+    $('.mc_anios').html(` ${html_anio_visible.join('')}
+      ${html_anio_oculto.length === 0 ? '' : `<div class="collapse" id="mc-anio-ocultos">${html_anio_oculto.join('')}</div> <a class="ecommerce-more-link" data-bs-toggle="collapse" href="#mc-anio-ocultos" role="button" aria-expanded="false" aria-controls="mc-anio-ocultos">MORE</a>`}
+    `);
+
+    var check_anio = obtener_mc_estado_o_anio_check('.mc-cehck-anio');
+    var check_estado = obtener_mc_estado_o_anio_check('.mc-cehck-estado');    
+
+    mc_cliente_meses(id_cliente, dia_cancelacion, check_anio, check_estado);
+    $('.div_mc_anios').show();
+    $('.div_mc_cliente').show();
+    $('.div_mc_cargando').hide();
+
+    // Añadir un event listener para escuchar los cambios en los checkboxes
+    document.querySelectorAll('.mc-cehck-anio').forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        var check_anio = obtener_mc_estado_o_anio_check('.mc-cehck-anio');
+        var check_estado = obtener_mc_estado_o_anio_check('.mc-cehck-estado');    
+        mc_cliente_meses(id_cliente_r, dia_cancelacion_r, check_anio, check_estado);
+        console.log(check_anio); // Ver el filtro actualizado
+      });
+    });
+
+  });
+}
+
+function mc_cliente_meses(id_cliente, dia_cancelacion, filtro_anio = null, filtro_estado = null) {
+  
+  $.getJSON(`../ajax/cliente.php?op=mc_cliente_meses`, {id_cliente:id_cliente, dia_cancelacion:dia_cancelacion, filtro_anio: filtro_anio, filtro_estado: filtro_estado},    function (e, textStatus, jqXHR) {
+    
+    // visualizacion de meses
+    $('.mc_meses').html('');
+    e.data.data_meses.forEach((val, key) => {
+      $('.mc_meses').append(` <div class="col-sm-12 col-md-4 col-lg-3 col-xl-2 col-xxl-2">
+          <div class="card custom-card border border-success border-1">
+            <div class="card-body contact-action">
+              <div class="contact-overlay"></div>
+              <div class="d-flex align-items-top ">
+                <div class="flex-fill flex-wrap gap-3">                                          
+                  <div class="text-center">
+                    <h6 class="mb-1 fs-13 fw-semibold"> ${val.nombre_mes_recortado}-${val.name_year}</h6>
+                    <p class="mb-1 fs-11 text-muted contact-mail text-truncate">${val.estado_pagado}</p>
+                    <p class="mb-0 fs-11 fw-semibold text-primary"> ${val.serie_comprobante}-${val.numero_comprobante} </p>
+                  </div>
+                </div>                                        
+              </div>          
+              ${val.idventa > 0 ? '' :
+              `<div class="d-flex align-items-center justify-content-center gap-2 contact-hover-buttons">
+                <button type="button" class="btn btn-sm btn-light contact-hover-btn"><i class="ri-delete-bin-6-line"></i></button>
+                <button aria-label="button" class="btn btn-sm btn-icon btn-light contact-hover-dropdown1" type="button"> <i class="ri-pencil-fill"></i>  </button> 
+              </div>`
+              }
+            </div>
+          </div>
+        </div>`);
+    });
+
+  });
+ 
+}
+
+
+
+// Añadir un event listener para escuchar los cambios en los checkboxes
+document.querySelectorAll('.mc-cehck-estado').forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    var check_anio = obtener_mc_estado_o_anio_check('.mc-cehck-anio');
+    var check_estado = obtener_mc_estado_o_anio_check('.mc-cehck-estado');   
+    mc_cliente_meses(id_cliente_r, dia_cancelacion_r, check_anio, check_estado); 
+    console.log(check_estado); // Ver el filtro actualizado
+  });
+});
+
+function obtener_mc_estado_o_anio_check(input_check) {
+  
+  if (input_check == '' || input_check == null ) {
+    return '';
+  } else {
+    const checkboxes = document.querySelectorAll(input_check);// Seleccionar todos los checkboxes de la sección   
+    let estadosSeleccionados = []; // Crear un arreglo para almacenar los valores de los checkboxes seleccionados  
+    // Iterar sobre cada checkbox y comprobar si está seleccionado
+    checkboxes.forEach(checkbox => {
+      if (checkbox.checked) {      
+        estadosSeleccionados.push(checkbox.value);// Si está marcado, agregar el valor del checkbox al arreglo
+      }
+    });  
+    return estadosSeleccionados.join(',');// Unir los valores seleccionados en una cadena separada por comas
+  }  
+}
+
 
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   :::::                                         R E S U M E N   D E   P R O D U C T O S   V E N D I D O S

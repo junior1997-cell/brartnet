@@ -72,15 +72,20 @@ BEGIN
     ORDER BY per.idpersona_cliente, cant_total_mes
   ) AS pco
   LEFT JOIN(
-    SELECT  pc.idpersona_cliente, COUNT(v.idventa) AS cant_cobrado
-    FROM venta AS v
-    INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
-    INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
-    WHERE vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN('01', '03', '12')
-    -- Filtros
-    and pc.idpersona_trabajador = COALESCE(idtrabajador, year(pc.idpersona_trabajador)) and year(vd.periodo_pago_format) = COALESCE(anio_pago, year(vd.periodo_pago_format))  
-    GROUP BY pc.idpersona_cliente
-    ORDER BY COUNT(v.idventa) DESC
+    SELECT  pcv.idpersona_cliente, COUNT(pcv.idventa) AS cant_cobrado
+    FROM (
+    SELECT  pc.idpersona_cliente, v.idventa
+      FROM venta AS v
+      INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
+      INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
+      WHERE vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN('01', '03', '12')
+      -- Filtros
+      and pc.idpersona_trabajador = COALESCE(idtrabajador, year(pc.idpersona_trabajador)) and year(vd.periodo_pago_format) = COALESCE(anio_pago, year(vd.periodo_pago_format))
+      UNION ALL
+      SELECT idpersona_cliente, 0 as idventa  FROM mes_cortado 
+    ) as pcv      
+    GROUP BY pcv.idpersona_cliente
+    ORDER BY COUNT(pcv.idventa) DESC
   ) AS co ON pco.idpersona_cliente = co.idpersona_cliente
   where pco.estado_pc = COALESCE(pc_estado, pco.estado_pc) and pco.estado_delete_pc = COALESCE(pc_estado_delete, pco.estado_delete_pc)
   ORDER BY  avance DESC, pco.cliente_nombre_completo ;

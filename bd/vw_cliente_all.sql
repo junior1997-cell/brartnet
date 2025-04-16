@@ -47,7 +47,7 @@ FROM
 			LPAD (pc.idpersona_cliente, 5, '0') as idpersona_cliente_v2,
 			pc.idpersona_cliente,
 			pc.ip_personal,
-			DAY (pc.fecha_cancelacion) AS dia_cancelacion,
+			DATE_FORMAT(pc.fecha_cancelacion, '%d') AS dia_cancelacion,
 			CASE WHEN pc.fecha_cancelacion > CURDATE() THEN DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') ELSE CONCAT( DATE_FORMAT(pc.fecha_cancelacion, '%d'), ' de cada mes' ) END AS dia_cancelacion_v2,
 			pc.fecha_cancelacion, DATE_FORMAT(pc.fecha_cancelacion, '%d/%m/%Y') AS fecha_cancelacion_format, 
 			pc.fecha_afiliacion,

@@ -1,3 +1,4 @@
+-- Active: 1731884224365@@127.0.0.1@3306@admin_brartnet
 DELIMITER $$
 
 CREATE FUNCTION fn_capitalize_texto(input VARCHAR(255)) RETURNS VARCHAR(255)

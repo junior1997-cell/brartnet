@@ -1004,8 +1004,8 @@ if (!isset($_SESSION["user_nombre"])) {
                             <div class="mb-sm-0 mb-2">
                               <p class="fs-14 mb-2 fw-semibold">Tipo de comprobante</p>
                               <div class="mb-0 authentication-btn-group">
-                                <input type="hidden" id="f_tipo_comprobante_hidden" value="12">
-                                <input type="hidden" name="f_idsunat_c01" id="f_idsunat_c01" value="12">
+                                <input type="hidden" id="f_tipo_comprobante_hidden" value="03">
+                                <input type="hidden" name="f_idsunat_c01" id="f_idsunat_c01" value="03">
                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                   
                                   <input type="radio" class="btn-check" name="f_tipo_comprobante" id="f_tipo_comprobante12" value="12" onchange="modificarSubtotales(); ver_series_comprobante('#f_tipo_comprobante12'); es_valido_cliente();">
@@ -1487,6 +1487,120 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
           </div>
           <!-- END::modal -->
+
+          <!-- MODAL - MESES CORTADOS -->
+          <div class="modal fade modal-effect" id="modal-meses-cortados" tabindex="-1" aria-labelledby="title-modal-meses-cortados-label" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="title-modal-meses-cortados-label">MESES CORTADOS</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body table-responsive">
+                  <div class="row">
+
+                    <div class="col-lg-3 col-xl-3 col-xxl-3 div_mc_anios">
+                      <div class="card custom-card products-navigation-card">
+                        <div class="card-body p-0">
+                          <div class="px-2 py-4 px-sm-4 border-bottom">
+                            <h6 class="fw-semibold mb-0">Años</h6>
+                            <div class="px-2 py-3 pb-0 mc_anios">
+                              
+                            </div>
+                          </div>
+                          <div class="px-2 py-4 px-sm-4">
+                            <h6 class="fw-semibold mb-0">Estados</h6>
+                            <div class="px-2 py-3 pb-0">
+                              <div class="form-check mb-2">
+                                <input class="form-check-input me-2 mc-cehck-estado" type="checkbox" value="PAGADO" id="mc-cehck-estado-1" checked>
+                                <label class="form-check-label text-success fs-10" for="mc-cehck-estado-1">Pagados</label>
+                                <span class="badge bg-light text-default fw-500 float-end fs-9">512</span>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input me-2 mc-cehck-estado" type="checkbox" value="DEUDA" id="mc-cehck-estado-3" checked>
+                                <label class="form-check-label text-danger fs-10"  for="mc-cehck-estado-3">Deuda</label>
+                                <span class="badge bg-light text-default fw-500 float-end fs-9">734</span>
+                              </div>
+                              <div class="form-check mb-2">
+                                <input class="form-check-input me-2 mc-cehck-estado" type="checkbox" value="CORTADO" id="mc-cehck-estado-2" checked>
+                                <label class="form-check-label text-warning fs-10" for="mc-cehck-estado-2">Cortados</label>
+                                <span class="badge bg-light text-default fw-500 float-end fs-9">2,186</span>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input me-2 mc-cehck-estado" type="checkbox" value="PENDIENTE" id="mc-cehck-estado-3" checked>
+                                <label class="form-check-label fs-10"  for="mc-cehck-estado-3">Pendientes</label>
+                                <span class="badge bg-light text-default fw-500 float-end fs-9">734</span>
+                              </div>
+                            </div>
+                          </div>                          
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End::col -->
+                    <div class="col-lg-9 col-xl-9 col-xxl-9 div_mc_cliente">
+                      <div class="card custom-card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="btn-list float-end">
+                                <a href="javascript:void(0);" class="avatar avatar-rounded avatar-sm bg-primary text-fixed-white" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Editar cliente" title="Editar cliente"><span><i class="bi bi-pencil-fill"></i></span></a>
+                                <a href="javascript:void(0);" class="avatar avatar-rounded avatar-sm bg-light text-default" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Realizar Pago" title="Realizar Pago"><span><i class="bi bi-cash-coin"></i></span></a>                                
+                              </div>
+                              <div class="d-flex mb-3 align-items-center flex-wrap gap-2">
+                                <div>
+                                  <span class="avatar avatar-lg avatar-rounded">
+                                    <img src="../assets/images/faces/1.jpg" alt="">
+                                  </span>
+                                </div>
+                                <div>
+                                  <h5 class="fw-semibold mb-0 d-flex align-items-center"><a href="javascript:void(0);" class="mc_cliente_nombre"> Brenda Simpson <i class="bi bi-check-circle-fill text-success fs-16" data-bs-toggle="tooltip" title="Verified candidate"></i></a></h5>
+                                  <div class="d-flex gap-2 flex-wrap"><a href="javascript:void(0);" class="mc_cliente_tipo_y_numero_documento">Software Developer</a> </div>
+                                  <div class="d-flex align-items-center fs-12 text-muted flex-wrap"> <p class="mb-0 fs-12 text-muted mc_cliente_direccion"><i class="bi bi-geo-alt fs-11"></i> Kondapur, Hyderabad</p>   </div>
+                                </div>
+                              </div>
+                              <div class="popular-tags mb-4">
+                                <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default mc_idcliente"><i class="ti ti-fingerprint text-muted me-1"></i> 0004534</a>
+                                <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default mc_cliente_mac"><i class="bi bi-globe text-muted me-1" ></i> 546:45:#453:3453:34</a>
+                                <a href="javascript:void(0);" class="badge rounded-pill bg-light text-default mc_cliente_microtick"><i class="bx bx-user-pin text-muted me-1"></i> dasdasaw</a>
+                              </div>
+                              <div class="d-flex align-items-center">
+                                <p class="mb-0 flex-grow-1"><span class="text-muted">Plan:</span> <span class="fw-semibold mc_cliente_plan" data-bs-toggle="tooltip" title="Current"> $2,300</span> </p>
+                                <p class="mb-0"><span class="text-muted">Pago:</span> <span class="fw-semibold mc_cliente_fecha_pago"> English, Hindi, Telugu</span></p>
+                              </div>
+                            </div>
+                            <div class="col-lg-12 px-2">
+                              <div class="border-top mt-2 mb-2" > </div>
+                            </div>
+                            <div class="col-lg-12">
+                              <div class="row mc_meses">
+                                
+
+                              </div>
+                              <!-- End::row -->
+                            </div>
+                            <!-- End::col -->
+                          </div>                          
+                          
+                        </div>                        
+                        <!-- End::card-body -->
+                      </div>
+                    </div>
+                    <!-- End::col -->                    
+                    <div class="col-lg-12 text-center div_mc_cargando" style="display: none;">
+                      <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                      <h4 class="bx-flashing">Cargando...</h4>
+                    </div>
+                    <!-- End::col -->    
+                  </div>
+                  <!-- End::row -->
+                </div>
+                <!-- End::modal-body -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>

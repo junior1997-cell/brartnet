@@ -64,12 +64,17 @@ FROM
   ORDER BY per.idpersona_cliente, cant_total_mes
 ) AS pco
 LEFT JOIN(
-  SELECT  pc.idpersona_cliente, COUNT(v.idventa) AS cant_cobrado
-  FROM venta AS v
-  INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
-  INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
-  WHERE vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN('01', '03', '12')
-  GROUP BY pc.idpersona_cliente
-  ORDER BY COUNT(v.idventa) DESC
+  SELECT  pcv.idpersona_cliente, COUNT(pcv.idventa) AS cant_cobrado
+  FROM (
+    SELECT  pc.idpersona_cliente, v.idventa
+    FROM venta AS v
+    INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
+    INNER JOIN persona_cliente AS pc ON pc.idpersona_cliente = v.idpersona_cliente
+    WHERE vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN('01', '03', '12')
+    UNION ALL
+    SELECT idpersona_cliente, 0 as idventa  FROM mes_cortado 
+  ) as pcv
+  GROUP BY pcv.idpersona_cliente
+  ORDER BY COUNT(pcv.idventa) DESC
 ) AS co ON pco.idpersona_cliente = co.idpersona_cliente
 ORDER BY avance DESC;
