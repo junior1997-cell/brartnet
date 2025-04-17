@@ -110,7 +110,7 @@ BEGIN
   ) AS lvd ON mes_c.year_month = lvd.periodo_pago 
   ORDER by mes_c.year_month DESC;
 
-  SELECT * FROM tmp_mes_cortado_cliente  
+  SELECT LPAD (mcc.idmes_cortado, 5, '0') as idmes_cortado_v2,  mcc.* FROM tmp_mes_cortado_cliente  as mcc
   WHERE ((filtro_anio IS NULL AND name_year = name_year)  OR (filtro_anio IS NOT NULL AND FIND_IN_SET(name_year, filtro_anio) > 0))
   AND ((filtro_estado IS NULL AND estado_pagado = estado_pagado)  OR (filtro_estado IS NOT NULL AND FIND_IN_SET(estado_pagado, filtro_estado COLLATE utf8mb4_spanish_ci) > 0));
 

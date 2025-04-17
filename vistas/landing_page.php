@@ -521,7 +521,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Internal Quill JS -->
     <script src="../assets/js/quill-editor.js"></script>
 
-    <script src="scripts/landing_page.js?version_jdl=1.48"></script>
+    <script src="scripts/landing_page.js?version_jdl=1.49"></script>
 
   </body>
 

@@ -1177,7 +1177,12 @@ if (!isset($_SESSION["user_nombre"])) {
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
       break;
-
+      
+      case 'mc_agregar_mes':
+        $rspta = $persona_cliente->mc_agregar_mes( $_GET["id_cliente"], $_GET["mes"],  $_GET["descripcion"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+      break;
 
 
       // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 

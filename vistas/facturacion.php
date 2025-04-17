@@ -1358,8 +1358,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- HTML Imagen -->
     <!-- <script src="../assets/libs/dom-to-image-master/dist/dom-to-image.min.js"></script> -->
 
-    <script src="scripts/facturacion.js?version_jdl=1.48"></script>
-    <script src="scripts/js_facturacion.js?version_jdl=1.48"></script>
+    <script src="scripts/facturacion.js?version_jdl=1.49"></script>
+    <script src="scripts/js_facturacion.js?version_jdl=1.49"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

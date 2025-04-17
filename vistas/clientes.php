@@ -42,6 +42,7 @@ if (!isset($_SESSION["user_nombre"])) {
         border-color: #007bff;
         /* Cambia el borde al pasar el ratón */
       }
+
     </style>
 
   </head>
@@ -1514,22 +1515,21 @@ if (!isset($_SESSION["user_nombre"])) {
                               <div class="form-check mb-2">
                                 <input class="form-check-input me-2 mc-cehck-estado" type="checkbox" value="PAGADO" id="mc-cehck-estado-1" checked>
                                 <label class="form-check-label text-success fs-10" for="mc-cehck-estado-1">Pagados</label>
-                                <span class="badge bg-light text-default fw-500 float-end fs-9">512</span>
+                                <span class="badge bg-success fw-500 float-end fs-9">3</span>
                               </div>
                               <div class="form-check">
                                 <input class="form-check-input me-2 mc-cehck-estado" type="checkbox" value="DEUDA" id="mc-cehck-estado-3" checked>
                                 <label class="form-check-label text-danger fs-10"  for="mc-cehck-estado-3">Deuda</label>
-                                <span class="badge bg-light text-default fw-500 float-end fs-9">734</span>
+                                <span class="badge bg-danger fw-500 float-end fs-9">2</span>
                               </div>
                               <div class="form-check mb-2">
                                 <input class="form-check-input me-2 mc-cehck-estado" type="checkbox" value="CORTADO" id="mc-cehck-estado-2" checked>
                                 <label class="form-check-label text-warning fs-10" for="mc-cehck-estado-2">Cortados</label>
-                                <span class="badge bg-light text-default fw-500 float-end fs-9">2,186</span>
+                                <span class="badge bg-warning fw-500 float-end fs-9">0</span>
                               </div>
                               <div class="form-check">
                                 <input class="form-check-input me-2 mc-cehck-estado" type="checkbox" value="PENDIENTE" id="mc-cehck-estado-3" checked>
-                                <label class="form-check-label fs-10"  for="mc-cehck-estado-3">Pendientes</label>
-                                <span class="badge bg-light text-default fw-500 float-end fs-9">734</span>
+                                <label class="form-check-label fs-10"  for="mc-cehck-estado-3">Pendientes</label>                                
                               </div>
                             </div>
                           </div>                          
@@ -1638,8 +1638,8 @@ if (!isset($_SESSION["user_nombre"])) {
     <!-- Google Maps JS -->
     <script src="../assets/libs/gmaps/gmaps.min.js"></script>
 
-    <script src="scripts/cliente.js?version_jdl=1.48"></script>
-    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.48"></script>
+    <script src="scripts/cliente.js?version_jdl=1.49"></script>
+    <script src="scripts/js_facturacion_cliente.js?version_jdl=1.49"></script>
     <script>
       $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip();

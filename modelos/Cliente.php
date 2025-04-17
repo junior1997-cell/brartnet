@@ -523,6 +523,13 @@ class Cliente
 
 	// ══════════════════════════════════════ M E S E S   C O R T A D O S  ══════════════════════════════════════ 
 
+	public function mc_agregar_mes($id_cliente, $mes, $descripcion){
+
+		$sql = "INSERT INTO mes_cortado( idpersona_cliente, periodo_cortado, periodo_cortado_format, observacion) 
+		VALUES ('$id_cliente','$mes','$mes-01','$descripcion')";
+		return ejecutarConsulta($sql, 'C');		
+	}
+
 	public function mc_cliente_detalle($id_cliente){
 		$sql = "SELECT * FROM vw_cliente_all where idpersona_cliente =  '$id_cliente';";
 		$cliente = ejecutarConsultaSimpleFila($sql);

@@ -679,7 +679,7 @@ if (!isset($_SESSION["user_nombre"])) {
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>      
     <script src="../assets/libs/flatpickr/plugins/monthSelect/index.js"></script>     
     
-    <script src="scripts/periodo_facturacion.js?version_jdl=1.48"></script>
+    <script src="scripts/periodo_facturacion.js?version_jdl=1.49"></script>
     
     <script>
       $(function() {

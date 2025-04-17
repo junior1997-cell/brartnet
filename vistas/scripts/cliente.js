@@ -1469,7 +1469,9 @@ function mc_cliente_detalle(id_cliente, dia_cancelacion) {
         <div class="form-check mb-2">
           <input class="form-check-input mc-cehck-anio me-2" type="checkbox" value="${val.name_year}" id="mc-cehck-anio-${key}" ${(key == 0 ? 'checked' : '')} >
           <label class="form-check-label" for="mc-cehck-anio-${key}">${val.name_year}</label>
-          <span class="badge bg-light text-default fw-500 float-end">2,712</span>
+          <span class="px-1 badge bg-light text-success fw-500 float-end me-1">4</span>
+          <span class="px-1 badge bg-light text-danger fw-500 float-end me-1">6</span>
+          <span class="px-1 badge bg-light text-warning fw-500 float-end me-1">3</span>
         </div>
       `;
     
@@ -1510,34 +1512,86 @@ function mc_cliente_detalle(id_cliente, dia_cancelacion) {
 }
 
 function mc_cliente_meses(id_cliente, dia_cancelacion, filtro_anio = null, filtro_estado = null) {
-  
+  $('.mc_meses').html(`<div class="col-lg-12 text-center"> <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div> <h4 class="bx-flashing">Cargando...</h4> </div>`);
   $.getJSON(`../ajax/cliente.php?op=mc_cliente_meses`, {id_cliente:id_cliente, dia_cancelacion:dia_cancelacion, filtro_anio: filtro_anio, filtro_estado: filtro_estado},    function (e, textStatus, jqXHR) {
     
     // visualizacion de meses
     $('.mc_meses').html('');
     e.data.data_meses.forEach((val, key) => {
-      $('.mc_meses').append(` <div class="col-sm-12 col-md-4 col-lg-3 col-xl-2 col-xxl-2">
-          <div class="card custom-card border border-success border-1">
-            <div class="card-body contact-action">
-              <div class="contact-overlay"></div>
-              <div class="d-flex align-items-top ">
-                <div class="flex-fill flex-wrap gap-3">                                          
-                  <div class="text-center">
-                    <h6 class="mb-1 fs-13 fw-semibold"> ${val.nombre_mes_recortado}-${val.name_year}</h6>
-                    <p class="mb-1 fs-11 text-muted contact-mail text-truncate">${val.estado_pagado}</p>
-                    <p class="mb-0 fs-11 fw-semibold text-primary"> ${val.serie_comprobante}-${val.numero_comprobante} </p>
-                  </div>
-                </div>                                        
-              </div>          
-              ${val.idventa > 0 ? '' :
-              `<div class="d-flex align-items-center justify-content-center gap-2 contact-hover-buttons">
-                <button type="button" class="btn btn-sm btn-light contact-hover-btn"><i class="ri-delete-bin-6-line"></i></button>
-                <button aria-label="button" class="btn btn-sm btn-icon btn-light contact-hover-dropdown1" type="button"> <i class="ri-pencil-fill"></i>  </button> 
-              </div>`
-              }
+      var color_border = '', content_mes = '';
+      // switch (val.estado_pagado) {
+      //   case 'PAGADO': color_border = 'border-success'; break;
+      //   case 'DEUDA': color_border = 'border-danger'; break;
+      //   case 'CORTADO': color_border = 'border-warning'; break;
+      //   case 'PENDIENTE': color_border = ''; break;      
+      //   default: color_border = '';     break;
+      // }
+
+      if (val.estado_pagado == 'PAGADO' ) {
+
+        color_border = 'border-success';
+        content_mes = `<div class="d-flex align-items-top ">
+          <div class="flex-fill flex-wrap gap-3">                                          
+            <div class="text-center">
+              <h6 class="mb-1 fs-13 fw-semibold"> ${val.nombre_mes_recortado}-${val.name_year}</h6>
+              <p class="mb-1 fs-11 contact-mail text-truncate badge bg-success">${val.estado_pagado}</p>
+              <p class="mb-0 fs-11 fw-semibold text-primary"> ${val.serie_comprobante}-${val.numero_comprobante} </p>
             </div>
-          </div>
-        </div>`);
+          </div>                                        
+        </div>`;    
+
+      } else if (val.estado_pagado == 'DEUDA' ) {
+
+        color_border = 'border-danger';
+        content_mes = `<div class="d-flex align-items-top ">
+          <div class="flex-fill flex-wrap gap-3">                                          
+            <div class="text-center">
+              <h6 class="mb-1 fs-13 fw-semibold"> ${val.nombre_mes_recortado}-${val.name_year}</h6>
+              <p class="mb-1 fs-11 contact-mail text-truncate badge bg-danger">${val.estado_pagado}</p>              
+            </div>
+          </div>                                        
+        </div>          
+        <div class="d-flex align-items-center justify-content-center gap-2 contact-hover-buttons">
+          <button type="button" class="btn btn-sm btn-light contact-hover-btn" onclick="agregar_mes_cortado( ${id_cliente}, '${val.year_month}', '${val.nombre_mes_recortado}-${val.name_year}'  )" ><i class="bi bi-calendar2-check"></i></button>
+        </div>`;
+        
+      } else if (val.estado_pagado == 'CORTADO' ) {
+        color_border = 'border-warning';
+        content_mes = `<div class="d-flex align-items-top ">
+          <div class="flex-fill flex-wrap gap-3">                                          
+            <div class="text-center">
+              <h6 class="mb-1 fs-13 fw-semibold"> ${val.nombre_mes_recortado}-${val.name_year}</h6>
+              <p class="mb-1 fs-11 contact-mail text-truncate badge bg-warning">${val.estado_pagado}</p>
+              <p class="mb-0 fs-11 fw-semibold text-primary"> ${val.idmes_cortado_v2} </p>
+            </div>
+          </div>                                        
+        </div>          
+        <div class="d-flex align-items-center justify-content-center gap-2 contact-hover-buttons">
+          <button type="button" class="btn btn-sm btn-light contact-hover-btn"><i class="ri-delete-bin-6-line"></i></button>
+          <button aria-label="button" class="btn btn-sm btn-icon btn-light contact-hover-dropdown1" type="button"> <i class="ri-pencil-fill"></i>  </button> 
+        </div>`;
+        
+      } else if (val.estado_pagado == 'PENDIENTE' ) {
+        color_border = '';
+        content_mes = `<div class="d-flex align-items-top ">
+          <div class="flex-fill flex-wrap gap-3">                                          
+            <div class="text-center">
+              <h6 class="mb-1 fs-13 fw-semibold"> ${val.nombre_mes_recortado}-${val.name_year}</h6>
+              <p class="mb-1 fs-11 text-muted contact-mail text-truncate badge ">${val.estado_pagado}</p>              
+            </div>
+          </div>                                        
+        </div>          
+        <div class="d-flex align-items-center justify-content-center gap-2 contact-hover-buttons">
+          <button type="button" class="btn btn-sm btn-light contact-hover-btn" onclick="agregar_mes_cortado( ${id_cliente}, '${val.year_month}', '${val.nombre_mes_recortado}-${val.name_year}' )"><i class="bi bi-calendar2-check"></i></button>
+        </div>`;        
+      }
+
+      $('.mc_meses').append(` <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-2">
+        <div class="card custom-card border ${color_border} border-1">
+          <div class="card-body contact-action">  <div class="contact-overlay"></div> ${content_mes} </div>
+        </div>
+      </div>`);      
+      
     });
 
   });
@@ -1571,6 +1625,67 @@ function obtener_mc_estado_o_anio_check(input_check) {
     });  
     return estadosSeleccionados.join(',');// Unir los valores seleccionados en una cadena separada por comas
   }  
+}
+
+function agregar_mes_cortado(id_cliente, mes, mes_nombre) {
+
+  $('#modal-meses-cortados').modal('hide');
+
+  Swal.fire({
+    icon: "warning",
+    title: `Asignar ¡CORTE! (${mes_nombre})`,
+    html: 'Antes de asignar CORTE ingrese una Observación',
+    input: 'textarea',        
+    inputAttributes: { autocapitalize: 'off', Class: 'form-control', Placeholder: 'ejemp: Corte de servicio por falta de pago.',  },
+    customClass: {
+      validationMessage: 'my-validation-message',
+    },
+    showCancelButton: true,
+    cancelButtonColor: "#d33",
+    cancelButtonText: 'Cancelar',
+    confirmButtonText: 'Si, asignar!',
+    confirmButtonColor: "#28a745",
+    showLoaderOnConfirm: true,
+    preConfirm: (value) => {
+      console.log(value);
+      if (!value) {
+        Swal.showValidationMessage('La <i class="fw-bold">&nbsp;NOTA&nbsp;</i> es requerido.')
+      }else{            
+        return fetch(`../ajax/cliente.php?op=mc_agregar_mes&id_cliente=${id_cliente}&mes=${mes}&descripcion=${value}`).then(response => {
+          console.log(response);
+          if (!response.ok) { throw new Error(response.statusText); }
+          return response.json();
+        }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+      }          
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {       
+    if (result.isConfirmed) {
+      if (result.value.status) {
+
+        $('#modal-meses-cortados').modal('show');
+        Swal.fire("Correcto!", `Corte de mes: ${mes_nombre} asignado correctamente`, "success");
+
+        var check_anio = obtener_mc_estado_o_anio_check('.mc-cehck-anio');
+        var check_estado = obtener_mc_estado_o_anio_check('.mc-cehck-estado');   
+        mc_cliente_meses(id_cliente_r, dia_cancelacion_r, check_anio, check_estado); 
+
+      }else{
+        $('#modal-meses-cortados').modal('show');
+        ver_errores(result.value);        
+      }     
+    } else {
+      $('#modal-meses-cortados').modal('show');
+    }
+  });  
+}
+
+function editar_mes_cortado(params) {
+  
+}
+
+function eliminar_mes_cortado(params) {
+  
 }
 
 

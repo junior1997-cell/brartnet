@@ -634,7 +634,7 @@
           <?php include("template/scripts.php"); ?>
           <?php include("template/custom_switcherjs.php"); ?> 
 
-          <script src="scripts/otros_gastos.js?version_jdl=1.48"></script>
+          <script src="scripts/otros_gastos.js?version_jdl=1.49"></script>
           <script> $(function () { $('[data-bs-toggle="tooltip"]').tooltip(); }); </script>
 
         
