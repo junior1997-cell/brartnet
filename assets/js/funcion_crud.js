@@ -342,7 +342,7 @@ function crud_simple_alerta(url, id_tabla, title, mensaje, text_button, callback
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
-    confirmButtonText: text_button,    
+    confirmButtonText: (text_button == null || text_button == '' ? 'Si, eliminar' : text_button),    
     preConfirm: (input) => {       
       return fetch(`${url}&id_tabla=${id_tabla}`).then(response => {
         //console.log(response);

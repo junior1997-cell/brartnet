@@ -40,38 +40,9 @@ BEGIN
     WHERE year_month_date 
     BETWEEN
     -- Fecha minima
-    ( 
-      SELECT CASE WHEN vd.fecha_minima_cobro IS NOT NULL THEN vd.fecha_minima_cobro WHEN pc.fecha_afiliacion < '2024-05-01' THEN '2024-05-01' ELSE pc.fecha_afiliacion END AS min_date
-      FROM persona_cliente AS pc
-      LEFT JOIN (
-        SELECT MIN(vd.periodo_pago_format) as fecha_minima_cobro, v.idpersona_cliente 
-        FROM venta_detalle AS vd
-        INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = idcliente
-        WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01','03','12')
-      ) AS vd on vd.idpersona_cliente = pc.idpersona_cliente
-      WHERE pc.idpersona_cliente = idcliente
-    ) AND 
+    (  select min_date from vw_cliente_fechas_min_max WHERE idpersona_cliente = idcliente ) AND 
     -- Fecha Maxima
-    (
-      SELECT CONCAT(
-      CASE
-        WHEN vd.fecha_maxima_cobro > CURDATE() THEN DATE_FORMAT(vd.fecha_maxima_cobro, '%Y')
-        WHEN pc.fecha_cancelacion > CURDATE() THEN  DATE_FORMAT( CURDATE(), '%Y') 
-        ELSE 
-          CASE
-            WHEN DATE_FORMAT(CURDATE(), '%d') > DATE_FORMAT(pc.fecha_cancelacion, '%d') THEN DATE_FORMAT( CURDATE(), '%Y') 
-            ELSE  DATE_FORMAT( TIMESTAMPADD (MONTH, -1, CURDATE()) , '%Y') 
-          END
-      END, '-12-01' ) AS max_date
-      FROM persona_cliente AS pc
-      LEFT JOIN (
-        SELECT MAX(vd.periodo_pago_format) as fecha_maxima_cobro, v.idpersona_cliente
-        FROM venta_detalle AS vd
-        INNER JOIN venta AS v ON vd.idventa = v.idventa AND v.idpersona_cliente = idcliente
-        WHERE vd.es_cobro='SI' AND v.estado_delete = 1 AND v.estado='1' AND  v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01','03','12')
-      ) AS vd on vd.idpersona_cliente = pc.idpersona_cliente
-      WHERE pc.idpersona_cliente = idcliente
-    ) 
+    ( select max_date_mc from vw_cliente_fechas_min_max WHERE idpersona_cliente = idcliente ) 
   ) AS mes_c
   LEFT JOIN( 
     SELECT 

@@ -150,7 +150,7 @@ if (!isset($_SESSION["user_nombre"])) {
 
                       </table>
 
-                    </div>
+                    </div> 
                     <!-- ------------ Formulario de Productos ------------ -->
                     <div class="div-form" style="display: none;">
                       <form name="form-agregar-producto" id="form-agregar-producto" method="POST" class="needs-validation" novalidate>
@@ -312,7 +312,7 @@ if (!isset($_SESSION["user_nombre"])) {
                           </div> 
 
                         </div>
-                        <div class="row" id="cargando-2-fomulario" style="display: none;" >
+                        <div class="row" id="cargando-2-formulario" style="display: none;" >
                           <div class="col-lg-12 text-center">                         
                             <div class="spinner-border me-4" style="width: 3rem; height: 3rem;"role="status"></div>
                             <h4 class="bx-flashing">Cargando...</h4>
@@ -362,7 +362,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <!-- End::Modal-VerDetalles -->
 
 
-          <!-- MODAL - AGREGAR CATEGORIA -->
+          <!-- MODAL - AGREGAR CATEGORIA - charge 3,4 -->
           <div class="modal fade modal-effect" id="modal-agregar-categoria" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-categoriaLabel">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
               <div class="modal-content">
@@ -407,7 +407,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <!-- End::Modal-Agregar-Cartegoria -->
 
 
-          <!-- MODAL - AGREGAR MARCA -->
+          <!-- MODAL - AGREGAR MARCA - chargue 5,6 -->
           <div class="modal fade modal-effect" id="modal-agregar-marca" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-marcaLabel">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
               <div class="modal-content">
@@ -452,7 +452,7 @@ if (!isset($_SESSION["user_nombre"])) {
           <!-- End::Modal-Agregar-Marca -->
 
 
-          <!-- MODAL - AGREGAR UM -->
+          <!-- MODAL - AGREGAR UM - charge 7,8 -->
           <div class="modal fade modal-effect" id="modal-agregar-u-m" role="dialog" tabindex="-1" aria-labelledby="modal-agregar-u-mLabel">
             <div class="modal-dialog modal-md modal-dialog-scrollable">
               <div class="modal-content">
@@ -462,7 +462,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
                 <div class="modal-body">
                   <form name="formulario-u-m" id="formulario-u-m" method="POST" class="row needs-validation" novalidate>
-                    <div class="row gy-2" id="cargando-1-fomulario">
+                    <div class="row gy-2" id="cargando-7-fomulario">
                       <input type="hidden" name="idsunat_unidad_medida" id="idsunat_unidad_medida">
 
 
@@ -479,7 +479,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         </div>
                       </div>
                     </div>
-                    <div class="row" id="cargando-2-fomulario" style="display: none;">
+                    <div class="row" id="cargando-8-fomulario" style="display: none;">
                       <div class="col-lg-12 text-center">
                         <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
                         <h4 class="bx-flashing">Cargando...</h4>
@@ -496,6 +496,24 @@ if (!isset($_SESSION["user_nombre"])) {
             </div>
           </div>
           <!-- End::Modal-registrar-unidad-medida -->
+
+          <!-- MODAL - VER FOTO -->
+          <div class="modal fade modal-effect" id="modal-ver-img" tabindex="-1" aria-labelledby="modal-ver-img" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title fs-13 title-ver-imgenes" id="modal-ver-imgLabel1">Imagen</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body html_modal_ver_imgenes"> 
+                  
+                </div>
+                <div class="modal-footer py-1">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" ><i class="las la-times fs-lg"></i> Close</button>                  
+                </div>
+              </div>
+            </div>
+          </div> 
 
         </div>
       </div>

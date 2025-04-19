@@ -6,7 +6,7 @@ SELECT
   COALESCE(co.cant_cobrado, 0) AS cant_cobrado,
   pco.cant_total_mes AS cant_total,
   CASE 
-    WHEN( pco.cant_total_mes - co.cant_cobrado ) = 0 THEN 'SIN DEUDA' 
+    WHEN( pco.cant_total_mes - co.cant_cobrado ) = 0 THEN 'PAGADO' 
     WHEN( pco.cant_total_mes - co.cant_cobrado ) > 0 THEN 'DEUDA' 
     WHEN( pco.cant_total_mes - co.cant_cobrado ) < 0 THEN 'ADELANTO' ELSE '-'
 	END AS estado_deuda,
@@ -59,6 +59,8 @@ FROM
     SELECT vd.periodo_pago_format, v.idpersona_cliente FROM venta v 
     INNER JOIN venta_detalle AS vd ON vd.idventa = v.idventa
     WHERE  vd.es_cobro = 'SI' AND v.estado = 1 AND v.estado_delete = 1 AND v.sunat_estado in ('ACEPTADA', 'POR ENVIAR') AND v.tipo_comprobante IN ('01', '03', '12')
+    UNION ALL
+    SELECT periodo_cortado_format, idpersona_cliente  FROM mes_cortado 
   ) AS ven ON ven.idpersona_cliente = per.idpersona_cliente 
   GROUP BY per.idpersona, per.idpersona_cliente
   ORDER BY per.idpersona_cliente, cant_total_mes

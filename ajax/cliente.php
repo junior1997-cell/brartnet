@@ -89,6 +89,12 @@ if (!isset($_SESSION["user_nombre"])) {
     $f_tiempo_entrega         = isset($_POST["f_tiempo_entrega"]) ? limpiarCadena($_POST["f_tiempo_entrega"]) : "";    
     $f_validez_cotizacion     = isset($_POST["f_validez_cotizacion"]) ? limpiarCadena($_POST["f_validez_cotizacion"]) : "";   
 
+    // ══════════════════════════════════════  D A T O S   D E   M E S   C O R T A D O ══════════════════════════════════════
+    $mc_idmes_cortado         = isset($_POST["mc_idmes_cortado"]) ? limpiarCadena($_POST["mc_idmes_cortado"]) : "";    
+    $mc_idpersona_cliente     = isset($_POST["mc_idpersona_cliente"]) ? limpiarCadena($_POST["mc_idpersona_cliente"]) : "";    
+    $mc_periodo_cortado       = isset($_POST["mc_periodo_cortado"]) ? limpiarCadena($_POST["mc_periodo_cortado"]) : "";    
+    $mc_observacion           = isset($_POST["mc_observacion"]) ? limpiarCadena($_POST["mc_observacion"]) : "";
+    
     //---id cliente no va 
     switch ($_GET["op"]) {
 
@@ -1166,6 +1172,18 @@ if (!isset($_SESSION["user_nombre"])) {
       break;
 
       // ══════════════════════════════════════  M E S E S   C O R T A D O S  ══════════════════════════════════════ 
+      case 'guardar_y_editar_mes_cortado':       
+
+        if (empty($mc_idmes_cortado)) {
+          $rspta = $persona_cliente->mc_agregar_mes(  $mc_idpersona_cliente, $mc_periodo_cortado, $mc_observacion  );
+          echo json_encode($rspta, true);
+        } else {
+
+          $rspta = $persona_cliente->mc_editar_mes($mc_idmes_cortado, $mc_idpersona_cliente, $mc_periodo_cortado, $mc_observacion  );
+          echo json_encode($rspta, true);
+        }
+      break;
+
       case 'mc_cliente_detalle':
         $rspta = $persona_cliente->mc_cliente_detalle( $_GET["id_cliente"] );
         //Codificar el resultado utilizando json
@@ -1180,6 +1198,18 @@ if (!isset($_SESSION["user_nombre"])) {
       
       case 'mc_agregar_mes':
         $rspta = $persona_cliente->mc_agregar_mes( $_GET["id_cliente"], $_GET["mes"],  $_GET["descripcion"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+      break;
+
+      case 'ver_mes_cortado':
+        $rspta = $persona_cliente->mc_ver_mes( $_GET["idmes_cortado"] );
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+      break;
+
+      case 'eliminar_mes_cortado':
+        $rspta = $persona_cliente->mc_eliminar( $_GET["id_tabla"] );
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
       break;

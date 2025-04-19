@@ -178,7 +178,7 @@ function guardar_editar_producto(e){
 				if (evt.lengthComputable) {
 					var percentComplete = (evt.loaded / evt.total) * 100;
 					$("#barra_progress_producto").css({ "width": percentComplete + '%' });
-					$("#barra_progress_producto div").text(percentComplete.toFixed(2) + " %");
+					$("#barra_progress_producto div").html(`<span class="mx-1">${percentComplete.toFixed(2)}%</span>`);
 				}
 			}, false);
 			return xhr;
@@ -203,7 +203,7 @@ function guardar_editar_producto(e){
 function mostrar_producto(idproducto){
   limpiar_form_producto();
 	show_hide_form(2);
-	$('#cargando-1-fomulario').hide();	$('#cargando-2-fomulario').show(); 
+	$('#cargando-1-formulario').hide();	$('#cargando-2-formulario').show(); 
 	$.post("../ajax/producto.php?op=mostrar", { idproducto: idproducto }, function (e, status) {
 		e = JSON.parse(e);
 
@@ -228,7 +228,7 @@ function mostrar_producto(idproducto){
 		$("#imagenmuestraProducto").attr("src", "../assets/modulo/productos/" + e.data.imagen);
 		$("#imagenactualProducto").val(e.data.imagen);
 
-    $('#cargando-1-fomulario').show();	$('#cargando-2-fomulario').hide();
+    $('#cargando-1-formulario').show();	$('#cargando-2-formulario').hide();
     $('#form-agregar-producto').valid();
 	});	
 }
@@ -665,9 +665,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function ver_img(img, nombre) {
-	$(".title-modal-img").html(`-${nombre}`);
+	$(".title-ver-imgenes").html(`-${nombre}`);
   $('#modal-ver-img').modal("show");
-  $('.html_ver_img').html(doc_view_extencion(img, 'assets/modulo/productos', '100%', '550'));
+  $('.html_modal_ver_imgenes').html(doc_view_extencion(img, 'assets/modulo/productos', '100%', '550'));
   $(`.jq_image_zoom`).zoom({ on:'grab' });
 }
 

@@ -23,6 +23,7 @@ function init() {
 
   $(".btn-guardar").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-cliente").submit(); } else { toastr_warning("Espera", "Procesando Datos", 3000); } });
   $(".btn-guardar-cobro").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-venta").submit(); } else { toastr_warning("Espera", "Procesando Datos", 3000); } });
+  $("#guardar_registro_meses_cortados").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-meses-cortados").submit(); } else { toastr_warning("Espera", "Procesando Datos", 3000); } });
 
   // ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════ 
   lista_select2("../ajax/cliente.php?op=select2_filtro_trabajador", '#filtro_trabajador', null, '.charge_filtro_trabajador');
@@ -540,7 +541,7 @@ function guardar_y_editar_cliente(e) {
       try {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {
-          Swal.fire("Correcto!", "Color registrado correctamente.", "success");
+          Swal.fire("Correcto!", "Cliente registrado correctamente.", "success");
           if (tabla_cliente_todos) { tabla_cliente_todos.ajax.reload(null, false); } 
           if (tabla_cliente_deudor) { tabla_cliente_deudor.ajax.reload(null, false); } 
           if (tabla_cliente_no_deudor) { tabla_cliente_no_deudor.ajax.reload(null, false); } 
@@ -1452,7 +1453,10 @@ function mc_cliente_detalle(id_cliente, dia_cancelacion) {
   $('.div_mc_cargando').show();
 
   $.getJSON(`../ajax/cliente.php?op=mc_cliente_detalle`, {id_cliente:id_cliente},  function (e, textStatus, jqXHR) {
-      
+
+    var imagen_perfil = e.data.data_cliente.foto_perfil == '' || e.data.data_cliente.foto_perfil == null ? 'no-perfil.jpg' :  e.data.data_cliente.foto_perfil;
+    $('.mc_perfil_cliente').html( e.data.data_cliente.cliente_tiene_pefil== 'SI' ? `<span class="avatar"> <img class="w-30px h-auto" src="../assets/modulo/persona/perfil/${imagen_perfil}" alt="" onclick="ver_img('${imagen_perfil}', '${e.data.data_cliente.nombre_razonsocial}')"> </span>`:
+       `<span class="avatar avatar-lg bg-primary-transparent profile-timeline-avatar">${e.data.data_cliente.cliente_primera_letra}</span>`);
     $('.mc_cliente_nombre').html(`${e.data.data_cliente.cliente_nombre_completo}<i class="bi bi-check-circle-fill text-success fs-16" data-bs-toggle="tooltip" title="Cliente Activo"></i>`);
     $('.mc_cliente_tipo_y_numero_documento').html(`${e.data.data_cliente.tipo_documento_abrev_nombre}: ${e.data.data_cliente.numero_documento}`);
     $('.mc_cliente_direccion').html(`<i class="bi bi-geo-alt fs-11"></i> ${e.data.data_cliente.centro_poblado}: ${e.data.data_cliente.direccion} `);
@@ -1567,8 +1571,8 @@ function mc_cliente_meses(id_cliente, dia_cancelacion, filtro_anio = null, filtr
           </div>                                        
         </div>          
         <div class="d-flex align-items-center justify-content-center gap-2 contact-hover-buttons">
-          <button type="button" class="btn btn-sm btn-light contact-hover-btn"><i class="ri-delete-bin-6-line"></i></button>
-          <button aria-label="button" class="btn btn-sm btn-icon btn-light contact-hover-dropdown1" type="button"> <i class="ri-pencil-fill"></i>  </button> 
+          <button type="button" class="btn btn-sm btn-light contact-hover-btn"><i class="ri-delete-bin-6-line" onclick="eliminar_mes_cortado(${val.idmes_cortado}, '${val.nombre_mes_recortado}-${val.name_year}')"></i></button>
+          <button aria-label="button" class="btn btn-sm btn-icon btn-light contact-hover-dropdown1" type="button" onclick="editar_mes_cortado(${val.idmes_cortado}, '${val.nombre_mes_recortado}-${val.name_year}')"> <i class="ri-pencil-fill"></i>  </button> 
         </div>`;
         
       } else if (val.estado_pagado == 'PENDIENTE' ) {
@@ -1594,11 +1598,8 @@ function mc_cliente_meses(id_cliente, dia_cancelacion, filtro_anio = null, filtr
       
     });
 
-  });
- 
+  }); 
 }
-
-
 
 // Añadir un event listener para escuchar los cambios en los checkboxes
 document.querySelectorAll('.mc-cehck-estado').forEach(checkbox => {
@@ -1680,12 +1681,93 @@ function agregar_mes_cortado(id_cliente, mes, mes_nombre) {
   });  
 }
 
-function editar_mes_cortado(params) {
-  
+function editar_mes_cortado(idmes_cortado, nombre_mes ) {
+  limpiar_form_mes_cortado();
+  $('#title-modal-agregar-meses-cortados-label').html(`EDITAR MES(${nombre_mes})`);
+  $('#modal-agregar-meses-cortados').modal('show');
+  $('#cargando-3-fomulario').hide();
+  $('#cargando-4-fomulario').show();
+  $.getJSON(`../ajax/cliente.php?op=ver_mes_cortado`, {idmes_cortado:idmes_cortado}, function (e, textStatus, jqXHR) {
+    $('#mc_idmes_cortado').val(e.data.idmes_cortado);
+    $('#mc_idpersona_cliente').val(e.data.idpersona_cliente);
+    $('#mc_periodo_cortado').val(e.data.periodo_cortado);
+    $('#mc_observacion').val(e.data.observacion);
+
+    $('#cargando-3-fomulario').show();
+    $('#cargando-4-fomulario').hide();
+  });
 }
 
-function eliminar_mes_cortado(params) {
-  
+function eliminar_mes_cortado(idmes_cortado, nombre_mes) {
+  crud_simple_alerta(
+    `../ajax/cliente.php?op=eliminar_mes_cortado`,
+    idmes_cortado,
+    'Eliminar!!', 
+    `Esta seguro de eliminar el mes <b class="text-danger" >${nombre_mes}</b>?, verifique antes eliminar.`,
+    'Si, eliminar',
+    function(){ sw_success('♻️ Exito! ♻️', "Tu registro ha sido Eliminado." ) }, 
+    function(){ var check_anio = obtener_mc_estado_o_anio_check('.mc-cehck-anio'); var check_estado = obtener_mc_estado_o_anio_check('.mc-cehck-estado'); mc_cliente_meses(id_cliente_r, dia_cancelacion_r, check_anio, check_estado);  }
+  );
+}
+
+function limpiar_form_mes_cortado() {
+  $('#mc_idmes_cortado').val('');
+  $('#mc_idpersona_cliente').val('');
+  $('#mc_periodo_cortado').val('');
+  $('#mc_observacion').val('');
+}
+
+function guardar_y_editar_mes_cortado(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#formulario-agregar-mes-cortado")[0]);
+
+  $.ajax({
+    url: "../ajax/cliente.php?op=guardar_y_editar_mes_cortado",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Corte registrado correctamente.", "success");           
+          $("#guardar_registro_meses_cortados").html('<i class="bx bx-save bx-tada fs-lg"></i> Guardar').removeClass('disabled');
+          $('#modal-agregar-meses-cortados').modal('hide');
+          var check_anio = obtener_mc_estado_o_anio_check('.mc-cehck-anio');
+          var check_estado = obtener_mc_estado_o_anio_check('.mc-cehck-estado');   
+          mc_cliente_meses(id_cliente_r, dia_cancelacion_r, check_anio, check_estado); 
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+      $("#guardar_registro_meses_cortados").html('<i class="bx bx-save bx-tada fs-lg"></i> Guardar').removeClass('disabled send-data');
+     
+    },
+    xhr: function () {
+			var xhr = new window.XMLHttpRequest();
+			xhr.upload.addEventListener("progress", function (evt) {
+				if (evt.lengthComputable) {
+					var percentComplete = (evt.loaded / evt.total) * 100;
+					$("#barra_progress_mes_cortado").css({ "width": percentComplete + '%' });
+					$("#barra_progress_mes_cortado div").html(`<span class="mx-1">${percentComplete.toFixed(2)}%</span>`);
+				}
+			}, false);
+			return xhr;
+		},
+		beforeSend: function () {
+			$("#guardar_registro_meses_cortados").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled send-data');
+			$("#barra_progress_mes_cortado").css({ width: "0%", });
+			$("#barra_progress_mes_cortado div").text("0%");
+      $("#barra_progress_mes_cortado_div").show();
+		},
+		complete: function () {
+			$("#barra_progress_mes_cortado").css({ width: "0%", });
+			$("#barra_progress_mes_cortado div").text("0%");
+      $("#barra_progress_mes_cortado_div").hide();
+		},
+		error: function (jqXhr, ajaxOptions, thrownError) {	ver_errores(jqXhr);	}
+  });
 }
 
 
@@ -1919,7 +2001,39 @@ $(function () {
     submitHandler: function (form) {
       guardar_editar_facturacion(form);
     },
-  }); 
+  });
+
+  $("#formulario-agregar-mes-cortado").validate({
+    rules: {
+      mc_periodo_cortado:   { required: true },
+      mc_observacion:       { required: true, minlength: 4, maxlength: 200, },
+    },
+    messages: {
+      mc_periodo_cortado:   { required: "Campo requerido.", },
+      mc_observacion:       { required: "Campo requerido.", }, 
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_mes_cortado(e);
+    },
+
+  });
+
   $('#f_metodo_pago_1').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 
   $('#tipo_persona_sunat').rules('add', { required: true, messages: { required: "Campo requerido" } });

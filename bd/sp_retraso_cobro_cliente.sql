@@ -12,7 +12,7 @@ BEGIN
     COALESCE(co.cant_cobrado, 0) AS cant_cobrado,
     pco.cant_total_mes AS cant_total,
     CASE 
-      WHEN( pco.cant_total_mes - co.cant_cobrado ) = 0 THEN 'SIN DEUDA' 
+      WHEN( pco.cant_total_mes - co.cant_cobrado ) = 0 THEN 'PAGADO' 
       WHEN( pco.cant_total_mes - co.cant_cobrado ) > 0 THEN 'DEUDA' 
       WHEN( pco.cant_total_mes - co.cant_cobrado ) < 0 THEN 'ADELANTO' ELSE '-'
     END AS estado_deuda,

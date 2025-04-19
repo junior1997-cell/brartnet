@@ -126,76 +126,26 @@ if (!isset($_SESSION["user_nombre"])) {
       case 'mostrar_detalle_producto':
         $rspta = $productos->mostrar_detalle_producto($idproducto);
         $nombre_doc = $rspta['data']['imagen'];
-        $html_table = '
-          <div class="my-3" ><span class="h6"> Datos del Producto </span></div>
-          <table class="table text-nowrap table-bordered">        
-            <tbody>
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="row">'.$rspta['data']['nombre'].'</th>            
-              </tr>              
-              <tr>
-                <th scope="col">Código</th>
-                <th scope="row">'.$rspta['data']['codigo'].'</th>
-              </tr> 
-              <tr>
-                <th scope="col">Descripción</th>
-                <th scope="row">'.$rspta['data']['descripcion'].'</th>
-              </tr>                  
-            </tbody>
-          </table>
-
-          <div class="my-3" ><span class="h6"> Detalles </span></div>
-          <table class="table text-nowrap table-bordered">        
-            <tbody>
-              <tr>
-                  <th scope="col">Categoria</th>
-                  <th scope="row">'.$rspta['data']['categoria'].'</th>            
-                </tr> 
-              <tr>
-                <th scope="col">Marca</th>
-                <th scope="row">'.$rspta['data']['marca'].'</th>            
-              </tr>              
-              <tr>
-                <th scope="col">U. Medida</th>
-                <th scope="row">'.$rspta['data']['unidad_medida'].'</th>
-              </tr> 
-              <tr>
-                <th scope="col">Stock</th>
-                <th scope="row">'.$rspta['data']['stock'].'</th>
-              </tr>   
-              <tr>
-                <th scope="col">Stock Minimo</th>
-                <th scope="row">'.$rspta['data']['stock_minimo'].'</th>
-              </tr>               
-            </tbody>
-          </table>
-
-          <div class="my-3" ><span class="h6"> Precio </span></div>
-          <table class="table text-nowrap table-bordered">        
-            <tbody>
-              <tr>
-                  <th scope="col">Precio Compra</th>
-                  <th scope="row"> S/ '.$rspta['data']['precio_compra'].'</th>            
-                </tr> 
-              <tr>
-                <th scope="col">Precio Venta</th>
-                <th scope="row">S/ '.$rspta['data']['precio_venta'].'</th>            
-              </tr>              
-              <tr>
-                <th scope="col">Precio por Mayor</th>
-                <th scope="row">S/ '.$rspta['data']['precioB'].'</th>
-              </tr> 
-              <tr>
-                <th scope="col">Precio Distribuidor</th>
-                <th scope="row">S/ '.$rspta['data']['precioC'].'</th>
-              </tr>   
-              <tr>
-                <th scope="col">Precio Especial</th>
-                <th scope="row">S/ '.$rspta['data']['precioD'].'</th>
-              </tr>               
-            </tbody>
-          </table>
+        $html_table = '<table class="table text-nowrap table-bordered">        
+          <tbody>
+            <tr><th class="py-2 text-center bg-body" colspan="2"><b>DATOS DEL PRODUCTO</b></th></tr> 
+            <tr><th class="py-1"><b>Nombre</b></th>      <td class="py-1">'.$rspta['data']['nombre'].'</td></tr>              
+            <tr><th class="py-1"><b>Código</b></th>      <td class="py-1">'.$rspta['data']['codigo'].'</td></tr> 
+            <tr><th class="py-1"><b>Descripción</b></th> <td class="py-1">'.$rspta['data']['descripcion'].'</td></tr>     
+            <tr><th class="py-2 text-center bg-body" colspan="2"><b>DETALLES</b></th></tr>     
+            <tr><th class="py-1"><b>Categoria</b></th>    <td class="py-1" >'.$rspta['data']['categoria'].'</td></tr> 
+            <tr><th class="py-1"><b>Marca</b></th>        <td class="py-1" >'.$rspta['data']['marca'].'</td></tr>              
+            <tr><th class="py-1"><b>U. Medida</b></th>    <td class="py-1" >'.$rspta['data']['unidad_medida'].'</td></tr> 
+            <tr><th class="py-1"><b>Stock</b></th>        <td class="py-1" >'.$rspta['data']['stock'].'</td></tr>   
+            <tr><th class="py-1"><b>Stock Minimo</b></th> <td class="py-1" >'.$rspta['data']['stock_minimo'].'</td></tr>      
+            <tr><th class="py-2 text-center bg-body" colspan="2"><b>PRECIOS</b></th></tr>     
+            <tr><th class="py-1"><b>De Compra</b></th>    <td class="py-1" > S/ '.$rspta['data']['precio_compra'].'</td></tr> 
+            <tr><th class="py-1"><b>De Venta</b></th>     <td class="py-1" >S/ '.$rspta['data']['precio_venta'].'</td></tr>              
+            <tr><th class="py-1"><b>De por Mayor</b></th> <td class="py-1" >S/ '.$rspta['data']['precioB'].'</td></tr> 
+            <tr><th class="py-1"><b>De Distribuidor</b></th><td class="py-1" >S/ '.$rspta['data']['precioC'].'</td></tr>   
+            <tr><th class="py-1"><b>De Especial</b></th>  <td class="py-1" >S/ '.$rspta['data']['precioD'].'</td></tr>   
+          </tbody>
+        </table>          
         <div class="my-3" ><span class="h6"> Imagen </span></div>';
         $rspta = ['status' => true, 'message' => 'Todo bien', 'data' => $html_table, 'imagen' => $rspta['data']['imagen'], 'nombre_doc'=> $nombre_doc];
         echo json_encode($rspta, true);

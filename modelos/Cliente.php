@@ -188,7 +188,7 @@ class Cliente
 
 		$sql1= "SELECT COUNT( pc.idpersona_cliente) AS total
 		FROM vw_retraso_cobro_cliente as pc 
-		where pc.estado_deuda in ( 'SIN DEUDA', 'ADELANTO') and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za ;";
+		where pc.estado_deuda in ( 'PAGADO', 'ADELANTO') and pc.estado_pc = '1' AND pc.estado_delete_pc = '1' $filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za ;";
 		$count_no_deuda = ejecutarConsultaSimpleFila($sql1); if ($count_no_deuda['status'] == false) {return $count_no_deuda; }
 
 		$sql2 = "SELECT IFNULL(COUNT(pc.idpersona_cliente), 0) as total 
@@ -278,15 +278,14 @@ class Cliente
 		CASE WHEN LENGTH(  vw_c.cliente_nombre_completo  ) <= 22 THEN  vw_c.cliente_nombre_completo ELSE CONCAT(  LEFT(vw_c.cliente_nombre_completo, 22) , '...') END  as cliente_nombre_completo_recorte
 		FROM vw_cliente_all as vw_c		
 		inner join vw_retraso_cobro_cliente as vw_rc on vw_rc.idpersona_cliente = vw_c.idpersona_cliente
-		where vw_c.estado_pc = '1' and vw_c.estado_delete_pc='1' and vw_rc.estado_deuda in ('SIN DEUDA', 'ADELANTO')
+		where vw_c.estado_pc = '1' and vw_c.estado_delete_pc='1' and vw_rc.estado_deuda in ('PAGADO', 'ADELANTO')
 		$filtro_sql_trab $filtro_sql_tp $filtro_sql_dp $filtro_sql_p $filtro_sql_cp $filtro_sql_za
 		ORDER BY vw_rc.avance , vw_c.idpersona_cliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	// ══════════════════════════════════════   DETALLE CLIENTE DEUDOR   ══════════════════════════════════════ 
-	public function detalle_cliente_deudor( $idpersona_cliente )	{
-		
+	public function detalle_cliente_deudor( $idpersona_cliente )	{		
 		
 		$sql = "SELECT 	 vw_rc.avance, vw_rc.avance_v2, vw_rc.cant_cobrado, vw_rc.cant_total, vw_c.*,
 		CASE WHEN LENGTH(  vw_c.cliente_nombre_completo  ) <= 22 THEN  vw_c.cliente_nombre_completo ELSE CONCAT(  LEFT(vw_c.cliente_nombre_completo, 22) , '...') END  as cliente_nombre_completo_recorte
@@ -524,10 +523,57 @@ class Cliente
 	// ══════════════════════════════════════ M E S E S   C O R T A D O S  ══════════════════════════════════════ 
 
 	public function mc_agregar_mes($id_cliente, $mes, $descripcion){
+		$sql = "SELECT * FROM vw_facturacion_detalle where idpersona_cliente = '$id_cliente' and periodo_pago = '$mes' and estado_v = '1' and estado_delete_v = '1' and sunat_estado IN ('ACEPTADA', 'POR ENVIAR');";
+		$buscando_mes = ejecutarConsultaArray($sql);		
+		if ( empty($buscando_mes['data']) ) {
+			$sql = "INSERT INTO mes_cortado( idpersona_cliente, periodo_cortado, periodo_cortado_format, observacion) 
+			VALUES ('$id_cliente','$mes','$mes-01','$descripcion')";
+			return ejecutarConsulta($sql, 'C');		
+		} else {
+			$info_repetida = ''; 
 
-		$sql = "INSERT INTO mes_cortado( idpersona_cliente, periodo_cortado, periodo_cortado_format, observacion) 
-		VALUES ('$id_cliente','$mes','$mes-01','$descripcion')";
-		return ejecutarConsulta($sql, 'C');		
+			foreach ($buscando_mes['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+					<span class="font-size-15px text-danger"><b>'.$value['tipo_comprobante_v1'].'</b> '.$value['serie_comprobante'].'-'.$value['numero_comprobante'].'</span><br>
+					<span class="font-size-15px text-danger"><b>Emision: </b> '.$value['fecha_emision'].'</span><br>
+					<span class="font-size-15px text-danger"><b>Estado: </b>'.$value['sunat_estado'].'</span><br>
+					<b>Papelera: </b>'.( $value['estado_v']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+					<b>Eliminado: </b>'. ($value['estado_delete_v']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+					<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+
+			$retorno = array( 'status' => 'error_usuario', 'code_error' => '', 'titulo' => 'Mes pagado!!', 'message' => 'Este mes esta pagado, no puede realizar el corte: '. $info_repetida, 'user' =>  $_SESSION['user_nombre'], 'data' => $buscando_mes['data'], 'id_tabla' => '' );
+			return $retorno;
+		}
+		
+		
+	}
+
+	public function mc_editar_mes($idmes_cortado, $id_cliente, $mes, $descripcion){
+		$sql = "SELECT * FROM vw_facturacion_detalle where idpersona_cliente = '$id_cliente' and periodo_pago = '$mes' and estado_v = '1' and estado_delete_v = '1' and sunat_estado IN ('ACEPTADA', 'POR ENVIAR');";
+		$buscando_mes = ejecutarConsultaArray($sql);		
+
+		if ( empty($buscando_mes['data']) ) {
+			$sql = "UPDATE mes_cortado SET idpersona_cliente='$id_cliente', periodo_cortado='$mes', periodo_cortado_format='$mes-01', observacion='$descripcion' WHERE idmes_cortado = '$idmes_cortado';";
+			return ejecutarConsulta($sql, 'U');		
+		} else {
+			$info_repetida = ''; 
+
+			foreach ($buscando_mes['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+					<span class="font-size-15px text-danger"><b>'.$value['tipo_comprobante_v1'].'</b> '.$value['serie_comprobante'].'-'.$value['numero_comprobante'].'</span><br>
+					<span class="ms-3 font-size-15px "><b>Emision: </b> '.$value['fecha_emision_format_v2'].'</span><br>
+					<span class="ms-3 font-size-15px "><b>Estado: </b>'.$value['sunat_estado'].'</span><br>
+					<b class="ms-3">Papelera: </b>'.( $value['estado_v']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+					<b class="ms-3">Eliminado: </b>'. ($value['estado_delete_v']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+					<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+
+			$retorno = array( 'status' => 'error_usuario', 'code_error' => '', 'titulo' => 'Mes pagado!!', 'message' => 'Este mes esta pagado, no puede realizar el corte: '. $info_repetida, 'user' =>  $_SESSION['user_nombre'], 'data' => $buscando_mes['data'], 'id_tabla' => '' );
+			return $retorno;
+		}		
 	}
 
 	public function mc_cliente_detalle($id_cliente){
@@ -559,6 +605,16 @@ class Cliente
 				'data_meses' 		=> $mes['data'],					
 			]
 		];
+	}
+
+	public function mc_ver_mes($idmes_cortado){
+		$sql = "SELECT * FROM mes_cortado WHERE idmes_cortado = '$idmes_cortado'; ";
+		return ejecutarConsultaSimpleFila($sql);		
+	}
+
+	public function mc_eliminar($idmes_cortado){
+		$sql = "DELETE FROM mes_cortado WHERE idmes_cortado = '$idmes_cortado'; ";
+		return ejecutarConsulta($sql);		
 	}
 
 	// ══════════════════════════════════════  S E L E C T 2 ══════════════════════════════════════

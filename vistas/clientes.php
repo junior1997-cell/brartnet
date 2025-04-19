@@ -425,8 +425,7 @@ if (!isset($_SESSION["user_nombre"])) {
                         </table>
                       </div>    
                     </div>
-                  </div>                    
-                 
+                  </div>                 
                                  
                 </div>
                 <div class="card-footer border-top-0">
@@ -570,9 +569,7 @@ if (!isset($_SESSION["user_nombre"])) {
                 </div>
               </div>
               
-            </div>
-
-            
+            </div>            
 
             <!-- ::::::::::::::::::: FORMULARIO ::::::::::::::::::: -->
             <div class="col-xxl-12 col-xl-12 " id="div-form-cliente" style="display: none;">          
@@ -1547,7 +1544,7 @@ if (!isset($_SESSION["user_nombre"])) {
                                 <a href="javascript:void(0);" class="avatar avatar-rounded avatar-sm bg-light text-default" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Realizar Pago" title="Realizar Pago"><span><i class="bi bi-cash-coin"></i></span></a>                                
                               </div>
                               <div class="d-flex mb-3 align-items-center flex-wrap gap-2">
-                                <div>
+                                <div class="mc_perfil_cliente">
                                   <span class="avatar avatar-lg avatar-rounded">
                                     <img src="../assets/images/faces/1.jpg" alt="">
                                   </span>
@@ -1597,6 +1594,56 @@ if (!isset($_SESSION["user_nombre"])) {
                 <!-- End::modal-body -->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" ><i class="las la-times"></i> Close</button>                  
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL - MESES CORTADOS - charge 3-4 -->
+          <div class="modal fade modal-effect bg-color-02020263" id="modal-agregar-meses-cortados" tabindex="-1" aria-labelledby="title-modal-agregar-meses-cortados-label" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="title-modal-agregar-meses-cortados-label">EDITAR MES</h6>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form name="formulario-agregar-mes-cortado" id="formulario-agregar-mes-cortado" method="POST" class="needs-validation" >
+                    <div class="row" id="cargando-3-fomulario">
+                      <input type="hidden" name="mc_idmes_cortado" id="mc_idmes_cortado">
+                      <input type="hidden" name="mc_idpersona_cliente" id="mc_idpersona_cliente">
+                      
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="mc_periodo_cortado" class="form-label">Periodo(*)</label>
+                          <input type="month" class="form-control" name="mc_periodo_cortado" id="mc_periodo_cortado" />
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="mc_observacion" class="form-label">Descripción(*)</label>
+                          <textarea class="form-control" rows="2" name="mc_observacion" id="mc_observacion"></textarea>                          
+                        </div>
+                      </div>
+                      <!-- Chargue -->
+                      <div class="p-l-25px col-lg-12" id="barra_progress_mes_cortado_div" style="display: none;">
+                        <div class="progress progress-lg custom-progress-3" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                          <div id="barra_progress_mes_cortado" class="progress-bar" style="width: 0%"> <div class="progress-bar-value">0%</div> </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" id="cargando-4-fomulario" style="display: none;">
+                      <div class="col-lg-12 text-center">
+                        <div class="spinner-border me-4" style="width: 3rem; height: 3rem;" role="status"></div>
+                        <h4 class="bx-flashing">Cargando...</h4>
+                      </div>
+                    </div> 
+                    <button type="submit" style="display: none;" id="submit-form-meses-cortados">Submit</button>
+                  </form>
+                </div>
+                <div class="modal-footer py-1">
+                  <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="limpiar_form_mes_cortado();"><i class="las la-times fs-lg"></i> Close</button>
+                  <button type="button" class="btn btn-sm btn-primary" id="guardar_registro_meses_cortados"><i class="bx bx-save bx-tada fs-lg"></i> Guardar</button>
                 </div>
               </div>
             </div>
